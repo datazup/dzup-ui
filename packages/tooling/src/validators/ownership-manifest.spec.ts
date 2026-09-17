@@ -279,8 +279,12 @@ describe('the vocabulary report (ADR-19 §3)', () => {
   })
 
   it('names a component-specific part and the component that declared it', () => {
-    expect(partsOutsideVocabulary(manifestWith(['root', 'row', 'cell']))).toEqual([
-      { symbol: 'DzButton', parts: ['row', 'cell'] },
+    // `decrement`/`increment` rather than `row`/`cell`: TASK-R5-O1 folded the
+    // table words INTO the vocabulary on 2026-09-04 (ADR-19 §3, S1-D1), and a
+    // stepper's two buttons are the case that stayed out on purpose — they are
+    // not interchangeable, so one `action` for both would lose the distinction.
+    expect(partsOutsideVocabulary(manifestWith(['root', 'decrement', 'increment']))).toEqual([
+      { symbol: 'DzButton', parts: ['decrement', 'increment'] },
     ])
   })
 
@@ -297,11 +301,24 @@ describe('the vocabulary report (ADR-19 §3)', () => {
     expect(report.violations.map(violation => violation.rule)).not.toContain('vocabulary')
   })
 
-  it('reports the table family, whose part names have no synonym', () => {
+  it('reports the stepper, whose two buttons have no shared word', () => {
+    const stepper = validateOwnershipManifest()
+      .vocabularyExtensions
+      .find(entry => entry.symbol === 'DzNumberInput')
+
+    expect(stepper?.parts).toEqual(['decrement', 'increment'])
+  })
+
+  it('no longer reports the table family — its words are vocabulary now', () => {
+    // The report is what made the vocabulary grow: `body`, `row` and `cell`
+    // were reported for long enough to be reviewed, and TASK-R5-O1 folded them
+    // in on 2026-09-04 along with `clear`, `toggle`, `filename` and `language`.
+    // Asserted rather than deleted, so that a name silently falling back OUT of
+    // the vocabulary shows up as a failing test rather than as a quiet report.
     const table = validateOwnershipManifest()
       .vocabularyExtensions
       .find(entry => entry.symbol === 'DzTable')
 
-    expect(table?.parts).toEqual(['body', 'row', 'cell'])
+    expect(table).toBeUndefined()
   })
 })

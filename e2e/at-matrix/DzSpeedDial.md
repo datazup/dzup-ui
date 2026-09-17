@@ -23,6 +23,22 @@ known one.
 | `dismiss` | Dismiss with Escape, and again by activating the close affordance. | Focus returns to the trigger and the AT announces where it landed. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/buttons/DzSpeedDial.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Enter` | trigger | Open or close the action list. |
+| `Space` | trigger | Open or close the action list. |
+| `Home` | open | Move focus to the first action. |
+| `End` | open | Move focus to the last action. |
+| `Escape` | — | Close the action list and return focus to the trigger. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

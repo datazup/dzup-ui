@@ -20,6 +20,7 @@ import {
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { toastVariants } from './DzToast.variants.ts'
@@ -57,7 +58,7 @@ function handleAction(): void {
 }
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 const rootStateProps = computed(() => ({
@@ -69,25 +70,29 @@ const rootStateProps = computed(() => ({
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzToast')
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <ToastRoot
     :duration="toast.duration"
+    data-part="root"
     :class="rootClasses"
     :data-tone="toast.tone ?? 'neutral'"
     style="contain: layout style"
-    v-bind="rootStateProps"
+    v-bind="{ ...dzTestId('dz-toast'), ...rootStateProps }"
     @update:open="(open: boolean) => { if (!open) handleClose() }"
   >
-    <div :class="styles.toneIndicator()" aria-hidden="true" />
+    <div data-part="indicator" :class="cn(styles.toneIndicator(), props.ui?.indicator)" aria-hidden="true" />
 
     <slot :toast="toast">
-      <div class="flex-1 pl-[var(--dz-spacing-2)]">
-        <ToastTitle :class="styles.title()">
+      <div class="flex-1 ps-[var(--dz-spacing-2)]">
+        <ToastTitle data-part="title" :class="cn(styles.title(), props.ui?.title)">
           {{ toast.title }}
         </ToastTitle>
-        <ToastDescription v-if="toast.description" :class="styles.description()">
+        <ToastDescription v-if="toast.description" data-part="description" :class="cn(styles.description(), props.ui?.description)">
           {{ toast.description }}
         </ToastDescription>
       </div>
@@ -95,7 +100,8 @@ const dzMessages = useComponentMessages('DzToast')
       <div v-if="toast.actionLabel" class="flex items-center">
         <slot name="action" :toast="toast">
           <ToastAction
-            :class="styles.actionButton()"
+            data-part="action"
+            :class="cn(styles.actionButton(), props.ui?.action)"
             :alt-text="toast.actionLabel"
             @click="handleAction"
           >
@@ -106,7 +112,8 @@ const dzMessages = useComponentMessages('DzToast')
     </slot>
 
     <ToastClose
-      :class="styles.closeButton()"
+      data-part="close"
+      :class="cn(styles.closeButton(), props.ui?.close)"
       :aria-label="dzMessages.close"
       @click="handleClose"
     >

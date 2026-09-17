@@ -22,6 +22,7 @@ import {
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { paginationVariants } from './DzPagination.variants.ts'
@@ -30,6 +31,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The current page number, one-based; defaults to page `1`. */
 const model = defineModel<number>({ default: 1 })
 
 const props = withDefaults(defineProps<DzPaginationProps>(), {
@@ -59,7 +61,7 @@ const styles = computed(() =>
 )
 
 const navClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 function handlePageChange(page: number): void {
@@ -74,11 +76,15 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <nav
     :id="id"
+    data-part="root"
     :class="navClasses"
     :aria-label="resolvedAriaLabel"
     :aria-labelledby="ariaLabelledby"
@@ -86,7 +92,7 @@ function handleBlur(event: FocusEvent): void {
     :data-state="disabled ? 'disabled' : 'idle'"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-pagination'), ...$attrs, class: undefined }"
     @focusin="handleFocus"
     @focusout="handleBlur"
   >
@@ -99,11 +105,12 @@ function handleBlur(event: FocusEvent): void {
       :disabled="disabled"
       @update:page="handlePageChange"
     >
-      <PaginationList v-slot="{ items }" :class="styles.list()">
+      <PaginationList v-slot="{ items }" data-part="list" :class="cn(styles.list(), ui?.list)">
         <!-- First page button -->
         <PaginationFirst
           v-if="showEdges"
-          :class="styles.button()"
+          data-part="action"
+          :class="cn(styles.button(), ui?.action)"
           :aria-label="dzMessages.firstPage"
         >
           <slot name="first">
@@ -113,7 +120,8 @@ function handleBlur(event: FocusEvent): void {
 
         <!-- Previous button -->
         <PaginationPrev
-          :class="styles.button()"
+          data-part="action"
+          :class="cn(styles.button(), ui?.action)"
           :aria-label="dzMessages.previousPage"
         >
           <slot name="prev">
@@ -126,9 +134,11 @@ function handleBlur(event: FocusEvent): void {
           <PaginationListItem
             v-if="item.type === 'page'"
             :value="item.value"
+            data-part="item"
             :class="cn(
               styles.button(),
               item.value === model ? styles.activeButton() : '',
+              ui?.item,
             )"
             :aria-current="item.value === model ? 'page' : undefined"
           >
@@ -138,7 +148,8 @@ function handleBlur(event: FocusEvent): void {
           <PaginationEllipsis
             v-else
             :index="index"
-            :class="styles.ellipsis()"
+            data-part="separator"
+            :class="cn(styles.ellipsis(), ui?.separator)"
           >
             <MoreHorizontal class="h-4 w-4" aria-hidden="true" />
           </PaginationEllipsis>
@@ -146,7 +157,8 @@ function handleBlur(event: FocusEvent): void {
 
         <!-- Next button -->
         <PaginationNext
-          :class="styles.button()"
+          data-part="action"
+          :class="cn(styles.button(), ui?.action)"
           :aria-label="dzMessages.nextPage"
         >
           <slot name="next">
@@ -157,7 +169,8 @@ function handleBlur(event: FocusEvent): void {
         <!-- Last page button -->
         <PaginationLast
           v-if="showEdges"
-          :class="styles.button()"
+          data-part="action"
+          :class="cn(styles.button(), ui?.action)"
           :aria-label="dzMessages.lastPage"
         >
           <slot name="last">

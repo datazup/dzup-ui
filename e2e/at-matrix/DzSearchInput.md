@@ -19,6 +19,20 @@ known one.
 | `reach` | Reach the component by the platform's own navigation (Tab, or swipe on touch). | Name, role and current state are announced together, and the name is the visible label. |
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/inputs/DzSearchInput.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Enter` | — | Submit the search. |
+| `Enter` | clear | Clear the field. |
+| `Space` | clear | Clear the field. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

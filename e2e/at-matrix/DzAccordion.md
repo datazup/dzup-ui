@@ -20,6 +20,23 @@ known one.
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 | `navigate` | Move through the collection with the pattern's own keys or gestures. | Each item is announced with its position and set size, and nothing is skipped. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/data/DzAccordion.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Enter` | trigger | Expand or collapse the focused section. |
+| `Space` | trigger | Expand or collapse the focused section. |
+| `ArrowDown` | — | Move focus to the next section header. |
+| `ArrowUp` | — | Move focus to the previous section header. |
+| `Home` | — | Move focus to the first section header. |
+| `End` | — | Move focus to the last section header. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

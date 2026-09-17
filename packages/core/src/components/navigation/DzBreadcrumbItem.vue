@@ -34,17 +34,18 @@ const styles = breadcrumbVariants()
 const linkClasses = computed(() => {
   const base = props.current ? styles.currentPage() : styles.link()
   const disabled = props.disabled ? styles.disabledLink() : ''
-  return cn(base, disabled, attrs.class as string | undefined)
+  return cn(base, disabled, attrs.class as string | undefined, props.ui?.['item-label'])
 })
 
 const isLink = computed(() => !!props.href && !props.current && !props.disabled)
 </script>
 
 <template>
-  <li :class="styles.item()">
+  <li data-part="item" :class="cn(styles.item(), ui?.item)">
     <a
       v-if="isLink"
       :href="href"
+      data-part="item-label"
       :class="linkClasses"
       v-bind="{ ...$attrs, class: undefined }"
     >
@@ -52,6 +53,7 @@ const isLink = computed(() => !!props.href && !props.current && !props.disabled)
     </a>
     <span
       v-else
+      data-part="item-label"
       role="link"
       :aria-current="current ? 'page' : undefined"
       :aria-disabled="disabled || undefined"

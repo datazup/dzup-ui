@@ -16,6 +16,7 @@ import type { DzListItemEmits, DzListItemProps, DzListItemSlots } from './DzList
  * ```
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_LIST_KEY } from './DzList.types.ts'
 import { listVariants } from './DzList.variants.ts'
@@ -60,11 +61,15 @@ function handleClick(event: MouseEvent): void {
     emit('click', event)
   }
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <li
     :id="id"
+    data-part="root"
     :class="classes"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
@@ -76,11 +81,11 @@ function handleClick(event: MouseEvent): void {
     :data-disabled="disabled ? '' : undefined"
     :tabindex="listContext?.interactive.value ? 0 : undefined"
     role="listitem"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-list-item'), ...$attrs, class: undefined }"
     @click="handleClick"
   >
     <slot name="prefix" />
-    <span class="flex-1"><slot /></span>
+    <span data-part="item-label" :class="cn('flex-1', ui?.['item-label'])"><slot /></span>
     <slot name="suffix" />
   </li>
 </template>

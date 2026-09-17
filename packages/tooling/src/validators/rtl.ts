@@ -40,28 +40,36 @@ export const MATRIX_PATH = resolve(ROOT, 'packages/core/docs/rtl-matrix.md')
  * Deliberately narrow. `rounded-lg`, `arrow-right` and `left-align-icon` are
  * not layout, and a rule that flagged them would be switched off within a week.
  *
- * **Known gap, measured by TASK-N2-S1 and NOT closed here (owner decision).**
- * Two things are wrong with the alternation above and they cancel out into a
+ * **The gap TASK-N2-S1 measured is closed here (S1-D3, TASK-R5-O2).** Two
+ * things were wrong with the old alternation and they cancelled out into a
  * false sense of coverage:
  *
- * 1. `inset-[lr]-` names `inset-l-` / `inset-r-`, which **Tailwind 4 does not
+ * 1. `inset-[lr]-` named `inset-l-` / `inset-r-`, which **Tailwind 4 does not
  *    have**. Its inset utilities are `top/right/bottom/left` (physical) and
- *    `inset-s-` / `inset-e-` (logical). So that clause can never match.
+ *    `inset-s-` / `inset-e-` (logical). That clause could never match, and it
+ *    is gone.
  * 2. The utilities that *do* express a physical inset — `left-…`, `right-…` —
- *    are not matched at all.
+ *    were not matched at all. They are now, with one exclusion.
  *
- * Adding `(?:^|[\s'"`])-?(?:left|right)-` was tried and reports **14 sites
- * across 5 components**, of which several are true defects (`DzDialog`'s close
- * control is pinned `right-[var(--dz-spacing-4)]` while its anatomy declares
- * `mirrors: 'layout'`) and several are the centring idiom `left-1/2` paired
- * with `-translate-x-1/2`, which is symmetric and correct. The token scanner
- * splits `left-1/2` into `left-1`, so the two cases are indistinguishable
- * without a real parse. Widening the regex therefore needs the true defects
- * fixed and the centring idiom excluded in the same change — a packet, not a
- * line. The measured list is in the TASK-N2-S1 handoff.
+ * **The exclusion: a fraction.** `left-1/2` paired with `-translate-x-1/2` is
+ * the centring idiom — symmetric, correct in both directions, and the reason
+ * the widening was reverted the first time. `(?![0-9]+\/)` after the hyphen
+ * skips `left-1/2`, `right-1/3` and every other fractional inset while still
+ * catching `right-[var(--dz-spacing-4)]`, `left-0` and `right-4`.
+ *
+ * That exclusion only works on the **whole line**, not on a token: the old
+ * implementation split the source on `[\w-]+`, which turns `left-1/2` into
+ * `left-1` and makes the idiom indistinguishable from a real inset. So
+ * {@link physicalUtilitiesIn} scans lines rather than tokens (see there).
+ *
+ * The 14 sites TASK-N2-S1 measured resolved as: `DzDialog`'s pinned close
+ * control was a real defect in a pilot and is fixed (`inset-e-`); `DzDialog`
+ * and `DzSpeedDial`'s `left-1/2` centring is excluded by the fraction rule;
+ * and the eight author-named FAB / speed-dial `position` corners are
+ * deliberate and now carry `rtl-physical-ok` with the reason at the line.
  */
 const PHYSICAL
-  = /(?:^|[\s'"`])-?(?:m[lr]|p[lr]|border-[lr]|rounded-[lr]|inset-[lr])-|(?:^|[\s'"`])text-(?:left|right)\b|(?:^|[\s'"`])-?border-[lr]\b/
+  = /(?:^|[\s'"`])-?(?:m[lr]|p[lr]|border-[lr]|rounded-[lr])-|(?:^|[\s'"`])-?(?:left|right)-(?!\d+\/)|(?:^|[\s'"`])text-(?:left|right)\b|(?:^|[\s'"`])-?border-[lr]\b/g
 
 /** The marker that declares a physical utility deliberate. */
 const PHYSICAL_OK = 'rtl-physical-ok'
@@ -116,17 +124,33 @@ export function rtlSourcesFor(evidence: readonly string[] | undefined): string[]
   return variants === undefined ? [vue] : [variants, vue]
 }
 
-/** Physical utilities in a variants source, minus the ones declared deliberate. */
+/**
+ * Physical utilities in a source, minus the ones declared deliberate.
+ *
+ * **Scans lines, not tokens** (S1-D3). The previous implementation split each
+ * line on `[\w-]+` and tested every token, which destroys the one piece of
+ * information needed to tell the centring idiom apart from a real inset: a
+ * tokeniser turns `left-1/2` into `left-1`, and `left-1` is a physical inset.
+ * Matching {@link PHYSICAL} against the line keeps the `/2` in view, so the
+ * fraction exclusion can do its job.
+ *
+ * The reported `utility` is the matched text with any leading separator
+ * trimmed, so a caller still gets `right-[var(--dz-spacing-4)]` rather than the
+ * whole line.
+ */
 export function physicalUtilitiesIn(source: string): { line: number, utility: string }[] {
   if (source.includes(PHYSICAL_OK))
     return []
 
   const found: { line: number, utility: string }[] = []
   source.split('\n').forEach((text, index) => {
-    for (const match of text.matchAll(/[\w-]+/g)) {
-      const token = match[0]
-      if (PHYSICAL.test(` ${token}`))
-        found.push({ line: index + 1, utility: token })
+    for (const match of text.matchAll(PHYSICAL)) {
+      // The alternation may consume a leading space, quote or backtick; the
+      // utility itself starts at the first `-` or word character.
+      const utility = match[0].replace(/^[\s'"`]+/, '')
+      // Print the whole utility, not just the prefix the regex needed to see.
+      const rest = text.slice(match.index + match[0].length).match(/^[\w.[\]()/%,#-]*/)
+      found.push({ line: index + 1, utility: utility + (rest?.[0] ?? '') })
     }
   })
   return found

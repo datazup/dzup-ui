@@ -16,6 +16,7 @@ import { RadioGroupIndicator, RadioGroupItem } from 'reka-ui'
  * ```
  */
 import { computed, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { radioVariants } from './DzRadio.variants.ts'
@@ -64,16 +65,20 @@ const resolvedAriaDescribedby = computed(
 
 const styles = computed(() => radioVariants({ size: props.size }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <label
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
     :data-state="resolvedDisabled ? 'disabled' : 'idle'"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-radio'), ...$attrs, class: undefined }"
   >
     <RadioGroupItem
       :id="resolvedId"
@@ -83,13 +88,14 @@ const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-      :class="styles.indicator()"
+      data-part="control"
+      :class="[styles.indicator(), ui?.control]"
     >
-      <RadioGroupIndicator class="flex items-center justify-center">
+      <RadioGroupIndicator data-part="indicator" class="flex items-center justify-center" :class="[ui?.indicator]">
         <span :class="styles.dot()" aria-hidden="true" />
       </RadioGroupIndicator>
     </RadioGroupItem>
-    <span v-if="$slots.default" :class="styles.label()">
+    <span v-if="$slots.default" data-part="label" :class="[styles.label(), ui?.label]">
       <slot />
     </span>
   </label>

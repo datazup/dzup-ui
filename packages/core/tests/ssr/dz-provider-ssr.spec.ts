@@ -8,6 +8,7 @@ import {
   useDzMessages,
   useDzMotion,
   useDzPortalTarget,
+  useDzSanitizer,
   useDzTestIds,
 } from '../../src/composables/provider/index.ts'
 import DzProvider from '../../src/providers/DzProvider.vue'
@@ -132,12 +133,18 @@ const Page = defineComponent({
     const { read } = useDzMessages()
     const { testId } = useDzTestIds()
     const formats = useDzFormats()
+    const sanitizer = useDzSanitizer()
 
     return () => h('main', { dir: direction.value, ...testId('page') }, [
       h('p', locale.value),
       h('p', read('DzPagination.next', 'Next')),
       h('p', formats.number({ style: 'percent' }).format(0.42)),
       h('p', motion.reduced.value ? 'still' : 'animated'),
+      // Rendered as text on purpose: the value the seam produces has to be
+      // byte-identical on the server and on the client, or the hydration
+      // assertions below would pass while the sanitizer disagreed across the
+      // boundary — the exact class of defect P4-03 found with `Intl`.
+      h('p', sanitizer.sanitize('<i>tag</i>', { sink: 'markdown', component: 'Page' })),
     ])
   },
 })
@@ -150,6 +157,7 @@ const ConfiguredApp = defineComponent({
         locale: 'ar-EG',
         messages: { DzPagination: { next: 'التالي' } },
         testIdPrefix: 'e2e',
+        sanitizer: { policyName: 'app', sanitize: (html: string) => `[app]${html}` },
       },
       { default: () => h(Page) },
     )
@@ -172,6 +180,9 @@ describe('dzProvider renders on a server', () => {
     // knows better. Answering `true` renders markup that never animates and
     // hydrates into markup that does, which is a visible jump (ADR-20 §7).
     expect(html).toContain('animated')
+    // The sanitizer resolves with no `window` and no `document`: nothing in the
+    // seam reaches for a DOM parser, which is why the depth guard is a scanner.
+    expect(html).toContain('[app]')
   })
 
   it('touches no DOM when it is the root provider', async () => {
@@ -289,5 +300,50 @@ describe('the bootstrap script and the provider agree', () => {
     // markup — the emitted script is byte-identical to what it was before
     // direction existed.
     expect(getThemeScript()).not.toContain('dir')
+  })
+})
+
+describe('the sanitizer seam under SSR', () => {
+  it('escapes on a server with no adapter installed, without touching a DOM', async () => {
+    const Unconfigured = defineComponent({
+      setup: () => () => h(DzProvider, null, { default: () => h(Page) }),
+    })
+    const html = await ssrRenderWithoutBrowser(Unconfigured)
+    // `&lt;` twice over in the serialised markup: once by the sanitizer, once
+    // by Vue's own text escaping. What matters is that no `<i>` survives.
+    expect(html).not.toContain('<i>tag</i>')
+  })
+
+  it('hydrates an app-installed adapter with zero mismatch warnings', async () => {
+    expect(await hydrateAndCollectWarnings(ConfiguredApp)).toEqual([])
+  })
+
+  it('rejects an over-ceiling payload identically on a server', async () => {
+    const Overflowing = defineComponent({
+      setup: () => () => h(
+        DzProvider,
+        { sanitizer: { limits: { maxLength: 4 } } },
+        {
+          default: () => h(defineComponent({
+            setup() {
+              const sanitizer = useDzSanitizer()
+              return () => {
+                try {
+                  return h('p', sanitizer.sanitize('<p>far too long</p>', {
+                    sink: 'markdown',
+                    component: 'Overflow',
+                  }))
+                }
+                catch (error) {
+                  return h('p', (error as Error).name)
+                }
+              }
+            },
+          })),
+        },
+      ),
+    })
+
+    expect(await ssrRenderWithoutBrowser(Overflowing)).toContain('DzSanitizeLimitError')
   })
 })

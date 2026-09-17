@@ -12,6 +12,7 @@ import type {
   BaseEvents,
   CanonicalSize,
 } from '@dzup-ui/contracts'
+import type { DzCheckboxUi } from './DzCheckbox.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -31,6 +32,13 @@ export interface DzCheckboxProps extends BaseAccessibilityProps {
   name?: string
   /** Whether the checkbox is required */
   required?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzCheckbox.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzCheckboxUi
 }
 
 // ---------------------------------------------------------------------------

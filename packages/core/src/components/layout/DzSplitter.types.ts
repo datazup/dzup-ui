@@ -20,3 +20,5 @@ export type {
 } from './DzResizable.types.ts'
 
 export { DZ_RESIZABLE_KEY as DZ_SPLITTER_KEY } from './DzResizable.types.ts'
+
+export type { DzSplitterPart, DzSplitterUi } from './DzSplitter.anatomy.ts'

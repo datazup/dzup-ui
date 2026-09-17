@@ -20,6 +20,8 @@ import { ToggleGroupItem, ToggleGroupRoot } from 'reka-ui'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { cn } from '../../utilities/cn.ts'
 import { segmentedVariants } from './DzSegmented.variants.ts'
 
@@ -27,6 +29,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Value of the selected segment; the default empty string selects none. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzSegmentedProps>(), {
@@ -35,17 +38,23 @@ const props = withDefaults(defineProps<DzSegmentedProps>(), {
 })
 
 const emit = defineEmits<DzSegmentedEmits>()
+
 defineSlots<DzSegmentedSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
 
 const styles = computed(() => segmentedVariants({ size: props.size }))
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
-const itemClasses = computed(() => styles.value.item())
+const itemClasses = computed(() => cn(styles.value.item(), props.ui?.item))
 
 function handleValueChange(raw: unknown): void {
   const value = raw as string
@@ -54,11 +63,16 @@ function handleValueChange(raw: unknown): void {
     emit('change', value)
   }
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <ToggleGroupRoot
     :id="id"
+    :dir="dzDirection"
+    data-part="root"
     type="single"
     :model-value="model"
     :disabled="disabled"
@@ -66,7 +80,7 @@ function handleValueChange(raw: unknown): void {
     :data-state="disabled ? 'disabled' : 'idle'"
     :aria-label="ariaLabel"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-segmented'), ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"
   >
     <ToggleGroupItem
@@ -74,6 +88,7 @@ function handleValueChange(raw: unknown): void {
       :key="item.value"
       :value="item.value"
       :disabled="item.disabled"
+      data-part="item"
       :class="itemClasses"
       :aria-label="item.label"
     >

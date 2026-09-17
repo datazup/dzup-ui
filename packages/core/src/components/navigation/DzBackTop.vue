@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
+import type { DzFabVariant } from '../buttons/DzFab.types.ts'
 import type { DzBackTopEmits, DzBackTopProps, DzBackTopSlots } from './DzBackTop.types.ts'
 /**
  * DzBackTop — Scroll-to-top button.
@@ -16,6 +18,7 @@ import type { DzBackTopEmits, DzBackTopProps, DzBackTopSlots } from './DzBackTop
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useScrollToTop } from '../../composables/useScrollToTop/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -31,9 +34,9 @@ const props = withDefaults(defineProps<DzBackTopProps>(), {
   visibilityHeight: 400,
   target: undefined,
   duration: 400,
-  variant: 'solid',
-  size: 'md',
-  tone: 'neutral',
+  variant: undefined,
+  size: undefined,
+  tone: undefined,
 })
 
 const emit = defineEmits<DzBackTopEmits>()
@@ -44,6 +47,34 @@ const dzMessages = useComponentMessages('DzBackTop')
 const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
+
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * This component FORWARDS its three axes to an inner `DzFab` that has also
+ * adopted, which makes the literals load-bearing rather than cosmetic: this
+ * component's `tone` default is `neutral` while `DzFab`'s is `primary`, so
+ * passing `undefined` down would silently repaint every back-to-top button.
+ * Keeping the literal as `resolve`'s last link means the value handed to the
+ * FAB is always explicit, and a host configuring `DzBackTop` reaches it here
+ * rather than being shadowed by a `DzFab` default.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved variant: prop, then provider, then default */
+const resolvedVariant = computed(
+  () => resolve<DzFabVariant>('DzBackTop', 'variant', [props.variant]) ?? 'solid',
+)
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzBackTop', 'size', [props.size]) ?? 'md',
+)
+
+/** Resolved tone: prop, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzBackTop', 'tone', [props.tone]) ?? 'neutral',
+)
 
 const { visible, scrollToTop } = useScrollToTop({
   visibilityHeight: () => props.visibilityHeight,
@@ -62,20 +93,25 @@ function handleClick(event: MouseEvent): void {
   scrollToTop()
   emit('click', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <DzFab
+    data-part="root"
     :aria-label="resolvedAriaLabel"
-    :variant="variant"
-    :size="size"
-    :tone="tone"
+    :variant="resolvedVariant"
+    :size="resolvedSize"
+    :tone="resolvedTone"
     position="static"
     :class="classes"
+    :ui="ui"
     :tabindex="visible ? undefined : -1"
     :aria-hidden="visible ? undefined : 'true'"
     data-component="dz-back-top"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-back-top'), ...$attrs, class: undefined }"
     @click="handleClick"
   >
     <slot>

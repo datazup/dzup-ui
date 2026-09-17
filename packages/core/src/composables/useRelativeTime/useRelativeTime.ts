@@ -19,9 +19,11 @@
  * @module @dzup-ui/core/composables/useRelativeTime
  */
 
+import type { DzFormats } from '@dzup-ui/contracts'
 import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue'
 import { computed, onBeforeUnmount, onMounted, ref, toValue, watch } from 'vue'
 import { cachedDateTimeFormat, cachedRelativeTimeFormat } from '../../i18n/intl-cache.ts'
+import { useDzFormats } from '../provider/useDzFormats.ts'
 import { useDzLocale } from '../provider/useDzLocale.ts'
 
 /** Accepted timestamp inputs: a Date, epoch milliseconds, or an ISO string. */
@@ -32,6 +34,15 @@ export type RelativeTimeMode = 'relative' | 'absolute'
 
 /** Locale(s) forwarded to the Intl formatters (defaults to the runtime locale). */
 export type RelativeTimeLocale = string | string[] | undefined
+
+/**
+ * The two `DzFormats` factories these formatters can be handed instead of
+ * building their own (ADR-20 §5, TASK-R5-O3).
+ *
+ * A `Pick` rather than the whole `DzFormats`, so the parameter says exactly what
+ * it uses and a caller can satisfy it without a provider.
+ */
+export type DzRelativeTimeFormats = Pick<DzFormats, 'date' | 'relativeTime'>
 
 /** One unit boundary used to pick the largest sensible Intl unit. */
 interface Division {
@@ -79,6 +90,7 @@ export function formatRelativeTime(
   value: RelativeTimeValue,
   now: RelativeTimeValue,
   locale?: RelativeTimeLocale,
+  formats?: DzRelativeTimeFormats,
 ): string {
   const target = toDate(value).getTime()
   const reference = toDate(now).getTime()
@@ -90,7 +102,8 @@ export function formatRelativeTime(
   // function and changing what `undefined` resolves to would be a breaking
   // change for anyone calling it directly. The composable below is where the
   // provider locale enters.
-  const rtf = cachedRelativeTimeFormat(locale, { numeric: 'auto' })
+  const rtf = formats?.relativeTime({ numeric: 'auto' })
+    ?? cachedRelativeTimeFormat(locale, { numeric: 'auto' })
   // Signed seconds: negative = in the past, positive = in the future.
   let duration = (target - reference) / SECOND_MS
 
@@ -113,14 +126,13 @@ export function formatRelativeTime(
 export function formatAbsoluteTime(
   value: RelativeTimeValue,
   locale?: RelativeTimeLocale,
+  formats?: DzRelativeTimeFormats,
 ): string {
   const date = toDate(value)
   if (Number.isNaN(date.getTime()))
     return ''
-  return cachedDateTimeFormat(locale, {
-    dateStyle: 'full',
-    timeStyle: 'short',
-  }).format(date)
+  const options: Intl.DateTimeFormatOptions = { dateStyle: 'full', timeStyle: 'short' }
+  return (formats?.date(options) ?? cachedDateTimeFormat(locale, options)).format(date)
 }
 
 /**
@@ -202,6 +214,18 @@ export function useRelativeTime(options: UseRelativeTimeOptions): UseRelativeTim
   const dzLocale = useDzLocale()
   const activeLocale = (): RelativeTimeLocale => toValue(locale) ?? dzLocale.value
 
+  /**
+   * The application's date and relative-time defaults (ADR-20 §5, TASK-R5-O3).
+   *
+   * Passed to the pure formatters only when this caller states no `locale`: a
+   * caller that named one is overriding the locale, and `DzFormats` binds the
+   * locale and the option defaults together, so honouring both would mean
+   * silently applying the host's options under someone else's locale.
+   */
+  const dzFormats = useDzFormats()
+  const providerFormats = (): DzRelativeTimeFormats | undefined =>
+    (toValue(locale) === undefined ? dzFormats : undefined)
+
   // Seed `now` from the wall clock at setup so the first render already reads
   // correctly (server and client clocks agree closely enough); the mounted
   // timer then keeps it fresh.
@@ -213,11 +237,11 @@ export function useRelativeTime(options: UseRelativeTimeOptions): UseRelativeTim
   })
 
   const relative = computed(() =>
-    formatRelativeTime(toValue(value), now.value, activeLocale()),
+    formatRelativeTime(toValue(value), now.value, activeLocale(), providerFormats()),
   )
 
   const absolute = computed(() =>
-    formatAbsoluteTime(toValue(value), activeLocale()),
+    formatAbsoluteTime(toValue(value), activeLocale(), providerFormats()),
   )
 
   const display = computed(() =>

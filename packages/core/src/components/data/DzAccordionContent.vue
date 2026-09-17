@@ -8,6 +8,7 @@ import { AccordionContent } from 'reka-ui'
  * Inherits variant/size context from parent DzAccordion via inject (ADR-08).
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_ACCORDION_KEY } from './DzAccordion.types.ts'
 import { accordionVariants } from './DzAccordion.variants.ts'
@@ -31,11 +32,19 @@ const styles = computed(() =>
 const classes = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
   <AccordionContent
+    data-part="content"
     :class="classes"
+    :data-dz-motion="dzMotionAttr"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <slot />

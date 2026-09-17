@@ -1,8 +1,31 @@
 <script setup lang="ts" generic="T = unknown">
 import type { DzFieldArrayEmits, DzFieldArrayProps, DzFieldArraySlots } from './DzFieldArray.types.ts'
+/**
+ * DzFieldArray — renderless repeater for an array-valued form field, owning the bounds and the per-row ids.
+ *
+ * Renders nothing of its own: it owns the array, enforces the `min` / `max`
+ * bounds, and hands each row its value, its index, the `remove` / `move` /
+ * `append` callbacks and a set of collision-free ids. Those ids are the point —
+ * every row of a repeater otherwise resolves to the single surrounding
+ * `DzFormField` id, so a label could activate the wrong row.
+ *
+ * @example
+ * ```vue
+ * <DzFieldArray v-model="emails" :min="1" :max="5">
+ *   <template #default="{ field, index, remove, canRemove, fieldId }">
+ *     <DzInput :id="fieldId" :model-value="field" />
+ *     <DzButton :disabled="!canRemove" @click="remove">Remove</DzButton>
+ *   </template>
+ *   <template #append="{ append }">
+ *     <DzButton @click="append('')">Add email</DzButton>
+ *   </template>
+ * </DzFieldArray>
+ * ```
+ */
 import { computed, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 
+/** The array of row values the field array edits; the default empty array renders no rows. */
 const model = defineModel<T[]>({ default: () => [] })
 
 const props = withDefaults(defineProps<DzFieldArrayProps>(), {

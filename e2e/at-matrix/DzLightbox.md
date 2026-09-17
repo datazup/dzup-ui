@@ -20,6 +20,22 @@ known one.
 | `reach` | Reach the component by the platform's own navigation (Tab, or swipe on touch). | Name, role and current state are announced together, and the name is the visible label. |
 | `dismiss` | Dismiss with Escape, and again by activating the close affordance. | Focus returns to the trigger and the AT announces where it landed. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/media/DzLightbox.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Escape` | — | Close the lightbox and return focus to the element that opened it. |
+| `Tab` | — | Move to the next focusable element, wrapping inside the lightbox. |
+| `Shift` + `Tab` | — | Move to the previous focusable element, wrapping inside the lightbox. |
+| `ArrowRight` | — | Show the next item. |
+| `ArrowLeft` | — | Show the previous item. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

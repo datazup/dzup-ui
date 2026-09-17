@@ -22,6 +22,22 @@ known one.
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 | `dismiss` | Dismiss with Escape, and again by activating the close affordance. | Focus returns to the trigger and the AT announces where it landed. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/buttons/DzSplitButton.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Enter` | root | Activate the primary action. |
+| `Space` | root | Activate the primary action. |
+| `ArrowDown` | trigger | Open the menu and focus its first item. |
+| `Enter` | trigger | Open the menu and focus its first item. |
+| `Escape` | menu open | Close the menu and return focus to the trigger. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

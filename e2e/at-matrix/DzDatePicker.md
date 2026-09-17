@@ -24,6 +24,26 @@ known one.
 | `dismiss` | Dismiss with Escape, and again by activating the close affordance. | Focus returns to the trigger and the AT announces where it landed. |
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzDatePicker.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowDown` | — | Open the calendar when closed, otherwise move to the next option. |
+| `ArrowUp` | — | Open the calendar when closed, otherwise move to the previous option. |
+| `Home` | list open | Move to the first option. |
+| `End` | list open | Move to the last option. |
+| `Enter` | — | Select the highlighted option and close the calendar. |
+| `Escape` | — | Close the calendar without changing the value. |
+| `Tab` | — | Move out of the control, closing the calendar. |
+| `ArrowRight` | calendar open | Move one day towards the inline end. |
+| `ArrowLeft` | calendar open | Move one day towards the inline start. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

@@ -9,6 +9,8 @@
 
 import type { BaseAccessibilityProps, Orientation } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzStepperUi } from './DzStepper.anatomy.ts'
+import type { DzStepperItemUi } from './DzStepperItem.anatomy.ts'
 
 /** Stepper orientation */
 export type StepperOrientation = Orientation
@@ -87,6 +89,12 @@ export interface DzStepperProps extends Omit<BaseAccessibilityProps, 'ariaInvali
    * component, so a stepper used as a progress indicator is unaffected.
    */
   linear?: boolean
+  /**
+   * Per-part class override for the `role="group"` wrapper (ADR-19 §5).
+   * `DzStepperItem` is a public component with an anatomy of its own, so the
+   * step's inner nodes are addressed through its `ui`, not through this one.
+   */
+  ui?: DzStepperUi
 }
 
 /** Events emitted by DzStepper */
@@ -133,6 +141,12 @@ export interface DzStepperItemProps {
    * regardless of this flag — upcoming steps never navigate.
    */
   clickable?: boolean
+  /**
+   * Per-part class overrides for the step's inner nodes (ADR-19 §5). `class`
+   * at the call site already lands on the step itself; the numbered circle,
+   * the title and the description are rendered from props.
+   */
+  ui?: DzStepperItemUi
 }
 
 /** Events emitted by DzStepperItem */

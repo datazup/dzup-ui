@@ -12,6 +12,7 @@
  */
 
 import type { BaseAccessibilityProps, CanonicalSize, Orientation } from '@dzup-ui/contracts'
+import type { DzMegaMenuUi } from './DzMegaMenu.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Model
@@ -83,6 +84,13 @@ export interface DzMegaMenuProps extends BaseAccessibilityProps {
   collapsed?: boolean
   /** Disabled state — prevents all interaction */
   disabled?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzMegaMenu.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzMegaMenuUi
 }
 
 // ---------------------------------------------------------------------------

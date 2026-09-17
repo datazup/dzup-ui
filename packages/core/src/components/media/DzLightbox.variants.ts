@@ -45,10 +45,15 @@ export const lightboxVariants = tv({
       'hover:bg-[var(--dz-background)]/40',
       'dz-focus-ring-button dz-disabled-button',
     ].join(' '),
-    prevButton: 'left-[var(--dz-spacing-4)] top-1/2 -translate-y-1/2',
-    nextButton: 'right-[var(--dz-spacing-4)] top-1/2 -translate-y-1/2',
+    // Logical insets (TASK-R5-O2, S1-D3): previous sits at the inline START of
+    // the reading direction and next at the inline END, so an Arabic lightbox
+    // steps backwards toward the right edge the way its reader expects.
+    // Identical in LTR. `inset-s-` / `inset-e-` are the spellings Tailwind 4
+    // generates; `start-` / `end-` do not exist (S1-F4c).
+    prevButton: 'inset-s-[var(--dz-spacing-4)] top-1/2 -translate-y-1/2',
+    nextButton: 'inset-e-[var(--dz-spacing-4)] top-1/2 -translate-y-1/2',
     closeButton: [
-      'absolute right-[var(--dz-spacing-4)] top-[var(--dz-spacing-4)]',
+      'absolute inset-e-[var(--dz-spacing-4)] top-[var(--dz-spacing-4)]',
       'inline-flex items-center justify-center',
       'h-8 w-8 rounded-full',
       'bg-[var(--dz-background)]/20 text-[var(--dz-background)]',
@@ -58,7 +63,7 @@ export const lightboxVariants = tv({
       'dz-focus-ring-button',
     ].join(' '),
     counter: [
-      'absolute top-[var(--dz-spacing-4)] left-[var(--dz-spacing-4)]',
+      'absolute top-[var(--dz-spacing-4)] inset-s-[var(--dz-spacing-4)]',
       'text-[length:var(--dz-text-sm)] text-[var(--dz-background)]',
     ].join(' '),
   },

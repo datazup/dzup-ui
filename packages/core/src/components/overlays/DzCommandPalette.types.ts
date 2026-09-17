@@ -8,6 +8,7 @@
 
 import type { BaseAccessibilityProps, BasePortalProps } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
+import type { DzCommandPaletteUi } from './DzCommandPalette.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Data types
@@ -60,6 +61,13 @@ export interface DzCommandPaletteProps extends BaseAccessibilityProps, BasePorta
   groups?: CommandGroup[]
   /** Whether to bind Ctrl+K / Cmd+K globally */
   enableGlobalShortcut?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in
+   * `DzCommandPalette.anatomy.ts` (ADR-19 §5). `class` keeps its existing
+   * target (the portalled dialog content); `ui.item` and `ui.icon` land on
+   * every row and every row icon.
+   */
+  ui?: DzCommandPaletteUi
 }
 
 /** Events emitted by DzCommandPalette */

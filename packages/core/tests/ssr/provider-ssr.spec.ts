@@ -8,6 +8,7 @@ import {
   useDzMotion,
   useDzNonce,
   useDzPortalTarget,
+  useDzSanitizer,
   useDzTestIds,
 } from '../../src/composables/provider/index.ts'
 import { provideDzLocale } from '../../src/composables/provider/useDzLocale.ts'
@@ -58,6 +59,7 @@ describe('provider composables render on a server', () => {
         const nonce = useDzNonce()
         const { read } = useDzMessages()
         const { testId } = useDzTestIds()
+        const sanitizer = useDzSanitizer()
 
         return () => h('div', [
           `locale=${locale.value}`,
@@ -67,6 +69,8 @@ describe('provider composables render on a server', () => {
           `nonce=${String(nonce.value)}`,
           `message=${read('select.noResults', 'No results found')}`,
           `testId=${String(testId('submit'))}`,
+          `policy=${sanitizer.policyName}`,
+          `depth=${String(sanitizer.limits.maxDepth)}`,
         ])
       },
     })
@@ -83,6 +87,10 @@ describe('provider composables render on a server', () => {
     expect(html).toContain('nonce=undefined')
     expect(html).toContain('message=No results found')
     expect(html).toContain('testId=undefined')
+    // The sanitizer's default is data, not a browser capability: the same
+    // policy name and the same ceilings resolve on a server as in a browser.
+    expect(html).toContain('policy=dzup-ui')
+    expect(html).toContain('depth=64')
   })
 
   it('formats numbers and dates on the server', async () => {

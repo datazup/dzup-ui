@@ -19,6 +19,14 @@ a form select whose overlay panel is a DzTree (TASK-NF-04).
 - **Risk tier:** C · **Status:** experimental
 - **Taxonomy:** variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **v-model:** `v-model:expandedKeys` (`string[] | undefined`), `v-model` (`TreeSelectValue`), `v-model:value` (`TreeSelectValue`)
+- **Anatomy parts (ADR-19):** `content`, `empty`, `error`, `icon`, `indicator`, `input`, `label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`
+
+## Intent and selection guidance
+
+**Not declared.** `DzTreeSelect` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (28, of which 18 inherited from `@dzup-ui/contracts`)
+## Props (29, of which 18 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -57,7 +65,7 @@ never as asserted.
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `invalid` | `boolean \| undefined` | no | `false` | Whether the field value is invalid |
 | `loading` | `boolean \| undefined` | no | — | Loading state -- shows loading indicator |
-| `modelValue` | `TreeSelectValue` | no | `undefined` | — |
+| `modelValue` | `TreeSelectValue` | no | `undefined` | The selected node key or keys, shaped by `selectionMode`, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). |
 | `name` | `string \| undefined` | no | `undefined` | Component name for form integration |
 | `nodes` | `TreeNode<unknown>[]` | yes | — | Hierarchical tree data shown in the overlay panel |
 | `noResultsText` | `string \| undefined` | no | `undefined` | Text shown in the panel when the filter matches no nodes |
@@ -70,6 +78,7 @@ never as asserted.
 | `selectionMode` | `TreeSelectSelectionMode \| undefined` | no | `"single"` | Selection behaviour |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | — | Semantic color tone |
+| `ui` | `Partial<Record<"icon" \| "root" \| "trigger" \| "indicator" \| "content" \| "error" \| "empty" \| "label" \| "input" \| "options-state" \| "options-message" \| "options-retry", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTreeSelect.anatomy.ts` (ADR-19 §5). The tree itself is a `DzTree`, which is its own anatomy boundary — restyle a node through `DzTree`'s parts, not through this map. |
 | `value` | `TreeSelectValue` | no | — | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. `isEmpty` is `undefined`-only, which is exact for this control: `TreeSelectValue` is `string \| string[] \| undefined`, so the only value that means "the consumer did not bind the default model" is `undefined`, and an explicit clear writes `[]` in multiple mode or `''` in single. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
@@ -86,8 +95,8 @@ never as asserted.
 | `retryOptions` | `[]` | The user asked to try again after an error. |
 | `select` | `[node: TreeNode<unknown>]` | Emitted when a node is selected (or toggled) |
 | `update:expandedKeys` | `unknown[]` | Emitted when the expanded keys change |
-| `update:modelValue` | `[value: TreeSelectValue]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
-| `update:value` | `[value: TreeSelectValue]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: TreeSelectValue]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
+| `update:value` | `[value: TreeSelectValue]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
 
 ## Slots (4)
 
@@ -115,6 +124,167 @@ Editable, running the **Multiple (chips)** story from `packages/core/stories/for
 
 <DzPlayground component="DzTreeSelect" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled — `expandedKeys`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzTreeSelect />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzTreeSelect v-model:expandedKeys="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzTreeSelect :expandedKeys="value" @update:expandedKeys="value = $event" />
+```
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzTreeSelect />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzTreeSelect v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzTreeSelect :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Controlled and uncontrolled — `value`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzTreeSelect />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzTreeSelect v-model:value="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzTreeSelect :value="value" @update:value="value = $event" />
+```
+
+**Where each variant is shown.** 8 stories in
+`packages/core/stories/forms/DzTreeSelect.stories.ts`: `Single`, `Multiple (chips)`, `Checkbox propagation`, `Filterable`, `In FormField`, `Dark Mode Preview`, `Accessibility: Keyboard-Only Tree Combobox`, `Real World: Catalog Category Filter`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `content` | `[data-part="content"]` | no — renders zero or more than once |
+| `empty` | `[data-part="empty"]` | no — renders zero or more than once |
+| `error` | `[data-part="error"]` | no — renders zero or more than once |
+| `icon` | `[data-part="icon"]` | yes |
+| `indicator` | `[data-part="indicator"]` | no — renders zero or more than once |
+| `input` | `[data-part="input"]` | no — renders zero or more than once |
+| `label` | `[data-part="label"]` | yes |
+| `options-message` | `[data-part="options-message"]` | no — renders zero or more than once |
+| `options-retry` | `[data-part="options-retry"]` | no — renders zero or more than once |
+| `options-state` | `[data-part="options-state"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `trigger` | `[data-part="trigger"]` | yes |
+
+```vue
+<DzTreeSelect :ui="{ 'content': 'ring-2', 'empty': 'ring-2', 'error': 'ring-2', 'icon': 'ring-2', 'indicator': 'ring-2', 'input': 'ring-2', 'label': 'ring-2', 'options-message': 'ring-2', 'options-retry': 'ring-2', 'options-state': 'ring-2', 'root': 'ring-2', 'trigger': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `checked` | `[data-state="checked"]` |
+| `closed` | `[data-state="closed"]` |
+| `disabled` | `[data-state="disabled"]` |
+| `idle` | `[data-state="idle"]` |
+| `indeterminate` | `[data-state="indeterminate"]` |
+| `invalid` | `[data-state="invalid"]` |
+| `loading` | `[data-state="loading"]` |
+| `open` | `[data-state="open"]` |
+| `readonly` | `[data-state="readonly"]` |
+| `required` | `[data-state="required"]` |
+| `unchecked` | `[data-state="unchecked"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/forms/DzTreeSelect.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMessages` | the translated string catalogue |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | `icon` | These parts render a direction-bearing icon and mirror with the layout. |
+
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzTreeSelect.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzTreeSelect` advertises 11 states:
+`checked`, `closed`, `disabled`, `idle`, `indeterminate`, `invalid`, `loading`, `open`, `readonly`, `required`, `unchecked`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzTreeSelect.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e986952`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -122,8 +292,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 28 | 27 | 10 declare a default, of which 14 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 11 | 9 | 9 recovered from the `Dz*Emits` interface · 3 synthesised by `defineModel` |
+| Props | 29 | 29 | 10 declare a default, of which 14 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 11 | 11 | 9 recovered from the `Dz*Emits` interface · 3 synthesised by `defineModel` |
 | Slots | 4 | 4 | 3 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -131,8 +301,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -141,7 +311,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `e986952e`
 
 **Why this pattern:** A form control whose overlay panel is a full treeview, so it owes both the combobox and the treeview keyboard contracts at once.
@@ -178,16 +348,28 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**10 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `ArrowDown` | — | Open the list when closed, otherwise move to the next option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
+| `ArrowUp` | — | Open the list when closed, otherwise move to the previous option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
+| `Home` | `list open` | Move to the first option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
+| `End` | `list open` | Move to the last option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
+| `Enter` | — | Select the highlighted option and close the list. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
+| `Escape` | — | Close the list without changing the value. | `2.1.1`, `2.1.2` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
+| `Tab` | — | Move out of the control, closing the list. | `2.1.2` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
+| `ArrowRight` | — | Expand the focused node. | `2.1.1` | [`treeview`](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) |
+| `ArrowLeft` | — | Collapse the focused node, or move to its parent. | `2.1.1` | [`treeview`](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) |
+| `Space` | — | Select the focused node. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+
+Declared in `packages/core/src/components/forms/DzTreeSelect.anatomy.ts`.
 
 - **Pattern:** [APG — `combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/forms/DzTreeSelect.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 10 binding(s); the unit spec asserts no key event for `Home`, `End`, `Escape`, `Tab`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -221,12 +403,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzTreeSelect.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzTreeSelect.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzTreeSelect.spec.ts` — The component declares 10 binding(s); the unit spec asserts no key event for `Home`, `End`, `Escape`, `Tab`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzTreeSelect.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzTreeSelect.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzTreeSelect.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzTreeSelect.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzTreeSelect.stories.ts` |
@@ -234,7 +416,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTreeSelect.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**5 unrun:** `axe`, `controlled-uncontrolled`, `rtl-contract`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

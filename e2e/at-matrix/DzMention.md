@@ -25,6 +25,23 @@ known one.
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzMention.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| any character key | — | Typing the trigger character opens the suggestion list. |
+| `ArrowDown` | list open | Move to the next suggestion. |
+| `ArrowUp` | list open | Move to the previous suggestion. |
+| `Enter` | list open | Insert the highlighted suggestion. |
+| `Tab` | list open | Insert the highlighted suggestion. |
+| `Escape` | — | Close the suggestion list and keep the typed text. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

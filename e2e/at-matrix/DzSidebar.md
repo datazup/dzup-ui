@@ -22,6 +22,20 @@ known one.
 | `typeahead` | Type the first characters of an item while the collection has focus. | Focus moves to the matching item and it is announced. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/navigation/DzSidebar.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Tab` | — | Move to the next item or group toggle; every one is its own tab stop. |
+| `Enter` | — | Activate the focused item, or expand and collapse the focused group. |
+| `Space` | — | Activate the focused item, or expand and collapse the focused group. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

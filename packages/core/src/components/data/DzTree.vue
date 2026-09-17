@@ -24,6 +24,7 @@ import type { TreeNavDirection } from './treeNavigation.ts'
  * ```
  */
 import { computed, nextTick, provide, toRef, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TREE_KEY } from './DzTree.types.ts'
 import { treeVariants } from './DzTree.variants.ts'
@@ -197,13 +198,17 @@ provide(DZ_TREE_KEY, context)
 const styles = computed(() => treeVariants({ size: props.size }))
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <ul
     :id="treeId"
+    data-part="root"
     role="tree"
     :class="rootClasses"
     :aria-label="ariaLabel"
@@ -213,7 +218,7 @@ const rootClasses = computed(() =>
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-tree'), ...$attrs, class: undefined }"
   >
     <template v-if="items.length > 0">
       <DzTreeItem
@@ -232,7 +237,7 @@ const rootClasses = computed(() =>
 
     <!-- role="none" keeps the placeholder out of the tree's required-children
          contract (a bare listitem is not an allowed owned element of role=tree). -->
-    <li v-else role="none" :class="styles.empty()">
+    <li v-else data-part="empty" role="none" :class="cn(styles.empty(), ui?.empty)">
       <slot name="empty">
         No items
       </slot>

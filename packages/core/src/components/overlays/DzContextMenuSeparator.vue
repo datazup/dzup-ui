@@ -20,5 +20,5 @@ const classes = computed(() =>
 </script>
 
 <template>
-  <ContextMenuSeparator :class="classes" v-bind="{ ...$attrs, class: undefined }" />
+  <ContextMenuSeparator data-part="separator" :class="classes" v-bind="{ ...$attrs, class: undefined }" />
 </template>

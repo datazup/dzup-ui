@@ -44,6 +44,11 @@ const props = withDefaults(defineProps<DzThemeProviderProps>(), {
  * adding the option to the older name would mean two places to look up what
  * "does it remember my theme?" answers to.
  */
+defineSlots<{
+  /** The application tree the theme context covers. Rendered unwrapped inside `DzProvider`. */
+  default?: () => unknown
+}>()
+
 const theme = computed<DzProviderThemeOptions>(() => ({
   default: props.defaultTheme,
   storageKey: props.storageKey,

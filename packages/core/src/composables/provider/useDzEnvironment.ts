@@ -1,24 +1,25 @@
-import type { DzDefaults, DzMotion, DzMotionPreference, DzTestIds } from '@dzup-ui/contracts'
+import type { DzDefaults, DzTestIds } from '@dzup-ui/contracts'
 import type { Ref } from 'vue'
 import {
   DZ_DEFAULTS_KEY,
-  DZ_MOTION_KEY,
   DZ_NONCE_KEY,
   DZ_PORTAL_TARGET_KEY,
   DZ_PROVIDER_DEFAULTS,
   DZ_TEST_IDS_KEY,
 } from '@dzup-ui/contracts'
-import { computed, inject, onScopeDispose, provide, readonly, ref } from 'vue'
+import { inject, provide, readonly, ref } from 'vue'
 
 /**
- * Host environment concerns: portal target, motion, defaults, nonce, test ids
+ * Host environment concerns: portal target, defaults, nonce, test ids
  * (TASK-OSS-P4-01, ADR-20).
  *
  * Grouped in one file because each is a handful of lines and they share one
  * property worth stating once: **every one of them must be safe under SSR.**
- * No `window`, `document` or `matchMedia` is touched at module scope, and the
- * only one that needs a browser API guards it and returns the server-safe
- * answer without it.
+ * No `window`, `document` or `matchMedia` is touched anywhere in this file.
+ *
+ * Motion shipped here too until TASK-R5-O3 and now lives in `useDzMotion.ts`:
+ * it is the one of the five with a rendering consequence, and it grew a CSS
+ * surface and a deterministic test mode that the other four do not need.
  */
 
 // ---------------------------------------------------------------------------
@@ -45,70 +46,6 @@ export function useDzPortalTarget(): Readonly<Ref<string | undefined>> {
 
 export function provideDzPortalTarget(target: Ref<string | undefined>): void {
   provide(DZ_PORTAL_TARGET_KEY, target)
-}
-
-// ---------------------------------------------------------------------------
-// Motion
-// ---------------------------------------------------------------------------
-
-/**
- * Whether components may animate.
- *
- * Under SSR there is no `matchMedia`, and the honest server answer is
- * **`reduced: false`** — the same thing the CSS `prefers-reduced-motion` media
- * query resolves to before the client knows better. Answering `true` on the
- * server would produce markup that never animates and then hydrates into markup
- * that does, which is a visible jump rather than a safe default.
- */
-export function useDzMotion(): DzMotion {
-  const injected = inject(DZ_MOTION_KEY, null)
-  if (injected !== null)
-    return injected
-
-  return createDzMotion(ref(DZ_PROVIDER_DEFAULTS.motion))
-}
-
-/**
- * Resolve a stated preference against the OS, and keep resolving as the OS
- * changes.
- *
- * Exported from this module but **not from the barrel**: `DzProvider` builds one
- * from an application's `motion` prop, and `useDzMotion` builds one from the
- * default for a tree with no provider. Both need the identical resolution rule,
- * and a second copy of it is how the provider and the fallback come to disagree
- * about what `'system'` means.
- *
- * The listener is registered on the caller's effect scope, so it is removed when
- * the provider unmounts.
- */
-export function createDzMotion(preference: Ref<DzMotionPreference>): DzMotion {
-  const systemReduced = ref(false)
-
-  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)')
-    systemReduced.value = query.matches
-
-    const listen = (event: MediaQueryListEvent): void => {
-      systemReduced.value = event.matches
-    }
-    query.addEventListener('change', listen)
-    onScopeDispose(() => query.removeEventListener('change', listen))
-  }
-
-  return {
-    preference: readonly(preference) as Ref<DzMotionPreference>,
-    reduced: readonly(computed(() => {
-      if (preference.value === 'reduced')
-        return true
-      if (preference.value === 'full')
-        return false
-      return systemReduced.value
-    })) as Ref<boolean>,
-  }
-}
-
-export function provideDzMotion(motion: DzMotion): void {
-  provide(DZ_MOTION_KEY, motion)
 }
 
 // ---------------------------------------------------------------------------

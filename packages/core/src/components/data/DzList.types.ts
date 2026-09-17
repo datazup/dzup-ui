@@ -12,6 +12,7 @@ import type {
   CanonicalTone,
 } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzListItemUi } from './DzListItem.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -93,6 +94,13 @@ export interface DzListItemProps extends BaseAccessibilityProps {
   active?: boolean
   /** Semantic color tone */
   tone?: CanonicalTone
+  /**
+   * Per-part class overrides, keyed by the names in `DzListItem.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzListItemUi
 }
 
 // ---------------------------------------------------------------------------

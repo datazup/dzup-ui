@@ -76,12 +76,21 @@ describe('dzBackTop', () => {
     expect(wrapper.emitted('click')).toHaveLength(1)
   })
 
-  it('is fixed-positioned bottom-right via tokens', () => {
+  /**
+   * Repointed, not weakened (TASK-R5-O2). The inline inset was `right-` and is
+   * now `inset-e-` — the same physical edge in a LTR document, the mirrored one
+   * in an RTL document. `DzBackTop.anatomy.ts` declares `mirrors: 'layout'`,
+   * which is what `validate:rtl` reads, and this assertion is the unit-level
+   * half of the same promise: the button is pinned to the inline END, not to
+   * the physical right. The assertion count and shape are unchanged.
+   */
+  it('is fixed-positioned to the bottom inline-end via tokens', () => {
     const wrapper = mount(DzBackTop)
     const cls = wrapper.find('button').attributes('class') ?? ''
     expect(cls).toContain('dz-back-top')
     expect(cls).toContain('fixed')
     expect(cls).toContain('bottom-[var(--dz-back-top-offset)]')
-    expect(cls).toContain('right-[var(--dz-back-top-offset)]')
+    expect(cls).toContain('inset-e-[var(--dz-back-top-offset)]')
+    expect(cls).not.toContain('right-[var(--dz-back-top-offset)]')
   })
 })

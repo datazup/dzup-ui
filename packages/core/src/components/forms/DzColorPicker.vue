@@ -15,7 +15,7 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
-import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -25,6 +25,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The selected colour as a CSS colour string (hex or `rgb()`); the default empty string selects none. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzColorPickerProps>(), {
@@ -142,16 +143,20 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-color-picker'), ...$attrs, class: undefined }"
   >
     <PopoverRoot v-model:open="popoverOpen">
       <!-- Trigger button -->
@@ -162,7 +167,8 @@ function handleBlur(event: FocusEvent): void {
         <button
           :id="resolvedId"
           type="button"
-          :class="styles.trigger()"
+          data-part="trigger"
+          :class="[styles.trigger(), ui?.trigger]"
           :aria-label="resolvedAriaLabel"
           :aria-labelledby="ariaLabelledby"
           :aria-describedby="resolvedAriaDescribedby"
@@ -175,11 +181,12 @@ function handleBlur(event: FocusEvent): void {
         >
           <slot>
             <span
-              :class="styles.swatch()"
+              data-part="indicator"
+              :class="[styles.swatch(), ui?.indicator]"
               :style="{ backgroundColor: model }"
               aria-hidden="true"
             />
-            <span :class="styles.valueText()">{{ model }}</span>
+            <span data-part="label" :class="[styles.valueText(), ui?.label]">{{ model }}</span>
           </slot>
         </button>
       </PopoverTrigger>
@@ -191,16 +198,20 @@ function handleBlur(event: FocusEvent): void {
         :defer="portalDefer"
       >
         <PopoverContent
+          data-part="content"
           :side-offset="4"
           class="z-50 w-64 rounded-[var(--dz-radius-lg)] border border-[var(--dz-border)] bg-[var(--dz-background)] shadow-[var(--dz-shadow-lg)]"
+          :class="[ui?.content]"
         >
-          <div :class="styles.panel()">
+          <div data-part="panel" :class="[styles.panel(), ui?.panel]">
             <!-- Native color input as main picker -->
             <div :class="styles.colorArea()" :style="{ height: `${props.canvasHeight}px` }">
               <input
                 type="color"
+                data-part="input"
                 :value="model"
                 class="h-full w-full cursor-crosshair border-0 p-0"
+                :class="[ui?.input]"
                 style="appearance: none; -webkit-appearance: none; border: none; background: none;"
                 :aria-label="dzMessages.colorArea"
                 @input="handleNativeColorChange"
@@ -210,13 +221,15 @@ function handleBlur(event: FocusEvent): void {
             <!-- Hex input -->
             <div v-if="showInput" class="flex items-center gap-[var(--dz-spacing-2)]">
               <span
-                :class="styles.swatch()"
+                data-part="indicator"
+                :class="[styles.swatch(), ui?.indicator]"
                 :style="{ backgroundColor: model }"
                 aria-hidden="true"
               />
               <input
                 type="text"
-                :class="styles.input()"
+                data-part="input"
+                :class="[styles.input(), ui?.input]"
                 :value="model"
                 maxlength="7"
                 placeholder="#000000"
@@ -226,12 +239,13 @@ function handleBlur(event: FocusEvent): void {
             </div>
 
             <!-- Preset swatches -->
-            <div v-if="presets.length > 0" :class="styles.presetGrid()">
+            <div v-if="presets.length > 0" data-part="group" :class="[styles.presetGrid(), ui?.group]">
               <button
                 v-for="color in presets"
                 :key="color"
                 type="button"
-                :class="styles.presetSwatch()"
+                data-part="item"
+                :class="[styles.presetSwatch(), ui?.item]"
                 :style="{ backgroundColor: color }"
                 :aria-label="`Select color ${color}`"
                 @click="handlePresetClick(color)"
@@ -254,7 +268,9 @@ function handleBlur(event: FocusEvent): void {
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

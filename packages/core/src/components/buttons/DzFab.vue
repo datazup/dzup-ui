@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { DzFabEmits, DzFabProps, DzFabSlots } from './DzFab.types.ts'
+import type { CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
+import type { DzFabEmits, DzFabProps, DzFabSlots, DzFabVariant } from './DzFab.types.ts'
 /**
  * DzFab — Floating action button.
  *
@@ -15,6 +16,7 @@ import type { DzFabEmits, DzFabProps, DzFabSlots } from './DzFab.types.ts'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { fabVariants } from './DzFab.variants.ts'
@@ -25,9 +27,9 @@ defineOptions({
 
 const props = withDefaults(defineProps<DzFabProps>(), {
   icon: undefined,
-  variant: 'solid',
-  size: 'md',
-  tone: 'primary',
+  variant: undefined,
+  size: undefined,
+  tone: undefined,
   disabled: false,
   loading: false,
   position: 'static',
@@ -40,6 +42,29 @@ const _slots = defineSlots<DzFabSlots>()
 
 const attrs = useAttrs()
 
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * Each axis keeps the literal it carried in `withDefaults` as `resolve`'s last
+ * link, so an unprovided tree renders exactly what it rendered before.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved variant: prop, then provider, then default */
+const resolvedVariant = computed(
+  () => resolve<DzFabVariant>('DzFab', 'variant', [props.variant]) ?? 'solid',
+)
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzFab', 'size', [props.size]) ?? 'md',
+)
+
+/** Resolved tone: prop, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzFab', 'tone', [props.tone]) ?? 'primary',
+)
+
 const isInert = computed(() => props.disabled || props.loading)
 
 /** Glyph dimension driven by the `--dz-fab-icon-size` token */
@@ -48,7 +73,7 @@ const iconSizeClass = 'h-[var(--dz-fab-icon-size)] w-[var(--dz-fab-icon-size)]'
 const classes = computed(() =>
   cn(
     // Color (tone × variant) from the button family.
-    buttonVariants({ variant: props.variant, size: 'md', tone: props.tone }),
+    buttonVariants({ variant: resolvedVariant.value, size: 'md', tone: resolvedTone.value }),
     // Shell: circle, elevation, sizing token, optional fixed positioning.
     // Listed second so the FAB shape/size wins over button defaults via cn().
     fabVariants({ position: props.position }),
@@ -81,6 +106,9 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -89,17 +117,17 @@ function handleBlur(event: FocusEvent): void {
     data-part="root"
     :type="type"
     :class="classes"
-    :data-size="size"
+    :data-size="resolvedSize"
     :disabled="disabled || undefined"
     :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
     :aria-label="ariaLabel"
     :data-state="loading ? 'loading' : disabled ? 'disabled' : 'idle'"
-    :data-tone="tone"
+    :data-tone="resolvedTone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-fab'), ...$attrs, class: undefined }"
     @click="handleClick"
     @focus="handleFocus"
     @blur="handleBlur"

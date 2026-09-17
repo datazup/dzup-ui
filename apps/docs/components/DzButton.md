@@ -20,6 +20,13 @@ Primary button component.
 - **Taxonomy:** variant: `solid` `outline` `ghost` `text` `link` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `root`, `spinner`
 
+## Intent and selection guidance
+
+**Not declared.** `DzButton` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -107,6 +114,153 @@ rather than swapping the label. The component keeps its own width and announces
 the busy state, so the layout does not jump and assistive technology is told what
 happened.
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `tone` | `[data-tone="…"]` | `tone` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 16 stories in
+`packages/core/stories/buttons/DzButton.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Tone Gallery`, `Loading`, `Disabled`, `States`, `With Prefix Icon`, `With Suffix Icon`, `With Prefix and Suffix Icons`, `Visual Matrix: Variant x Tone`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Form Actions`, `Real World: Danger Confirmation`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `root` | `[data-part="root"]` | yes |
+| `spinner` | `[data-part="spinner"]` | no — renders zero or more than once |
+
+```vue
+<DzButton :ui="{ 'root': 'ring-2', 'spinner': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `idle` | `[data-state="idle"]` |
+| `loading` | `[data-state="loading"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-button-disabled-opacity` |
+| `--dz-button-focus-ring-color` |
+| `--dz-button-focus-ring-offset` |
+| `--dz-button-focus-ring-width` |
+| `--dz-button-font-family` |
+| `--dz-button-font-weight` |
+| `--dz-button-icon-font-size` |
+| `--dz-button-icon-height` |
+| `--dz-button-icon-width` |
+| `--dz-button-lg-font-size` |
+| `--dz-button-lg-gap` |
+| `--dz-button-lg-height` |
+| `--dz-button-lg-padding-x` |
+| `--dz-button-md-font-size` |
+| `--dz-button-md-gap` |
+| `--dz-button-md-height` |
+| `--dz-button-md-padding-x` |
+| `--dz-button-radius` |
+| `--dz-button-sm-font-size` |
+| `--dz-button-sm-gap` |
+| `--dz-button-sm-height` |
+| `--dz-button-sm-padding-x` |
+| `--dz-button-transition` |
+| `--dz-button-xl-font-size` |
+| `--dz-button-xl-gap` |
+| `--dz-button-xl-height` |
+| `--dz-button-xl-padding-x` |
+| `--dz-button-xs-font-size` |
+| `--dz-button-xs-gap` |
+| `--dz-button-xs-height` |
+| `--dz-button-xs-padding-x` |
+
+Declared in `packages/core/src/components/buttons/DzButton.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDefaults` | per-component prop defaults (`size`, `variant`, `tone`, `density`) |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+**Provider-settable defaults:** `size`, `tone`, `variant` — declared in the
+anatomy, so a prop left undefined on this component resolves from the provider rather than
+from a hard-coded value.
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/buttons/DzButton.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
+
+| Security lane | State |
+| --- | --- |
+| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. |
+| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `csp-fixture` | Not owed at this boundary. |
+| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzButton` advertises 3 states:
+`disabled`, `idle`, `loading`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/buttons/DzButton.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `4c9fb7a`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -123,8 +277,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -166,14 +320,20 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**2 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `Enter` | Activate the button. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+| `Space` | Activate the button. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+
+Declared in `packages/core/src/components/buttons/DzButton.anatomy.ts`.
 
 - **Pattern:** [APG — `button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 2 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -207,18 +367,18 @@ Every kind of evidence required of this component — by Tier B, by its `url` se
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/buttons/DzButton.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/buttons/DzButton.spec.ts` — The component declares 2 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/buttons/DzButton.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/buttons/DzButton.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/buttons/DzButton.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzButton.md` — 6 AT/browser pairs, none executed. |
 | `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` — Covered by a class-level artifact, not a per-component one. |
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 
-**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -83,6 +83,13 @@ export { BREAKPOINTS, type BreakpointStep } from './primitives/index.js'
 // Re-export semantic
 export { LIGHT_SEMANTIC_TOKENS } from './semantic/index.js'
 export { DARK_SEMANTIC_TOKENS } from './semantic/index.js'
+// The third cascade (TASK-R5-O7). Same 115 ABI names, valued in CSS system
+// colours; ships as the opt-in stylesheet `@dzup-ui/tokens/css/high-contrast`.
+export {
+  HIGH_CONTRAST_CEILINGS,
+  HIGH_CONTRAST_SEMANTIC_TOKENS,
+  HIGH_CONTRAST_SYSTEM_COLORS,
+} from './semantic/index.js'
 
 // Token type definitions (will also be available from dist/tokens.d.ts once generated)
 /** Theme mode preference */

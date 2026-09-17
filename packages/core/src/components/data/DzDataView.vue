@@ -7,6 +7,7 @@ import type {
   DzDataViewSlots,
 } from './DzDataView.types.ts'
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzEmpty from '../feedback/DzEmpty.vue'
@@ -41,12 +42,16 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Which layout renders the collection; defaults to `list`. */
 const layout = defineModel<DataViewLayout>('layout', { default: 'list' })
 
+/** Zero-based index of the first item on the current page; defaults to `0`, the first page. */
 const first = defineModel<number>('first', { default: 0 })
 
+/** Dotted path of the field the collection is sorted by; the default empty string leaves it unsorted. */
 const sortField = defineModel<string>('sortField', { default: '' })
 
+/** Sort direction - `1` ascending, `-1` descending, `0` original order; defaults to `1`. */
 const sortOrder = defineModel<DataViewSortOrder>('sortOrder', { default: 1 })
 
 const props = withDefaults(defineProps<DzDataViewProps<T>>(), {
@@ -79,7 +84,7 @@ const attrs = useAttrs()
 const styles = computed(() => dataViewVariants({ size: props.size }))
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 // ---------------------------------------------------------------------------
@@ -218,11 +223,15 @@ const announcement = computed(() => {
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzDataView')
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :data-size="size"
     :data-layout="layout"
@@ -231,7 +240,7 @@ const dzMessages = useComponentMessages('DzDataView')
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-data-view'), ...$attrs, class: undefined }"
   >
     <!-- Live region: announces the rendered window on page/sort/layout change -->
     <div class="sr-only" aria-live="polite" aria-atomic="true">
@@ -241,7 +250,8 @@ const dzMessages = useComponentMessages('DzDataView')
     <!-- Toolbar: leading content + sort control + layout toggle -->
     <div
       v-if="$slots.header || $slots.sort || sortOptions.length > 0 || layoutToggle"
-      :class="styles.toolbar()"
+      data-part="header"
+      :class="cn(styles.toolbar(), ui?.header)"
     >
       <div :class="styles.toolbarStart()">
         <slot name="header" />
@@ -257,7 +267,8 @@ const dzMessages = useComponentMessages('DzDataView')
         >
           <select
             v-if="sortOptions.length > 0"
-            :class="styles.sortSelect()"
+            data-part="control"
+            :class="cn(styles.sortSelect(), ui?.control)"
             :disabled="disabled"
             :value="activeSortIndex"
             :aria-label="dzMessages.sortBy"
@@ -335,26 +346,28 @@ const dzMessages = useComponentMessages('DzDataView')
         v-for="(item, index) in pagedItems"
         :key="itemKey(item, index)"
         role="listitem"
-        :class="styles.gridCell()"
+        data-part="item"
+        :class="cn(styles.gridCell(), ui?.item)"
       >
         <slot name="item" :item="item" :index="pageOffset + index" :layout="layout" />
       </div>
     </DzGrid>
 
     <!-- List layout -->
-    <ul v-else role="list" :class="styles.list()">
+    <ul v-else data-part="list" role="list" :class="cn(styles.list(), ui?.list)">
       <li
         v-for="(item, index) in pagedItems"
         :key="itemKey(item, index)"
         role="listitem"
-        :class="styles.listItem()"
+        data-part="item"
+        :class="cn(styles.listItem(), ui?.item)"
       >
         <slot name="item" :item="item" :index="pageOffset + index" :layout="layout" />
       </li>
     </ul>
 
     <!-- Footer + paginator -->
-    <div v-if="$slots.footer || showPaginator" :class="styles.footer()">
+    <div v-if="$slots.footer || showPaginator" data-part="footer" :class="cn(styles.footer(), ui?.footer)">
       <slot name="footer" />
       <DzPagination
         v-if="showPaginator"
@@ -363,7 +376,7 @@ const dzMessages = useComponentMessages('DzDataView')
         :page-size="rows"
         :size="size"
         :disabled="disabled"
-        class="ml-auto"
+        class="ms-auto"
         @update:model-value="onPageChange"
       />
     </div>

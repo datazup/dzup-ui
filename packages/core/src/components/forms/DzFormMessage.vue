@@ -30,6 +30,11 @@ defineOptions({
   inheritAttrs: false,
 })
 
+defineSlots<{
+  /** Message content. Overrides the field context's `error` string when filled. */
+  default?: () => unknown
+}>()
+
 const attrs = useAttrs()
 const context = useFormFieldContext()
 

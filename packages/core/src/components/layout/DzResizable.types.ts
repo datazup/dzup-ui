@@ -12,6 +12,7 @@ import type {
   CanonicalSize,
 } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzResizableUi } from './DzResizable.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -49,6 +50,12 @@ export interface DzResizableProps extends BaseAccessibilityProps {
   disabled?: boolean
   /** Keyboard resize step in percentage (default 10) */
   keyboardResizeBy?: number
+  /**
+   * Per-part class override for the group, keyed by the name in
+   * `DzResizable.anatomy.ts` (ADR-19 §5). Panels and handles are written by
+   * the consumer at the call site and already take `class`.
+   */
+  ui?: DzResizableUi
 }
 
 // ---------------------------------------------------------------------------

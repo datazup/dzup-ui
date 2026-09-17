@@ -1,8 +1,10 @@
+import { expectFallthrough } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
 /**
  * DzKnob — Contract Spec v1 conformance tests.
  */
 import { describe, expect, it } from 'vitest'
+import { anatomy } from './DzKnob.anatomy.ts'
 import DzKnob from './DzKnob.vue'
 
 describe('dzKnob — Contract Spec v1', () => {
@@ -56,5 +58,47 @@ describe('dzKnob — renderer contract C1 value', () => {
   it('prefers the default model when both are bound', () => {
     const wrapper = mount(DzKnob, { props: { modelValue: 70, value: 30, ariaLabel: 'Gain' } })
     expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('70')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Attribute fallthrough (TASK-R5-O6)
+// ---------------------------------------------------------------------------
+
+describe('dzKnob — attribute fallthrough', () => {
+  // DzKnob is one of seven multi-root components in the catalogue. Vue cannot
+  // choose a fallthrough target for a fragment, so the component picks one and
+  // the anatomy declares which. Before this declaration existed, the only way
+  // to find out was to render it and look.
+  it('a consumer\'s class and id land on the declared target', () => {
+    const wrapper = mount(DzKnob, {
+      attrs: { class: 'dz-fallthrough-probe', id: 'dz-fallthrough-id' },
+      props: { ariaLabel: 'Gain' },
+      attachTo: document.body,
+    })
+
+    expectFallthrough(
+      wrapper.element.parentElement ?? wrapper.element,
+      anatomy.fallthrough,
+      { className: 'dz-fallthrough-probe', id: 'dz-fallthrough-id' },
+      'DzKnob',
+    )
+    wrapper.unmount()
+  })
+
+  it('the error line does not also receive them', () => {
+    // The second root. If `$attrs` were bound to both, the consumer's `id`
+    // would appear twice — invalid HTML, and a querySelector that silently
+    // picks the wrong node.
+    const wrapper = mount(DzKnob, {
+      attrs: { class: 'dz-fallthrough-probe' },
+      props: { error: 'Too loud', ariaLabel: 'Gain' },
+      attachTo: document.body,
+    })
+
+    const carriers = (wrapper.element.parentElement ?? wrapper.element)
+      .querySelectorAll('.dz-fallthrough-probe')
+    expect(carriers).toHaveLength(1)
+    wrapper.unmount()
   })
 })

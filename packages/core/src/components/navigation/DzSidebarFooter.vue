@@ -46,6 +46,7 @@ const footerClasses = computed(() =>
 
 <template>
   <div
+    data-part="footer"
     :class="footerClasses"
     v-bind="{ ...$attrs, class: undefined }"
   >

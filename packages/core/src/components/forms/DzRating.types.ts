@@ -12,6 +12,7 @@
 
 import type { BaseFormControlProps, ChangeEvents } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
+import type { DzRatingUi } from './DzRating.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -29,6 +30,12 @@ export interface DzRatingProps extends BaseFormControlProps<never> {
   icon?: Component
   /** Icon component used for the empty state (defaults to the filled icon) */
   emptyIcon?: Component
+  /**
+   * Per-part class overrides, keyed by the names in `DzRating.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target — the `role="slider"` box,
+   * declared here as `control` — so `ui.root` is the route to the wrapper.
+   */
+  ui?: DzRatingUi
 }
 
 // ---------------------------------------------------------------------------

@@ -19,6 +19,14 @@ Collapsible navigation sidebar root component.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Risk tier:** C · **Status:** stable
 - **v-model:** `v-model:collapsed` (`boolean | undefined`), `v-model:mobileOpen` (`boolean | undefined`)
+- **Anatomy parts (ADR-19):** `body`, `footer`, `group`, `group-label`, `header`, `icon`, `item`, `item-label`, `overlay`, `root`, `suffix`
+
+## Intent and selection guidance
+
+**Not declared.** `DzSidebar` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (15, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (16, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -58,6 +66,7 @@ never as asserted.
 | `portalTo` | `string \| HTMLElement \| undefined` | no | — | Portal target for the teleported layer. Added by TASK-OSS-P4-04. This component used to teleport to a hard-coded `body` with no way to redirect it — which is precisely the case an application embedding the library in a shadow root or a micro-frontend shell cannot work around. Falls back to the `DzProvider` target, then to `document.body`. |
 | `position` | `"fixed" \| "static" \| undefined` | no | `"static"` | Controls how the sidebar root positions itself on desktop. - `static` (default): `relative shrink-0` — sidebar is a flex sibling of the AppShell content panel. - `fixed`: `fixed inset-y-0 left-0` — legacy positioning; content area must reserve its own offset. Mobile drawer behavior (when `mobileOpen` is true and `isMobile` is true) overrides position to `fixed` regardless. |
 | `storageKey` | `string \| undefined` | no | `undefined` | Persist the collapsed state to `localStorage` under this key. Hydrates from storage on mount (when running in the browser). No-op during SSR or when storage is unavailable. |
+| `ui` | `DzSidebarUi \| undefined` | no | — | Per-part class overrides for the three nodes DzSidebar renders itself (ADR-19 §5). The mobile scrim is teleported and the scrolling body is internal, so neither has a call site `class` could reach. |
 | `width` | `string \| undefined` | no | `undefined` | Expanded sidebar width (CSS value) |
 
 ## Events (2)
@@ -124,6 +133,8 @@ Bottom section of the sidebar.
 | --- | --- | --- |
 | `default` | `{ collapsed: boolean; }` | Footer content with collapsed state |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSidebar`; see that component's usage snippet.
 
 ### DzSidebarHeader
@@ -140,6 +151,8 @@ Top section of the sidebar.
 | --- | --- | --- |
 | `default` | `{ collapsed: boolean; }` | Header content with collapsed state |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSidebar`; see that component's usage snippet.
 
 ### DzSidebarItem
@@ -150,7 +163,7 @@ Individual navigation item within a sidebar.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Compound part of:** `DzSidebar`
 
-#### Props (10, of which 5 inherited from `@dzup-ui/contracts`)
+#### Props (11, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -164,12 +177,13 @@ Individual navigation item within a sidebar.
 | `href` | `string \| undefined` | no | `undefined` | Native link href (renders as &lt;a>) |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `to` | `string \| object \| undefined` | no | `undefined` | Router link destination (renders as &lt;RouterLink>) |
+| `ui` | `DzSidebarItemUi \| undefined` | no | — | Per-part class overrides for the item's inner nodes (ADR-19 §5). `class` at the call site lands on the item; the icon wrapper, the label and the badge wrapper are the nodes a collapse animation has to reach. |
 
 #### Events (1)
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent]` | — |
+| `click` | `[event: MouseEvent]` | Item was clicked |
 
 #### Slots (3)
 
@@ -178,6 +192,8 @@ Individual navigation item within a sidebar.
 | `badge` | — | Badge displayed after the label |
 | `default` | — | Item label text |
 | `icon` | — | Icon displayed before the label |
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzSidebar`; see that component's usage snippet.
 
@@ -189,13 +205,14 @@ Groups sidebar items with an optional title.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Compound part of:** `DzSidebar`
 
-#### Props (3)
+#### Props (4)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `collapsible` | `boolean \| undefined` | no | `false` | Whether the section can be collapsed |
 | `defaultOpen` | `boolean \| undefined` | no | `true` | Whether the section is open by default |
 | `title` | `string \| undefined` | no | `undefined` | Section title text |
+| `ui` | `DzSidebarSectionUi \| undefined` | no | — | Per-part class override for the section's title row (ADR-19 §5). The section's own element takes `class` at the call site; the title is rendered from the `title` prop and is otherwise unreachable. |
 
 #### Slots (2)
 
@@ -204,7 +221,183 @@ Groups sidebar items with an optional title.
 | `default` | — | Section items |
 | `title` | — | Custom section title content |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSidebar`; see that component's usage snippet.
+
+## Variants and controlled state
+
+**Controlled and uncontrolled — `collapsed`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzSidebar />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzSidebar v-model:collapsed="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzSidebar :collapsed="value" @update:collapsed="value = $event" />
+```
+
+**Controlled and uncontrolled — `mobileOpen`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzSidebar />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzSidebar v-model:mobileOpen="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzSidebar :mobileOpen="value" @update:mobileOpen="value = $event" />
+```
+
+**Where each variant is shown.** 11 stories in
+`packages/core/stories/navigation/DzSidebar.stories.ts`: `Default`, `Collapsed`, `FixedPosition`, `MobileDrawer`, `ActiveStyleFilled`, `ActiveStyleRail`, `Interactive`, `Dark Mode Preview`, `States`, `Accessibility: Landmark & Keyboard Order`, `Real World: App Shell Navigation`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `body` | `[data-part="body"]` | yes |
+| `footer` | `[data-part="footer"]` | no — renders zero or more than once |
+| `group` | `[data-part="group"]` | no — renders zero or more than once |
+| `group-label` | `[data-part="group-label"]` | no — renders zero or more than once |
+| `header` | `[data-part="header"]` | no — renders zero or more than once |
+| `icon` | `[data-part="icon"]` | no — renders zero or more than once |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `item-label` | `[data-part="item-label"]` | no — renders zero or more than once |
+| `overlay` | `[data-part="overlay"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `suffix` | `[data-part="suffix"]` | no — renders zero or more than once |
+
+```vue
+<DzSidebar :ui="{ 'body': 'ring-2', 'footer': 'ring-2', 'group': 'ring-2', 'group-label': 'ring-2', 'header': 'ring-2', 'icon': 'ring-2', 'item': 'ring-2', 'item-label': 'ring-2', 'overlay': 'ring-2', 'root': 'ring-2', 'suffix': 'ring-2' }" />
+```
+
+**Where your `class` lands** — read this before you size or position it.
+
+Your `class`, `id` and `data-*` land on the `root` part —
+`[data-part="root"]`.
+This component renders **more than one root element**, so Vue cannot choose where your attributes go and the component chooses for it. This is the node it designates.
+
+The merge order above still holds: your `class` beats `ui.root`.
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `active` | `[data-state="active"]` |
+| `collapsed` | `[data-state="collapsed"]` |
+| `expanded` | `[data-state="expanded"]` |
+| `inactive` | `[data-state="inactive"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-sidebar-bg` |
+| `--dz-sidebar-border` |
+| `--dz-sidebar-collapsed-width` |
+| `--dz-sidebar-footer-bg` |
+| `--dz-sidebar-footer-border` |
+| `--dz-sidebar-footer-padding` |
+| `--dz-sidebar-foreground` |
+| `--dz-sidebar-header-bg` |
+| `--dz-sidebar-header-border` |
+| `--dz-sidebar-header-padding` |
+| `--dz-sidebar-item-active-bg` |
+| `--dz-sidebar-item-active-text` |
+| `--dz-sidebar-item-font-size` |
+| `--dz-sidebar-item-font-weight` |
+| `--dz-sidebar-item-gap` |
+| `--dz-sidebar-item-hover-bg` |
+| `--dz-sidebar-item-hover-text` |
+| `--dz-sidebar-item-padding-x` |
+| `--dz-sidebar-item-padding-y` |
+| `--dz-sidebar-item-radius` |
+| `--dz-sidebar-overlay-bg` |
+| `--dz-sidebar-overlay-z-index` |
+| `--dz-sidebar-section-padding-y` |
+| `--dz-sidebar-section-title-color` |
+| `--dz-sidebar-section-title-font-size` |
+| `--dz-sidebar-section-title-letter-spacing` |
+| `--dz-sidebar-transition` |
+| `--dz-sidebar-width` |
+
+Declared in `packages/core/src/components/navigation/DzSidebar.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMessages` | the translated string catalogue |
+| `useDzPortalTarget` | where teleported content is mounted |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/navigation/DzSidebar.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
+
+| Security lane | State |
+| --- | --- |
+| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. |
+| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `csp-fixture` | Not owed at this boundary. |
+| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzSidebar` advertises 4 states:
+`active`, `collapsed`, `expanded`, `inactive`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/navigation/DzSidebar.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `4c9fb7a`.
 
 ## Extraction fidelity
 
@@ -213,7 +406,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 15 | 15 | 5 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 16 | 16 | 5 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 2 | 2 | 2 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 1 | 1 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -222,8 +415,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -232,7 +425,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`treeview`](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/)
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `url` — Navigation entries carry a host-supplied `href`.
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `4c9fb7a1`
 
 **Why this pattern:** A nested navigation tree that also owns a collapsed rail mode and, on small screens, a teleported overlay — three focus contracts on one component.
@@ -270,14 +463,21 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**3 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `Tab` | Move to the next item or group toggle; every one is its own tab stop. | `2.1.2` | — *(component-specific)* |
+| `Enter` | Activate the focused item, or expand and collapse the focused group. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+| `Space` | Activate the focused item, or expand and collapse the focused group. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+
+Declared in `packages/core/src/components/navigation/DzSidebar.anatomy.ts`.
 
 - **Pattern:** [APG — `treeview`](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -311,12 +511,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzSidebar.spec.ts` — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzSidebar.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
@@ -327,7 +527,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 
-**8 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `portal-hydration`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**8 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `portal-hydration`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -19,6 +19,7 @@ import type {
   InputVariant,
 } from '@dzup-ui/contracts'
 import type { TreeNode } from '../data/DzTree.types.ts'
+import type { DzTreeSelectUi } from './DzTreeSelect.anatomy.ts'
 
 // Re-export the tree node shape so consumers can type their `nodes` data
 // without reaching into the data family directly.
@@ -68,6 +69,12 @@ export interface DzTreeSelectProps extends BaseFormControlProps<InputVariant>, A
   noResultsText?: string
   /** Open the panel by default (uncontrolled initial state) */
   defaultOpen?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzTreeSelect.anatomy.ts`
+   * (ADR-19 §5). The tree itself is a `DzTree`, which is its own anatomy
+   * boundary — restyle a node through `DzTree`'s parts, not through this map.
+   */
+  ui?: DzTreeSelectUi
 }
 
 // ---------------------------------------------------------------------------

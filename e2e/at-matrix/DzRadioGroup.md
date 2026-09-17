@@ -21,6 +21,23 @@ known one.
 | `select` | Select an item and confirm the selection. | The selected state is announced, and the control's value reflects it afterwards. |
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzRadioGroup.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | — | Move to and select the next radio. |
+| `ArrowLeft` | — | Move to and select the previous radio. |
+| `ArrowDown` | — | Move to and select the next radio. |
+| `ArrowUp` | — | Move to and select the previous radio. |
+| `Space` | — | Select the focused radio. |
+| `Tab` | — | Move out of the group; the group is one tab stop. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

@@ -105,6 +105,7 @@ function handleClick(event: MouseEvent): void {
   <component
     :is="computedTag"
     :id="id"
+    data-part="item"
     :class="itemClasses"
     :data-state="dataState"
     :aria-current="active ? 'page' : undefined"
@@ -116,14 +117,16 @@ function handleClick(event: MouseEvent): void {
     @click="handleClick"
   >
     <!-- Icon slot: always visible -->
-    <span v-if="$slots.icon" class="dz-sidebar-item-icon shrink-0">
+    <span v-if="$slots.icon" data-part="icon" class="dz-sidebar-item-icon shrink-0" :class="cn(ui?.icon)">
       <slot name="icon" />
     </span>
 
     <!-- Label: hidden when collapsed -->
     <span
       v-if="!isCollapsed"
+      data-part="item-label"
       class="dz-sidebar-item-label truncate"
+      :class="cn(ui?.['item-label'])"
     >
       <slot />
     </span>
@@ -131,7 +134,9 @@ function handleClick(event: MouseEvent): void {
     <!-- Badge: hidden when collapsed -->
     <span
       v-if="$slots.badge && !isCollapsed"
-      class="dz-sidebar-item-badge ml-auto shrink-0"
+      data-part="suffix"
+      class="dz-sidebar-item-badge ms-auto shrink-0"
+      :class="cn(ui?.suffix)"
     >
       <slot name="badge" />
     </span>

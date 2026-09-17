@@ -15,6 +15,7 @@ import type { DzInputEmits, DzInputProps, DzInputSlots } from './DzInput.types.t
  * ```
  */
 import { computed, inject, ref, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -26,6 +27,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The field's text value; the default empty string renders an empty input. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzInputProps>(), {
@@ -175,7 +177,13 @@ function handleClear(): void {
 }
 
 /** Expose the native input ref for programmatic focus */
-defineExpose({ inputRef })
+defineExpose({
+  /** The underlying `<input>` element, for focus, selection and measurement. `null` before mount. */
+  inputRef,
+})
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -189,7 +197,7 @@ defineExpose({ inputRef })
     :data-readonly="readonly ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-input'), ...$attrs, class: undefined }"
   >
     <!-- The visual field: border, background, focus ring -->
     <div data-part="control" :class="controlClasses">

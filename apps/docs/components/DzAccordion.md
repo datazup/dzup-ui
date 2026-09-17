@@ -18,6 +18,16 @@ Compound accordion root using Reka UI (ADR-07).
 - **Install:** `npm i @dzup-ui/core` — then `import { DzAccordion } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
 - **Risk tier:** B · **Status:** stable
+- **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
+- **v-model:** `v-model` (`string | string[] | undefined`)
+- **Anatomy parts (ADR-19):** `content`, `indicator`, `item`, `root`, `trigger`
+
+## Intent and selection guidance
+
+**Not declared.** `DzAccordion` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -39,7 +49,42 @@ never as asserted.
 :::
 
 
-No props, events or slots could be extracted for this component, although it declares them in source. That is an extraction gap, **not** a statement that it has none — read its types file before assuming an empty API.
+## Props (12, of which 5 inherited from `@dzup-ui/contracts`)
+
+| Prop | Type | Required | Declared default | Description |
+| --- | --- | --- | --- | --- |
+| `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
+| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
+| `ariaLabel` | `string \| undefined` | no | — | Accessible label |
+| `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
+| `collapsible` | `boolean \| undefined` | no | — | Whether all items can be collapsed simultaneously (single mode only; defaults to `true`) |
+| `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents all items from toggling |
+| `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
+| `modelValue` | `string \| string[] \| undefined` | no | `""` | The open item's value in `single` mode, or the array of open values in `multiple` mode; the default empty string opens nothing. |
+| `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
+| `type` | `"single" \| "multiple" \| undefined` | no | `"single"` | Selection type: `single` opens one item at a time, `multiple` any number |
+| `ui` | `DzAccordionUi \| undefined` | no | — | Per-part class override for the accordion root (ADR-19 §5). Items, triggers and panels are sub-components the consumer writes, where `class` at the call site already lands. |
+| `variant` | `AccordionVariant \| undefined` | no | `"default"` | Visual style variant |
+
+## Events (3)
+
+| Event | Payload | Description |
+| --- | --- | --- |
+| `change` | `[value: string \| string[]]` | Emitted when the active item(s) change |
+| `revealed` | `[value: string]` | An item was revealed imperatively and its panel has rendered |
+| `update:modelValue` | `[value: string \| string[]]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
+
+## Slots (1)
+
+| Slot | Slot props | Description |
+| --- | --- | --- |
+| `default` | — | DzAccordionItem children |
+
+## Exposed on `ref` (1)
+
+| Member | Type |
+| --- | --- |
+| `revealItem` | `(id: string) => Promise<void>` |
 
 ## Usage (verbatim story source from `packages/core/stories/data/DzAccordion.stories.ts`, story `Default`)
 
@@ -109,6 +154,8 @@ Accordion content wrapping Reka UI
 | --- | --- | --- |
 | `default` | — | Accordion panel content |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzAccordion`; see that component's usage snippet.
 
 ### DzAccordionItem
@@ -132,6 +179,8 @@ Accordion item wrapping Reka UI AccordionItem (ADR-07).
 | --- | --- | --- |
 | `default` | — | Trigger and content for this accordion section |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzAccordion`; see that component's usage snippet.
 
 ### DzAccordionTrigger
@@ -142,13 +191,139 @@ Accordion trigger wrapping Reka UI
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
 - **Compound part of:** `DzAccordion`
 
+#### Props (1)
+
+| Prop | Type | Required | Declared default | Description |
+| --- | --- | --- | --- | --- |
+| `ui` | `DzAccordionTriggerUi \| undefined` | no | — | Per-part class override for the chevron (ADR-19 §5). The trigger's own element takes `class` at the call site; the indicator it renders has no call site of its own. |
+
 #### Slots (1)
 
 | Slot | Slot props | Description |
 | --- | --- | --- |
 | `default` | — | Trigger label content |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzAccordion`; see that component's usage snippet.
+
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzAccordion />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzAccordion v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzAccordion :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 13 stories in
+`packages/core/stories/data/DzAccordion.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Multiple Selection Mode`, `Collapsible (All Closable)`, `Disabled`, `Disabled Individual Item`, `Dark Mode Preview`, `Accessibility: Keyboard Navigation`, `Real World: FAQ Page`, `Real World: Settings Panel`, `Bindable: v-for items + v-model`, `States`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `content` | `[data-part="content"]` | no — renders zero or more than once |
+| `indicator` | `[data-part="indicator"]` | no — renders zero or more than once |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `trigger` | `[data-part="trigger"]` | no — renders zero or more than once |
+
+```vue
+<DzAccordion :ui="{ 'content': 'ring-2', 'indicator': 'ring-2', 'item': 'ring-2', 'root': 'ring-2', 'trigger': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `closed` | `[data-state="closed"]` |
+| `disabled` | `[data-state="disabled"]` |
+| `open` | `[data-state="open"]` |
+| `ready` | `[data-state="ready"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/data/DzAccordion.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | `indicator` | These parts render a direction-bearing icon and mirror with the layout. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/data/DzAccordion.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-layouts-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzAccordion` advertises 4 states:
+`closed`, `disabled`, `open`, `ready`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/data/DzAccordion.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e986952`.
 
 ## Extraction fidelity
 
@@ -157,21 +332,17 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 0 | 0 | unknown — the extractor recovered nothing for this component (see below) |
-| Events | 0 | 0 | unknown — the extractor recovered nothing for this component (see below) |
-| Slots | 0 | 0 | unknown — the extractor recovered nothing for this component (see below) |
-| Exposed on `ref` | 0 | 0 | unknown — the extractor recovered nothing for this component (see below) |
-
-::: danger Extraction gap — do not read the absence above as an empty API
-`DzAccordion` declares its API in `packages/core/src/components/data/DzAccordion.types.ts`, yet the extractor recovered no props, events or slots from it. **This page cannot tell you what the component accepts.** Read the types file. This is tracked as a downward-only ratchet so a second component cannot enter this state unnoticed.
-:::
+| Props | 12 | 12 | 5 declare a default |
+| Events | 3 | 3 | 2 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Slots | 1 | 1 | 0 carry slot props |
+| Exposed on `ref` | 1 | 1 | no description exists in source for any exposed member, catalog-wide |
 
 ## Accessibility and evidence
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -180,7 +351,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`accordion`](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/)
 - **Traits:** none declared
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `e986952e`
 
 **Compound sub-parts are not matrix rows.** `DzAccordionContent`, `DzAccordionItem`, `DzAccordionTrigger` are documented on this page and carry no evidence row of its own. Everything below describes `DzAccordion`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
@@ -214,14 +385,24 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**6 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `Enter` | `trigger` | Expand or collapse the focused section. | `2.1.1` | [`accordion`](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) |
+| `Space` | `trigger` | Expand or collapse the focused section. | `2.1.1` | [`accordion`](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) |
+| `ArrowDown` | — | Move focus to the next section header. | `2.1.1` | [`accordion`](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) |
+| `ArrowUp` | — | Move focus to the previous section header. | `2.1.1` | [`accordion`](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) |
+| `Home` | — | Move focus to the first section header. | `2.1.1` | [`accordion`](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) |
+| `End` | — | Move focus to the last section header. | `2.1.1` | [`accordion`](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) |
+
+Declared in `packages/core/src/components/data/DzAccordion.anatomy.ts`.
 
 - **Pattern:** [APG — `accordion`](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 6 binding(s); the unit spec asserts no key event for `Enter`, `Space`, `ArrowDown`, `ArrowUp`, `Home`, `End`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -255,15 +436,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzAccordion.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-layouts-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzAccordion.spec.ts` — The component declares 6 binding(s); the unit spec asserts no key event for `Enter`, `Space`, `ArrowDown`, `ArrowUp`, `Home`, `End`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzAccordion.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzAccordion.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzAccordion.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzAccordion.md` — 6 AT/browser pairs, none executed. |
 
-**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -39,6 +39,24 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /** Tier B — owns focus across several cells, a value, and a paste contract. */
+  /**
+   * Keyboard contract (TASK-R5-O5). Reka `PinInputRoot`, which moves
+   * focus between the cells as the code is typed. The horizontal rows
+   * carry no `rtl` marker: this component declares `rtl.keyboard:
+   * 'none'`, and a row marked mirrored would contradict it (owner
+   * decision D36).
+   */
+  keyboard: [
+    { key: '<digit>', action: 'Enter the character and move focus to the next cell.', wcag: ['2.1.1'] },
+    {
+      key: 'Backspace',
+      action: 'Clear the current cell, or move to the previous cell when it is already empty.',
+      wcag: ['2.1.1'],
+    },
+    { key: 'ArrowRight', action: 'Move focus to the next cell.', wcag: ['2.1.1'] },
+    { key: 'ArrowLeft', action: 'Move focus to the previous cell.', wcag: ['2.1.1'] },
+  ],
+
   riskTier: 'B',
 } as const satisfies ComponentAnatomy
 

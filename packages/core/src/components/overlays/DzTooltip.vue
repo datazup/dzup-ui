@@ -22,6 +22,10 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/**
+ * Whether the tooltip is shown. Left `undefined` (the default) Reka UI owns the
+ * open state and the tooltip follows hover and focus on its own.
+ */
 const open = defineModel<boolean | undefined>('open')
 
 const props = withDefaults(defineProps<DzTooltipProps>(), {

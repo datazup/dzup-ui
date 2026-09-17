@@ -20,6 +20,24 @@ known one.
 | `navigate` | Move through the collection with the pattern's own keys or gestures. | Each item is announced with its position and set size, and nothing is skipped. |
 | `non-drag` | Perform the drag interaction without a pointer drag. | A keyboard or single-pointer path exists, is discoverable, and narrates each step. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/layout/DzResizable.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | — | Move the separator towards the inline end. |
+| `ArrowLeft` | — | Move the separator towards the inline start. |
+| `ArrowDown` | — | Move the separator down when the panes stack vertically. |
+| `ArrowUp` | — | Move the separator up when the panes stack vertically. |
+| `Home` | — | Move the separator to its minimum position. |
+| `End` | — | Move the separator to its maximum position. |
+| `Enter` | — | Collapse the pane, or restore it when already collapsed. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

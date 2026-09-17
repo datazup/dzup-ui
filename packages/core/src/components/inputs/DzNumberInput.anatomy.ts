@@ -42,6 +42,16 @@ export const anatomy = {
    */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). APG `spinbutton`. ArrowUp and
+   * ArrowDown are handled in `DzNumberInput.vue`; the increment and
+   * decrement parts are the pointer equivalent of the same two keys.
+   */
+  keyboard: [
+    { key: 'ArrowUp', action: 'Increase the value by one step.', wcag: ['2.1.1'], apg: 'spinbutton' },
+    { key: 'ArrowDown', action: 'Decrease the value by one step.', wcag: ['2.1.1'], apg: 'spinbutton' },
+  ],
+
   /** Tier B — focus, a value, a `spinbutton` role and a keyboard contract. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

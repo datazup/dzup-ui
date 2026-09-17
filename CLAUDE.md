@@ -191,7 +191,7 @@ export interface DzButtonSlots {
 | ADR-02 | Contract-first design (frozen variant taxonomies)  |
 | ADR-04 | Token-only styling (no raw colors)                 |
 | ADR-07 | Reka UI for headless primitives                    |
-| ADR-12 | Committed dist artifacts                           |
+| ADR-12 | Generated `dist/` is published, never committed (corrected 2026-09-04) |
 | ADR-15 | FOUC prevention                                    |
 | ADR-16 | `defineModel` for v-model                          |
 | ADR-17 | Token source of truth and component token ownership |

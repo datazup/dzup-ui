@@ -26,6 +26,7 @@ import type {
  * ```
  */
 import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -43,6 +44,7 @@ defineOptions({
  * control in the catalog takes, and until now it silently did nothing here.
  */
 const legacyValueModel = defineModel<string[]>('value', { default: () => [] })
+/** The committed tag tokens, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). */
 const primaryModel = defineModel<string[] | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzTagsInputProps>(), {
   placeholder: undefined,
@@ -316,12 +318,16 @@ const styles = computed(() =>
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     ref="rootEl"
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
@@ -330,10 +336,11 @@ const rootClasses = computed(() =>
     :data-loading="loading ? '' : undefined"
     :aria-busy="loading || undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-tags-input'), ...$attrs, class: undefined }"
   >
     <div
-      :class="styles.field()"
+      data-part="control"
+      :class="[styles.field(), ui?.control]"
       :data-disabled="resolvedDisabled ? '' : undefined"
       :data-state="resolvedDisabled ? 'disabled' : undefined"
       role="group"
@@ -370,7 +377,8 @@ const rootClasses = computed(() =>
         ref="inputEl"
         v-model="draft"
         type="text"
-        :class="styles.input()"
+        data-part="input"
+        :class="[styles.input(), ui?.input]"
         :placeholder="placeholder"
         :disabled="resolvedDisabled"
         :readonly="resolvedReadonly"
@@ -407,7 +415,8 @@ const rootClasses = computed(() =>
     <p
       v-if="error"
       :id="errorId"
-      :class="styles.error()"
+      data-part="error"
+      :class="[styles.error(), ui?.error]"
       role="alert"
     >
       {{ error }}

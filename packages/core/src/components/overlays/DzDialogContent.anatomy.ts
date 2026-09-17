@@ -47,6 +47,33 @@ export const anatomy = {
   recipes: ['size'],
 
   /**
+   * Keyboard contract (TASK-R5-O5). The content pane of a `DzDialog`; the
+   * keys are the dialog contract, implemented by the Reka dialog
+   * primitives this part renders.
+   */
+  keyboard: [
+    {
+      key: 'Escape',
+      action: 'Close the dialog and return focus to the element that opened it.',
+      wcag: ['2.1.1', '2.1.2'],
+      apg: 'dialog',
+    },
+    {
+      key: 'Tab',
+      action: 'Move to the next focusable element, wrapping inside the dialog.',
+      wcag: ['2.1.2'],
+      apg: 'dialog',
+    },
+    {
+      key: 'Tab',
+      modifiers: ['Shift'],
+      action: 'Move to the previous focusable element, wrapping inside the dialog.',
+      wcag: ['2.1.2'],
+      apg: 'dialog',
+    },
+  ],
+
+  /**
    * Tier B — interactive primitive. It is the focus trap, the scroll lock and
    * the escape handler. A defect here strands a keyboard user inside or
    * outside the dialog.

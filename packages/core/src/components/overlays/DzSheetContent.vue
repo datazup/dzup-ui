@@ -9,6 +9,7 @@ import { DialogContent, DialogOverlay, DialogPortal, injectDialogRootContext } f
  */
 import { computed, useAttrs } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { sheetVariants } from './DzSheet.variants.ts'
 
@@ -75,6 +76,12 @@ function handlePointerDownOutside(event: Event): void {
 function handleInteractOutside(event: Event): void {
   emit('interactOutside', event)
 }
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
@@ -83,10 +90,12 @@ function handleInteractOutside(event: Event): void {
     :disabled="portalDisabled"
     :defer="portalDefer"
   >
-    <DialogOverlay :class="overlayClasses" />
+    <DialogOverlay data-part="overlay" :class="overlayClasses" :data-dz-motion="dzMotionAttr" />
     <DialogContent
       :id="id"
+      data-part="content"
       :class="contentClasses"
+      :data-dz-motion="dzMotionAttr"
       :data-side="side"
       style="contain: layout style"
       v-bind="{ ...contentAria, ...$attrs, class: undefined }"

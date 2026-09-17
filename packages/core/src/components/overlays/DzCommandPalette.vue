@@ -44,6 +44,7 @@ import {
  */
 import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/useEscapeKey.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -53,6 +54,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Whether the palette overlay is open; `false` keeps it closed. */
 const open = defineModel<boolean>('open', { default: false })
 
 const props = withDefaults(defineProps<DzCommandPaletteProps>(), {
@@ -208,6 +210,12 @@ watch(open, (isOpen) => {
     searchModel.value = ''
   }
 })
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
@@ -217,10 +225,12 @@ watch(open, (isOpen) => {
       :disabled="portalDisabled"
       :defer="portalDefer"
     >
-      <DialogOverlay :class="styles.overlay()" />
+      <DialogOverlay data-part="overlay" :class="cn(styles.overlay(), props.ui?.overlay)" :data-dz-motion="dzMotionAttr" />
       <DialogContent
         :id="id"
+        data-part="content"
         :class="contentClasses"
+        :data-dz-motion="dzMotionAttr"
         style="contain: layout style"
         v-bind="{ ...contentAria, ...$attrs, class: undefined }"
       >
@@ -252,9 +262,10 @@ watch(open, (isOpen) => {
           ignore-filter
         >
           <!-- Search input -->
-          <div :class="styles.inputWrapper()">
+          <div data-part="control" :class="cn(styles.inputWrapper(), props.ui?.control)">
             <svg
-              :class="styles.inputIcon()"
+              data-part="icon"
+              :class="cn(styles.inputIcon(), props.ui?.icon)"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
@@ -268,7 +279,8 @@ watch(open, (isOpen) => {
               <path d="m21 21-4.3-4.3" />
             </svg>
             <ComboboxInput
-              :class="styles.input()"
+              data-part="input"
+              :class="cn(styles.input(), props.ui?.input)"
               :placeholder="placeholder"
               auto-focus
               @update:model-value="handleSearchInput"
@@ -276,12 +288,12 @@ watch(open, (isOpen) => {
           </div>
 
           <!-- Items list -->
-          <ComboboxContent :class="styles.list()" :dismiss-able="false">
+          <ComboboxContent data-part="list" :class="cn(styles.list(), props.ui?.list)" :dismiss-able="false">
             <!-- Grouped rendering -->
             <template v-if="groupedItems">
               <template v-for="groupDef in groups" :key="groupDef.id">
-                <ComboboxGroup v-if="groupedItems.get(groupDef.id)?.length">
-                  <ComboboxLabel :class="styles.groupHeading()">
+                <ComboboxGroup v-if="groupedItems.get(groupDef.id)?.length" data-part="group" :class="props.ui?.group">
+                  <ComboboxLabel data-part="group-label" :class="cn(styles.groupHeading(), props.ui?.['group-label'])">
                     {{ groupDef.label }}
                   </ComboboxLabel>
                   <ComboboxItem
@@ -289,20 +301,23 @@ watch(open, (isOpen) => {
                     :key="item.id"
                     :value="item.id"
                     :disabled="item.disabled"
-                    :class="styles.item()"
+                    data-part="item"
+                    :class="cn(styles.item(), props.ui?.item)"
                     @select.prevent="handleSelect(item)"
                   >
                     <slot name="item" :item="item">
                       <component
                         :is="item.icon"
                         v-if="item.icon"
-                        :class="styles.itemIcon()"
+                        data-part="icon"
+                        :class="cn(styles.itemIcon(), props.ui?.icon)"
                         aria-hidden="true"
                       />
-                      <span :class="styles.itemLabel()">{{ item.label }}</span>
+                      <span data-part="item-label" :class="cn(styles.itemLabel(), props.ui?.['item-label'])">{{ item.label }}</span>
                       <span
                         v-if="item.shortcut"
-                        :class="styles.itemShortcut()"
+                        data-part="suffix"
+                        :class="cn(styles.itemShortcut(), props.ui?.suffix)"
                       >
                         {{ item.shortcut }}
                       </span>
@@ -318,20 +333,23 @@ watch(open, (isOpen) => {
                   :key="item.id"
                   :value="item.id"
                   :disabled="item.disabled"
-                  :class="styles.item()"
+                  data-part="item"
+                  :class="cn(styles.item(), props.ui?.item)"
                   @select.prevent="handleSelect(item)"
                 >
                   <slot name="item" :item="item">
                     <component
                       :is="item.icon"
                       v-if="item.icon"
-                      :class="styles.itemIcon()"
+                      data-part="icon"
+                      :class="cn(styles.itemIcon(), props.ui?.icon)"
                       aria-hidden="true"
                     />
-                    <span :class="styles.itemLabel()">{{ item.label }}</span>
+                    <span data-part="item-label" :class="cn(styles.itemLabel(), props.ui?.['item-label'])">{{ item.label }}</span>
                     <span
                       v-if="item.shortcut"
-                      :class="styles.itemShortcut()"
+                      data-part="suffix"
+                      :class="cn(styles.itemShortcut(), props.ui?.suffix)"
                     >
                       {{ item.shortcut }}
                     </span>
@@ -347,20 +365,23 @@ watch(open, (isOpen) => {
                 :key="item.id"
                 :value="item.id"
                 :disabled="item.disabled"
-                :class="styles.item()"
+                data-part="item"
+                :class="cn(styles.item(), props.ui?.item)"
                 @select.prevent="handleSelect(item)"
               >
                 <slot name="item" :item="item">
                   <component
                     :is="item.icon"
                     v-if="item.icon"
-                    :class="styles.itemIcon()"
+                    data-part="icon"
+                    :class="cn(styles.itemIcon(), props.ui?.icon)"
                     aria-hidden="true"
                   />
-                  <span :class="styles.itemLabel()">{{ item.label }}</span>
+                  <span data-part="item-label" :class="cn(styles.itemLabel(), props.ui?.['item-label'])">{{ item.label }}</span>
                   <span
                     v-if="item.shortcut"
-                    :class="styles.itemShortcut()"
+                    data-part="suffix"
+                    :class="cn(styles.itemShortcut(), props.ui?.suffix)"
                   >
                     {{ item.shortcut }}
                   </span>
@@ -369,7 +390,7 @@ watch(open, (isOpen) => {
             </template>
 
             <!-- Empty state -->
-            <ComboboxEmpty :class="styles.empty()">
+            <ComboboxEmpty data-part="empty" :class="cn(styles.empty(), props.ui?.empty)">
               <slot name="empty">
                 No results found.
               </slot>

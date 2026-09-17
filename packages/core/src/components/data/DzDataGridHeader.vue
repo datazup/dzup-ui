@@ -78,10 +78,11 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
 </script>
 
 <template>
-  <thead :class="styles.header()" role="rowgroup">
-    <tr :class="styles.headerRow()" role="row">
+  <thead data-part="header" :class="styles.header()" role="rowgroup">
+    <tr data-part="row" :class="styles.headerRow()" role="row">
       <th
         v-if="ctx!.selectable.value === 'multiple'"
+        data-part="cell"
         :class="cn(styles.headerCell(), 'w-[var(--dz-spacing-10)]')"
         role="columnheader"
       >
@@ -96,6 +97,7 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
       <th
         v-for="col in ctx!.columns.value"
         :key="col.field"
+        data-part="cell"
         :class="cn(styles.headerCell(), getAlignClass(col.align), 'relative')"
         :style="getColumnStyle(col)"
         :aria-sort="
@@ -113,6 +115,7 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
           {{ col.header }}
           <span
             v-if="ctx!.sortable.value && col.sortable !== false"
+            data-part="indicator"
             :class="styles.sortIcon()"
             aria-hidden="true"
           >
@@ -140,6 +143,7 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
         <!-- Filter popover -->
         <div
           v-if="isColumnFilterable(col) && openFilterField === col.field"
+          data-part="panel"
           :class="filterPopoverClasses"
           role="dialog"
           :aria-label="`Filter ${col.header}`"

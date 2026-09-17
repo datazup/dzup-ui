@@ -21,6 +21,13 @@ Compound split button with primary action + dropdown.
 - **Taxonomy:** variant: `solid` `outline` `ghost` `text` `link` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `action`, `root`, `trigger`
 
+## Intent and selection guidance
+
+**Not declared.** `DzSplitButton` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -52,10 +59,10 @@ never as asserted.
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows spinner on primary action |
-| `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `tone` | `CanonicalTone \| undefined` | no | `"primary"` | Semantic color tone |
+| `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
+| `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
 | `ui` | `DzSplitButtonUi \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzSplitButton.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
-| `variant` | `ButtonVariant \| undefined` | no | `"solid"` | Visual style variant |
+| `variant` | `ButtonVariant \| undefined` | no | `undefined` | Visual style variant |
 
 ## Slots (1)
 
@@ -102,13 +109,15 @@ Primary action button within DzSplitButton.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent]` | — |
+| `click` | `[event: MouseEvent]` | Primary action clicked |
 
 #### Slots (1)
 
 | Slot | Slot props | Description |
 | --- | --- | --- |
 | `default` | — | Primary action label |
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzSplitButton`; see that component's usage snippet.
 
@@ -132,7 +141,115 @@ Dropdown trigger within DzSplitButton.
 | --- | --- | --- |
 | `default` | — | Dropdown menu content |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSplitButton`; see that component's usage snippet.
+
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `tone` | `[data-tone="…"]` | `tone` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 12 stories in
+`packages/core/stories/buttons/DzSplitButton.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Tone Gallery`, `Disabled`, `Loading`, `States`, `Dark Mode Preview`, `Interactive`, `Interactive: Menu Select`, `Accessibility: Focus States`, `Real World: Save with Options`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `action` | `[data-part="action"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `trigger` | `[data-part="trigger"]` | no — renders zero or more than once |
+
+```vue
+<DzSplitButton :ui="{ 'action': 'ring-2', 'root': 'ring-2', 'trigger': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `idle` | `[data-state="idle"]` |
+| `loading` | `[data-state="loading"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/buttons/DzSplitButton.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDefaults` | per-component prop defaults (`size`, `variant`, `tone`, `density`) |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/buttons/DzSplitButton.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzSplitButton` advertises 3 states:
+`disabled`, `idle`, `loading`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/buttons/DzSplitButton.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e0d1707`.
 
 ## Extraction fidelity
 
@@ -141,7 +258,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 11 | 11 | 5 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 11 | 11 | 2 declare a default, of which 4 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -150,8 +267,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -161,7 +278,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `e0d17078`
 
 **Compound sub-parts are not matrix rows.** `DzSplitButtonAction`, `DzSplitButtonMenu` are documented on this page and carry no evidence row of its own. Everything below describes `DzSplitButton`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
 
@@ -194,14 +311,23 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**5 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `Enter` | `root` | Activate the primary action. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+| `Space` | `root` | Activate the primary action. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+| `ArrowDown` | `trigger` | Open the menu and focus its first item. | `2.1.1` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) |
+| `Enter` | `trigger` | Open the menu and focus its first item. | `2.1.1` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) |
+| `Escape` | `menu open` | Close the menu and return focus to the trigger. | `2.1.1`, `2.1.2` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) |
+
+Declared in `packages/core/src/components/buttons/DzSplitButton.anatomy.ts`.
 
 - **Pattern:** [APG — `menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 5 binding(s); the unit spec asserts no key event for `Enter`, `ArrowDown`, `Escape`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -235,15 +361,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/buttons/DzSplitButton.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/buttons/DzSplitButton.spec.ts` — The component declares 5 binding(s); the unit spec asserts no key event for `Enter`, `ArrowDown`, `Escape`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/buttons/DzSplitButton.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/buttons/DzSplitButton.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/buttons/DzSplitButton.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSplitButton.md` — 6 AT/browser pairs, none executed. |
 
-**4 unrun:** `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -8,6 +8,7 @@
  */
 
 import type { BasePortalProps } from '@dzup-ui/contracts'
+import type { DzTooltipUi } from './DzTooltip.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Positioning
@@ -55,6 +56,12 @@ export interface DzTooltipContentProps extends /* @vue-ignore */ BasePortalProps
   align?: TooltipAlign
   /** Whether to show the arrow (default true) */
   arrow?: boolean
+  /**
+   * Per-part class override for the arrow, keyed by the name in
+   * `DzTooltip.anatomy.ts` (ADR-19 §5). The panel takes `class` at the call
+   * site; the arrow is the node nothing else can reach.
+   */
+  ui?: Pick<DzTooltipUi, 'indicator'>
 }
 
 // ---------------------------------------------------------------------------

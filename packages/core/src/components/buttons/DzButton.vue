@@ -15,7 +15,7 @@ import type { DzButtonEmits, DzButtonProps, DzButtonSlots } from './DzButton.typ
  * ```
  */
 import { computed, getCurrentInstance, inject, isProxy, markRaw, toRaw, useAttrs } from 'vue'
-import { useDzDefaults } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { DZ_BUTTON_GROUP_KEY } from './DzButtonGroup.types.ts'
@@ -154,6 +154,9 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -178,7 +181,7 @@ function handleBlur(event: FocusEvent): void {
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-button'), ...$attrs, class: undefined }"
     @click="handleClick"
     @focus="handleFocus"
     @blur="handleBlur"

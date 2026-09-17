@@ -43,6 +43,12 @@ function makeRecord(overrides: Partial<ComponentMetaRecord> = {}): ComponentMeta
     componentCommit: 'abc1234',
     componentType: 'class',
     anatomy: { state: 'absent', parts: [] },
+    // Required on the record since TASK-R5-O3; this fixture predates it and was
+    // only compiling because of the cast below. An absent field here is not the
+    // same as an empty one — `renderProvider` would have to guess, and a page
+    // that says "reads no provider context" about a record that simply has no
+    // field would be publishing a claim nobody made.
+    providerHooks: [],
     props: [],
     globalPropCount: 12,
     events: [],
@@ -88,6 +94,7 @@ function makeArtifact(components: ComponentMetaRecord[]): ComponentMetaArtifact 
       eventsWithDescription: 0,
       eventsFromExtractor: 0,
       eventsFromEmitsInterface: 0,
+      eventsModelSynthesised: 0,
       eventsModelDerived: 0,
       slots: 0,
       slotsWithDescription: 0,

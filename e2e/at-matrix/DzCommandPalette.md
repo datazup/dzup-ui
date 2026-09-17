@@ -25,6 +25,23 @@ known one.
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/overlays/DzCommandPalette.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Meta` + `k` | — | Open the palette from anywhere in the document. |
+| `Control` + `k` | — | Open the palette from anywhere in the document. |
+| `ArrowDown` | — | Move to the next result. |
+| `ArrowUp` | — | Move to the previous result. |
+| `Enter` | — | Run the highlighted command. |
+| `Escape` | — | Close the palette. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

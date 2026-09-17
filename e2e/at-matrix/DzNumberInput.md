@@ -20,6 +20,19 @@ known one.
 | `navigate` | Move through the collection with the pattern's own keys or gestures. | Each item is announced with its position and set size, and nothing is skipped. |
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/inputs/DzNumberInput.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowUp` | — | Increase the value by one step. |
+| `ArrowDown` | — | Decrease the value by one step. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

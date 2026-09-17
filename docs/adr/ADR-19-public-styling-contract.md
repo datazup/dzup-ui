@@ -7,6 +7,15 @@
 - **Does not change any code.** It fixes names so the packets that follow do
   not each invent their own.
 
+> **Amendments — 2026-09-04, TASK-R5-O1.** The acceptance packet
+> (`docs/program-2026-09/reports/N5-05-adr-19-acceptance-packet.md`) measured
+> **13 divergences** between this document and the code at `99b963a`. They are
+> closed here: four by shipping the code the ADR decided (the three missing
+> cascade layers, the `DataState` widening, the layer-order fixture, the parts
+> vocabulary), the rest by amending the text where the code was right and the
+> ADR was not. Every amended passage is dated inline. **The status line above is
+> deliberately unchanged** — acceptance is an owner act (TASK-R0-O2), and this
+> task produced its input, not its signature.
 ## Context
 
 The reassessment records finding **H3**: only a minority of Core components
@@ -106,11 +115,11 @@ What each slot is for:
 
 | Layer | Contents | Owner |
 |---|---|---|
-| `dz-reset` | box-model and document normalisation | Core (currently inside `dz-base`; moves in P3-03) |
+| `dz-reset` | box-model and document normalisation | Core — **moved 2026-09-04** (TASK-R5-O1) out of `dz-base` into its own layer in `base.css` |
 | `dz-tokens` | `--dz-*` declarations, light and dark | `@dzup-ui/tokens` |
 | `dz-base` | element defaults and shared interaction utilities (`.dz-focus-ring-*`, `.dz-disabled-*`) | Core |
 | `dz-components` | per-component rules and component-token defaults (`.dz-panel`, `.dz-panel[data-size=lg]`) | Core, and Pro for its own components |
-| `dz-utilities` | library-provided single-purpose helpers | Core |
+| `dz-utilities` | library-provided single-purpose helpers | Core — **registered and empty**: the library ships no utility class outside `dz-base` today, and registering the name is what fixes the order (2026-09-04) |
 | `dz-overrides` | **empty in the library — reserved for consumers** | consumer |
 
 Rules that come with the order:
@@ -121,9 +130,46 @@ Rules that come with the order:
   layered component styles the way consumer utilities do).
 - **A consumer override needs no `!important`.** Unlayered CSS beats every
   layer, and `dz-overrides` beats every library layer, so both routes win.
-  `!important` in library CSS is a defect; the two present today
-  (`.dz-tab-close-btn`, `.dz-field-input-reset`) are recorded as debt for P3-03,
-  not blessed.
+
+  > **Shipped and measured, 2026-09-04 (TASK-R5-O1).** All six slots are now
+  > declared, in `packages/core/src/styles/base.css` **and** in the statement
+  > `packages/tokens/src/generate.ts` emits into `tokens.css` — both, because CSS
+  > registers a layer at its FIRST appearance, so a single statement would have
+  > left the order dependent on which sheet a bundler emitted first.
+  > `yarn test:e2e:layer-order` asserts it in chromium, firefox and webkit
+  > **against the packed tarballs**: unlayered consumer CSS wins in *both* import
+  > orders, and a rule in `@layer dz-overrides` beats `dz-components`, with no
+  > `!important` anywhere in the fixture.
+  >
+  > **One measured limit, recorded rather than smoothed over.** A consumer sheet
+  > that opens `@layer dz-overrides { … }` **before** the dzup stylesheets are
+  > evaluated registers that layer first, and the library's own statement then
+  > appends `dz-reset … dz-components` after it — so `dz-components` wins and the
+  > override silently does nothing. Repeating the statement in both published
+  > sheets does not fix this and nothing the library ships can: it cannot make a
+  > declaration appear before a sheet that loads earlier. The documented
+  > arrangement is therefore *dzup stylesheets first*, and the unlayered route,
+  > which is order-independent, is the one to reach for when that cannot be
+  > guaranteed. Asserted, in all three engines, so it cannot change unnoticed.
+
+- **`!important` in library CSS is a defect — with one carve-out.** Corrected
+  2026-09-04: there are **three rules / six declarations**, not two.
+  `.dz-field-input-reset` (`base.css`) and `.dz-tab-close-btn:hover` are debt
+  with an owner. `.dz-native-input:-webkit-autofill` is a **permanent recorded
+  exception**: the WebKit autofill UA rule genuinely cannot be overridden without
+  it, so it belongs beside the print block and `.dz-prose` as unlayered-or-
+  important by necessity rather than in a debt list nobody can ever clear.
+
+- **Vendor sublayers are registered, not improvised.** A rule that selects a node
+  another library renders (`[data-reka-*]`, `.reka-*`, and the equivalents for
+  Radix, Floating UI, Vaul, TanStack) is the CSS form of the §3 rule that keeps
+  Reka internals out of the parts contract, and it needs an owner and a way out.
+  `packages/core/src/styles/vendor-registry.json` records selector, owner, reason
+  and exit condition; `yarn validate:vendor-sublayers` fails on an incomplete
+  entry, on an entry whose rule has been deleted, and on a vendor-shaped selector
+  with no entry. The registry is **empty**, measured empty on `99b963a` — the
+  only contact with Reka is a custom property the library *reads* — which is
+  precisely why the third rule exists (2026-09-04).
 - **Tailwind utilities a consumer generates stay outside these layers.** The
   library never emits the utility classes its `tv()` recipes name; the consumer's
   Tailwind build does. That is why `tv()` output cannot be "moved into
@@ -149,8 +195,23 @@ Every public component's stable anatomy nodes carry `data-part="<name>"`.
   group-label · separator · close · action · error · hint · empty · loader`
 
   A component may declare a name outside it when the vocabulary genuinely has no
-  word for the node; the validator in P3-02 lists such names in its report so the
+  word for the node; the validator lists such names in its report so the
   vocabulary can grow deliberately instead of by accident.
+
+  > **Grown once, deliberately, 2026-09-04 (TASK-R5-O1; N2-S1 S1-D1).** The
+  > mechanism worked as specified: `validate:anatomy-parts` reported **14 shipped
+  > names across 7 components** sitting outside the original 30. Seven name a job
+  > that recurs and are now **in** the vocabulary — `clear`, `toggle`,
+  > `filename`, `language`, `body`, `row`, `cell`. The other seven were reviewed
+  > and deliberately kept component-specific, recorded with a reason in
+  > `ANATOMY_PART_EXTENSIONS` (`packages/contracts/src/anatomy.types.ts`):
+  > `copy-button` and `line-number` (DzCodeBlock), `decrement` and `increment`
+  > (a stepper has two buttons that are not interchangeable), and the three
+  > `options-*` names, which are **held** for the `DzOptionsState` decision
+  > below. Nothing was renamed: renaming a shipped part name is breaking, which
+  > is exactly why the review had to happen while the cost was still low. The
+  > validator now distinguishes *folded in* / *reviewed extension* / *held* /
+  > *nobody has looked at it*, and the last of those has a ceiling of **zero**.
 - **Parts are a promise about identity, not about structure.** A part may move in
   the tree, gain a wrapper, or change element type in a minor release. Removing
   or renaming one is a breaking change.
@@ -158,6 +219,19 @@ Every public component's stable anatomy nodes carry `data-part="<name>"`.
   renders it is not addressable; if a consumer needs it, Core wraps it in a node
   of its own and names that. This is the P3-03 stop condition, stated here so it
   is a rule rather than one task's caveat.
+- **An unexported internal's parts are governed only when *every* host declares
+  them.** *(Added 2026-09-04, TASK-R5-O1 — the rule this section was missing;
+  packet D19-10 / N2-S1 S1-F2.)* A library-internal Vue component with no
+  ownership-manifest entry — `DzOptionsState.vue` is the case — renders into the
+  DOM of every component that imports it, so its `data-part` names land in seven
+  public components at once. It is neither a compound part (it has no
+  `parentComponent`) nor a public component, so no single anatomy owns it. The
+  rule that follows: such an emission counts as declared when **every** importing
+  host declares it, and it therefore cannot be closed one component at a time.
+  Its disposition — inline it, make it a compound part with a `parentComponent`,
+  or add an ownership kind for a shared internal — is its own decision
+  (N2-S1 **S1-D4**), and it is what `maxUndeclaredEmissions: 3` and the three
+  `held` part names both wait on.
 
 ### 4. States: a per-component `data-state` enum plus presence-only booleans
 
@@ -172,6 +246,21 @@ Every public component's stable anatomy nodes carry `data-part="<name>"`.
   per-component enum carrying the real constraint. A union that a shipped
   component already violates is not a contract; keeping it as-is would only mean
   the next component quietly violates it too.
+
+  > **Performed 2026-09-04 (TASK-R5-O1).** It had not been:
+  > `data-attributes.types.ts` still declared the closed eight-value union as the
+  > attribute type fourteen days after this ADR was written, and `DzButton` had
+  > been emitting `idle | loading | disabled` — none of them in it — since it
+  > shipped. The widening on its own would only remove a check, so it landed with
+  > the gate that replaces it: **`validate:anatomy-parts` now reads every
+  > `data-state` literal a template can produce and fails when the component
+  > anatomy (or a composing parent) does not declare it.** Measured at the
+  > widening: **0** violations across all 32 declaring components; **1** in a
+  > compound part (`DzTableRow` emits `expanded`, which `DzTable` does not
+  > declare) held under a ratcheting ceiling; and **88** values from components
+  > that declare no anatomy at all, under a second ceiling that falls as the
+  > rollout reaches them. The gate was proven by seeding an out-of-enum value on
+  > `DzButton` and observing exit 1.
 - **Boolean states are presence-only attributes**, absent when false — never
   `="false"`. This is already the rule in `data-attributes.types.ts` and it is
   reaffirmed here:
@@ -182,8 +271,19 @@ Every public component's stable anatomy nodes carry `data-part="<name>"`.
   `data-size · data-variant · data-tone · data-density · data-orientation`.
   They mirror the resolved recipe value (after group/provider inheritance, not
   the raw prop) and they are what `core.css` already selects on. A component that
-  accepts one of these props emits the matching attribute on its root; P3-02's
-  validator reports the ones that do not (today: most of them).
+  accepts one of these props emits the matching attribute on its root.
+
+  > **Corrected 2026-09-04 (TASK-R5-O1; packet D19-6).** This clause used to say
+  > *"P3-02's validator reports the ones that do not (today: most of them)"*.
+  > **No such gate was ever built** — `anatomy-parts.ts` contains no reference to
+  > `data-size`, `data-variant`, `data-tone`, `data-density` or
+  > `data-orientation`, and nothing else measures them. The recipe attributes are
+  > therefore **declared public and unenforced**, and the size of the gap is
+  > unmeasured rather than "most of them". This clause is the one part of §4 that
+  > is a forward commitment. The follow-up is named in the Consequences: build it
+  > with the `data-scope` emitter as one `useAnatomy()` attribute bag, because a
+  > second hand-written per-node attribute is the failure mode this program has
+  > recorded five times.
 - **States and recipes go on the node they describe**, which is usually but not
   always the root. A part carrying a state carries it on that part.
 
@@ -199,6 +299,14 @@ ui?: Partial<Record<Part, DzClassValue>>
   Tailwind conflict resolution behaves identically to `class`.
 - **`Part` is the component's own declared part union**, so a typo is a type
   error and autocomplete lists the real anatomy.
+- **A compound part carries `ui` for its own parts, and its parent is not
+  required to.** *(Clarified 2026-09-04, TASK-R5-O1; packet D19-12.)*
+  `DzDialogContentProps` declares `ui?: DzDialogContentUi` and `DzDialog` has no
+  `ui` prop at all — correctly, because `DzDialogContent` owns
+  `overlay`/`content`/`header`/`viewport`/`footer` and `DzDialog` renders no
+  element of its own. §5 was silent on the case, which is why the count of `ui`
+  declarations propagated through three task briefs as a wrong number: it is
+  **26 public components + 1 compound part**, not 27 components and not 5.
 - **`DzClassValue` is declared structurally in `@dzup-ui/contracts`**, not
   imported from `clsx`. It is structurally compatible with `clsx`'s `ClassValue`,
   and it keeps contracts free of a dependency on a styling library it otherwise
@@ -215,41 +323,103 @@ Why `ui` and not `parts` or `classes`:
   implication about *what* the values are — which leaves room to accept more than
   class strings later without another rename.
 
-### 6. Migration: dual-emit for one minor series, removal needs a major
+### 6. Migration: dual-emit for one release series; removal is breaking
+
+> **Amended 2026-09-04 (TASK-R5-O1)** to reconcile with
+> `packages/contracts/VERSIONING.md` §7.2. The original wording said removal
+> "is a **major** change" and that the `DataState` widening "ships as a minor".
+> Under `VERSIONING.md` §1 a `major` before 1.0 *is* `1.0.0` and
+> `validate:release-policy` refuses it, so read literally this section forbade
+> removing a part until the library was stable. Wording only; the intent —
+> removal is breaking, addition is not — is unchanged.
 
 - Components that already emit a legacy attribute for a node keep emitting it
   **alongside** the new `data-part`, marked in source with
   `// TODO(remove-after: <version>)`.
-- Dual-emit lasts **one minor release series**. Removal is a **major** change and
-  needs its own changeset; nothing here authorises a release of any kind.
-- Adding parts, states, recipe attributes or `ui` to a component is **additive**
-  and ships as a minor.
+- Dual-emit lasts **one release series**. Removing or renaming a part is
+  **breaking, and therefore a minor while the library is `0.x`** (a major from
+  1.0), and needs its own changeset; nothing here authorises a release of any
+  kind.
+- Adding parts, states, recipe attributes or `ui` to a component is **additive**,
+  and additive ships as a **patch** at `0.x`.
 - The `DataState` widening in decision 4 is a **type-level widening** — every
-  value that type-checked before still type-checks — and ships as a minor.
+  value that type-checked before still type-checks — so under `VERSIONING.md`
+  §2.1 it is a **patch**.
 
-## Prerequisite packet (blocking nothing in P3, blocking any DTCG claim)
+## Prerequisite packet — DISCHARGED
 
-**P3-00 — DTCG emit for `@dzup-ui/tokens`.** Add a generated
+**P3-00 — DTCG emit for `@dzup-ui/tokens`.** *(Discharged by TASK-N2-T1;
+recorded here 2026-09-04 by TASK-R5-O1 — packet D19-9. This section previously
+said the pipeline did not exist and forbade any document from describing it,
+which by then blocked documents from describing a pipeline that ships and is
+gated.)*
+
+`packages/tokens/src/dtcg.ts` and `src/generate-dtcg.ts` emit
 `dist/tokens.dtcg.json` (`$value`/`$type`, groups mirroring
-primitives/semantic/component), a schema check, and a spec asserting the DTCG
-document and `tokens.css` are projections of the same maps. Until it exists, no
-document, README, or task may describe DTCG as this library's token authority.
+primitives/semantic/component). `yarn validate:tokens:dtcg`
+(`packages/tooling/src/token-checks/dtcg-round-trip.ts`) resolves every alias
+through an independent DTCG reader and asserts each resolved value equals what
+`dist/tokens.css` computes for the same `--dz-*` name, in both theme cascades.
+It runs inside `yarn validate:all`.
+
+The prohibition this section carried is narrowed to the rule it was always
+protecting: **the TypeScript token maps remain the single source of truth, and
+the DTCG document is a generated projection of them — never a second source.**
 
 ## Consequences
 
-- P3-02 can define `ComponentAnatomy` against fixed names instead of proposing
-  them, and its validator has something to measure "declared or explicitly
-  `none`" against.
-- The measured baseline is honest and unflattering: **2 of 143** public
-  components emit any `data-part`. P3-03's five pilots are the first five; the
-  remaining ~138 are the rollout, and the validator counts down rather than
-  claiming a state the code does not have.
-- The `DataState` widening removes a type-level guarantee that was already false.
-  Real safety moves to the per-component enum, which is checked against rendered
-  DOM by `expectAnatomy` rather than asserted in a type nobody enforced.
-- Consumers gain `dz-overrides` immediately as a documented place to write, with
-  no library change required — the layer statement is additive.
-- Two `!important` declarations in `core.css` become recorded debt with an owner.
+*Re-measured 2026-09-04 (TASK-R5-O1) against `99b963a`. The original bullets were
+written on 2026-08-20 and three of them had become false — one of them a promise
+of a consumer-visible capability that did not exist.*
+
+- P3-02 defined `ComponentAnatomy` against these names rather than proposing
+  them. The contract is declared by **32 `.anatomy.ts` files** (31 public
+  components + `DzDialogContent`, a compound part), emitting **118 static
+  `data-part` sites across 37 components** in 36 distinct names. The
+  `maxWithoutAnatomy` ratchet has fallen 142 → 138 → 137 → 136 → **113**, one
+  direction only.
+- The measured baseline was honest and unflattering — 2 of 143 components emitted
+  any `data-part` when this ADR was written — and it remains unflattering:
+  **113 of 144 public components have still not declared an anatomy.** Three
+  families are complete (`inputs` 8/8, `buttons` 8/8, `typography` 8/8); nine are
+  not. The validator counts down and never claims a state the code lacks.
+- The typed override prop `ui` ships on **26 public components and 1 compound
+  part**. A compound part may carry `ui` for its own parts without its parent
+  declaring one — `DzDialogContent` does, `DzDialog` does not.
+- **The `DataState` widening has been performed** (2026-09-04). It removed a
+  type-level guarantee that was already false — `DzButton`'s
+  `idle | loading | disabled` violated the closed union from the day it shipped.
+  Real safety now sits in the per-component enum, checked against **source** by
+  `validate:anatomy-parts` and against **rendered DOM** by `expectAnatomy`. Under
+  `VERSIONING.md` §2.1 the widening is a **patch**.
+- **All six cascade layers are declared**, in `base.css` and in the statement
+  `tokens.css` carries, so `dz-overrides` is a documented place for a consumer to
+  write with no library change required. That sentence used to be in this list
+  and was **untrue for fourteen days**: three of the six layers existed nowhere,
+  and a consumer writing `@layer dz-overrides { … }` won by CSS append-order
+  accident for an unregistered layer, which would have stopped holding the moment
+  the library registered anything after `dz-components`. It is now asserted on the
+  packed tarballs in three engines (`yarn test:e2e:layer-order`), together with
+  the one case that does **not** hold — a consumer sheet that registers
+  `dz-overrides` before the dzup stylesheets load.
+- **Three `!important` rules ship in `core.css`, not two.**
+  `.dz-field-input-reset` and `.dz-tab-close-btn:hover` are debt with an owner.
+  `.dz-native-input:-webkit-autofill` is a **permanent recorded exception** — the
+  WebKit autofill UA rule cannot be overridden without it — and joins the print
+  block and `.dz-prose` as unlayered-or-important by necessity.
+- The recipe attributes (`data-size`, `data-variant`, `data-tone`,
+  `data-density`, `data-orientation`) are declared public by §4 and **no gate
+  measures them**. `core.css` already selects on them, so the surface is public
+  whether or not it is enforced. Filed as a follow-up, to be built with the
+  `data-scope` emitter as one `useAnatomy()` attribute bag.
+- **Part identity is carried by convention, not by attribute.** Two measured
+  collisions — a `[data-part="content"]` selector matching a `<table>` two
+  components down, and `part "root" appears 5 times` on `DzSpeedDial` — were
+  fixed with structural anchors. The residual case, `DzTooltipTrigger` merging
+  its `data-state` onto `DzRelativeTime`'s own root, cannot be fixed structurally
+  and is a **known limit**. Whether to add `data-scope` is an open owner decision
+  with a costed sheet:
+  `docs/program-2026-09-04/reports/TASK-R5-O1-data-scope-decision.md`.
 
 ## Alternatives considered
 
@@ -295,7 +465,11 @@ not generalise.
 | Hook | Added by | What it enforces |
 |---|---|---|
 | `validate:adr-references` | **this task** | every `ADR-NN` cited in source, docs or stories resolves to a document in `docs/adr/`, or to the ratcheted list of ADRs that are registry-only |
-| `validate:contract-parity` (extended) | P3-02 | declared parts/states exist in rendered DOM; no undeclared `data-part` |
+| `validate:anatomy-parts` | **TASK-N2-S1**, extended by **TASK-R5-O1** | **source-level**: every static `data-part` is declared by its component's anatomy or a composing parent's; every non-optional declared part is emitted somewhere; every `data-state` literal a template can produce is declared by that component's `states`; part names outside the vocabulary are classified (folded in / reviewed extension / held / unreviewed) and only *unreviewed* is a failure. Ratchets: `maxUndeclaredEmissions` 3, `maxUnemittedDeclarations` 0, `maxUndeclaredStates` 1, `maxStatesWithoutAnatomy` 88, `maxUnreviewedPartNames` 0, `maxHeldPartNames` 3. **This replaces the `validate:contract-parity` extension this table originally assigned the job to, which was never built** — `contract-parity.ts` contains no reference to anatomy (packet D19-5) |
+| `expectAnatomy` (`@dzup-ui/testing`) | P3-02, corrected by N2-S1 | **rendered-DOM**: declared parts and states exist in the mounted tree; a descendant `data-part="root"` is an anatomy boundary and is not descended into |
+| `validate:vendor-sublayers` | **TASK-R5-O1** | a CSS selector reaching into a vendor's DOM has a registry entry with owner, reason and exit condition; an entry whose rule has been deleted fails; the registry is empty today |
 | `validate:ownership` (extended) | P3-02 | every public component has `anatomy` or an explicit `anatomy: "none"` |
-| `validate:tokens` | exists | no raw color literals; every value references `var(--dz-*)` |
-| override e2e | P3-03 | computed styles change through `ui` and `dz-overrides` with no `!important` in the fixture |
+| recipe-attribute parity | **not built** | §4 declares `data-size/variant/tone/density/orientation` public. **No such gate exists.** Follow-up, to be built with the `useAnatomy()` attribute bag |
+| `validate:tokens` · `validate:tokens:dtcg` | exists · TASK-N2-T1 | no raw color literals; every value references `var(--dz-*)`; the DTCG projection round-trips against `tokens.css` |
+| override e2e (`e2e/components/styling-overrides.spec.ts`) | P3-03 | computed styles change through `ui` — including into a portaled listbox and a dialog backdrop — with no `!important` in the fixture. Playwright; not part of `validate:all` |
+| layer-order e2e (`e2e/styling/layer-order.spec.ts`) | **TASK-R5-O1** | on the **packed tarballs**, in chromium/firefox/webkit: all six layers registered in order in both published stylesheets; unlayered consumer CSS wins in both import orders; `@layer dz-overrides` beats `dz-components`; and the one order that does not hold. No `!important` in the fixture. Playwright; `yarn test:e2e:layer-order` |

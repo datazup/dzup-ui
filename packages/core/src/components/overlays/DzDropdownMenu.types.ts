@@ -7,6 +7,7 @@
  */
 
 import type { BaseAccessibilityProps, BasePortalProps } from '@dzup-ui/contracts'
+import type { DzDropdownMenuUi } from './DzDropdownMenu.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Side / Align
@@ -85,6 +86,13 @@ export interface DzDropdownMenuContentSlots {
 export interface DzDropdownMenuItemProps {
   /** Whether the item is disabled */
   disabled?: boolean
+  /**
+   * Per-part class overrides for the two adornment wrappers, keyed by the
+   * names in `DzDropdownMenu.anatomy.ts` (ADR-19 §5). The item's own element
+   * takes `class` at the call site; `prefix` and `suffix` are the nodes
+   * nothing else can reach.
+   */
+  ui?: Pick<DzDropdownMenuUi, 'prefix' | 'suffix'>
 }
 
 /** Events emitted by DzDropdownMenuItem */

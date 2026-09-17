@@ -18,6 +18,7 @@ import type {
   InputVariant,
   OpenableEvents,
 } from '@dzup-ui/contracts'
+import type { DzMentionUi } from './DzMention.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Option + trigger shapes
@@ -72,6 +73,12 @@ export interface DzMentionProps extends BaseFormControlProps<InputVariant> {
   loadingText?: string
   /** Copy shown when a resolved/filtered query yields no options */
   noResultsText?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzMention.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target — the text control, declared
+   * there as `input` — so `ui.root` is the route to the wrapper.
+   */
+  ui?: DzMentionUi
 }
 
 // ---------------------------------------------------------------------------

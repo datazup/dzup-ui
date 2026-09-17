@@ -28,6 +28,7 @@ import type {
  * ```
  */
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
@@ -45,6 +46,7 @@ defineOptions({
  * control in the catalog takes, and until now it silently did nothing here.
  */
 const legacyValueModel = defineModel<string>('value', { default: '' })
+/** The raw text including the mention trigger characters, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). */
 const primaryModel = defineModel<string | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzMentionProps>(), {
   multiline: true,
@@ -542,12 +544,23 @@ const controlClasses = computed(() =>
   cn(styles.value.control(), attrs.class as string | undefined),
 )
 
-defineExpose({ controlRef })
+defineExpose({
+  /**
+   * The underlying `<textarea>`, or the `<input>` when `multiline` is off,
+   * for focus and caret work. `null` before mount.
+   */
+  controlRef,
+})
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
-    :class="styles.root()"
+    data-part="root"
+    v-bind="dzTestId('dz-mention')"
+    :class="[styles.root(), ui?.root]"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
@@ -556,14 +569,15 @@ defineExpose({ controlRef })
     :aria-busy="loading || undefined"
     style="contain: layout style"
   >
-    <div :class="styles.field()">
+    <div data-part="control" :class="[styles.field(), ui?.control]">
       <!-- Text control: textarea (multiline) or input (single-line) -->
       <textarea
         v-if="multiline"
         :id="resolvedId"
         ref="controlRef"
         v-model="model"
-        :class="controlClasses"
+        data-part="input"
+        :class="[controlClasses, ui?.input]"
         :name="name"
         :placeholder="placeholder"
         :rows="rows"
@@ -597,7 +611,8 @@ defineExpose({ controlRef })
         ref="controlRef"
         v-model="model"
         type="text"
-        :class="controlClasses"
+        data-part="input"
+        :class="[controlClasses, ui?.input]"
         :name="name"
         :placeholder="placeholder"
         :maxlength="maxlength"
@@ -628,12 +643,13 @@ defineExpose({ controlRef })
       <!-- Suggestion menu -->
       <div
         v-if="menuOpen"
-        :class="styles.menu()"
+        data-part="content"
+        :class="[styles.menu(), ui?.content]"
         :style="menuStyle"
         data-mention-menu
       >
         <template v-if="loading">
-          <div :class="styles.helper()" data-mention-loading>
+          <div data-part="loader" :class="[styles.helper(), ui?.loader]" data-mention-loading>
             <slot name="loading" :char="activeTrigger!.char" :query="activeQuery">
               {{ resolvedLoadingText }}
             </slot>
@@ -643,7 +659,8 @@ defineExpose({ controlRef })
         <ul
           v-else-if="filteredOptions.length > 0"
           :id="listboxId"
-          :class="styles.list()"
+          data-part="list"
+          :class="[styles.list(), ui?.list]"
           role="listbox"
           :aria-label="`${activeTrigger!.char} suggestions`"
         >
@@ -652,7 +669,8 @@ defineExpose({ controlRef })
             :id="`${resolvedId}-option-${index}`"
             :key="option.value"
             role="option"
-            :class="styles.item()"
+            data-part="item"
+            :class="[styles.item(), ui?.item]"
             :data-mention-option="true"
             :data-index="index"
             :data-active="index === activeIndex || undefined"
@@ -669,12 +687,12 @@ defineExpose({ controlRef })
               :active="index === activeIndex"
               :index="index"
             >
-              <span :class="styles.optionLabel()">{{ option.label }}</span>
+              <span data-part="item-label" :class="[styles.optionLabel(), ui?.['item-label']]">{{ option.label }}</span>
             </slot>
           </li>
         </ul>
 
-        <div v-else :class="styles.helper()" data-mention-empty>
+        <div v-else data-part="empty" :class="[styles.helper(), ui?.empty]" data-mention-empty>
           <slot name="empty" :char="activeTrigger!.char" :query="activeQuery">
             {{ resolvedNoResultsText }}
           </slot>
@@ -689,7 +707,9 @@ defineExpose({ controlRef })
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

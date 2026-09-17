@@ -38,11 +38,28 @@
  * 3. **Vocabulary extensions** are reported, never failed — ADR-19 §3 says the
  *    vocabulary grows deliberately, and a report is how a maintainer sees the
  *    proposal.
+ * 4. **`undeclared-state`** (TASK-R5-O1) — every `data-state` VALUE a template
+ *    can produce must be declared in the emitting component's `states`, or in a
+ *    composing parent's. This is the gate that replaces the closed `DataState`
+ *    union: ADR-19 §4 widened `DataAttributes['data-state']` to `string`
+ *    precisely because a global union that `DzButton` already violated was not
+ *    a contract, and the per-component enum only becomes one when something
+ *    reads it. **Ceiling zero** — it was zero on the tree the rule was written
+ *    against, across all 32 declaring components.
+ * 5. **`states-without-anatomy`** — a `data-state` value emitted by a component
+ *    that declares no anatomy at all. Nothing constrains it, so it is counted
+ *    rather than failed, under a ceiling that falls as the anatomy rollout
+ *    (TASK-R5-O2) reaches each component. It is the state-side twin of
+ *    `maxWithoutAnatomy`.
  *
  * Dynamic bindings (`:data-part="…"`) are counted and printed but not resolved:
  * a computed part name is outside what source can decide, and pretending
  * otherwise is the "reports on a proxy and labels it as the thing" failure this
- * program has now recorded four times.
+ * program has now recorded four times. `:data-state="…"` is treated one step
+ * further: the string literals inside the expression ARE resolved, because a
+ * state is almost always a ternary over literals, and an expression that yields
+ * no literal at all (`:data-state="status"`) is reported unresolved rather than
+ * guessed.
  *
  * Usage:
  *   tsx packages/tooling/src/validators/anatomy-parts.ts
@@ -55,7 +72,11 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { basename, dirname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { ANATOMY_PART_VOCABULARY } from '@dzup-ui/contracts'
+// Read from SOURCE, not from the package specifier: '@dzup-ui/contracts'
+// resolves to the built `dist`, so a validator importing it would report against a
+// stale vocabulary until someone rebuilt contracts. `ownership-manifest.ts` already
+// imports this way for the same reason. (TASK-R5-O1)
+import { ANATOMY_PART_EXTENSIONS, ANATOMY_PART_VOCABULARY } from '../../../contracts/src/anatomy.types.ts'
 import { parseAnatomySource } from '../ownership/anatomy-source.ts'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../')
@@ -64,6 +85,7 @@ const MANIFEST = resolve(ROOT, 'packages/core/manifests/component-ownership.mani
 const CEILINGS = resolve(dirname(fileURLToPath(import.meta.url)), 'anatomy-parts-ceilings.json')
 
 const VOCABULARY = new Set<string>(ANATOMY_PART_VOCABULARY)
+const EXTENSIONS = ANATOMY_PART_EXTENSIONS as Record<string, { status: 'reviewed' | 'held' }>
 
 export interface PartEmission {
   /** Emitting component symbol, e.g. `DzTableRow`. */
@@ -74,7 +96,8 @@ export interface PartEmission {
 }
 
 export interface AnatomyPartsViolation {
-  rule: 'undeclared-emission' | 'unemitted-declaration'
+  rule: 'undeclared-emission' | 'unemitted-declaration' | 'undeclared-state' | 'states-without-anatomy'
+    | 'unreviewed-part-name' | 'held-part-name'
   symbol: string
   part: string
   message: string
@@ -87,19 +110,35 @@ export interface AnatomyPartsReport {
   ceilings: Ceilings
   /** Part names outside the ADR-19 shared vocabulary — reported, not failed. */
   vocabularyExtensions: { symbol: string, parts: string[] }[]
+  /** Out-of-vocabulary names recorded in ANATOMY_PART_EXTENSIONS as still undecided. */
+  heldPartNames: string[]
+  /** Out-of-vocabulary names in neither the vocabulary nor the extension registry. */
+  unreviewedPartNames: string[]
   /** `:data-part="…"` sites, which source cannot resolve. */
   dynamicEmissions: PartEmission[]
+  /** `data-state` values no anatomy declares, from a component that has one. */
+  undeclaredStates: AnatomyPartsViolation[]
+  /** `data-state` values emitted by a component with no anatomy at all. */
+  statesWithoutAnatomy: AnatomyPartsViolation[]
+  /** `:data-state="…"` expressions carrying no string literal to resolve. */
+  unresolvedStates: PartEmission[]
   totals: {
     emittingFiles: number
     declaringFiles: number
     distinctParts: number
     emissions: number
+    stateEmitters: number
+    distinctStates: number
   }
 }
 
 export interface Ceilings {
   maxUndeclaredEmissions: number
   maxUnemittedDeclarations: number
+  maxUndeclaredStates: number
+  maxStatesWithoutAnatomy: number
+  maxUnreviewedPartNames: number
+  maxHeldPartNames: number
 }
 
 export function readCeilings(path: string = CEILINGS): Ceilings {
@@ -107,6 +146,10 @@ export function readCeilings(path: string = CEILINGS): Ceilings {
   return {
     maxUndeclaredEmissions: raw.maxUndeclaredEmissions ?? 0,
     maxUnemittedDeclarations: raw.maxUnemittedDeclarations ?? 0,
+    maxUndeclaredStates: raw.maxUndeclaredStates ?? 0,
+    maxStatesWithoutAnatomy: raw.maxStatesWithoutAnatomy ?? 0,
+    maxUnreviewedPartNames: raw.maxUnreviewedPartNames ?? 0,
+    maxHeldPartNames: raw.maxHeldPartNames ?? 0,
   }
 }
 
@@ -143,6 +186,45 @@ export function staticPartsIn(source: string): { part: string, line: number }[] 
   const found: { part: string, line: number }[] = []
   for (const match of source.matchAll(/\bdata-part\s*=\s*"([^"]*)"/g))
     found.push({ part: match[1] ?? '', line: source.slice(0, match.index).split('\n').length })
+  return found
+}
+
+/**
+ * `data-state` values one source can produce, with 1-based line numbers.
+ *
+ * Two shapes, because templates use both: a literal attribute
+ * (`data-state="open"`) and a bound expression (`:data-state="x ? 'a' : 'b'"`).
+ * For the bound form every single-quoted literal in the expression is a value
+ * the component can emit, so all of them are returned. An expression with no
+ * literal — `:data-state="status"` — yields nothing and is reported separately;
+ * guessing what a computed value resolves to is exactly the proxy-for-the-thing
+ * failure this validator exists to avoid.
+ *
+ * The static pattern is anchored on a non-`:`, non-word, non-`-` character so
+ * it does not also match the bound form (`:data-state=`) or a longer attribute
+ * that merely ends in `data-state`.
+ */
+export function statesIn(source: string): { state: string, line: number, bound: boolean }[] {
+  const found: { state: string, line: number, bound: boolean }[] = []
+  const lineOf = (index: number): number => source.slice(0, index).split('\n').length
+  for (const match of source.matchAll(/(^|[^:\w-])data-state\s*=\s*"([^"]*)"/g))
+    found.push({ state: match[2] ?? '', line: lineOf(match.index), bound: false })
+  for (const match of source.matchAll(/(?::|v-bind:)data-state\s*=\s*"([^"]*)"/g)) {
+    for (const literal of (match[1] ?? '').matchAll(/'([^']*)'/g))
+      found.push({ state: literal[1] ?? '', line: lineOf(match.index), bound: true })
+  }
+  return found
+}
+
+/** `:data-state="…"` expressions that carry no string literal to resolve. */
+export function unresolvedStatesIn(source: string): { expression: string, line: number }[] {
+  const found: { expression: string, line: number }[] = []
+  for (const match of source.matchAll(/(?::|v-bind:)data-state\s*=\s*"([^"]*)"/g)) {
+    const expression = (match[1] ?? '').trim()
+    if (/'[^']*'/.test(expression))
+      continue
+    found.push({ expression, line: source.slice(0, match.index).split('\n').length })
+  }
   return found
 }
 
@@ -332,13 +414,128 @@ export function checkAnatomyParts(
     }
   }
 
+  // -------------------------------------------------------------------------
+  // States (TASK-R5-O1, ADR-19 §4)
+  //
+  // The closed `DataState` union used to type `DataAttributes['data-state']`
+  // and `DzButton` violated it from the day it shipped. §4 widened the
+  // attribute to `string` and moved the constraint into each component's
+  // anatomy; this is what makes that constraint real. Coverage follows the
+  // same ownership walk as a part: own anatomy, then a composing parent, then
+  // — for an unmanifested internal — every host that renders it.
+  // -------------------------------------------------------------------------
+
+  const declaresState = (symbol: string, state: string): boolean => {
+    const anatomy = anatomies.get(symbol)
+    return anatomy !== undefined && anatomy.states.includes(state)
+  }
+
+  const stateCoveredBy = (symbol: string, state: string): string | undefined => {
+    if (declaresState(symbol, state))
+      return symbol
+    let cursor = parents.get(symbol)
+    const guard = new Set<string>([symbol])
+    while (cursor !== undefined && !guard.has(cursor)) {
+      if (declaresState(cursor, state))
+        return cursor
+      guard.add(cursor)
+      cursor = parents.get(cursor)
+    }
+    if (!kinds.has(symbol)) {
+      const hosts = importers.get(symbol) ?? []
+      if (hosts.length > 0 && hosts.every(host => stateCoveredBy(host, state) !== undefined))
+        return hosts.join(', ')
+    }
+    return undefined
+  }
+
+  /** Does this symbol, or anything that owns it, declare an anatomy at all? */
+  const hasGoverningAnatomy = (symbol: string): boolean => {
+    if (anatomies.has(symbol))
+      return true
+    let cursor = parents.get(symbol)
+    const guard = new Set<string>([symbol])
+    while (cursor !== undefined && !guard.has(cursor)) {
+      if (anatomies.has(cursor))
+        return true
+      guard.add(cursor)
+      cursor = parents.get(cursor)
+    }
+    if (!kinds.has(symbol)) {
+      const hosts = importers.get(symbol) ?? []
+      return hosts.length > 0 && hosts.every(host => hasGoverningAnatomy(host))
+    }
+    return false
+  }
+
+  const undeclaredStates: AnatomyPartsViolation[] = []
+  const statesWithoutAnatomy: AnatomyPartsViolation[] = []
+  const unresolvedStates: PartEmission[] = []
+  const distinctStates = new Set<string>()
+  const stateEmitters = new Set<string>()
+
+  for (const file of files) {
+    const symbol = symbolOf(file)
+    const source = sources.get(file) ?? ''
+    const rel = relative(ROOT, file).replaceAll('\\', '/')
+
+    for (const entry of unresolvedStatesIn(source))
+      unresolvedStates.push({ symbol, file: rel, line: entry.line, part: entry.expression })
+
+    const seen = new Set<string>()
+    for (const { state, line } of statesIn(source)) {
+      if (state === '' || seen.has(state))
+        continue
+      seen.add(state)
+      distinctStates.add(state)
+      stateEmitters.add(symbol)
+      if (stateCoveredBy(symbol, state) !== undefined)
+        continue
+      const violation: AnatomyPartsViolation = hasGoverningAnatomy(symbol)
+        ? {
+            rule: 'undeclared-state',
+            symbol,
+            part: state,
+            message: `${rel}:${line} can emit data-state="${state}", which ${symbol}'s anatomy `
+              + 'does not declare. ADR-19 §4 makes the per-component `states` array the contract '
+              + '— the global `DataState` union stopped being one because a shipped component '
+              + 'already violated it. Add the value to `states`, or stop emitting it.',
+          }
+        : {
+            rule: 'states-without-anatomy',
+            symbol,
+            part: state,
+            message: `${rel}:${line} emits data-state="${state}" and ${symbol} declares no `
+              + 'anatomy, so nothing constrains the value. Counted under the ceiling that falls '
+              + 'as the anatomy rollout reaches this component.',
+          }
+      if (violation.rule === 'undeclared-state')
+        undeclaredStates.push(violation)
+      else
+        statesWithoutAnatomy.push(violation)
+    }
+  }
+
   const vocabularyExtensions: { symbol: string, parts: string[] }[] = []
+  const heldPartNames = new Set<string>()
+  const unreviewedPartNames = new Set<string>()
   for (const [symbol, anatomy] of [...anatomies].sort((a, b) => a[0].localeCompare(b[0]))) {
     if (anatomy.parts === 'none')
       continue
     const outside = anatomy.parts.filter(part => !VOCABULARY.has(part))
     if (outside.length > 0)
       vocabularyExtensions.push({ symbol, parts: outside })
+    // ADR-19 §3 says the vocabulary grows DELIBERATELY. A name outside it is
+    // therefore one of three things, and the report has to say which: folded
+    // in, reviewed and deliberately kept component-specific
+    // (ANATOMY_PART_EXTENSIONS), or nobody has looked at it yet.
+    for (const part of outside) {
+      const entry = EXTENSIONS[part]
+      if (entry === undefined)
+        unreviewedPartNames.add(part)
+      else if (entry.status === 'held')
+        heldPartNames.add(part)
+    }
   }
 
   const violations: AnatomyPartsViolation[] = []
@@ -362,6 +559,50 @@ export function checkAnatomyParts(
         + `${ceilings.maxUnemittedDeclarations}.`,
     })
   }
+  if (undeclaredStates.length > ceilings.maxUndeclaredStates) {
+    violations.push({
+      rule: 'undeclared-state',
+      symbol: '(ceiling)',
+      part: '',
+      message: `${undeclaredStates.length} data-state values are emitted by a component whose `
+        + `anatomy does not declare them, over the ceiling of ${ceilings.maxUndeclaredStates}. `
+        + 'Add the value to the `states` array of that component (or of the component that '
+        + 'composes it) in the same change.',
+    })
+  }
+  if (unreviewedPartNames.size > ceilings.maxUnreviewedPartNames) {
+    violations.push({
+      rule: 'unreviewed-part-name',
+      symbol: '(ceiling)',
+      part: [...unreviewedPartNames].join(', '),
+      message: `${unreviewedPartNames.size} declared part name(s) are in neither the ADR-19 shared `
+        + `vocabulary nor ANATOMY_PART_EXTENSIONS: ${[...unreviewedPartNames].join(', ')}. `
+        + 'ADR-19 §3 says the vocabulary grows deliberately — so a new name is either folded into '
+        + 'ANATOMY_PART_VOCABULARY or recorded as a deliberate extension with a reason. Renaming a '
+        + 'shipped part name is breaking, which is why the review happens before it ships.',
+    })
+  }
+  if (heldPartNames.size > ceilings.maxHeldPartNames) {
+    violations.push({
+      rule: 'held-part-name',
+      symbol: '(ceiling)',
+      part: [...heldPartNames].join(', '),
+      message: `${heldPartNames.size} part name(s) are recorded as \`held\` — reviewed as far as `
+        + `"not decided yet" — over the ceiling of ${ceilings.maxHeldPartNames}. The ceiling `
+        + 'ratchets DOWN as each held name gets its decision.',
+    })
+  }
+  if (statesWithoutAnatomy.length > ceilings.maxStatesWithoutAnatomy) {
+    violations.push({
+      rule: 'states-without-anatomy',
+      symbol: '(ceiling)',
+      part: '',
+      message: `${statesWithoutAnatomy.length} data-state values come from components with no `
+        + `anatomy, over the ceiling of ${ceilings.maxStatesWithoutAnatomy}. The ceiling ratchets `
+        + 'DOWN as the rollout declares each component: it may never be raised to admit a new '
+        + 'ungoverned state.',
+    })
+  }
 
   return {
     violations,
@@ -369,12 +610,19 @@ export function checkAnatomyParts(
     unemitted,
     ceilings,
     vocabularyExtensions,
+    heldPartNames: [...heldPartNames],
+    unreviewedPartNames: [...unreviewedPartNames],
     dynamicEmissions,
+    undeclaredStates,
+    statesWithoutAnatomy,
+    unresolvedStates,
     totals: {
       emittingFiles,
       declaringFiles: anatomies.size,
       distinctParts: distinctParts.size,
       emissions,
+      stateEmitters: stateEmitters.size,
+      distinctStates: distinctStates.size,
     },
   }
 }
@@ -394,13 +642,23 @@ if (isMain) {
       + `declarations); ${report.undeclared.length}/${ceilings.maxUndeclaredEmissions} undeclared, `
       + `${report.unemitted.length}/${ceilings.maxUnemittedDeclarations} declared-but-unemitted`,
     )
+    console.warn(
+      `  data-state: ${totals.distinctStates} distinct values across ${totals.stateEmitters} `
+      + `components; ${report.undeclaredStates.length}/${ceilings.maxUndeclaredStates} undeclared `
+      + `by a declaring component, ${report.statesWithoutAnatomy.length}/`
+      + `${ceilings.maxStatesWithoutAnatomy} from components with no anatomy`,
+    )
     if (report.undeclared.length > 0) {
       console.warn('  still undeclared (under the ceiling, ratchets down):')
       for (const violation of report.undeclared)
         console.warn(`   · ${violation.symbol} — "${violation.part}"`)
     }
     if (report.vocabularyExtensions.length > 0) {
-      console.warn('  part names outside the ADR-19 shared vocabulary (reported, not a failure):')
+      console.warn(
+        `  part names outside the ADR-19 shared vocabulary (reported, not a failure) — `
+        + `${report.unreviewedPartNames.length} unreviewed, ${report.heldPartNames.length}/`
+        + `${ceilings.maxHeldPartNames} held for a decision, the rest reviewed extensions:`,
+      )
       for (const entry of report.vocabularyExtensions)
         console.warn(`   · ${entry.symbol} — ${entry.parts.join(', ')}`)
     }
@@ -409,10 +667,15 @@ if (isMain) {
       for (const entry of report.dynamicEmissions)
         console.warn(`   · ${entry.file}:${entry.line} — ${entry.part}`)
     }
+    if (report.unresolvedStates.length > 0) {
+      console.warn('  :data-state expressions with no literal to resolve (reported, not failed):')
+      for (const entry of report.unresolvedStates)
+        console.warn(`   · ${entry.file}:${entry.line} — ${entry.part}`)
+    }
     process.exit(0)
   }
 
-  for (const violation of [...report.undeclared, ...report.unemitted])
+  for (const violation of [...report.undeclared, ...report.unemitted, ...report.undeclaredStates])
     console.error(`✗ ${violation.message}`)
   for (const violation of report.violations)
     console.error(`\n✗ ${violation.rule}: ${violation.message}`)

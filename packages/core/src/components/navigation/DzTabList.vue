@@ -136,6 +136,7 @@ const classes = computed(() =>
 <template>
   <TabsList
     v-roving-entry
+    data-part="list"
     :loop="loop"
     :class="classes"
     v-bind="{ ...$attrs, class: undefined }"

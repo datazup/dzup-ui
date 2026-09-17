@@ -12,6 +12,7 @@ import type {
   CanonicalSize,
 } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzAccordionTriggerUi, DzAccordionUi } from './DzAccordion.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -58,6 +59,12 @@ export interface DzAccordionSingleProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Disabled state -- prevents all items from toggling */
   disabled?: boolean
+  /**
+   * Per-part class override for the accordion root (ADR-19 §5). Items,
+   * triggers and panels are sub-components the consumer writes, where
+   * `class` at the call site already lands.
+   */
+  ui?: DzAccordionUi
 }
 
 /** Props for the DzAccordion root component (multiple selection mode) */
@@ -70,10 +77,63 @@ export interface DzAccordionMultipleProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Disabled state -- prevents all items from toggling */
   disabled?: boolean
+  /**
+   * Per-part class override for the accordion root (ADR-19 §5). Items,
+   * triggers and panels are sub-components the consumer writes, where
+   * `class` at the call site already lands.
+   */
+  ui?: DzAccordionUi
 }
 
 /** Union props for DzAccordion */
 export type DzAccordionProps = DzAccordionSingleProps | DzAccordionMultipleProps
+
+/**
+ * The flat prop declaration `defineProps` receives (TASK-R5-O8, A3-D3).
+ *
+ * `defineProps<DzAccordionProps>()` — a UNION type argument — is resolved to
+ * `{}` by `vue-language-core`, the engine behind both `vue-tsc` and
+ * `vue-component-meta`. Measured at `99b963a`:
+ *
+ *   - `<DzAccordion :size="123" type="multiple" collapsible />` type-checks
+ *     CLEAN, while the same mistake on `DzTabs` is rejected — the union bought
+ *     no discrimination and cost every consumer their prop type-checking;
+ *   - `vue-component-meta` returned **0 props, 0 events, 0 slots and 0 exposed
+ *     members** for the whole component, which is why its docs page, its
+ *     `llms.txt` entry and its three MCP tool answers were empty (A3-D3).
+ *
+ * Vue's own SFC compiler already flattens the union to exactly these eleven
+ * members plus `modelValue`, so the runtime prop declaration is unchanged —
+ * this interface is a transcription of the compiler's own output, held in the
+ * type system where the language service can read it.
+ *
+ * `DzAccordionSingleProps`, `DzAccordionMultipleProps` and `DzAccordionProps`
+ * remain the authored, exported consumer contract; `_DzAccordionRootCoversUnion`
+ * below fails the build if this flat form ever stops covering them.
+ */
+export interface DzAccordionRootProps extends BaseAccessibilityProps {
+  /** Selection type: `single` opens one item at a time, `multiple` any number */
+  type?: 'single' | 'multiple'
+  /** Whether all items can be collapsed simultaneously (single mode only; defaults to `true`) */
+  collapsible?: boolean
+  /** Visual style variant */
+  variant?: AccordionVariant
+  /** Component size */
+  size?: CanonicalSize
+  /** Disabled state -- prevents all items from toggling */
+  disabled?: boolean
+  /**
+   * Per-part class override for the accordion root (ADR-19 §5). Items,
+   * triggers and panels are sub-components the consumer writes, where
+   * `class` at the call site already lands.
+   */
+  ui?: DzAccordionUi
+}
+
+/** Compile-time proof that the flat runtime declaration still covers the union. */
+type Assert<T extends true> = T
+export type _DzAccordionRootCoversUnion
+  = Assert<DzAccordionProps extends DzAccordionRootProps ? true : false>
 
 // ---------------------------------------------------------------------------
 // DzAccordion Emits
@@ -94,7 +154,7 @@ export interface DzAccordionEmits {
 /** Slot definitions for DzAccordion */
 export interface DzAccordionSlots {
   /** DzAccordionItem children */
-  default: () => unknown
+  default?: () => unknown
 }
 
 // ---------------------------------------------------------------------------
@@ -123,6 +183,12 @@ export interface DzAccordionItemSlots {
 export interface DzAccordionTriggerProps {
   /** Additional class name */
   class?: string
+  /**
+   * Per-part class override for the chevron (ADR-19 §5). The trigger's own
+   * element takes `class` at the call site; the indicator it renders has no
+   * call site of its own.
+   */
+  ui?: DzAccordionTriggerUi
 }
 
 /** Slot definitions for DzAccordionTrigger */

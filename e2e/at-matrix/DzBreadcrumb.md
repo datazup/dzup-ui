@@ -20,6 +20,19 @@ known one.
 | `navigate` | Move through the collection with the pattern's own keys or gestures. | Each item is announced with its position and set size, and nothing is skipped. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/navigation/DzBreadcrumb.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Tab` | — | Move to the next crumb; every crumb is its own tab stop. |
+| `Enter` | — | Follow the focused crumb. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

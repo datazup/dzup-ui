@@ -13,6 +13,7 @@ import type { DzNumberInputEmits, DzNumberInputProps, DzNumberInputSlots } from 
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -22,6 +23,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The numeric value; `undefined` renders an empty field. */
 const model = defineModel<number | undefined>({ default: undefined })
 
 const props = withDefaults(defineProps<DzNumberInputProps>(), {
@@ -208,10 +210,16 @@ function handleBlur(event: FocusEvent): void {
 }
 
 /** Expose the native input ref for programmatic focus */
-defineExpose({ inputRef })
+defineExpose({
+  /** The underlying `<input>` element, for focus, selection and measurement. `null` before mount. */
+  inputRef,
+})
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzNumberInput')
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -225,7 +233,7 @@ const dzMessages = useComponentMessages('DzNumberInput')
     :data-readonly="readonly ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-number-input'), ...$attrs, class: undefined }"
   >
     <!-- Input wrapper with variant styling -->
     <div data-part="control" :class="wrapperClasses">

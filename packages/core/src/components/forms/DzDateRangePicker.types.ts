@@ -15,6 +15,7 @@ import type {
   InputVariant,
   SelectOpenableEvents,
 } from '@dzup-ui/contracts'
+import type { DzDateRangePickerUi } from './DzDateRangePicker.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Value type
@@ -50,6 +51,12 @@ export interface DzDateRangePickerProps extends BaseAccessibilityProps, BaseVali
   variant?: InputVariant
   /** Form field name */
   name?: string
+  /**
+   * Per-part class overrides, keyed by the names in
+   * `DzDateRangePicker.anatomy.ts` (ADR-19 §5). `ui.input` reaches the segments
+   * on **both** ends of the range.
+   */
+  ui?: DzDateRangePickerUi
 }
 
 // ---------------------------------------------------------------------------

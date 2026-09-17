@@ -86,6 +86,25 @@ describe('css scanner', () => {
     expect(declarations[3]?.atRules).toEqual(['@layer dz-tokens'])
     expect(declarations[4]?.atRules).toEqual(['@layer dz-tokens', '@media (prefers-color-scheme: dark)'])
   })
+
+  /**
+   * `tokens.css` opens with the six-slot ADR-19 ordering statement (TASK-R5-O1).
+   * A statement at-rule owns no block, and before the scanner reset its prelude
+   * on a top-level `;` its text was carried into the next block's context — so
+   * every token in the file parsed under `@layer …; @layer dz-tokens` and the
+   * round-trip compared the wrong cascade. The regression is cheap to keep.
+   */
+  it('a top-level statement at-rule does not leak into the next block', () => {
+    const parsed = parseCssDeclarations(`
+@layer dz-reset, dz-tokens, dz-base;
+@layer dz-tokens {
+  :root { --dz-x: 1px }
+}
+`)
+    expect(parsed).toHaveLength(1)
+    expect(parsed[0]?.atRules).toEqual(['@layer dz-tokens'])
+    expect(parsed[0]?.selector).toBe(':root')
+  })
 })
 
 describe('declaration blocks reconstructed from the token maps', () => {

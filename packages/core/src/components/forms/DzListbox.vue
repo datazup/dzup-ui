@@ -34,6 +34,8 @@ import {
  * ```
  */
 import { computed, markRaw, ref, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
@@ -45,6 +47,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Value of the selected option, or an array of values when `multiple` is set; `null` selects none. */
 const model = defineModel<DzListboxValue | DzListboxValue[] | null>({ default: null })
 
 const props = withDefaults(defineProps<DzListboxProps>(), {
@@ -74,7 +77,13 @@ const props = withDefaults(defineProps<DzListboxProps>(), {
 })
 
 const emit = defineEmits<DzListboxEmits>()
+
 defineSlots<DzListboxSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 // The async-options rows are one shared group across all seven selection
 // controls, so a translator writes them once (renderer contract C9).
@@ -363,17 +372,22 @@ function onContentClickCapture(event: MouseEvent): void {
   event.stopPropagation()
   applyRange(opt.value)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div>
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-listbox')">
     <ListboxRoot
+      :dir="dzDirection"
       :model-value="rekaModel"
       :multiple="multiple"
       :disabled="resolvedDisabled"
       :name="name"
       :required="resolvedRequired"
-      :class="rootClasses"
+      data-part="control"
+      :class="[rootClasses, ui?.control]"
       :data-disabled="resolvedDisabled ? '' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
       :data-required="resolvedRequired ? '' : undefined"
@@ -390,8 +404,9 @@ function onContentClickCapture(event: MouseEvent): void {
       <div v-if="filter" :class="styles.filterWrapper()">
         <ListboxFilter
           :model-value="filterQuery"
+          data-part="input"
           :placeholder="resolvedFilterPlaceholder"
-          :class="styles.filter()"
+          :class="[styles.filter(), ui?.input]"
           :aria-label="dzMessages.filterOptions"
           @update:model-value="handleFilterInput"
         />
@@ -422,7 +437,8 @@ function onContentClickCapture(event: MouseEvent): void {
 
       <ListboxContent
         :id="resolvedId"
-        :class="styles.viewport()"
+        data-part="viewport"
+        :class="[styles.viewport(), ui?.viewport]"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="resolvedAriaDescribedby"
@@ -431,8 +447,8 @@ function onContentClickCapture(event: MouseEvent): void {
       >
         <template v-if="visibleOptions.length > 0">
           <template v-for="grp in groups" :key="grp.key ?? '__flat__'">
-            <ListboxGroup v-if="grp.key !== null" :class="styles.group()">
-              <ListboxGroupLabel :class="styles.groupLabel()">
+            <ListboxGroup v-if="grp.key !== null" data-part="group" :class="[styles.group(), ui?.group]">
+              <ListboxGroupLabel data-part="group-label" :class="[styles.groupLabel(), ui?.['group-label']]">
                 <slot name="groupLabel" :group="grp.key">
                   {{ grp.key }}
                 </slot>
@@ -442,7 +458,8 @@ function onContentClickCapture(event: MouseEvent): void {
                 :key="opt.index"
                 :value="opt.value"
                 :disabled="opt.disabled"
-                :class="styles.option()"
+                data-part="item"
+                :class="[styles.option(), ui?.item]"
                 data-dz-listbox-option=""
                 :data-dz-index="opt.index"
               >
@@ -455,11 +472,12 @@ function onContentClickCapture(event: MouseEvent): void {
                   <component
                     :is="opt.icon"
                     v-if="opt.icon"
-                    :class="styles.optionIcon()"
+                    data-part="icon"
+                    :class="[styles.optionIcon(), ui?.icon]"
                     aria-hidden="true"
                   />
-                  <span :class="styles.optionLabel()">{{ opt.label }}</span>
-                  <ListboxItemIndicator v-if="checkmark">
+                  <span data-part="item-label" :class="[styles.optionLabel(), ui?.['item-label']]">{{ opt.label }}</span>
+                  <ListboxItemIndicator v-if="checkmark" data-part="item-indicator" :class="[ui?.['item-indicator']]">
                     <Check :class="styles.checkIcon()" aria-hidden="true" />
                   </ListboxItemIndicator>
                 </slot>
@@ -472,7 +490,8 @@ function onContentClickCapture(event: MouseEvent): void {
                 :key="opt.index"
                 :value="opt.value"
                 :disabled="opt.disabled"
-                :class="styles.option()"
+                data-part="item"
+                :class="[styles.option(), ui?.item]"
                 data-dz-listbox-option=""
                 :data-dz-index="opt.index"
               >
@@ -485,11 +504,12 @@ function onContentClickCapture(event: MouseEvent): void {
                   <component
                     :is="opt.icon"
                     v-if="opt.icon"
-                    :class="styles.optionIcon()"
+                    data-part="icon"
+                    :class="[styles.optionIcon(), ui?.icon]"
                     aria-hidden="true"
                   />
-                  <span :class="styles.optionLabel()">{{ opt.label }}</span>
-                  <ListboxItemIndicator v-if="checkmark">
+                  <span data-part="item-label" :class="[styles.optionLabel(), ui?.['item-label']]">{{ opt.label }}</span>
+                  <ListboxItemIndicator v-if="checkmark" data-part="item-indicator" :class="[ui?.['item-indicator']]">
                     <Check :class="styles.checkIcon()" aria-hidden="true" />
                   </ListboxItemIndicator>
                 </slot>
@@ -498,7 +518,7 @@ function onContentClickCapture(event: MouseEvent): void {
           </template>
         </template>
 
-        <div v-else :class="styles.empty()">
+        <div v-else data-part="empty" :class="[styles.empty(), ui?.empty]">
           <slot name="empty">
             {{ resolvedEmptyMessage }}
           </slot>
@@ -510,7 +530,9 @@ function onContentClickCapture(event: MouseEvent): void {
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

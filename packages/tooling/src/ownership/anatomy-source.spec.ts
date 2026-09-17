@@ -195,7 +195,14 @@ describe('parseAnatomySource', () => {
 
 describe('readAnatomyFor', () => {
   it('returns nothing, and no problem, for a component with no declaration', () => {
-    const result = readAnatomyFor(`${ROOT}/packages/core/src/components/cards/DzCard.vue`)
+    // `DzOptionsState`, not `DzCard`: the anatomy rollout reaches a new family
+    // every packet, so any component picked for "has no declaration" is a
+    // fixture with an expiry date — `DzCard` was this example until TASK-R5-O2
+    // declared the cards family and turned this assertion red. `DzOptionsState`
+    // is the one component in the catalogue whose declaration is BLOCKED, on
+    // the S1-D4 disposition, so it is the stable choice; when S1-D4 is taken
+    // and it gains one, this line moves with it deliberately.
+    const result = readAnatomyFor(`${ROOT}/packages/core/src/components/forms/DzOptionsState.vue`)
 
     expect(result.anatomy).toBeUndefined()
     expect(result.problems).toEqual([])
@@ -254,5 +261,235 @@ describe('referencedComponentTokens', () => {
     const referenced = referencedComponentTokens(button, 'DzButton')
 
     expect(referenced.filter(token => !declared.includes(token))).toEqual([])
+  })
+})
+
+/**
+ * The keyboard contract (TASK-R5-O5).
+ *
+ * The rows this parser reads are published as the keyboard table on 144
+ * documentation pages — the section an accessibility buyer reads first. A
+ * half-read table is worse than the "not yet derived" sentence it replaces,
+ * because it reads as complete. Every shape that must be read, and every shape
+ * that must be REFUSED, is pinned here.
+ */
+describe('keyboard contract', () => {
+  function parse(fields: string) {
+    return parseAnatomySource(
+      `export const anatomy = {\n  parts: ['root'],\n  states: [],\n  componentTokens: [],\n${fields}\n  riskTier: 'B',\n} as const satisfies ComponentAnatomy\n`,
+      'test.anatomy.ts',
+    )
+  }
+
+  it('reads an explicit none as a claim, not as an absence', () => {
+    const result = parse(`  keyboard: 'none',`)
+    expect(result.problems).toEqual([])
+    expect(result.anatomy?.keyboard).toBe('none')
+  })
+
+  it('leaves keyboard undefined when the component declares none at all', () => {
+    // 'none' and absent are DIFFERENT facts: one is a claim that the component
+    // has no keyboard behaviour, the other is that nobody has written it down.
+    // The docs ratchet counts the second and publishes the first.
+    expect(parse('').anatomy?.keyboard).toBeUndefined()
+  })
+
+  it('does NOT mistake rtl.keyboard for the top-level keyboard contract', () => {
+    // The defect this parser shipped with for one edit: `rtl: { mirrors:
+    // 'layout', keyboard: 'none' }` contains the literal `, keyboard: 'none'`,
+    // so a non-depth-aware field lookup read EVERY rtl-declaring component as
+    // claiming it has no keyboard behaviour — a wrong table on every page.
+    const result = parse(
+      `  rtl: { mirrors: 'layout', keyboard: 'swap-horizontal' },\n`
+      + `  keyboard: [{ key: 'ArrowRight', action: 'Move to the next tab.', rtl: 'mirrored' }],`,
+    )
+    expect(result.problems).toEqual([])
+    expect(result.anatomy?.keyboard).toEqual([
+      { key: 'ArrowRight', action: 'Move to the next tab.', rtl: 'mirrored' },
+    ])
+  })
+
+  it('reads every field of a binding', () => {
+    const result = parse(
+      `  keyboard: [\n`
+      + `    { key: 'ArrowDown', modifiers: ['Alt'], when: 'trigger', action: 'Open the list.', wcag: ['2.1.1'], apg: 'combobox' },\n`
+      + `  ],`,
+    )
+    expect(result.problems).toEqual([])
+    expect(result.anatomy?.keyboard).toEqual([{
+      key: 'ArrowDown',
+      modifiers: ['Alt'],
+      when: 'trigger',
+      action: 'Open the list.',
+      wcag: ['2.1.1'],
+      apg: 'combobox',
+    }])
+  })
+
+  it('keeps the declared row order — a keyboard table is not alphabetical', () => {
+    const result = parse(
+      `  keyboard: [\n`
+      + `    { key: 'Enter', action: 'Activate.' },\n`
+      + `    { key: 'ArrowDown', action: 'Move down.' },\n`
+      + `  ],`,
+    )
+    expect((result.anatomy?.keyboard as { key: string }[]).map(b => b.key))
+      .toEqual(['Enter', 'ArrowDown'])
+  })
+
+  it('reads an action containing an escaped apostrophe without truncating it', () => {
+    // Keyboard actions are prose. `[^']*` stops at the apostrophe and would
+    // publish "Move to the list" where the contract says "Move to the list's
+    // first item" — a sentence that is wrong rather than merely short.
+    const result = parse(
+      `  keyboard: [{ key: 'Home', action: 'Move to the list\\'s first item.' }],`,
+    )
+    expect(result.problems).toEqual([])
+    expect((result.anatomy?.keyboard as { action: string }[])[0].action)
+      .toBe('Move to the list\'s first item.')
+  })
+
+  it('reads an action containing a comma without ending the value early', () => {
+    const result = parse(
+      `  keyboard: [{ key: 'Escape', action: 'Close the dialog, returning focus to the trigger.' }],`,
+    )
+    expect((result.anatomy?.keyboard as { action: string }[])[0].action)
+      .toBe('Close the dialog, returning focus to the trigger.')
+  })
+
+  it('refuses a binding with no action — a key whose effect is unstated is not a contract', () => {
+    const result = parse(`  keyboard: [{ key: 'Enter' }],`)
+    expect(result.anatomy).toBeUndefined()
+    expect(result.problems.join(' ')).toContain('no `action`')
+  })
+
+  it('refuses a binding with no key', () => {
+    const result = parse(`  keyboard: [{ action: 'Does something.' }],`)
+    expect(result.problems.join(' ')).toContain('no `key`')
+  })
+
+  it('refuses an empty array, which is not the same claim as none', () => {
+    const result = parse(`  keyboard: [],`)
+    expect(result.problems.join(' ')).toContain('not a claim')
+  })
+
+  it('refuses a modifier that is not KeyboardEvent spelling', () => {
+    const result = parse(
+      `  keyboard: [{ key: 'k', modifiers: ['Cmd'], action: 'Open the palette.' }],`,
+    )
+    expect(result.problems.join(' ')).toContain('Cmd')
+  })
+
+  it('refuses an rtl value outside mirrored/fixed', () => {
+    const result = parse(
+      `  keyboard: [{ key: 'ArrowLeft', action: 'Move left.', rtl: 'swap' }],`,
+    )
+    expect(result.problems.join(' ')).toContain('expected \'mirrored\' or \'fixed\'')
+  })
+
+  it('refuses a mirrored binding on a component whose rtl says the arrows do not swap', () => {
+    // Two declarations in the same file contradicting each other. The three-axis
+    // rtl contract exists to make exactly this visible.
+    const result = parse(
+      `  rtl: { mirrors: 'layout', keyboard: 'none' },\n`
+      + `  keyboard: [{ key: 'ArrowLeft', action: 'Move left.', rtl: 'mirrored' }],`,
+    )
+    expect(result.anatomy).toBeUndefined()
+    expect(result.problems.join(' ')).toContain('cannot both be right')
+  })
+
+  it('refuses a keyboard value that is neither none nor an array', () => {
+    const result = parse(`  keyboard: 'some',`)
+    expect(result.problems.join(' ')).toContain('expected \'none\' or an array')
+  })
+})
+
+/**
+ * The fallthrough contract (TASK-R5-O6, owner decisions D24 and D26).
+ *
+ * The field answers "where does a consumer's `class` actually land?", which had
+ * no machine-readable answer anywhere before this task. Absent is the honest
+ * common case; present means the component is multi-root, re-points `class` at
+ * an inner part, or renders nothing of its own and delegates.
+ */
+describe('fallthrough contract', () => {
+  function parse(fields: string) {
+    return parseAnatomySource(
+      `export const anatomy = {
+  parts: ['root', 'control'],
+  states: [],
+  componentTokens: [],
+${fields}
+  riskTier: 'B',
+} as const satisfies ComponentAnatomy
+`,
+      'test.anatomy.ts',
+    )
+  }
+
+  it('leaves it undefined when the component declares none', () => {
+    // Absent is the ordinary case — one root, attributes reach it — and must not
+    // be invented as `{ target: 'root' }`, which would put a needless note on
+    // every documentation page.
+    expect(parse(`  recipes: ['size'],`).anatomy?.fallthrough).toBeUndefined()
+  })
+
+  it('reads a plain target', () => {
+    expect(parse(`  fallthrough: { target: 'control' },`).anatomy?.fallthrough)
+      .toEqual({ target: 'control' })
+  })
+
+  it('reads a delegate alongside the target (D26)', () => {
+    expect(
+      parse(`  fallthrough: { target: 'root', delegatesTo: 'DzCombobox' },`).anatomy?.fallthrough,
+    ).toEqual({ target: 'root', delegatesTo: 'DzCombobox' })
+  })
+
+  it(`reads 'none' as the renderless claim`, () => {
+    expect(parse(`  fallthrough: { target: 'none' },`).anatomy?.fallthrough)
+      .toEqual({ target: 'none' })
+  })
+
+  it('survives a multi-line declaration with a prose reason', () => {
+    // The real shape. A `reason` is prose containing commas, quotes and
+    // backticks, and it is deliberately NOT carried into the manifest — but it
+    // must not break the read of the fields that are.
+    const result = parse(
+      `  fallthrough: {
+`
+      + `    target: 'control',
+`
+      + `    reason:
+`
+      + `      'D24: \`$attrs\` binds to SliderRoot (\`control\`), not the labelled wrapper, '
+`
+      + `      + 'so a width you pass applies there.',
+`
+      + `  },`,
+    )
+    expect(result.anatomy?.fallthrough).toEqual({ target: 'control' })
+  })
+
+  it('refuses a declaration with no target', () => {
+    const result = parse(`  fallthrough: { reason: 'it goes somewhere, we think' },`)
+    expect(result.problems.join(' ')).toContain('no `target`')
+  })
+
+  it('refuses a non-object declaration', () => {
+    const result = parse(`  fallthrough: 'control',`)
+    expect(result.problems.join(' ')).toContain('expected an object literal')
+  })
+
+  it('does NOT mistake a nested target for the top-level field', () => {
+    // The F-2 failure mode from TASK-R5-O5, guarded for the new field: the
+    // depth-aware `fieldValue` must not read a `target:` that belongs to some
+    // other nested object.
+    const result = parse(
+      `  rtl: { mirrors: 'layout', keyboard: 'none' },
+`
+      + `  fallthrough: { target: 'control' },`,
+    )
+    expect(result.anatomy?.fallthrough).toEqual({ target: 'control' })
+    expect(result.anatomy?.rtl).toEqual({ mirrors: 'layout', keyboard: 'none' })
   })
 })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DzCardEmits, DzCardProps } from './DzCard.types.ts'
+import type { DzCardEmits, DzCardProps, DzCardSlots } from './DzCard.types.ts'
 /**
  * DzCard — A surface container component.
  *
@@ -19,6 +19,7 @@ import type { DzCardEmits, DzCardProps } from './DzCard.types.ts'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { cardVariants } from './DzCard.variants.ts'
 
@@ -35,6 +36,8 @@ const props = withDefaults(defineProps<DzCardProps>(), {
 
 const emit = defineEmits<DzCardEmits>()
 
+defineSlots<DzCardSlots>()
+
 const attrs = useAttrs()
 
 /** Computed class string merging variant classes with consumer overrides (ADR-10). */
@@ -47,6 +50,7 @@ const classes = computed(() =>
       clickable: props.clickable || undefined,
     }),
     attrs.class as string,
+    props.ui?.root,
   ),
 )
 
@@ -94,13 +98,17 @@ function handleKeydown(event: KeyboardEvent): void {
     emit('click', event)
   }
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="classes"
-    v-bind="{ ...dataAttrs, ...a11yAttrs, ...ariaAttrs }"
+    v-bind="{ ...dzTestId('dz-card'), ...dataAttrs, ...a11yAttrs, ...ariaAttrs }"
     @click="handleClick"
     @keydown="handleKeydown"
   >

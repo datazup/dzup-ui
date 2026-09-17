@@ -20,6 +20,7 @@ import type {
   InputVariant,
   SelectOpenableEvents,
 } from '@dzup-ui/contracts'
+import type { DzTimePickerUi } from './DzTimePicker.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Selection layout
@@ -70,6 +71,12 @@ export interface DzTimePickerProps extends BaseAccessibilityProps, BasePortalPro
   confirmText?: string
   /** Cancel button label */
   cancelText?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzTimePicker.anatomy.ts`
+   * (ADR-19 §5). `ui.list` names the region of choices in **both** the roll and
+   * the select layout, so a theme does not have to branch on `selection`.
+   */
+  ui?: DzTimePickerUi
 }
 
 // ---------------------------------------------------------------------------

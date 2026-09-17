@@ -35,6 +35,12 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
+   * Keyboard contract (TASK-R5-O5). A layout wrapper around controls that
+   * own their own keys.
+   */
+  keyboard: 'none',
+
+  /**
    * Tier A — a presentational shell. It owns no focus, no value and no keyboard
    * contract; the field it wraps owns all three.
    */

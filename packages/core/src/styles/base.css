@@ -5,12 +5,12 @@
  * All design values reference --dz-* tokens from @dzup-ui/tokens.
  *
  * Sections:
- *   1. Layer order declaration
- *   2. Box model reset
- *   3. Document defaults
- *   4. Focus ring utility
- *   5. Reduced motion
- *   6. Print styles
+ *   1. Layer order declaration (all six ADR-19 slots)
+ *   2. Box model reset          -> @layer dz-reset
+ *   3. Document defaults        -> @layer dz-reset
+ *   4. Focus ring utility       -> @layer dz-base
+ *   5. Reduced motion           -> @layer dz-base
+ *   6. Print styles             (unlayered, recorded exception)
  *
  * Companion sheets inlined at build time (must precede the layer statement):
  *   prose.css — .dz-prose rich-content typography (unlayered, like consumer
@@ -24,15 +24,44 @@
    Establishes specificity hierarchy for the library. Consumer utilities
    (unlayered by default in Tailwind CSS 4) always beat layered styles,
    making overrides predictable without !important.
+
+   All six ADR-19 §2 slots are registered here, including the two the library
+   writes nothing into. Registering a name is the whole point: an *unregistered*
+   layer is appended after every registered one, so before this statement named
+   them a consumer writing `@layer dz-overrides { … }` won by CSS append-order
+   accident rather than by anything the library promised — and would have
+   silently started losing the day the library registered any layer after
+   `dz-components`. TASK-R5-O1, 2026-09-04 (ADR-19 packet D19-2/D19-3).
+
+     dz-reset       box-model and document normalisation (§2, §3 below)
+     dz-tokens      --dz-* declarations; written by @dzup-ui/tokens
+     dz-base        element defaults and shared interaction utilities
+     dz-components  per-component rules and component-token defaults
+     dz-utilities   library-provided single-purpose helpers — EMPTY today;
+                    the library ships no utility class outside dz-base
+     dz-overrides   EMPTY BY CONTRACT — reserved for consumers
+
+   Two things stay unlayered on purpose and are recorded as such: the print
+   block at the end of this file, and `.dz-prose` (imported above), which must
+   beat layered component styles the way consumer utilities do. A third,
+   `.dz-native-input:-webkit-autofill`, is layered but keeps `!important`
+   because the WebKit autofill UA rule cannot be beaten without it.
    ========================================================================== */
 
-@layer dz-tokens, dz-base, dz-components;
+@layer dz-reset, dz-tokens, dz-base, dz-components, dz-utilities, dz-overrides;
 
 /* ==========================================================================
-   2–5. Base Reset & Utilities (layered)
+   2–3. Reset & Document Defaults (layered, lowest precedence)
+
+   ADR-19 §2's table puts box-model and document normalisation in `dz-reset`
+   and notes it was "currently inside dz-base; moves in P3-03". It moves here.
+   Nothing else in the library sets `box-sizing`, `margin` on `body` or
+   `scroll-behavior`, so the move lowers these rules' precedence against rules
+   that do not exist — no shipped selector changes weight. It does give a
+   consumer the layer ADR-19 promised for resetting the reset.
    ========================================================================== */
 
-@layer dz-base {
+@layer dz-reset {
   /* ==========================================================================
      2. Box Model Reset
      ========================================================================== */
@@ -61,7 +90,13 @@
   html {
     scroll-behavior: smooth;
   }
+}
 
+/* ==========================================================================
+   4–5. Base Utilities (layered)
+   ========================================================================== */
+
+@layer dz-base {
   /* ==========================================================================
      4. Interaction Utilities
      Reusable focus and disabled contracts for semantic interactive surfaces.
@@ -330,7 +365,8 @@
      * `--dz-control-visual-size` is deliberately NOT given a default here, and
      * the fallback lives inside the calc instead. Measured, not assumed: in this
      * build Tailwind emits its utilities into `@layer utilities`, and this
-     * file's `@layer dz-tokens, dz-base, dz-components` statement is declared
+     * file's `@layer dz-reset, dz-tokens, dz-base, dz-components, dz-utilities,
+     * dz-overrides` statement is declared
      * AFTER Tailwind's, so a `dz-base` declaration BEATS the utility. A default
      * on this line therefore overrode every `[--dz-control-visual-size:1.125rem]`
      * a variant wrote, the inset collapsed to zero, and the give-back silently

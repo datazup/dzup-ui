@@ -19,6 +19,13 @@ Code display component (inline or block).
 - **Risk tier:** A · **Status:** stable
 - **Anatomy parts (ADR-19):** `root`
 
+## Intent and selection guidance
+
+**Not declared.** `DzCode` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -66,6 +73,100 @@ Editable, running the **Variant Gallery** story from `packages/core/stories/typo
 
 <DzPlayground component="DzCode" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 9 stories in
+`packages/core/stories/typography/DzCode.stories.ts`: `Default`, `Variant Gallery`, `Inline Code in Paragraph`, `Block Code`, `With Language Hint`, `DzCode vs DzCodeBlock`, `Dark Mode Preview`, `Accessibility: Semantic Elements`, `Real World: Installation Guide`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzCode :ui="{ 'root': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+This component declares no states: nothing about it is advertised to CSS or to a test.
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/typography/DzCode.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `none` | The geometry is **physical on purpose** — a claim, not an oversight. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is not a requirement at this tier, so nothing measures it.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+This component declares no states, so there is no state matrix to show. A presentational
+component that renders the same way every time is the normal case for this.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e0d1707`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -82,8 +183,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -93,7 +194,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `e0d17078`
 
 ### WCAG 2.2 criteria in scope (9)
 
@@ -115,10 +216,9 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**No keyboard behaviour of its own.** This component declares `keyboard: 'none'` — an
+explicit claim, checked like any other part of its contract, not an absence of information.
+Whatever keys reach it are the platform's or its container's.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.

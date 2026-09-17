@@ -21,6 +21,13 @@ File upload with drag-and-drop support.
 - **v-model:** `v-model` (`DzFileUploadValue | undefined`)
 - **Anatomy parts (ADR-19):** `root`
 
+## Intent and selection guidance
+
+**Not declared.** `DzFileUpload` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -71,7 +78,7 @@ never as asserted.
 | `error` | `[error: FileUploadError]` | A file failed validation |
 | `focus` | `[event: FocusEvent]` | Focus gained |
 | `remove` | `[file: File]` | A file was removed from the list |
-| `update:modelValue` | `[value: DzFileUploadValue]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: DzFileUploadValue]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 | `upload` | `[files: File[]]` | Files were uploaded (added to the model) |
 | `uploadRequest` | `[request: UploadRequest]` | The host should upload this file (reference mode only). The `File` is here and **only** here — never in the model. `ref` is the entry already in the value, with `status: 'pending'`; the host replaces it with `'uploaded'` or `'failed'` when it knows. `signal` aborts if the user removes the file before the upload finishes. |
 
@@ -94,6 +101,124 @@ Editable, running the **Size Gallery** story from `packages/core/stories/forms/D
 
 <DzPlayground component="DzFileUpload" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzFileUpload />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzFileUpload v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzFileUpload :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 12 stories in
+`packages/core/stories/forms/DzFileUpload.stories.ts`: `Default`, `Size Gallery`, `Multiple File Upload`, `Image Files Only`, `Max Size (5MB)`, `Disabled`, `Invalid State`, `States`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Avatar Upload`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzFileUpload :ui="{ 'root': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/forms/DzFileUpload.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMessages` | the translated string catalogue |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzFileUpload.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/2 metric(s) have a derived threshold |
+| **Security boundary** | `file` — a hostile input can reach a sink here, and the cells below are what has been measured. |
+
+| Security lane | State |
+| --- | --- |
+| `threat-model` | `present` — `packages/core/security/DzFileUpload.threat-model.md`. |
+| `malicious-corpus` | `present` — `packages/core/security/DzFileUpload.malicious-corpus.spec.ts`. |
+| `csp-fixture` | `present` — `packages/core/security/DzFileUpload.csp-fixture.spec.ts`. |
+| `url-policy` | `present` — `packages/core/security/DzFileUpload.url-policy.spec.ts`. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzFileUpload` advertises 1 state:
+`disabled`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzFileUpload.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e0d1707`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -102,7 +227,7 @@ extraction that produced the tables above.
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
 | Props | 17 | 17 | 7 declare a default, of which 10 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 7 | 6 | 6 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Events | 7 | 7 | 6 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 2 | 2 | 2 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -110,8 +235,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -121,7 +246,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `drags`
 - **Security boundary:** `file` — Reads user-chosen files. Size, type and count checks here are UX only — the documentation has to say that a server must revalidate and scan.
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `e986952e`
+- **Component last changed at:** `e0d17078`
 
 **Why this pattern:** The one Core component whose primary job is a data boundary: it reads files the user chooses, over both a picker and a drop target.
 
@@ -166,10 +291,16 @@ DzFileUpload drags (drop files onto the zone), so SC 2.5.7 applies and was audit
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**2 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `Enter` | `dropzone` | Open the file picker. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+| `Space` | `dropzone` | Open the file picker. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+
+Declared in `packages/core/src/components/forms/DzFileUpload.anatomy.ts`.
 
 - **Pattern:** [APG — `button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
@@ -209,12 +340,12 @@ Every kind of evidence required of this component — by Tier D, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzFileUpload.spec.ts` |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzFileUpload.spec.ts` — All 2 declared binding(s) are exercised by the unit spec. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/forms/DzFileUpload.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzFileUpload.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzFileUpload.md` — 6 AT/browser pairs, none executed. |
@@ -225,7 +356,7 @@ Every kind of evidence required of this component — by Tier D, by its traits (
 | `url-policy` | tier D | `present` | `packages/core/security/DzFileUpload.url-policy.spec.ts` |
 | `csp-fixture` | tier D | `present` | `packages/core/security/DzFileUpload.csp-fixture.spec.ts` |
 
-**1 unrun:** `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**2 unrun:** `browser-matrix`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

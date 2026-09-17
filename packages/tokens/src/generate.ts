@@ -3,6 +3,7 @@
  *
  * Reads all token definitions and generates:
  * - dist/tokens.css       — All CSS custom properties
+ * - dist/tokens.high-contrast.css — The opt-in third cascade (TASK-R5-O7)
  * - dist/tokens.d.ts      — TypeScript type definitions
  * - dist/tailwind-theme.js — Tailwind CSS 4 theme extension
  * - dist/tailwind-theme.d.ts — Types for the Tailwind theme
@@ -39,6 +40,7 @@ import { generateTransitionCssVars } from './primitives/transitions.js'
 import { generateTypographyCssVars } from './primitives/typography.js'
 import { generateZIndexCssVars } from './primitives/z-index.js'
 import { DARK_SEMANTIC_TOKENS } from './semantic/dark.js'
+import { HIGH_CONTRAST_SEMANTIC_TOKENS } from './semantic/high-contrast.js'
 // Semantic
 import { LIGHT_SEMANTIC_TOKENS } from './semantic/light.js'
 
@@ -100,9 +102,18 @@ function generateCss(): string {
  *
  * All token declarations are wrapped in @layer dz-tokens so that
  * consumer utilities (unlayered) can override them without !important.
- * The layer order is declared in packages/core/src/styles/base.css:
- *   @layer dz-tokens, dz-base, dz-components;
+ *
+ * The ordering statement below repeats the one in
+ * packages/core/src/styles/base.css verbatim. It has to: CSS registers a layer
+ * at its FIRST appearance, so if this sheet loaded first and only opened
+ * the dz-tokens block, dz-tokens would register ahead of dz-reset and the
+ * shipped order would depend on which stylesheet a bundler emitted first.
+ * Repeating the full statement makes the order identical either way.
+ * base.css remains the single statement the docs evidence layer reads
+ * (packages/tooling/src/docs/read-evidence.ts). TASK-R5-O1, ADR-19 §2.
  */
+
+@layer dz-reset, dz-tokens, dz-base, dz-components, dz-utilities, dz-overrides;
 
 @layer dz-tokens {
 
@@ -194,6 +205,95 @@ ${formatVars(componentTokens)}
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* The same overrides, keyed on the attribute an ADR-20 §7 adopter
+   writes on its root when the APPLICATION asked for reduced motion
+   (TASK-R5-O3, packages/core/src/composables/provider/useDzMotion.ts).
+
+   Expressed here rather than per component for the reason the block above
+   exists: twenty-six components once restated the reduced-motion rule locally
+   and it is expressed once, here. The media query answers for the OS; this
+   answers for a host that has its own accessibility setting, which the media
+   query cannot see. Also outside @layer, so it wins the same way. */
+[data-dz-motion="reduce"],
+[data-dz-motion="reduce"] *,
+[data-dz-motion="reduce"] *::before,
+[data-dz-motion="reduce"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+`
+}
+
+// --------------------------------------------------------------------------
+// High-Contrast Cascade Generation (TASK-R5-O7)
+// --------------------------------------------------------------------------
+
+/**
+ * The third cascade, emitted to its own opt-in stylesheet.
+ *
+ * Separate from `tokens.css` on purpose: no component implements the theme yet
+ * (TASK-R5-O7 changes no component), so folding 115 extra declarations into the
+ * sheet every consumer already loads would cost every one of them bytes for a
+ * theme none of them can select. A second import is the honest price of an
+ * opt-in cascade.
+ */
+function generateHighContrastCss(): string {
+  return `/**
+ * dzup-ui — High-Contrast Token Cascade  (GENERATED — do not edit)
+ *
+ * The third cascade alongside light and dark: the same 115 semantic ABI names,
+ * valued in CSS system colours so the palette comes from the user's operating
+ * system instead of from this package. Generated from
+ * packages/tokens/src/semantic/high-contrast.ts, where the role table and its
+ * ceilings (HC-1..HC-5) are documented.
+ *
+ * Opt in with:
+ *   import '@dzup-ui/tokens/css'                  // must come first
+ *   import '@dzup-ui/tokens/css/high-contrast'
+ *
+ * then set data-theme="high-contrast" on the root element.
+ */
+
+@layer dz-reset, dz-tokens, dz-base, dz-components, dz-utilities, dz-overrides;
+
+@layer dz-tokens {
+
+/* ==========================================================================
+   Application opt-in — [data-theme="high-contrast"]
+
+   Same tier and same specificity as [data-theme="dark"], so it behaves exactly
+   like the other themes: whichever theme the root element names, wins. This is
+   the load-bearing half. Under an explicit opt-in the browser forces nothing,
+   and the system keywords still resolve to the OS palette.
+   ========================================================================== */
+
+[data-theme="high-contrast"] {
+${formatVars(HIGH_CONTRAST_SEMANTIC_TOKENS)}
+}
+
+} /* end @layer dz-tokens */
+
+/* ==========================================================================
+   OS forced-colors — kept OUTSIDE @layer, for the reason the reduced-motion
+   block in tokens.css is: an accessibility override the user asked the OS for
+   must always win, and an unlayered rule beats every layered one regardless of
+   which stylesheet a bundler emitted first.
+
+   Belt-and-braces by design. With forced-color-adjust: auto the browser already
+   replaces the used value of color, background-color and border-color whatever
+   these custom properties say; this block matters for the properties it does
+   not force, and it keeps var(--dz-*) readable rather than leaving an oklch
+   value that no longer describes what is on screen.
+   ========================================================================== */
+
+@media (forced-colors: active) {
+  :root {
+${formatVars(HIGH_CONTRAST_SEMANTIC_TOKENS, '    ')}
   }
 }
 `
@@ -445,6 +545,7 @@ function main(): void {
   mkdirSync(DIST_DIR, { recursive: true })
 
   const css = generateCss()
+  const highContrastCss = generateHighContrastCss()
   const types = generateTypes()
   const tailwindTheme = generateTailwindTheme()
   const tailwindThemeTypes = generateTailwindThemeTypes()
@@ -460,6 +561,7 @@ function main(): void {
   }
 
   writeFileSync(resolve(DIST_DIR, 'tokens.css'), css, 'utf-8')
+  writeFileSync(resolve(DIST_DIR, 'tokens.high-contrast.css'), highContrastCss, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tokens.d.ts'), types, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tailwind-theme.js'), tailwindTheme, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tailwind-theme.d.ts'), tailwindThemeTypes, 'utf-8')
@@ -472,6 +574,10 @@ function main(): void {
     '[tokens] Generated dist/tokens.css (%d lines, %d token declarations)',
     lineCount,
     tokenCount,
+  )
+  console.log(
+    '[tokens] Generated dist/tokens.high-contrast.css (%d token declarations)',
+    Object.keys(HIGH_CONTRAST_SEMANTIC_TOKENS).length,
   )
   console.log('[tokens] Generated dist/tokens.d.ts')
   console.log('[tokens] Generated dist/tailwind-theme.js')

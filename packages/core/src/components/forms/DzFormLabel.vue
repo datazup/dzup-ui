@@ -21,6 +21,11 @@ defineOptions({
   inheritAttrs: false,
 })
 
+defineSlots<{
+  /** The label text. Rendered inside the `<label>` whose `for` the field context resolves. */
+  default?: () => unknown
+}>()
+
 const attrs = useAttrs()
 const context = useFormFieldContext()
 

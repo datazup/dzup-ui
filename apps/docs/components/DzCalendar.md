@@ -19,6 +19,14 @@ full-surface month/week calendar for date selection and
 - **Risk tier:** C · **Status:** experimental
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **v-model:** `v-model:focusedDate` (`string | undefined`), `v-model:value` (`DzCalendarModelValue | undefined`)
+- **Anatomy parts (ADR-19):** `action`, `cell`, `content`, `group`, `header`, `item`, `root`, `row`, `title`
+
+## Intent and selection guidance
+
+**Not declared.** `DzCalendar` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (17, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (18, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -51,7 +59,7 @@ never as asserted.
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents all interaction |
 | `disabledDate` | `((date: Date) => boolean) \| undefined` | no | `undefined` | Predicate marking individual dates as disabled |
 | `firstDayOfWeek` | `WeekdayIndex \| undefined` | no | `0` | First day of the week (0 = Sunday … 6 = Saturday) |
-| `focusedDate` | `string \| undefined` | no | `""` | — |
+| `focusedDate` | `string \| undefined` | no | `""` | The ISO 8601 date whose month the grid shows and whose cell holds the roving tabindex; the default empty string starts the grid on today's month. |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `locale` | `string \| undefined` | no | `undefined` | Locale for formatting (BCP 47 tag, e.g. 'en-US') |
 | `maxDate` | `string \| undefined` | no | `undefined` | Maximum selectable date (ISO 8601 string) |
@@ -59,7 +67,8 @@ never as asserted.
 | `mode` | `CalendarMode \| undefined` | no | `"single"` | Selection mode |
 | `readonly` | `boolean \| undefined` | no | `false` | Read-only state -- navigable but not selectable |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `value` | `DzCalendarModelValue \| undefined` | no | `null` | — |
+| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "action" \| "title" \| "header" \| "group" \| "row" \| "cell", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzCalendar.anatomy.ts` (ADR-19 §5). Every node but the wrapper is generated from the visible period, so `ui` is the only route to the header, the navigation, the week rows and the day buttons. |
+| `value` | `DzCalendarModelValue \| undefined` | no | `null` | The current selection, shaped by `mode` - an ISO date string in `single`, an ISO string array in `multiple`, a start/end pair in `range`. `null` selects nothing. |
 | `view` | `CalendarView \| undefined` | no | `"month"` | View granularity |
 
 ## Events (3)
@@ -67,8 +76,8 @@ never as asserted.
 | Event | Payload | Description |
 | --- | --- | --- |
 | `panelChange` | `[payload: CalendarPanelChangePayload]` | Visible period (month/week) changed |
-| `update:focusedDate` | `[value: string]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
-| `update:value` | `[value: DzCalendarModelValue]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:focusedDate` | `[value: string]` | Emitted when the `v-model:focusedDate` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:focusedDate` consumes it for you. |
+| `update:value` | `[value: DzCalendarModelValue]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
 
 ## Slots (1)
 
@@ -93,6 +102,156 @@ Editable, running the **Dark Mode Preview** story from `packages/core/stories/da
 
 <DzPlayground component="DzCalendar" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+
+**Controlled and uncontrolled — `focusedDate`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzCalendar />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzCalendar v-model:focusedDate="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzCalendar :focusedDate="value" @update:focusedDate="value = $event" />
+```
+
+**Controlled and uncontrolled — `value`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzCalendar />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzCalendar v-model:value="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzCalendar :value="value" @update:value="value = $event" />
+```
+
+**Where each variant is shown.** 10 stories in
+`packages/core/stories/data/DzCalendar.stories.ts`: `Month`, `Week`, `Range Selection`, `With Event Dots`, `Disabled Dates (weekends)`, `Min / Max Constraints`, `Dark Mode Preview`, `States`, `Accessibility: Keyboard-Only Grid`, `Real World: Booking Availability`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `action` | `[data-part="action"]` | no — renders zero or more than once |
+| `cell` | `[data-part="cell"]` | no — renders zero or more than once |
+| `content` | `[data-part="content"]` | yes |
+| `group` | `[data-part="group"]` | yes |
+| `header` | `[data-part="header"]` | yes |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `row` | `[data-part="row"]` | no — renders zero or more than once |
+| `title` | `[data-part="title"]` | yes |
+
+```vue
+<DzCalendar :ui="{ 'action': 'ring-2', 'cell': 'ring-2', 'content': 'ring-2', 'group': 'ring-2', 'header': 'ring-2', 'item': 'ring-2', 'root': 'ring-2', 'row': 'ring-2', 'title': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `in-range` | `[data-state="in-range"]` |
+| `outside-month` | `[data-state="outside-month"]` |
+| `selected` | `[data-state="selected"]` |
+| `today` | `[data-state="today"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-calendar-cell-foreground` |
+| `--dz-calendar-cell-hover-bg` |
+| `--dz-calendar-cell-radius` |
+| `--dz-calendar-cell-size` |
+| `--dz-calendar-disabled-opacity` |
+| `--dz-calendar-header-foreground` |
+| `--dz-calendar-outside-foreground` |
+| `--dz-calendar-outside-opacity` |
+| `--dz-calendar-range-bg` |
+| `--dz-calendar-selected-bg` |
+| `--dz-calendar-selected-foreground` |
+| `--dz-calendar-today-ring` |
+| `--dz-calendar-weekday-foreground` |
+
+Declared in `packages/core/src/components/data/DzCalendar.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDirection` | the document writing direction |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | `action` | These parts render a direction-bearing icon and mirror with the layout. |
+
+**Locale and formats.** Reads `useDzDirection` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/data/DzCalendar.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzCalendar` advertises 5 states:
+`disabled`, `in-range`, `outside-month`, `selected`, `today`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/data/DzCalendar.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `a170c9a`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -100,8 +259,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 17 | 15 | 8 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 3 | 1 | 1 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
+| Props | 18 | 18 | 8 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 3 | 3 | 1 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 1 | 1 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -109,8 +268,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -119,7 +278,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/)
 - **Traits:** none declared
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `a170c9a9`
 
 **Why this pattern:** A month grid with roving focus, range selection and locale-dependent week starts — the composite case APG models as a grid rather than as a set of buttons.
@@ -155,16 +314,30 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**12 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- |
+| `ArrowRight` | Move focus one day to the inline end. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | swaps with the writing direction |
+| `ArrowLeft` | Move focus one day to the inline start. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | swaps with the writing direction |
+| `ArrowDown` | Move focus one row down. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `ArrowUp` | Move focus one row up. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Home` | Move focus to the first day of the row. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `End` | Move focus to the last day of the row. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `PageDown` | Move to the next month. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `PageUp` | Move to the previous month. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Shift` + `PageDown` | Move to the next year. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Shift` + `PageUp` | Move to the previous year. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Enter` | Select the focused day. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Space` | Select the focused day. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+
+Declared in `packages/core/src/components/data/DzCalendar.anatomy.ts`.
 
 - **Pattern:** [APG — `grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/data/DzCalendar.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 12 binding(s); the unit spec asserts no key event for `ArrowLeft`, `ArrowUp`, `PageUp`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -198,18 +371,18 @@ Every kind of evidence required of this component — by Tier C — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/data/DzCalendar.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzCalendar.spec.ts` — The component declares 12 binding(s); the unit spec asserts no key event for `ArrowLeft`, `ArrowUp`, `PageUp`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzCalendar.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzCalendar.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**5 unrun:** `axe`, `ssr-sample`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

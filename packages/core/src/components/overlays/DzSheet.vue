@@ -24,6 +24,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Whether the sheet is open; `false` keeps it closed. */
 const open = defineModel<boolean>('open', { default: false })
 
 withDefaults(defineProps<DzSheetProps>(), {

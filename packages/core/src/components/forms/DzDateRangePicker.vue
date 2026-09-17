@@ -39,6 +39,7 @@ import {
  * ```
  */
 import { computed, toRef, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDatePicker } from '../../composables/useDatePicker/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -48,6 +49,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The selected range as ISO 8601 `start`/`end` date strings; the default pair of empty strings selects no range. */
 const model = defineModel<DateRangeValue>({ default: () => ({ start: '', end: '' }) })
 
 const props = withDefaults(defineProps<DzDateRangePickerProps>(), {
@@ -171,10 +173,13 @@ function handleBlur(event: FocusEvent): void {
 const triggerClasses = computed(() =>
   cn(styles.value.trigger(), attrs.class as string | undefined),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div>
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-date-range-picker')">
     <DateRangePickerRoot
       :model-value="rangeValue"
       :min-value="startPicker.minValue.value"
@@ -191,7 +196,8 @@ const triggerClasses = computed(() =>
         <DateRangePickerField
           :id="resolvedId"
           v-slot="{ segments }"
-          :class="triggerClasses"
+          data-part="control"
+          :class="[triggerClasses, ui?.control]"
           :aria-label="ariaLabel"
           :aria-labelledby="ariaLabelledby"
           :aria-describedby="resolvedAriaDescribedby"
@@ -225,21 +231,23 @@ const triggerClasses = computed(() =>
             <DateRangePickerInput
               v-for="(item, index) in segments.start"
               :key="`start-${item.part}-${index}`"
+              data-part="input"
               :part="item.part"
               type="start"
-              :class="item.part === 'literal' ? styles.field() : styles.fieldInput()"
+              :class="[item.part === 'literal' ? styles.field() : styles.fieldInput(), ui?.input]"
             >
               {{ item.value }}
             </DateRangePickerInput>
 
-            <span :class="styles.separator()">-</span>
+            <span data-part="separator" :class="[styles.separator(), ui?.separator]">-</span>
 
             <DateRangePickerInput
               v-for="(item, index) in segments.end"
               :key="`end-${item.part}-${index}`"
+              data-part="input"
               :part="item.part"
               type="end"
-              :class="item.part === 'literal' ? styles.field() : styles.fieldInput()"
+              :class="[item.part === 'literal' ? styles.field() : styles.fieldInput(), ui?.input]"
             >
               {{ item.value }}
             </DateRangePickerInput>
@@ -248,22 +256,24 @@ const triggerClasses = computed(() =>
           <!-- TASK-N1-O3 / WCAG 2.2 SC 2.5.8 -- see DzDatePicker.vue for why this
                uses `dz-target-min` and not the footprint-neutral variant. -->
           <DateRangePickerTrigger
-            class="ml-auto dz-target-min inline-flex items-center justify-center"
+            data-part="trigger"
+            class="ms-auto dz-target-min inline-flex items-center justify-center"
+            :class="[ui?.trigger]"
             :aria-label="ariaLabel ?? 'Open date range picker'"
           >
-            <CalendarIcon :class="styles.icon()" aria-hidden="true" />
+            <CalendarIcon data-part="icon" :class="[styles.icon(), ui?.icon]" aria-hidden="true" />
           </DateRangePickerTrigger>
         </DateRangePickerField>
       </DateRangePickerAnchor>
 
-      <DateRangePickerContent :class="styles.content()" :side-offset="4">
-        <DateRangePickerCalendar v-slot="{ weekDays, grid }" :class="styles.calendar()">
-          <DateRangePickerHeader :class="styles.header()">
-            <DateRangePickerPrev :class="styles.navButton()">
+      <DateRangePickerContent data-part="content" :class="[styles.content(), ui?.content]" :side-offset="4">
+        <DateRangePickerCalendar v-slot="{ weekDays, grid }" data-part="panel" :class="[styles.calendar(), ui?.panel]">
+          <DateRangePickerHeader data-part="header" :class="[styles.header(), ui?.header]">
+            <DateRangePickerPrev data-part="action" :class="[styles.navButton(), ui?.action]">
               <ChevronLeft class="h-4 w-4" aria-hidden="true" />
             </DateRangePickerPrev>
-            <DateRangePickerHeading :class="styles.heading()" />
-            <DateRangePickerNext :class="styles.navButton()">
+            <DateRangePickerHeading data-part="title" :class="[styles.heading(), ui?.title]" />
+            <DateRangePickerNext data-part="action" :class="[styles.navButton(), ui?.action]">
               <ChevronRight class="h-4 w-4" aria-hidden="true" />
             </DateRangePickerNext>
           </DateRangePickerHeader>
@@ -271,14 +281,16 @@ const triggerClasses = computed(() =>
           <DateRangePickerGrid
             v-for="month in grid"
             :key="month.value.toString()"
-            :class="styles.grid()"
+            data-part="group"
+            :class="[styles.grid(), ui?.group]"
           >
             <DateRangePickerGridHead>
-              <DateRangePickerGridRow>
+              <DateRangePickerGridRow data-part="row" :class="[ui?.row]">
                 <DateRangePickerHeadCell
                   v-for="day in weekDays"
                   :key="day"
-                  :class="styles.headCell()"
+                  data-part="cell"
+                  :class="[styles.headCell(), ui?.cell]"
                 >
                   {{ day }}
                 </DateRangePickerHeadCell>
@@ -288,17 +300,21 @@ const triggerClasses = computed(() =>
               <DateRangePickerGridRow
                 v-for="(weekDates, index) in month.rows"
                 :key="`week-${index}`"
+                data-part="row"
+                :class="[ui?.row]"
               >
                 <DateRangePickerCell
                   v-for="weekDate in weekDates"
                   :key="weekDate.toString()"
                   :date="weekDate"
-                  :class="styles.cell()"
+                  data-part="cell"
+                  :class="[styles.cell(), ui?.cell]"
                 >
                   <DateRangePickerCellTrigger
                     :day="weekDate"
                     :month="month.value"
-                    :class="styles.cellTrigger()"
+                    data-part="item"
+                    :class="[styles.cellTrigger(), ui?.item]"
                   />
                 </DateRangePickerCell>
               </DateRangePickerGridRow>
@@ -312,7 +328,9 @@ const triggerClasses = computed(() =>
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

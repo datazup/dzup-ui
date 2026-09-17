@@ -105,6 +105,15 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
+   * Keyboard contract (TASK-R5-O5). Native `button` activation. Nothing
+   * else is DzButton’s: Arrow keys belong to whatever groups it.
+   */
+  keyboard: [
+    { key: 'Enter', action: 'Activate the button.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', action: 'Activate the button.', wcag: ['2.1.1'], apg: 'button' },
+  ],
+
+  /**
    * Tier B — interactive primitive. It manages focus, carries
    * `disabled`/`aria-disabled` semantics, and is polymorphic across
    * `button`/`a`/`RouterLink`. A defect here is a functional failure for

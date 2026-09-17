@@ -58,7 +58,7 @@
     },
     {
       "id": "ADR-12",
-      "title": "Committed dist artifacts",
+      "title": "Generated dist/ artifacts are published, never committed: dist/ is gitignored (.gitignore:9) with zero tracked dist files repo-wide, and reaches consumers through each package.json `files` entry at npm pack time. Retitled 2026-09-04 (TASK-N0-04): the previous title, \"Committed dist artifacts\", described a practice neither this repo nor dzup-ui-pro follows, and had already misled source comments in apps/landing/vite/serve-storybook.ts and packages/tooling/README.md",
       "recordedIn": "CLAUDE.md § Key ADRs"
     },
     {

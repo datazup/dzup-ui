@@ -20,6 +20,7 @@ import type { DzRelativeTimeProps, DzRelativeTimeSlots } from './DzRelativeTime.
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useRelativeTime } from '../../composables/useRelativeTime/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzTooltip from '../overlays/DzTooltip.vue'
@@ -78,6 +79,9 @@ const slotProps = computed(() => ({
   absolute: absolute.value,
   datetime: datetime.value,
 }))
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -91,7 +95,7 @@ const slotProps = computed(() => ({
         :aria-label="accessibleLabel"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="ariaDescribedby"
-        v-bind="{ ...$attrs, class: undefined }"
+        v-bind="{ ...dzTestId('dz-relative-time'), ...$attrs, class: undefined }"
       >
         <slot v-bind="slotProps">{{ display }}</slot>
       </time>

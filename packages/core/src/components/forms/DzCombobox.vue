@@ -36,7 +36,7 @@ import {
  * ```
  */
 import { computed, ref, useAttrs, useId, watch } from 'vue'
-import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
@@ -49,6 +49,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Value of the selected option; the default empty string selects none. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzComboboxProps>(), {
@@ -345,10 +346,13 @@ watch(
   },
   { immediate: true },
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div>
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-combobox')">
     <ComboboxRoot
       :model-value="model"
       :disabled="resolvedDisabled"
@@ -361,7 +365,8 @@ watch(
       @update:open="handleOpenChange"
     >
       <ComboboxAnchor
-        :class="rootClasses"
+        data-part="control"
+        :class="[rootClasses, ui?.control]"
         :data-state="resolvedDisabled ? 'disabled' : 'idle'"
         :data-disabled="resolvedDisabled ? '' : undefined"
         :data-invalid="resolvedInvalid ? '' : undefined"
@@ -374,9 +379,10 @@ watch(
         <ComboboxInput
           :id="resolvedId"
           v-model="searchQuery"
+          data-part="input"
           :display-value="resolveDisplayValue"
           :placeholder="placeholder"
-          :class="styles.input()"
+          :class="[styles.input(), ui?.input]"
           :disabled="resolvedDisabled"
           :aria-label="resolvedAriaLabel"
           :aria-labelledby="resolvedAriaLabelledby"
@@ -393,7 +399,8 @@ watch(
         >
           <button
             type="button"
-            :class="styles.clearButton()"
+            data-part="clear"
+            :class="[styles.clearButton(), ui?.clear]"
             :aria-label="dzMessages.clearSelection"
             @click.stop="handleClear"
           >
@@ -404,7 +411,8 @@ watch(
         <ComboboxTrigger as-child>
           <button
             type="button"
-            :class="styles.icon()"
+            data-part="trigger"
+            :class="[styles.icon(), ui?.trigger]"
             :aria-label="dzMessages.toggleOptions"
             :disabled="resolvedDisabled"
           >
@@ -421,7 +429,7 @@ watch(
               :label="resolvedLoadingText"
               class="size-[var(--dz-control-visual-size)]"
             />
-            <ChevronDown v-else class="size-[var(--dz-control-visual-size)]" aria-hidden="true" />
+            <ChevronDown v-else data-part="icon" class="size-[var(--dz-control-visual-size)]" :class="[ui?.icon]" aria-hidden="true" />
           </button>
         </ComboboxTrigger>
       </ComboboxAnchor>
@@ -431,8 +439,8 @@ watch(
         :disabled="portalDisabled"
         :defer="portalDefer"
       >
-        <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
-          <ComboboxViewport :class="styles.viewport()">
+        <ComboboxContent data-part="content" :class="[styles.content(), ui?.content]" position="popper" :side-offset="4">
+          <ComboboxViewport data-part="viewport" :class="[styles.viewport(), ui?.viewport]">
             <!--
               One row instead of the list while the host is loading, has nothing, or
               failed (renderer contract C9). `optionsRow` is null whenever the control
@@ -447,7 +455,7 @@ watch(
             />
             <template v-else-if="loading">
               <slot name="loading">
-                <div :class="styles.empty()">
+                <div data-part="empty" :class="[styles.empty(), ui?.empty]">
                   {{ resolvedLoadingText }}
                 </div>
               </slot>
@@ -460,9 +468,10 @@ watch(
                 :value="item.value"
                 :text-value="item.label"
                 :disabled="item.disabled"
-                :class="styles.item()"
+                data-part="item"
+                :class="[styles.item(), ui?.item]"
               >
-                <ComboboxItemIndicator class="absolute left-1 flex items-center justify-center">
+                <ComboboxItemIndicator data-part="item-indicator" class="absolute inset-s-1 flex items-center justify-center" :class="[ui?.['item-indicator']]">
                   <Check :class="styles.checkIcon()" aria-hidden="true" />
                 </ComboboxItemIndicator>
                 <slot
@@ -471,12 +480,12 @@ watch(
                   :index="index"
                   :selected="model === item.value"
                 >
-                  <span class="pl-6">{{ item.label }}</span>
+                  <span data-part="item-label" class="ps-6" :class="[ui?.['item-label']]">{{ item.label }}</span>
                 </slot>
               </ComboboxItem>
             </template>
 
-            <div v-else :class="styles.empty()">
+            <div v-else data-part="empty" :class="[styles.empty(), ui?.empty]">
               <slot
                 name="empty"
                 :query="searchQuery"
@@ -495,7 +504,9 @@ watch(
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

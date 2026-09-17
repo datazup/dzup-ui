@@ -5,10 +5,11 @@
 > because the contracts package is the one thing every other package — and every
 > consumer, and `@dzup-ui-pro/pro` — already depends on inward.
 >
-> **Three reconciliations in §7 are `[!owner]`** and are marked as such. They are
-> places where this statement disagrees with prose already in the repository.
-> Until an owner rules, the older text is not deleted; the disagreement is
-> recorded here so nobody has to discover it during a release.
+> **The three reconciliations in §7 were APPLIED on 2026-09-04** by TASK-R5-O1,
+> in the three documents themselves. §7 now records what changed and where, so
+> the ruling is auditable rather than merely announced. Nothing was deleted: each
+> amended document carries a dated note saying what it used to say and why the
+> old wording was wrong.
 >
 > **This document authorises no release.** It states what a number would mean.
 
@@ -209,36 +210,49 @@ review's, and §2 exists to make it a shared one.
 
 ---
 
-## 7. Reconciliations — `[!owner]`
+## 7. Reconciliations — RESOLVED 2026-09-04
 
-This statement disagrees with three documents already in the repository. None is
-edited by `TASK-N5-01`; the disagreement is recorded so a release does not
-discover it.
+This statement disagreed with three documents already in the repository. All
+three were amended **in place** by `TASK-R5-O1` on 2026-09-04 (report:
+`docs/program-2026-09-04/reports/TASK-R5-O1-handoff.md`), each with a dated note
+in the amended document recording what it used to say. Nothing was deleted and
+no version was released.
 
-**7.1 — `apps/storybook/stories/Versioning.mdx` states the 1.x mapping.** Its
-bump table says *"major — a breaking change"* and *"minor — additive, your code
-still runs"*, and its "What counts as breaking" list is headed *"Breaking (major
-only)"*. That is the correct table for 1.x and the wrong one for the version
-range every package is actually in. **Decision needed:** amend `Versioning.mdx`
-to carry the 0.x mapping now and the 1.x mapping as "what these numbers will
-mean at 1.0", or supersede it with this file. Its breaking-surface list is good
-and is largely absorbed above.
+**7.1 — `apps/storybook/stories/Versioning.mdx` stated the 1.x mapping.**
+✅ **Resolved — amended.** Its bump table said *"major — a breaking change"* and
+*"minor — additive, your code still runs"*, and its breaking list was headed
+*"Breaking (major only)"* — the correct table for 1.x and the wrong one for the
+range every package is actually in. The page now carries **both**: "Today —
+while every package is `0.x`" (the §1 mapping, with the caret-range reasoning)
+and "At 1.0 — what these numbers will mean" (the original table, correctly
+labelled as future). Its breaking-surface list is kept and re-headed "the
+breaking bump" rather than "major only", and the deprecation window now reads
+"removed in a breaking one — a minor while the packages are `0.x`, a major from
+1.0". This file remains the statement of record; the MDX page is its
+consumer-facing half.
+→ `apps/storybook/stories/Versioning.mdx`
 
-**7.2 — ADR-19 §6 says part removal "is a **major** change".** ADR-19 is
-**Proposed**, so this is a proposed rule meeting a proposed policy. Under §1,
-`major` before 1.0 means `1.0.0`, so read literally ADR-19 forbids removing a
-part until the library is stable. **Decision needed:** amend ADR-19 §6 to say
-"breaking, and therefore a minor while the library is 0.x" — a wording change,
-not a change of intent. ADR-19's other release sentences already agree with this
-document ("adding parts… is additive"; the `DataState` widening "ships as a
-minor" — under §2.1 that widening is type-level and would now be a patch, which
-is the second half of the same amendment).
+**7.2 — ADR-19 §6 said part removal "is a **major** change".**
+✅ **Resolved — amended, as this section proposed.** §6 is now headed *"dual-emit
+for one release series; removal is breaking"* and reads *"breaking, and therefore
+a minor while the library is `0.x` (a major from 1.0)"*. The second half of the
+same amendment landed with it: §6 no longer says the `DataState` widening "ships
+as a minor" — under §2.1 a type-level widening is a **patch** — and "adding
+parts… is additive" now names the patch position explicitly. Wording only; the
+intent is unchanged. The ADR's **status is untouched** (still Proposed —
+acceptance is TASK-R0-O2).
+→ `docs/adr/ADR-19-public-styling-contract.md` §6
 
-**7.3 — `packages/tokens/TOKENS.md` says the two deprecated sidebar aliases are
-"removed in the next major".** Same shape as 7.2: before 1.0 there is no next
-major. **Decision needed:** either restate as "removed in a future minor" or
-hold them until 1.0 deliberately. Holding them is defensible — they cost two
-lines — and is the safer default until an owner says otherwise.
+**7.3 — `packages/tokens/TOKENS.md` said the two deprecated sidebar aliases are
+"removed in the next major".**
+✅ **Resolved — held until 1.0**, the option this section called the safer
+default. Before 1.0 there is no next major, so the sentence promised a removal no
+releasable version could carry. `--dz-sidebar-text` and `--dz-sidebar-text-hover`
+now read *"held until 1.0"*, with the reasoning inline: they cost two lines, and
+removing them in a `0.x` minor would break every consumer who took the token ABI
+at its word for the sake of that saving. They keep `$deprecated` in the DTCG
+export.
+→ `packages/tokens/TOKENS.md`
 
 ---
 

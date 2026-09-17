@@ -20,5 +20,5 @@ const classes = computed(() =>
 </script>
 
 <template>
-  <DropdownMenuSeparator :class="classes" v-bind="{ ...$attrs, class: undefined }" />
+  <DropdownMenuSeparator data-part="separator" :class="classes" v-bind="{ ...$attrs, class: undefined }" />
 </template>

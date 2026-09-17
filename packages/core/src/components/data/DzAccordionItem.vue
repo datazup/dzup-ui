@@ -35,6 +35,7 @@ const classes = computed(() =>
 
 <template>
   <AccordionItem
+    data-part="item"
     :value="props.value"
     :disabled="props.disabled"
     :class="classes"

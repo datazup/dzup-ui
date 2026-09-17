@@ -14,6 +14,7 @@ import type {
   CanonicalSize,
 } from '@dzup-ui/contracts'
 import type { Component, InjectionKey, Ref } from 'vue'
+import type { DzDataGridUi } from './DzDataGrid.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Column definition
@@ -212,6 +213,13 @@ export interface DzDataGridProps<T = Record<string, unknown>> extends BaseAccess
    * Ignored when `manual=false`.
    */
   total?: number
+  /**
+   * Per-part class overrides, keyed by the names in `DzDataGrid.anatomy.ts`
+   * (ADR-19 §5). Unlike `DzTable`, whose rows and cells are written at the
+   * call site, this component renders its own header, body and pagination, so
+   * `ui` is the only route to them.
+   */
+  ui?: DzDataGridUi
 }
 
 // ---------------------------------------------------------------------------

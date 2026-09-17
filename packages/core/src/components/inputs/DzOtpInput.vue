@@ -13,6 +13,7 @@ import { PinInputInput, PinInputRoot } from 'reka-ui'
  * ```
  */
 import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { otpInputVariants } from './DzOtpInput.variants.ts'
@@ -21,6 +22,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The concatenated one-time-code characters; the default empty string leaves every cell blank. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzOtpInputProps>(), {
@@ -158,12 +160,16 @@ function normalizeAggregateInput(): void {
 
 onMounted(normalizeAggregateInput)
 watch(() => props.length, () => void nextTick(normalizeAggregateInput))
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     ref="rootRef"
     data-part="root"
+    v-bind="dzTestId('dz-otp-input')"
     :class="outerClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"

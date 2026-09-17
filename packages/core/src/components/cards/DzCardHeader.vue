@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DzCardHeaderProps, DzCardHeaderSlots } from './DzCard.types.ts'
 /**
  * DzCardHeader — Structural sub-part for the card header section.
  *
@@ -22,6 +23,10 @@ defineOptions({
   inheritAttrs: false,
 })
 
+const props = defineProps<DzCardHeaderProps>()
+
+defineSlots<DzCardHeaderSlots>()
+
 const attrs = useAttrs()
 
 /** Computed class string merging variant classes with consumer overrides (ADR-10). */
@@ -31,11 +36,15 @@ const classes = computed(() =>
 </script>
 
 <template>
-  <div :class="classes">
+  <div data-part="header" :class="classes">
     <div class="flex-1 min-w-0">
       <slot />
     </div>
-    <div v-if="$slots.actions" class="ml-[var(--dz-spacing-3)] flex-shrink-0">
+    <div
+      v-if="$slots.actions"
+      data-part="action"
+      :class="cn('ms-[var(--dz-spacing-3)] flex-shrink-0', props.ui?.action)"
+    >
       <slot name="actions" />
     </div>
   </div>

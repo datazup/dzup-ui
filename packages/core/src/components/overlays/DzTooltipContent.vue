@@ -19,6 +19,7 @@ import { TooltipArrow, TooltipContent, TooltipPortal } from 'reka-ui'
  */
 import { computed, useAttrs } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { tooltipVariants } from './DzTooltip.variants.ts'
 
@@ -49,6 +50,12 @@ const styles = computed(() => tooltipVariants())
 const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
@@ -61,14 +68,17 @@ const contentClasses = computed(() =>
       :side="props.side"
       :side-offset="props.sideOffset"
       :align="props.align"
+      data-part="content"
       :class="contentClasses"
+      :data-dz-motion="dzMotionAttr"
       style="contain: layout style"
       v-bind="{ ...$attrs, class: undefined }"
     >
       <slot />
       <TooltipArrow
         v-if="props.arrow"
-        :class="styles.arrow()"
+        data-part="indicator"
+        :class="cn(styles.arrow(), props.ui?.indicator)"
         :width="8"
         :height="4"
       />

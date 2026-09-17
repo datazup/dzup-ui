@@ -8,6 +8,7 @@
  */
 
 import type { BasePortalProps, CanonicalSize } from '@dzup-ui/contracts'
+import type { DzConfirmDialogUi } from './DzConfirmDialog.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -35,6 +36,13 @@ export interface DzConfirmDialogProps extends BasePortalProps {
   size?: CanonicalSize
   /** Additional class applied to the dialog's owned overlay. */
   overlayClass?: string
+  /**
+   * Per-part class overrides for the four nodes this component renders inside
+   * the dialog, keyed by the names in `DzConfirmDialog.anatomy.ts`
+   * (ADR-19 §5). The overlay, content and viewport belong to
+   * `DzDialogContent` and are reached through `overlayClass` and `class`.
+   */
+  ui?: DzConfirmDialogUi
 }
 
 // ---------------------------------------------------------------------------

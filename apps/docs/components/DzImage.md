@@ -18,6 +18,13 @@ Enhanced image component with loading and error states.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/media`
 - **Risk tier:** A · **Status:** stable
 
+## Intent and selection guidance
+
+**Not declared.** `DzImage` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -49,7 +56,7 @@ never as asserted.
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `aspectRatio` | `string \| undefined` | no | — | Aspect ratio (e.g., '16/9', '1/1') |
 | `fallback` | `string \| undefined` | no | — | Fallback image URL to display on error |
-| `fit` | `"fill" \| "none" \| "cover" \| "contain" \| undefined` | no | `"cover"` | Object-fit behavior |
+| `fit` | `"none" \| "fill" \| "cover" \| "contain" \| undefined` | no | `"cover"` | Object-fit behavior |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `lazy` | `boolean \| undefined` | no | `false` | Whether to lazy-load the image |
 | `src` | `string` | yes | — | Image source URL |
@@ -80,6 +87,73 @@ Editable, running the **Object Fit Gallery** story from `packages/core/stories/m
 
 <DzPlayground component="DzImage" />
 
+## Variants and controlled state
+
+**Not declared.** `DzImage` declares no recipe axes in its anatomy and exposes no
+`v-model` pair, so it has neither variants to list nor a controlled form to show. For a
+presentational component that is the whole truth; for an interactive one it means the anatomy
+has not been written down yet.
+
+## Parts, states and tokens
+
+**Not declared.** `DzImage` has no `DzImage.anatomy.ts`, so
+nothing here says which nodes you may address, which states it advertises or which custom
+properties it reads. **That is not the same claim as having none** — it is that nobody has
+written them down. Until the declaration exists, a descendant selector against generated
+`tailwind-variants` class names is the only way in, and those names are free to change.
+
+## Provider defaults and context
+
+**Not declared.** `DzImage` calls no `DzProvider` reader, so **nothing an application
+sets on the provider reaches it** — not the locale, not the motion preference, not the
+direction, not the test-id prefix. Every value it uses comes from its own props and defaults.
+That is measured from its source rather than assumed, and it is a gap in the component (ADR-20
+adoption), not in this page.
+
+## Locale, direction and formats
+
+**Not declared.** `DzImage` declares no `rtl` contract, so this page cannot say
+whether its layout mirrors, whether the arrow keys swap, or which of its icons carry
+direction. "Does it mirror?" has three defensible answers and only the component knows which
+applies; leaving it undeclared is how a catalogue ends up mirroring some things and not
+others for no stated reason.
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is not a requirement at this tier, so nothing measures it.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
+
+| Security lane | State |
+| --- | --- |
+| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. |
+| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `csp-fixture` | Not owed at this boundary. |
+| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+**Not declared.** `DzImage` declares no anatomy, so there is no state union to show
+examples for.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `6c5f522`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -96,8 +170,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -130,10 +204,11 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**Not declared.** This component declares no keyboard contract, so this page cannot say which
+key does what. **That is not a claim that it has no keyboard behaviour** — a component with
+none declares `keyboard: 'none'` explicitly, and those two facts are deliberately not
+collapsed. The contract is declared beside the component in its `*.anatomy.ts`; until it is,
+the only thing measuring this component's keyboard is the presence boolean below.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.

@@ -39,6 +39,7 @@ const dzMessages = useComponentMessages('DzCarouselNext')
 <template>
   <button
     type="button"
+    data-part="action"
     :class="classes"
     :disabled="!carouselContext?.canNext.value"
     :aria-label="dzMessages.nextSlide"

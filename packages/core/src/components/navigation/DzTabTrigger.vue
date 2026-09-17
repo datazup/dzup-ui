@@ -75,6 +75,7 @@ const dzMessages = useComponentMessages('DzTabTrigger')
 
 <template>
   <TabsTrigger
+    data-part="trigger"
     :value="value"
     :disabled="disabled"
     :class="classes"
@@ -89,7 +90,9 @@ const dzMessages = useComponentMessages('DzTabTrigger')
     <button
       v-if="closable"
       type="button"
+      data-part="close"
       class="dz-tab-close-btn"
+      :class="cn(ui?.close)"
       :tabindex="-1"
       :aria-label="dzMessages.closeTab"
       :disabled="disabled"

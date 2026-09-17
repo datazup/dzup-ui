@@ -21,6 +21,13 @@ Compound semantic table root component.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `title`
 
+## Intent and selection guidance
+
+**Not declared.** `DzTable` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -141,6 +148,8 @@ Table body section (&lt;tbody>).
 | `default` | — | Table body rows |
 | `empty` | — | Custom empty-state content, rendered inside a full-width placeholder row when the `default` slot yields zero rows (and not `loading`). Defaults to a `DzEmpty` with "No records found." when not provided. |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableCell
@@ -171,6 +180,8 @@ Table cell (&lt;td> or &lt;th>).
 | --- | --- | --- |
 | `default` | — | Cell content |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableFooter
@@ -187,6 +198,8 @@ Table footer section (&lt;tfoot>).
 | --- | --- | --- |
 | `default` | — | Table footer rows |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableHeader
@@ -202,6 +215,8 @@ Table header section (&lt;thead>).
 | Slot | Slot props | Description |
 | --- | --- | --- |
 | `default` | — | Table header rows |
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzTable`; see that component's usage snippet.
 
@@ -228,7 +243,119 @@ Table row (&lt;tr>).
 | `default` | — | Table cells |
 | `expand` | — | Accordion-style detail content shown when an `expandable` row is expanded |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzTable`; see that component's usage snippet.
+
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 18 stories in
+`packages/core/stories/data/DzTable.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Density Gallery`, `Striped & Hoverable`, `With Selected Row`, `Loading`, `With Caption Slot`, `With Colspan & Rowspan`, `Dark Mode Preview`, `Accessibility: Semantic Table`, `Sticky Header`, `Responsive – Mobile`, `Real World: Invoice Line Items`, `Column Pinning`, `Column Resizing`, `Virtual Scroll`, `States`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `body` | `[data-part="body"]` | no — renders zero or more than once |
+| `cell` | `[data-part="cell"]` | no — renders zero or more than once |
+| `content` | `[data-part="content"]` | yes |
+| `footer` | `[data-part="footer"]` | no — renders zero or more than once |
+| `header` | `[data-part="header"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `row` | `[data-part="row"]` | no — renders zero or more than once |
+| `title` | `[data-part="title"]` | no — renders zero or more than once |
+
+```vue
+<DzTable :ui="{ 'body': 'ring-2', 'cell': 'ring-2', 'content': 'ring-2', 'footer': 'ring-2', 'header': 'ring-2', 'root': 'ring-2', 'row': 'ring-2', 'title': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `expanded` | `[data-state="expanded"]` |
+| `loading` | `[data-state="loading"]` |
+| `ready` | `[data-state="ready"]` |
+| `selected` | `[data-state="selected"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/data/DzTable.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/data/DzTable.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/4 metric(s) have a derived threshold |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzTable` advertises 4 states:
+`expanded`, `loading`, `ready`, `selected`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/data/DzTable.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `4c9fb7a`.
 
 ## Extraction fidelity
 
@@ -246,8 +373,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -310,16 +437,22 @@ at `51dec93c`.
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**4 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `Tab` | — | Move to the next interactive cell or header control; the table itself is not a tab stop. | `2.1.2` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) |
+| `Enter` | `header sortable` | Cycle the focused column sort. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) |
+| `Space` | `header sortable` | Cycle the focused column sort. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) |
+| `Shift` + `Enter` | `header sortable` | Add the focused column to the existing sort rather than replacing it. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) |
+
+Declared in `packages/core/src/components/data/DzTable.anatomy.ts`.
 
 - **Pattern:** [APG — `table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/data/DzTable.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 4 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -353,12 +486,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/data/DzTable.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzTable.spec.ts` — The component declares 4 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzTable.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/data/DzTable.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
@@ -366,7 +499,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/4 metric(s) have a derived threshold |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/data/DzTable.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 
-**2 unrun:** `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -19,6 +19,7 @@ import type { DzBreadcrumbContext, DzBreadcrumbProps, DzBreadcrumbSlots } from '
  * ```
  */
 import { computed, provide, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_BREADCRUMB_KEY } from './DzBreadcrumb.types.ts'
@@ -55,20 +56,24 @@ provide(DZ_BREADCRUMB_KEY, context)
 const navClasses = computed(() =>
   cn(styles.nav(), attrs.class as string | undefined),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <nav
     :id="id"
+    data-part="root"
     :class="navClasses"
     :aria-label="resolvedAriaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     data-state="ready"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-breadcrumb'), ...$attrs, class: undefined }"
   >
-    <ol :class="styles.list()">
+    <ol data-part="list" :class="cn(styles.list(), ui?.list)">
       <slot />
     </ol>
   </nav>

@@ -18,6 +18,14 @@ horizontal (or vertical) navigation menubar whose top-level
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Risk tier:** C · **Status:** experimental
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
+- **Anatomy parts (ADR-19):** `group`, `group-label`, `indicator`, `item`, `list`, `panel`, `root`, `trigger`
+
+## Intent and selection guidance
+
+**Not declared.** `DzMegaMenu` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -39,7 +47,7 @@ never as asserted.
 :::
 
 
-## Props (12, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (13, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -55,6 +63,7 @@ never as asserted.
 | `openOnHover` | `boolean \| undefined` | no | `true` | Open panels on pointer hover (in addition to click / keyboard) |
 | `orientation` | `Orientation \| undefined` | no | `"horizontal"` | Menubar orientation |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
+| `ui` | `Partial<Record<"root" \| "item" \| "trigger" \| "indicator" \| "list" \| "group" \| "panel" \| "group-label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMegaMenu.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; a key outside the declared parts is a type error, not a class that lands nowhere. |
 
 ## Events (3)
 
@@ -88,6 +97,126 @@ Editable, running the **Dark Mode Preview** story from `packages/core/stories/na
 
 <DzPlayground component="DzMegaMenu" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `orientation` | `[data-orientation="…"]` | `orientation` |
+| `size` | `[data-size="…"]` | `size` |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 7 stories in
+`packages/core/stories/navigation/DzMegaMenu.stories.ts`: `Horizontal`, `With Featured Card`, `Responsive (collapsed)`, `Dark Mode Preview`, `States`, `Accessibility: Menubar Keyboard Contract`, `Real World: Marketing Site Header`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `group` | `[data-part="group"]` | no — renders zero or more than once |
+| `group-label` | `[data-part="group-label"]` | no — renders zero or more than once |
+| `indicator` | `[data-part="indicator"]` | no — renders zero or more than once |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `list` | `[data-part="list"]` | yes |
+| `panel` | `[data-part="panel"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `trigger` | `[data-part="trigger"]` | no — renders zero or more than once |
+
+```vue
+<DzMegaMenu :ui="{ 'group': 'ring-2', 'group-label': 'ring-2', 'indicator': 'ring-2', 'item': 'ring-2', 'list': 'ring-2', 'panel': 'ring-2', 'root': 'ring-2', 'trigger': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-menu-bar-gap` |
+| `--dz-menu-column-gap` |
+| `--dz-menu-column-min-width` |
+| `--dz-menu-panel-offset` |
+| `--dz-menu-panel-padding` |
+
+Declared in `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDirection` | the document writing direction |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | `indicator` | These parts render a direction-bearing icon and mirror with the layout. |
+
+**Locale and formats.** Reads `useDzDirection` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
+
+| Security lane | State |
+| --- | --- |
+| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. |
+| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `csp-fixture` | Not owed at this boundary. |
+| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzMegaMenu` advertises 1 state:
+`disabled`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/navigation/DzMegaMenu.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `80ce301`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -95,7 +224,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 12 | 12 | 5 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 13 | 13 | 5 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 3 | 3 | 3 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
 | Slots | 3 | 3 | 3 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -104,8 +233,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -114,7 +243,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
 - **Traits:** `dataset`
 - **Security boundary:** `url` — Menu entries carry a host-supplied `href` that becomes a navigation.
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `80ce3012`
 
 **Why this pattern:** A menubar whose panels are multi-column compositions rather than item lists, so the menu keyboard contract has to survive content APG does not model.
@@ -150,16 +279,28 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**10 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- | --- |
+| `ArrowRight` | — | Move focus to the next top-level item. | `2.1.1` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | swaps with the writing direction |
+| `ArrowLeft` | — | Move focus to the previous top-level item. | `2.1.1` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | swaps with the writing direction |
+| `ArrowDown` | — | Open the focused item panel and move into it. | `2.1.1` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | — |
+| `ArrowUp` | `panel open` | Move to the previous item inside an open panel. | `2.1.1` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | — |
+| `Enter` | — | Open the focused item panel, or invoke the focused link. | `2.1.1` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | — |
+| `Space` | — | Open the focused item panel, or invoke the focused link. | `2.1.1` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | — |
+| `Home` | — | Move focus to the first item. | `2.1.1` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | — |
+| `End` | — | Move focus to the last item. | `2.1.1` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | — |
+| `Escape` | — | Close the open panel and return focus to its top-level item. | `2.1.1`, `2.1.2` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | — |
+| `Tab` | — | Move out of the menubar. | `2.1.2` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | — |
+
+Declared in `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts`.
 
 - **Pattern:** [APG — `menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/navigation/DzMegaMenu.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 10 binding(s); the unit spec asserts no key event for `Space`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -193,12 +334,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/navigation/DzMegaMenu.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzMegaMenu.spec.ts` — The component declares 10 binding(s); the unit spec asserts no key event for `Space`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
@@ -208,7 +349,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 
-**6 unrun:** `axe`, `ssr-sample`, `controlled-uncontrolled`, `rtl-contract`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

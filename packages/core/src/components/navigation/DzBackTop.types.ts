@@ -15,6 +15,7 @@ import type {
   CanonicalTone,
 } from '@dzup-ui/contracts'
 import type { DzFabVariant } from '../buttons/DzFab.types.ts'
+import type { DzBackTopUi } from './DzBackTop.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -45,6 +46,12 @@ export interface DzBackTopProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Semantic color tone (delegated to DzFab). */
   tone?: CanonicalTone
+  /**
+   * Per-part class overrides, keyed by the names in `DzBackTop.anatomy.ts`
+   * (ADR-19 §5). Forwarded to the underlying `DzFab`, whose `root` and `icon`
+   * are the two nodes this component's DOM is made of.
+   */
+  ui?: DzBackTopUi
 }
 
 // ---------------------------------------------------------------------------

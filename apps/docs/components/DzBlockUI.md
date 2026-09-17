@@ -19,6 +19,14 @@ Content-loading mask.
 - **Risk tier:** B · **Status:** beta
 - **Taxonomy:** tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **v-model:** `v-model:blocked` (`boolean | undefined`)
+- **Anatomy parts (ADR-19):** `content`, `description`, `overlay`, `root`
+
+## Intent and selection guidance
+
+**Not declared.** `DzBlockUI` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (11, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (12, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -48,13 +56,14 @@ never as asserted.
 | `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
-| `blocked` | `boolean \| undefined` | no | `false` | — |
+| `blocked` | `boolean \| undefined` | no | `false` | Whether the blocking overlay covers the content; `false` leaves it interactive. |
 | `fullScreen` | `boolean \| undefined` | no | `false` | Mask the entire viewport instead of just the slotted region. When `true` the overlay is teleported to `<body>` and fixed over the screen, and keyboard focus is trapped within the overlay. |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `message` | `string \| undefined` | no | `undefined` | Optional message rendered beneath the default spinner. |
 | `portalTo` | `string \| HTMLElement \| undefined` | no | — | Portal target for the teleported layer. Added by TASK-OSS-P4-04. This component used to teleport to a hard-coded `body` with no way to redirect it — which is precisely the case an application embedding the library in a shadow root or a micro-frontend shell cannot work around. Falls back to the `DzProvider` target, then to `document.body`. |
 | `spinnerSize` | `CanonicalSize \| undefined` | no | `"lg"` | Size of the default spinner. |
 | `tone` | `CanonicalTone \| undefined` | no | `"primary"` | Semantic color tone for the default spinner. |
+| `ui` | `Partial<Record<"root" \| "content" \| "overlay" \| "description", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzBlockUI.anatomy.ts` (ADR-19 §5). `class` keeps its existing target (the positioning root); `ui` addresses the other parts by name, and a typo is a type error. |
 
 ## Events (3)
 
@@ -62,7 +71,7 @@ never as asserted.
 | --- | --- | --- |
 | `block` | `[]` | Fired after the region becomes blocked and focus has been contained. |
 | `unblock` | `[]` | Fired after the region is unblocked and prior focus has been restored. |
-| `update:blocked` | `[value: boolean]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:blocked` | `[value: boolean]` | Emitted when the `v-model:blocked` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:blocked` consumes it for you. |
 
 ## Slots (2)
 
@@ -101,6 +110,120 @@ No editable playground is published for this component.
 
 Every story in `packages/core/stories/feedback/DzBlockUI.stories.ts` either has a computed template or binds Storybook's `args`, neither of which can be mounted outside Storybook. A playground here would have to be written by hand, and a hand-written example is not evidence of anything.
 
+## Variants and controlled state
+
+**Controlled and uncontrolled — `blocked`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzBlockUI />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzBlockUI v-model:blocked="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzBlockUI :blocked="value" @update:blocked="value = $event" />
+```
+
+**Where each variant is shown.** 3 stories in
+`packages/core/stories/feedback/DzBlockUI.stories.ts`: `PanelBlock`, `WithMessage`, `FullScreen`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `content` | `[data-part="content"]` | yes |
+| `description` | `[data-part="description"]` | no — renders zero or more than once |
+| `overlay` | `[data-part="overlay"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzBlockUI :ui="{ 'content': 'ring-2', 'description': 'ring-2', 'overlay': 'ring-2', 'root': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `blocked` | `[data-state="blocked"]` |
+| `full-screen` | `[data-state="full-screen"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-blockui-blur` |
+| `--dz-blockui-gap` |
+| `--dz-blockui-mask` |
+| `--dz-blockui-message-color` |
+| `--dz-blockui-radius` |
+| `--dz-blockui-z` |
+
+Declared in `packages/core/src/components/feedback/DzBlockUI.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMotion` | the motion preference, including `prefers-reduced-motion` |
+| `useDzPortalTarget` | where teleported content is mounted |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/feedback/DzBlockUI.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzBlockUI` advertises 2 states:
+`blocked`, `full-screen`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/feedback/DzBlockUI.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `4c9fb7a`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -108,8 +231,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 11 | 10 | 4 declare a default, of which 6 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 3 | 2 | 2 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 12 | 12 | 4 declare a default, of which 6 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 3 | 3 | 2 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 2 | 2 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -117,8 +240,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -127,7 +250,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** `custom` — no WAI-ARIA Authoring Practices pattern describes this component.
 - **Traits:** `teleports`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `4c9fb7a1`
 
 **Why this pattern:** A modal mask that blocks interaction without being a dialog: nothing inside it takes focus, and the point is that focus cannot reach what it covers.
@@ -162,14 +285,13 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**No keyboard behaviour of its own.** This component declares `keyboard: 'none'` — an
+explicit claim, checked like any other part of its contract, not an absence of information.
+Whatever keys reach it are the platform's or its container's.
 
 - **Pattern:** `custom` — **no APG pattern applies**, so there is no external
   keyboard contract to link. The recorded reason is quoted above.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** the `keyboard-spec` requirement is **excepted** for this component — The component declares `keyboard: 'none'` — an explicit claim that it has no keyboard behaviour of its own, so there is no key sequence for a spec to assert.
 
 ### Assistive technology
 
@@ -203,16 +325,16 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/feedback/DzBlockUI.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | `excepted` | `packages/core/src/components/feedback/DzBlockUI.spec.ts` — The component declares `keyboard: 'none'` — an explicit claim that it has no keyboard behaviour of its own, so there is no key sequence for a spec to assert. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/feedback/DzBlockUI.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | **`unrun`** | `packages/core/stories/feedback/DzBlockUI.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/feedback/DzBlockUI.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzBlockUI.md` — 6 AT/browser pairs, none executed. |
 
-**8 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-play`, `rtl-contract`, `portal-hydration`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**7 unrun:** `axe`, `ssr-sample`, `controlled-uncontrolled`, `browser-play`, `browser-matrix`, `portal-hydration`, `at-manual` · **1 excepted:** `keyboard-spec`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

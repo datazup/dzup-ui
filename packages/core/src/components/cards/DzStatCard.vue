@@ -19,6 +19,7 @@ import type { DzStatCardProps, DzStatCardSlots } from './DzStatCard.types.ts'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { statCardVariants } from './DzStatCard.variants.ts'
 
@@ -41,27 +42,32 @@ const styles = computed(() =>
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
     data-state="ready"
     :data-variant="variant"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-stat-card'), ...$attrs, class: undefined }"
   >
     <!-- Header: title + icon -->
-    <div :class="styles.header()">
-      <span :class="styles.title()">{{ title }}</span>
+    <div data-part="header" :class="cn(styles.header(), props.ui?.header)">
+      <span data-part="title" :class="cn(styles.title(), props.ui?.title)">{{ title }}</span>
       <slot name="icon">
         <component
           :is="icon"
           v-if="icon"
+          data-part="icon"
           class="h-5 w-5"
-          :class="styles.icon()"
+          :class="cn(styles.icon(), props.ui?.icon)"
           aria-hidden="true"
         />
       </slot>
@@ -75,7 +81,7 @@ const rootClasses = computed(() =>
     </div>
 
     <!-- Trend + description -->
-    <div v-if="trendValue || description" :class="styles.description()">
+    <div v-if="trendValue || description" data-part="description" :class="cn(styles.description(), props.ui?.description)">
       <slot name="footer">
         <span v-if="trendValue" :class="styles.trend()">
           <!-- Trend arrow -->

@@ -12,6 +12,7 @@ import { Check } from 'lucide-vue-next'
  * v-model via defineModel<string[]>() -- selected keys (ADR-16).
  */
 import { computed, toRef, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useTransfer } from '../../composables/useTransfer/index.ts'
@@ -203,13 +204,17 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div :class="wrapperClasses" v-bind="{ ...$attrs, class: undefined }">
+  <div data-part="root" :class="[wrapperClasses, ui?.root]" v-bind="{ ...dzTestId('dz-transfer'), ...$attrs, class: undefined }">
     <div
       :id="resolvedId"
-      :class="groupClasses"
+      data-part="control"
+      :class="[groupClasses, ui?.control]"
       :data-disabled="resolvedDisabled ? '' : undefined"
       :data-required="resolvedRequired ? '' : undefined"
       :data-state="resolvedDisabled ? 'disabled' : undefined"
@@ -236,12 +241,12 @@ function handleBlur(event: FocusEvent): void {
         @retry="handleRetryOptions"
       />
       <!-- Source list -->
-      <div :class="styles.list()" data-dz-transfer-list>
-        <div :class="styles.listHeader()">
+      <div data-part="list" :class="[styles.list(), ui?.list]" data-dz-transfer-list>
+        <div data-part="header" :class="[styles.listHeader(), ui?.header]">
           <slot name="source-header">
             <span>Source</span>
           </slot>
-          <span :class="styles.listCount()">
+          <span data-part="hint" :class="[styles.listCount(), ui?.hint]">
             {{ sourceSelected.size }}/{{ sourceItems.length }}
           </span>
         </div>
@@ -249,12 +254,14 @@ function handleBlur(event: FocusEvent): void {
           v-if="searchable"
           v-model="sourceSearch"
           type="text"
-          :class="styles.searchInput()"
+          data-part="input"
+          :class="[styles.searchInput(), ui?.input]"
           :placeholder="resolvedSearchPlaceholder"
           :aria-label="dzMessages.searchSource"
         >
         <div
-          :class="styles.listBody()"
+          data-part="body"
+          :class="[styles.listBody(), ui?.body]"
           role="listbox"
           :aria-label="dzMessages.sourceItems"
           aria-multiselectable="true"
@@ -264,7 +271,8 @@ function handleBlur(event: FocusEvent): void {
             <div
               v-for="item in filteredSourceItems"
               :key="item.key"
-              :class="cn(styles.item(), sourceSelected.has(item.key) ? styles.itemSelected() : '')"
+              data-part="item"
+              :class="[cn(styles.item(), sourceSelected.has(item.key) ? styles.itemSelected() : ''), ui?.item]"
               :data-disabled="isItemDisabled(item) ? '' : undefined"
               role="option"
               :aria-selected="sourceSelected.has(item.key)"
@@ -276,35 +284,39 @@ function handleBlur(event: FocusEvent): void {
             >
               <slot name="item" :item="item" :selected="sourceSelected.has(item.key)">
                 <span
-                  :class="styles.itemCheckbox()"
+                  data-part="item-indicator"
+                  :class="[styles.itemCheckbox(), ui?.['item-indicator']]"
                   :data-checked="sourceSelected.has(item.key)"
                   data-transfer-check
                   aria-hidden="true"
                 >
                   <Check v-if="sourceSelected.has(item.key)" class="h-3 w-3" />
                 </span>
-                <span>{{ item.label }}</span>
+                <span data-part="item-label" :class="[ui?.['item-label']]">{{ item.label }}</span>
               </slot>
             </div>
           </template>
-          <div v-else :class="styles.empty()">
+          <div v-else data-part="empty" :class="[styles.empty(), ui?.empty]">
             No items
           </div>
         </div>
       </div>
 
       <!-- Transfer actions -->
-      <div :class="styles.actions()">
+      <div data-part="group" :class="[styles.actions(), ui?.group]">
         <button
           type="button"
-          :class="styles.actionButton()"
+          data-part="action"
+          :class="[styles.actionButton(), ui?.action]"
           :disabled="sourceSelected.size === 0 || resolvedDisabled"
           :aria-label="dzMessages.moveToTarget"
           @click="moveToTarget"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
+            data-part="icon"
             class="h-4 w-4"
+            :class="[ui?.icon]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -318,14 +330,17 @@ function handleBlur(event: FocusEvent): void {
         </button>
         <button
           type="button"
-          :class="styles.actionButton()"
+          data-part="action"
+          :class="[styles.actionButton(), ui?.action]"
           :disabled="targetSelected.size === 0 || resolvedDisabled"
           :aria-label="dzMessages.moveToSource"
           @click="moveToSource"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
+            data-part="icon"
             class="h-4 w-4"
+            :class="[ui?.icon]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -340,12 +355,12 @@ function handleBlur(event: FocusEvent): void {
       </div>
 
       <!-- Target list -->
-      <div :class="styles.list()" data-dz-transfer-list>
-        <div :class="styles.listHeader()">
+      <div data-part="list" :class="[styles.list(), ui?.list]" data-dz-transfer-list>
+        <div data-part="header" :class="[styles.listHeader(), ui?.header]">
           <slot name="target-header">
             <span>Target</span>
           </slot>
-          <span :class="styles.listCount()">
+          <span data-part="hint" :class="[styles.listCount(), ui?.hint]">
             {{ targetSelected.size }}/{{ targetItems.length }}
           </span>
         </div>
@@ -353,12 +368,14 @@ function handleBlur(event: FocusEvent): void {
           v-if="searchable"
           v-model="targetSearch"
           type="text"
-          :class="styles.searchInput()"
+          data-part="input"
+          :class="[styles.searchInput(), ui?.input]"
           :placeholder="resolvedSearchPlaceholder"
           :aria-label="dzMessages.searchTarget"
         >
         <div
-          :class="styles.listBody()"
+          data-part="body"
+          :class="[styles.listBody(), ui?.body]"
           role="listbox"
           :aria-label="dzMessages.targetItems"
           aria-multiselectable="true"
@@ -369,7 +386,8 @@ function handleBlur(event: FocusEvent): void {
             <div
               v-for="item in filteredTargetItems"
               :key="item.key"
-              :class="cn(styles.item(), targetSelected.has(item.key) ? styles.itemSelected() : '')"
+              data-part="item"
+              :class="[cn(styles.item(), targetSelected.has(item.key) ? styles.itemSelected() : ''), ui?.item]"
               :data-disabled="isItemDisabled(item) ? '' : undefined"
               role="option"
               :aria-selected="targetSelected.has(item.key)"
@@ -381,18 +399,19 @@ function handleBlur(event: FocusEvent): void {
             >
               <slot name="item" :item="item" :selected="targetSelected.has(item.key)">
                 <span
-                  :class="styles.itemCheckbox()"
+                  data-part="item-indicator"
+                  :class="[styles.itemCheckbox(), ui?.['item-indicator']]"
                   :data-checked="targetSelected.has(item.key)"
                   data-transfer-check
                   aria-hidden="true"
                 >
                   <Check v-if="targetSelected.has(item.key)" class="h-3 w-3" />
                 </span>
-                <span>{{ item.label }}</span>
+                <span data-part="item-label" :class="[ui?.['item-label']]">{{ item.label }}</span>
               </slot>
             </div>
           </template>
-          <div v-else :class="styles.empty()">
+          <div v-else data-part="empty" :class="[styles.empty(), ui?.empty]">
             No items
           </div>
         </div>
@@ -403,7 +422,9 @@ function handleBlur(event: FocusEvent): void {
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

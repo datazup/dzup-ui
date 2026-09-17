@@ -23,6 +23,7 @@ const classes = computed(() =>
 
 <template>
   <DialogClose
+    data-part="close"
     :class="classes"
     v-bind="{ ...$attrs, class: undefined }"
   >

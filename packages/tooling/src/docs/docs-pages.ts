@@ -51,6 +51,7 @@ import type { SeedRefusal } from '../playground/playground-contract.ts'
 import type { EvidenceSources } from './evidence.ts'
 import { FAMILY_LABELS, FAMILY_ORDER } from '../llms/llms-content.ts'
 import { groupByFamily, renderComponentSection } from '../llms/render-llms.ts'
+import { renderContractSections, renderIntent } from './contract-sections.ts'
 import { renderEvidence } from './evidence.ts'
 
 /** Directory (relative to the docs app root) the generated component pages live in. */
@@ -543,6 +544,10 @@ export function renderComponentPage(input: ComponentPageInput): string {
     ...provenance,
     ...meta,
     '',
+    // TASK-R5-O5, page-contract section 1. Above the API tables, because "what
+    // is this for and when should I reach for something else" is the question a
+    // reader has BEFORE a prop table, not after one.
+    ...renderIntent(record),
     ...HOW_TO_READ,
     '',
     ...rest,
@@ -580,6 +585,13 @@ export function renderComponentPage(input: ComponentPageInput): string {
     for (const part of parts)
       body.push(...renderComponentSection(part, artifact, { level: 3, memberHeadingLevel: 4 }))
   }
+
+  // TASK-R5-O5, page-contract sections 4, 5, 6, 8, 9 and 10 — after the API and
+  // the compound parts, before the fidelity block, because they describe the
+  // component's CONTRACT and the fidelity block describes this page's own
+  // extraction quality. Section 7 (keyboard) lives inside the evidence block
+  // below, beside the WCAG scope list it is the mechanism for.
+  body.push(...renderContractSections(record, evidence))
 
   body.push(...renderFidelity(record))
 

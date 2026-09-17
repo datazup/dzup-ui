@@ -17,6 +17,7 @@ import type {
   ChipVariant,
   InputVariant,
 } from '@dzup-ui/contracts'
+import type { DzTagsInputUi } from './DzTagsInput.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Supporting shapes
@@ -61,6 +62,13 @@ export interface DzTagsInputProps extends BaseFormControlProps<InputVariant> {
   chipVariant?: ChipVariant
   /** Semantic tone of the committed-token chips (default `neutral`) */
   chipTone?: CanonicalTone
+  /**
+   * Per-part class overrides, keyed by the names in `DzTagsInput.anatomy.ts`
+   * (ADR-19 §5). The committed tokens are `DzChip`s and therefore their own
+   * anatomy boundary; restyle them through `chipVariant` / `chipTone` or
+   * `DzChip`'s own parts.
+   */
+  ui?: DzTagsInputUi
 }
 
 // ---------------------------------------------------------------------------
@@ -78,10 +86,15 @@ export interface DzTagsInputProps extends BaseFormControlProps<InputVariant> {
  * - `focus` / `blur` — text field focus
  */
 export interface DzTagsInputEmits {
+  /** Emitted after a token is committed, with the token text. */
   add: [token: string]
+  /** Emitted after a token is detached, with the token text and the index it held. */
   remove: [token: string, index: number]
+  /** Emitted when a token is rejected instead of committed, with the text and why. */
   invalid: [token: string, reason: DzTagsInputRejectReason]
+  /** Emitted when the text field takes focus. */
   focus: [event: FocusEvent]
+  /** Emitted when the text field loses focus, after any `addOnBlur` commit. */
   blur: [event: FocusEvent]
 }
 

@@ -26,6 +26,8 @@ import type {
  * ```
  */
 import { computed, h, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { useTheme } from '../../providers/useTheme.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzIconButton from '../buttons/DzIconButton.vue'
@@ -125,7 +127,7 @@ const currentIcon = computed<FunctionalComponent>(() => ICONS[theme.value])
 
 const styles = computed(() => colorModeToggleVariants({ variant: props.variant }))
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 const glyphClasses = computed(() => styles.value.glyph())
 
@@ -185,14 +187,25 @@ function handleSwitchChange(): void {
 function handleSegmentChange(value: string): void {
   commit(value as ThemePreference)
 }
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <span
+    data-part="root"
     :class="rootClasses"
+    :data-dz-motion="dzMotionAttr"
     :data-variant="variant"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-color-mode-toggle'), ...$attrs, class: undefined }"
   >
     <!-- icon variant: a single button that cycles modes -->
     <DzIconButton

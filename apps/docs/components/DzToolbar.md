@@ -18,6 +18,14 @@ horizontal action bar with start/center/end regions.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** B · **Status:** beta
 - **Taxonomy:** variant: `flat` `outlined` `elevated` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
+- **Anatomy parts (ADR-19):** `group`, `root`
+
+## Intent and selection guidance
+
+**Not declared.** `DzToolbar` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -39,7 +47,7 @@ never as asserted.
 :::
 
 
-## Props (12, of which 8 inherited from `@dzup-ui/contracts`)
+## Props (13, of which 8 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -53,6 +61,7 @@ never as asserted.
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `sticky` | `boolean \| undefined` | no | `false` | Whether the toolbar sticks to the top of its scroll container |
 | `tone` | `CanonicalTone \| undefined` | no | — | Semantic color tone |
+| `ui` | `Partial<Record<"root" \| "group", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzToolbar.anatomy.ts` (ADR-19 §5). `ui.group` lands on every rendered region — the three regions share one part name; use `[data-toolbar-region]` to reach just one. |
 | `variant` | `ToolbarVariant \| undefined` | no | `"flat"` | Visual style variant |
 | `wrap` | `boolean \| undefined` | no | `false` | Whether items wrap onto multiple lines when space runs out |
 
@@ -114,6 +123,111 @@ No editable playground is published for this component.
 
 Every story in `packages/core/stories/layout/DzToolbar.stories.ts` either has a computed template or binds Storybook's `args`, neither of which can be mounted outside Storybook. A playground here would have to be written by hand, and a hand-written example is not evidence of anything.
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `orientation` | `[data-orientation="…"]` | `orientation` |
+| `size` | `[data-size="…"]` | `size` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 5 stories in
+`packages/core/stories/layout/DzToolbar.stories.ts`: `Default`, `Title Centered`, `Sticky`, `Responsive Wrap`, `Dark Mode Preview`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `group` | `[data-part="group"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzToolbar :ui="{ 'group': 'ring-2', 'root': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+This component declares no states: nothing about it is advertised to CSS or to a test.
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-toolbar-bg` |
+| `--dz-toolbar-border` |
+| `--dz-toolbar-gap` |
+| `--dz-toolbar-padding-x` |
+| `--dz-toolbar-padding-y` |
+| `--dz-toolbar-radius` |
+| `--dz-toolbar-shadow` |
+| `--dz-toolbar-sticky-z` |
+
+Declared in `packages/core/src/components/layout/DzToolbar.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/layout/DzToolbar.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+This component declares no states, so there is no state matrix to show. A presentational
+component that renders the same way every time is the normal case for this.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `a170c9a`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -121,7 +235,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 12 | 12 | 6 declare a default |
+| Props | 13 | 13 | 6 declare a default |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 4 | 4 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -130,8 +244,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -140,7 +254,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/)
 - **Traits:** none declared
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `a170c9a9`
 
 ### WCAG 2.2 criteria in scope (18)
@@ -172,14 +286,23 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**5 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- |
+| `ArrowRight` | Move focus to the next control in the toolbar. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | swaps with the writing direction |
+| `ArrowLeft` | Move focus to the previous control in the toolbar. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | swaps with the writing direction |
+| `Home` | Move focus to the first control. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
+| `End` | Move focus to the last control. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
+| `Tab` | Move out of the toolbar; the toolbar is one tab stop. | `2.1.2` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
+
+Declared in `packages/core/src/components/layout/DzToolbar.anatomy.ts`.
 
 - **Pattern:** [APG — `toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 5 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -213,15 +336,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/layout/DzToolbar.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/layout/DzToolbar.spec.ts` — The component declares 5 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/layout/DzToolbar.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/layout/DzToolbar.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/layout/DzToolbar.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzToolbar.md` — 6 AT/browser pairs, none executed. |
 
-**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

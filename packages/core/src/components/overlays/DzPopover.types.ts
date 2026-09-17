@@ -8,6 +8,7 @@
  */
 
 import type { BasePortalProps } from '@dzup-ui/contracts'
+import type { DzPopoverUi } from './DzPopover.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Positioning
@@ -48,6 +49,12 @@ export interface DzPopoverContentProps extends BasePortalProps {
   arrow?: boolean
   /** Size of the popover panel */
   size?: PopoverContentSize
+  /**
+   * Per-part class override for the arrow, keyed by the name in
+   * `DzPopover.anatomy.ts` (ADR-19 §5). The panel takes `class` at the call
+   * site; the arrow is the node nothing else can reach.
+   */
+  ui?: Pick<DzPopoverUi, 'indicator'>
 }
 
 // ---------------------------------------------------------------------------

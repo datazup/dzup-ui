@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { DzBlockUIEmits, DzBlockUIProps, DzBlockUISlots } from './DzBlockUI.types.ts'
 import { computed, nextTick, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
-import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { useFocusTrap } from '../../composables/useFocusTrap/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { blockUiVariants } from './DzBlockUI.variants.ts'
@@ -10,6 +11,7 @@ import DzSpinner from './DzSpinner.vue'
 defineOptions({
   inheritAttrs: false,
 })
+/** Whether the blocking overlay covers the content; `false` leaves it interactive. */
 const blocked = defineModel<boolean>('blocked', { default: false })
 
 /**
@@ -72,7 +74,7 @@ let previouslyFocused: HTMLElement | null = null
 const { activate, deactivate } = useFocusTrap(overlayRef)
 
 const rootClasses = computed(() =>
-  cn(styles.root(), attrs.class as string | undefined),
+  cn(styles.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 function setContentRef(el: unknown): void {
@@ -112,23 +114,35 @@ watch(blocked, async (isBlocked) => {
 onBeforeUnmount(() => {
   deactivate()
 })
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
+    :data-dz-motion="dzMotionAttr"
     :data-blocked="blocked ? '' : undefined"
     :data-full-screen="fullScreen ? '' : undefined"
     :aria-busy="blocked || undefined"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-block-ui'), ...$attrs, class: undefined }"
   >
     <div
       :ref="setContentRef"
-      :class="styles.content()"
+      data-part="content"
+      :class="cn(styles.content(), props.ui?.content)"
       :inert="contentInert || undefined"
       data-testid="dz-block-ui-content"
     >
@@ -145,7 +159,9 @@ onBeforeUnmount(() => {
         <div
           v-if="blocked"
           ref="overlayRef"
-          :class="styles.overlay({ fullScreen })"
+          data-part="overlay"
+          :class="cn(styles.overlay({ fullScreen }), props.ui?.overlay)"
+          :data-dz-motion="dzMotionAttr"
           tabindex="-1"
           data-testid="dz-block-ui-overlay"
           @mousedown.prevent
@@ -153,7 +169,7 @@ onBeforeUnmount(() => {
         >
           <slot name="overlay" :blocked="blocked">
             <DzSpinner :size="spinnerSize" :tone="tone" :label="spinnerLabel" />
-            <span v-if="message" :class="styles.message()">{{ message }}</span>
+            <span v-if="message" data-part="description" :class="cn(styles.message(), props.ui?.description)">{{ message }}</span>
           </slot>
         </div>
       </Transition>

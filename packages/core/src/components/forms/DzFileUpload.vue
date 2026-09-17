@@ -25,6 +25,7 @@ import { isFileRef, toFileRef } from '@dzup-ui/contracts'
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -357,6 +358,9 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -366,7 +370,7 @@ function handleBlur(event: FocusEvent): void {
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-file-upload'), ...$attrs, class: undefined }"
   >
     <!-- Hidden file input -->
     <input

@@ -23,6 +23,7 @@ import type {
  * ```
  */
 import { computed, onBeforeUnmount, onMounted, provide, ref, toRef, useAttrs, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
 import { carouselVariants } from './DzCarousel.variants.ts'
@@ -31,6 +32,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Zero-based index of the slide currently in view; defaults to `0`, the first slide. */
 const model = defineModel<number>({ default: 0 })
 
 const props = withDefaults(defineProps<DzCarouselProps>(), {
@@ -134,13 +136,17 @@ const styles = computed(() =>
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :aria-label="ariaLabel ?? 'Carousel'"
     :aria-labelledby="ariaLabelledby"
@@ -150,13 +156,14 @@ const rootClasses = computed(() =>
     :data-disabled="disabled ? '' : undefined"
     :data-state="slideCount > 0 ? 'ready' : 'empty'"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-carousel'), ...$attrs, class: undefined }"
     @mouseenter="stopAutoplay"
     @mouseleave="autoplay ? startAutoplay() : undefined"
   >
-    <div aria-live="polite" :class="styles.viewport()">
+    <div aria-live="polite" data-part="viewport" :class="cn(styles.viewport(), props.ui?.viewport)">
       <div
-        :class="styles.container()"
+        data-part="content"
+        :class="cn(styles.container(), props.ui?.content)"
         :style="{
           transform: orientation === 'horizontal'
             ? `translateX(-${model * 100}%)`

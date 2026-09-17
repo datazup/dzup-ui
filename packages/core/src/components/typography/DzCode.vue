@@ -17,6 +17,7 @@ import type { DzCodeProps, DzCodeSlots } from './DzCode.types.ts'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { codeVariants } from './DzCode.variants.ts'
 
@@ -40,6 +41,9 @@ const classes = computed(() =>
     props.ui?.root,
   ),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -49,7 +53,7 @@ const classes = computed(() =>
     data-part="root"
     :class="classes"
     :data-language="language"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-code'), ...$attrs, class: undefined }"
   ><code><slot /></code></pre>
   <code
     v-else

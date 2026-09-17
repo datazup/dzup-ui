@@ -110,6 +110,53 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none', icons: ['indicator'] },
 
   /**
+   * Keyboard contract (TASK-R5-O5). `useSelectKeyboard` in
+   * `packages/core/src/composables/useSelect/`, which is where every row
+   * below is implemented, over APG `combobox`.
+   */
+  keyboard: [
+    {
+      key: 'ArrowDown',
+      action: 'Open the list when closed, otherwise move to the next option.',
+      wcag: ['2.1.1'],
+      apg: 'combobox',
+    },
+    {
+      key: 'ArrowUp',
+      action: 'Open the list when closed, otherwise move to the previous option.',
+      wcag: ['2.1.1'],
+      apg: 'combobox',
+    },
+    { key: 'Home', when: 'list open', action: 'Move to the first option.', wcag: ['2.1.1'], apg: 'combobox' },
+    { key: 'End', when: 'list open', action: 'Move to the last option.', wcag: ['2.1.1'], apg: 'combobox' },
+    {
+      key: 'Enter',
+      action: 'Select the highlighted option and close the list.',
+      wcag: ['2.1.1'],
+      apg: 'combobox',
+    },
+    {
+      key: 'Escape',
+      action: 'Close the list without changing the value.',
+      wcag: ['2.1.1', '2.1.2'],
+      apg: 'combobox',
+    },
+    { key: 'Tab', action: 'Move out of the control, closing the list.', wcag: ['2.1.2'], apg: 'combobox' },
+    {
+      key: ' ',
+      action: 'Select the highlighted option when the list is open, otherwise open it.',
+      wcag: ['2.1.1'],
+      apg: 'combobox',
+    },
+    {
+      key: '<character>',
+      action: 'Type-ahead: move to the next option whose label starts with that character.',
+      wcag: ['2.1.1'],
+      apg: 'combobox',
+    },
+  ],
+
+  /**
    * Tier B — interactive primitive. It owns focus, the listbox keyboard
    * contract and a value, and its popup is teleported, so hydration is part of
    * its contract rather than an implementation detail.

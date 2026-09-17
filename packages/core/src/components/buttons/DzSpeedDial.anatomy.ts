@@ -36,6 +36,36 @@ export const anatomy = {
    */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). APG `menu-button`. Home, End and
+   * Escape are handled in `DzSpeedDial.vue`; the corner `position` is
+   * physical on purpose and no key moves it.
+   */
+  keyboard: [
+    {
+      key: 'Enter',
+      when: 'trigger',
+      action: 'Open or close the action list.',
+      wcag: ['2.1.1'],
+      apg: 'menu-button',
+    },
+    {
+      key: ' ',
+      when: 'trigger',
+      action: 'Open or close the action list.',
+      wcag: ['2.1.1'],
+      apg: 'menu-button',
+    },
+    { key: 'Home', when: 'open', action: 'Move focus to the first action.', wcag: ['2.1.1'], apg: 'menu' },
+    { key: 'End', when: 'open', action: 'Move focus to the last action.', wcag: ['2.1.1'], apg: 'menu' },
+    {
+      key: 'Escape',
+      action: 'Close the action list and return focus to the trigger.',
+      wcag: ['2.1.1', '2.1.2'],
+      apg: 'menu-button',
+    },
+  ],
+
   /** Tier B — owns a roving focus contract and an expanded/collapsed disclosure. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

@@ -34,7 +34,7 @@ import {
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
-import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
@@ -46,6 +46,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Values of the selected options; the default empty array selects none. */
 const model = defineModel<string[]>({ default: () => [] })
 
 const props = withDefaults(defineProps<DzMultiSelectProps>(), {
@@ -241,10 +242,13 @@ const rootClasses = computed(() =>
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzMultiSelect')
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div>
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-multi-select')">
     <ComboboxRoot
       :model-value="model"
       :disabled="resolvedDisabled"
@@ -257,7 +261,8 @@ const dzMessages = useComponentMessages('DzMultiSelect')
       @update:open="handleOpenChange"
     >
       <ComboboxAnchor
-        :class="rootClasses"
+        data-part="control"
+        :class="[rootClasses, ui?.control]"
         :data-state="resolvedDisabled ? 'disabled' : 'idle'"
         :data-disabled="resolvedDisabled ? '' : undefined"
         :data-invalid="resolvedInvalid ? '' : undefined"
@@ -287,8 +292,9 @@ const dzMessages = useComponentMessages('DzMultiSelect')
         <ComboboxInput
           :id="resolvedId"
           v-model="searchQuery"
+          data-part="input"
           :placeholder="model.length === 0 ? placeholder : undefined"
-          :class="styles.input()"
+          :class="[styles.input(), ui?.input]"
           :disabled="resolvedDisabled || isMaxReached"
           :aria-label="ariaLabel"
           :aria-labelledby="ariaLabelledby"
@@ -302,7 +308,8 @@ const dzMessages = useComponentMessages('DzMultiSelect')
         <button
           v-if="model.length > 0"
           type="button"
-          :class="styles.icon()"
+          data-part="clear"
+          :class="[styles.icon(), ui?.clear]"
           :aria-label="dzMessages.clearAll"
           @click.stop="handleClear"
         >
@@ -312,12 +319,13 @@ const dzMessages = useComponentMessages('DzMultiSelect')
         <ComboboxTrigger as-child>
           <button
             type="button"
-            :class="styles.icon()"
+            data-part="trigger"
+            :class="[styles.icon(), ui?.trigger]"
             :aria-label="dzMessages.toggleOptions"
             :disabled="resolvedDisabled"
           >
             <!-- TASK-N1-O3: see DzCombobox.vue — the button is the 24px target. -->
-            <ChevronDown class="size-[var(--dz-control-visual-size)]" aria-hidden="true" />
+            <ChevronDown data-part="icon" class="size-[var(--dz-control-visual-size)]" :class="[ui?.icon]" aria-hidden="true" />
           </button>
         </ComboboxTrigger>
       </ComboboxAnchor>
@@ -327,16 +335,17 @@ const dzMessages = useComponentMessages('DzMultiSelect')
         :disabled="portalDisabled"
         :defer="portalDefer"
       >
-        <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
-          <ComboboxViewport :class="styles.viewport()">
+        <ComboboxContent data-part="content" :class="[styles.content(), ui?.content]" position="popper" :side-offset="4">
+          <ComboboxViewport data-part="viewport" :class="[styles.viewport(), ui?.viewport]">
             <ComboboxItem
               v-for="(item, index) in filteredItems"
               :key="item.value"
               :value="item.value"
               :disabled="item.disabled || (isMaxReached && !model.includes(item.value))"
-              :class="styles.item()"
+              data-part="item"
+              :class="[styles.item(), ui?.item]"
             >
-              <ComboboxItemIndicator class="absolute left-1 flex items-center justify-center">
+              <ComboboxItemIndicator data-part="item-indicator" class="absolute inset-s-1 flex items-center justify-center" :class="[ui?.['item-indicator']]">
                 <Check :class="styles.checkIcon()" aria-hidden="true" />
               </ComboboxItemIndicator>
               <slot
@@ -345,7 +354,7 @@ const dzMessages = useComponentMessages('DzMultiSelect')
                 :index="index"
                 :selected="model.includes(item.value)"
               >
-                <span class="pl-6">{{ item.label }}</span>
+                <span data-part="item-label" class="ps-6" :class="[ui?.['item-label']]">{{ item.label }}</span>
               </slot>
             </ComboboxItem>
 
@@ -361,7 +370,7 @@ const dzMessages = useComponentMessages('DzMultiSelect')
               :can-retry="canRetryOptions"
               @retry="handleRetryOptions"
             />
-            <ComboboxEmpty :class="styles.empty()">
+            <ComboboxEmpty data-part="empty" :class="[styles.empty(), ui?.empty]">
               <slot name="empty">
                 No options available
               </slot>
@@ -375,7 +384,9 @@ const dzMessages = useComponentMessages('DzMultiSelect')
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

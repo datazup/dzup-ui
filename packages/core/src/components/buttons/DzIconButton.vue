@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ButtonVariant, CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
 import type { DzIconButtonEmits, DzIconButtonProps } from './DzIconButton.types.ts'
 /**
  * DzIconButton — Icon-only button component.
@@ -13,6 +14,7 @@ import type { DzIconButtonEmits, DzIconButtonProps } from './DzIconButton.types.
  * ```
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { DZ_BUTTON_GROUP_KEY } from './DzButtonGroup.types.ts'
@@ -36,9 +38,32 @@ const emit = defineEmits<DzIconButtonEmits>()
 const attrs = useAttrs()
 const groupContext = inject(DZ_BUTTON_GROUP_KEY, null)
 
-const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'md')
-const resolvedVariant = computed(() => props.variant ?? groupContext?.variant.value ?? 'solid')
-const resolvedTone = computed(() => props.tone ?? groupContext?.tone.value ?? 'primary')
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * `resolve` implements the one precedence the provider fixes — prop, then the
+ * button-group compound context, then the provider, then this component's own
+ * default. The chain below is the same one that was written inline here before
+ * adoption, with the provider slotted into the single place ADR-20 puts it; with
+ * no `DzProvider` mounted `resolve` reads an empty map and every line behaves
+ * exactly as it did.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved size: prop, then group context, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzIconButton', 'size', [props.size, groupContext?.size.value]) ?? 'md',
+)
+
+/** Resolved variant: prop, then group context, then provider, then default */
+const resolvedVariant = computed(
+  () => resolve<ButtonVariant>('DzIconButton', 'variant', [props.variant, groupContext?.variant.value]) ?? 'solid',
+)
+
+/** Resolved tone: prop, then group context, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzIconButton', 'tone', [props.tone, groupContext?.tone.value]) ?? 'primary',
+)
 const resolvedDisabled = computed(() => props.disabled || (groupContext?.disabled.value ?? false))
 const isInert = computed(() => resolvedDisabled.value || props.loading)
 
@@ -100,6 +125,9 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -117,7 +145,7 @@ function handleBlur(event: FocusEvent): void {
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-icon-button'), ...$attrs, class: undefined }"
     @click="handleClick"
     @focus="handleFocus"
     @blur="handleBlur"

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
+import type { DzFabVariant } from './DzFab.types.ts'
 import type {
   DzSpeedDialEmits,
   DzSpeedDialItem,
@@ -31,6 +33,7 @@ import type {
  */
 import { Plus, X } from 'lucide-vue-next'
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzTooltip from '../overlays/DzTooltip.vue'
 import DzTooltipContent from '../overlays/DzTooltipContent.vue'
@@ -48,14 +51,15 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Whether the action list is expanded; `false` keeps it collapsed behind the trigger. */
 const open = defineModel<boolean>('open', { default: false })
 
 const props = withDefaults(defineProps<DzSpeedDialProps>(), {
   direction: 'up',
   type: 'linear',
-  size: 'md',
-  tone: 'primary',
-  variant: 'solid',
+  size: undefined,
+  tone: undefined,
+  variant: undefined,
   position: 'static',
   icon: undefined,
   closeIcon: undefined,
@@ -71,6 +75,14 @@ const attrs = useAttrs()
 const styles = speedDialVariants()
 const menuId = useId()
 
+/**
+ * rtl-physical-ok — author-named, deliberate physical corners (TASK-R5-O2,
+ * closing S1-D3). Same reasoning as `DzFab.variants.ts`: `position` names a
+ * screen corner, not a reading-order edge, so these four must NOT mirror. The
+ * marker is file-wide, and these four `switch` arms are this template's only
+ * physical utilities — the `left-1/2` centring in `DzSpeedDial.variants.ts` is
+ * excluded by the fraction rule in `validate:rtl` rather than by a marker.
+ */
 const rootPositionClass = computed(() => {
   switch (props.position) {
     case 'bottom-right':
@@ -99,6 +111,30 @@ const triggerRef = ref<InstanceType<typeof DzFab>>()
 /** The menu element — used to query action buttons for focus management. */
 const menuEl = ref<HTMLElement>()
 
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * The three trigger axes resolve once here and are then passed explicitly to
+ * the inner `DzFab`, so the dial and its trigger cannot disagree. Each keeps
+ * the literal it carried in `withDefaults` as the last link.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved trigger size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzSpeedDial', 'size', [props.size]) ?? 'md',
+)
+
+/** Resolved trigger tone: prop, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzSpeedDial', 'tone', [props.tone]) ?? 'primary',
+)
+
+/** Resolved trigger variant: prop, then provider, then default */
+const resolvedVariant = computed(
+  () => resolve<DzFabVariant>('DzSpeedDial', 'variant', [props.variant]) ?? 'solid',
+)
+
 const triggerIcon = computed(() => (open.value ? (props.closeIcon ?? X) : (props.icon ?? Plus)))
 
 /** Icon-button size for the actions — one step below the trigger size. */
@@ -110,7 +146,7 @@ const actionButtonSize = computed(() => {
     lg: 'md',
     xl: 'lg',
   }
-  return map[props.size] ?? 'sm'
+  return map[resolvedSize.value] ?? 'sm'
 })
 
 const isVertical = computed(() => props.direction === 'up' || props.direction === 'down')
@@ -151,7 +187,7 @@ function itemOffset(i: number, count: number): { x: number, y: number } {
     return { x: Math.cos(rad) * props.radius, y: -Math.sin(rad) * props.radius }
   }
   const [ux, uy] = directionUnit()
-  const step = (SPEED_DIAL_ACTION_PX[props.size] ?? 40) + SPEED_DIAL_GAP_PX
+  const step = (SPEED_DIAL_ACTION_PX[resolvedSize.value] ?? 40) + SPEED_DIAL_GAP_PX
   const d = (i + 1) * step
   return { x: ux * d, y: uy * d }
 }
@@ -278,6 +314,9 @@ function onRootKeydown(event: KeyboardEvent): void {
     close(true)
   }
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -285,7 +324,7 @@ function onRootKeydown(event: KeyboardEvent): void {
     data-part="root"
     :class="rootClasses"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-speed-dial'), ...$attrs, class: undefined }"
     @keydown="onRootKeydown"
     @mouseenter="onHoverOpen"
     @mouseleave="onHoverClose"
@@ -313,7 +352,7 @@ function onRootKeydown(event: KeyboardEvent): void {
             <DzIconButton
               :icon="item.icon"
               :aria-label="item.label"
-              :tone="item.tone ?? tone"
+              :tone="item.tone ?? resolvedTone"
               :size="actionButtonSize"
               :disabled="item.disabled"
               :class="styles.action()"
@@ -335,9 +374,9 @@ function onRootKeydown(event: KeyboardEvent): void {
       ref="triggerRef"
       :icon="triggerIcon"
       :aria-label="ariaLabel"
-      :tone="tone"
-      :size="size"
-      :variant="variant"
+      :tone="resolvedTone"
+      :size="resolvedSize"
+      :variant="resolvedVariant"
       :disabled="disabled"
       :aria-expanded="open"
       aria-haspopup="menu"

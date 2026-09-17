@@ -9,6 +9,7 @@
  * </DzCardBody>
  * ```
  */
+import type { DzCardBodySlots } from './DzCard.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { cardBodyVariants } from './DzCard.variants.ts'
@@ -16,6 +17,8 @@ import { cardBodyVariants } from './DzCard.variants.ts'
 defineOptions({
   inheritAttrs: false,
 })
+
+defineSlots<DzCardBodySlots>()
 
 const attrs = useAttrs()
 
@@ -26,7 +29,7 @@ const classes = computed(() =>
 </script>
 
 <template>
-  <div :class="classes">
+  <div data-part="body" :class="classes">
     <slot />
   </div>
 </template>

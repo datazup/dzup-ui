@@ -1,6 +1,6 @@
 ---
 title: "DzFieldArray"
-description: "DzFieldArray — API reference generated from source."
+description: "renderless repeater for an array-valued form field, owning the bounds and the per-row ids."
 outline: [2, 3]
 ---
 
@@ -10,12 +10,21 @@ outline: [2, 3]
 
 # DzFieldArray
 
+renderless repeater for an array-valued form field, owning the bounds and the per-row ids.
+
 - **Family:** Forms
 - **Source:** `packages/core/src/components/forms/DzFieldArray.vue` · types `packages/core/src/components/forms/DzFieldArray.types.ts`
 - **Install:** `npm i @dzup-ui/core` — then `import { DzFieldArray } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/forms`
 - **Risk tier:** B · **Status:** experimental
 - **v-model:** `v-model` (`T[] | undefined`)
+
+## Intent and selection guidance
+
+**Not declared.** `DzFieldArray` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -42,25 +51,25 @@ never as asserted.
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `id` | `string \| undefined` | no | `undefined` | Base for the per-item ids handed to the default slot. Defaults to the surrounding `DzFormField`'s id, then to a generated one. Set it when two arrays share a page and their generated bases would be indistinguishable in a test or a bug report. |
-| `max` | `number \| undefined` | no | `undefined` | — |
-| `min` | `number \| undefined` | no | `undefined` | — |
-| `modelValue` | `T[] \| undefined` | no | `[]` | — |
+| `max` | `number \| undefined` | no | `undefined` | Most rows the array may hold — appending past it is a no-op, and the `append` slot stops rendering. `undefined` sets no upper bound. |
+| `min` | `number \| undefined` | no | `undefined` | Fewest rows the array may hold — removing below it is a no-op. `undefined` sets no lower bound. |
+| `modelValue` | `T[] \| undefined` | no | `[]` | The array of row values the field array edits; the default empty array renders no rows. |
 
 ## Events (4)
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `add` | `[item: T]` | — |
-| `remove` | `[index: number]` | — |
-| `reorder` | `[from: number, to: number]` | — |
-| `update:modelValue` | `[value: T[]]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `add` | `[item: T]` | Emitted after a row is appended, with the appended item. Suppressed when `max` blocked the append. |
+| `remove` | `[index: number]` | Emitted after a row is removed, with the index it occupied. Suppressed when `min` blocked the removal. |
+| `reorder` | `[from: number, to: number]` | Emitted after a row moves, with its old and new index. Suppressed for out-of-range or no-op moves. |
+| `update:modelValue` | `[value: T[]]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (2)
 
 | Slot | Slot props | Description |
 | --- | --- | --- |
-| `append` | `DzFieldArrayAppendSlotProps<T>` | — |
-| `default` | `DzFieldArraySlotProps<T>` | — |
+| `append` | `DzFieldArrayAppendSlotProps<T>` | Rendered after the rows while another may be appended, with `append`, `count` and `canAppend`. Omitted once `max` is reached. |
+| `default` | `DzFieldArraySlotProps<T>` | Rendered once per row, with the row value, its index, its collision-free ids and the `remove` / `move` / `append` callbacks. |
 
 ## Usage (from `packages/core/stories/forms/DzFieldArray.stories.ts`, story `Default`)
 
@@ -94,6 +103,101 @@ Editable, running the **Per-Row Validation** story from `packages/core/stories/f
 
 <DzPlayground component="DzFieldArray" />
 
+## Variants and controlled state
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzFieldArray />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzFieldArray v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzFieldArray :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 4 stories in
+`packages/core/stories/forms/DzFieldArray.stories.ts`: `Add / Remove / Reorder`, `Min / Max Items`, `Per-Row Validation`, `Dark Mode Preview`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+This component declares `parts: 'none'` — it renders no element of its own. A renderless or
+pure-slot wrapper has nothing to address, which is a different fact from an undeclared anatomy.
+
+**Where your `class` lands** — nowhere. This component renders no element of its own.
+
+It renders no element of its own, so a `class`, an `id` or a `data-*` you pass **reaches
+nothing at all**. Style the markup you put in its slots instead.
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+This component declares no states: nothing about it is advertised to CSS or to a test.
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/forms/DzFieldArray.anatomy.ts`.
+
+## Provider defaults and context
+
+**Not declared.** `DzFieldArray` calls no `DzProvider` reader, so **nothing an application
+sets on the provider reaches it** — not the locale, not the motion preference, not the
+direction, not the test-id prefix. Every value it uses comes from its own props and defaults.
+That is measured from its source rather than assumed, and it is a gap in the component (ADR-20
+adoption), not in this page.
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `none` | The geometry is **physical on purpose** — a claim, not an oversight. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzFieldArray.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+This component declares no states, so there is no state matrix to show. A presentational
+component that renders the same way every time is the normal case for this.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e986952`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -101,17 +205,17 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 4 | 1 | 1 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 4 | 0 | 0 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
-| Slots | 2 | 0 | 2 carry slot props |
+| Props | 4 | 4 | 1 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 4 | 4 | 3 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Slots | 2 | 2 | 2 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
 ## Accessibility and evidence
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -120,7 +224,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** `custom` — no WAI-ARIA Authoring Practices pattern describes this component.
 - **Traits:** `dataset`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `e986952e`
 
 **Why this pattern:** A renderless controller for add/remove/move over a repeated field group. It owns focus placement after a removal, which is the part that fails silently.
@@ -163,14 +267,20 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**2 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `Enter` | `action` | Activate the focused add or remove control. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+| `Space` | `action` | Activate the focused add or remove control. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+
+Declared in `packages/core/src/components/forms/DzFieldArray.anatomy.ts`.
 
 - **Pattern:** `custom` — **no APG pattern applies**, so there is no external
   keyboard contract to link. The recorded reason is quoted above.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 2 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -204,16 +314,16 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzFieldArray.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A | `excepted` | Renderless: it supplies scoped slot props and ships no styles. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzFieldArray.spec.ts` — The component declares 2 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzFieldArray.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzFieldArray.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzFieldArray.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzFieldArray.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzFieldArray.md` — 6 AT/browser pairs, none executed. |
 
-**6 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `data-scenarios`, `at-manual` · **1 excepted:** `token-contrast`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `data-scenarios`, `at-manual` · **1 excepted:** `token-contrast`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

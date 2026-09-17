@@ -30,6 +30,36 @@ export const anatomy = {
   /** The action and the disclosure sit on the inline axis and flip with the document. */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). APG `menu-button`: the primary half
+   * is a button, the secondary half opens the menu.
+   */
+  keyboard: [
+    { key: 'Enter', when: 'root', action: 'Activate the primary action.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', when: 'root', action: 'Activate the primary action.', wcag: ['2.1.1'], apg: 'button' },
+    {
+      key: 'ArrowDown',
+      when: 'trigger',
+      action: 'Open the menu and focus its first item.',
+      wcag: ['2.1.1'],
+      apg: 'menu-button',
+    },
+    {
+      key: 'Enter',
+      when: 'trigger',
+      action: 'Open the menu and focus its first item.',
+      wcag: ['2.1.1'],
+      apg: 'menu-button',
+    },
+    {
+      key: 'Escape',
+      when: 'menu open',
+      action: 'Close the menu and return focus to the trigger.',
+      wcag: ['2.1.1', '2.1.2'],
+      apg: 'menu-button',
+    },
+  ],
+
   /** Tier B — two focusable controls sharing one disabled/loading model. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

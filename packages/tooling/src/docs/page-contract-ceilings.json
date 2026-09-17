@@ -1,0 +1,44 @@
+{
+  "//": "TASK-R5-O5. One ratchet per section of the ten-section documentation page contract (2026-08-11 reassessment doc 03). Each number is PAGES OUT OF 144 whose section renders an honest 'not declared' cell because the artifact behind it does not exist. Every number may only FALL; validate:docs-pages fails when one rises AND when one drops without the ceiling being lowered, because a ceiling nobody lowers stops meaning anything. Measured at 99b963a with the uncommitted working tree, over the 144 public components.",
+
+  "intent": {
+    "//": "Section 1. Components with no `@intent` block in their SFC header. 144 of 144 -- NOTHING in the catalogue declares one today, because the field did not exist before this packet. The sentence has to be authored by a person and must live in the source header, never in apps/docs, so that whoever changes the behaviour is holding the paragraph that describes it. This is the largest single documentation debt the contract exposes and it falls one component at a time.",
+    "ceiling": 144
+  },
+  "api": {
+    "//": "Section 2. Public components with no prop/event/slot/expose tables. Zero, and structurally so: the tables ARE the freshness comparison validate:docs-pages has run since TASK-N2-D1. Held as a ratchet so it cannot silently regress.",
+    "ceiling": 0
+  },
+  "usage": {
+    "//": "Section 3. Public components with no usage section. Zero -- a component with no story renders the absence rather than omitting the heading.",
+    "ceiling": 0
+  },
+  "variants": {
+    "//": "Section 4. Components declaring neither a recipe axis nor a v-model pair, so there are no variants to list and no controlled form to show. 49 of 144. For a presentational component that is the whole truth; for an interactive one it means the anatomy has not been written down. Falls with the anatomy rollout (TASK-R5-O2's remaining three families).",
+    "ceiling": 49
+  },
+  "parts": {
+    "//": "Section 5. Components with no Dz{Name}.anatomy.ts, so the page cannot say which nodes a consumer may address. 41 of 144. Exactly the anatomy gap TASK-R5-O2 is closing family by family: navigation, data and forms are not started, and the remaining 41 are the Tier A layout and display primitives.",
+    "ceiling": 41
+  },
+  "provider": {
+    "//": "Section 6. Components that call no DzProvider reader, so nothing an application configures reaches them (ADR-20 adoption). 39 of 144 public components. TASK-R5-O3 took providerHooks from 0 to 120 of 208 records; this is the residue, and it is a gap in the components rather than in the page.",
+    "ceiling": 39
+  },
+  "keyboard": {
+    "//": "Section 7. Components with no declared keyboard contract. 41 of 144 -- down from 144 of 144, which is what every page said before this packet ('Not yet derived'). The 41 are EXACTLY the components with no anatomy file to declare it in, so this ceiling is now pinned to `parts` and falls with it. It read 43 for one run: DzProvider and DzThemeProvider live in packages/core/src/providers/, outside components/{family}/, and the first authoring pass walked only the latter -- the ratchet's DOWNWARD arm is what reported the correction. NOTE the distinction the contract keeps: 19 components declare keyboard: 'none' EXPLICITLY and are NOT counted here, because an explicit claim of no keyboard behaviour is a different fact from nobody having written one down.",
+    "ceiling": 41
+  },
+  "locale": {
+    "//": "Section 8. Components with no declared `rtl` contract, so the page cannot say whether they mirror, whether their arrow keys swap, or which icons carry direction. 41 of 144 -- the same anatomy-less set as `parts`.",
+    "ceiling": 41
+  },
+  "operational": {
+    "//": "Section 9. Public components with no capability-matrix row. Zero: the matrix covers all 144. Held as a ratchet because a component published without a row would have no SSR, portal, performance or security state at all, and the page would have to say so.",
+    "ceiling": 0
+  },
+  "states": {
+    "//": "Section 10. Components with no declared anatomy, so there is no state union to show examples for. 41 of 144 -- the same anatomy-less set as `parts`. A component that declares an EMPTY states array is not counted: 'this renders the same way every time' is an answer.",
+    "ceiling": 41
+  }
+}

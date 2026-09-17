@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "sourceCommit": "99b963a03e1c0a9cd8077c9f1d0405a645174e4e",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -1367,6 +1367,92 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "item",
+          "trigger",
+          "indicator",
+          "content"
+        ],
+        "states": [
+          "ready",
+          "disabled",
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "item",
+          "trigger",
+          "indicator",
+          "content"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "indicator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Expand or collapse the focused section.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "accordion"
+          },
+          {
+            "key": " ",
+            "action": "Expand or collapse the focused section.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "accordion"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next section header.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "accordion"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous section header.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "accordion"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first section header.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "accordion"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last section header.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "accordion"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzAccordion.vue",
@@ -1725,6 +1811,45 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "list",
+          "item"
+        ],
+        "states": [
+          "ready",
+          "active"
+        ],
+        "componentTokens": [
+          "--dz-anchor-color",
+          "--dz-anchor-hover-color",
+          "--dz-anchor-active-color",
+          "--dz-anchor-rail-color",
+          "--dz-anchor-font-size",
+          "--dz-anchor-item-gap",
+          "--dz-anchor-indent"
+        ],
+        "riskTier": "B",
+        "optionalParts": [
+          "list",
+          "item"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Follow the link.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "link"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzAnchor.vue",
@@ -2146,6 +2271,51 @@
       ],
       "kind": "public-component",
       "status": "beta",
+      "anatomy": {
+        "parts": [
+          "root",
+          "icon"
+        ],
+        "states": [
+          "idle"
+        ],
+        "componentTokens": [
+          "--dz-back-top-offset",
+          "--dz-back-top-z",
+          "--dz-back-top-transition"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "variant",
+          "tone"
+        ],
+        "optionalParts": [
+          "icon"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the control, scrolling the page back to the top.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the control, scrolling the page back to the top.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzBackTop.vue",
@@ -2246,6 +2416,36 @@
       ],
       "kind": "public-component",
       "status": "beta",
+      "anatomy": {
+        "parts": [
+          "root",
+          "content",
+          "overlay",
+          "description"
+        ],
+        "states": [
+          "blocked",
+          "full-screen"
+        ],
+        "componentTokens": [
+          "--dz-blockui-mask",
+          "--dz-blockui-blur",
+          "--dz-blockui-radius",
+          "--dz-blockui-gap",
+          "--dz-blockui-z",
+          "--dz-blockui-message-color"
+        ],
+        "riskTier": "B",
+        "optionalParts": [
+          "overlay",
+          "description"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": "none"
+      },
       "evidence": [
         "packages/core/src/components/feedback/index.ts",
         "packages/core/src/components/feedback/DzBlockUI.vue",
@@ -2333,7 +2533,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
@@ -2377,6 +2578,51 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "list",
+          "item",
+          "item-label",
+          "separator"
+        ],
+        "states": [
+          "ready",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "optionalParts": [
+          "item",
+          "item-label",
+          "separator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "separator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move to the next crumb; every crumb is its own tab stop.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "breadcrumb"
+          },
+          {
+            "key": "Enter",
+            "action": "Follow the focused crumb.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "link"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzBreadcrumb.vue",
@@ -2578,7 +2824,25 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the button.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the button.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
@@ -2639,7 +2903,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
@@ -2722,6 +2987,164 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "header",
+          "title",
+          "group",
+          "action",
+          "content",
+          "row",
+          "cell",
+          "item"
+        ],
+        "states": [
+          "disabled",
+          "selected",
+          "today",
+          "in-range",
+          "outside-month"
+        ],
+        "componentTokens": [
+          "--dz-calendar-cell-size",
+          "--dz-calendar-cell-radius",
+          "--dz-calendar-cell-foreground",
+          "--dz-calendar-cell-hover-bg",
+          "--dz-calendar-selected-bg",
+          "--dz-calendar-selected-foreground",
+          "--dz-calendar-range-bg",
+          "--dz-calendar-today-ring",
+          "--dz-calendar-header-foreground",
+          "--dz-calendar-weekday-foreground",
+          "--dz-calendar-outside-foreground",
+          "--dz-calendar-outside-opacity",
+          "--dz-calendar-disabled-opacity"
+        ],
+        "riskTier": "C",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "action",
+          "row",
+          "cell",
+          "item"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "action"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move focus one day to the inline end.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move focus one day to the inline start.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move focus one row down.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus one row up.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first day of the row.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last day of the row.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "PageDown",
+            "action": "Move to the next month.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "PageUp",
+            "action": "Move to the previous month.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "PageDown",
+            "action": "Move to the next year.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "PageUp",
+            "action": "Move to the previous year.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the focused day.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused day.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzCalendar.vue",
@@ -2821,7 +3244,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
@@ -2865,6 +3289,60 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "header",
+          "body",
+          "footer",
+          "action"
+        ],
+        "states": [
+          "interactive",
+          "static"
+        ],
+        "componentTokens": [
+          "--dz-card-radius",
+          "--dz-card-padding",
+          "--dz-card",
+          "--dz-card-foreground",
+          "--dz-card-border-color"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "variant"
+        ],
+        "optionalParts": [
+          "header",
+          "body",
+          "footer",
+          "action"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the card.",
+            "when": "clickable",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the card.",
+            "when": "clickable",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/cards/index.ts",
         "packages/core/src/components/cards/DzCard.vue",
@@ -3075,6 +3553,75 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "viewport",
+          "content",
+          "item",
+          "list",
+          "item-indicator",
+          "action"
+        ],
+        "states": [
+          "ready",
+          "empty",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "orientation"
+        ],
+        "optionalParts": [
+          "item",
+          "list",
+          "item-indicator",
+          "action"
+        ],
+        "rtl": {
+          "mirrors": "none",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Show the next slide.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "carousel",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Show the previous slide.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "carousel",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "Enter",
+            "action": "Activate the focused previous or next control.",
+            "when": "control",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the focused previous or next control.",
+            "when": "control",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/media/index.ts",
         "packages/core/src/components/media/DzCarousel.vue",
@@ -3289,6 +3836,156 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "trigger",
+          "label",
+          "clear",
+          "icon",
+          "content",
+          "panel",
+          "input",
+          "list",
+          "group",
+          "item",
+          "item-label",
+          "item-indicator",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "states": [
+          "disabled",
+          "invalid",
+          "readonly",
+          "required",
+          "loading",
+          "open",
+          "closed",
+          "selected",
+          "active"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "clear",
+          "content",
+          "panel",
+          "input",
+          "list",
+          "group",
+          "item",
+          "item-label",
+          "item-indicator",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "icon",
+            "item-indicator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Open the panel when closed, otherwise move to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Open the panel when closed, otherwise move to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the highlighted option and close the panel.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the panel without changing the value.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the control, closing the panel.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Move into the focused option child column.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move back to the parent column.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox",
+            "rtl": "mirrored"
+          },
+          {
+            "key": " ",
+            "action": "Select the highlighted option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzCascader.vue",
@@ -3417,6 +4114,44 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "indicator",
+          "label"
+        ],
+        "states": [
+          "checked",
+          "unchecked",
+          "indeterminate",
+          "disabled",
+          "required"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "indicator",
+          "label"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": " ",
+            "action": "Toggle the checkbox, cycling through the indeterminate state when the control is tri-state.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "checkbox"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzCheckbox.vue",
@@ -3457,6 +4192,43 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "ready",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "orientation"
+        ],
+        "optionalParts": [],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move to the next checkbox; each box in the group is its own tab stop.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "checkbox"
+          },
+          {
+            "key": " ",
+            "action": "Toggle the focused checkbox.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "checkbox"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzCheckboxGroup.vue",
@@ -3551,6 +4323,64 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "close"
+        ],
+        "states": [
+          "idle",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "variant",
+          "tone"
+        ],
+        "optionalParts": [
+          "close"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the chip.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the chip.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": "Backspace",
+            "action": "Remove the chip.",
+            "when": "removable",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Delete",
+            "action": "Remove the chip.",
+            "when": "removable",
+            "wcag": [
+              "2.1.1"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzChip.vue",
@@ -3619,7 +4449,8 @@
         "rtl": {
           "mirrors": "none",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
@@ -3660,7 +4491,27 @@
         "rtl": {
           "mirrors": "none",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Copy the code to the clipboard.",
+            "when": "copy-button",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Copy the code to the clipboard.",
+            "when": "copy-button",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/data/index.ts",
@@ -3732,6 +4583,41 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Expand or collapse the region.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "disclosure"
+          },
+          {
+            "key": " ",
+            "action": "Expand or collapse the region.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "disclosure"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/layout/index.ts",
         "packages/core/src/components/layout/DzCollapse.vue",
@@ -3774,6 +4660,43 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [],
+        "componentTokens": [
+          "--dz-color-mode-toggle-icon-size",
+          "--dz-color-mode-toggle-transition"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the control, advancing the colour mode.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the control, advancing the colour mode.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzColorModeToggle.vue",
@@ -3860,6 +4783,97 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "trigger",
+          "indicator",
+          "label",
+          "content",
+          "panel",
+          "input",
+          "group",
+          "item",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "required",
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "indicator",
+          "label",
+          "content",
+          "panel",
+          "input",
+          "group",
+          "item",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move the colour pointer one step along the saturation axis.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "fixed"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move the colour pointer one step back along the saturation axis.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "fixed"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move the colour pointer one step up the value axis.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move the colour pointer one step down the value axis.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "Home",
+            "action": "Move the colour pointer to the start of the axis.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "End",
+            "action": "Move the colour pointer to the end of the axis.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzColorPicker.vue",
@@ -3915,6 +4929,125 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "clear",
+          "trigger",
+          "icon",
+          "content",
+          "viewport",
+          "item",
+          "item-indicator",
+          "item-label",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "invalid",
+          "required",
+          "loading",
+          "open",
+          "closed",
+          "checked",
+          "unchecked"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "clear",
+          "icon",
+          "content",
+          "viewport",
+          "item",
+          "item-indicator",
+          "item-label",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Open the list when closed, otherwise move to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Open the list when closed, otherwise move to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the highlighted option and close the list.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the list without changing the value.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the control, closing the list.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzCombobox.vue",
@@ -3998,6 +5131,98 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "overlay",
+          "content",
+          "control",
+          "icon",
+          "input",
+          "list",
+          "group",
+          "group-label",
+          "item",
+          "item-label",
+          "suffix",
+          "empty"
+        ],
+        "states": [
+          "open",
+          "closed",
+          "disabled",
+          "selected"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "optionalParts": [
+          "icon",
+          "group",
+          "group-label",
+          "item",
+          "item-label",
+          "suffix",
+          "empty"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "k",
+            "action": "Open the palette from anywhere in the document.",
+            "modifiers": [
+              "Meta"
+            ],
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "k",
+            "action": "Open the palette from anywhere in the document.",
+            "modifiers": [
+              "Control"
+            ],
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move to the next result.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move to the previous result.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Run the highlighted command.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the palette.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzCommandPalette.vue",
@@ -4170,6 +5395,69 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "overlay",
+          "content",
+          "viewport",
+          "icon",
+          "title",
+          "description",
+          "action"
+        ],
+        "states": [
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant"
+        ],
+        "optionalParts": [
+          "overlay",
+          "content",
+          "viewport",
+          "icon",
+          "title",
+          "description",
+          "action"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Dismiss the dialog without taking the action.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "alertdialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move between the actions, wrapping inside the dialog.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "alertdialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move backwards between the actions.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "alertdialog"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzConfirmDialog.vue",
@@ -4270,6 +5558,121 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "content",
+          "item",
+          "prefix",
+          "suffix",
+          "separator"
+        ],
+        "states": [
+          "open",
+          "closed",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "optionalParts": [
+          "content",
+          "item",
+          "prefix",
+          "suffix",
+          "separator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "suffix"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next item, wrapping at the end.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous item, wrapping at the start.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "Enter",
+            "action": "Invoke the focused item and close the menu.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": " ",
+            "action": "Invoke the focused item and close the menu.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Open the focused item submenu and focus its first item.",
+            "when": "item with a submenu",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Close the current submenu and return to its parent item.",
+            "when": "submenu open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the menu and return focus to the trigger.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "<character>",
+            "action": "Move focus to the next item whose label starts with that character.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzContextMenu.vue",
@@ -4503,7 +5906,25 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the control, copying the value to the clipboard.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the control, copying the value to the clipboard.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
@@ -4644,6 +6065,143 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "loader",
+          "empty",
+          "content",
+          "header",
+          "body",
+          "row",
+          "cell",
+          "indicator",
+          "panel",
+          "footer"
+        ],
+        "states": [
+          "ready",
+          "loading",
+          "selected"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "density"
+        ],
+        "optionalParts": [
+          "loader",
+          "empty",
+          "content",
+          "header",
+          "body",
+          "row",
+          "cell",
+          "indicator",
+          "panel",
+          "footer"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "indicator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move focus one cell to the inline end.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move focus one cell to the inline start.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move focus one row down.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus one row up.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first cell of the row.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last cell of the row.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "Enter",
+            "action": "Cycle the focused column sort.",
+            "when": "header",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": " ",
+            "action": "Cycle the focused column sort.",
+            "when": "header",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "Enter",
+            "action": "Add the focused column to the existing sort rather than replacing it.",
+            "modifiers": [
+              "Shift"
+            ],
+            "when": "header",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the column filter popover.",
+            "when": "filter open",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "grid"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzDataGrid.vue",
@@ -4920,6 +6478,50 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "header",
+          "control",
+          "list",
+          "item",
+          "footer"
+        ],
+        "states": [
+          "disabled"
+        ],
+        "componentTokens": [
+          "--dz-data-view-gap",
+          "--dz-data-view-toolbar-gap",
+          "--dz-data-view-list-divider",
+          "--dz-data-view-list-item-padding-x",
+          "--dz-data-view-list-item-padding-y"
+        ],
+        "riskTier": "C",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "header",
+          "control",
+          "list",
+          "item",
+          "footer"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move between the layout controls and the rendered items.",
+            "wcag": [
+              "2.1.2"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzDataView.vue",
@@ -5006,6 +6608,145 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "trigger",
+          "icon",
+          "content",
+          "panel",
+          "header",
+          "title",
+          "action",
+          "group",
+          "row",
+          "cell",
+          "item",
+          "error"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "required",
+          "invalid",
+          "open",
+          "closed",
+          "selected"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "input",
+          "content",
+          "panel",
+          "header",
+          "title",
+          "action",
+          "group",
+          "row",
+          "cell",
+          "item",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "action",
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Open the calendar when closed, otherwise move to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Open the calendar when closed, otherwise move to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the highlighted option and close the calendar.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the calendar without changing the value.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the control, closing the calendar.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Move one day towards the inline end.",
+            "when": "calendar open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move one day towards the inline start.",
+            "when": "calendar open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid",
+            "rtl": "mirrored"
+          }
+        ],
+        "fallthrough": {
+          "target": "control"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzDatePicker.vue",
@@ -5061,6 +6802,146 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "separator",
+          "trigger",
+          "icon",
+          "content",
+          "panel",
+          "header",
+          "title",
+          "action",
+          "group",
+          "row",
+          "cell",
+          "item",
+          "error"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "required",
+          "invalid",
+          "open",
+          "closed",
+          "selected"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "input",
+          "content",
+          "panel",
+          "header",
+          "title",
+          "action",
+          "group",
+          "row",
+          "cell",
+          "item",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "action",
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Open the calendar when closed, otherwise move to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Open the calendar when closed, otherwise move to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the highlighted option and close the calendar.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the calendar without changing the value.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the control, closing the calendar.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Move one day towards the inline end.",
+            "when": "calendar open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move one day towards the inline start.",
+            "when": "calendar open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid",
+            "rtl": "mirrored"
+          }
+        ],
+        "fallthrough": {
+          "target": "control"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzDateRangePicker.vue",
@@ -5308,7 +7189,37 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Close the dialog and return focus to the element that opened it.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the next focusable element, wrapping inside the dialog.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the previous focusable element, wrapping inside the dialog.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
@@ -5404,6 +7315,36 @@
           "header",
           "viewport",
           "footer"
+        ],
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Close the dialog and return focus to the element that opened it.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the next focusable element, wrapping inside the dialog.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the previous focusable element, wrapping inside the dialog.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          }
         ]
       },
       "evidence": [
@@ -5663,6 +7604,121 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "content",
+          "item",
+          "prefix",
+          "suffix",
+          "separator"
+        ],
+        "states": [
+          "open",
+          "closed",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "optionalParts": [
+          "content",
+          "item",
+          "prefix",
+          "suffix",
+          "separator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "suffix"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next item, wrapping at the end.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous item, wrapping at the start.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "Enter",
+            "action": "Invoke the focused item and close the menu.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": " ",
+            "action": "Invoke the focused item and close the menu.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Open the focused item submenu and focus its first item.",
+            "when": "item with a submenu",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Close the current submenu and return to its parent item.",
+            "when": "submenu open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the menu and return focus to the trigger.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "<character>",
+            "action": "Move focus to the next item whose label starts with that character.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzDropdownMenu.vue",
@@ -6037,7 +8093,25 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the action.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the action.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
@@ -6125,6 +8199,41 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": "none",
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [],
+        "optionalParts": [],
+        "rtl": {
+          "mirrors": "none",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the focused add or remove control.",
+            "when": "action",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the focused add or remove control.",
+            "when": "action",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ],
+        "fallthrough": {
+          "target": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzFieldArray.vue",
@@ -6212,7 +8321,27 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Open the file picker.",
+            "when": "dropzone",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Open the file picker.",
+            "when": "dropzone",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
@@ -6526,7 +8655,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
@@ -6609,7 +8739,25 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the button.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the button.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
@@ -6695,6 +8843,40 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "overlay",
+          "header",
+          "body",
+          "footer"
+        ],
+        "states": [
+          "ready"
+        ],
+        "componentTokens": [
+          "--dz-card-radius",
+          "--dz-card-padding",
+          "--dz-card",
+          "--dz-card-foreground",
+          "--dz-card-border-color"
+        ],
+        "riskTier": "A",
+        "recipes": [
+          "variant"
+        ],
+        "optionalParts": [
+          "overlay",
+          "header",
+          "body",
+          "footer"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": "none"
+      },
       "evidence": [
         "packages/core/src/components/cards/index.ts",
         "packages/core/src/components/cards/DzImageCard.vue",
@@ -6737,6 +8919,93 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "panel",
+          "label",
+          "separator",
+          "control"
+        ],
+        "states": [
+          "disabled"
+        ],
+        "componentTokens": [
+          "--dz-image-comparison-divider-color",
+          "--dz-image-comparison-divider-width",
+          "--dz-image-comparison-handle-size",
+          "--dz-image-comparison-handle-bg",
+          "--dz-image-comparison-handle-color",
+          "--dz-image-comparison-label-bg",
+          "--dz-image-comparison-label-color"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "orientation"
+        ],
+        "optionalParts": [
+          "panel",
+          "label"
+        ],
+        "rtl": {
+          "mirrors": "none",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move the divider towards the right edge of the image.",
+            "wcag": [
+              "2.1.1",
+              "2.5.7"
+            ],
+            "apg": "slider",
+            "rtl": "fixed"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move the divider towards the left edge of the image.",
+            "wcag": [
+              "2.1.1",
+              "2.5.7"
+            ],
+            "apg": "slider",
+            "rtl": "fixed"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move the divider towards the right edge of the image.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move the divider towards the left edge of the image.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "Home",
+            "action": "Move the divider fully to the left edge.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "End",
+            "action": "Move the divider fully to the right edge.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/media/index.ts",
         "packages/core/src/components/media/DzImageComparison.vue",
@@ -6834,6 +9103,46 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "content",
+          "loader",
+          "error",
+          "hint"
+        ],
+        "states": [
+          "disabled"
+        ],
+        "componentTokens": [
+          "--dz-infinite-scroll-sentinel-size",
+          "--dz-infinite-scroll-status-gap",
+          "--dz-infinite-scroll-status-padding-y"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "loader",
+          "error",
+          "hint"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move to the next focusable element inside the loaded items; the feed adds no keys of its own.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "feed"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzInfiniteScroll.vue",
@@ -6920,6 +9229,60 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "trigger",
+          "content",
+          "icon"
+        ],
+        "states": [
+          "display",
+          "edit",
+          "disabled"
+        ],
+        "componentTokens": [
+          "--dz-inplace-gap",
+          "--dz-inplace-padding-x",
+          "--dz-inplace-padding-y",
+          "--dz-inplace-radius",
+          "--dz-inplace-ring",
+          "--dz-inplace-hover-bg",
+          "--dz-inplace-hint-color",
+          "--dz-inplace-disabled-opacity"
+        ],
+        "riskTier": "B",
+        "recipes": [],
+        "optionalParts": [
+          "trigger",
+          "content",
+          "icon"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Open the editor from the display state, or commit the edit from the editor.",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Escape",
+            "action": "Cancel the edit and restore the previous value.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzInplace.vue",
@@ -7079,7 +9442,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
@@ -7143,7 +9507,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
@@ -7218,7 +9583,23 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Backspace",
+            "action": "Delete the previous entered character, stepping over any mask literal.",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Delete",
+            "action": "Delete the next entered character, stepping over any mask literal.",
+            "wcag": [
+              "2.1.1"
+            ]
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
@@ -7333,7 +9714,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
@@ -7377,6 +9759,111 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "indicator",
+          "label",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "required",
+          "readonly",
+          "loading",
+          "invalid"
+        ],
+        "componentTokens": [
+          "--dz-knob-range",
+          "--dz-knob-value"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "indicator",
+          "label",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "none",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Increase the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Decrease the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Increase the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Decrease the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "PageUp",
+            "action": "Increase the value by the large step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "PageDown",
+            "action": "Decrease the value by the large step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "Home",
+            "action": "Set the value to its minimum.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "End",
+            "action": "Set the value to its maximum.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          }
+        ],
+        "fallthrough": {
+          "target": "root"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzKnob.vue",
@@ -7435,6 +9922,83 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "overlay",
+          "content",
+          "label",
+          "close",
+          "action",
+          "description"
+        ],
+        "states": [
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "optionalParts": [
+          "label",
+          "action",
+          "description"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "action"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Close the lightbox and return focus to the element that opened it.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the next focusable element, wrapping inside the lightbox.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the previous focusable element, wrapping inside the lightbox.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Show the next item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Show the previous item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "rtl": "mirrored"
+          }
+        ],
+        "fallthrough": {
+          "target": "content"
+        }
+      },
       "evidence": [
         "packages/core/src/components/media/index.ts",
         "packages/core/src/components/media/DzLightbox.vue",
@@ -7532,6 +10096,45 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "item-label"
+        ],
+        "states": [
+          "active",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "tone"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the row.",
+            "when": "interactive",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the row.",
+            "when": "interactive",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzListItem.vue",
@@ -7613,6 +10216,124 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "viewport",
+          "group",
+          "group-label",
+          "item",
+          "icon",
+          "item-label",
+          "item-indicator",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "states": [
+          "disabled",
+          "invalid",
+          "required",
+          "readonly",
+          "loading",
+          "checked",
+          "unchecked"
+        ],
+        "componentTokens": [
+          "--dz-listbox-bg",
+          "--dz-listbox-fg",
+          "--dz-listbox-border",
+          "--dz-listbox-radius",
+          "--dz-listbox-active-ring",
+          "--dz-listbox-item-active-bg",
+          "--dz-listbox-item-selected-bg",
+          "--dz-listbox-item-selected-fg"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "input",
+          "group",
+          "group-label",
+          "item",
+          "icon",
+          "item-label",
+          "item-indicator",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the focused option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "<character>",
+            "action": "Move focus to the next option whose label starts with that character.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzListbox.vue",
@@ -7751,6 +10472,134 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "list",
+          "trigger",
+          "indicator",
+          "panel",
+          "group",
+          "group-label",
+          "item"
+        ],
+        "states": [
+          "disabled"
+        ],
+        "componentTokens": [
+          "--dz-menu-bar-gap",
+          "--dz-menu-panel-offset",
+          "--dz-menu-panel-padding",
+          "--dz-menu-column-gap",
+          "--dz-menu-column-min-width"
+        ],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "orientation"
+        ],
+        "optionalParts": [
+          "trigger",
+          "indicator",
+          "panel",
+          "group",
+          "group-label",
+          "item"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "indicator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move focus to the next top-level item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menubar",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move focus to the previous top-level item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menubar",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Open the focused item panel and move into it.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menubar"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move to the previous item inside an open panel.",
+            "when": "panel open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menubar"
+          },
+          {
+            "key": "Enter",
+            "action": "Open the focused item panel, or invoke the focused link.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menubar"
+          },
+          {
+            "key": " ",
+            "action": "Open the focused item panel, or invoke the focused link.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menubar"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menubar"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menubar"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the open panel and return focus to its top-level item.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "menubar"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the menubar.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "menubar"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzMegaMenu.vue",
@@ -7907,6 +10756,105 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "content",
+          "loader",
+          "list",
+          "item",
+          "item-label",
+          "empty",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "invalid",
+          "required",
+          "readonly",
+          "loading",
+          "active"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "content",
+          "loader",
+          "list",
+          "item",
+          "item-label",
+          "empty",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "<character>",
+            "action": "Typing the trigger character opens the suggestion list.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move to the next suggestion.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move to the previous suggestion.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Insert the highlighted suggestion.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Tab",
+            "action": "Insert the highlighted suggestion.",
+            "when": "list open",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the suggestion list and keep the typed text.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          }
+        ],
+        "fallthrough": {
+          "target": "input"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzMention.vue",
@@ -8007,6 +10955,58 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "item",
+          "item-label",
+          "separator"
+        ],
+        "states": [
+          "ready",
+          "active",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "item",
+          "item-label",
+          "separator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move to the next item; every item is its own tab stop, and there is no roving index.",
+            "wcag": [
+              "2.1.2"
+            ]
+          },
+          {
+            "key": "Enter",
+            "action": "Activate the focused item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the focused item.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzMenu.vue",
@@ -8258,6 +11258,123 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "clear",
+          "trigger",
+          "icon",
+          "content",
+          "viewport",
+          "item",
+          "item-indicator",
+          "item-label",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "invalid",
+          "required",
+          "open",
+          "closed",
+          "checked",
+          "unchecked"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "clear",
+          "content",
+          "viewport",
+          "item",
+          "item-indicator",
+          "item-label",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Open the list when closed, otherwise move to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Open the list when closed, otherwise move to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Toggle the highlighted option; the list stays open.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the list without changing the selection.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Backspace",
+            "action": "Remove the last selected value when the text field is empty.",
+            "when": "input empty",
+            "wcag": [
+              "2.1.1"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzMultiSelect.vue",
@@ -8313,6 +11430,56 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "icon",
+          "content",
+          "title",
+          "description",
+          "action",
+          "close"
+        ],
+        "states": [
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "tone"
+        ],
+        "optionalParts": [
+          "icon",
+          "description",
+          "action",
+          "close"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Dismiss the notification.",
+            "when": "close",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Dismiss the notification.",
+            "when": "close",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/feedback/index.ts",
         "packages/core/src/components/feedback/DzNotification.vue",
@@ -8398,7 +11565,25 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "ArrowUp",
+            "action": "Increase the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "spinbutton"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Decrease the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "spinbutton"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
@@ -8455,6 +11640,146 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "group",
+          "list",
+          "item",
+          "control",
+          "item-label",
+          "empty"
+        ],
+        "states": [
+          "disabled",
+          "selected",
+          "grabbed"
+        ],
+        "componentTokens": [
+          "--dz-order-list-gap",
+          "--dz-order-list-radius",
+          "--dz-order-list-border",
+          "--dz-order-list-control-gap",
+          "--dz-order-list-item-gap",
+          "--dz-order-list-item-bg",
+          "--dz-order-list-item-hover-bg",
+          "--dz-order-list-item-padding-x",
+          "--dz-order-list-item-padding-y",
+          "--dz-order-list-item-selected-bg",
+          "--dz-order-list-item-selected-fg",
+          "--dz-order-list-item-grab-bg",
+          "--dz-order-list-grab-shadow",
+          "--dz-order-list-handle-color",
+          "--dz-order-list-handle-hover",
+          "--dz-order-list-drop-indicator-color",
+          "--dz-order-list-drop-indicator-size",
+          "--dz-order-list-disabled-opacity"
+        ],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "group",
+          "item",
+          "control",
+          "item-label",
+          "empty"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the focused option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "<character>",
+            "action": "Move focus to the next option whose label starts with that character.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move the selected item one position earlier.",
+            "modifiers": [
+              "Alt"
+            ],
+            "wcag": [
+              "2.1.1",
+              "2.5.7"
+            ]
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move the selected item one position later.",
+            "modifiers": [
+              "Alt"
+            ],
+            "wcag": [
+              "2.1.1",
+              "2.5.7"
+            ]
+          },
+          {
+            "key": "Escape",
+            "action": "Cancel the reorder and restore the original position.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzOrderList.vue",
@@ -8550,7 +11875,37 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "<digit>",
+            "action": "Enter the character and move focus to the next cell.",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Backspace",
+            "action": "Clear the current cell, or move to the previous cell when it is already empty.",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Move focus to the next cell.",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move focus to the previous cell.",
+            "wcag": [
+              "2.1.1"
+            ]
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
@@ -8651,6 +12006,62 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "list",
+          "item",
+          "action",
+          "separator"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "selected"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "item",
+          "action",
+          "separator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "action"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move to the next page control; each control is its own tab stop.",
+            "wcag": [
+              "2.1.2"
+            ]
+          },
+          {
+            "key": "Enter",
+            "action": "Go to the focused page.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Go to the focused page.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzPagination.vue",
@@ -8706,6 +12117,66 @@
       ],
       "kind": "public-component",
       "status": "beta",
+      "anatomy": {
+        "parts": [
+          "root",
+          "header",
+          "trigger",
+          "title",
+          "indicator",
+          "action",
+          "content"
+        ],
+        "states": [],
+        "componentTokens": [
+          "--dz-panel-bg",
+          "--dz-panel-foreground",
+          "--dz-panel-border",
+          "--dz-panel-shadow",
+          "--dz-panel-radius",
+          "--dz-panel-accent",
+          "--dz-panel-gap",
+          "--dz-panel-padding-x",
+          "--dz-panel-padding-y",
+          "--dz-panel-header-padding-y",
+          "--dz-panel-title-size"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "variant",
+          "tone"
+        ],
+        "optionalParts": [
+          "indicator",
+          "action",
+          "content"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Expand or collapse the panel body.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "disclosure"
+          },
+          {
+            "key": " ",
+            "action": "Expand or collapse the panel body.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "disclosure"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/layout/index.ts",
         "packages/core/src/components/layout/DzPanel.vue",
@@ -8795,7 +12266,27 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Show or hide the password.",
+            "when": "toggle",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Show or hide the password.",
+            "when": "toggle",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
@@ -8852,6 +12343,127 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "clear",
+          "trigger",
+          "icon",
+          "content",
+          "viewport",
+          "item",
+          "item-indicator",
+          "item-label",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "invalid",
+          "required",
+          "loading",
+          "open",
+          "closed",
+          "checked",
+          "unchecked"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [],
+        "optionalParts": [
+          "root",
+          "control",
+          "input",
+          "trigger",
+          "clear",
+          "icon",
+          "content",
+          "viewport",
+          "item",
+          "item-indicator",
+          "item-label",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the focused option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "<character>",
+            "action": "Move focus to the next option whose label starts with that character.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          }
+        ],
+        "fallthrough": {
+          "target": "root",
+          "delegatesTo": "DzCombobox"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzPersonaSelector.vue",
@@ -8910,6 +12522,78 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "trigger",
+          "panel",
+          "header",
+          "icon",
+          "body",
+          "title",
+          "description",
+          "action"
+        ],
+        "states": [],
+        "componentTokens": [
+          "--dz-popconfirm-bg",
+          "--dz-popconfirm-fg",
+          "--dz-popconfirm-border",
+          "--dz-popconfirm-shadow",
+          "--dz-popconfirm-radius",
+          "--dz-popconfirm-width",
+          "--dz-popconfirm-padding"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "tone"
+        ],
+        "optionalParts": [
+          "panel",
+          "header",
+          "icon",
+          "body",
+          "title",
+          "description",
+          "action"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Dismiss the confirmation without taking the action.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "alertdialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move between the actions, wrapping inside the confirmation.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "alertdialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move backwards between the actions.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "alertdialog"
+          }
+        ],
+        "fallthrough": {
+          "target": "panel"
+        }
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzPopconfirm.vue",
@@ -8968,6 +12652,56 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "content",
+          "indicator"
+        ],
+        "states": [
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "optionalParts": [
+          "content",
+          "indicator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Close the popover and return focus to the element that opened it.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the next focusable element, wrapping inside the popover.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the previous focusable element, wrapping inside the popover.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzPopover.vue",
@@ -9146,7 +12880,8 @@
         "rtl": {
           "mirrors": "none",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/providers/index.ts",
@@ -9302,6 +13037,45 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "indicator",
+          "label"
+        ],
+        "states": [
+          "idle",
+          "checked",
+          "unchecked",
+          "disabled",
+          "invalid",
+          "active"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "indicator",
+          "label"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": " ",
+            "action": "Select the focused radio.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzRadio.vue",
@@ -9329,6 +13103,78 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "ready",
+          "disabled",
+          "required"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "orientation"
+        ],
+        "optionalParts": [],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move to and select the next radio.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move to and select the previous radio.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move to and select the next radio.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move to and select the previous radio.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused radio.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the group; the group is one tab stop.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "radio-group"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzRadioGroup.vue",
@@ -9410,6 +13256,119 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "indicator",
+          "label",
+          "error"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "required",
+          "invalid"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "tone",
+          "orientation"
+        ],
+        "optionalParts": [
+          "indicator",
+          "label",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "indicator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Increase the focused thumb by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Decrease the focused thumb by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Increase the focused thumb by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Decrease the focused thumb by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "PageUp",
+            "action": "Increase the focused thumb by the large step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "PageDown",
+            "action": "Decrease the focused thumb by the large step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "Home",
+            "action": "Set the focused thumb to its minimum.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "End",
+            "action": "Set the focused thumb to its maximum.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the other thumb; each thumb is its own tab stop.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "slider-multithumb"
+          }
+        ],
+        "fallthrough": {
+          "target": "control"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzRangeSlider.vue",
@@ -9465,6 +13424,74 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "item",
+          "item-indicator",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "required",
+          "readonly",
+          "loading",
+          "invalid"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "item",
+          "item-indicator",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowUp",
+            "action": "Increase the rating by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Decrease the rating by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "Home",
+            "action": "Set the rating to its minimum.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "End",
+            "action": "Set the rating to its maximum.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          }
+        ],
+        "fallthrough": {
+          "target": "control"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzRating.vue",
@@ -9538,7 +13565,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
@@ -9595,6 +13623,94 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "panel",
+          "separator",
+          "indicator"
+        ],
+        "states": [
+          "inactive",
+          "hover",
+          "drag",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "orientation"
+        ],
+        "optionalParts": [
+          "panel",
+          "separator",
+          "indicator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move the separator towards the inline end.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move the separator towards the inline start.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move the separator down when the panes stack vertically.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move the separator up when the panes stack vertically.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          },
+          {
+            "key": "Home",
+            "action": "Move the separator to its minimum position.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          },
+          {
+            "key": "End",
+            "action": "Move the separator to its maximum position.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          },
+          {
+            "key": "Enter",
+            "action": "Collapse the pane, or restore it when already collapsed.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/layout/index.ts",
         "packages/core/src/components/layout/DzResizable.vue",
@@ -9874,6 +13990,23 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "viewport"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "orientation"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": "none"
+      },
       "evidence": [
         "packages/core/src/components/layout/index.ts",
         "packages/core/src/components/layout/DzScrollArea.vue",
@@ -10005,7 +14138,34 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Submit the search.",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Enter",
+            "action": "Clear the field.",
+            "when": "clear",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Clear the field.",
+            "when": "clear",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
@@ -10062,6 +14222,83 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "item"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "on",
+          "off",
+          "active"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "item"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move to and select the next segment.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move to and select the previous segment.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move to and select the next segment.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move to and select the previous segment.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused segment.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "radio-group"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the group; the group is one tab stop.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "radio-group"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzSegmented.vue",
@@ -10169,7 +14406,84 @@
           "icons": [
             "indicator"
           ]
-        }
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Open the list when closed, otherwise move to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Open the list when closed, otherwise move to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the highlighted option and close the list.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the list without changing the value.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the control, closing the list.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": " ",
+            "action": "Select the highlighted option when the list is open, otherwise open it.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "<character>",
+            "action": "Type-ahead: move to the next option whose label starts with that character.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
@@ -10250,6 +14564,65 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "overlay",
+          "content",
+          "title",
+          "description",
+          "close"
+        ],
+        "states": [
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "overlay",
+          "content",
+          "title",
+          "description",
+          "close"
+        ],
+        "rtl": {
+          "mirrors": "none",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Close the sheet and return focus to the element that opened it.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the next focusable element, wrapping inside the sheet.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the previous focusable element, wrapping inside the sheet.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzSheet.vue",
@@ -10468,6 +14841,101 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "overlay",
+          "body",
+          "header",
+          "footer",
+          "group",
+          "group-label",
+          "item",
+          "icon",
+          "item-label",
+          "suffix"
+        ],
+        "states": [
+          "collapsed",
+          "expanded",
+          "active",
+          "inactive"
+        ],
+        "componentTokens": [
+          "--dz-sidebar-width",
+          "--dz-sidebar-collapsed-width",
+          "--dz-sidebar-bg",
+          "--dz-sidebar-foreground",
+          "--dz-sidebar-border",
+          "--dz-sidebar-transition",
+          "--dz-sidebar-header-bg",
+          "--dz-sidebar-header-border",
+          "--dz-sidebar-header-padding",
+          "--dz-sidebar-footer-bg",
+          "--dz-sidebar-footer-border",
+          "--dz-sidebar-footer-padding",
+          "--dz-sidebar-section-padding-y",
+          "--dz-sidebar-section-title-color",
+          "--dz-sidebar-section-title-font-size",
+          "--dz-sidebar-section-title-letter-spacing",
+          "--dz-sidebar-item-radius",
+          "--dz-sidebar-item-padding-x",
+          "--dz-sidebar-item-padding-y",
+          "--dz-sidebar-item-gap",
+          "--dz-sidebar-item-font-size",
+          "--dz-sidebar-item-font-weight",
+          "--dz-sidebar-item-hover-bg",
+          "--dz-sidebar-item-hover-text",
+          "--dz-sidebar-item-active-bg",
+          "--dz-sidebar-item-active-text",
+          "--dz-sidebar-overlay-bg",
+          "--dz-sidebar-overlay-z-index"
+        ],
+        "riskTier": "C",
+        "optionalParts": [
+          "overlay",
+          "header",
+          "footer",
+          "group",
+          "group-label",
+          "item",
+          "icon",
+          "item-label",
+          "suffix"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move to the next item or group toggle; every one is its own tab stop.",
+            "wcag": [
+              "2.1.2"
+            ]
+          },
+          {
+            "key": "Enter",
+            "action": "Activate the focused item, or expand and collapse the focused group.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the focused item, or expand and collapse the focused group.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ],
+        "fallthrough": {
+          "target": "root"
+        }
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzSidebar.vue",
@@ -10763,6 +15231,110 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "indicator",
+          "label",
+          "error"
+        ],
+        "states": [
+          "idle",
+          "disabled",
+          "required",
+          "invalid"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "tone",
+          "orientation"
+        ],
+        "optionalParts": [
+          "label",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "indicator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Increase the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Decrease the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Increase the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Decrease the value by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "PageUp",
+            "action": "Increase the value by the large step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "PageDown",
+            "action": "Decrease the value by the large step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "Home",
+            "action": "Set the value to its minimum.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          },
+          {
+            "key": "End",
+            "action": "Set the value to its maximum.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider"
+          }
+        ],
+        "fallthrough": {
+          "target": "control"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzSlider.vue",
@@ -10880,7 +15452,54 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Open or close the action list.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu-button"
+          },
+          {
+            "key": " ",
+            "action": "Open or close the action list.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu-button"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first action.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last action.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the action list and return focus to the trigger.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "menu-button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
@@ -10968,6 +15587,25 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "loading"
+        ],
+        "componentTokens": [],
+        "riskTier": "A",
+        "recipes": [
+          "size",
+          "tone"
+        ],
+        "rtl": {
+          "mirrors": "none",
+          "keyboard": "none"
+        },
+        "keyboard": "none"
+      },
       "evidence": [
         "packages/core/src/components/feedback/index.ts",
         "packages/core/src/components/feedback/DzSpinner.vue",
@@ -11022,7 +15660,55 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the primary action.",
+            "when": "root",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the primary action.",
+            "when": "root",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Open the menu and focus its first item.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu-button"
+          },
+          {
+            "key": "Enter",
+            "action": "Open the menu and focus its first item.",
+            "when": "trigger",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu-button"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the menu and return focus to the trigger.",
+            "when": "menu open",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "menu-button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
@@ -11178,6 +15864,94 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "panel",
+          "separator",
+          "indicator"
+        ],
+        "states": [
+          "inactive",
+          "hover",
+          "drag",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "orientation"
+        ],
+        "optionalParts": [
+          "panel",
+          "separator",
+          "indicator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move the separator towards the inline end.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move the separator towards the inline start.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move the separator down when the panes stack vertically.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move the separator up when the panes stack vertically.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          },
+          {
+            "key": "Home",
+            "action": "Move the separator to its minimum position.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          },
+          {
+            "key": "End",
+            "action": "Move the separator to its maximum position.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          },
+          {
+            "key": "Enter",
+            "action": "Collapse the pane, or restore it when already collapsed.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "window-splitter"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/layout/index.ts",
         "packages/core/src/components/layout/DzSplitter.vue",
@@ -11374,6 +16148,38 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "header",
+          "title",
+          "icon",
+          "description"
+        ],
+        "states": [
+          "ready"
+        ],
+        "componentTokens": [
+          "--dz-card-radius",
+          "--dz-card-padding",
+          "--dz-card",
+          "--dz-card-foreground",
+          "--dz-card-border-color"
+        ],
+        "riskTier": "A",
+        "recipes": [
+          "variant"
+        ],
+        "optionalParts": [
+          "icon",
+          "description"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": "none"
+      },
       "evidence": [
         "packages/core/src/components/cards/index.ts",
         "packages/core/src/components/cards/DzStatCard.vue",
@@ -11416,6 +16222,32 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "ready"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "orientation"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move to the next navigable step; each step is its own tab stop.",
+            "wcag": [
+              "2.1.2"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzStepper.vue",
@@ -11458,6 +16290,50 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "indicator",
+          "title",
+          "description"
+        ],
+        "states": [
+          "upcoming",
+          "active",
+          "completed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "optionalParts": [
+          "indicator",
+          "title",
+          "description"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Go to this step.",
+            "when": "clickable",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Go to this step.",
+            "when": "clickable",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzStepperItem.vue",
@@ -11540,6 +16416,53 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "indicator",
+          "label"
+        ],
+        "states": [
+          "checked",
+          "unchecked",
+          "disabled",
+          "required"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "label"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "indicator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": " ",
+            "action": "Toggle the switch.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "switch"
+          },
+          {
+            "key": "Enter",
+            "action": "Toggle the switch — the underlying element is a button, so Enter activates it.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "switch"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzSwitch.vue",
@@ -11749,7 +16672,8 @@
         "states": [
           "ready",
           "loading",
-          "selected"
+          "selected",
+          "expanded"
         ],
         "componentTokens": [],
         "riskTier": "C",
@@ -11768,7 +16692,47 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "swap-horizontal"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "Move to the next interactive cell or header control; the table itself is not a tab stop.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "table"
+          },
+          {
+            "key": "Enter",
+            "action": "Cycle the focused column sort.",
+            "when": "header sortable",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "table"
+          },
+          {
+            "key": " ",
+            "action": "Cycle the focused column sort.",
+            "when": "header sortable",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "table"
+          },
+          {
+            "key": "Enter",
+            "action": "Add the focused column to the existing sort rather than replacing it.",
+            "modifiers": [
+              "Shift"
+            ],
+            "when": "header sortable",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "table"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/data/index.ts",
@@ -12056,6 +17020,121 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "list",
+          "trigger",
+          "content",
+          "close"
+        ],
+        "states": [
+          "ready",
+          "active",
+          "inactive",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "variant",
+          "tone",
+          "orientation"
+        ],
+        "optionalParts": [
+          "list",
+          "trigger",
+          "content",
+          "close"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move to the next tab.",
+            "when": "horizontal",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "tabs",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move to the previous tab.",
+            "when": "horizontal",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "tabs",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowDown",
+            "action": "Move to the next tab.",
+            "when": "vertical",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "tabs"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move to the previous tab.",
+            "when": "vertical",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "tabs"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first tab.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "tabs"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last tab.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "tabs"
+          },
+          {
+            "key": "Enter",
+            "action": "Activate the focused tab.",
+            "when": "activationMode manual",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "tabs"
+          },
+          {
+            "key": " ",
+            "action": "Activate the focused tab.",
+            "when": "activationMode manual",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "tabs"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the tab list to the active panel; the list is one tab stop.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "tabs"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/navigation/index.ts",
         "packages/core/src/components/navigation/DzTabs.vue",
@@ -12135,6 +17214,64 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "close"
+        ],
+        "states": [
+          "idle",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "variant",
+          "tone"
+        ],
+        "optionalParts": [
+          "close"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Activate the tag.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Activate the tag.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": "Backspace",
+            "action": "Remove the tag.",
+            "when": "removable",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Delete",
+            "action": "Remove the tag.",
+            "when": "removable",
+            "wcag": [
+              "2.1.1"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzTag.vue",
@@ -12190,6 +17327,58 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "invalid",
+          "required",
+          "readonly",
+          "loading"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Commit the pending token as a tag.",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Backspace",
+            "action": "Remove the last tag when the field is empty.",
+            "when": "input empty",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "<character>",
+            "action": "A configured delimiter character commits the pending token.",
+            "wcag": [
+              "2.1.1"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzTagsInput.vue",
@@ -12276,7 +17465,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
@@ -12347,7 +17537,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
@@ -12425,7 +17616,8 @@
         "rtl": {
           "mirrors": "none",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/providers/DzThemeProvider.vue",
@@ -12456,6 +17648,123 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "trigger",
+          "label",
+          "icon",
+          "clear",
+          "content",
+          "panel",
+          "list",
+          "group",
+          "item",
+          "input",
+          "separator",
+          "footer",
+          "action",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "required",
+          "invalid",
+          "open",
+          "closed",
+          "selected"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "label",
+          "icon",
+          "clear",
+          "content",
+          "panel",
+          "list",
+          "group",
+          "item",
+          "input",
+          "separator",
+          "footer",
+          "action",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Open the time list when closed, otherwise move to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Open the time list when closed, otherwise move to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the highlighted option and close the time list.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the time list without changing the value.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the control, closing the time list.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzTimePicker.vue",
@@ -12608,6 +17917,52 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "indicator",
+          "title",
+          "description",
+          "action",
+          "close"
+        ],
+        "states": [
+          "open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "tone"
+        ],
+        "optionalParts": [
+          "description",
+          "action"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Dismiss the toast.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "alertdialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the toast action and the close control.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "alertdialog"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/feedback/index.ts",
         "packages/core/src/components/feedback/DzToast.vue",
@@ -12781,7 +18136,25 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": [
+          {
+            "key": "Enter",
+            "action": "Toggle the pressed state.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          },
+          {
+            "key": " ",
+            "action": "Toggle the pressed state.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
       },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
@@ -12896,6 +18269,80 @@
       ],
       "kind": "public-component",
       "status": "beta",
+      "anatomy": {
+        "parts": [
+          "root",
+          "group"
+        ],
+        "states": [],
+        "componentTokens": [
+          "--dz-toolbar-bg",
+          "--dz-toolbar-border",
+          "--dz-toolbar-shadow",
+          "--dz-toolbar-radius",
+          "--dz-toolbar-gap",
+          "--dz-toolbar-padding-x",
+          "--dz-toolbar-padding-y",
+          "--dz-toolbar-sticky-z"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "size",
+          "variant",
+          "orientation"
+        ],
+        "optionalParts": [
+          "group"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowRight",
+            "action": "Move focus to the next control in the toolbar.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "toolbar",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move focus to the previous control in the toolbar.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "toolbar",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first control.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "toolbar"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last control.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "toolbar"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the toolbar; the toolbar is one tab stop.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "toolbar"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/layout/index.ts",
         "packages/core/src/components/layout/DzToolbar.vue",
@@ -12940,6 +18387,45 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "content",
+          "indicator"
+        ],
+        "states": [
+          "instant-open",
+          "delayed-open",
+          "closed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "optionalParts": [
+          "content",
+          "indicator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Dismiss the tooltip without moving focus.",
+            "wcag": [
+              "1.4.13"
+            ],
+            "apg": "tooltip"
+          },
+          {
+            "key": "Tab",
+            "action": "Move focus to the trigger, which shows the tooltip.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "tooltip"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzTooltip.vue",
@@ -13066,6 +18552,84 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "overlay",
+          "panel",
+          "header",
+          "title",
+          "description",
+          "footer",
+          "list",
+          "item-indicator",
+          "action"
+        ],
+        "states": [],
+        "componentTokens": [
+          "--dz-tour-mask",
+          "--dz-tour-radius"
+        ],
+        "riskTier": "C",
+        "optionalParts": [
+          "overlay",
+          "panel",
+          "header",
+          "title",
+          "description",
+          "footer",
+          "list",
+          "item-indicator",
+          "action"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        },
+        "keyboard": [
+          {
+            "key": "Escape",
+            "action": "Close the tour and return focus to the element that opened it.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the next focusable element, wrapping inside the tour.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "Tab",
+            "action": "Move to the previous focusable element, wrapping inside the tour.",
+            "modifiers": [
+              "Shift"
+            ],
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "dialog"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Advance to the next step.",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Return to the previous step.",
+            "wcag": [
+              "2.1.1"
+            ]
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/overlays/index.ts",
         "packages/core/src/components/overlays/DzTour.vue",
@@ -13152,6 +18716,130 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "list",
+          "header",
+          "hint",
+          "input",
+          "body",
+          "item",
+          "item-indicator",
+          "item-label",
+          "empty",
+          "group",
+          "action",
+          "icon",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "states": [
+          "disabled",
+          "invalid",
+          "required",
+          "checked"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "list",
+          "header",
+          "hint",
+          "input",
+          "body",
+          "item",
+          "item-indicator",
+          "item-label",
+          "empty",
+          "action",
+          "icon",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the focused option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "<character>",
+            "action": "Move focus to the next option whose label starts with that character.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          },
+          {
+            "key": "Enter",
+            "action": "Move the selected items to the other list.",
+            "when": "transfer action",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "button"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzTransfer.vue",
@@ -13207,6 +18895,97 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "empty"
+        ],
+        "states": [
+          "ready",
+          "loading",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "empty"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal"
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next visible node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous visible node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Expand the focused node, or move to its first child when already expanded.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Collapse the focused node, or move to its parent when already collapsed.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first visible node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last visible node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "Enter",
+            "action": "Activate the focused node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzTree.vue",
@@ -13249,6 +19028,105 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "item",
+          "indicator",
+          "control",
+          "item-label",
+          "group"
+        ],
+        "states": [
+          "open",
+          "closed",
+          "checked",
+          "unchecked",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "optionalParts": [
+          "control",
+          "item-label",
+          "group"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "swap-horizontal",
+          "icons": [
+            "indicator"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Move focus to the next visible node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous visible node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Expand the focused node, or move to its first child when already expanded.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Collapse the focused node, or move to its parent when already collapsed.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "Home",
+            "action": "Move focus to the first visible node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "End",
+            "action": "Move focus to the last visible node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "Enter",
+            "action": "Activate the focused node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzTreeItem.vue",
@@ -13304,6 +19182,143 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "trigger",
+          "label",
+          "icon",
+          "content",
+          "indicator",
+          "input",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "states": [
+          "idle",
+          "open",
+          "closed",
+          "disabled",
+          "invalid",
+          "readonly",
+          "required",
+          "loading",
+          "checked",
+          "unchecked",
+          "indeterminate"
+        ],
+        "componentTokens": [],
+        "riskTier": "C",
+        "recipes": [
+          "size",
+          "variant"
+        ],
+        "optionalParts": [
+          "content",
+          "indicator",
+          "input",
+          "empty",
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none",
+          "icons": [
+            "icon"
+          ]
+        },
+        "keyboard": [
+          {
+            "key": "ArrowDown",
+            "action": "Open the list when closed, otherwise move to the next option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Open the list when closed, otherwise move to the previous option.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Home",
+            "action": "Move to the first option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "End",
+            "action": "Move to the last option.",
+            "when": "list open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Enter",
+            "action": "Select the highlighted option and close the list.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Escape",
+            "action": "Close the list without changing the value.",
+            "wcag": [
+              "2.1.1",
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "Tab",
+            "action": "Move out of the control, closing the list.",
+            "wcag": [
+              "2.1.2"
+            ],
+            "apg": "combobox"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Expand the focused node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Collapse the focused node, or move to its parent.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "treeview"
+          },
+          {
+            "key": " ",
+            "action": "Select the focused node.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "listbox"
+          }
+        ]
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzTreeSelect.vue",
@@ -13385,7 +19400,8 @@
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
-        }
+        },
+        "keyboard": "none"
       },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
@@ -18649,7 +24665,7 @@
       "subpath": ".",
       "kind": "composable",
       "evidence": [
-        "packages/core/src/composables/provider/useDzEnvironment.ts",
+        "packages/core/src/composables/provider/useDzMotion.ts",
         "packages/core/manifests/public-api.manifest.json#exports.composables"
       ]
     },
@@ -18670,6 +24686,16 @@
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzEnvironment.ts",
+        "packages/core/manifests/public-api.manifest.json#exports.composables"
+      ]
+    },
+    {
+      "symbol": "useDzSanitizer",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "composable",
+      "evidence": [
+        "packages/core/src/composables/provider/useDzSanitizer.ts",
         "packages/core/manifests/public-api.manifest.json#exports.composables"
       ]
     },

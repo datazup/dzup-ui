@@ -18,6 +18,14 @@ Step-by-step product walkthrough that spotlights target elements
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/overlays`
 - **Risk tier:** C · **Status:** experimental
 - **v-model:** `v-model:current` (`number | undefined`), `v-model:open` (`boolean | undefined`)
+- **Anatomy parts (ADR-19):** `action`, `description`, `footer`, `header`, `item-indicator`, `list`, `overlay`, `panel`, `title`
+
+## Intent and selection guidance
+
+**Not declared.** `DzTour` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -39,7 +47,7 @@ never as asserted.
 :::
 
 
-## Props (11, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (12, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -47,13 +55,14 @@ never as asserted.
 | `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
-| `current` | `number \| undefined` | no | `0` | — |
+| `current` | `number \| undefined` | no | `0` | Zero-based index of the step currently shown; defaults to the first step. |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `mask` | `boolean \| undefined` | no | `true` | Dim everything except the active target with a spotlight mask. |
-| `open` | `boolean \| undefined` | no | `false` | — |
+| `open` | `boolean \| undefined` | no | `false` | Whether the tour is running; `false` keeps every step hidden. |
 | `portalTo` | `string \| HTMLElement \| undefined` | no | — | Portal target for the teleported layer. Added by TASK-OSS-P4-04. This component used to teleport to a hard-coded `body` with no way to redirect it — which is precisely the case an application embedding the library in a shadow root or a micro-frontend shell cannot work around. Falls back to the `DzProvider` target, then to `document.body`. |
 | `scrollIntoView` | `boolean \| undefined` | no | `true` | Scroll an off-screen target into view when its step activates. |
 | `steps` | `DzTourStep[]` | yes | — | The ordered steps that make up the tour. |
+| `ui` | `Partial<Record<"action" \| "title" \| "list" \| "footer" \| "overlay" \| "description" \| "header" \| "item-indicator" \| "panel", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTour.anatomy.ts` (ADR-19 §5). `class` keeps its existing target (the step panel); `ui['item-indicator']` lands on every step dot. |
 
 ## Events (5)
 
@@ -62,8 +71,8 @@ never as asserted.
 | `change` | `[index: number]` | The active step changed; payload is the new zero-based step index. |
 | `close` | `[]` | The tour was dismissed via Skip, the Escape key, or programmatically. |
 | `finish` | `[]` | The tour completed via the Finish control on the last step. |
-| `update:current` | `[value: number]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
-| `update:open` | `[value: boolean]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:current` | `[value: number]` | Emitted when the `v-model:current` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:current` consumes it for you. |
+| `update:open` | `[value: boolean]` | Emitted when the `v-model:open` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:open` consumes it for you. |
 
 ## Slots (3)
 
@@ -107,6 +116,128 @@ No editable playground is published for this component.
 
 Every story in `packages/core/stories/overlays/DzTour.stories.ts` either has a computed template or binds Storybook's `args`, neither of which can be mounted outside Storybook. A playground here would have to be written by hand, and a hand-written example is not evidence of anything.
 
+## Variants and controlled state
+
+**Controlled and uncontrolled — `current`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzTour />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzTour v-model:current="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzTour :current="value" @update:current="value = $event" />
+```
+
+**Controlled and uncontrolled — `open`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzTour />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzTour v-model:open="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzTour :open="value" @update:open="value = $event" />
+```
+
+**Where each variant is shown.** 8 stories in
+`packages/core/stories/overlays/DzTour.stories.ts`: `BasicThreeStep`, `NoMask`, `CustomFooter`, `ControlledStep`, `Dark Mode Preview`, `Interactive`, `Accessibility: Modal Dialog & Focus Trap`, `Real World: First-Run Onboarding`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `action` | `[data-part="action"]` | no — renders zero or more than once |
+| `description` | `[data-part="description"]` | no — renders zero or more than once |
+| `footer` | `[data-part="footer"]` | no — renders zero or more than once |
+| `header` | `[data-part="header"]` | no — renders zero or more than once |
+| `item-indicator` | `[data-part="item-indicator"]` | no — renders zero or more than once |
+| `list` | `[data-part="list"]` | no — renders zero or more than once |
+| `overlay` | `[data-part="overlay"]` | no — renders zero or more than once |
+| `panel` | `[data-part="panel"]` | no — renders zero or more than once |
+| `title` | `[data-part="title"]` | no — renders zero or more than once |
+
+```vue
+<DzTour :ui="{ 'action': 'ring-2', 'description': 'ring-2', 'footer': 'ring-2', 'header': 'ring-2', 'item-indicator': 'ring-2', 'list': 'ring-2', 'overlay': 'ring-2', 'panel': 'ring-2', 'title': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+This component declares no states: nothing about it is advertised to CSS or to a test.
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-tour-mask` |
+| `--dz-tour-radius` |
+
+Declared in `packages/core/src/components/overlays/DzTour.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMotion` | the motion preference, including `prefers-reduced-motion` |
+| `useDzPortalTarget` | where teleported content is mounted |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/overlays/DzTour.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+This component declares no states, so there is no state matrix to show. A presentational
+component that renders the same way every time is the normal case for this.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `4c9fb7a`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -114,8 +245,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 11 | 9 | 4 declare a default, of which 5 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 5 | 3 | 3 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
+| Props | 12 | 12 | 4 declare a default, of which 5 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 5 | 5 | 3 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 3 | 3 | 3 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -123,8 +254,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -133,7 +264,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/)
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `4c9fb7a1`
 
 **Why this pattern:** A sequence of dialogs that spotlight elements outside themselves: focus, the overlay cut-out and the target’s own scroll position all have to agree, step after step.
@@ -170,16 +301,23 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**5 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `Escape` | Close the tour and return focus to the element that opened it. | `2.1.1`, `2.1.2` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) |
+| `Tab` | Move to the next focusable element, wrapping inside the tour. | `2.1.2` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) |
+| `Shift` + `Tab` | Move to the previous focusable element, wrapping inside the tour. | `2.1.2` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) |
+| `ArrowRight` | Advance to the next step. | `2.1.1` | — *(component-specific)* |
+| `ArrowLeft` | Return to the previous step. | `2.1.1` | — *(component-specific)* |
+
+Declared in `packages/core/src/components/overlays/DzTour.anatomy.ts`.
 
 - **Pattern:** [APG — `dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/overlays/DzTour.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 5 binding(s); the unit spec asserts no key event for `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -213,12 +351,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/overlays/DzTour.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/overlays/DzTour.spec.ts` — The component declares 5 binding(s); the unit spec asserts no key event for `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/overlays/DzTour.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
@@ -226,7 +364,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTour.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**7 unrun:** `axe`, `ssr-sample`, `controlled-uncontrolled`, `rtl-contract`, `portal-hydration`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**8 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `portal-hydration`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

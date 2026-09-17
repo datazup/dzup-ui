@@ -10,6 +10,7 @@ import { DropdownMenuContent, DropdownMenuPortal } from 'reka-ui'
  */
 import { computed, useAttrs } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { dropdownMenuVariants } from './DzDropdownMenu.variants.ts'
 
@@ -49,6 +50,12 @@ function handleEscapeKeyDown(event: KeyboardEvent): void {
 function handlePointerDownOutside(event: Event): void {
   emit('pointerDownOutside', event)
 }
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
@@ -62,7 +69,9 @@ function handlePointerDownOutside(event: Event): void {
       :side="side"
       :align="align"
       :side-offset="sideOffset"
+      data-part="content"
       :class="classes"
+      :data-dz-motion="dzMotionAttr"
       :aria-label="ariaLabel"
       v-bind="{ ...$attrs, class: undefined }"
       @escape-key-down="handleEscapeKeyDown"

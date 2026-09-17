@@ -19,6 +19,14 @@ free-text token / chips input.
 - **Risk tier:** B · **Status:** experimental
 - **Taxonomy:** variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **v-model:** `v-model` (`string[] | undefined`), `v-model:value` (`string[] | undefined`)
+- **Anatomy parts (ADR-19):** `control`, `error`, `input`, `root`
+
+## Intent and selection guidance
+
+**Not declared.** `DzTagsInput` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (25, of which 15 inherited from `@dzup-ui/contracts`)
+## Props (26, of which 15 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -59,13 +67,14 @@ never as asserted.
 | `invalid` | `boolean \| undefined` | no | `false` | Whether the field value is invalid |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows loading indicator |
 | `max` | `number \| undefined` | no | `undefined` | Maximum number of tokens allowed (no limit when omitted) |
-| `modelValue` | `string[] \| undefined` | no | `undefined` | — |
+| `modelValue` | `string[] \| undefined` | no | `undefined` | The committed tag tokens, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). |
 | `name` | `string \| undefined` | no | `undefined` | Component name for form integration |
 | `placeholder` | `string \| undefined` | no | `undefined` | Placeholder shown in the text field (hidden once tokens exist, optional) |
 | `readonly` | `boolean \| undefined` | no | `false` | Read-only state -- visible but not editable |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
+| `ui` | `Partial<Record<"root" \| "error" \| "control" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTagsInput.anatomy.ts` (ADR-19 §5). The committed tokens are `DzChip`s and therefore their own anatomy boundary; restyle them through `chipVariant` / `chipTone` or `DzChip`'s own parts. |
 | `validate` | `((token: string) => boolean) \| undefined` | no | `undefined` | Per-token validation predicate. Return `false` to reject the token, triggering a brief `danger` flash on the field. Runs after the dedupe and max checks. |
 | `value` | `string[] \| undefined` | no | `[]` | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
@@ -74,13 +83,13 @@ never as asserted.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `add` | `[token: string]` | — |
-| `blur` | `[event: FocusEvent]` | — |
-| `focus` | `[event: FocusEvent]` | — |
-| `invalid` | `[token: string, reason: DzTagsInputRejectReason]` | — |
-| `remove` | `[token: string, index: number]` | — |
-| `update:modelValue` | `[value: string[] \| undefined]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
-| `update:value` | `[value: string[]]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `add` | `[token: string]` | Emitted after a token is committed, with the token text. |
+| `blur` | `[event: FocusEvent]` | Emitted when the text field loses focus, after any `addOnBlur` commit. |
+| `focus` | `[event: FocusEvent]` | Emitted when the text field takes focus. |
+| `invalid` | `[token: string, reason: DzTagsInputRejectReason]` | Emitted when a token is rejected instead of committed, with the text and why. |
+| `remove` | `[token: string, index: number]` | Emitted after a token is detached, with the token text and the index it held. |
+| `update:modelValue` | `[value: string[] \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
+| `update:value` | `[value: string[]]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
 
 ## Slots (1)
 
@@ -100,6 +109,138 @@ Editable, running the **Email Validation** story from `packages/core/stories/for
 
 <DzPlayground component="DzTagsInput" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzTagsInput />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzTagsInput v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzTagsInput :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Controlled and uncontrolled — `value`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzTagsInput />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzTagsInput v-model:value="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzTagsInput :value="value" @update:value="value = $event" />
+```
+
+**Where each variant is shown.** 9 stories in
+`packages/core/stories/forms/DzTagsInput.stories.ts`: `Default`, `Email Validation`, `Max Tags`, `No Duplicates`, `In Form Field`, `Size Gallery`, `Invalid State`, `Disabled`, `Dark Mode Preview`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `control` | `[data-part="control"]` | yes |
+| `error` | `[data-part="error"]` | no — renders zero or more than once |
+| `input` | `[data-part="input"]` | yes |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzTagsInput :ui="{ 'control': 'ring-2', 'error': 'ring-2', 'input': 'ring-2', 'root': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `invalid` | `[data-state="invalid"]` |
+| `loading` | `[data-state="loading"]` |
+| `readonly` | `[data-state="readonly"]` |
+| `required` | `[data-state="required"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/forms/DzTagsInput.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzTagsInput.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzTagsInput` advertises 5 states:
+`disabled`, `invalid`, `loading`, `readonly`, `required`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzTagsInput.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e986952`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -107,8 +248,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 25 | 24 | 13 declare a default, of which 12 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 7 | 0 | 0 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
+| Props | 26 | 26 | 13 declare a default, of which 12 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 7 | 7 | 5 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 1 | 1 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -116,8 +257,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -126,7 +267,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** `custom` — no WAI-ARIA Authoring Practices pattern describes this component.
 - **Traits:** `dataset`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `e986952e`
 
 **Why this pattern:** A text field whose committed values become removable tokens in the same control. APG has no pattern; the keyboard contract is the one this repository documents.
@@ -162,10 +303,17 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**3 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `Enter` | — | Commit the pending token as a tag. | `2.1.1` | — *(component-specific)* |
+| `Backspace` | `input empty` | Remove the last tag when the field is empty. | `2.1.1` | — *(component-specific)* |
+| any character key | — | A configured delimiter character commits the pending token. | `2.1.1` | — *(component-specific)* |
+
+Declared in `packages/core/src/components/forms/DzTagsInput.anatomy.ts`.
 
 - **Pattern:** `custom` — **no APG pattern applies**, so there is no external
   keyboard contract to link. The recorded reason is quoted above.
@@ -205,16 +353,16 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzTagsInput.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzTagsInput.spec.ts` |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzTagsInput.spec.ts` — All 3 declared binding(s) are exercised by the unit spec. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzTagsInput.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzTagsInput.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzTagsInput.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzTagsInput.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTagsInput.md` — 6 AT/browser pairs, none executed. |
 
-**5 unrun:** `axe`, `controlled-uncontrolled`, `rtl-contract`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `controlled-uncontrolled`, `browser-matrix`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

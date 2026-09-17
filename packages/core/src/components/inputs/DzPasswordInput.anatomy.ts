@@ -30,6 +30,15 @@ export const anatomy = {
 
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). A native text field plus a reveal
+   * control, which is a button.
+   */
+  keyboard: [
+    { key: 'Enter', when: 'toggle', action: 'Show or hide the password.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', when: 'toggle', action: 'Show or hide the password.', wcag: ['2.1.1'], apg: 'button' },
+  ],
+
   /** Tier B — owns focus and a value, and gates what is on screen. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

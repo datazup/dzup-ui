@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DzAccordionTriggerSlots } from './DzAccordion.types.ts'
+import type { DzAccordionTriggerProps, DzAccordionTriggerSlots } from './DzAccordion.types.ts'
 import { AccordionHeader, AccordionTrigger } from 'reka-ui'
 /**
  * DzAccordionTrigger — Accordion trigger wrapping Reka UI
@@ -15,6 +15,13 @@ import { accordionVariants } from './DzAccordion.variants.ts'
 defineOptions({
   inheritAttrs: false,
 })
+
+/**
+ * Declared for `ui` (ADR-19 §5). `class` continues to arrive through
+ * `useAttrs` — `inheritAttrs: false` plus the explicit `v-bind` below — so
+ * naming it here would take it out of `$attrs` and break that path.
+ */
+const props = defineProps<Omit<DzAccordionTriggerProps, 'class'>>()
 
 defineSlots<DzAccordionTriggerSlots>()
 
@@ -36,6 +43,7 @@ const classes = computed(() =>
 <template>
   <AccordionHeader class="flex">
     <AccordionTrigger
+      data-part="trigger"
       :class="classes"
       v-bind="{ ...$attrs, class: undefined }"
     >
@@ -48,7 +56,8 @@ const classes = computed(() =>
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        :class="styles.chevron()"
+        data-part="indicator"
+        :class="cn(styles.chevron(), props.ui?.indicator)"
         aria-hidden="true"
       >
         <polyline points="6 9 12 15 18 9" />

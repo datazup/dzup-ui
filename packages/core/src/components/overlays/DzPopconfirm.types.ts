@@ -15,6 +15,7 @@
 import type { BaseAccessibilityProps, CanonicalTone } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 import type { FloatingPlacement } from '../../composables/useFloating/index.ts'
+import type { DzPopconfirmUi } from './DzPopconfirm.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Positioning
@@ -63,6 +64,12 @@ export interface DzPopconfirmProps extends BaseAccessibilityProps {
    * the work settles.
    */
   loading?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzPopconfirm.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target (the teleported panel);
+   * `ui` addresses the trigger wrapper and everything inside the panel.
+   */
+  ui?: DzPopconfirmUi
 }
 
 // ---------------------------------------------------------------------------

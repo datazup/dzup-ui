@@ -12,6 +12,7 @@ import type {
   CanonicalTone,
 } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
+import type { DzNotificationUi } from './DzNotification.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -31,6 +32,13 @@ export interface DzNotificationProps extends BaseAccessibilityProps {
   icon?: Component
   /** Auto-dismiss duration in milliseconds (0 = persistent) */
   duration?: number
+  /**
+   * Per-part class overrides, keyed by the names in
+   * `DzNotification.anatomy.ts` (ADR-19 §5). `class` keeps its existing target
+   * (the surface); `ui` addresses the other parts by name, and a typo is a
+   * type error.
+   */
+  ui?: DzNotificationUi
 }
 
 // ---------------------------------------------------------------------------

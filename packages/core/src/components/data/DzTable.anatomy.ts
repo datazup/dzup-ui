@@ -42,11 +42,19 @@ export const anatomy = {
   optionalParts: ['title', 'header', 'body', 'row', 'cell', 'footer'],
 
   /**
-   * `ready`/`loading` on the root, `selected` on a row. `data-virtual` is a
-   * rendering MODE, not a state, and is not declared: it says how the table
-   * draws itself, not what condition it is in.
+   * `ready`/`loading` on the root, `selected` and `expanded` on a row.
+   * `data-virtual` is a rendering MODE, not a state, and is not declared: it
+   * says how the table draws itself, not what condition it is in.
+   *
+   * `expanded` was added on 2026-09-04 by TASK-R5-O2, taking owner decision
+   * **D11** option (a). `DzTableRow.vue:99` has emitted it on the expansion row
+   * since before the state gate existed; TASK-R5-O1 could only initialise
+   * `maxUndeclaredStates` at 1 because declaring it makes the ownership
+   * manifest stale and that packet was not free to regenerate it. This one is,
+   * so the declaration and the regeneration land together and the ceiling goes
+   * to 0.
    */
-  states: ['ready', 'loading', 'selected'],
+  states: ['ready', 'loading', 'selected', 'expanded'],
 
   /**
    * Empty for the same reason as DzSelect: `DzTable.tokens.ts` maps to global
@@ -73,6 +81,42 @@ export const anatomy = {
    * the inline axis, so ArrowRight advances in LTR and retreats in RTL.
    */
   rtl: { mirrors: 'layout', keyboard: 'swap-horizontal' },
+
+  /**
+   * Keyboard contract (TASK-R5-O5). A static table takes no keyboard of
+   * its own; what it owns is the sort control on a sortable header,
+   * implemented by `useDataGridHeader`.
+   */
+  keyboard: [
+    {
+      key: 'Tab',
+      action: 'Move to the next interactive cell or header control; the table itself is not a tab stop.',
+      wcag: ['2.1.2'],
+      apg: 'table',
+    },
+    {
+      key: 'Enter',
+      when: 'header sortable',
+      action: 'Cycle the focused column sort.',
+      wcag: ['2.1.1'],
+      apg: 'table',
+    },
+    {
+      key: ' ',
+      when: 'header sortable',
+      action: 'Cycle the focused column sort.',
+      wcag: ['2.1.1'],
+      apg: 'table',
+    },
+    {
+      key: 'Enter',
+      modifiers: ['Shift'],
+      when: 'header sortable',
+      action: 'Add the focused column to the existing sort rather than replacing it.',
+      wcag: ['2.1.1'],
+      apg: 'table',
+    },
+  ],
 
   /**
    * Tier C — composite. Several primitives share one selection and sort state,

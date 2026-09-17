@@ -26,6 +26,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { parseAnatomySource } from '../ownership/anatomy-source.ts'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 import { compareSymbols } from '../ownership/ownership-manifest.types.ts'
 import {
@@ -42,6 +43,73 @@ export const AT_MATRIX_INDEX = resolve(AT_MATRIX_DIR, 'index.json')
 
 /** Everything below this line is a human's; the generator never rewrites it. */
 export const RESULTS_MARKER = '<!-- results: append-only. The generator never rewrites below here. -->'
+
+/**
+ * The keys a tester is expected to drive, cited from the component's own
+ * declared keyboard contract (TASK-R5-O5).
+ *
+ * The `navigate` task says *"move through the collection with the pattern's own
+ * keys"*, which asks the tester to know the APG pattern from memory and to
+ * guess where this component departs from it. It departs often — `DzMenu` is
+ * assigned APG `menu` and implements no roving index at all — and a tester
+ * driving the pattern instead of the component reports a failure against a
+ * behaviour nobody promised.
+ *
+ * So the scaffold cites the **contract**, which is the same declaration the
+ * documentation page renders and the capability matrix measures the unit spec
+ * against. One source, three readers; a tester who finds the table wrong has
+ * found a defect in the component or in the contract, and either is worth
+ * having.
+ */
+export function renderKeyboardCitation(row: QualityMatrixRow): string {
+  const anatomyPath = row.source.replace(/\.vue$/, '.anatomy.ts')
+  const abs = resolve(ROOT, anatomyPath)
+  const contract = existsSync(abs)
+    ? parseAnatomySource(readFileSync(abs, 'utf8'), anatomyPath).anatomy?.keyboard
+    : undefined
+
+  if (contract === undefined) {
+    return `## Declared keyboard contract
+
+**None declared.** \`${row.component}\` has no machine-readable keyboard contract, so the keys below
+are whatever the APG \`${row.pattern}\` pattern names and whatever the component happens to do. Drive
+the pattern, and record any difference you find as a note — that difference is the contract nobody
+has written down yet.
+
+`
+  }
+
+  if (contract === 'none') {
+    return `## Declared keyboard contract
+
+\`${row.component}\` declares \`keyboard: 'none'\` in \`${anatomyPath}\` — an explicit claim that it
+has no keyboard behaviour of its own. Any key that appears to do something here is either the
+platform's or its container's, and is worth a note.
+
+`
+  }
+
+  const rows = contract
+    .map((b) => {
+      const key = b.key === ' ' ? '`Space`' : b.key.startsWith('<') ? `any ${b.key.slice(1, -1)} key` : `\`${b.key}\``
+      const chord = [...(b.modifiers ?? []).map(m => `\`${m}\``), key].join(' + ')
+      return `| ${chord} | ${b.when ?? '—'} | ${b.action} |`
+    })
+    .join('\n')
+
+  return `## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+\`${anatomyPath}\` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+${rows}
+
+`
+}
 
 /** The generated header for one component. */
 export function renderHeader(row: QualityMatrixRow): string {
@@ -75,6 +143,7 @@ known one.
 |---|---|---|
 ${taskRows}
 
+${renderKeyboardCitation(row)}
 ## Pairs
 
 | id | Pairing | What it exposes |

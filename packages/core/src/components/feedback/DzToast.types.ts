@@ -9,6 +9,7 @@
 
 import type { BaseAccessibilityProps, CanonicalTone } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzToastUi } from './DzToast.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Toast item (for imperative API)
@@ -77,6 +78,12 @@ export interface DzToastProps extends BaseAccessibilityProps {
   defaultOpen?: boolean
   /** Controlled open state for static or externally managed toasts */
   open?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzToast.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target (the toast surface); `ui`
+   * addresses the other parts by name, and a typo is a type error.
+   */
+  ui?: DzToastUi
 }
 
 // ---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "sourceCommit": "99b963a03e1c0a9cd8077c9f1d0405a645174e4e",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
     "packages/contracts/src/quality-tiers.ts",
@@ -364,7 +364,7 @@
         "DzAccordionItem",
         "DzAccordionTrigger"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzAffix",
@@ -516,7 +516,7 @@
       },
       "source": "packages/core/src/components/navigation/DzAnchor.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzAnimatedNumber",
@@ -830,7 +830,7 @@
       },
       "source": "packages/core/src/components/navigation/DzBackTop.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzBadge",
@@ -935,7 +935,7 @@
       },
       "source": "packages/core/src/components/feedback/DzBlockUI.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzBlockquote",
@@ -1049,7 +1049,7 @@
         "DzBreadcrumbItem",
         "DzBreadcrumbSeparator"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzButton",
@@ -1226,7 +1226,7 @@
       },
       "source": "packages/core/src/components/data/DzCalendar.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCaption",
@@ -1330,7 +1330,7 @@
         "DzCardFooter",
         "DzCardHeader"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCarousel",
@@ -1402,7 +1402,7 @@
         "DzCarouselPrevious",
         "DzCarouselSlide"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCascader",
@@ -1481,7 +1481,7 @@
       },
       "source": "packages/core/src/components/forms/DzCascader.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCheckbox",
@@ -1543,7 +1543,7 @@
       },
       "source": "packages/core/src/components/forms/DzCheckbox.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCheckboxGroup",
@@ -1606,7 +1606,7 @@
       },
       "source": "packages/core/src/components/forms/DzCheckboxGroup.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzChip",
@@ -1667,7 +1667,7 @@
       },
       "source": "packages/core/src/components/data/DzChip.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCode",
@@ -1805,7 +1805,7 @@
       },
       "source": "packages/core/src/components/layout/DzCollapse.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzColorModeToggle",
@@ -1867,7 +1867,7 @@
       },
       "source": "packages/core/src/components/navigation/DzColorModeToggle.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzColorPicker",
@@ -1940,7 +1940,7 @@
       },
       "source": "packages/core/src/components/forms/DzColorPicker.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCombobox",
@@ -2019,7 +2019,7 @@
       },
       "source": "packages/core/src/components/forms/DzCombobox.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCommandPalette",
@@ -2096,7 +2096,7 @@
       },
       "source": "packages/core/src/components/overlays/DzCommandPalette.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzConfirmDialog",
@@ -2161,7 +2161,7 @@
       },
       "source": "packages/core/src/components/overlays/DzConfirmDialog.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzContainer",
@@ -2270,7 +2270,7 @@
         "DzContextMenuSeparator",
         "DzContextMenuTrigger"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCopyButton",
@@ -2454,7 +2454,7 @@
         "DzDataGridHeader",
         "DzDataGridPagination"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzDataView",
@@ -2527,7 +2527,7 @@
       },
       "source": "packages/core/src/components/data/DzDataView.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzDatePicker",
@@ -2599,7 +2599,7 @@
       },
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzDateRangePicker",
@@ -2671,7 +2671,7 @@
       },
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzDeferredContent",
@@ -2936,7 +2936,7 @@
         "DzDropdownMenuSeparator",
         "DzDropdownMenuTrigger"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzEmoji",
@@ -3187,7 +3187,7 @@
       },
       "source": "packages/core/src/components/forms/DzFieldArray.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzFileUpload",
@@ -3661,7 +3661,7 @@
       },
       "source": "packages/core/src/components/cards/DzImageCard.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzImageComparison",
@@ -3735,7 +3735,7 @@
       },
       "source": "packages/core/src/components/media/DzImageComparison.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzInfiniteScroll",
@@ -3802,7 +3802,7 @@
       },
       "source": "packages/core/src/components/data/DzInfiniteScroll.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzInplace",
@@ -3865,7 +3865,7 @@
       },
       "source": "packages/core/src/components/forms/DzInplace.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzInput",
@@ -4139,7 +4139,7 @@
       },
       "source": "packages/core/src/components/forms/DzKnob.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzLightbox",
@@ -4211,7 +4211,7 @@
       },
       "source": "packages/core/src/components/media/DzLightbox.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzList",
@@ -4316,7 +4316,7 @@
       },
       "source": "packages/core/src/components/data/DzListItem.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzListbox",
@@ -4384,7 +4384,7 @@
       },
       "source": "packages/core/src/components/forms/DzListbox.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzMasonry",
@@ -4504,7 +4504,7 @@
       },
       "source": "packages/core/src/components/navigation/DzMegaMenu.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzMention",
@@ -4579,7 +4579,7 @@
       },
       "source": "packages/core/src/components/forms/DzMention.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzMenu",
@@ -4655,7 +4655,7 @@
         "DzMenuItem",
         "DzMenuSeparator"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzMeterGroup",
@@ -4771,7 +4771,7 @@
       },
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzNotification",
@@ -4834,7 +4834,7 @@
       },
       "source": "packages/core/src/components/feedback/DzNotification.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzNumberInput",
@@ -4976,7 +4976,7 @@
       },
       "source": "packages/core/src/components/data/DzOrderList.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzOtpInput",
@@ -5143,7 +5143,7 @@
       },
       "source": "packages/core/src/components/navigation/DzPagination.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzPanel",
@@ -5204,7 +5204,7 @@
       },
       "source": "packages/core/src/components/layout/DzPanel.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzPasswordInput",
@@ -5354,7 +5354,7 @@
       },
       "source": "packages/core/src/components/forms/DzPersonaSelector.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzPopconfirm",
@@ -5419,7 +5419,7 @@
       },
       "source": "packages/core/src/components/overlays/DzPopconfirm.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzPopover",
@@ -5487,7 +5487,7 @@
         "DzPopoverContent",
         "DzPopoverTrigger"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzProgress",
@@ -5698,7 +5698,7 @@
       },
       "source": "packages/core/src/components/forms/DzRadio.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzRadioGroup",
@@ -5761,7 +5761,7 @@
       },
       "source": "packages/core/src/components/forms/DzRadioGroup.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzRangeSlider",
@@ -5829,7 +5829,7 @@
       },
       "source": "packages/core/src/components/forms/DzRangeSlider.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzRating",
@@ -5892,7 +5892,7 @@
       },
       "source": "packages/core/src/components/forms/DzRating.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzRelativeTime",
@@ -6006,7 +6006,7 @@
         "DzResizableHandle",
         "DzResizablePanel"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzResult",
@@ -6145,7 +6145,7 @@
       },
       "source": "packages/core/src/components/layout/DzScrollArea.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzScrollProgress",
@@ -6308,7 +6308,7 @@
       },
       "source": "packages/core/src/components/navigation/DzSegmented.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSelect",
@@ -6451,7 +6451,7 @@
         "DzSheetTitle",
         "DzSheetTrigger"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSidebar",
@@ -6540,7 +6540,7 @@
         "DzSidebarItem",
         "DzSidebarSection"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSkeleton",
@@ -6647,7 +6647,7 @@
       },
       "source": "packages/core/src/components/forms/DzSlider.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSpacer",
@@ -6795,7 +6795,7 @@
       },
       "source": "packages/core/src/components/feedback/DzSpinner.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSplitButton",
@@ -6929,7 +6929,7 @@
         "DzSplitterHandle",
         "DzSplitterPanel"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzStack",
@@ -7005,7 +7005,7 @@
       },
       "source": "packages/core/src/components/cards/DzStatCard.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzStepper",
@@ -7068,7 +7068,7 @@
       },
       "source": "packages/core/src/components/navigation/DzStepper.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzStepperItem",
@@ -7130,7 +7130,7 @@
       },
       "source": "packages/core/src/components/navigation/DzStepperItem.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSwitch",
@@ -7192,7 +7192,7 @@
       },
       "source": "packages/core/src/components/forms/DzSwitch.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTable",
@@ -7342,7 +7342,7 @@
         "DzTabList",
         "DzTabTrigger"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTag",
@@ -7403,7 +7403,7 @@
       },
       "source": "packages/core/src/components/data/DzTag.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTagsInput",
@@ -7471,7 +7471,7 @@
       },
       "source": "packages/core/src/components/forms/DzTagsInput.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzText",
@@ -7715,7 +7715,7 @@
       },
       "source": "packages/core/src/components/forms/DzTimePicker.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTimeline",
@@ -7862,7 +7862,7 @@
         "DzToastProvider",
         "DzToastViewport"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzToggleButton",
@@ -8023,7 +8023,7 @@
       },
       "source": "packages/core/src/components/layout/DzToolbar.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTooltip",
@@ -8092,7 +8092,7 @@
         "DzTooltipContent",
         "DzTooltipTrigger"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTour",
@@ -8170,7 +8170,7 @@
       },
       "source": "packages/core/src/components/overlays/DzTour.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTransfer",
@@ -8245,7 +8245,7 @@
       },
       "source": "packages/core/src/components/forms/DzTransfer.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTree",
@@ -8319,7 +8319,7 @@
       },
       "source": "packages/core/src/components/data/DzTree.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTreeItem",
@@ -8380,7 +8380,7 @@
       },
       "source": "packages/core/src/components/data/DzTreeItem.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTreeSelect",
@@ -8458,7 +8458,7 @@
       },
       "source": "packages/core/src/components/forms/DzTreeSelect.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzVisuallyHidden",

@@ -1,0 +1,25 @@
+{
+  "//": [
+    "Ratchets for packages/tooling/src/token-checks/token-references.ts (TASK-R5-O7).",
+    "Both move in ONE direction only. Raising either to make a run pass is the",
+    "failure mode the ratchet exists to prevent — lower the number or fix the code.",
+    "",
+    "maxUnusedTokens — tokens tokens.css emits that NO source or doc anywhere in",
+    "the repo references. Measured at 271 of 674 on 2026-09-15 at 99b963a.",
+    "  • 164 are palette shades (--dz-colors-<ramp>-<shade>). A design system",
+    "    legitimately ships complete ramps, so these are not debt and the ceiling",
+    "    is not expected to reach zero.",
+    "  • 107 are component-tier tokens — whole emitted sets for --dz-badge-*,",
+    "    --dz-dialog-*, --dz-card-*, --dz-chart-2..10 — that no component reads,",
+    "    because those components style themselves with Tailwind utilities",
+    "    instead. That half IS debt, and it is the half this ceiling is aimed at.",
+    "  Exit condition: the component-tier half reaches 0, either by wiring the",
+    "  components to their own tokens or by not emitting tokens nothing honours.",
+    "",
+    "maxAliasCycles — an alias ring (--dz-a: var(--dz-b); --dz-b: var(--dz-a))",
+    "makes every name on it resolve to nothing. There is no acceptable count",
+    "above zero, so this ceiling is a constant, not a ratchet."
+  ],
+  "maxUnusedTokens": 271,
+  "maxAliasCycles": 0
+}

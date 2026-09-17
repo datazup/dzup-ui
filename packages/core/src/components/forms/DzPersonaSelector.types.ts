@@ -6,6 +6,8 @@
  * @module @dzup-ui/core/components/forms/DzPersonaSelector
  */
 
+import type { DzPersonaSelectorUi } from './DzPersonaSelector.anatomy.ts'
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -39,6 +41,13 @@ export interface DzPersonaSelectorProps {
   placeholder?: string
   /** Disabled state */
   disabled?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in
+   * `DzPersonaSelector.anatomy.ts` (ADR-19 §5). This component renders no
+   * element of its own, so the map is forwarded whole to the `DzCombobox` that
+   * is* its root — one map still reaches every part the declaration names.
+   */
+  ui?: DzPersonaSelectorUi
 }
 
 // ---------------------------------------------------------------------------

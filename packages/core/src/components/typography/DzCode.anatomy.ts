@@ -25,6 +25,11 @@ export const anatomy = {
    */
   rtl: { mirrors: 'none', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Presentational inline code.
+   */
+  keyboard: 'none',
+
   /** Tier A — presentational. */
   riskTier: 'A',
 } as const satisfies ComponentAnatomy

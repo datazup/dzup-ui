@@ -21,6 +21,29 @@ known one.
 | `select` | Select an item and confirm the selection. | The selected state is announced, and the control's value reflects it afterwards. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/data/DzCalendar.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | — | Move focus one day to the inline end. |
+| `ArrowLeft` | — | Move focus one day to the inline start. |
+| `ArrowDown` | — | Move focus one row down. |
+| `ArrowUp` | — | Move focus one row up. |
+| `Home` | — | Move focus to the first day of the row. |
+| `End` | — | Move focus to the last day of the row. |
+| `PageDown` | — | Move to the next month. |
+| `PageUp` | — | Move to the previous month. |
+| `Shift` + `PageDown` | — | Move to the next year. |
+| `Shift` + `PageUp` | — | Move to the previous year. |
+| `Enter` | — | Select the focused day. |
+| `Space` | — | Select the focused day. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

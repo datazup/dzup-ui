@@ -18,6 +18,13 @@ one root component for every concern an application configures.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/providers`
 - **Risk tier:** B · **Status:** experimental
 
+## Intent and selection guidance
+
+**Not declared.** `DzProvider` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -38,7 +45,7 @@ never as asserted.
 :::
 
 
-## Props (11)
+## Props (12)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -50,6 +57,7 @@ never as asserted.
 | `motion` | `DzMotionPreference \| undefined` | no | — | Animation policy. `'full'` overrides a user's stated OS preference (ADR-20 §7). |
 | `nonce` | `string \| undefined` | no | — | CSP nonce for any `<style>` this library injects at runtime. |
 | `portal` | `string \| undefined` | no | — | Where overlays teleport to: a selector, or omitted for `document.body`. |
+| `sanitizer` | `DzSanitizerOptions \| null \| undefined` | no | — | The organisation-wide HTML sanitizer (TASK-R3-O2, ADR-20 amendment A6). Set once at the root: allowed markup, the Trusted Types policy name, and the input ceilings. Partial — a nested provider tightening `limits` keeps the ancestor's `sanitize`, which is ADR-20 §3's per-key override applied one level down. Omitted, components resolve to Core's escaping default: **markup in, text out**. That is deliberately not a pass-through, and it is deliberately visible — a host that meant to render rich content sees its tags as text on the first render rather than shipping an unguarded sink. `null` means "I will supply one" and is a *different* state from omitted: `useDzSanitizer()` throws in development if nothing then supplies it. |
 | `testIdPrefix` | `string \| undefined` | no | — | Shorthand that both **enables** test ids and namespaces them. Enabling is implied because a host that names a prefix has said what it wants; requiring `:test-ids="{ enabled: true, prefix: 'e2e' }"` alongside would make the common case the verbose one. An explicit `testIds.enabled` still wins, so the shorthand can be overruled without being removed. |
 | `testIds` | `Partial<DzTestIds> \| undefined` | no | — | Test-id policy: whether they render at all, and under which attribute. |
 | `theme` | `DzProviderThemeOptions \| undefined` | no | — | Theme options, or omitted to leave an ancestor's theme in charge. |
@@ -79,6 +87,90 @@ Editable, running the **NestedProviders** story from `packages/core/stories/prov
 
 <DzPlayground component="DzProvider" />
 
+## Variants and controlled state
+
+**Not declared.** `DzProvider` declares no recipe axes in its anatomy and exposes no
+`v-model` pair, so it has neither variants to list nor a controlled form to show. For a
+presentational component that is the whole truth; for an interactive one it means the anatomy
+has not been written down yet.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+This component declares `parts: 'none'` — it renders no element of its own. A renderless or
+pure-slot wrapper has nothing to address, which is a different fact from an undeclared anatomy.
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+This component declares no states: nothing about it is advertised to CSS or to a test.
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/providers/DzProvider.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDefaults` | per-component prop defaults (`size`, `variant`, `tone`, `density`) |
+| `useDzDirection` | the document writing direction |
+| `useDzLocale` | the active locale |
+| `useDzNonce` | — *(reader not in the published context map)* |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `none` | The geometry is **physical on purpose** — a claim, not an oversight. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** Reads `useDzDirection`, `useDzLocale` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/providers/DzProvider.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/dz-provider-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+This component declares no states, so there is no state matrix to show. A presentational
+component that renders the same way every time is the normal case for this.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `4c9fb7a`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -86,7 +178,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 11 | 11 | 0 declare a default |
+| Props | 12 | 12 | 0 declare a default |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -95,8 +187,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -147,10 +239,9 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**No keyboard behaviour of its own.** This component declares `keyboard: 'none'` — an
+explicit claim, checked like any other part of its contract, not an absence of information.
+Whatever keys reach it are the platform's or its container's.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.
@@ -193,10 +284,10 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `excepted` | Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence. |
 | `rtl-contract` | tier B | `present` | `packages/core/src/providers/DzProvider.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzProvider.md` — 6 AT/browser pairs, none executed. |
 
-**3 unrun:** `axe`, `controlled-uncontrolled`, `at-manual` · **4 excepted:** `token-contrast`, `keyboard-spec`, `state-stories`, `browser-play`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `axe`, `controlled-uncontrolled`, `browser-matrix`, `at-manual` · **4 excepted:** `token-contrast`, `keyboard-spec`, `state-stories`, `browser-play`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

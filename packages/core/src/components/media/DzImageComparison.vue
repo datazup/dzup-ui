@@ -22,6 +22,7 @@ import type {
  * ```
  */
 import { computed, ref, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { imageComparisonVariants } from './DzImageComparison.variants.ts'
 
@@ -29,6 +30,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Divider position along the active axis as a percentage, clamped to 0-100; defaults to `50`, the midpoint. */
 const position = defineModel<number>('position', { default: 50 })
 
 const props = withDefaults(defineProps<DzImageComparisonProps>(), {
@@ -67,7 +69,7 @@ const styles = computed(() =>
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 /**
@@ -182,25 +184,30 @@ function handleKeydown(event: KeyboardEvent): void {
 
 /** Expose programmatic focus for parity with other interactive components. */
 defineExpose({
+  /** Move keyboard focus to the divider handle. */
   focus: (): void => handleRef.value?.focus(),
 })
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
     ref="rootRef"
+    data-part="root"
     :class="rootClasses"
     :data-orientation="orientation"
     :data-disabled="disabled ? '' : undefined"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-image-comparison'), ...$attrs, class: undefined }"
     @pointerdown="handlePointerDown"
     @pointermove="handlePointerMove"
     @pointerup="handlePointerUp"
     @pointercancel="handlePointerUp"
   >
     <!-- Base (before) layer -- establishes the component height -->
-    <div :class="styles.before()">
+    <div data-part="panel" :class="cn(styles.before(), props.ui?.panel)">
       <slot name="before">
         <img v-if="beforeSrc" :src="beforeSrc" :alt="beforeAlt ?? ''" class="block h-full w-full object-cover">
       </slot>
@@ -208,7 +215,8 @@ defineExpose({
 
     <!-- Revealed (after) layer -- clipped to the divider position -->
     <div
-      :class="[styles.after(), motionClass]"
+      data-part="panel"
+      :class="[styles.after(), motionClass, props.ui?.panel]"
       :style="{ clipPath: afterClip }"
     >
       <slot name="after">
@@ -217,19 +225,20 @@ defineExpose({
     </div>
 
     <!-- Caption chips -->
-    <span v-if="beforeLabel" :class="styles.label()" class="bottom-[var(--dz-spacing-2)] left-[var(--dz-spacing-2)]">
+    <span v-if="beforeLabel" data-part="label" :class="cn(styles.label(), props.ui?.label)" class="bottom-[var(--dz-spacing-2)] left-[var(--dz-spacing-2)]">
       {{ beforeLabel }}
     </span>
-    <span v-if="afterLabel" :class="styles.label()" class="bottom-[var(--dz-spacing-2)] right-[var(--dz-spacing-2)]">
+    <span v-if="afterLabel" data-part="label" :class="cn(styles.label(), props.ui?.label)" class="bottom-[var(--dz-spacing-2)] right-[var(--dz-spacing-2)]">
       {{ afterLabel }}
     </span>
 
     <!-- Divider line + draggable grip -->
-    <div :class="[styles.divider(), motionClass]" :style="dividerStyle">
+    <div data-part="separator" :class="[styles.divider(), motionClass, props.ui?.separator]" :style="dividerStyle">
       <div
         ref="handleRef"
         role="slider"
-        :class="styles.handle()"
+        data-part="control"
+        :class="cn(styles.handle(), props.ui?.control)"
         :tabindex="disabled ? -1 : 0"
         :aria-valuemin="0"
         :aria-valuemax="100"

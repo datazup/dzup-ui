@@ -19,6 +19,14 @@ Dual-thumb range slider using Reka UI Slider (ADR-07).
 - **Risk tier:** B · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **v-model:** `v-model` (`[number, number] | undefined`)
+- **Anatomy parts (ADR-19):** `control`, `error`, `indicator`, `label`, `root`
+
+## Intent and selection guidance
+
+**Not declared.** `DzRangeSlider` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (17, of which 8 inherited from `@dzup-ui/contracts`)
+## Props (18, of which 8 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -54,13 +62,14 @@ never as asserted.
 | `invalid` | `boolean \| undefined` | no | `false` | Whether the field value is invalid |
 | `max` | `number \| undefined` | no | `100` | Maximum value |
 | `min` | `number \| undefined` | no | `0` | Minimum value |
-| `modelValue` | `[number, number] \| undefined` | no | `[0, 100] as [ number, number ]` | — |
+| `modelValue` | `[number, number] \| undefined` | no | `[0, 100] as [ number, number ]` | The `[start, end]` pair the two thumbs sit at; defaults to `[0, 100]`. |
 | `name` | `string \| undefined` | no | `undefined` | Form field name |
 | `orientation` | `Orientation \| undefined` | no | `"horizontal"` | Slider orientation |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
-| `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
+| `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `step` | `number \| undefined` | no | `1` | Step increment |
-| `tone` | `CanonicalTone \| undefined` | no | `"primary"` | Semantic color tone |
+| `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "control" \| "label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzRangeSlider.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`, declared here as `control`; `ui.indicator` reaches **both** thumbs. |
 
 ## Events (4)
 
@@ -69,7 +78,7 @@ never as asserted.
 | `blur` | `[event: FocusEvent]` | Focus lost |
 | `change` | `[value: [number, number], metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `focus` | `[event: FocusEvent]` | Focus gained |
-| `update:modelValue` | `[value: [number, number]]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: [number, number]]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (1)
 
@@ -95,6 +104,135 @@ Editable, running the **Size Gallery** story from `packages/core/stories/forms/D
 
 <DzPlayground component="DzRangeSlider" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `orientation` | `[data-orientation="…"]` | `orientation` |
+| `size` | `[data-size="…"]` | `size` |
+| `tone` | `[data-tone="…"]` | `tone` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzRangeSlider />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzRangeSlider v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzRangeSlider :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 12 stories in
+`packages/core/stories/forms/DzRangeSlider.stories.ts`: `Default`, `Size Gallery`, `Tone Gallery`, `Step Increment (10)`, `Vertical`, `Disabled`, `States`, `With Label (slot)`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Price Filter`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `control` | `[data-part="control"]` | yes |
+| `error` | `[data-part="error"]` | no — renders zero or more than once |
+| `indicator` | `[data-part="indicator"]` | no — renders zero or more than once |
+| `label` | `[data-part="label"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzRangeSlider :ui="{ 'control': 'ring-2', 'error': 'ring-2', 'indicator': 'ring-2', 'label': 'ring-2', 'root': 'ring-2' }" />
+```
+
+**Where your `class` lands** — read this before you size or position it.
+
+Your `class`, `id` and `data-*` land on the `control` part —
+`[data-part="control"]`.
+That is an inner node, not the outermost element — so a width or a margin you pass applies there rather than to the whole component.
+
+The merge order above still holds: your `class` beats `ui.control`.
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `idle` | `[data-state="idle"]` |
+| `invalid` | `[data-state="invalid"]` |
+| `required` | `[data-state="required"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/forms/DzRangeSlider.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDefaults` | per-component prop defaults (`size`, `variant`, `tone`, `density`) |
+| `useDzDirection` | the document writing direction |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | `indicator` | These parts render a direction-bearing icon and mirror with the layout. |
+
+**Locale and formats.** Reads `useDzDirection` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzRangeSlider.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzRangeSlider` advertises 4 states:
+`disabled`, `idle`, `invalid`, `required`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzRangeSlider.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e986952`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -102,17 +240,17 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 17 | 16 | 10 declare a default, of which 7 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 4 | 3 | 3 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 18 | 18 | 8 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 4 | 4 | 3 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 1 | 1 | 0 carry slot props |
-| Exposed on `ref` | 1 | 0 | no description exists in source for any exposed member, catalog-wide |
+| Exposed on `ref` | 1 | 1 | no description exists in source for any exposed member, catalog-wide |
 
 ## Accessibility and evidence
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -121,7 +259,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`slider-multithumb`](https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/)
 - **Traits:** `drags`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `e986952e`
 
 ### WCAG 2.2 criteria in scope (21)
@@ -163,14 +301,27 @@ DzRangeSlider drags (drag either thumb), so SC 2.5.7 applies and was audited.
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**9 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- |
+| `ArrowRight` | Increase the focused thumb by one step. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | swaps with the writing direction |
+| `ArrowLeft` | Decrease the focused thumb by one step. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | swaps with the writing direction |
+| `ArrowUp` | Increase the focused thumb by one step. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `ArrowDown` | Decrease the focused thumb by one step. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `PageUp` | Increase the focused thumb by the large step. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `PageDown` | Decrease the focused thumb by the large step. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `Home` | Set the focused thumb to its minimum. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `End` | Set the focused thumb to its maximum. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `Tab` | Move to the other thumb; each thumb is its own tab stop. | `2.1.2` | [`slider-multithumb`](https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/) | — |
+
+Declared in `packages/core/src/components/forms/DzRangeSlider.anatomy.ts`.
 
 - **Pattern:** [APG — `slider-multithumb`](https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowUp`, `ArrowDown`, `PageUp`, `PageDown`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -204,16 +355,16 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzRangeSlider.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzRangeSlider.spec.ts` — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowUp`, `ArrowDown`, `PageUp`, `PageDown`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzRangeSlider.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzRangeSlider.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzRangeSlider.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzRangeSlider.md` — 6 AT/browser pairs, none executed. |
 | `non-drag-alternative` | trait drags | **`unrun`** | The component drags and its spec asserts no keyboard equivalent (WCAG 2.5.7). |
 
-**6 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`, `non-drag-alternative`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`, `non-drag-alternative`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

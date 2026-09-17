@@ -16,6 +16,7 @@ import type {
   TabsVariant,
 } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzTabsUi, DzTabTriggerUi } from './DzTabs.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -64,6 +65,12 @@ export interface DzTabsProps extends Omit<BaseAccessibilityProps, 'ariaInvalid'>
   tone?: CanonicalTone
   /** Tab activation mode: automatic (on focus) or manual (on click) */
   activationMode?: 'automatic' | 'manual'
+  /**
+   * Per-part class override for the tabs root (ADR-19 §5). The list, the
+   * triggers and the panels are sub-components the consumer writes, where
+   * `class` at the call site already lands.
+   */
+  ui?: DzTabsUi
 }
 
 // ---------------------------------------------------------------------------
@@ -118,6 +125,12 @@ export interface DzTabTriggerProps {
   disabled?: boolean
   /** Whether this tab shows a close button for removal */
   closable?: boolean
+  /**
+   * Per-part class override for the dismiss button (ADR-19 §5). The trigger's
+   * own element takes `class` at the call site; the button rendered under
+   * `closable` has no call site of its own.
+   */
+  ui?: DzTabTriggerUi
 }
 
 /** Slot definitions for DzTabTrigger */

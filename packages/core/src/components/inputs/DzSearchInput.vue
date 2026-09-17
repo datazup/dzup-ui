@@ -16,6 +16,7 @@ import type {
  * ```
  */
 import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -26,6 +27,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The search query text; the default empty string renders an empty field. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzSearchInputProps>(), {
@@ -177,7 +179,13 @@ function handleClear(): void {
   inputRef.value?.focus()
 }
 
-defineExpose({ inputRef })
+defineExpose({
+  /** The underlying `<input>` element, for focus, selection and measurement. `null` before mount. */
+  inputRef,
+})
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -191,7 +199,7 @@ defineExpose({ inputRef })
     :data-readonly="readonly ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-search-input'), ...$attrs, class: undefined }"
   >
     <div data-part="control" :class="wrapperClasses">
       <!-- Search icon -->

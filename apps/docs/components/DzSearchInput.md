@@ -21,6 +21,13 @@ Search input with search icon and clear button.
 - **v-model:** `v-model` (`string | undefined`)
 - **Anatomy parts (ADR-19):** `clear`, `control`, `error`, `icon`, `input`, `root`, `spinner`
 
+## Intent and selection guidance
+
+**Not declared.** `DzSearchInput` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -57,14 +64,14 @@ never as asserted.
 | `invalid` | `boolean \| undefined` | no | `false` | Whether the field value is invalid |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows loading indicator |
 | `loadingLabel` | `string \| undefined` | no | `undefined` | Accessible label for the loading spinner shown when `loading` is true |
-| `modelValue` | `string \| undefined` | no | `""` | — |
+| `modelValue` | `string \| undefined` | no | `""` | The search query text; the default empty string renders an empty field. |
 | `name` | `string \| undefined` | no | — | Component name for form integration |
 | `placeholder` | `string \| undefined` | no | — | Placeholder text |
 | `readonly` | `boolean \| undefined` | no | `false` | Read-only state -- visible but not editable |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"icon" \| "clear" \| "error" \| "root" \| "spinner" \| "control" \| "input", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzSearchInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "clear" \| "error" \| "spinner" \| "control" \| "input", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzSearchInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 ## Events (6)
@@ -76,7 +83,7 @@ never as asserted.
 | `clear` | `[]` | Value cleared |
 | `focus` | `[event: FocusEvent]` | Focus gained |
 | `search` | `[value: string]` | Search submitted (Enter key) |
-| `update:modelValue` | `[value: string]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (1)
 
@@ -102,6 +109,128 @@ Editable, running the **Variant Gallery** story from `packages/core/stories/inpu
 
 <DzPlayground component="DzSearchInput" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `tone` | `[data-tone="…"]` | `tone` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzSearchInput />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzSearchInput v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzSearchInput :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 14 stories in
+`packages/core/stories/inputs/DzSearchInput.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Clearable vs Non-Clearable`, `With Suffix Slot`, `States`, `Disabled`, `Invalid with Error Message`, `Dark Mode Preview`, `Interactive`, `Accessibility: Search Semantics`, `Real World: Navbar Search`, `Real World: Data Table Filter`, `Readonly`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `clear` | `[data-part="clear"]` | no — renders zero or more than once |
+| `control` | `[data-part="control"]` | yes |
+| `error` | `[data-part="error"]` | no — renders zero or more than once |
+| `icon` | `[data-part="icon"]` | yes |
+| `input` | `[data-part="input"]` | yes |
+| `root` | `[data-part="root"]` | yes |
+| `spinner` | `[data-part="spinner"]` | no — renders zero or more than once |
+
+```vue
+<DzSearchInput :ui="{ 'clear': 'ring-2', 'control': 'ring-2', 'error': 'ring-2', 'icon': 'ring-2', 'input': 'ring-2', 'root': 'ring-2', 'spinner': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `loading` | `[data-state="loading"]` |
+| `readonly` | `[data-state="readonly"]` |
+| `required` | `[data-state="required"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/inputs/DzSearchInput.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMessages` | the translated string catalogue |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/inputs/DzSearchInput.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzSearchInput` advertises 4 states:
+`disabled`, `loading`, `readonly`, `required`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/inputs/DzSearchInput.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e0d1707`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -109,17 +238,17 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 21 | 20 | 10 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 6 | 5 | 5 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 21 | 21 | 10 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 6 | 6 | 5 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 1 | 1 | 0 carry slot props |
-| Exposed on `ref` | 1 | 0 | no description exists in source for any exposed member, catalog-wide |
+| Exposed on `ref` | 1 | 1 | no description exists in source for any exposed member, catalog-wide |
 
 ## Accessibility and evidence
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -129,7 +258,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `e986952e`
+- **Component last changed at:** `e0d17078`
 
 ### WCAG 2.2 criteria in scope (21)
 
@@ -163,16 +292,21 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**3 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `Enter` | — | Submit the search. | `2.1.1` | — *(component-specific)* |
+| `Enter` | `clear` | Clear the field. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+| `Space` | `clear` | Clear the field. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+
+Declared in `packages/core/src/components/inputs/DzSearchInput.anatomy.ts`.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/inputs/DzSearchInput.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 3 binding(s); the unit spec asserts no key event for `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -206,15 +340,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/inputs/DzSearchInput.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/inputs/DzSearchInput.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/inputs/DzSearchInput.spec.ts` — The component declares 3 binding(s); the unit spec asserts no key event for `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/inputs/DzSearchInput.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/inputs/DzSearchInput.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/inputs/DzSearchInput.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSearchInput.md` — 6 AT/browser pairs, none executed. |
 
-**3 unrun:** `axe`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

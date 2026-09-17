@@ -20,6 +20,19 @@ known one.
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/inputs/DzInputMask.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Backspace` | — | Delete the previous entered character, stepping over any mask literal. |
+| `Delete` | — | Delete the next entered character, stepping over any mask literal. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

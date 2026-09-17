@@ -84,6 +84,13 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
+   * Keyboard contract (TASK-R5-O5). A native text field. Text editing and
+   * caret movement are the platform contract, not this component; DzInput
+   * adds no key of its own.
+   */
+  keyboard: 'none',
+
+  /**
    * Tier B — interactive primitive. It holds user input, carries
    * `aria-invalid`/`aria-describedby` wiring, and inherits size and validation
    * state from `DzInputGroup` and `DzFormField`. A defect is a data or

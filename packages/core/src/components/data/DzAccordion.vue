@@ -2,8 +2,7 @@
 import type {
   DzAccordionContext,
   DzAccordionEmits,
-  DzAccordionProps,
-  DzAccordionSingleProps,
+  DzAccordionRootProps,
   DzAccordionSlots,
 } from './DzAccordion.types.ts'
 import { AccordionRoot } from 'reka-ui'
@@ -25,6 +24,7 @@ import { AccordionRoot } from 'reka-ui'
  * ```
  */
 import { computed, nextTick, provide, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_ACCORDION_KEY } from './DzAccordion.types.ts'
 import { accordionVariants } from './DzAccordion.variants.ts'
@@ -33,9 +33,13 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/**
+ * The open item's value in `single` mode, or the array of open values in
+ * `multiple` mode; the default empty string opens nothing.
+ */
 const model = defineModel<string | string[]>({ default: '' })
 
-const props = withDefaults(defineProps<DzAccordionProps>(), {
+const props = withDefaults(defineProps<DzAccordionRootProps>(), {
   type: 'single',
   variant: 'default',
   size: 'md',
@@ -52,7 +56,7 @@ defineSlots<DzAccordionSlots>()
  * Reka keeps one item open at all times, which surprises most users.
  */
 const resolvedCollapsible = computed(() =>
-  props.type === 'single' ? ((props as DzAccordionSingleProps).collapsible ?? true) : undefined,
+  props.type === 'single' ? (props.collapsible ?? true) : undefined,
 )
 
 const attrs = useAttrs()
@@ -88,7 +92,14 @@ async function revealItem(id: string): Promise<void> {
   emit('revealed', id)
 }
 
-defineExpose({ revealItem })
+defineExpose({
+  /**
+   * Open the item whose value is `id` — added to the open set in `multiple`
+   * mode, replacing the current one in `single` — and resolve once its panel
+   * has rendered and `revealed` has fired.
+   */
+  revealItem,
+})
 
 const styles = computed(() =>
   accordionVariants({
@@ -98,7 +109,7 @@ const styles = computed(() =>
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 function handleValueChange(value: string | string[] | undefined): void {
@@ -109,11 +120,15 @@ function handleValueChange(value: string | string[] | undefined): void {
   model.value = next
   emit('change', next)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <AccordionRoot
     :id="id"
+    data-part="root"
     :type="(type as 'single' | 'multiple')"
     :model-value="model"
     :collapsible="resolvedCollapsible"
@@ -124,7 +139,7 @@ function handleValueChange(value: string | string[] | undefined): void {
     :aria-describedby="ariaDescribedby"
     :data-state="disabled ? 'disabled' : 'ready'"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-accordion'), ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"
   >
     <slot />

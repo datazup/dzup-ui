@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import type { CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
 import type {
   DzAnimatedNumberEmits,
   DzAnimatedNumberProps,
   DzAnimatedNumberSlots,
 } from './DzAnimatedNumber.types.ts'
 import { computed, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+import { useDzDefaults } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzFormats } from '../../composables/provider/useDzFormats.ts'
 import { useDzLocale } from '../../composables/provider/useDzLocale.ts'
+import { useDzMotion } from '../../composables/provider/useDzMotion.ts'
 import { cachedNumberFormat } from '../../i18n/intl-cache.ts'
 import { cn } from '../../utilities/cn.ts'
 import { sampleTween } from './DzAnimatedNumber.tween.ts'
@@ -38,8 +42,8 @@ const props = withDefaults(defineProps<DzAnimatedNumberProps>(), {
   duration: 1000,
   easing: 'ease-out',
   startOnView: true,
-  size: 'md',
-  tone: 'neutral',
+  size: undefined,
+  tone: undefined,
   format: undefined,
   locale: undefined,
   id: undefined,
@@ -51,6 +55,11 @@ const props = withDefaults(defineProps<DzAnimatedNumberProps>(), {
 
 const emit = defineEmits<DzAnimatedNumberEmits>()
 defineSlots<DzAnimatedNumberSlots>()
+
+// Whether a tween may run at all (ADR-20 §7, TASK-R5-O3). Replaces a local
+// `matchMedia` read, so a host that set `motion="reduced"` now snaps to the
+// target instead of counting.
+const dzMotion = useDzMotion()
 
 const attrs = useAttrs()
 
@@ -79,9 +88,23 @@ const displayValue = ref(props.value)
 const dzLocale = useDzLocale()
 const activeLocale = computed(() => props.locale ?? dzLocale.value)
 
+/**
+ * The application's number defaults (ADR-20 §5, TASK-R5-O3).
+ *
+ * Used only when this instance states no `locale`. `useDzFormats()` binds both
+ * the locale AND the host's `formats.number` / `formats.currency` defaults, and
+ * an instance that names its own locale is overriding the first without saying
+ * anything about the second — there is no `DzFormats` shape for "these
+ * defaults, that locale", so the honest thing is to fall back to the shared
+ * cache directly and document why. Both paths hit the same module cache.
+ */
+const dzFormats = useDzFormats()
+
 const formatter = computed<Intl.NumberFormat | null>(() => {
   try {
-    return cachedNumberFormat(activeLocale.value, props.format)
+    return props.locale === undefined
+      ? dzFormats.number(props.format)
+      : cachedNumberFormat(activeLocale.value, props.format)
   }
   catch {
     return null
@@ -135,21 +158,13 @@ let rafId = 0
 let started = false
 let observer: IntersectionObserver | null = null
 
-function prefersReducedMotion(): boolean {
-  return (
-    typeof window !== 'undefined'
-    && typeof window.matchMedia === 'function'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
-}
-
 /** Whether a real tween can run (vs. snapping straight to the target). */
 function canAnimate(): boolean {
   return (
     typeof window !== 'undefined'
     && typeof requestAnimationFrame === 'function'
     && props.duration > 0
-    && !prefersReducedMotion()
+    && !dzMotion.reduced.value
   )
 }
 
@@ -244,9 +259,11 @@ onBeforeUnmount(() => {
 })
 
 defineExpose({
+  /** The mid-tween number currently rendered; equal to `value` once the animation settles. */
   get displayValue() {
     return displayValue.value
   },
+  /** The rendered figure as the formatted string on screen, from the same formatter the template uses. */
   get displayText() {
     return displayText.value
   },
@@ -256,7 +273,26 @@ defineExpose({
 // Styling
 // ---------------------------------------------------------------------------
 
-const styles = computed(() => animatedNumberVariants({ size: props.size, tone: props.tone }))
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * Each axis keeps the literal it carried in `withDefaults` as `resolve`'s last
+ * link, and BOTH readers move together — the `tv()` recipe and the `data-size`
+ * / `data-tone` attributes ADR-19 publishes.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzAnimatedNumber', 'size', [props.size]) ?? 'md',
+)
+
+/** Resolved tone: prop, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzAnimatedNumber', 'tone', [props.tone]) ?? 'neutral',
+)
+
+const styles = computed(() => animatedNumberVariants({ size: resolvedSize.value, tone: resolvedTone.value }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 </script>
 
@@ -265,8 +301,8 @@ const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string
     :id="id"
     ref="root"
     :class="rootClasses"
-    :data-size="size"
-    :data-tone="tone"
+    :data-size="resolvedSize"
+    :data-tone="resolvedTone"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     style="contain: layout style"

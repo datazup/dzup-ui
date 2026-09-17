@@ -11,6 +11,7 @@ import { DialogOverlay } from 'reka-ui'
  * sibling of DzDialogContent or the dialog will have two overlays.
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DIALOG_KEY } from './DzDialog.types.ts'
 import { dialogVariants } from './DzDialog.variants.ts'
@@ -29,12 +30,19 @@ const styles = computed(() => dialogVariants())
 const overlayClasses = computed(() =>
   cn(styles.value.overlay(), attrs.class as string | undefined),
 )
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
   <Transition :name="overlayTransitionName">
     <DialogOverlay
       :class="overlayClasses"
+      :data-dz-motion="dzMotionAttr"
       v-bind="{ ...$attrs, class: undefined }"
     />
   </Transition>

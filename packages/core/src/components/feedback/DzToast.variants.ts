@@ -54,7 +54,8 @@ export const toastVariants = tv({
       'dz-focus-ring-button',
     ].join(' '),
     closeButton: [
-      'absolute right-[var(--dz-spacing-1)] top-[var(--dz-spacing-1)]',
+      // Logical inline-end inset (TASK-R5-O2, S1-D3). Identical in LTR.
+      'absolute inset-e-[var(--dz-spacing-1)] top-[var(--dz-spacing-1)]',
       'inline-flex items-center justify-center',
       'rounded-[var(--dz-radius-sm)]',
       'h-5 w-5',
@@ -65,7 +66,9 @@ export const toastVariants = tv({
       'focus-visible:opacity-100 dz-focus-ring-button',
     ].join(' '),
     toneIndicator: [
-      'absolute left-0 top-0 bottom-0 w-1',
+      // The tone stripe sits on the edge the text starts at, so it is a logical
+      // inline-start inset (TASK-R5-O2, S1-D3). Identical in LTR.
+      'absolute inset-s-0 top-0 bottom-0 w-1',
     ].join(' '),
   },
   variants: {
@@ -101,6 +104,20 @@ export const toastVariants = tv({
         toneIndicator: 'bg-[var(--dz-info-solid)]',
       },
     },
+    /**
+     * rtl-physical-ok — the four corner values are author-named, deliberate
+     * physical positions (TASK-R5-O2, closing S1-D3).
+     *
+     * Same reasoning as `DzFab.variants.ts`: `position="bottom-right"` is a
+     * promise about the screen corner, and an app that wants the stack to
+     * follow the reading direction picks the opposite value per locale.
+     *
+     * The marker is file-wide, so it is added ONLY after this file's two real
+     * defects were fixed above — the close control and the tone stripe are now
+     * `inset-e-` / `inset-s-`, and nothing physical is left here but these six
+     * `position` values (the two `left-1/2` centring pairs are excluded by the
+     * fraction rule in `validate:rtl`, not by this marker).
+     */
     position: {
       'top-right': { viewport: 'top-0 right-0' },
       'top-left': { viewport: 'top-0 left-0' },

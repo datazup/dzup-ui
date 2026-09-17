@@ -28,6 +28,8 @@ import type { DzAnchorEmits, DzAnchorItem, DzAnchorProps, DzAnchorSlots } from '
  * ```
  */
 import { computed, h, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotion } from '../../composables/provider/useDzMotion.ts'
 import { useScrollSpy } from '../../composables/useScrollSpy/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -52,6 +54,10 @@ const props = withDefaults(defineProps<DzAnchorProps>(), {
 
 const emit = defineEmits<DzAnchorEmits>()
 const slots = defineSlots<DzAnchorSlots>()
+
+// Smooth scroll, or not (ADR-20 §7, TASK-R5-O3). Replaces a local
+// `matchMedia` read inside `scrollToTarget`.
+const dzMotion = useDzMotion()
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzAnchor')
@@ -102,13 +108,8 @@ function scrollToTarget(href: string, moveFocus: boolean): void {
   if (!el)
     return
 
-  const prefersReduced
-    = typeof window !== 'undefined'
-      && typeof window.matchMedia === 'function'
-      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
   const top = el.getBoundingClientRect().top + window.scrollY - props.offsetTop
-  window.scrollTo({ top, behavior: prefersReduced ? 'auto' : 'smooth' })
+  window.scrollTo({ top, behavior: dzMotion.reduced.value ? 'auto' : 'smooth' })
 
   if (moveFocus) {
     // Make the heading programmatically focusable, then move focus to it so
@@ -139,7 +140,7 @@ function handleClick(event: MouseEvent, item: DzAnchorItem): void {
 }
 
 const rootClasses = computed(() =>
-  cn(anchorVariants({ affix: props.affix }).root(), attrs.class as string | undefined),
+  cn(anchorVariants({ affix: props.affix }).root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 const rootStyle = computed<Record<string, string>>(() => ({
@@ -156,7 +157,7 @@ const rootStyle = computed<Record<string, string>>(() => ({
 function renderList(list: DzAnchorItem[], level: number): VNode {
   return h(
     'ul',
-    { 'class': anchorVariants().list(), 'data-level': level },
+    { 'class': cn(anchorVariants().list(), props.ui?.list), 'data-part': 'list', 'data-level': level },
     list.map((item) => {
       const isActive = activeHref.value === item.href
       const linkClass = anchorVariants({ active: isActive, disabled: item.disabled }).link()
@@ -168,7 +169,8 @@ function renderList(list: DzAnchorItem[], level: number): VNode {
           'a',
           {
             'href': item.href,
-            'class': linkClass,
+            'class': cn(linkClass, props.ui?.item),
+            'data-part': 'item',
             'style': {
               paddingInlineStart: `calc(var(--dz-anchor-indent) * ${level} + var(--dz-spacing-3))`,
             },
@@ -190,18 +192,22 @@ function renderList(list: DzAnchorItem[], level: number): VNode {
 function AnchorTree(): VNode {
   return renderList(props.items, 0)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <nav
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :style="rootStyle"
     :aria-label="resolvedAriaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     data-state="ready"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-anchor'), ...$attrs, class: undefined }"
   >
     <AnchorTree />
   </nav>

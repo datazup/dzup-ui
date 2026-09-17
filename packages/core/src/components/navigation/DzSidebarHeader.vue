@@ -46,6 +46,7 @@ const headerClasses = computed(() =>
 
 <template>
   <div
+    data-part="header"
     :class="headerClasses"
     v-bind="{ ...$attrs, class: undefined }"
   >

@@ -14,6 +14,7 @@ import type {
   Orientation,
   ToolbarVariant,
 } from '@dzup-ui/contracts'
+import type { DzToolbarUi } from './DzToolbar.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -38,6 +39,12 @@ export interface DzToolbarProps
   orientation?: ToolbarOrientation
   /** HTML element to render as */
   as?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzToolbar.anatomy.ts`
+   * (ADR-19 §5). `ui.group` lands on every rendered region — the three regions
+   * share one part name; use `[data-toolbar-region]` to reach just one.
+   */
+  ui?: DzToolbarUi
 }
 
 // ---------------------------------------------------------------------------

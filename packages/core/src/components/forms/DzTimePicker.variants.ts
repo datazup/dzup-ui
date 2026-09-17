@@ -36,7 +36,14 @@ export const timePickerVariants = tv({
     valueText: 'flex-1 truncate text-[var(--dz-foreground)]',
     placeholder: 'flex-1 truncate text-[var(--dz-muted-foreground)]',
     cleaner: [
-      'absolute right-[var(--dz-spacing-2)] top-1/2 -translate-y-1/2',
+      // TASK-R5-O2: a LOGICAL inset, not a physical one. The cleaner sits at
+      // the end of the field the reader finishes at, which is a statement about
+      // the reading direction rather than an author naming a screen edge (the
+      // distinction `DzFab`'s `position` prop is on the other side of).
+      // Identical output in a LTR document. (The physical spelling is
+      // deliberately not written out here: validate:rtl reads comments as text,
+      // F-C5.)
+      'absolute inset-e-[var(--dz-spacing-2)] top-1/2 -translate-y-1/2',
       'shrink-0 inline-flex items-center justify-center',
       'rounded-[var(--dz-radius-sm)]',
       'text-[var(--dz-muted-foreground)]',
@@ -103,7 +110,7 @@ export const timePickerVariants = tv({
       'inline-flex items-center justify-center',
       'rounded-[var(--dz-radius-md)]',
       'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1)]',
-      'text-[length:var(--dz-text-sm)] font-[var(--dz-font-weight-medium)]',
+      'text-[length:var(--dz-text-sm)] font-[var(--dz-font-medium)]',
       'dz-focus-ring-control',
       'transition-colors motion-reduce:transition-none',
     ].join(' '),

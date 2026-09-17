@@ -21,12 +21,25 @@ Concretely, this is what "ABI" buys you:
 
 - A `--dz-*` name is not renamed or removed without a version bump that says so.
   `--dz-sidebar-text` and `--dz-sidebar-text-hover` are the current deprecations;
-  they carry `$deprecated` in the DTCG export and are removed in the next major.
+  they carry `$deprecated` in the DTCG export and are **held until 1.0**.
+  *(Reconciled 2026-09-04, TASK-R5-O1, `packages/contracts/VERSIONING.md` §7.3.
+  This line used to say "removed in the next major". Before 1.0 there is no next
+  major — under §1 a `major` bump **is** `1.0.0`, and `validate:release-policy`
+  refuses one — so as written the sentence promised a removal that no releasable
+  version could carry. Holding the two aliases is the option §7.3 calls the
+  safer default: they cost two lines, and removing them in a `0.x` minor would
+  break every consumer who took the ABI at its word for the sake of that
+  saving.)*
 - `var(--dz-primary)` in your own stylesheet is a supported integration. You do
   not need to import anything from JavaScript to use this design system.
-- Library CSS ships inside `@layer dz-tokens`, so your unlayered CSS overrides it
-  without `!important`. Overriding a `--dz-*` property on `:root` — or on any
-  subtree — is the supported way to re-theme.
+- Library CSS ships inside `@layer dz-tokens`, one of the **six** layers the
+  library registers (`dz-reset, dz-tokens, dz-base, dz-components, dz-utilities,
+  dz-overrides`; ADR-19 §2, shipped 2026-09-04). Your unlayered CSS beats every
+  one of them without `!important`, in either import order, and a rule you write
+  in `@layer dz-overrides` beats every library layer provided the dzup
+  stylesheets are loaded first. Both routes are asserted on the packed tarball
+  in three engines by `yarn test:e2e:layer-order`. Overriding a `--dz-*`
+  property on `:root` — or on any subtree — is the supported way to re-theme.
 
 **What "governed" means today, honestly:** this package is `0.x`. The 0.x
 release policy for `@dzup-ui/*` is an open packet (`TASK-N5-01`), so the
@@ -120,6 +133,47 @@ dark — 29 of them. **If you resolve this export for a dark UI, you must follow
 the dark declaration of any ABI name `semantic.dark` redeclares.** That includes
 tokens that alias a *primitive*: `--dz-card-shadow` → `--dz-shadow-md` is
 theme-varying even though it never touches the semantic tier.
+
+#### The third cascade: high-contrast is CSS-only (TASK-R5-O7)
+
+There is a third cascade, and it is **deliberately not in this export**:
+
+```css
+@import '@dzup-ui/tokens/css';                 /* must come first */
+@import '@dzup-ui/tokens/css/high-contrast';   /* opt-in */
+```
+
+`dist/tokens.high-contrast.css` declares the same **115** semantic ABI names as
+light and dark, under `[data-theme="high-contrast"]` and, outside `@layer`, under
+`@media (forced-colors: active)`. Its values are **CSS system colours** —
+`Canvas`, `CanvasText`, `ButtonFace`, `ButtonText`, `Field`, `Highlight`,
+`HighlightText`, `LinkText`, `ButtonBorder`, `GrayText` — so the palette comes
+from the user's operating system rather than from this package, and a Windows
+High Contrast theme is adopted automatically.
+
+DTCG 2025.10 cannot express a system colour: the official schema enumerates
+thirteen `$type`s, and `color` requires a `colorSpace` with numeric
+`components`. A system colour is a reference to the platform, not a value in a
+colour space. Emitting the cascade with a fabricated oklch triple would make a
+design tool render swatches this library does not ship, so the group is omitted
+rather than falsified. `yarn validate:tokens:dtcg` still gates it: the stylesheet
+and the token map must agree in both directions, the opt-in block and the
+forced-colors block must not diverge, and all three cascades must declare exactly
+the same names.
+
+**Import `@dzup-ui/tokens/css` first.** Three names —
+`--dz-appshell-header-bg`, `--dz-appshell-header-border` and
+`--dz-appshell-main-bg` — are declared twice in `tokens.css` (the cross-tier
+shadowing held at a ceiling of three), and the second declaration has the same
+specificity as `[data-theme="high-contrast"]`. With the documented order the
+high-contrast values win; reversing the two imports silently leaves those three
+at their light-theme values. Ceiling HC-6.
+
+The role table and its six ceilings (HC-1 alpha, HC-2 categorical colour, HC-3
+hover/active collapse, HC-4 `GrayText` discipline, HC-5 the missing
+`--dz-input-foreground`, HC-6 import order) are documented in
+`packages/tokens/src/semantic/high-contrast.ts`. No component implements the
+theme yet — TASK-R5-O7 changed no component.
 
 ### `$type` mapping
 

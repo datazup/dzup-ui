@@ -9,6 +9,7 @@
  */
 
 import type { BaseAccessibilityProps, Orientation } from '@dzup-ui/contracts'
+import type { DzImageComparisonUi } from './DzImageComparison.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Orientation
@@ -41,6 +42,12 @@ export interface DzImageComparisonProps extends BaseAccessibilityProps {
   step?: number
   /** Disables pointer and keyboard interaction. */
   disabled?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in
+   * `DzImageComparison.anatomy.ts` (ADR-19 §5). `ui.panel` lands on **both**
+   * image layers — they share a part name.
+   */
+  ui?: DzImageComparisonUi
 }
 
 // ---------------------------------------------------------------------------

@@ -27,6 +27,10 @@ defineOptions({
 // `open` prop to `false`, which Reka reads as "controlled and closed" — so
 // `defaultOpen` could never take effect. An explicit default keeps `open`
 // undefined until someone binds `v-model:open`, leaving the menu uncontrolled.
+/**
+ * Whether the menu is open. Left `undefined` (the default) Reka UI owns the
+ * open state and the trigger toggles it without a binding.
+ */
 const open = defineModel<boolean | undefined>('open', { default: undefined })
 
 withDefaults(defineProps<DzDropdownMenuProps>(), {

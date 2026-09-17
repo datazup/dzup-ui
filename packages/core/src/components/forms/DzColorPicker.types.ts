@@ -14,6 +14,7 @@ import type {
   CanonicalSize,
   ChangeEvents,
 } from '@dzup-ui/contracts'
+import type { DzColorPickerUi } from './DzColorPicker.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -33,6 +34,12 @@ export interface DzColorPickerProps extends BaseAccessibilityProps, BasePortalPr
   name?: string
   /** Height of the color-picker canvas area in pixels (default: 120) */
   canvasHeight?: number
+  /**
+   * Per-part class overrides, keyed by the names in `DzColorPicker.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * the panel parts render into a portal, where `class` never reached them.
+   */
+  ui?: DzColorPickerUi
 }
 
 // ---------------------------------------------------------------------------

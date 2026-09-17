@@ -21,6 +21,7 @@ import type {
   InputVariant,
   SelectOpenableEvents,
 } from '@dzup-ui/contracts'
+import type { DzCascaderUi } from './DzCascader.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Value + option shapes
@@ -83,6 +84,12 @@ export interface DzCascaderProps extends BaseFormControlProps<InputVariant>, Bas
   noResultsText?: string
   /** Show the clear ("cleaner") button when a value is selected */
   cleaner?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzCascader.anatomy.ts`
+   * (ADR-19 §5). `ui.list` names the region of choices in **both** the flat and
+   * the column layout, so a theme does not have to branch on the filter state.
+   */
+  ui?: DzCascaderUi
 }
 
 // ---------------------------------------------------------------------------

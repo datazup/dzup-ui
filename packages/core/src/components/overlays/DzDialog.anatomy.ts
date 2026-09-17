@@ -42,6 +42,33 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
+   * Keyboard contract (TASK-R5-O5). Reka `DialogRoot`, APG `dialog`:
+   * focus is trapped while open and Escape is the documented way out,
+   * which is SC 2.1.2.
+   */
+  keyboard: [
+    {
+      key: 'Escape',
+      action: 'Close the dialog and return focus to the element that opened it.',
+      wcag: ['2.1.1', '2.1.2'],
+      apg: 'dialog',
+    },
+    {
+      key: 'Tab',
+      action: 'Move to the next focusable element, wrapping inside the dialog.',
+      wcag: ['2.1.2'],
+      apg: 'dialog',
+    },
+    {
+      key: 'Tab',
+      modifiers: ['Shift'],
+      action: 'Move to the previous focusable element, wrapping inside the dialog.',
+      wcag: ['2.1.2'],
+      apg: 'dialog',
+    },
+  ],
+
+  /**
    * Tier B — interactive primitive. It owns the open state, the modal flag and
    * the focus trap that Reka enforces. Nothing renders, and a defect still
    * traps or releases focus wrongly.

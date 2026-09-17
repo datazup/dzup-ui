@@ -399,7 +399,44 @@ interface at `:80`. A5's "~38 components" is now **40**.
 
 ---
 
-## 10. What this packet refuses to imply
+---
+
+## 11. Item 10 — added after this packet was written (TASK-R3-O2, 2026-09-04)
+
+> Appended by TASK-R3-O2 of program 2026-09-04, per that task's requirement that
+> the ADR-20 amendment be *"written in the packet's format"* and referenced here
+> as **item 10**. Everything above this line is unchanged and still bound to
+> `6f1f653`; this item is bound to **`99b963a`**.
+
+| # | Item | ADR text vs code behaviour | Amend / fix | Recommendation |
+|---|---|---|---|---|
+| **D20-10** 🟠 | **ADR-20 has nine concerns; the contract needs a tenth, and another package is blocked on it.** | ADR-20 §1 fixes nine keys plus theme. Measured at `99b963a`: `DzProvider` carries eleven props across those nine concerns and **no `sanitizer`**. Meanwhile `../../../dzup-ui-pro/docs/security.md` §10 records the shared `DzSanitizerAdapter` as **open, "depends on the Core provider (OSS P4)"**, with 13 reviewed sinks, 6 of them guarded `sanitizer-adapter`, each resolving DOMPurify for itself — so a host cannot set one organisation-wide policy. 08-11 doc 06 asks for exactly that. §9 correctly forbids Pro solving it with a provider of its own, which leaves the seam owed by Core and owed by nobody else. | **amend-ADR**, code shipped | **Accept amendment A6 with the ADR.** Unlike D20-1…D20-4 this is not an adoption gap in something already built — it is a *missing clause* that a second package has been blocked on since QUAL-04. The code is written and validated (below); what acceptance decides is whether the contract records a tenth concern. |
+
+**What shipped against it (TASK-R3-O2, `99b963a`):**
+
+| Clause | Evidence |
+|---|---|
+| Key in contracts, like the other nine | `packages/contracts/src/provider.types.ts` — `DZ_SANITIZER_KEY`, `DzSanitizerAdapter`, `DzSanitizeContext`, `DzSanitizeLimits`, `DzSanitizerOptions`, `DzSanitizeLimitError` |
+| Typed default in `DZ_PROVIDER_DEFAULTS` | `sanitizer: { policyName: 'dzup-ui', limits: { maxLength: 131072, maxDepth: 64 } }` — Pro's measured numbers, one source |
+| Reader that never throws for an unconfigured tree | `packages/core/src/composables/provider/useDzSanitizer.ts`; barrel-exported reader only, writer withheld like every other |
+| Per-key nesting (A1) and per-field fold | `DzProvider.spec.ts` — "leaves every other concern alone" now asserts the sanitizer survives a nested provider; "lets a nested provider tighten a ceiling and keep the adapter" |
+| SSR + hydration | `packages/core/tests/ssr/provider-ssr.spec.ts`, `dz-provider-ssr.spec.ts` — resolves with `window`/`document`/`matchMedia` deleted; zero hydration mismatch warnings; over-ceiling rejection identical on a server |
+| The default is not a pass-through | `packages/core/src/security/sanitize.spec.ts` — 30 tests |
+
+**The measurement this item adds to §1's adoption table:**
+
+| Concern | Composable | `.vue` consumers | Which |
+|---|---|---|---|
+| **Sanitizer** | **`useDzSanitizer`** | **0** | **and 0 is the correct number** — Core renders no HTML sink (0 `v-html`, 0 `innerHTML` in `packages/core/src`, 15 `SecurityBoundary` declarers all `url`/`payload`). This is not D20-1's shape: there is nothing in Core to adopt it, and the consumer is Pro TASK-R5-P2. |
+
+**What this item refuses to imply:** that a sanitizer seam makes Core safer than
+it was. Core had no HTML sink to make unsafe. What it makes possible is a host
+setting one policy for the fourteen Pro components that do, and that benefit is
+not banked until Pro consumes it.
+
+---
+
+## 12. What this packet refuses to imply
 
 - **That ADR-20 is accepted.** No status was set and no ADR file was edited.
 - **That the 88 passing tests are anything but locally qualified.** They are not

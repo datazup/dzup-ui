@@ -29,6 +29,12 @@ export const anatomy = {
   /** A horizontal group flips with the document; the segments reverse with it. */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). A `role="group"` wrapper, not a
+   * toolbar: the browser Tab order applies and there is nothing to move.
+   */
+  keyboard: 'none',
+
   /** Tier A — presentational. It joins controls and owns no focus of its own. */
   riskTier: 'A',
 } as const satisfies ComponentAnatomy

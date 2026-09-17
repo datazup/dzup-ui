@@ -10,14 +10,30 @@ import { StatusBadge } from './_blocks/StatusBadge.ts'
 What a version number here promises you, what a deprecation obliges us to, and how
 long you have to act on one.
 
-> **Pre-1.0.** Every `@dzup-ui/*` package is currently `0.1.0-alpha.x`. Under semver,
-> `0.x` grants no compatibility guarantee at all. The policy below is what we hold
-> ourselves to anyway, and what becomes binding at 1.0 — it is not a claim that the
-> API is frozen today.
+> **Pre-1.0.** Every `@dzup-ui/*` package is `0.x`. Under semver, `0.x` grants no
+> compatibility guarantee at all, so a `0.x` library has to *choose* a convention and
+> say which one. Ours is stated in `packages/contracts/VERSIONING.md`, which is the
+> statement of record; this page is its consumer-facing half.
 
 ## Semver
 
-The packages version together and follow semver:
+**Which table applies depends on which side of 1.0 you are on, and today it is the
+first one.** Reconciled with `VERSIONING.md` §7.1 on 2026-09-04 (TASK-R5-O1): this
+page previously carried only the 1.x mapping, which is the right table for a library
+that has shipped 1.0 and the wrong one for every package here.
+
+### Today — while every package is `0.x`
+
+`^0.2.0` resolves to `>=0.2.0 <0.3.0`. The minor position is the only one a caret
+range protects in `0.x`, so that is where a break has to go:
+
+| Bump      | `0.2.0 →` | Means                                                        | On `^0.2.0` you |
+|-----------|-----------|--------------------------------------------------------------|-----------------|
+| **minor** | `0.3.0`   | **A breaking change.** Something that used to work no longer does. | **do not receive it.** Widen the range to opt in. |
+| **patch** | `0.2.1`   | **Additive or a fix.** New API, or a defect corrected.        | **receive it automatically.** |
+| **major** | `1.0.0`   | **Not used before 1.0.** A `major` bump *is* the 1.0 release, and `yarn validate:release-policy` refuses one. | — |
+
+### At 1.0 — what these numbers will mean
 
 | Bump      | Means                                                                 |
 |-----------|-----------------------------------------------------------------------|
@@ -27,7 +43,11 @@ The packages version together and follow semver:
 
 ### What counts as breaking
 
-Breaking (major only):
+The list below is *what* counts as breaking. *Which number* carries it is the pair of
+tables above — a minor today, a major at 1.0. Read "major only" as "the breaking
+bump", whichever that currently is.
+
+Breaking (the breaking bump only):
 
 - Removing or renaming a component, prop, emit, slot, or exported type.
 - Changing a prop's default in a way that changes rendered output.
@@ -81,8 +101,9 @@ When something stable is going away, this is what you are owed.
 
 ### The support window
 
-**A deprecated API keeps working for at least two minor releases, and is only
-removed in a major.**
+**A deprecated API keeps working for at least two releases, and is only removed in a
+breaking one** — a minor while the packages are `0.x`, a major from 1.0 (see the two
+tables above; reconciled 2026-09-04, `VERSIONING.md` §7.1).
 
 Deprecate in `0.4.0` and the earliest removal is whichever comes later:
 `0.6.0`-and-a-major, in practice the next major after `0.6.0`. It never disappears in

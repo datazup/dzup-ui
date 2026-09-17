@@ -2,6 +2,7 @@
 import type { DzTourProps, DzTourSlotProps, DzTourSlots, DzTourStep } from './DzTour.types.ts'
 import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotion, useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
 import { useFloating } from '../../composables/useFloating/index.ts'
 import { useFocusTrap } from '../../composables/useFocusTrap/index.ts'
@@ -13,8 +14,10 @@ import { tourVariants } from './DzTour.variants.ts'
 defineOptions({
   inheritAttrs: false,
 })
+/** Whether the tour is running; `false` keeps every step hidden. */
 const open = defineModel<boolean>('open', { default: false })
 
+/** Zero-based index of the step currently shown; defaults to the first step. */
 const current = defineModel<number>('current', { default: 0 })
 
 /**
@@ -153,18 +156,17 @@ const panelStyle = computed<Record<string, string>>(() => {
 
 // ── Reduced motion + scrolling ──────────────────────────────────────────────
 
-function prefersReducedMotion(): boolean {
-  return typeof window !== 'undefined'
-    && typeof window.matchMedia === 'function'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
+// Scroll behaviour for `scrollTargetIntoView` (ADR-20 §7, TASK-R5-O3).
+// Replaces a local `matchMedia` read; the panel and mask transitions are
+// covered by the `dzMotionAttr` binding below.
+const dzMotion = useDzMotion()
 
 function scrollTargetIntoView(): void {
   if (!props.scrollIntoView)
     return
   const el = resolveTarget(activeStep.value)
   el?.scrollIntoView({
-    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    behavior: dzMotion.reduced.value ? 'auto' : 'smooth',
     block: 'center',
     inline: 'center',
   })
@@ -274,6 +276,12 @@ const slotProps = computed<DzTourSlotProps>(() => ({
 }))
 
 const panelClasses = computed(() => cn(styles.panel()))
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
@@ -281,7 +289,9 @@ const panelClasses = computed(() => cn(styles.panel()))
     <!-- Spotlight mask (box-shadow cutout dims everything except the target) -->
     <div
       v-if="mask && targetRect"
-      :class="styles.mask()"
+      data-part="overlay"
+      :class="cn(styles.mask(), props.ui?.overlay)"
+      :data-dz-motion="dzMotionAttr"
       :style="cutoutStyle"
       aria-hidden="true"
       data-testid="dz-tour-mask"
@@ -291,11 +301,13 @@ const panelClasses = computed(() => cn(styles.panel()))
     <div
       ref="floatingRef"
       role="dialog"
+      data-part="panel"
       aria-modal="true"
       :aria-labelledby="activeStep.title ? titleId : undefined"
       :aria-label="!activeStep.title ? ariaLabel : undefined"
       :aria-describedby="activeStep.description ? descriptionId : undefined"
       :class="panelClasses"
+      :data-dz-motion="dzMotionAttr"
       :style="panelStyle"
       data-testid="dz-tour-panel"
       v-bind="$attrs"
@@ -307,32 +319,33 @@ const panelClasses = computed(() => cn(styles.panel()))
 
       <!-- Body -->
       <slot v-bind="slotProps">
-        <div :class="styles.header()">
-          <p v-if="activeStep.title" :id="titleId" :class="styles.title()">
+        <div data-part="header" :class="cn(styles.header(), props.ui?.header)">
+          <p v-if="activeStep.title" :id="titleId" data-part="title" :class="cn(styles.title(), props.ui?.title)">
             {{ activeStep.title }}
           </p>
         </div>
-        <p v-if="activeStep.description" :id="descriptionId" :class="styles.description()">
+        <p v-if="activeStep.description" :id="descriptionId" data-part="description" :class="cn(styles.description(), props.ui?.description)">
           {{ activeStep.description }}
         </p>
       </slot>
 
       <!-- Footer -->
       <slot name="footer" v-bind="slotProps">
-        <div :class="styles.footer()">
+        <div data-part="footer" :class="cn(styles.footer(), props.ui?.footer)">
           <!-- Indicators -->
           <slot name="indicators" v-bind="slotProps">
-            <div :class="styles.indicators()" aria-hidden="true">
+            <div data-part="list" :class="cn(styles.indicators(), props.ui?.list)" aria-hidden="true">
               <span
                 v-for="(_, index) in steps"
                 :key="index"
-                :class="styles.dot({ active: index === activeIndex })"
+                data-part="item-indicator"
+                :class="cn(styles.dot({ active: index === activeIndex }), props.ui?.['item-indicator'])"
               />
             </div>
           </slot>
 
           <!-- Controls -->
-          <div :class="styles.controls()">
+          <div data-part="action" :class="cn(styles.controls(), props.ui?.action)">
             <DzButton
               variant="ghost"
               tone="neutral"

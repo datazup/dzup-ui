@@ -60,9 +60,13 @@ checks the file exists. Two cases fall outside that rule and both are labelled
 in the result's `origin` field:
 
 - **`generated-artifact`** — `@dzup-ui/tokens/css` and `/tailwind` are written
-  by `yarn tokens:generate` and committed (ADR-12). There is no source file, so
-  both modes resolve to `dist/`, and a token change needs the generator before a
-  consumer sees it.
+  by `yarn tokens:generate` into `dist/`, which is **gitignored and published,
+  not committed** (ADR-12; corrected 2026-09-04, TASK-N0-04 — this line
+  previously said "and committed"). They reach consumers through the tokens
+  package's `files: ["LICENSE", "dist"]` at pack time. There is no source file,
+  so both modes resolve to `dist/`, and a token change needs the generator
+  before a consumer sees it — and, because nothing tracks the output, before a
+  fresh clone has one at all.
 - **`override`** — a declared exception with a reason, for a source file that is
   not where the rule would look. There is exactly one
   (`@dzup-ui/core/styles` → `src/styles/base.css`, because `dist/core.css` is

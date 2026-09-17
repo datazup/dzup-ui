@@ -179,6 +179,10 @@ behaviour depends on which provider a host remembered to mount.
   sites can be migrated one at a time to the same cache.
 - `@dzup-ui/contracts` now carries runtime symbols. It remains dependency-free
   and tree-shakeable.
+- **A tenth concern, the sanitizer, was added by amendment A6** (TASK-R3-O2).
+  Its default is an escaping adapter rather than a pass-through, it has zero
+  component consumers inside Core by construction, and it is the seam
+  `@dzup-ui-pro/pro` consumes in place of its per-component DOMPurify sites.
 
 ## Alternatives considered
 
@@ -227,9 +231,10 @@ ancestor's per-component map.
 
 ## Amendments (TASK-OSS-P4-02)
 
-Building the writer forced four decisions this ADR had not taken. They are
-recorded here rather than in a second ADR because each one is a rule about the
-keys and merge semantics §1–§9 define.
+Building the writer forced four decisions this ADR had not taken (A1–A4); P4-03
+added a fifth (A5), and TASK-R3-O2 a sixth (A6, 2026-09-04) that adds a concern
+rather than a rule. They are recorded here rather than in a second ADR because
+each one is a rule about the keys and merge semantics §1–§9 define.
 
 ### A1. A provider provides only the keys its props set
 
@@ -349,9 +354,68 @@ provider. The **pure exported helpers** (`formatNumber`, `formatRelativeTime`,
 `formatAbsoluteTime`) deliberately do not: an omitted `locale` still means the
 runtime's own, because they are public functions whose signature says so.
 
+### A6. A tenth concern: the sanitizer (TASK-R3-O2, 2026-09-04)
+
+**Added after P4, and by a different force.** A1–A5 were decisions that building
+the writer forced. This one is a decision that *another package* forced: Pro's
+QUAL-04 built a 13-sink registry, a malicious corpus and a Trusted Types lane,
+and then recorded in `../../../dzup-ui-pro/docs/security.md` §10 that the shared
+`DzSanitizerAdapter` could not be built, because **Core had no provider seam and
+§9 forbids a Pro-only provider.** §9 is right, so the seam belongs here.
+
+08-11 doc 06 asks for a central sanitizer adapter configurable **once per
+application**: allowed markup, a Trusted Types policy name and input ceilings. A
+`sanitizer` concern is added with the same obligations the other nine carry — a
+key in contracts (`DZ_SANITIZER_KEY`), a typed default, per-key nesting, an
+SSR-safe resolution and a documented composable (`useDzSanitizer`).
+
+**The default is escaping, and that is the substantive decision.** Core renders
+no HTML sink of its own — measured at `99b963a`: zero `v-html`, zero `innerHTML`
+in `packages/core/src`, and all fifteen `SecurityBoundary` declarers are `url` or
+`payload` — so there was no existing Core sanitizer to promote. Of the three
+candidates:
+
+| Default | Verdict |
+|---|---|
+| Pass-through | **Rejected.** It is the vulnerability the seam exists to remove, and it fails in the direction where nothing looks wrong until it is. |
+| Bundle a sanitizer | **Rejected.** A parser and an allowlist in every consumer's bundle, for a library that renders no HTML, and Core would own a policy that belongs to the host. |
+| **Escape** | **Chosen.** Safe with no dependency, byte-identical on server and client, and *visibly* wrong when it is wrong: a host that meant to render rich content sees tags as text on the first render rather than shipping an unguarded sink. |
+
+**The ceilings are the seam's, not the adapter's.** `resolveSanitizer` enforces
+`limits` before delegating, so the common installation
+(`{ sanitize: html => DOMPurify.sanitize(html) }`) cannot omit them by
+forgetting them. `maxLength` is in **characters**, and `128 KiB` / depth `64` are
+Pro's measured `DEFAULT_SANITIZE_LIMITS` carried over unchanged rather than
+re-guessed. The depth guard is a **scanner, not a parse** — the parse is the cost
+being bounded — ported from Pro with its 26 validated shapes, so the two tiers
+cannot come to disagree about what depth 64 means.
+
+**Three states, not two.** Omitted means "nobody configured one" and resolves to
+the escaping default. `null` means "the host will supply one" and, if nothing
+does, throws in development — a distinction A1 makes possible and one that keeps
+a configuration mistake from becoming a rendering difference nobody looks for.
+In production the same state falls back to escaping: failing closed beats
+failing loudly in a user's face.
+
+**Consequences for §2 and for the ratchet.** `DZ_PROVIDER_DEFAULTS` grows a
+`sanitizer` key — the first time it has grown since §2 published it, and a
+contract change for anyone comparing against the object, so it ships under a
+`minor` per `VERSIONING.md`'s 0.x rule. The vocabulary (`markdown`,
+`mermaid-svg`, `notebook-output`, `diff-highlight`, `rich-text-paste`, and the
+three object-URL contexts typed separately) is Pro's registry vocabulary
+verbatim; no name is invented and none is dropped.
+
+**What this amendment does *not* claim.** The seam has **zero component
+consumers in Core**, because Core has no HTML sink to consume it — and unlike
+D20-1 through D20-4, that is a property of the catalogue rather than an
+un-run rollout. It is stated here so acceptance records it: what ships is *the
+contract and its default*, exercised by its own suite and by Pro
+TASK-R5-P2, not adoption across 144 components.
+
 ### What did not change
 
-Every default in §2, the deep-merge rule for messages in §3, the direction
+Every default in §2 **that existed before A6** (A6 adds a key rather than
+changing one), the deep-merge rule for messages in §3, the direction
 resolution in §4, the formatter cache in §5, the precedence in §6, the motion
 policy in §7, and the Pro extension rule in §9. No component's default changed,
 and every concern still resolves with no provider mounted.
@@ -371,6 +435,7 @@ media-query value, not this contract's. The implementation follows this ADR.
 | `packages/core/src/providers/DzProvider.spec.ts` | prop → composable routing · nesting per key · the negative case (an unset prop provides nothing) · message deep-merge across a boundary · defaults precedence and both accepted shapes · `persist: false` in both directions · nonce on the injected style tag · `dir` reflected by the root only |
 | `packages/core/src/providers/DzProvider.contract.spec.ts` · `DzThemeProvider.contract.spec.ts` | Contract Spec v1 and anatomy conformance — including `parts: 'none'`, i.e. that neither renders an element |
 | `packages/core/tests/ssr/dz-provider-ssr.spec.ts` | server render with the browser globals deleted, **plus** hydration with zero mismatch warnings for a configured, a nested, and a themed tree |
+| `packages/core/src/security/sanitize.spec.ts` | A6: escaping default is not a pass-through · ceilings enforced before parsing, length before depth · the depth scanner's over-count and under-count bypasses · per-field fold · options read at call time |
 | `yarn validate:contract-parity` | now covers `packages/core/src/providers`, which it never did |
 | `yarn validate:hardcoded-strings` | no static `aria-label` in a template and no literal default on a user-visible prop, unless a comment says why |
 | `packages/core/src/i18n/i18n.spec.ts` | every catalog value equals the literal it replaced · per-key override · a non-string override falls back rather than rendering `[object Object]` · 1,000 rows construct at most one formatter per (locale, options) pair |

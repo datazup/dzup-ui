@@ -19,6 +19,14 @@ Groups DzCheckbox components with a shared string[] model.
 - **Risk tier:** B · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **v-model:** `v-model` (`string[] | undefined`)
+- **Anatomy parts (ADR-19):** `root`
+
+## Intent and selection guidance
+
+**Not declared.** `DzCheckboxGroup` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -50,7 +58,7 @@ never as asserted.
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state propagated to all child checkboxes |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
-| `modelValue` | `string[] \| undefined` | no | `[]` | — |
+| `modelValue` | `string[] \| undefined` | no | `[]` | Values of the options that are checked; the default empty array checks none. |
 | `orientation` | `Orientation \| undefined` | no | `"vertical"` | Layout orientation |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Size propagated to all child checkboxes |
 
@@ -59,7 +67,7 @@ never as asserted.
 | Event | Payload | Description |
 | --- | --- | --- |
 | `change` | `[values: string[]]` | Value changed after user interaction |
-| `update:modelValue` | `[value: string[]]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: string[]]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (1)
 
@@ -85,6 +93,117 @@ Editable, running the **Size Gallery** story from `packages/core/stories/forms/D
 
 <DzPlayground component="DzCheckboxGroup" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `orientation` | `[data-orientation="…"]` | `orientation` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzCheckboxGroup />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzCheckboxGroup v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzCheckboxGroup :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 9 stories in
+`packages/core/stories/forms/DzCheckboxGroup.stories.ts`: `Default`, `Horizontal`, `Size Gallery`, `Disabled`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Notification Preferences`, `States`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzCheckboxGroup :ui="{ 'root': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `ready` | `[data-state="ready"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/forms/DzCheckboxGroup.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzCheckboxGroup.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzCheckboxGroup` advertises 2 states:
+`disabled`, `ready`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzCheckboxGroup.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `80ce301`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -92,8 +211,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 9 | 8 | 4 declare a default, of which 5 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 2 | 1 | 1 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 9 | 9 | 4 declare a default, of which 5 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 2 | 2 | 1 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -101,8 +220,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -111,7 +230,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`checkbox`](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/)
 - **Traits:** none declared
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `80ce3012`
 
 ### WCAG 2.2 criteria in scope (20)
@@ -145,14 +264,20 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**2 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `Tab` | Move to the next checkbox; each box in the group is its own tab stop. | `2.1.2` | [`checkbox`](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/) |
+| `Space` | Toggle the focused checkbox. | `2.1.1` | [`checkbox`](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/) |
+
+Declared in `packages/core/src/components/forms/DzCheckboxGroup.anatomy.ts`.
 
 - **Pattern:** [APG — `checkbox`](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 2 binding(s); the unit spec asserts no key event for `Tab`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -186,15 +311,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzCheckboxGroup.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzCheckboxGroup.spec.ts` — The component declares 2 binding(s); the unit spec asserts no key event for `Tab`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzCheckboxGroup.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzCheckboxGroup.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzCheckboxGroup.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzCheckboxGroup.md` — 6 AT/browser pairs, none executed. |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

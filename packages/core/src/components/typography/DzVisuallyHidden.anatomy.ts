@@ -18,6 +18,12 @@ export const anatomy = {
   componentTokens: [],
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Renders text for assistive technology
+   * only; it takes no focus.
+   */
+  keyboard: 'none',
+
   /** Tier A — presentational, and load-bearing for assistive technology. */
   riskTier: 'A',
 } as const satisfies ComponentAnatomy

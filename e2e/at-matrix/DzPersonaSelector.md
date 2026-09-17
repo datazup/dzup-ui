@@ -22,6 +22,24 @@ known one.
 | `select` | Select an item and confirm the selection. | The selected state is announced, and the control's value reflects it afterwards. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzPersonaSelector.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowDown` | — | Move focus to the next option. |
+| `ArrowUp` | — | Move focus to the previous option. |
+| `Home` | — | Move focus to the first option. |
+| `End` | — | Move focus to the last option. |
+| `Enter` | — | Select the focused option. |
+| `Space` | — | Select the focused option. |
+| any character key | — | Move focus to the next option whose label starts with that character. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

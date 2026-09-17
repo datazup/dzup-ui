@@ -1,0 +1,14 @@
+{
+  "$comment": "Vendor sublayer registry (TASK-R5-O1, ADR-19 §2). A vendor sublayer is a rule the library writes against a DOM some OTHER library renders — a `[data-reka-*]`, `.reka-*`, `[data-radix-*]`, `[data-floating-ui-*]` or `[data-vaul-*]` selector inside one of the dz-* layers. ADR-19 §3 already forbids turning a Reka internal into a `data-part`; this file is the same rule one level down, for CSS: styling a node the library does not render is a coupling to a version of somebody else's markup, and it must be written down with an owner and a way out rather than discovered when the dependency's next minor moves the node.",
+  "$comment.rules": "`yarn validate:vendor-sublayers` enforces three things. (1) Every entry declares selector · owner · reason · exit, all non-empty; `exit` is an ISO date or a named event, never 'when we get to it'. (2) Every entry's selector still appears in the library CSS — a registry that outlives its rule is a licence nobody revoked. (3) Every vendor-shaped selector in the library CSS has an entry — which is what makes this a gate rather than a document.",
+  "$comment.entries": "EMPTY, and measured empty on 99b963a rather than assumed: the only contact between library CSS and Reka is `var(--reka-accordion-content-height)` in base.css, which READS a custom property Reka sets from inside the library's own `.dz-accordion-content` rule. That is a value the vendor publishes, not a node the library reaches into, so it is not a sublayer and inventing an entry for it would put a false positive at the top of an empty ledger. The ADR-19 acceptance packet names no vendor selector either. The file ships empty on purpose: an empty registry with a gate behind it is the only way the FIRST such selector cannot land unnoticed.",
+  "layers": [
+    "dz-reset",
+    "dz-tokens",
+    "dz-base",
+    "dz-components",
+    "dz-utilities",
+    "dz-overrides"
+  ],
+  "entries": []
+}

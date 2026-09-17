@@ -12,6 +12,8 @@ import type {
   CanonicalSize,
 } from '@dzup-ui/contracts'
 import type { Component, ComputedRef, InjectionKey, Ref } from 'vue'
+import type { DzTreeUi } from './DzTree.anatomy.ts'
+import type { DzTreeItemUi } from './DzTreeItem.anatomy.ts'
 import type { TreeNavDirection } from './treeNavigation.ts'
 
 // ---------------------------------------------------------------------------
@@ -124,6 +126,13 @@ export interface DzTreeProps<T = unknown> extends BaseAccessibilityProps {
   disabled?: boolean
   /** Loading state */
   loading?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzTree.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzTreeUi
 }
 
 // ---------------------------------------------------------------------------
@@ -172,6 +181,13 @@ export interface DzTreeItemProps {
   posInSet?: number
   /** Total number of siblings in this node's group (aria-setsize) */
   setSize?: number
+  /**
+   * Per-part class overrides, keyed by the names in `DzTreeItem.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzTreeItemUi
 }
 
 /** Slot definitions for DzTreeItem */

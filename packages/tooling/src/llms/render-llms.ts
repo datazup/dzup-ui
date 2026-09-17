@@ -503,11 +503,24 @@ export function renderComponentSection(
       '',
     )
   }
+  // TASK-R5-O5. Both absence branches now carry the **Usage heading** as well as
+  // the note. They did not, and `validate:docs-pages`' new per-section check
+  // caught it on its first run: `DzThemeProvider` — the one public component in
+  // the catalogue with no stories file at all — rendered a page with no Usage
+  // section whatsoever, so a reader scanning headings could not tell the
+  // difference between "this has no example" and "this page forgot to show it".
+  // A section that vanishes where its artifact is missing is precisely the
+  // failure mode the page contract exists to stop.
   else if (record.kind === 'compound-part' && record.parentComponent !== undefined) {
-    lines.push(COMPOUND_EXAMPLE_TEMPLATE.replace('{parent}', record.parentComponent), '')
+    lines.push(
+      group('Usage', 'no story of its own — it is documented through its parent'),
+      '',
+      COMPOUND_EXAMPLE_TEMPLATE.replace('{parent}', record.parentComponent),
+      '',
+    )
   }
   else {
-    lines.push(NO_EXAMPLE_NOTE, '')
+    lines.push(group('Usage', 'no published example'), '', NO_EXAMPLE_NOTE, '')
   }
 
   return lines

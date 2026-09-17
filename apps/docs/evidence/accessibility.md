@@ -118,7 +118,7 @@ from.
 
 An honest gap is worth more than a plausible table.
 
-Measured today: of the 89 components that owe a `keyboard-spec`, 29 have a specification asserting at least one key sequence, 58 do not, and 2 are excepted. None of that is a table of bindings, and the repository has nowhere to hold one.
+Measured today: of the 89 components that owe a `keyboard-spec`, 5 have a specification asserting at least one key sequence, 78 do not, and 6 are excepted. None of that is a table of bindings, and the repository has nowhere to hold one.
 
 ## What "in scope" means on a component page
 
@@ -190,12 +190,12 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/quality-matrix.json` | `69fd88d079d8a1fc…` | yes |
-| `packages/core/docs/capability-matrix.json` | `02993453b1d97cee…` | yes |
+| `packages/core/docs/quality-matrix.json` | `f4c674109b6e2eac…` | yes |
+| `packages/core/docs/capability-matrix.json` | `561b7852a04d4f92…` | yes |
 | `packages/core/docs/wcag-deviations.json` | `c3fdab5ea679fbb0…` | yes |
-| `e2e/at-matrix/index.json` | `9d3a42652df31ea4…` | yes |
+| `e2e/at-matrix/index.json` | `0abcc92ef6c3332f…` | yes |
 
-Capability matrix `sourceCommit` `51dec93c` · quality matrix `51dec93c`.
+Capability matrix `sourceCommit` `99b963a0` · quality matrix `99b963a0`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

@@ -30,7 +30,13 @@ export const ratingVariants = tv({
       'block text-[var(--dz-muted-foreground)]',
     ].join(' '),
     overlay: [
-      'pointer-events-none absolute left-0 top-0 h-full overflow-hidden',
+      // TASK-R5-O2: a LOGICAL inset, not a physical one. The overlay is clipped
+      // by width to show a partial star, so it has to grow from the edge the
+      // reader starts at — pinned to the screen's start edge instead, it fills
+      // the wrong half of every star in an Arabic document. Identical output in
+      // a LTR document. (The physical spelling is deliberately not written out
+      // here: validate:rtl reads comments as text, F-C5.)
+      'pointer-events-none absolute inset-s-0 top-0 h-full overflow-hidden',
     ].join(' '),
     filled: [
       'block [&_svg]:fill-current',

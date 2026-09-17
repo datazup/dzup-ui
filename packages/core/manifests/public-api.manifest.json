@@ -233,7 +233,8 @@
           "useDzMotion",
           "useDzDefaults",
           "useDzNonce",
-          "useDzTestIds"
+          "useDzTestIds",
+          "useDzSanitizer"
         ]
       },
       "useClickOutside": {

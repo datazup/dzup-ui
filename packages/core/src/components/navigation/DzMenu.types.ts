@@ -8,6 +8,7 @@
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzMenuItemUi, DzMenuUi } from './DzMenu.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Compound context (ADR-08)
@@ -34,6 +35,12 @@ export interface DzMenuProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Collapse the menu to icon-only mode */
   collapsed?: boolean
+  /**
+   * Per-part class override for the `<nav>` this component renders
+   * (ADR-19 §5). Items and separators are sub-components the consumer writes,
+   * where `class` at the call site already lands.
+   */
+  ui?: DzMenuUi
 }
 
 /** Slot definitions for DzMenu */
@@ -56,6 +63,13 @@ export interface DzMenuItemProps {
   href?: string
   /** Accessible label */
   ariaLabel?: string
+  /**
+   * Per-part class override for the item's label wrapper (ADR-19 §5). The
+   * item's own element takes `class` at the call site; the `<span>` that holds
+   * the text — and that disappears when the surrounding sidebar collapses — is
+   * the node nothing else can reach.
+   */
+  ui?: DzMenuItemUi
 }
 
 /** Events emitted by DzMenuItem */

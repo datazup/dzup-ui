@@ -9,6 +9,7 @@
 
 import type { AsyncOptionsEmits, AsyncOptionsProps, AsyncOptionsState, BaseFormControlProps, SelectEvents } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
+import type { DzListboxUi } from './DzListbox.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Value / option shape
@@ -69,6 +70,12 @@ export interface DzListboxProps extends BaseFormControlProps<never>, AsyncOption
   checkmark?: boolean
   /** Message rendered when there are no (matching) options */
   emptyMessage?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzListbox.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target — the listbox box, declared
+   * there as `control`.
+   */
+  ui?: DzListboxUi
 }
 
 // ---------------------------------------------------------------------------

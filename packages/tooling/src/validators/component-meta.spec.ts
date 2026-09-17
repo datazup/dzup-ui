@@ -76,6 +76,7 @@ function artifact(components: ComponentMetaRecord[] = [record()]): ComponentMeta
     eventsWithDescription: 0,
     eventsFromExtractor: 0,
     eventsFromEmitsInterface: 0,
+    eventsModelSynthesised: 0,
     eventsModelDerived: 0,
     slots: 0,
     slotsWithDescription: 0,

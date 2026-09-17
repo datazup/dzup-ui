@@ -1,5 +1,5 @@
 {
-  "//": "TASK-N2-A2. Ratcheted extraction debt for packages/core/docs/component-meta.json. Every number may only FALL; validate:component-meta fails when one rises, and tells you to lower it when it drops. Measured at 51dec93 with the uncommitted N1+T1+A1 working tree, over 208 components (144 public-component + 64 compound-part).",
+  "//": "TASK-N2-A2. Ratcheted extraction debt for packages/core/docs/component-meta.json. Every number may only FALL; validate:component-meta fails when one rises, and tells you to lower it when it drops. Measured at 51dec93 with the uncommitted N1+T1+A1 working tree, over 208 components (144 public-component + 64 compound-part). TASK-R5-O8 re-measured every number at 99b963a and drove the four description ratchets to zero.",
 
   "unclassifiable": {
     "//": "Components vue-component-meta could not process at all. Zero today -- the task's <stop_conditions> unclassifiable branch was never reached. A rise means a source change broke extraction for a component, which is exactly the signal this gate exists to give.",
@@ -15,20 +15,20 @@
   },
 
   "propsWithoutDescription": {
-    "//": "Own props whose declaring member carries no JSDoc. 63 of 1,712. This is a SOURCE gap, not an extraction gap: vue-component-meta reads the JSDoc that is there. Falls as component authors document props.",
-    "ceiling": 63
+    "//": "Own props whose declaring member carries no JSDoc. Zero since TASK-R5-O8, down from 63 of 1,712 at 51dec93 (still 63, of 1,798, at 99b963a). 57 of those 63 were the props `defineModel` synthesises -- `modelValue`, `open`, `blocked`, `first`/`layout`/`sortField`/`sortOrder`, ... -- and it turned out they ARE authorable: vue-component-meta reads a JSDoc block written directly above the `defineModel(...)` call, measured on DzInput before a line of it was written. The other six were DzAsyncBoundary (delay/onError/timeout), DzErrorBoundary (onError) and DzFieldArray (min/max). This is a SOURCE gap, not an extraction gap: the pipeline reads the JSDoc that is there.",
+    "ceiling": 0
   },
   "slotsWithoutDescription": {
-    "//": "Slots with no JSDoc on the DzXSlots member. 21 of 326. Same class as propsWithoutDescription.",
-    "ceiling": 21
+    "//": "Slots with no JSDoc on the DzXSlots member. Zero since TASK-R5-O8, down from 21 of 326. Nine of the 21 needed no prose at all: DzCard and its three sub-parts declared no `defineSlots<...>()`, so their slots were inferred from the template and the documented DzCard*Slots interfaces were dead code nothing read. Declaring them is a type-only change with no runtime effect. The other twelve were authored -- DzAsyncBoundary 3, DzErrorBoundary 2, DzFieldArray 2 in their types files, and DzDataGridBody, the three DzForm* parts and DzThemeProvider in inline `defineSlots<{...}>()` blocks, none of which declared slots before.",
+    "ceiling": 0
   },
   "eventsWithoutDescription": {
-    "//": "Events with no description from either source. 106 of 359. 71 of those are `update:*` events defineModel synthesises (ADR-16) -- there is no authored member anywhere in the repo to carry prose for them. The other 35 are real authored emits whose DzXEmits interface does not exist or does not document the member (mostly Reka-forwarded compound-part events: escapeKeyDown, pointerDownOutside, interactOutside). See finding F-1 and owner decision D2.",
-    "ceiling": 106
+    "//": "Events with no description from any source. Zero since TASK-R5-O8, down from 106 of 359. Two mechanisms closed it, and both are visible in the totals rather than hidden in this number. (1) The `Dz{Name}Emits` lookup became name-keyed instead of path-keyed: thirteen compound parts declare their emits interface in the PARENT's types file (DzContextMenu.types.ts, not DzContextMenuContent.types.ts, which does not exist), so 25 of the 35 authored gaps -- 24 in a parent types file plus `DzSplitter.layoutChange` behind an `export ... as ...` alias -- were documented prose nothing could reach. The other 10 were authored in TASK-R5-O8. (2) Decision A2-D2: the 71 `update:*` events `defineModel` synthesises have no member anywhere to carry prose, so the extractor synthesises one and stamps `descriptionSource: \"model-synthesised\"`, counted separately in `totals.eventsModelSynthesised`. Subtract that total from `eventsWithDescription` for the authored count.",
+    "ceiling": 0
   },
   "exposedWithoutDescription": {
-    "//": "defineExpose members with no description. 26 of 26 -- every exposed member in the catalog is undocumented. The prose that exists sits on the defineExpose() CALL, not on the members, so no extractor can attribute it. A consumer calling ref.value.start() is using public API with zero published documentation. See finding F-3.",
-    "ceiling": 26
+    "//": "defineExpose members with no description. Zero since TASK-R5-O8, down from 26 of 26 -- every exposed member in the catalog was undocumented. The prose that existed sat on the defineExpose() CALL, where no extractor can attribute it to a member; vue-component-meta does read a JSDoc written on the object-literal PROPERTY inside the call, which is where all 27 now live (26 + DzAccordion's revealItem, newly extractable).",
+    "ceiling": 0
   },
 
   "publicComponentsWithoutExample": {
@@ -36,7 +36,7 @@
     "ceiling": 1
   },
   "componentsWithoutStaticTemplate": {
-    "//": "Components whose primary story's template is not a static string literal, so no paste-ready markup can be sliced out verbatim. 80 of 208 -- the primary story SOURCE is still published for all 143 that have a story, so these are still answerable, just not one-line-pasteable. 64 of the 80 are compound parts, which have no stories of their own by design.",
+    "//": "Components whose primary story's template is not a static string literal, so no paste-ready markup can be sliced out verbatim. 80 of 208, unchanged by TASK-R5-O8, and re-measured there into three populations: 64 compound parts with no stories file at all (by design); DzThemeProvider, which has no stories file either (the publicComponentsWithoutExample ceiling of 1); and 15 public components whose primary story is either `= {}` -- Storybook renders it straight from `args`, so there is no template to slice (DzIcon, DzEmoji, DzCopyButton, DzIconButton, ...) -- or an interpolated `${...}` template literal the extractor refuses rather than publish half-substituted (DzAccordion, DzFlex, DzGrid, DzMasonry, ...). The primary story SOURCE is still published for all 143 that have a story, so these are answerable, just not one-line-pasteable. Lowering it means writing stories, not metadata -- TASK-R5-O8 <stop_conditions> routes it to story-dod; see owner decision D53.",
     "ceiling": 80
   }
 }

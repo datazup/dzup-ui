@@ -34,6 +34,7 @@ import {
  * ```
  */
 import { computed, nextTick, ref, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzIconButton from '../buttons/DzIconButton.vue'
@@ -128,7 +129,7 @@ const styles = computed(() =>
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 /** Resolve a stable key for an item (from `dataKey`, else its index) */
@@ -483,21 +484,26 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-order-list'), ...$attrs, class: undefined }"
   >
     <!-- Move controls -->
     <div
       v-if="showControls"
-      :class="cn(styles.controls(), controlsPosition === 'end' ? 'order-2' : 'order-0')"
+      data-part="group"
+      :class="cn(styles.controls(), controlsPosition === 'end' ? 'order-2' : 'order-0', ui?.group)"
       role="group"
       :aria-label="dzMessages.reorderControls"
     >
@@ -547,7 +553,8 @@ function handleBlur(event: FocusEvent): void {
     <div :class="controlsPosition === 'end' ? 'order-0 min-w-0 flex-1' : 'order-1 min-w-0 flex-1'">
       <slot name="header" />
       <ul
-        :class="styles.list()"
+        data-part="list"
+        :class="cn(styles.list(), ui?.list)"
         :role="selectable ? 'listbox' : 'list'"
         :aria-multiselectable="selectable || undefined"
         :aria-label="ariaLabel"
@@ -560,7 +567,8 @@ function handleBlur(event: FocusEvent): void {
           v-for="(item, index) in model"
           :key="resolveKey(item, index)"
           :ref="(el) => setItemEl(el, index)"
-          :class="cn(styles.item(), itemStateClass(item, index))"
+          data-part="item"
+          :class="cn(styles.item(), itemStateClass(item, index), ui?.item)"
           :role="selectable ? 'option' : 'listitem'"
           :tabindex="index === activeIndex ? 0 : -1"
           :aria-selected="selectable ? isSelected(item, index) : undefined"
@@ -578,7 +586,8 @@ function handleBlur(event: FocusEvent): void {
           <!-- Drag handle -->
           <span
             v-if="dragHandle"
-            :class="styles.handle()"
+            data-part="control"
+            :class="cn(styles.handle(), ui?.control)"
             :title="resolvedDragHandleLabel"
             aria-hidden="true"
             data-dz-order-list-handle
@@ -588,7 +597,7 @@ function handleBlur(event: FocusEvent): void {
             <GripVertical class="h-4 w-4" />
           </span>
 
-          <span :class="styles.content()">
+          <span data-part="item-label" :class="cn(styles.content(), ui?.['item-label'])">
             <slot
               name="item"
               :item="item"
@@ -601,7 +610,7 @@ function handleBlur(event: FocusEvent): void {
           </span>
         </li>
 
-        <li v-if="model.length === 0" :class="styles.empty()">
+        <li v-if="model.length === 0" data-part="empty" :class="cn(styles.empty(), ui?.empty)">
           <slot name="empty">
             No items
           </slot>

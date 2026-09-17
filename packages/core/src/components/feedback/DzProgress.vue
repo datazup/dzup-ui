@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CanonicalSize, CanonicalTone, ProgressVariant } from '@dzup-ui/contracts'
 import type { DzProgressProps, DzProgressSlots } from './DzProgress.types.ts'
 /**
  * DzProgress — Visual indicator of task completion.
@@ -14,6 +15,7 @@ import type { DzProgressProps, DzProgressSlots } from './DzProgress.types.ts'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzDefaults } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import {
   circularSizeMap,
@@ -28,15 +30,40 @@ defineOptions({
 const props = withDefaults(defineProps<DzProgressProps>(), {
   value: 0,
   max: 100,
-  variant: 'bar',
-  size: 'md',
-  tone: 'primary',
+  variant: undefined,
+  size: undefined,
+  tone: undefined,
   indeterminate: false,
 })
 
 defineSlots<DzProgressSlots>()
 
 const attrs = useAttrs()
+
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * Each axis keeps the literal it carried in `withDefaults` as `resolve`'s last
+ * link, so an unprovided tree renders exactly what it rendered before. Note
+ * `variant` drives a `v-if` here as well as the recipes: a raw read there would
+ * render the bar branch while the styling resolved circular.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved variant: prop, then provider, then default */
+const resolvedVariant = computed(
+  () => resolve<ProgressVariant>('DzProgress', 'variant', [props.variant]) ?? 'bar',
+)
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzProgress', 'size', [props.size]) ?? 'md',
+)
+
+/** Resolved tone: prop, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzProgress', 'tone', [props.tone]) ?? 'primary',
+)
 
 /** Clamped percentage value */
 const percentage = computed(() => {
@@ -49,19 +76,19 @@ const percentage = computed(() => {
 /** Track classes for bar variant */
 const trackClasses = computed(() =>
   cn(
-    progressTrackVariants({ size: props.size }),
+    progressTrackVariants({ size: resolvedSize.value }),
     attrs.class as string | undefined,
   ),
 )
 
 /** Bar fill classes */
 const barClasses = computed(() =>
-  progressBarVariants({ tone: props.tone, indeterminate: props.indeterminate }),
+  progressBarVariants({ tone: resolvedTone.value, indeterminate: props.indeterminate }),
 )
 
 /** Circular SVG dimensions */
 const circularConfig = computed(() => {
-  const config = (circularSizeMap[props.size] ?? circularSizeMap.md) as { size: number, strokeWidth: number }
+  const config = (circularSizeMap[resolvedSize.value] ?? circularSizeMap.md) as { size: number, strokeWidth: number }
   const radius = (config.size - config.strokeWidth) / 2
   const circumference = 2 * Math.PI * radius
   return { size: config.size, strokeWidth: config.strokeWidth, radius, circumference }
@@ -84,13 +111,13 @@ const toneColorVar = computed(() => {
     danger: 'var(--dz-danger)',
     info: 'var(--dz-info)',
   }
-  return map[props.tone] ?? map.primary
+  return map[resolvedTone.value] ?? map.primary
 })
 </script>
 
 <template>
   <div
-    v-if="variant === 'bar'"
+    v-if="resolvedVariant === 'bar'"
     :id="id"
     :class="trackClasses"
     role="progressbar"
@@ -100,7 +127,7 @@ const toneColorVar = computed(() => {
     :aria-label="ariaLabel ?? 'Progress'"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    :data-tone="tone"
+    :data-tone="resolvedTone"
     :data-state="indeterminate ? 'indeterminate' : 'determinate'"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
@@ -123,7 +150,7 @@ const toneColorVar = computed(() => {
     :aria-label="ariaLabel ?? 'Progress'"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    :data-tone="tone"
+    :data-tone="resolvedTone"
     :data-state="indeterminate ? 'indeterminate' : 'determinate'"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

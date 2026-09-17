@@ -9,6 +9,7 @@
  */
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
+import type { DzInplaceUi } from './DzInplace.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Unions
@@ -48,6 +49,13 @@ export interface DzInplaceProps extends Omit<BaseAccessibilityProps, 'ariaInvali
   size?: CanonicalSize
   /** Placeholder for the built-in DzInput editor (no `#edit` slot) */
   placeholder?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzInplace.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * the built-in `DzInput` editor is its own anatomy boundary and is reached
+   * through the `#edit` slot, not through this map.
+   */
+  ui?: DzInplaceUi
 }
 
 // ---------------------------------------------------------------------------

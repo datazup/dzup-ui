@@ -22,41 +22,113 @@ get both right and still show a chevron pointing away from the panel it opens.
 
 | Component | mirrors | keyboard | direction-bearing icons |
 |---|---|---|---|
+| `DzAccordion` | layout | none | `indicator` |
+| `DzAnchor` | layout | none | — |
+| `DzBackTop` | layout | none | — |
+| `DzBlockUI` | layout | none | — |
 | `DzBlockquote` | layout | none | — |
+| `DzBreadcrumb` | layout | none | `separator` |
 | `DzButton` | layout | none | — |
 | `DzButtonGroup` | layout | none | — |
+| `DzCalendar` | layout | swap-horizontal | `action` |
 | `DzCaption` | layout | none | — |
+| `DzCard` | layout | none | — |
+| `DzCarousel` | none | swap-horizontal | — |
+| `DzCascader` | layout | swap-horizontal | `icon`, `item-indicator` |
+| `DzCheckbox` | layout | none | — |
+| `DzCheckboxGroup` | layout | none | — |
+| `DzChip` | layout | none | — |
 | `DzCode` | none | none | — |
 | `DzCodeBlock` | none | none | — |
+| `DzCollapse` | layout | none | — |
+| `DzColorModeToggle` | layout | none | — |
+| `DzColorPicker` | layout | none | — |
+| `DzCombobox` | layout | none | `icon` |
+| `DzCommandPalette` | layout | none | — |
+| `DzConfirmDialog` | layout | none | — |
+| `DzContextMenu` | layout | none | `suffix` |
 | `DzCopyButton` | layout | none | — |
+| `DzDataGrid` | layout | swap-horizontal | `indicator` |
+| `DzDataView` | layout | none | — |
+| `DzDatePicker` | layout | swap-horizontal | `action`, `icon` |
+| `DzDateRangePicker` | layout | swap-horizontal | `action`, `icon` |
 | `DzDialog` | layout | none | — |
+| `DzDropdownMenu` | layout | none | `suffix` |
 | `DzFab` | layout | none | — |
+| `DzFieldArray` | none | none | — |
 | `DzFileUpload` | layout | none | — |
 | `DzHeading` | layout | none | — |
 | `DzIconButton` | layout | none | — |
+| `DzImageCard` | layout | none | — |
+| `DzImageComparison` | none | none | — |
+| `DzInfiniteScroll` | layout | none | — |
+| `DzInplace` | layout | none | `icon` |
 | `DzInput` | layout | none | — |
 | `DzInputGroup` | layout | none | — |
 | `DzInputMask` | layout | none | — |
 | `DzKbd` | layout | none | — |
+| `DzKnob` | none | swap-horizontal | — |
+| `DzLightbox` | layout | swap-horizontal | `action` |
+| `DzListItem` | layout | none | — |
+| `DzListbox` | layout | none | — |
+| `DzMegaMenu` | layout | swap-horizontal | `indicator` |
+| `DzMention` | layout | none | — |
+| `DzMenu` | layout | none | — |
+| `DzMultiSelect` | layout | none | `icon` |
+| `DzNotification` | layout | none | — |
 | `DzNumberInput` | layout | none | — |
+| `DzOrderList` | layout | none | — |
 | `DzOtpInput` | layout | none | — |
+| `DzPagination` | layout | swap-horizontal | `action` |
+| `DzPanel` | layout | none | — |
 | `DzPasswordInput` | layout | none | — |
+| `DzPersonaSelector` | layout | none | `icon` |
+| `DzPopconfirm` | layout | none | — |
+| `DzPopover` | layout | none | — |
 | `DzProvider` | none | none | — |
+| `DzRadio` | layout | none | — |
+| `DzRadioGroup` | layout | swap-horizontal | — |
+| `DzRangeSlider` | layout | swap-horizontal | `indicator` |
+| `DzRating` | layout | swap-horizontal | — |
 | `DzRelativeTime` | layout | none | — |
+| `DzResizable` | layout | swap-horizontal | — |
+| `DzScrollArea` | layout | swap-horizontal | — |
 | `DzSearchInput` | layout | none | — |
+| `DzSegmented` | layout | swap-horizontal | — |
 | `DzSelect` | layout | none | `indicator` |
+| `DzSheet` | none | none | — |
+| `DzSidebar` | layout | none | — |
+| `DzSlider` | layout | swap-horizontal | `indicator` |
 | `DzSpeedDial` | layout | none | — |
+| `DzSpinner` | none | none | — |
 | `DzSplitButton` | layout | none | — |
+| `DzSplitter` | layout | swap-horizontal | — |
+| `DzStatCard` | layout | none | — |
+| `DzStepper` | layout | swap-horizontal | — |
+| `DzStepperItem` | layout | none | — |
+| `DzSwitch` | layout | none | `indicator` |
 | `DzTable` | layout | swap-horizontal | — |
+| `DzTabs` | layout | swap-horizontal | — |
+| `DzTag` | layout | none | — |
+| `DzTagsInput` | layout | none | — |
 | `DzText` | layout | none | — |
 | `DzTextarea` | layout | none | — |
 | `DzThemeProvider` | none | none | — |
+| `DzTimePicker` | layout | none | `icon` |
+| `DzToast` | layout | none | — |
 | `DzToggleButton` | layout | none | — |
+| `DzToolbar` | layout | swap-horizontal | — |
+| `DzTooltip` | layout | none | — |
+| `DzTour` | layout | none | — |
+| `DzTransfer` | layout | none | `icon` |
+| `DzTree` | layout | swap-horizontal | — |
+| `DzTreeItem` | layout | swap-horizontal | `indicator` |
+| `DzTreeSelect` | layout | none | `icon` |
 | `DzVisuallyHidden` | layout | none | — |
 
-**31 of 144 public components declare an RTL contract.** The
+**103 of 144 public components declare an RTL contract.** The
 rest are silent, not compliant: the field lives in the anatomy, and only
-31 components declare an anatomy at all. The two rollouts are the
+103 components declare an anatomy at all. The two rollouts are the
 same rollout, ratcheted by `maxWithoutAnatomy` in
 `packages/tooling/src/ownership/unclassified-ceiling.json`.
 

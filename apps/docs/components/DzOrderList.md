@@ -19,6 +19,14 @@ reorderable list with drag, control-button, and keyboard reorder.
 - **Risk tier:** C · **Status:** experimental
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **v-model:** `v-model:value` (`T[] | undefined`)
+- **Anatomy parts (ADR-19):** `control`, `empty`, `group`, `item`, `item-label`, `list`, `root`
+
+## Intent and selection guidance
+
+**Not declared.** `DzOrderList` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (19, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (20, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -61,6 +69,7 @@ never as asserted.
 | `selectable` | `boolean \| undefined` | no | `false` | Allow multi-selection so a group of rows can be moved together |
 | `showControls` | `boolean \| undefined` | no | `true` | Render the Move Up / Down / Top / Bottom control buttons |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
+| `ui` | `Partial<Record<"root" \| "item" \| "list" \| "item-label" \| "group" \| "empty" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzOrderList.anatomy.ts` (ADR-19 §5). `class` keeps its existing target on the wrapper; the toolbar, the list, the rows, the drag handle and the placeholder are all rendered by this component. |
 | `value` | `T[] \| undefined` | no | `[]` | modelValue = the ordered array (never mutated in place) |
 | `variant` | `OrderListVariant \| undefined` | no | `"bordered"` | Visual style variant |
 
@@ -72,7 +81,7 @@ never as asserted.
 | `focus` | `[event: FocusEvent]` | Focus entered the list |
 | `reorder` | `[payload: OrderListReorderPayload]` | A reorder completed (drag, control button, or keyboard drop) |
 | `selectionChange` | `[keys: OrderListKey[]]` | The selected key set changed (only fired when `selectable`) |
-| `update:value` | `[value: T[]]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:value` | `[value: T[]]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
 
 ## Slots (3)
 
@@ -100,6 +109,144 @@ Editable, running the **States** story from `packages/core/stories/data/DzOrderL
 
 <DzPlayground component="DzOrderList" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled — `value`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzOrderList />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzOrderList v-model:value="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzOrderList :value="value" @update:value="value = $event" />
+```
+
+**Where each variant is shown.** 7 stories in
+`packages/core/stories/data/DzOrderList.stories.ts`: `Default`, `WithControls`, `MultiSelect`, `CustomItem`, `States`, `Accessibility: Keyboard-Only Reorder`, `Real World: Dashboard Widget Order`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `control` | `[data-part="control"]` | no — renders zero or more than once |
+| `empty` | `[data-part="empty"]` | no — renders zero or more than once |
+| `group` | `[data-part="group"]` | no — renders zero or more than once |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `item-label` | `[data-part="item-label"]` | no — renders zero or more than once |
+| `list` | `[data-part="list"]` | yes |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzOrderList :ui="{ 'control': 'ring-2', 'empty': 'ring-2', 'group': 'ring-2', 'item': 'ring-2', 'item-label': 'ring-2', 'list': 'ring-2', 'root': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `grabbed` | `[data-state="grabbed"]` |
+| `selected` | `[data-state="selected"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-order-list-border` |
+| `--dz-order-list-control-gap` |
+| `--dz-order-list-disabled-opacity` |
+| `--dz-order-list-drop-indicator-color` |
+| `--dz-order-list-drop-indicator-size` |
+| `--dz-order-list-gap` |
+| `--dz-order-list-grab-shadow` |
+| `--dz-order-list-handle-color` |
+| `--dz-order-list-handle-hover` |
+| `--dz-order-list-item-bg` |
+| `--dz-order-list-item-gap` |
+| `--dz-order-list-item-grab-bg` |
+| `--dz-order-list-item-hover-bg` |
+| `--dz-order-list-item-padding-x` |
+| `--dz-order-list-item-padding-y` |
+| `--dz-order-list-item-selected-bg` |
+| `--dz-order-list-item-selected-fg` |
+| `--dz-order-list-radius` |
+
+Declared in `packages/core/src/components/data/DzOrderList.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMessages` | the translated string catalogue |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/data/DzOrderList.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzOrderList` advertises 3 states:
+`disabled`, `grabbed`, `selected`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/data/DzOrderList.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `5773f65`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -107,8 +254,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 19 | 19 | 8 declare a default, of which 10 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 5 | 4 | 4 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 20 | 20 | 8 declare a default, of which 10 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 5 | 5 | 4 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 3 | 3 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -116,8 +263,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -126,8 +273,8 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)
 - **Traits:** `dataset`, `drags`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
-- **Component last changed at:** `4c9fb7a1`
+- **Declared anatomy:** `declared`
+- **Component last changed at:** `5773f65c`
 
 **Why this pattern:** Reorder over a consumer-supplied collection, with three input paths (drag, control buttons, keyboard grab/move/drop) that must agree on one model.
 
@@ -173,16 +320,28 @@ DzOrderList drags (reorder an item by dragging its grip), so SC 2.5.7 applies an
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**10 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `ArrowDown` | Move focus to the next option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `ArrowUp` | Move focus to the previous option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Home` | Move focus to the first option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `End` | Move focus to the last option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Enter` | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Space` | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| any character key | Move focus to the next option whose label starts with that character. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Alt` + `ArrowUp` | Move the selected item one position earlier. | `2.1.1`, `2.5.7` | — *(component-specific)* |
+| `Alt` + `ArrowDown` | Move the selected item one position later. | `2.1.1`, `2.5.7` | — *(component-specific)* |
+| `Escape` | Cancel the reorder and restore the original position. | `2.1.1`, `2.1.2` | — *(component-specific)* |
+
+Declared in `packages/core/src/components/data/DzOrderList.anatomy.ts`.
 
 - **Pattern:** [APG — `listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/data/DzOrderList.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 10 binding(s); the unit spec asserts no key event for `Home`, `Enter`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -216,20 +375,20 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzOrderList.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/data/DzOrderList.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzOrderList.spec.ts` — The component declares 10 binding(s); the unit spec asserts no key event for `Home`, `Enter`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzOrderList.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzOrderList.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzOrderList.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/data/DzOrderList.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzOrderList.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/data/DzOrderList.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzOrderList.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
+| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/data/DzOrderList.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 
-**6 unrun:** `axe`, `ssr-sample`, `controlled-uncontrolled`, `rtl-contract`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

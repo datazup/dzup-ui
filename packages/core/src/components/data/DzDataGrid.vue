@@ -26,6 +26,7 @@ import type {
  * ```
  */
 import { computed, provide, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDataGrid } from '../../composables/useDataGrid/useDataGrid.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
@@ -117,7 +118,7 @@ const styles = computed(() =>
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 const pageSizeOptions = computed<number[]>(() => {
@@ -130,10 +131,14 @@ const pageSizeOptions = computed<number[]>(() => {
 function handleRowClick(row: Record<string, unknown>, index: number): void {
   emit('rowClick', row as T, index)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
+    data-part="root"
     :class="rootClasses"
     :aria-label="ariaLabel ?? 'Data grid'"
     :aria-labelledby="ariaLabelledby"
@@ -143,10 +148,10 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
     :data-loading="loading ? '' : undefined"
     role="region"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-data-grid'), ...$attrs, class: undefined }"
   >
     <!-- Loading overlay -->
-    <div v-if="loading && grid.displayData.value.length > 0" :class="styles.loading()">
+    <div v-if="loading && grid.displayData.value.length > 0" data-part="loader" :class="cn(styles.loading(), ui?.loader)">
       <slot name="loading">
         <svg class="animate-spin h-6 w-6 text-[var(--dz-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
@@ -156,7 +161,7 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
     </div>
 
     <!-- Empty state -->
-    <div v-else-if="!loading && grid.displayData.value.length === 0" :class="styles.empty()">
+    <div v-else-if="!loading && grid.displayData.value.length === 0" data-part="empty" :class="cn(styles.empty(), ui?.empty)">
       <slot name="empty">
         No data available
       </slot>
@@ -166,7 +171,8 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
     <table
       v-else
       :id="id"
-      :class="styles.table()"
+      data-part="content"
+      :class="cn(styles.table(), ui?.content)"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby"

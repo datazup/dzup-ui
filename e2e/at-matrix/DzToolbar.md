@@ -20,6 +20,22 @@ known one.
 | `navigate` | Move through the collection with the pattern's own keys or gestures. | Each item is announced with its position and set size, and nothing is skipped. |
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/layout/DzToolbar.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | — | Move focus to the next control in the toolbar. |
+| `ArrowLeft` | — | Move focus to the previous control in the toolbar. |
+| `Home` | — | Move focus to the first control. |
+| `End` | — | Move focus to the last control. |
+| `Tab` | — | Move out of the toolbar; the toolbar is one tab stop. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

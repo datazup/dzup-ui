@@ -48,7 +48,10 @@ export const notificationDescriptionVariants = tv({
 
 export const notificationCloseVariants = tv({
   base: [
-    'absolute right-[var(--dz-spacing-2)] top-[var(--dz-spacing-2)]',
+    // Logical inline-end inset (TASK-R5-O2, S1-D3): the dismiss control belongs
+    // on the edge the reader finishes at, and the anatomy declares
+    // `mirrors: 'layout'`. Identical in LTR.
+    'absolute inset-e-[var(--dz-spacing-2)] top-[var(--dz-spacing-2)]',
     'inline-flex items-center justify-center',
     'h-6 w-6 rounded-[var(--dz-radius-sm)]',
     'opacity-70 transition-opacity',

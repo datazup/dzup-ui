@@ -1,7 +1,8 @@
 import type { DzDefaults, DzMessages } from '@dzup-ui/contracts'
+import { DzSanitizeLimitError } from '@dzup-ui/contracts'
 import { mount } from '@vue/test-utils'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 import {
   useDzDefaults,
   useDzDirection,
@@ -11,6 +12,7 @@ import {
   useDzMotion,
   useDzNonce,
   useDzPortalTarget,
+  useDzSanitizer,
   useDzTestIds,
 } from './index.ts'
 // The write half is intentionally absent from the barrel (see index.ts); it is
@@ -24,6 +26,16 @@ import {
 import { clearFormatterCache, formatterCacheSize } from './useDzFormats.ts'
 import { directionForLocale, provideDzLocale } from './useDzLocale.ts'
 import { mergeMessages, provideDzMessages } from './useDzMessages.ts'
+// Motion's writer, test hook and root binding are off the barrel (see index.ts),
+// so they are imported by path — the way `DzProvider` and a lane setup file do.
+import {
+  createDzMotion,
+  DZ_MOTION_ATTRIBUTE,
+  provideDzMotion,
+  setDzMotionTestMode,
+  useDzMotionAttribute,
+} from './useDzMotion.ts'
+import { createDzSanitizer, provideDzSanitizer } from './useDzSanitizer.ts'
 
 /**
  * Provider composables (TASK-OSS-P4-01, ADR-20).
@@ -62,6 +74,7 @@ describe('working with no provider mounted', () => {
     expect(probe(() => useDzDefaults()).defaults.value).toEqual({})
     expect(probe(() => useDzTestIds()).testIds.value)
       .toEqual({ enabled: false, attribute: 'data-testid' })
+    expect(probe(() => useDzSanitizer()).policyName).toBe('dzup-ui')
   })
 
   it('never throws when uninjected', () => {
@@ -70,6 +83,7 @@ describe('working with no provider mounted', () => {
     // application to have opted in.
     expect(() => probe(() => useDzLocale())).not.toThrow()
     expect(() => probe(() => useDzMotion())).not.toThrow()
+    expect(() => probe(() => useDzSanitizer())).not.toThrow()
   })
 
   it('falls back to the string a component hard-codes today', () => {
@@ -397,6 +411,22 @@ describe('motion', () => {
     vi.unstubAllGlobals()
   })
 
+  /**
+   * A partial `matchMedia` is what a host polyfill and most test rigs provide:
+   * `{ matches }` and nothing else. Reading the value is the part that matters;
+   * staying subscribed is the improvement, and losing the improvement must not
+   * take the value down with it — this runs in `setup()`, where a throw fails
+   * the whole component. Measured: eight DzAnchor specs did exactly that.
+   */
+  it('survives a matchMedia that implements only `matches`', () => {
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({ matches: true }))
+
+    expect(() => probe(() => useDzMotion())).not.toThrow()
+    expect(probe(() => useDzMotion()).reduced.value).toBe(true)
+
+    vi.unstubAllGlobals()
+  })
+
   it('unsubscribes when the scope is disposed', () => {
     const removeEventListener = vi.fn()
     vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
@@ -415,5 +445,197 @@ describe('motion', () => {
 
     expect(removeEventListener).toHaveBeenCalled()
     vi.unstubAllGlobals()
+  })
+
+  /**
+   * The deterministic test mode (TASK-R5-O3).
+   *
+   * Every case below releases the mode again, because it is process-global on
+   * purpose: a lane sets it once for a whole run, so a spec that left it set
+   * would silently decide the answer for every spec after it.
+   */
+  describe('deterministic test mode', () => {
+    afterEach(() => {
+      setDzMotionTestMode(null)
+      delete (globalThis as { __DZ_MOTION__?: unknown }).__DZ_MOTION__
+    })
+
+    it('forces the answer with no provider and no matchMedia', () => {
+      setDzMotionTestMode('reduced')
+
+      const motion = probe(() => useDzMotion())
+      expect(motion.preference.value).toBe('reduced')
+      expect(motion.reduced.value).toBe(true)
+    })
+
+    it('outranks a provider that asked for full motion', () => {
+      setDzMotionTestMode('reduced')
+
+      const motion = probe(
+        () => useDzMotion(),
+        child => h(defineComponent({
+          setup(_, { slots }) {
+            provideDzMotion(createDzMotion(ref('full')))
+            return () => slots.default?.()
+          },
+        }), () => h(child as never)),
+      )
+
+      expect(motion.reduced.value).toBe(true)
+    })
+
+    it('outranks the OS when the application asked for full motion', () => {
+      vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
+        matches: true,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      }))
+      setDzMotionTestMode('full')
+
+      expect(probe(() => useDzMotion()).reduced.value).toBe(false)
+      vi.unstubAllGlobals()
+    })
+
+    /**
+     * The channel a Playwright `addInitScript` can reach: it runs before any
+     * module of this library is evaluated, so it cannot call a function.
+     */
+    it('reads globalThis.__DZ_MOTION__ and ignores a value that is not a preference', () => {
+      ;(globalThis as { __DZ_MOTION__?: unknown }).__DZ_MOTION__ = 'reduced'
+      expect(probe(() => useDzMotion()).reduced.value).toBe(true)
+
+      ;(globalThis as { __DZ_MOTION__?: unknown }).__DZ_MOTION__ = 'yes please'
+      expect(probe(() => useDzMotion()).reduced.value).toBe(false)
+    })
+
+    it('releases the forced preference on null', () => {
+      setDzMotionTestMode('reduced')
+      setDzMotionTestMode(null)
+
+      expect(probe(() => useDzMotion()).reduced.value).toBe(false)
+    })
+  })
+
+  describe('the root binding', () => {
+    afterEach(() => setDzMotionTestMode(null))
+
+    it('renders nothing under the default policy', () => {
+      expect(probe(() => useDzMotionAttribute()).value).toBeUndefined()
+    })
+
+    it('carries the attribute the CSS rule is keyed on when motion is reduced', () => {
+      setDzMotionTestMode('reduced')
+
+      expect(probe(() => useDzMotionAttribute()).value).toBe('reduce')
+      expect(DZ_MOTION_ATTRIBUTE).toBe('data-dz-motion')
+    })
+
+    it('follows a provider that turns motion off after mount', async () => {
+      const preference = ref<'system' | 'reduced' | 'full'>('full')
+      const attrs = probe(
+        () => useDzMotionAttribute(),
+        child => h(defineComponent({
+          setup(_, { slots }) {
+            provideDzMotion(createDzMotion(preference))
+            return () => slots.default?.()
+          },
+        }), () => h(child as never)),
+      )
+
+      expect(attrs.value).toBeUndefined()
+      preference.value = 'reduced'
+      await nextTick()
+      expect(attrs.value).toBe('reduce')
+    })
+  })
+})
+
+describe('sanitizer (ADR-20 amendment A6)', () => {
+  const context = { sink: 'markdown' as const, component: 'DzTest' }
+
+  it('resolves to the escaping default with nothing installed', () => {
+    // Core renders no HTML sink of its own, so this default is what an
+    // application that adopted one component and nothing else gets. It is
+    // escaping rather than pass-through on purpose: markup in, text out.
+    const sanitizer = probe(() => useDzSanitizer())
+    expect(sanitizer.sanitize('<img src=x onerror=alert(1)>', context))
+      .toBe('&lt;img src=x onerror=alert(1)&gt;')
+    expect(sanitizer.limits).toEqual({ maxLength: 128 * 1024, maxDepth: 64 })
+  })
+
+  it('takes the adapter a provider installed', () => {
+    const sanitizer = probe(
+      () => useDzSanitizer(),
+      child => h(defineComponent({
+        setup(_, { slots }) {
+          provideDzSanitizer(createDzSanitizer(
+            ref({ policyName: 'app', sanitize: (html: string) => `[app]${html}` }),
+            undefined,
+          ))
+          return () => slots.default?.()
+        },
+      }), () => h(child as never)),
+    )
+
+    expect(sanitizer.policyName).toBe('app')
+    expect(sanitizer.sanitize('<b>x</b>', context)).toBe('[app]<b>x</b>')
+  })
+
+  it('lets an instance override beat the provider, per ADR-20 §6 step 1', () => {
+    const sanitizer = probe(
+      () => useDzSanitizer({ sanitize: (html: string) => `[instance]${html}` }),
+      child => h(defineComponent({
+        setup(_, { slots }) {
+          provideDzSanitizer(createDzSanitizer(
+            ref({ sanitize: (html: string) => `[app]${html}` }),
+            undefined,
+          ))
+          return () => slots.default?.()
+        },
+      }), () => h(child as never)),
+    )
+
+    expect(sanitizer.sanitize('x', context)).toBe('[instance]x')
+  })
+
+  it('lets an instance tighten a ceiling without discarding the app adapter', () => {
+    // The per-field fold, one level below ADR-20 §3's per-key override.
+    const sanitizer = probe(
+      () => useDzSanitizer({ limits: { maxLength: 4 } }),
+      child => h(defineComponent({
+        setup(_, { slots }) {
+          provideDzSanitizer(createDzSanitizer(
+            ref({ policyName: 'app', sanitize: (html: string) => `[app]${html}` }),
+            undefined,
+          ))
+          return () => slots.default?.()
+        },
+      }), () => h(child as never)),
+    )
+
+    expect(sanitizer.policyName).toBe('app')
+    expect(sanitizer.sanitize('abcd', context)).toBe('[app]abcd')
+    expect(() => sanitizer.sanitize('abcde', context)).toThrow(DzSanitizeLimitError)
+  })
+
+  it('distinguishes an explicit null from an unconfigured tree', () => {
+    // `null` is a host saying "I will supply one" and then not. Under DEV that
+    // is a throw, because a silent fallback turns a configuration mistake into
+    // a rendering difference nobody goes looking for.
+    //
+    // The spy is for Vue's own "missing render function" warning: a setup that
+    // throws never returns one. Silenced rather than left in the log so a real
+    // warning in this suite still stands out.
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    expect(() => probe(
+      () => useDzSanitizer(),
+      child => h(defineComponent({
+        setup(_, { slots }) {
+          provideDzSanitizer(null)
+          return () => slots.default?.()
+        },
+      }), () => h(child as never)),
+    )).toThrow(/set `sanitizer` to null/)
+    warn.mockRestore()
   })
 })

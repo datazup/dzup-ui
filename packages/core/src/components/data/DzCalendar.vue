@@ -32,6 +32,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
  * ```
  */
 import { computed, nextTick, ref, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useCalendar } from '../../composables/useCalendar/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { calendarVariants } from './DzCalendar.variants.ts'
@@ -40,8 +42,16 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/**
+ * The current selection, shaped by `mode` - an ISO date string in `single`,
+ * an ISO string array in `multiple`, a start/end pair in `range`. `null` selects nothing.
+ */
 const value = defineModel<DzCalendarModelValue>('value', { default: null })
 
+/**
+ * The ISO 8601 date whose month the grid shows and whose cell holds the roving
+ * tabindex; the default empty string starts the grid on today's month.
+ */
 const focusedDate = defineModel<string>('focusedDate', { default: '' })
 
 const props = withDefaults(defineProps<DzCalendarProps>(), {
@@ -63,7 +73,13 @@ const props = withDefaults(defineProps<DzCalendarProps>(), {
 })
 
 const emit = defineEmits<DzCalendarEmits>()
+
 defineSlots<DzCalendarSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
 const gridRef = ref<HTMLElement | null>(null)
@@ -99,7 +115,7 @@ function weekStartOf(date: CalendarDate): CalendarDate {
 
 const styles = computed(() => calendarVariants({ size: props.size }))
 
-const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
+const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root))
 
 // ---------------------------------------------------------------------------
 // Selection state (per mode)
@@ -275,11 +291,16 @@ function onGridKeydown(event: KeyboardEvent): void {
   let next = cur
   let handled = true
 
+  // The previous day is one step back along the INLINE axis, which is the left
+  // key in an LTR grid and the right key in an RTL one.
+  const previousDayKey = dzDirection.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+  const nextDayKey = dzDirection.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
+
   switch (event.key) {
-    case 'ArrowLeft':
+    case previousDayKey:
       next = cur.subtract({ days: 1 })
       break
-    case 'ArrowRight':
+    case nextDayKey:
       next = cur.add({ days: 1 })
       break
     case 'ArrowUp':
@@ -334,18 +355,22 @@ function daySlotProps(day: CalendarDay) {
     dayNumber: day.dayNumber,
   }
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :data-size="size"
     :data-mode="mode"
     :data-view="view"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-calendar'), ...$attrs, class: undefined }"
   >
     <!-- Live region: announces the visible period on navigation -->
     <div class="sr-only" aria-live="polite" aria-atomic="true">
@@ -353,15 +378,16 @@ function daySlotProps(day: CalendarDay) {
     </div>
 
     <!-- Header: heading + prev/today/next controls -->
-    <div :class="styles.header()">
-      <span :class="styles.heading()" aria-hidden="true">{{ periodLabel }}</span>
-      <div :class="styles.nav()">
-        <button type="button" :class="styles.todayButton()" :disabled="disabled" @click="goToday">
+    <div data-part="header" :class="cn(styles.header(), ui?.header)">
+      <span data-part="title" :class="cn(styles.heading(), ui?.title)" aria-hidden="true">{{ periodLabel }}</span>
+      <div data-part="group" :class="cn(styles.nav(), ui?.group)">
+        <button type="button" data-part="action" :class="cn(styles.todayButton(), ui?.action)" :disabled="disabled" @click="goToday">
           Today
         </button>
         <button
           type="button"
-          :class="styles.navButton()"
+          data-part="action"
+          :class="cn(styles.navButton(), ui?.action)"
           :disabled="disabled"
           :aria-label="view === 'week' ? 'Previous week' : 'Previous month'"
           @click="goPrev"
@@ -370,7 +396,8 @@ function daySlotProps(day: CalendarDay) {
         </button>
         <button
           type="button"
-          :class="styles.navButton()"
+          data-part="action"
+          :class="cn(styles.navButton(), ui?.action)"
           :disabled="disabled"
           :aria-label="view === 'week' ? 'Next week' : 'Next month'"
           @click="goNext"
@@ -383,8 +410,9 @@ function daySlotProps(day: CalendarDay) {
     <!-- Grid -->
     <div
       ref="gridRef"
+      data-part="content"
       role="grid"
-      :class="styles.grid()"
+      :class="cn(styles.grid(), ui?.content)"
       :aria-label="ariaLabel ?? periodLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby"
@@ -393,12 +421,13 @@ function daySlotProps(day: CalendarDay) {
       @keydown="onGridKeydown"
     >
       <!-- Weekday header row -->
-      <div role="row" :class="styles.weekdayRow()">
+      <div data-part="row" role="row" :class="cn(styles.weekdayRow(), ui?.row)">
         <span
           v-for="label in weekDayLabels"
           :key="label"
+          data-part="cell"
           role="columnheader"
-          :class="styles.weekday()"
+          :class="cn(styles.weekday(), ui?.cell)"
         >
           {{ label }}
         </span>
@@ -408,21 +437,24 @@ function daySlotProps(day: CalendarDay) {
       <div
         v-for="(week, weekIndex) in weeks"
         :key="`week-${weekIndex}`"
+        data-part="row"
         role="row"
-        :class="styles.week()"
+        :class="cn(styles.week(), ui?.row)"
       >
         <div
           v-for="day in week"
           :key="day.iso"
+          data-part="cell"
           role="gridcell"
           :aria-selected="isSelected(day.iso)"
-          :class="styles.cell()"
+          :class="cn(styles.cell(), ui?.cell)"
         >
           <button
             type="button"
             :data-iso="day.iso"
             :tabindex="day.iso === focusedIso ? 0 : -1"
-            :class="styles.dayButton()"
+            data-part="item"
+            :class="cn(styles.dayButton(), ui?.item)"
             :aria-label="day.label"
             :aria-disabled="isDayDisabled(day) || undefined"
             :data-today="day.isToday ? '' : undefined"

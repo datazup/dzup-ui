@@ -38,6 +38,24 @@ export const anatomy = {
 
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). A masked text field. Backspace and
+   * Delete are intercepted in `DzInputMask.vue` so that deleting steps
+   * over the mask literals instead of stranding the caret on one.
+   */
+  keyboard: [
+    {
+      key: 'Backspace',
+      action: 'Delete the previous entered character, stepping over any mask literal.',
+      wcag: ['2.1.1'],
+    },
+    {
+      key: 'Delete',
+      action: 'Delete the next entered character, stepping over any mask literal.',
+      wcag: ['2.1.1'],
+    },
+  ],
+
   /** Tier B — owns focus, a value, and a keydown contract that rewrites input. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

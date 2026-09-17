@@ -16,7 +16,12 @@ import { tv } from 'tailwind-variants'
 export const backTopVariants = tv({
   base: [
     'dz-back-top',
-    'fixed bottom-[var(--dz-back-top-offset)] right-[var(--dz-back-top-offset)]',
+    // A LOGICAL inline-end inset, not a physical one: `DzBackTop` has no
+    // `position` prop, so the corner is "out of the way of the text" rather
+    // than an author naming a side, and it has to follow the reading
+    // direction. `inset-e-` is the spelling Tailwind 4 generates and is
+    // byte-identical in a LTR document (TASK-R5-O2).
+    'fixed bottom-[var(--dz-back-top-offset)] inset-e-[var(--dz-back-top-offset)]',
     'z-[var(--dz-back-top-z)]',
     'transition-[opacity,transform] duration-[var(--dz-back-top-transition)]',
     'motion-reduce:transition-none',

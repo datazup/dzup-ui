@@ -21,6 +21,19 @@ known one.
 | `non-drag` | Perform the drag interaction without a pointer drag. | A keyboard or single-pointer path exists, is discoverable, and narrates each step. |
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzFileUpload.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Enter` | dropzone | Open the file picker. |
+| `Space` | dropzone | Open the file picker. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

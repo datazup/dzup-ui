@@ -1,8 +1,9 @@
 /**
  * DzProvider — type definitions (TASK-OSS-P4-02, ADR-20).
  *
- * One props object for the nine concerns ADR-20 fixed plus the theme contract
- * ADR-09 already shipped. Every prop is optional and **every prop is optional
+ * One props object for the nine concerns ADR-20 fixed, the sanitizer its
+ * amendment A6 added (TASK-R3-O2), and the theme contract ADR-09 already
+ * shipped. Every prop is optional and **every prop is optional
  * for the same reason**: ADR-20 §3 says a provider overrides *the keys it
  * sets*, so an undefined prop is not "use the default" — it is "leave whatever
  * the ancestor decided alone". That distinction is what makes nesting compose
@@ -18,6 +19,7 @@ import type {
   DzLocale,
   DzMessages,
   DzMotionPreference,
+  DzSanitizerOptions,
   DzTestIds,
 } from '@dzup-ui/contracts'
 import type { InjectionKey } from 'vue'
@@ -113,6 +115,23 @@ export interface DzProviderProps {
   defaults?: DzProviderDefaults
   /** CSP nonce for any `<style>` this library injects at runtime. */
   nonce?: string
+  /**
+   * The organisation-wide HTML sanitizer (TASK-R3-O2, ADR-20 amendment A6).
+   *
+   * Set once at the root: allowed markup, the Trusted Types policy name, and
+   * the input ceilings. Partial — a nested provider tightening `limits` keeps
+   * the ancestor's `sanitize`, which is ADR-20 §3's per-key override applied one
+   * level down.
+   *
+   * Omitted, components resolve to Core's escaping default: **markup in, text
+   * out**. That is deliberately not a pass-through, and it is deliberately
+   * visible — a host that meant to render rich content sees its tags as text on
+   * the first render rather than shipping an unguarded sink.
+   *
+   * `null` means "I will supply one" and is a *different* state from omitted:
+   * `useDzSanitizer()` throws in development if nothing then supplies it.
+   */
+  sanitizer?: DzSanitizerOptions | null
   /** Test-id policy: whether they render at all, and under which attribute. */
   testIds?: Partial<DzTestIds>
   /**

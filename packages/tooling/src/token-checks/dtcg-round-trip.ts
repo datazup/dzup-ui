@@ -90,12 +90,26 @@ import { generateTransitionCssVars } from '../../../tokens/src/primitives/transi
 import { generateTypographyCssVars } from '../../../tokens/src/primitives/typography.js'
 import { generateZIndexCssVars } from '../../../tokens/src/primitives/z-index.js'
 import { DARK_SEMANTIC_TOKENS } from '../../../tokens/src/semantic/dark.js'
+import { HIGH_CONTRAST_SEMANTIC_TOKENS } from '../../../tokens/src/semantic/high-contrast.js'
 import { LIGHT_SEMANTIC_TOKENS } from '../../../tokens/src/semantic/light.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const TOKENS_PACKAGE_DIR = resolve(__dirname, '../../../tokens')
 const TOKENS_CSS_PATH = resolve(TOKENS_PACKAGE_DIR, 'dist/tokens.css')
 const TOKENS_DTCG_PATH = resolve(TOKENS_PACKAGE_DIR, 'dist/tokens.dtcg.json')
+const TOKENS_HC_CSS_PATH = resolve(TOKENS_PACKAGE_DIR, 'dist/tokens.high-contrast.css')
+
+/**
+ * The third cascade's selectors (TASK-R5-O7).
+ *
+ * `tokens.high-contrast.css` declares the same 115 names twice: once under the
+ * application opt-in inside `@layer dz-tokens`, and once under
+ * `@media (forced-colors: active)` outside the layer so an accessibility
+ * override the user asked the OS for always wins. The two must agree — the same
+ * rule, and the same reason, as the two dark blocks above.
+ */
+const HIGH_CONTRAST_SELECTOR = '[data-theme="high-contrast"]'
+const FORCED_COLORS = '@media (forced-colors: active)'
 
 // --------------------------------------------------------------------------
 // Ratchets
@@ -238,6 +252,15 @@ export function parseCssDeclarations(css: string): CssDeclaration[] {
     }
     if (char === ';') {
       flushDeclaration()
+      // A top-level statement at-rule (`@layer a, b, c;`, `@charset`, a plain
+      // `@import`) ends here and owns nothing. Without this reset its text
+      // stayed in `prelude` and was prepended to the NEXT block's at-rule
+      // context, so `@layer dz-tokens {` parsed as
+      // `@layer a, b, c; @layer dz-tokens` and every declaration inside it lost
+      // its context. Found by TASK-R5-O1 when `tokens.css` grew the six-slot
+      // ADR-19 ordering statement above its own block.
+      if (stack.length === 0)
+        prelude = ''
       continue
     }
     if (stack.length === 0) {
@@ -683,13 +706,128 @@ export interface RoundTripResult {
     readonly cssNamesDark: number
     readonly comparedLight: number
     readonly comparedDark: number
+    readonly comparedHighContrast: number
     readonly aliasesResolved: number
+    readonly highContrastSource: 'dist/tokens.high-contrast.css' | 'token map (dist not built)'
     readonly cssSource: 'dist/tokens.css' | 'token maps (dist not built)'
     readonly dtcgSource: 'dist/tokens.dtcg.json' | 'rebuilt in memory (dist not built)'
   }
 }
 
 interface UntypedRecord { cssVariable?: unknown, cssValue?: unknown, reason?: unknown }
+
+/**
+ * The third cascade (TASK-R5-O7), checked exactly the way the other two are.
+ *
+ * **Why this is a CSS check and not a DTCG one.** High-contrast is valued in CSS
+ * system colours (`Canvas`, `ButtonText`, …), and DTCG 2025.10 cannot express
+ * one: the vendored official schema enumerates thirteen `$type`s, and `color`
+ * requires a `colorSpace` with numeric `components`. A system colour is a
+ * reference to the platform rather than a value — there is no colour space it
+ * lives in. So the cascade is absent from `tokens.dtcg.json` rather than
+ * present with a fabricated oklch triple that would make a design tool render
+ * swatches this library does not ship, and would make the round-trip compare
+ * the export against a value the stylesheet does not contain. Recorded as a
+ * compatibility note, not a schema fork — TASK-R5-O7 D47.
+ *
+ * What is still guaranteed, and it is the guarantee that matters for an ABI:
+ * the shipped stylesheet and the token map declare the same names with the same
+ * values, in both directions, and the third cascade declares exactly the names
+ * the other two do.
+ */
+function checkHighContrastCascade(
+  fail: (check: string, symbol: string, message: string) => void,
+  notes: string[],
+): { compared: number, source: 'dist/tokens.high-contrast.css' | 'token map (dist not built)' } {
+  const map = HIGH_CONTRAST_SEMANTIC_TOKENS
+
+  // The invariant the whole cascade exists to hold: same ids as light and dark.
+  // Checked against both, because "same as light" alone would not notice light
+  // and dark themselves drifting apart.
+  for (const [label, other] of [['light', LIGHT_SEMANTIC_TOKENS], ['dark', DARK_SEMANTIC_TOKENS]] as const) {
+    for (const name of Object.keys(other)) {
+      if (map[name] === undefined) {
+        fail('high-contrast-parity', name, `declared in the ${label} cascade but not in high-contrast`)
+      }
+    }
+    for (const name of Object.keys(map)) {
+      if (other[name] === undefined) {
+        fail('high-contrast-parity', name, `declared in high-contrast but not in the ${label} cascade`)
+      }
+    }
+  }
+
+  if (!existsSync(TOKENS_HC_CSS_PATH)) {
+    notes.push(
+      'dist/tokens.high-contrast.css is absent (dist/ is git-ignored); the high-contrast '
+      + 'cascade was checked against its token map only. Run `yarn tokens:generate`.',
+    )
+    return { compared: Object.keys(map).length, source: 'token map (dist not built)' }
+  }
+
+  const declarations = parseCssDeclarations(readFileSync(TOKENS_HC_CSS_PATH, 'utf-8'))
+  const optIn = new Map<string, string>()
+  const forced = new Map<string, string>()
+  for (const declaration of [...declarations].sort((a, b) => a.order - b.order)) {
+    const inForcedColors = declaration.atRules.some(
+      rule => rule.replace(/\s+/g, ' ') === FORCED_COLORS,
+    )
+    if (inForcedColors && declaration.selector === ':root') {
+      forced.set(declaration.name, declaration.value)
+    }
+    else if (!inForcedColors && declaration.selector === HIGH_CONTRAST_SELECTOR) {
+      optIn.set(declaration.name, declaration.value)
+    }
+  }
+
+  // Both directions against the map, the same shape as `css-reconstruction`.
+  for (const [name, value] of Object.entries(map)) {
+    const shipped = optIn.get(name)
+    if (shipped === undefined) {
+      fail('high-contrast', name, 'present in the token map, absent from dist/tokens.high-contrast.css')
+    }
+    else if (shipped !== value) {
+      fail('high-contrast', name, `token map says "${value}", the stylesheet says "${shipped}"`)
+    }
+  }
+  for (const name of optIn.keys()) {
+    if (map[name] === undefined) {
+      fail('high-contrast', name, 'present in dist/tokens.high-contrast.css, absent from the token map')
+    }
+  }
+
+  // The opt-in block and the forced-colors block must not diverge, for the same
+  // reason the two dark blocks must not: a user who reaches the theme through
+  // the OS and a user who reaches it through the app must see one theme.
+  for (const [name, value] of optIn) {
+    const other = forced.get(name)
+    if (other === undefined) {
+      fail(
+        'high-contrast-parity',
+        name,
+        'declared under [data-theme="high-contrast"] but not in the forced-colors block',
+      )
+    }
+    else if (other !== value) {
+      fail(
+        'high-contrast-parity',
+        name,
+        `[data-theme="high-contrast"] says "${value}", the forced-colors block says "${other}"`,
+      )
+    }
+  }
+  for (const name of forced.keys()) {
+    if (!optIn.has(name)) {
+      fail(
+        'high-contrast-parity',
+        name,
+        'declared in the forced-colors block but not under [data-theme="high-contrast"]',
+      )
+    }
+  }
+
+  return { compared: optIn.size, source: 'dist/tokens.high-contrast.css' }
+}
 
 export function runRoundTrip(): RoundTripResult {
   const issues: RoundTripIssue[] = []
@@ -796,6 +934,9 @@ export function runRoundTrip(): RoundTripResult {
       fail('dark-parity', name, 'resolves in the OS-dark cascade but not in the explicit-dark cascade')
     }
   }
+
+  // ---- the third cascade (TASK-R5-O7) ----------------------------------
+  const highContrast = checkHighContrastCascade(fail, notes)
 
   // ---- cross-tier shadowing ratchet ------------------------------------
   const ceiling = new Set(SHADOWED_ACROSS_TIERS)
@@ -1072,7 +1213,9 @@ export function runRoundTrip(): RoundTripResult {
       cssNamesDark: css.dark.size,
       comparedLight,
       comparedDark,
+      comparedHighContrast: highContrast.compared,
       aliasesResolved,
+      highContrastSource: highContrast.source,
       cssSource,
       dtcgSource,
     },
@@ -1091,6 +1234,11 @@ function main(): void {
       + `${stats.aliasesResolved} aliases preserved; `
       + `${stats.comparedLight} light and ${stats.comparedDark} dark values matched against `
       + `${stats.cssNamesLight}/${stats.cssNamesDark} declared custom properties`,
+    )
+    console.warn(
+      `  high-contrast:  ${stats.comparedHighContrast} values matched, key-identical to `
+      + `light and dark (${stats.highContrastSource}); valued in CSS system colours, which `
+      + `DTCG 2025.10 cannot express — see D47`,
     )
     console.warn(`  CSS read from:  ${stats.cssSource}`)
     console.warn(`  DTCG read from: ${stats.dtcgSource}`)

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ButtonVariant, CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
 import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './DzCopyButton.types.ts'
 /**
  * DzCopyButton — Clipboard copy button with visual feedback.
@@ -14,6 +15,7 @@ import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './
  * ```
  */
 import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
+import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { copyButtonVariants } from './DzCopyButton.variants.ts'
@@ -27,9 +29,9 @@ const props = withDefaults(defineProps<DzCopyButtonProps>(), {
   ariaLabel: undefined,
   label: undefined,
   copiedLabel: undefined,
-  variant: 'outline',
-  tone: 'neutral',
-  size: 'sm',
+  variant: undefined,
+  tone: undefined,
+  size: undefined,
   disabled: false,
   ui: undefined,
 })
@@ -45,21 +47,51 @@ let resetTimer: ReturnType<typeof setTimeout> | undefined
 /** Whether a text label is shown next to the icon (non-square layout) */
 const hasLabel = computed(() => Boolean(props.label || props.copiedLabel))
 
-/** Active tone — flips to `success` while showing copied feedback */
-const resolvedTone = computed(() => (copied.value ? 'success' : props.tone))
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * Each axis keeps the literal default it carried in `withDefaults` as the last
+ * link, so an unprovided tree renders what it always did — note `size` is `sm`
+ * here rather than the family's `md`, which is this component's own decision and
+ * stays its own.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved variant: prop, then provider, then default */
+const resolvedVariant = computed(
+  () => resolve<ButtonVariant>('DzCopyButton', 'variant', [props.variant]) ?? 'outline',
+)
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzCopyButton', 'size', [props.size]) ?? 'sm',
+)
+
+/**
+ * Active tone — flips to `success` while showing copied feedback.
+ *
+ * The copied state outranks every configured source: it is transient feedback
+ * about what just happened, not a style preference, so a host default cannot
+ * suppress it.
+ */
+const resolvedTone = computed<CanonicalTone>(
+  () => (copied.value
+    ? 'success'
+    : resolve<CanonicalTone>('DzCopyButton', 'tone', [props.tone]) ?? 'neutral'),
+)
 
 const classes = computed(() =>
   cn(
     // Fill / border / tone come from the shared button taxonomy (ADR-02)
     buttonVariants({
-      variant: props.variant,
-      size: props.size,
+      variant: resolvedVariant.value,
+      size: resolvedSize.value,
       tone: resolvedTone.value,
     }),
     // Icon-only buttons are square; labelled buttons keep button padding + gap
     hasLabel.value
       ? 'gap-1.5'
-      : copyButtonVariants({ size: props.size }),
+      : copyButtonVariants({ size: resolvedSize.value }),
     attrs.class as string | undefined,
     props.ui?.root,
   ),
@@ -131,6 +163,9 @@ function fallbackCopy(text: string): void {
   document.execCommand('copy')
   document.body.removeChild(textarea)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -142,11 +177,11 @@ function fallbackCopy(text: string): void {
     :disabled="disabled || undefined"
     :aria-label="resolvedAriaLabel"
     :data-state="copied ? 'copied' : 'idle'"
-    :data-variant="variant"
+    :data-variant="resolvedVariant"
     :data-tone="resolvedTone"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-copy-button'), ...$attrs, class: undefined }"
     @click="handleCopy"
   >
     <!-- Icon slot -->

@@ -21,6 +21,25 @@ known one.
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 | `non-drag` | Perform the drag interaction without a pointer drag. | A keyboard or single-pointer path exists, is discoverable, and narrates each step. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzKnob.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | — | Increase the value by one step. |
+| `ArrowLeft` | — | Decrease the value by one step. |
+| `ArrowUp` | — | Increase the value by one step. |
+| `ArrowDown` | — | Decrease the value by one step. |
+| `PageUp` | — | Increase the value by the large step. |
+| `PageDown` | — | Decrease the value by the large step. |
+| `Home` | — | Set the value to its minimum. |
+| `End` | — | Set the value to its maximum. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

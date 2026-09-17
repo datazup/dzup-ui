@@ -42,12 +42,12 @@ library commits to keeping — and something a consumer can point at when it mov
 | Design tokens | `--dz-*` custom properties generated from the TypeScript token maps in `@dzup-ui/tokens`. The interchange surface. | Exported as a Design Tokens Community Group document and round-trip verified against the emitted stylesheet in both cascades. |
 | Component tokens | `--dz-{component}-{property}`, resolving to the global tokens. Re-map one and every instance follows. | Every CSS value in the library goes through `var(--dz-*)`; raw colour literals fail the token validator. |
 | Typed recipes | Styling written with `tv()` in a `.variants.ts` file beside each component. | No `<style scoped>` and no hard-coded colour anywhere in the library. |
-| Stable `data-part` / `data-state` | Selectable from your own stylesheet, on components that have declared an anatomy. | **31 of 144** components have declared one: `DzBlockquote`, `DzButton`, `DzButtonGroup`, `DzCaption`, `DzCode`, `DzCodeBlock`, `DzCopyButton`, `DzDialog`, `DzFab`, `DzFileUpload`, `DzHeading`, `DzIconButton`, `DzInput`, `DzInputGroup`, `DzInputMask`, `DzKbd`, `DzNumberInput`, `DzOtpInput`, `DzPasswordInput`, `DzProvider`, `DzRelativeTime`, `DzSearchInput`, `DzSelect`, `DzSpeedDial`, `DzSplitButton`, `DzTable`, `DzText`, `DzTextarea`, `DzThemeProvider`, `DzToggleButton`, `DzVisuallyHidden`. |
-| The typed `ui` prop | A per-instance override keyed by part name, so one instance can be restyled without a selector war. | **26 of 144** public components declare it: `DzBlockquote`, `DzButton`, `DzButtonGroup`, `DzCaption`, `DzCode`, `DzCopyButton`, `DzFab`, `DzHeading`, `DzIconButton`, `DzInput`, `DzInputGroup`, `DzInputMask`, `DzKbd`, `DzNumberInput`, `DzOtpInput`, `DzPasswordInput`, `DzRelativeTime`, `DzSearchInput`, `DzSelect`, `DzSpeedDial`, `DzSplitButton`, `DzTable`, `DzText`, `DzTextarea`, `DzToggleButton`, `DzVisuallyHidden`, plus the compound part `DzDialogContent`. |
+| Stable `data-part` / `data-state` | Selectable from your own stylesheet, on components that have declared an anatomy. | **103 of 144** components have declared one: `DzAccordion`, `DzAnchor`, `DzBackTop`, `DzBlockUI`, `DzBlockquote`, `DzBreadcrumb`, `DzButton`, `DzButtonGroup`, `DzCalendar`, `DzCaption`, `DzCard`, `DzCarousel`, `DzCascader`, `DzCheckbox`, `DzCheckboxGroup`, `DzChip`, `DzCode`, `DzCodeBlock`, `DzCollapse`, `DzColorModeToggle`, `DzColorPicker`, `DzCombobox`, `DzCommandPalette`, `DzConfirmDialog`, `DzContextMenu`, `DzCopyButton`, `DzDataGrid`, `DzDataView`, `DzDatePicker`, `DzDateRangePicker`, `DzDialog`, `DzDropdownMenu`, `DzFab`, `DzFieldArray`, `DzFileUpload`, `DzHeading`, `DzIconButton`, `DzImageCard`, `DzImageComparison`, `DzInfiniteScroll`, `DzInplace`, `DzInput`, `DzInputGroup`, `DzInputMask`, `DzKbd`, `DzKnob`, `DzLightbox`, `DzListItem`, `DzListbox`, `DzMegaMenu`, `DzMention`, `DzMenu`, `DzMultiSelect`, `DzNotification`, `DzNumberInput`, `DzOrderList`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzPopconfirm`, `DzPopover`, `DzProvider`, `DzRadio`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzRelativeTime`, `DzResizable`, `DzScrollArea`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSheet`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzSpinner`, `DzSplitButton`, `DzSplitter`, `DzStatCard`, `DzStepper`, `DzStepperItem`, `DzSwitch`, `DzTable`, `DzTabs`, `DzTag`, `DzTagsInput`, `DzText`, `DzTextarea`, `DzThemeProvider`, `DzTimePicker`, `DzToast`, `DzToggleButton`, `DzToolbar`, `DzTooltip`, `DzTour`, `DzTransfer`, `DzTree`, `DzTreeItem`, `DzTreeSelect`, `DzVisuallyHidden`. |
+| The typed `ui` prop | A per-instance override keyed by part name, so one instance can be restyled without a selector war. | **88 of 144** public components declare it: `DzAccordion`, `DzAnchor`, `DzBackTop`, `DzBlockquote`, `DzBlockUI`, `DzBreadcrumb`, `DzButton`, `DzButtonGroup`, `DzCalendar`, `DzCaption`, `DzCard`, `DzCarousel`, `DzCascader`, `DzCheckbox`, `DzChip`, `DzCode`, `DzColorModeToggle`, `DzColorPicker`, `DzCombobox`, `DzCommandPalette`, `DzConfirmDialog`, `DzCopyButton`, `DzDataGrid`, `DzDataView`, `DzDatePicker`, `DzDateRangePicker`, `DzFab`, `DzHeading`, `DzIconButton`, `DzImageCard`, `DzImageComparison`, `DzInfiniteScroll`, `DzInplace`, `DzInput`, `DzInputGroup`, `DzInputMask`, `DzKbd`, `DzKnob`, `DzLightbox`, `DzListbox`, `DzListItem`, `DzMegaMenu`, `DzMention`, `DzMenu`, `DzMultiSelect`, `DzNotification`, `DzNumberInput`, `DzOrderList`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzPopconfirm`, `DzRadio`, `DzRangeSlider`, `DzRating`, `DzRelativeTime`, `DzResizable`, `DzScrollArea`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzSplitButton`, `DzSplitter`, `DzStatCard`, `DzStepper`, `DzStepperItem`, `DzSwitch`, `DzTable`, `DzTabs`, `DzTag`, `DzTagsInput`, `DzText`, `DzTextarea`, `DzTimePicker`, `DzToast`, `DzToggleButton`, `DzToolbar`, `DzTour`, `DzTransfer`, `DzTree`, `DzTreeItem`, `DzTreeSelect`, `DzVisuallyHidden`, plus the compound parts `DzAccordionTrigger`, `DzBreadcrumbItem`, `DzCardHeader`, `DzContextMenuItem`, `DzDialogContent`, `DzDropdownMenuItem`, `DzMenuItem`, `DzPopoverContent`, `DzSidebarItem`, `DzSidebarSection`, `DzTabTrigger`, `DzTooltipContent`. |
 
 ::: warning The last two rows are a rollout, and the numbers say so
 A component that has not declared an anatomy has **not declared** its parts. That is not the same
-claim as having none, and this site never collapses the two: 113 component pages print nothing under parts because nothing generated says what their parts are, not because
+claim as having none, and this site never collapses the two: 41 component pages print nothing under parts because nothing generated says what their parts are, not because
 they have none.
 :::
 
@@ -58,7 +58,7 @@ layered rule regardless of specificity, so your stylesheet wins by default: no `
 specificity war, no `:where()` tricks. This is the part of the contract that costs a consumer
 nothing to use and is the reason an unstyled mode buys less than it appears to.
 
-The layers, in the order the library declares them: `dz-tokens`, `dz-base`, `dz-components`. Read from the single `@layer` statement in `packages/core/src/styles/base.css`; nothing on this page names a layer that stylesheet does not.
+The layers, in the order the library declares them: `dz-reset`, `dz-tokens`, `dz-base`, `dz-components`, `dz-utilities`, `dz-overrides`. Read from the single `@layer` statement in `packages/core/src/styles/base.css`; nothing on this page names a layer that stylesheet does not.
 
 ## What this statement does not claim
 
@@ -90,10 +90,10 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/capability-matrix.json` | `02993453b1d97cee…` | yes |
-| `packages/core/src/styles/base.css` | `a7de1afe7bbc24fa…` | yes |
+| `packages/core/docs/capability-matrix.json` | `561b7852a04d4f92…` | yes |
+| `packages/core/src/styles/base.css` | `ee7d5ca85e12a1ea…` | yes |
 
-Capability matrix `sourceCommit` `51dec93c` · quality matrix `51dec93c`.
+Capability matrix `sourceCommit` `99b963a0` · quality matrix `99b963a0`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

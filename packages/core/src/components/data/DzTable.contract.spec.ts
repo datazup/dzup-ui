@@ -1,7 +1,7 @@
 /**
  * DzTable — Contract Spec v1 conformance tests.
  */
-import { expectAnatomy } from '@dzup-ui/testing'
+import { expectAnatomy, expectFallthrough } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
@@ -214,5 +214,42 @@ describe('dzTableRow (expandable) — Contract Spec v1', () => {
     const caption = wrapper.find('[data-part="title"]').classes()
     expect(caption).toContain('sr-only')
     expect(caption).toContain('font-bold')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Attribute fallthrough (TASK-R5-O6)
+// ---------------------------------------------------------------------------
+
+describe('dzTableRow — attribute fallthrough', () => {
+  // DzTableRow is multi-root: the <tr> and, when `expandable`, a second <tr>
+  // holding the expanded panel. It has no anatomy file — DzTable owns the
+  // family declaration — so the target is declared here and asserted against
+  // the rendering that actually has two roots.
+  const fallthrough = {
+    target: 'row',
+    reason:
+      'Multi-root when `expandable` (the row + its expansion row). `$attrs` '
+      + 'binds to the data row; the expansion row is conditional on state and '
+      + 'cannot carry a consumer id that has to stay addressable.',
+  } as const
+
+  it('a consumer\'s class lands on the data row, not the expansion row', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () => h(DzTableBody, () => h(
+          DzTableRow,
+          { expandable: true, class: 'dz-fallthrough-probe' },
+          { default: () => h(DzTableCell, () => 'a'), expand: () => 'more' },
+        )),
+      },
+    })
+
+    expectFallthrough(
+      wrapper.element,
+      fallthrough,
+      { className: 'dz-fallthrough-probe' },
+      'DzTableRow',
+    )
   })
 })

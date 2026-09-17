@@ -46,6 +46,7 @@ const classes = computed(() =>
 
 <template>
   <div
+    data-part="item"
     :class="classes"
     role="group"
     aria-roledescription="slide"

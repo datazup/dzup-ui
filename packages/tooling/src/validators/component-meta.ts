@@ -326,9 +326,10 @@ if (isMain) {
   console.warn('  field      total  described  source')
   console.warn(`  props     ${String(t.props).padStart(6)}${String(t.propsWithDescription).padStart(11)}  vue-component-meta`)
   console.warn(`  events    ${String(t.events).padStart(6)}${String(t.eventsWithDescription).padStart(11)}  `
-    + `${t.eventsFromExtractor} extractor + ${t.eventsFromEmitsInterface} emits-interface`)
+    + `${t.eventsFromExtractor} extractor + ${t.eventsFromEmitsInterface} emits-interface `
+    + `+ ${t.eventsModelSynthesised} model-synthesised (A2-D2, generated not authored)`)
   console.warn(`  slots     ${String(t.slots).padStart(6)}${String(t.slotsWithDescription).padStart(11)}  vue-component-meta`)
-  console.warn(`  exposed   ${String(t.exposed).padStart(6)}${String(t.exposedWithDescription).padStart(11)}  none exist in source`)
+  console.warn(`  exposed   ${String(t.exposed).padStart(6)}${String(t.exposedWithDescription).padStart(11)}  vue-component-meta`)
   console.warn('')
   console.warn(`  examples: ${t.componentsWithPrimaryExample}/${t.components} have a real story source; `
     + `${t.componentsWithStaticTemplate} also yield a paste-ready template`)

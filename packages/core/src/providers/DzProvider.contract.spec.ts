@@ -9,6 +9,7 @@ import {
   useDzMotion,
   useDzNonce,
   useDzPortalTarget,
+  useDzSanitizer,
   useDzTestIds,
 } from '../composables/provider/index.ts'
 import { anatomy } from './DzProvider.anatomy.ts'
@@ -94,6 +95,10 @@ describe('dzProvider — Contract Spec v1', () => {
         seen.motion = useDzMotion().preference.value
         seen.message = useDzMessages().read('DzPagination.next', 'Next')
         seen.testId = useDzTestIds().testId('root')
+        seen.sanitized = useDzSanitizer().sanitize('<b>x</b>', {
+          sink: 'markdown',
+          component: 'DzTest',
+        })
         return () => h('div')
       },
     })
@@ -107,6 +112,7 @@ describe('dzProvider — Contract Spec v1', () => {
         motion: 'reduced',
         nonce: 'nonce-1',
         testIdPrefix: 'e2e',
+        sanitizer: { sanitize: (html: string) => `[app]${html}` },
       },
       slots: { default: () => h(Child) },
     })
@@ -119,6 +125,7 @@ describe('dzProvider — Contract Spec v1', () => {
       motion: 'reduced',
       message: 'التالي',
       testId: { 'data-testid': 'e2e-root' },
+      sanitized: '[app]<b>x</b>',
     })
   })
 
@@ -134,6 +141,11 @@ describe('dzProvider — Contract Spec v1', () => {
         seen.portal = useDzPortalTarget().value
         seen.nonce = useDzNonce().value
         seen.testId = useDzTestIds().testId('root')
+        seen.sanitized = useDzSanitizer().sanitize('<b>x</b>', {
+          sink: 'markdown',
+          component: 'DzTest',
+        })
+        seen.policyName = useDzSanitizer().policyName
         return () => h('div')
       },
     })
@@ -146,6 +158,11 @@ describe('dzProvider — Contract Spec v1', () => {
       portal: undefined,
       nonce: undefined,
       testId: undefined,
+      // Markup in, text out. The documented default for the eleventh concern is
+      // the only one of the eleven that is a *refusal* rather than a value, and
+      // pinning it here is what stops a future "convenience" pass-through.
+      sanitized: '&lt;b&gt;x&lt;/b&gt;',
+      policyName: 'dzup-ui',
     })
   })
 })

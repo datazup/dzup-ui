@@ -22,6 +22,25 @@ known one.
 | `typeahead` | Type the first characters of an item while the collection has focus. | Focus moves to the matching item and it is announced. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/data/DzTree.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowDown` | — | Move focus to the next visible node. |
+| `ArrowUp` | — | Move focus to the previous visible node. |
+| `ArrowRight` | — | Expand the focused node, or move to its first child when already expanded. |
+| `ArrowLeft` | — | Collapse the focused node, or move to its parent when already collapsed. |
+| `Home` | — | Move focus to the first visible node. |
+| `End` | — | Move focus to the last visible node. |
+| `Enter` | — | Activate the focused node. |
+| `Space` | — | Select the focused node. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

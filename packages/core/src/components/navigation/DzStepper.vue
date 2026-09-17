@@ -16,6 +16,7 @@ import type { DzStepperContext, DzStepperEmits, DzStepperProps, DzStepperSlots }
  * ```
  */
 import { computed, nextTick, provide, ref, toRef, useAttrs, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
 import { DZ_STEPPER_KEY } from './DzStepper.types.ts'
@@ -25,6 +26,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Zero-based index of the active step; defaults to the first step. */
 const model = defineModel<number>({ default: 0 })
 
 const props = withDefaults(defineProps<DzStepperProps>(), {
@@ -122,20 +124,31 @@ async function revealItem(id: number): Promise<void> {
   emit('revealed', id)
 }
 
-defineExpose({ revealItem })
+defineExpose({
+  /**
+   * Activate the step at `id`, emitting `change` when it was not already
+   * active, and resolve once its panel has rendered and `revealed` has
+   * fired. Deliberately bypasses `beforeChange`.
+   */
+  revealItem,
+})
 
 const styles = computed(() =>
   stepperVariants({ orientation: props.orientation }),
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :aria-label="ariaLabel ?? (ariaLabelledby ? undefined : 'Progress steps')"
     :aria-labelledby="ariaLabelledby"
@@ -143,7 +156,7 @@ const rootClasses = computed(() =>
     data-state="ready"
     role="group"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-stepper'), ...$attrs, class: undefined }"
   >
     <slot />
   </div>

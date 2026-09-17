@@ -12,6 +12,15 @@
 >
 > Review date: **2026-08-29**. Baseline: `main` @ `51dec93` (clean worktree).
 > Re-verify at session start (§2).
+>
+> **Successor program (2026-09-04):** every task here landed except TASK-N1-O4
+> (manual AT — needs a human tester). The residual work each handoff names, the
+> 1.0 exit criteria C1–C15, and the 08-11 spec requirements no packet ever
+> built have been re-cut as ready-to-run prompts with mandatory `<done_check>`
+> blocks at [`../program-2026-09-04/README.md`](../program-2026-09-04/README.md)
+> — start there, not here. Facts in §2 below are historical: `main` is at
+> `99b963a` or later, the artifacts stamp `51dec93`, and the committed tree is
+> **not** green (`validate:all` link 16, `yarn test` 2 failures).
 
 ---
 

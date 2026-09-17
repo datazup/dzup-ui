@@ -4,6 +4,7 @@ import type { DzStepperItemEmits, DzStepperItemProps, DzStepperItemSlots } from 
  * DzStepperItem — A single step within DzStepper.
  */
 import { computed, inject, onMounted, ref, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_STEPPER_KEY } from './DzStepper.types.ts'
 import { stepperVariants } from './DzStepper.variants.ts'
@@ -82,23 +83,27 @@ function handleKeydown(event: KeyboardEvent): void {
     activate()
   }
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
+    data-part="root"
     :class="stepClasses"
     :data-state="status"
     :data-clickable="isClickable ? '' : undefined"
     :aria-current="status === 'active' ? 'step' : undefined"
     :role="isClickable ? 'button' : undefined"
     :tabindex="isClickable ? 0 : undefined"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-stepper-item'), ...$attrs, class: undefined }"
     @click="activate"
     @keydown="handleKeydown"
   >
     <!-- Step indicator -->
     <slot name="indicator" :step="stepIndex + 1" :status="status">
-      <div :class="styles.indicator()">
+      <div data-part="indicator" :class="cn(styles.indicator(), ui?.indicator)">
         <!-- Completed check -->
         <svg
           v-if="status === 'completed'"
@@ -121,11 +126,11 @@ function handleKeydown(event: KeyboardEvent): void {
 
     <!-- Step text -->
     <div>
-      <div v-if="title" :class="styles.title()">
+      <div v-if="title" data-part="title" :class="cn(styles.title(), ui?.title)">
         {{ title }}
         <span v-if="optional" class="text-[var(--dz-muted-foreground)] font-normal">(optional)</span>
       </div>
-      <div v-if="description" :class="styles.description()">
+      <div v-if="description" data-part="description" :class="cn(styles.description(), ui?.description)">
         {{ description }}
       </div>
     </div>

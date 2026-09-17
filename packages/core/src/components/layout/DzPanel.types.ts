@@ -15,6 +15,7 @@ import type {
   CanonicalSize,
   PanelVariant,
 } from '@dzup-ui/contracts'
+import type { DzPanelUi } from './DzPanel.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -35,6 +36,13 @@ export interface DzPanelProps
   collapsible?: boolean
   /** HTML element to render the root as */
   as?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzPanel.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target (the panel surface); `ui`
+   * addresses the header, trigger, title, chevron, actions and body by name,
+   * and a typo is a type error.
+   */
+  ui?: DzPanelUi
 }
 
 // ---------------------------------------------------------------------------

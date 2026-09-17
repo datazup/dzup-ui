@@ -21,6 +21,8 @@ import { RadioGroupRoot } from 'reka-ui'
  * ```
  */
 import { computed, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 
@@ -28,6 +30,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Value of the selected radio; the default empty string selects none. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzRadioGroupProps>(), {
@@ -44,7 +47,13 @@ const props = withDefaults(defineProps<DzRadioGroupProps>(), {
 })
 
 const emit = defineEmits<DzRadioGroupEmits>()
+
 defineSlots<DzRadioGroupSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -90,11 +99,16 @@ const classes = computed(() =>
     attrs.class as string | undefined,
   ),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <RadioGroupRoot
     :id="resolvedId"
+    :dir="dzDirection"
+    data-part="root"
     :model-value="model"
     :disabled="resolvedDisabled"
     :name="name"
@@ -110,7 +124,7 @@ const classes = computed(() =>
     :data-required="resolvedRequired ? '' : undefined"
     :data-orientation="orientation"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-radio-group'), ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"
     @focus="handleFocus"
     @blur="handleBlur"

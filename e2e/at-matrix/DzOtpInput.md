@@ -20,6 +20,21 @@ known one.
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/inputs/DzOtpInput.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| any digit key | — | Enter the character and move focus to the next cell. |
+| `Backspace` | — | Clear the current cell, or move to the previous cell when it is already empty. |
+| `ArrowRight` | — | Move focus to the next cell. |
+| `ArrowLeft` | — | Move focus to the previous cell. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

@@ -20,6 +20,8 @@ import {
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { cn } from '../../utilities/cn.ts'
 import { scrollAreaVariants } from './DzScrollArea.variants.ts'
 
@@ -34,11 +36,16 @@ const props = withDefaults(defineProps<DzScrollAreaProps>(), {
 
 defineSlots<DzScrollAreaSlots>()
 
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
+
 const attrs = useAttrs()
 const styles = computed(() => scrollAreaVariants())
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 const vScrollbarClasses = computed(() =>
@@ -58,18 +65,23 @@ const showVertical = computed(() =>
 const showHorizontal = computed(() =>
   props.orientation === 'horizontal' || props.orientation === 'both',
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <ScrollAreaRoot
     :id="id"
+    :dir="dzDirection"
+    data-part="root"
     :type="type"
     :class="rootClasses"
     :aria-label="ariaLabel"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-scroll-area'), ...$attrs, class: undefined }"
   >
-    <ScrollAreaViewport :class="styles.viewport()">
+    <ScrollAreaViewport data-part="viewport" :class="cn(styles.viewport(), props.ui?.viewport)">
       <slot />
     </ScrollAreaViewport>
 

@@ -22,7 +22,7 @@ const classes = computed(() =>
 </script>
 
 <template>
-  <DialogDescription :class="classes" v-bind="{ ...$attrs, class: undefined }">
+  <DialogDescription data-part="description" :class="classes" v-bind="{ ...$attrs, class: undefined }">
     <slot />
   </DialogDescription>
 </template>

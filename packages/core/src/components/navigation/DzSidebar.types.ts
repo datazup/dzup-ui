@@ -10,6 +10,7 @@
 
 import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
+import type { DzSidebarItemUi, DzSidebarSectionUi, DzSidebarUi } from './DzSidebar.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -83,6 +84,12 @@ export interface DzSidebarProps extends BaseAccessibilityProps {
    * No-op during SSR or when storage is unavailable.
    */
   storageKey?: string
+  /**
+   * Per-part class overrides for the three nodes DzSidebar renders itself
+   * (ADR-19 §5). The mobile scrim is teleported and the scrolling body is
+   * internal, so neither has a call site `class` could reach.
+   */
+  ui?: DzSidebarUi
 }
 
 // ---------------------------------------------------------------------------
@@ -123,6 +130,12 @@ export interface DzSidebarItemProps extends BaseAccessibilityProps {
   href?: string
   /** Router link destination (renders as <RouterLink>) */
   to?: string | object
+  /**
+   * Per-part class overrides for the item's inner nodes (ADR-19 §5). `class`
+   * at the call site lands on the item; the icon wrapper, the label and the
+   * badge wrapper are the nodes a collapse animation has to reach.
+   */
+  ui?: DzSidebarItemUi
 }
 
 /** Events emitted by DzSidebarItem */
@@ -153,6 +166,12 @@ export interface DzSidebarSectionProps {
   collapsible?: boolean
   /** Whether the section is open by default */
   defaultOpen?: boolean
+  /**
+   * Per-part class override for the section's title row (ADR-19 §5). The
+   * section's own element takes `class` at the call site; the title is
+   * rendered from the `title` prop and is otherwise unreachable.
+   */
+  ui?: DzSidebarSectionUi
 }
 
 /** Slot definitions for DzSidebarSection */

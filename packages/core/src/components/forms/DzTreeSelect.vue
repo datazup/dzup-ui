@@ -31,6 +31,7 @@ import { Check, ChevronDown, Minus, X } from 'lucide-vue-next'
  * ```
  */
 import { computed, ref, useAttrs, useId, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
@@ -60,6 +61,7 @@ defineOptions({
  * explicit clear writes `[]` in multiple mode or `''` in single.
  */
 const legacyValueModel = defineModel<TreeSelectValue>('value')
+/** The selected node key or keys, shaped by `selectionMode`, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). */
 const primaryModel = defineModel<TreeSelectValue>({ default: undefined })
 const expandedKeysModel = defineModel<string[]>('expandedKeys', { default: () => [] })
 const props = withDefaults(defineProps<DzTreeSelectProps>(), {
@@ -613,10 +615,13 @@ function handleSearchInput(event: Event): void {
 const triggerClasses = computed(() =>
   cn(styles.value.trigger(), attrs.class as string | undefined),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div>
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-tree-select')">
     <DzPopover v-model:open="isOpen">
       <DzPopoverTrigger>
         <button
@@ -632,7 +637,8 @@ const triggerClasses = computed(() =>
           :aria-describedby="resolvedAriaDescribedby"
           :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
           :disabled="resolvedDisabled"
-          :class="triggerClasses"
+          data-part="trigger"
+          :class="[triggerClasses, ui?.trigger]"
           :data-state="resolvedDisabled ? 'disabled' : (isOpen ? 'open' : 'idle')"
           :data-disabled="resolvedDisabled ? '' : undefined"
           :data-invalid="resolvedInvalid ? '' : undefined"
@@ -647,7 +653,7 @@ const triggerClasses = computed(() =>
           @focus="handleFocus"
           @blur="handleBlur"
         >
-          <span :class="styles.value()">
+          <span data-part="label" :class="[styles.value(), ui?.label]">
             <slot name="value" :selected-nodes="selectedNodes" :placeholder="placeholder">
               <template v-if="!hasSelection">
                 <span :class="styles.placeholder()">{{ placeholder }}</span>
@@ -676,7 +682,7 @@ const triggerClasses = computed(() =>
               </template>
             </slot>
           </span>
-          <ChevronDown :class="styles.icon()" aria-hidden="true" />
+          <ChevronDown data-part="icon" :class="[styles.icon(), ui?.icon]" aria-hidden="true" />
         </button>
       </DzPopoverTrigger>
 
@@ -684,7 +690,7 @@ const triggerClasses = computed(() =>
         :arrow="false"
         align="start"
         :side-offset="4"
-        :class="styles.panel()"
+        :class="[styles.panel(), ui?.content]"
       >
         <div
           v-if="filter"
@@ -693,8 +699,9 @@ const triggerClasses = computed(() =>
           <input
             type="text"
             :value="query"
+            data-part="input"
             :placeholder="resolvedFilterPlaceholder"
-            :class="styles.searchInput()"
+            :class="[styles.searchInput(), ui?.input]"
             role="searchbox"
             :aria-label="dzMessages.filterOptions"
             data-dz-tree-search
@@ -770,7 +777,7 @@ const triggerClasses = computed(() =>
           </template>
         </DzTree>
 
-        <div v-else :class="styles.empty()" data-dz-tree-empty>
+        <div v-else data-part="empty" :class="[styles.empty(), ui?.empty]" data-dz-tree-empty>
           <slot name="empty">
             {{ filterActive ? resolvedNoResultsText : 'No options available' }}
           </slot>
@@ -782,7 +789,9 @@ const triggerClasses = computed(() =>
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

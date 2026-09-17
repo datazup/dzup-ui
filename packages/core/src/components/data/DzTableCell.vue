@@ -15,6 +15,7 @@ import type { DzTableCellProps, DzTableCellSlots } from './DzTable.types.ts'
  *   the `colId` adopt that width.
  */
 import { computed, inject, ref, useAttrs } from 'vue'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
@@ -37,6 +38,11 @@ const props = withDefaults(defineProps<DzTableCellProps>(), {
 })
 
 defineSlots<DzTableCellSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
 const tableContext = inject(DZ_TABLE_KEY, null)
@@ -146,11 +152,16 @@ function onResizeKey(event: KeyboardEvent): void {
   const step = event.shiftKey ? 24 : 8
   const current
     = resolvedWidth.value ?? cellEl.value?.getBoundingClientRect().width ?? minColWidth()
-  if (event.key === 'ArrowLeft') {
+  // Narrower is a step back along the INLINE axis: the column's resizable edge
+  // is its inline-end, which is on the right in LTR and on the left in RTL.
+  const narrowerKey = dzDirection.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+  const widerKey = dzDirection.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
+
+  if (event.key === narrowerKey) {
     event.preventDefault()
     tableContext?.setColWidth(props.colId, Math.max(minColWidth(), current - step))
   }
-  else if (event.key === 'ArrowRight') {
+  else if (event.key === widerKey) {
     event.preventDefault()
     tableContext?.setColWidth(props.colId, current + step)
   }

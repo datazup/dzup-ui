@@ -22,10 +22,10 @@
 
 | Verdict | Count | Meaning |
 | --- | ---: | --- |
-| ✅ pass | 251 | satisfies the clause today |
+| ✅ pass | 278 | satisfies the clause today |
 | ⛔ gap | 0 | fails the clause; work for TASK-FORM-OSS-02 |
 | 🕓 future | 5 | the seam does not exist yet; work for TASK-FORM-OSS-03 |
-| ◻ unrun | 47 | the check exists and has not been run for this control |
+| ◻ unrun | 20 | the check exists and has not been run for this control |
 | – n-a | 93 | the clause does not apply to this kind of control |
 
 | Clause | | ✅ | ⛔ | 🕓 | ◻ | – |
@@ -35,7 +35,7 @@
 | C3 | states | 44 | 0 | 0 | 0 | 0 |
 | C4 | messages | 35 | 0 | 0 | 0 | 9 |
 | C5 | SSR | 44 | 0 | 0 | 0 | 0 |
-| C6 | RTL | 10 | 0 | 0 | 34 | 0 |
+| C6 | RTL | 37 | 0 | 0 | 7 | 0 |
 | C7 | motion | 5 | 0 | 0 | 0 | 39 |
 | C8 | keyboard | 30 | 0 | 0 | 3 | 11 |
 | C9 | async | 8 | 0 | 5 | 5 | 26 |
@@ -50,8 +50,27 @@
 - `DzPasswordInput`
 - `DzSearchInput`
 - `DzTextarea`
+- `DzCascader`
+- `DzCheckbox`
+- `DzColorPicker`
+- `DzCombobox`
+- `DzDatePicker`
+- `DzDateRangePicker`
+- `DzFieldArray`
 - `DzFileUpload`
+- `DzInplace`
+- `DzKnob`
+- `DzListbox`
+- `DzMultiSelect`
+- `DzRadio`
+- `DzRangeSlider`
+- `DzRating`
 - `DzSelect`
+- `DzSlider`
+- `DzSwitch`
+- `DzTimePicker`
+- `DzTransfer`
+- `DzTreeSelect`
 
 ## Matrix
 
@@ -72,47 +91,47 @@
 
 | Control | kind | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | specs c/a/s | story states |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `DzCascader` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled, Invalid |
-| `DzCheckbox` | boolean | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
-| `DzCheckboxGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | 🕓 future — renders whatever children it is given rather than an option list of its own, so the seam belongs on a future group that takes options | ✓/·/✓ | Disabled |
-| `DzColorPicker` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
-| `DzCombobox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Loading, Invalid |
-| `DzDatePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled, Invalid |
-| `DzDateRangePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
-| `DzFieldArray` | array | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
+| `DzCascader` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled, Invalid |
+| `DzCheckbox` | boolean | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
+| `DzCheckboxGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — renders whatever children it is given rather than an option list of its own, so the seam belongs on a future group that takes options | ✓/·/✓ | Disabled |
+| `DzColorPicker` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
+| `DzCombobox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Loading, Invalid |
+| `DzDatePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled, Invalid |
+| `DzDateRangePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
+| `DzFieldArray` | array | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
 | `DzFileUpload` | file | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
 | `DzFloatLabel` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | – n-a | – n-a | ✓/·/✓ | — |
 | `DzFormDescription` | compound-part | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ◻ unrun — not in the quality matrix (compound parts are not assigned a tier) | – n-a | ·/·/✓ | — |
 | `DzFormField` | wrapper | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | – n-a | ✓/✓/✓ | Disabled, Invalid, Error, Required |
 | `DzFormLabel` | compound-part | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ◻ unrun — not in the quality matrix (compound parts are not assigned a tier) | – n-a | ·/✓/✓ | — |
 | `DzFormMessage` | compound-part | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ◻ unrun — not in the quality matrix (compound parts are not assigned a tier) | – n-a | ·/·/✓ | — |
-| `DzInplace` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
-| `DzKnob` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | Readonly |
-| `DzListbox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled |
-| `DzMention` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | 🕓 future — has a loading prop and its own suggestion menu; wiring it to the shared seam needs the menu to render the state rows, which is a bigger change than the six selection controls took | ✓/·/✓ | Invalid |
-| `DzMultiSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
-| `DzPersonaSelector` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | 🕓 future — the DzCombobox it delegates to now has the seam, but this control declares none of the props and so cannot forward them — a pass-through, not a reimplementation | ✓/·/✓ | Disabled |
-| `DzRadio` | boolean | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
-| `DzRadioGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | 🕓 future — same as DzCheckboxGroup — the radios are children, not an option list this control owns | ✓/✓/✓ | Disabled |
-| `DzRangeSlider` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled |
-| `DzRating` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | Readonly |
+| `DzInplace` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
+| `DzKnob` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Readonly |
+| `DzListbox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled |
+| `DzMention` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — has a loading prop and its own suggestion menu; wiring it to the shared seam needs the menu to render the state rows, which is a bigger change than the six selection controls took | ✓/·/✓ | Invalid |
+| `DzMultiSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
+| `DzPersonaSelector` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — the DzCombobox it delegates to now has the seam, but this control declares none of the props and so cannot forward them — a pass-through, not a reimplementation | ✓/·/✓ | Disabled |
+| `DzRadio` | boolean | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
+| `DzRadioGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — same as DzCheckboxGroup — the radios are children, not an option list this control owns | ✓/✓/✓ | Disabled |
+| `DzRangeSlider` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled |
+| `DzRating` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Readonly |
 | `DzSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
-| `DzSlider` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
-| `DzSwitch` | boolean | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
-| `DzTagsInput` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | 🕓 future — has no suggestion source at all today; the seam lands when one does | ✓/·/✓ | Disabled, Invalid |
-| `DzTimePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
-| `DzTransfer` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled, Invalid |
-| `DzTreeSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | — |
+| `DzSlider` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
+| `DzSwitch` | boolean | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
+| `DzTagsInput` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — has no suggestion source at all today; the seam lands when one does | ✓/·/✓ | Disabled, Invalid |
+| `DzTimePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
+| `DzTransfer` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled, Invalid |
+| `DzTreeSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | — |
 
 ### Layouts — the primitives a renderer uses as form sections
 
 | Control | kind | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | specs c/a/s | story states |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `DzAccordion` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | Disabled |
+| `DzAccordion` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | Disabled |
 | `DzGrid` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
 | `DzStack` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
-| `DzStepper` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
-| `DzTabs` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | Disabled |
+| `DzStepper` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
+| `DzTabs` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | Disabled |
 
 ## Gaps by family, for TASK-FORM-OSS-02
 

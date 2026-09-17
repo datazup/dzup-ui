@@ -23,6 +23,25 @@ export const anatomy = {
   recipes: ['variant', 'size', 'tone'],
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Native `button` activation. The
+   * clipboard write is the action.
+   */
+  keyboard: [
+    {
+      key: 'Enter',
+      action: 'Activate the control, copying the value to the clipboard.',
+      wcag: ['2.1.1'],
+      apg: 'button',
+    },
+    {
+      key: ' ',
+      action: 'Activate the control, copying the value to the clipboard.',
+      wcag: ['2.1.1'],
+      apg: 'button',
+    },
+  ],
+
   /** Tier B — a real button: focus, keyboard activation, and a clipboard write. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

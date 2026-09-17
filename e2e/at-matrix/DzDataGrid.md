@@ -21,6 +21,27 @@ known one.
 | `select` | Select an item and confirm the selection. | The selected state is announced, and the control's value reflects it afterwards. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/data/DzDataGrid.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | — | Move focus one cell to the inline end. |
+| `ArrowLeft` | — | Move focus one cell to the inline start. |
+| `ArrowDown` | — | Move focus one row down. |
+| `ArrowUp` | — | Move focus one row up. |
+| `Home` | — | Move focus to the first cell of the row. |
+| `End` | — | Move focus to the last cell of the row. |
+| `Enter` | header | Cycle the focused column sort. |
+| `Space` | header | Cycle the focused column sort. |
+| `Shift` + `Enter` | header | Add the focused column to the existing sort rather than replacing it. |
+| `Escape` | filter open | Close the column filter popover. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

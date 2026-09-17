@@ -20,6 +20,7 @@ import type { DzPanelEmits, DzPanelProps, DzPanelSlots } from './DzPanel.types.t
  * ```
  */
 import { computed, useAttrs, useId, useSlots } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzCollapse from './DzCollapse.vue'
 import {
@@ -78,8 +79,12 @@ const classes = computed(() =>
   cn(
     panelVariants({ variant: props.variant, size: props.size }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -90,26 +95,29 @@ const classes = computed(() =>
     :data-variant="variant"
     :data-size="size"
     :data-tone="tone"
+    data-part="root"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-panel'), ...$attrs, class: undefined }"
   >
-    <div :class="panelHeaderVariants({ bordered: variant !== 'legend' })">
+    <div data-part="header" :class="cn(panelHeaderVariants({ bordered: variant !== 'legend' }), props.ui?.header)">
       <component
         :is="collapsible ? 'button' : 'div'"
         :type="collapsible ? 'button' : undefined"
         :aria-expanded="collapsible ? expanded : undefined"
         :aria-controls="collapsible ? regionId : undefined"
-        :class="panelTriggerVariants({ collapsible })"
+        data-part="trigger"
+        :class="cn(panelTriggerVariants({ collapsible }), props.ui?.trigger)"
         @click="toggle"
       >
-        <span :class="panelTitleVariants()">
+        <span data-part="title" :class="cn(panelTitleVariants(), props.ui?.title)">
           <slot name="header">{{ header }}</slot>
         </span>
         <svg
           v-if="collapsible"
-          :class="panelChevronVariants({ expanded })"
+          data-part="indicator"
+          :class="cn(panelChevronVariants({ expanded }), props.ui?.indicator)"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -122,17 +130,17 @@ const classes = computed(() =>
         </svg>
       </component>
 
-      <div v-if="hasActions" class="flex shrink-0 items-center gap-[var(--dz-panel-gap)]">
+      <div v-if="hasActions" data-part="action" :class="cn('flex shrink-0 items-center gap-[var(--dz-panel-gap)]', props.ui?.action)">
         <slot name="actions" />
       </div>
     </div>
 
     <DzCollapse v-if="collapsible" :id="regionId" v-model="expanded">
-      <div :class="panelBodyVariants()" :inert="collapsed || undefined">
+      <div data-part="content" :class="cn(panelBodyVariants(), props.ui?.content)" :inert="collapsed || undefined">
         <slot />
       </div>
     </DzCollapse>
-    <div v-else :id="regionId" :class="panelBodyVariants()">
+    <div v-else :id="regionId" data-part="content" :class="cn(panelBodyVariants(), props.ui?.content)">
       <slot />
     </div>
   </component>

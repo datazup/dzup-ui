@@ -38,12 +38,10 @@ import type {
 } from '@dzup-ui/contracts'
 import type { DzProviderDefaults, DzProviderProps, DzProviderSlots } from './DzProvider.types.ts'
 import type { ResolvedTheme, ThemePreference } from './DzThemeProvider.types.ts'
-import { DZ_DIRECTION_KEY } from '@dzup-ui/contracts'
+import { DZ_DIRECTION_KEY, DZ_SANITIZER_KEY } from '@dzup-ui/contracts'
 import { computed, inject, onMounted, onUnmounted, provide, ref, watch } from 'vue'
 import {
-  createDzMotion,
   provideDzDefaults,
-  provideDzMotion,
   provideDzNonce,
   provideDzPortalTarget,
   provideDzTestIds,
@@ -53,6 +51,8 @@ import {
 import { createDzFormats, provideDzFormats } from '../composables/provider/useDzFormats.ts'
 import { directionForLocale, provideDzLocale, useDzLocale } from '../composables/provider/useDzLocale.ts'
 import { provideDzMessages } from '../composables/provider/useDzMessages.ts'
+import { createDzMotion, provideDzMotion } from '../composables/provider/useDzMotion.ts'
+import { createDzSanitizer, provideDzSanitizer } from '../composables/provider/useDzSanitizer.ts'
 import { DZ_PROVIDER_SCOPE_KEY } from './DzProvider.types.ts'
 import { DZ_THEME_KEY } from './DzThemeProvider.types.ts'
 
@@ -162,6 +162,30 @@ function normaliseDefaults(input: DzProviderDefaults): DzDefaults {
 
 if (props.defaults !== undefined)
   provideDzDefaults(computed(() => normaliseDefaults(props.defaults ?? {})))
+
+// ---------------------------------------------------------------------------
+// Sanitizer (ADR-20 amendment A6, TASK-R3-O2)
+// ---------------------------------------------------------------------------
+
+/**
+ * Fold this provider's `sanitizer` over whatever an ancestor installed.
+ *
+ * `inject` resolves against the PARENT chain, so this reads the ancestor's
+ * adapter, not the one about to be provided — which is what makes
+ * `<DzProvider :sanitizer="{ limits: { maxDepth: 8 } }">` inside a provider that
+ * installed DOMPurify keep DOMPurify and tighten only the ceiling.
+ *
+ * A6 keeps A1: an *undefined* prop provides nothing at all, so a nested
+ * provider mounted to change the locale does not silently reset an
+ * application's sanitizer to the escaping default.
+ */
+const inheritedSanitizer = inject(DZ_SANITIZER_KEY, undefined)
+
+if (props.sanitizer !== undefined) {
+  provideDzSanitizer(
+    createDzSanitizer(computed(() => props.sanitizer), inheritedSanitizer),
+  )
+}
 
 // ---------------------------------------------------------------------------
 // Nonce and test ids

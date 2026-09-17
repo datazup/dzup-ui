@@ -20,6 +20,11 @@ export const anatomy = {
   recipes: ['tone'],
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Presentational text.
+   */
+  keyboard: 'none',
+
   /** Tier A — presentational, and it re-renders on a timer rather than on input. */
   riskTier: 'A',
 } as const satisfies ComponentAnatomy

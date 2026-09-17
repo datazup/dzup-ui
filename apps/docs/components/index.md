@@ -43,7 +43,7 @@ outline: [2, 2]
 - [DzCombobox](./DzCombobox.md) — Searchable select using Reka UI Combobox (ADR-07).
 - [DzDatePicker](./DzDatePicker.md) — Date selection using Reka UI DatePicker (ADR-07).
 - [DzDateRangePicker](./DzDateRangePicker.md) — Date range selection using Reka UI (ADR-07).
-- [DzFieldArray](./DzFieldArray.md)
+- [DzFieldArray](./DzFieldArray.md) — renderless repeater for an array-valued form field, owning the bounds and the per-row ids.
 - [DzFileUpload](./DzFileUpload.md) — File upload with drag-and-drop support.
 - [DzFloatLabel](./DzFloatLabel.md) — floating-label field wrapper.
 - [DzFormField](./DzFormField.md) — Compound wrapper that provides form field context.
@@ -123,11 +123,11 @@ outline: [2, 2]
 ## Feedback
 
 - [DzAlert](./DzAlert.md) — Contextual alert messages for user feedback.
-- [DzAsyncBoundary](./DzAsyncBoundary.md)
+- [DzAsyncBoundary](./DzAsyncBoundary.md) — `<Suspense>` wrapper that shows a loading fallback, catches the errors its subtree throws, and can time a pending child out.
 - [DzBadge](./DzBadge.md) — Compact label for status, counts, or categories.
 - [DzBlockUI](./DzBlockUI.md) — Content-loading mask.
 - [DzEmpty](./DzEmpty.md) — Empty state placeholder component.
-- [DzErrorBoundary](./DzErrorBoundary.md)
+- [DzErrorBoundary](./DzErrorBoundary.md) — catches the render errors its subtree throws and swaps in a fallback slot instead of letting them reach the application root.
 - [DzMeterGroup](./DzMeterGroup.md) — Segmented proportional meter with legend.
 - [DzNotification](./DzNotification.md) — Persistent notification message with optional auto-dismiss.
 - [DzProgress](./DzProgress.md) — Visual indicator of task completion.

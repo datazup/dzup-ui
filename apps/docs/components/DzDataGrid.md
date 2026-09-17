@@ -20,6 +20,14 @@ Compound data grid root component.
 - **Risk tier:** C · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **v-model:** `v-model:filters` (`DzDataGridFilter[] | undefined`), `v-model:selectedRows` (`T[] | undefined`), `v-model:sortModel` (`SortModel[] | undefined`)
+- **Anatomy parts (ADR-19):** `body`, `cell`, `content`, `empty`, `footer`, `header`, `indicator`, `loader`, `panel`, `root`, `row`
+
+## Intent and selection guidance
+
+**Not declared.** `DzDataGrid` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -41,7 +49,7 @@ never as asserted.
 :::
 
 
-## Props (20, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (21, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -65,6 +73,7 @@ never as asserted.
 | `sortable` | `boolean \| undefined` | no | `false` | Whether sorting is enabled |
 | `sortModel` | `SortModel[] \| undefined` | no | `[]` | Current sort model (controlled) |
 | `total` | `number \| undefined` | no | `undefined` | Total number of rows across all pages, used when `manual=true` so pagination can compute `totalPages` from the server's reported total rather than from the current page slice. Ignored when `manual=false`. |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "content" \| "footer" \| "header" \| "row" \| "cell" \| "body" \| "empty" \| "panel" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzDataGrid.anatomy.ts` (ADR-19 §5). Unlike `DzTable`, whose rows and cells are written at the call site, this component renders its own header, body and pagination, so `ui` is the only route to them. |
 
 ## Events (8)
 
@@ -124,13 +133,15 @@ Internal body sub-part for DzDataGrid.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `rowClick` | `[row: Record<string, unknown>, index: number]` | — |
+| `rowClick` | `[row: Record<string, unknown>, index: number]` | Emitted when a row is clicked, with the row and its zero-based index. Fires before selection toggles. |
 
 #### Slots (1)
 
 | Slot | Slot props | Description |
 | --- | --- | --- |
-| `cell` | `{ row: Record<string, unknown>; column: ColumnDef<Record<string, unknown>>; value: unknown; }` | — |
+| `cell` | `{ row: Record<string, unknown>; column: ColumnDef<Record<string, unknown>>; value: unknown; }` | Override one cell's rendering. Receives the row, its column definition and the raw field value; unfilled, the cell prints `row[column.field]`. |
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzDataGrid`; see that component's usage snippet.
 
@@ -143,6 +154,8 @@ Internal header sub-part for DzDataGrid.
 - **Compound part of:** `DzDataGrid`
 
 This component declares no props, events or slots; it renders a fixed element and takes only Vue's standard attributes.
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzDataGrid`; see that component's usage snippet.
 
@@ -168,10 +181,163 @@ Internal pagination sub-part for DzDataGrid.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `update:page` | `[page: number]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
-| `update:pageSize` | `[pageSize: number]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:page` | `[page: number]` | Page changed |
+| `update:pageSize` | `[pageSize: number]` | Page size changed |
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzDataGrid`; see that component's usage snippet.
+
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `density` | `[data-density="…"]` | `density` |
+| `size` | `[data-size="…"]` | `size` |
+
+**Controlled and uncontrolled — `filters`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzDataGrid />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzDataGrid v-model:filters="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzDataGrid :filters="value" @update:filters="value = $event" />
+```
+
+**Controlled and uncontrolled — `selectedRows`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzDataGrid />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzDataGrid v-model:selectedRows="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzDataGrid :selectedRows="value" @update:selectedRows="value = $event" />
+```
+
+**Controlled and uncontrolled — `sortModel`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzDataGrid />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzDataGrid v-model:sortModel="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzDataGrid :sortModel="value" @update:sortModel="value = $event" />
+```
+
+**Where each variant is shown.** 14 stories in
+`packages/core/stories/data/DzDataGrid.stories.ts`: `Default`, `Size Gallery`, `Density Gallery`, `With Sorting`, `With Row Selection`, `With Pagination`, `Loading`, `Empty State`, `Dark Mode Preview`, `Accessibility: Keyboard Navigation`, `Real World: Team Dashboard`, `Real World: Compact Report`, `Performance: 1,000 Rows`, `States`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `body` | `[data-part="body"]` | no — renders zero or more than once |
+| `cell` | `[data-part="cell"]` | no — renders zero or more than once |
+| `content` | `[data-part="content"]` | no — renders zero or more than once |
+| `empty` | `[data-part="empty"]` | no — renders zero or more than once |
+| `footer` | `[data-part="footer"]` | no — renders zero or more than once |
+| `header` | `[data-part="header"]` | no — renders zero or more than once |
+| `indicator` | `[data-part="indicator"]` | no — renders zero or more than once |
+| `loader` | `[data-part="loader"]` | no — renders zero or more than once |
+| `panel` | `[data-part="panel"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `row` | `[data-part="row"]` | no — renders zero or more than once |
+
+```vue
+<DzDataGrid :ui="{ 'body': 'ring-2', 'cell': 'ring-2', 'content': 'ring-2', 'empty': 'ring-2', 'footer': 'ring-2', 'header': 'ring-2', 'indicator': 'ring-2', 'loader': 'ring-2', 'panel': 'ring-2', 'root': 'ring-2', 'row': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `loading` | `[data-state="loading"]` |
+| `ready` | `[data-state="ready"]` |
+| `selected` | `[data-state="selected"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/data/DzDataGrid.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | `indicator` | These parts render a direction-bearing icon and mirror with the layout. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/data/DzDataGrid.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 2/4 metric(s) have a derived threshold |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzDataGrid` advertises 3 states:
+`loading`, `ready`, `selected`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/data/DzDataGrid.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `6c5f522`.
 
 ## Extraction fidelity
 
@@ -180,7 +346,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 20 | 20 | 11 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 21 | 21 | 11 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 8 | 8 | 8 recovered from the `Dz*Emits` interface · 3 synthesised by `defineModel` |
 | Slots | 6 | 6 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -189,8 +355,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -199,7 +365,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/)
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `6c5f5223`
 
 **Why this pattern:** Cell-level roving focus over a consumer-supplied dataset, with sort, selection and column state that interact.
@@ -238,14 +404,28 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**10 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Where | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- | --- |
+| `ArrowRight` | — | Move focus one cell to the inline end. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | swaps with the writing direction |
+| `ArrowLeft` | — | Move focus one cell to the inline start. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | swaps with the writing direction |
+| `ArrowDown` | — | Move focus one row down. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `ArrowUp` | — | Move focus one row up. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Home` | — | Move focus to the first cell of the row. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `End` | — | Move focus to the last cell of the row. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Enter` | `header` | Cycle the focused column sort. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Space` | `header` | Cycle the focused column sort. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Shift` + `Enter` | `header` | Add the focused column to the existing sort rather than replacing it. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `Escape` | `filter open` | Close the column filter popover. | `2.1.1`, `2.1.2` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+
+Declared in `packages/core/src/components/data/DzDataGrid.anatomy.ts`.
 
 - **Pattern:** [APG — `grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 10 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Space`, `Escape`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -279,12 +459,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzDataGrid.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzDataGrid.spec.ts` — The component declares 10 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Space`, `Escape`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzDataGrid.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzDataGrid.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzDataGrid.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/data/DzDataGrid.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzDataGrid.stories.ts` |
@@ -292,7 +472,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzDataGrid.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 2/4 metric(s) have a derived threshold |
 
-**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `portal-hydration`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `portal-hydration`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

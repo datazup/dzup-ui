@@ -1,4 +1,5 @@
 import type { DzDefaults, DzMessages } from '@dzup-ui/contracts'
+import { DzSanitizeLimitError } from '@dzup-ui/contracts'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
@@ -11,6 +12,7 @@ import {
   useDzMotion,
   useDzNonce,
   useDzPortalTarget,
+  useDzSanitizer,
   useDzTestIds,
 } from '../composables/provider/index.ts'
 import { clearFormatterCache } from '../composables/provider/useDzFormats.ts'
@@ -72,6 +74,9 @@ function underProvider<T>(
 
   return { value: captured, wrapper }
 }
+
+/** One sanitisation context for every case below; the sink vocabulary is Pro's. */
+const SINK = { sink: 'markdown', component: 'DzTest' } as const
 
 let matchesValue = false
 let reducedMotionValue = false
@@ -177,11 +182,17 @@ describe('nested providers override per key', () => {
     // must not reset the portal target to the default, which is what an
     // implementation that provides every key unconditionally would do.
     const { value } = underProvider(
-      { locale: 'ar-EG', portal: '#outer', nonce: 'outer-nonce' },
+      {
+        locale: 'ar-EG',
+        portal: '#outer',
+        nonce: 'outer-nonce',
+        sanitizer: { policyName: 'outer-policy', sanitize: (html: string) => `[outer]${html}` },
+      },
       () => ({
         locale: useDzLocale(),
         portal: useDzPortalTarget(),
         nonce: useDzNonce(),
+        sanitizer: useDzSanitizer(),
       }),
       { locale: 'bs-BA' },
     )
@@ -189,6 +200,12 @@ describe('nested providers override per key', () => {
     expect(value.locale.value).toBe('bs-BA')
     expect(value.portal.value).toBe('#outer')
     expect(value.nonce.value).toBe('outer-nonce')
+    // A6 keeps A1: the sanitizer an application installed at the root survives
+    // a nested provider mounted to change something else entirely. Resetting it
+    // to the escaping default would silently turn every rich-content render
+    // into visible markup — a truncation wearing an override's clothes.
+    expect(value.sanitizer.policyName).toBe('outer-policy')
+    expect(value.sanitizer.sanitize('<b>x</b>', SINK)).toBe('[outer]<b>x</b>')
   })
 
   it('inherits an ancestor locale when only the direction is overridden', () => {
@@ -448,5 +465,87 @@ describe('motion', () => {
     reducedMotionValue = true
     const { value } = underProvider({ motion: 'full' }, () => useDzMotion())
     expect(value.reduced.value).toBe(false)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Sanitizer (ADR-20 amendment A6, TASK-R3-O2)
+// ---------------------------------------------------------------------------
+
+describe('sanitizer', () => {
+  it('escapes rather than passes through when no host installed one', () => {
+    const { value } = underProvider({}, () => useDzSanitizer())
+    expect(value.sanitize('<script>alert(1)</script>', SINK))
+      .toBe('&lt;script&gt;alert(1)&lt;/script&gt;')
+  })
+
+  it('installs the adapter an application supplies', () => {
+    const { value } = underProvider(
+      { sanitizer: { policyName: 'acme', sanitize: (html: string) => `[acme]${html}` } },
+      () => useDzSanitizer(),
+    )
+    expect(value.policyName).toBe('acme')
+    expect(value.sanitize('<b>x</b>', SINK)).toBe('[acme]<b>x</b>')
+  })
+
+  it('enforces the ceilings for a host that supplied only a function', () => {
+    // The seam owns the ceilings, so the most common installation —
+    // `{ sanitize: html => DOMPurify.sanitize(html) }` — cannot ship without
+    // them by forgetting them.
+    const { value } = underProvider(
+      { sanitizer: { sanitize: (html: string) => html, limits: { maxLength: 8 } } },
+      () => useDzSanitizer(),
+    )
+    expect(() => value.sanitize('far too long to pass', SINK)).toThrow(DzSanitizeLimitError)
+  })
+
+  it('lets a nested provider tighten a ceiling and keep the adapter', () => {
+    const { value } = underProvider(
+      { sanitizer: { policyName: 'acme', sanitize: (html: string) => `[acme]${html}` } },
+      () => useDzSanitizer(),
+      { sanitizer: { limits: { maxDepth: 2 } } },
+    )
+
+    expect(value.policyName).toBe('acme')
+    expect(value.limits).toEqual({ maxLength: 128 * 1024, maxDepth: 2 })
+    expect(value.sanitize('<p>x</p>', SINK)).toBe('[acme]<p>x</p>')
+    expect(() => value.sanitize('<div><div><div>x', SINK)).toThrow(DzSanitizeLimitError)
+  })
+
+  it('lets a nested provider replace the adapter outright', () => {
+    const { value } = underProvider(
+      { sanitizer: { sanitize: (html: string) => `[outer]${html}` } },
+      () => useDzSanitizer(),
+      { sanitizer: { sanitize: (html: string) => `[inner]${html}` } },
+    )
+    expect(value.sanitize('x', SINK)).toBe('[inner]x')
+  })
+
+  it('follows a host that swaps its adapter at runtime', async () => {
+    // Read at call time, like `useDzFormats` and the locale: a host toggling a
+    // policy does not require every consumer to re-subscribe.
+    const wrapper = mount(DzProvider, {
+      props: { sanitizer: { sanitize: (html: string) => `[v1]${html}` } },
+      slots: {
+        default: () => h(defineComponent({
+          setup() {
+            const sanitizer = useDzSanitizer()
+            return () => h('div', sanitizer.sanitize('x', SINK))
+          },
+        })),
+      },
+    })
+
+    expect(wrapper.text()).toBe('[v1]x')
+    await wrapper.setProps({ sanitizer: { sanitize: (html: string) => `[v2]${html}` } })
+    await nextTick()
+    expect(wrapper.text()).toBe('[v2]x')
+  })
+
+  it('throws in dev when a host promised an adapter with null and supplied none', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    expect(() => underProvider({ sanitizer: null }, () => useDzSanitizer()))
+      .toThrow(/set `sanitizer` to null/)
+    warn.mockRestore()
   })
 })

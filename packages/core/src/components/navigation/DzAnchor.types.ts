@@ -10,6 +10,7 @@
  */
 
 import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { DzAnchorUi } from './DzAnchor.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Item model
@@ -44,6 +45,13 @@ export interface DzAnchorProps extends BaseAccessibilityProps {
   affix?: boolean
   /** Accessible label for the `<nav>` landmark. */
   ariaLabel?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzAnchor.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * every other node in the rail is rendered by this component's own render
+   * function, so `ui` is the only way to reach it.
+   */
+  ui?: DzAnchorUi
 }
 
 // ---------------------------------------------------------------------------

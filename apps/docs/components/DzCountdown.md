@@ -19,6 +19,13 @@ live countdown / elapsed timer.
 - **Risk tier:** A · **Status:** experimental
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
+## Intent and selection guidance
+
+**Not declared.** `DzCountdown` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -53,9 +60,9 @@ never as asserted.
 | `interval` | `number \| undefined` | no | `1000` | Tick granularity in ms — use `<1000` (e.g. `100`) to animate `S` (default `1000`) |
 | `mode` | `CountdownMode \| undefined` | no | `"to"` | Count down to a fixed time (`'to'`) or across a span (`'duration'`) |
 | `pauseOnHidden` | `boolean \| undefined` | no | `false` | Pause while the document is hidden and resume on visibility (default `false`) |
-| `size` | `CanonicalSize \| undefined` | no | `"md"` | Value typographic scale |
+| `size` | `CanonicalSize \| undefined` | no | `undefined` | Value typographic scale |
 | `target` | `number \| Date` | yes | — | The target. For `mode: 'to'` — a `Date` or epoch-ms timestamp to count down to. For `mode: 'duration'` — the span length in milliseconds. |
-| `tone` | `CanonicalTone \| undefined` | no | `"neutral"` | Value colour tone |
+| `tone` | `CanonicalTone \| undefined` | no | `undefined` | Value colour tone |
 
 ## Events (2)
 
@@ -94,6 +101,68 @@ Editable, running the **PauseResume** story from `packages/core/stories/data/DzC
 
 <DzPlayground component="DzCountdown" />
 
+## Variants and controlled state
+
+**Not declared.** `DzCountdown` declares no recipe axes in its anatomy and exposes no
+`v-model` pair, so it has neither variants to list nor a controlled form to show. For a
+presentational component that is the whole truth; for an interactive one it means the anatomy
+has not been written down yet.
+
+## Parts, states and tokens
+
+**Not declared.** `DzCountdown` has no `DzCountdown.anatomy.ts`, so
+nothing here says which nodes you may address, which states it advertises or which custom
+properties it reads. **That is not the same claim as having none** — it is that nobody has
+written them down. Until the declaration exists, a descendant selector against generated
+`tailwind-variants` class names is the only way in, and those names are free to change.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDefaults` | per-component prop defaults (`size`, `variant`, `tone`, `density`) |
+
+## Locale, direction and formats
+
+**Not declared.** `DzCountdown` declares no `rtl` contract, so this page cannot say
+whether its layout mirrors, whether the arrow keys swap, or which of its icons carry
+direction. "Does it mirror?" has three defensible answers and only the component knows which
+applies; leaving it undeclared is how a catalogue ends up mirroring some things and not
+others for no stated reason.
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is not a requirement at this tier, so nothing measures it.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+**Not declared.** `DzCountdown` declares no anatomy, so there is no state union to show
+examples for.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `70a0707`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -101,17 +170,17 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 13 | 13 | 7 declare a default, of which 5 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 13 | 13 | 5 declare a default, of which 7 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 2 | 2 | 2 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
 | Slots | 1 | 1 | 1 carry slot props |
-| Exposed on `ref` | 3 | 0 | no description exists in source for any exposed member, catalog-wide |
+| Exposed on `ref` | 3 | 3 | no description exists in source for any exposed member, catalog-wide |
 
 ## Accessibility and evidence
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -145,10 +214,11 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**Not declared.** This component declares no keyboard contract, so this page cannot say which
+key does what. **That is not a claim that it has no keyboard behaviour** — a component with
+none declares `keyboard: 'none'` explicitly, and those two facts are deliberately not
+collapsed. The contract is declared beside the component in its `*.anatomy.ts`; until it is,
+the only thing measuring this component's keyboard is the presence boolean below.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.

@@ -43,6 +43,7 @@ function handleClick(event: MouseEvent): void {
   <a
     v-if="href"
     :href="href"
+    data-part="item"
     :class="classes"
     :aria-label="ariaLabel"
     :aria-current="active ? 'page' : undefined"
@@ -54,13 +55,14 @@ function handleClick(event: MouseEvent): void {
     @click="handleClick"
   >
     <slot name="icon" />
-    <span v-if="!ctx?.collapsed.value">
+    <span v-if="!ctx?.collapsed.value" data-part="item-label" :class="cn(ui?.['item-label'])">
       <slot />
     </span>
   </a>
   <button
     v-else
     type="button"
+    data-part="item"
     :class="classes"
     :aria-label="ariaLabel"
     :aria-current="active ? 'page' : undefined"
@@ -72,7 +74,7 @@ function handleClick(event: MouseEvent): void {
     @click="handleClick"
   >
     <slot name="icon" />
-    <span v-if="!ctx?.collapsed.value">
+    <span v-if="!ctx?.collapsed.value" data-part="item-label" :class="cn(ui?.['item-label'])">
       <slot />
     </span>
   </button>

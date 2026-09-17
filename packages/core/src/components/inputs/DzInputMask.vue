@@ -20,6 +20,7 @@ import type { DzInputMaskEmits, DzInputMaskProps, DzInputMaskSlots } from './DzI
  * ```
  */
 import { computed, inject, onMounted, ref, useAttrs, useId, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_INPUT_GROUP_KEY } from './DzInputGroup.types.ts'
@@ -30,6 +31,10 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/**
+ * The bound text - the displayed masked value by default, or the stripped value
+ * when `modelMode` is `"unmasked"`. The default empty string renders the bare mask.
+ */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzInputMaskProps>(), {
@@ -242,7 +247,17 @@ onMounted(() => {
 })
 
 /** Expose the native input ref + validation state for consumers */
-defineExpose({ inputRef, completed, unmasked })
+defineExpose({
+  /** The underlying `<input>` element, for focus, selection and measurement. `null` before mount. */
+  inputRef,
+  /** Whether every token position in the mask is filled. */
+  completed,
+  /** The value with mask literals and unfilled slot characters stripped — what a form should persist. */
+  unmasked,
+})
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -257,7 +272,7 @@ defineExpose({ inputRef, completed, unmasked })
     :data-readonly="readonly ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-input-mask'), ...$attrs, class: undefined }"
   >
     <!-- Input wrapper with variant styling -->
     <div data-part="control" :class="wrapperClasses">

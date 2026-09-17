@@ -4,26 +4,42 @@
  * Canonical public API contracts (types, events, slots) for all dzup-ui
  * components. Every public component MUST conform to these interfaces.
  *
- * This package is types-only with one exception: {@link assertNever} is a
- * tiny runtime helper for exhaustive switch checking.
+ * This package is types-first. Its runtime exports are deliberately few, and
+ * each is there because it is an **identity** the tiers must share rather than
+ * an implementation they each keep: {@link assertNever}, the form-value codecs,
+ * the `DZ_*_KEY` injection symbols, and `DzSanitizeLimitError` — a class two
+ * packages must be able to `instanceof` against the same constructor. All are
+ * pure and dependency-free.
  *
  * Dependency: `vue` (for `Ref`, `InjectionKey` types only).
  * Does NOT depend on `@dzup-ui/tokens` at runtime.
  */
 
 // Component anatomy (Contract Spec v1 styling surface, ADR-19)
-export { ANATOMY_PART_VOCABULARY } from './anatomy.types.js'
+export { ANATOMY_PART_EXTENSIONS, ANATOMY_PART_VOCABULARY } from './anatomy.types.js'
 
 export type {
   AnatomyPart,
   ComponentAnatomy,
+  ComponentFallthrough,
+  ComponentKeyboard,
   ComponentRtl,
   DzClassValue,
+  KeyboardBinding,
+  KeyboardModifier,
   RecipeAxis,
   RiskTier,
   UiOverrides,
   VocabularyPart,
 } from './anatomy.types.js'
+
+// The composition contract (TASK-R5-O6, ADR-19 §5 · finding R-021).
+// The `asChild` allowlist is a central list on purpose: its value is that a
+// component cannot add itself to it. See the module doc for why that is not a
+// per-component declaration like every other contract fact in the repo.
+export { AS_CHILD_ALLOWLIST, asChildEntryFor } from './as-child-allowlist.js'
+
+export type { AsChildEntry, AsChildGuarantee, AsChildMode } from './as-child-allowlist.js'
 
 // Async option sources and file references (renderer contract C9, TASK-FORM-OSS-03)
 export type {
@@ -55,6 +71,10 @@ export type {
   TabsVariant,
   ToolbarVariant,
 } from './canonical.types.js'
+
+export { HANDLER_COMPOSITION_RULE, SAFE_FALLTHROUGH_ATTRS, UI_MERGE_ORDER } from './composition.types.js'
+
+export type { UiMergeLayer } from './composition.types.js'
 // Compound component context types
 export type { CompoundContext, CompoundRegistration } from './compound.types.js'
 // Data attribute types
@@ -101,7 +121,8 @@ export type {
   BaseValidationProps,
 } from './props.types.js'
 
-// Provider contract — injection keys and concern shapes (ADR-20)
+// Provider contract — injection keys and concern shapes (ADR-20; sanitizer
+// concern added by ADR-20 amendment A6, TASK-R3-O2)
 export {
   DZ_DEFAULTS_KEY,
   DZ_DIRECTION_KEY,
@@ -112,7 +133,11 @@ export {
   DZ_NONCE_KEY,
   DZ_PORTAL_TARGET_KEY,
   DZ_PROVIDER_DEFAULTS,
+  DZ_SANITIZER_KEY,
   DZ_TEST_IDS_KEY,
+  // Runtime: the error the sanitizer seam throws. Exported as a value because
+  // `instanceof` is the point — see its docstring.
+  DzSanitizeLimitError,
 } from './provider.types.js'
 
 export type {
@@ -126,6 +151,12 @@ export type {
   DzMessages,
   DzMotion,
   DzMotionPreference,
+  DzObjectUrlSink,
+  DzSanitizeContext,
+  DzSanitizeLimits,
+  DzSanitizerAdapter,
+  DzSanitizerOptions,
+  DzSanitizeSink,
   DzTestIds,
 } from './provider.types.js'
 

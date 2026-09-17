@@ -8,6 +8,7 @@
  */
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
+import type { DzSegmentedUi } from './DzSegmented.anatomy.ts'
 
 /** A segmented item option */
 export interface SegmentedItem {
@@ -31,6 +32,12 @@ export interface DzSegmentedProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Disabled state -- prevents all interaction */
   disabled?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzSegmented.anatomy.ts`
+   * (ADR-19 §5). `class` lands on the track, so `ui.item` is the only way to
+   * reach a segment without a descendant selector.
+   */
+  ui?: DzSegmentedUi
 }
 
 // ---------------------------------------------------------------------------

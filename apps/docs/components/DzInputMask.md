@@ -21,6 +21,13 @@ format-masked text input.
 - **v-model:** `v-model` (`string | undefined`)
 - **Anatomy parts (ADR-19):** `control`, `error`, `input`, `prefix`, `root`, `suffix`
 
+## Intent and selection guidance
+
+**Not declared.** `DzInputMask` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -57,7 +64,7 @@ never as asserted.
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows loading indicator |
 | `mask` | `string` | yes | — | Mask pattern. Tokens: `9` = digit, `a` = letter, `*` = alphanumeric. Every other character is a literal (e.g. `"(999) 999-9999"`, `"99/99/9999"`). |
 | `modelMode` | `"masked" \| "unmasked" \| undefined` | no | `"masked"` | Which value `v-model` holds. `'masked'` (the default, and the existing behaviour) keeps the displayed string — `"(555) 123-4567"` — in the model. `'unmasked'` puts the stripped value there instead: `"5551234567"`. Why this exists: a form document persists whatever the model holds, so the default persists *presentation*. Change the mask from `"(999) 999-9999"` to `"999-999-9999"` and every stored value is now formatted for a mask that no longer exists. `update:unmasked` has always emitted the raw value, but a generic consumer — a schema-driven renderer binding `v-model` through a registry — has no way to reach a one-way emit. This gives it one without changing what anybody gets today. The displayed value is unaffected either way; only the model changes. |
-| `modelValue` | `string \| undefined` | no | `""` | — |
+| `modelValue` | `string \| undefined` | no | `""` | The bound text - the displayed masked value by default, or the stripped value when `modelMode` is `"unmasked"`. The default empty string renders the bare mask. |
 | `name` | `string \| undefined` | no | — | Component name for form integration |
 | `placeholder` | `string \| undefined` | no | — | Placeholder text shown when the field is empty |
 | `readonly` | `boolean \| undefined` | no | `false` | Read-only state -- visible but not editable |
@@ -65,7 +72,7 @@ never as asserted.
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `slotChar` | `string \| undefined` | no | `"_"` | Character shown for unfilled token positions |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"error" \| "root" \| "control" \| "input" \| "prefix" \| "suffix", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzInputMask.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
+| `ui` | `Partial<Record<"root" \| "error" \| "control" \| "input" \| "suffix" \| "prefix", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzInputMask.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 ## Events (5)
@@ -75,7 +82,7 @@ never as asserted.
 | `blur` | `[event: FocusEvent]` | Focus lost |
 | `complete` | `[unmasked: string]` | Emitted once every token position has been filled |
 | `focus` | `[event: FocusEvent]` | Focus gained |
-| `update:modelValue` | `[value: string]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 | `update:unmasked` | `[value: string]` | Emitted with formatting characters (literals + slot chars) stripped |
 
 ## Slots (2)
@@ -120,6 +127,127 @@ Editable, running the **With Form Field** story from `packages/core/stories/inpu
 
 <DzPlayground component="DzInputMask" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+| `tone` | `[data-tone="…"]` | `tone` |
+| `variant` | `[data-variant="…"]` | `variant` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzInputMask />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzInputMask v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzInputMask :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 10 stories in
+`packages/core/stories/inputs/DzInputMask.stories.ts`: `Phone Number`, `Date`, `Credit Card`, `License Key`, `With Form Field`, `Auto Clear on Blur`, `Size Gallery`, `Dark Mode Preview`, `Accessibility: Keyboard & ARIA`, `Readonly`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `control` | `[data-part="control"]` | yes |
+| `error` | `[data-part="error"]` | no — renders zero or more than once |
+| `input` | `[data-part="input"]` | yes |
+| `prefix` | `[data-part="prefix"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `suffix` | `[data-part="suffix"]` | no — renders zero or more than once |
+
+```vue
+<DzInputMask :ui="{ 'control': 'ring-2', 'error': 'ring-2', 'input': 'ring-2', 'prefix': 'ring-2', 'root': 'ring-2', 'suffix': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `completed` | `[data-state="completed"]` |
+| `disabled` | `[data-state="disabled"]` |
+| `loading` | `[data-state="loading"]` |
+| `readonly` | `[data-state="readonly"]` |
+| `required` | `[data-state="required"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/inputs/DzInputMask.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/inputs/DzInputMask.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzInputMask` advertises 5 states:
+`completed`, `disabled`, `loading`, `readonly`, `required`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/inputs/DzInputMask.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e0d1707`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -127,17 +255,17 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 22 | 21 | 10 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 5 | 4 | 4 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
+| Props | 22 | 22 | 10 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 5 | 5 | 4 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 2 | 2 | 0 carry slot props |
-| Exposed on `ref` | 3 | 0 | no description exists in source for any exposed member, catalog-wide |
+| Exposed on `ref` | 3 | 3 | no description exists in source for any exposed member, catalog-wide |
 
 ## Accessibility and evidence
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -147,7 +275,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `e986952e`
+- **Component last changed at:** `e0d17078`
 
 ### WCAG 2.2 criteria in scope (22)
 
@@ -182,16 +310,20 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**2 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `Backspace` | Delete the previous entered character, stepping over any mask literal. | `2.1.1` | — *(component-specific)* |
+| `Delete` | Delete the next entered character, stepping over any mask literal. | `2.1.1` | — *(component-specific)* |
+
+Declared in `packages/core/src/components/inputs/DzInputMask.anatomy.ts`.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/inputs/DzInputMask.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 2 binding(s); the unit spec asserts no key event for `Delete`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -225,15 +357,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/inputs/DzInputMask.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/inputs/DzInputMask.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/inputs/DzInputMask.spec.ts` — The component declares 2 binding(s); the unit spec asserts no key event for `Delete`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/inputs/DzInputMask.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/inputs/DzInputMask.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/inputs/DzInputMask.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzInputMask.md` — 6 AT/browser pairs, none executed. |
 
-**3 unrun:** `axe`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

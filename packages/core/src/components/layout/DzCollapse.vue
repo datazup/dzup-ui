@@ -15,6 +15,7 @@ import type { DzCollapseProps, DzCollapseSlots } from './DzCollapse.types.ts'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useCollapse } from '../../composables/useCollapse/useCollapse.ts'
 import { cn } from '../../utilities/cn.ts'
 
@@ -22,6 +23,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Whether the panel is expanded; `false` renders it collapsed. */
 const model = defineModel<boolean>({ default: false })
 
 const props = withDefaults(defineProps<DzCollapseProps>(), {
@@ -45,18 +47,22 @@ function setContentRef(el: unknown): void {
 const classes = computed(() =>
   cn(attrs.class as string | undefined),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
     :ref="setContentRef"
+    data-part="root"
     :class="classes"
     :style="{ contain: 'layout style', ...contentStyle }"
     :aria-hidden="!model || undefined"
     :data-state="model ? 'open' : 'closed'"
     role="region"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-collapse'), ...$attrs, class: undefined }"
   >
     <slot />
   </div>

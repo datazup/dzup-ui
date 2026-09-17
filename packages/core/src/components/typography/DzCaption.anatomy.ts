@@ -16,6 +16,11 @@ export const anatomy = {
   recipes: ['tone'],
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Presentational typography.
+   */
+  keyboard: 'none',
+
   /** Tier A — presentational. */
   riskTier: 'A',
 } as const satisfies ComponentAnatomy

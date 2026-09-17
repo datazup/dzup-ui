@@ -51,6 +51,7 @@ const classes = computed(() => cn(styles.value.handle(), attrs.class as string |
 <template>
   <SplitterResizeHandle
     :disabled="props.disabled"
+    data-part="separator"
     :class="classes"
     :aria-orientation="ariaOrientation"
     :data-direction="direction"
@@ -58,7 +59,7 @@ const classes = computed(() => cn(styles.value.handle(), attrs.class as string |
     v-bind="{ ...$attrs, class: undefined }"
   >
     <slot>
-      <div v-if="withHandle" :class="styles.handleIndicator()">
+      <div v-if="withHandle" data-part="indicator" :class="styles.handleIndicator()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"

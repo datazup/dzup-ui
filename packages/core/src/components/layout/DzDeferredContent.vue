@@ -113,7 +113,14 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 
-defineExpose({ loaded })
+defineExpose({
+  /**
+   * Whether the deferred content has been rendered — `true` once the root has
+   * intersected the viewport, and from the first render where
+   * `IntersectionObserver` is unavailable (SSR, older engines).
+   */
+  loaded,
+})
 </script>
 
 <template>

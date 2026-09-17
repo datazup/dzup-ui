@@ -21,6 +21,7 @@ import type {
  * ```
  */
 import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import {
@@ -79,12 +80,16 @@ onBeforeUnmount(() => {
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzNotification')
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     v-if="visible"
     :id="id"
+    data-part="root"
     :class="classes"
     :role="isUrgent ? 'alert' : 'status'"
     :aria-live="isUrgent ? 'assertive' : 'polite'"
@@ -94,32 +99,34 @@ const dzMessages = useComponentMessages('DzNotification')
     :data-tone="tone"
     :data-state="visible ? 'open' : 'closed'"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-notification'), ...$attrs, class: undefined }"
   >
     <!-- Icon -->
     <slot name="icon">
       <component
         :is="icon"
         v-if="icon"
+        data-part="icon"
         class="h-5 w-5 shrink-0"
+        :class="props.ui?.icon"
         aria-hidden="true"
       />
     </slot>
 
     <!-- Content -->
-    <div class="flex-1 min-w-0 pr-[var(--dz-spacing-4)]">
+    <div data-part="content" :class="cn('flex-1 min-w-0 pe-[var(--dz-spacing-4)]', props.ui?.content)">
       <!-- Title -->
-      <div :class="notificationTitleVariants()">
+      <div data-part="title" :class="cn(notificationTitleVariants(), props.ui?.title)">
         {{ title }}
       </div>
 
       <!-- Description / default slot -->
-      <div v-if="description || $slots.default" :class="notificationDescriptionVariants()" class="mt-[var(--dz-spacing-1)]">
+      <div v-if="description || $slots.default" data-part="description" :class="cn(notificationDescriptionVariants(), props.ui?.description)" class="mt-[var(--dz-spacing-1)]">
         <slot>{{ description }}</slot>
       </div>
 
       <!-- Actions -->
-      <div v-if="$slots.actions" class="mt-[var(--dz-spacing-3)] flex gap-[var(--dz-spacing-2)]" @click="handleAction">
+      <div v-if="$slots.actions" data-part="action" :class="cn('mt-[var(--dz-spacing-3)] flex gap-[var(--dz-spacing-2)]', props.ui?.action)" @click="handleAction">
         <slot name="actions" />
       </div>
     </div>
@@ -128,7 +135,8 @@ const dzMessages = useComponentMessages('DzNotification')
     <button
       v-if="closable"
       type="button"
-      :class="notificationCloseVariants()"
+      data-part="close"
+      :class="cn(notificationCloseVariants(), props.ui?.close)"
       :aria-label="dzMessages.dismiss"
       @click="handleClose"
     >

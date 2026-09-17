@@ -30,6 +30,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Id of the selected persona; the default empty string selects none. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzPersonaSelectorProps>(), {
@@ -74,6 +75,7 @@ const rootClass = computed(() => cn(attrs.class as string | undefined))
     :placeholder="placeholder"
     :disabled="disabled"
     :class="rootClass"
+    :ui="ui"
     data-component="DzPersonaSelector"
     v-bind="{ ...$attrs, class: undefined }"
     @update:model-value="handleUpdate"
@@ -85,7 +87,7 @@ const rootClass = computed(() => cn(attrs.class as string | undefined))
           :persona="(personaById.get(item.value) as Persona)"
           :selected="selected"
         >
-          <div class="flex items-center gap-2 pl-6">
+          <div class="flex items-center gap-2 ps-6">
             <img
               v-if="personaById.get(item.value)?.avatarUrl"
               :src="personaById.get(item.value)?.avatarUrl"
@@ -94,16 +96,16 @@ const rootClass = computed(() => cn(attrs.class as string | undefined))
             >
             <span
               v-else
-              class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-[var(--dz-radius-full)] bg-[var(--dz-muted)] text-[length:var(--dz-font-size-xs)] text-[var(--dz-muted-foreground)]"
+              class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-[var(--dz-radius-full)] bg-[var(--dz-muted)] text-[length:var(--dz-text-xs)] text-[var(--dz-muted-foreground)]"
               aria-hidden="true"
             >
               {{ (personaById.get(item.value)?.name ?? '?').charAt(0).toUpperCase() }}
             </span>
             <span class="flex flex-col">
-              <span class="text-[length:var(--dz-font-size-sm)] text-[var(--dz-foreground)]">
+              <span class="text-[length:var(--dz-text-sm)] text-[var(--dz-foreground)]">
                 {{ personaById.get(item.value)?.name }}
               </span>
-              <span class="text-[length:var(--dz-font-size-xs)] text-[var(--dz-muted-foreground)]">
+              <span class="text-[length:var(--dz-text-xs)] text-[var(--dz-muted-foreground)]">
                 {{ personaById.get(item.value)?.role }}
               </span>
             </span>

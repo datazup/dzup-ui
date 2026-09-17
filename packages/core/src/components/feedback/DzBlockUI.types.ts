@@ -14,6 +14,7 @@ import type {
   CanonicalSize,
   CanonicalTone,
 } from '@dzup-ui/contracts'
+import type { DzBlockUIUi } from './DzBlockUI.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -43,6 +44,12 @@ export interface DzBlockUIProps extends BaseAccessibilityProps {
   tone?: CanonicalTone
   /** Size of the default spinner. */
   spinnerSize?: CanonicalSize
+  /**
+   * Per-part class overrides, keyed by the names in `DzBlockUI.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target (the positioning root);
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   */
+  ui?: DzBlockUIUi
 }
 
 // ---------------------------------------------------------------------------

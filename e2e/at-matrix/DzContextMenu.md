@@ -22,6 +22,27 @@ known one.
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 | `dismiss` | Dismiss with Escape, and again by activating the close affordance. | Focus returns to the trigger and the AT announces where it landed. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/overlays/DzContextMenu.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowDown` | — | Move focus to the next item, wrapping at the end. |
+| `ArrowUp` | — | Move focus to the previous item, wrapping at the start. |
+| `Home` | — | Move focus to the first item. |
+| `End` | — | Move focus to the last item. |
+| `Enter` | — | Invoke the focused item and close the menu. |
+| `Space` | — | Invoke the focused item and close the menu. |
+| `ArrowRight` | item with a submenu | Open the focused item submenu and focus its first item. |
+| `ArrowLeft` | submenu open | Close the current submenu and return to its parent item. |
+| `Escape` | — | Close the menu and return focus to the trigger. |
+| any character key | — | Move focus to the next item whose label starts with that character. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

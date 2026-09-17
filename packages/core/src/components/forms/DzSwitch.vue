@@ -13,6 +13,8 @@ import { SwitchRoot, SwitchThumb } from 'reka-ui'
  * ```
  */
 import { computed, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { switchVariants } from './DzSwitch.variants.ts'
@@ -21,6 +23,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Whether the switch is on; `false` renders it off. */
 const model = defineModel<boolean>({ default: false })
 
 const props = withDefaults(defineProps<DzSwitchProps>(), {
@@ -72,16 +75,27 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <label
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
+    :data-dz-motion="dzMotionAttr"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="model ? 'checked' : 'unchecked'"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-switch'), ...$attrs, class: undefined }"
   >
     <SwitchRoot
       :id="resolvedId"
@@ -93,14 +107,15 @@ function handleBlur(event: FocusEvent): void {
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
       :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
-      :class="styles.track()"
+      data-part="control"
+      :class="[styles.track(), ui?.control]"
       @update:model-value="handleCheckedChange"
       @focus="handleFocus"
       @blur="handleBlur"
     >
-      <SwitchThumb :class="styles.thumb()" />
+      <SwitchThumb data-part="indicator" :class="[styles.thumb(), ui?.indicator]" />
     </SwitchRoot>
-    <span v-if="$slots.default" :class="styles.label()">
+    <span v-if="$slots.default" data-part="label" :class="[styles.label(), ui?.label]">
       <slot />
     </span>
   </label>

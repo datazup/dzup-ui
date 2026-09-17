@@ -12,6 +12,7 @@
  */
 
 import type { BaseFormControlProps, ChangeEvents } from '@dzup-ui/contracts'
+import type { DzKnobUi } from './DzKnob.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -34,6 +35,11 @@ export interface DzKnobProps extends BaseFormControlProps<never> {
   strokeWidth?: number
   /** Whether to render the value label in the center of the dial */
   showValue?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzKnob.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target.
+   */
+  ui?: DzKnobUi
 }
 
 // ---------------------------------------------------------------------------

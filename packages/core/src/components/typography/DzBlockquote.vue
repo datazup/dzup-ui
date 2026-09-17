@@ -15,6 +15,7 @@ import type { DzBlockquoteProps, DzBlockquoteSlots } from './DzBlockquote.types.
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { blockquoteVariants } from './DzBlockquote.variants.ts'
 
@@ -44,6 +45,9 @@ const footerClasses = computed(() => cn(
   + 'text-[var(--dz-muted-foreground)]',
   props.ui?.footer,
 ))
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -52,7 +56,7 @@ const footerClasses = computed(() => cn(
     data-part="root"
     :class="classes"
     :cite="cite"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-blockquote'), ...$attrs, class: undefined }"
   >
     <div data-part="content" :class="contentClasses">
       <slot />

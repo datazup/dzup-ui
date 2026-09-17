@@ -16,6 +16,7 @@ import type {
   BaseAccessibilityProps,
   CanonicalSize,
 } from '@dzup-ui/contracts'
+import type { DzOrderListUi } from './DzOrderList.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Shared types
@@ -79,6 +80,13 @@ export interface DzOrderListProps extends BaseAccessibilityProps {
    * which is what the prop had always claimed to be and never was.
    */
   dragHandleLabel?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzOrderList.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target on the wrapper; the
+   * toolbar, the list, the rows, the drag handle and the placeholder are all
+   * rendered by this component.
+   */
+  ui?: DzOrderListUi
 }
 
 // ---------------------------------------------------------------------------

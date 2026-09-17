@@ -23,6 +23,10 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/**
+ * Whether the menu is open. Left `undefined` (the default) Reka UI owns the
+ * open state and the menu opens from the context-menu gesture without a binding.
+ */
 const open = defineModel<boolean | undefined>('open')
 
 withDefaults(defineProps<DzContextMenuProps>(), {

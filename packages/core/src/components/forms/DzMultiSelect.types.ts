@@ -18,6 +18,7 @@ import type {
   InputVariant,
   SelectOpenableEvents,
 } from '@dzup-ui/contracts'
+import type { DzMultiSelectUi } from './DzMultiSelect.anatomy.ts'
 import type { DzSelectItem } from './DzSelect.types.ts'
 
 // ---------------------------------------------------------------------------
@@ -40,6 +41,13 @@ export interface DzMultiSelectProps extends BaseAccessibilityProps, BaseValidati
   name?: string
   /** Maximum number of items that can be selected */
   maxSelections?: number
+  /**
+   * Per-part class overrides, keyed by the names in `DzMultiSelect.anatomy.ts`
+   * (ADR-19 §5). The selected-value chips are **not** among them: they are the
+   * vocabulary stop that declaration records, and `ui.control` plus a
+   * descendant selector is the route to them until the word exists.
+   */
+  ui?: DzMultiSelectUi
 }
 
 // ---------------------------------------------------------------------------

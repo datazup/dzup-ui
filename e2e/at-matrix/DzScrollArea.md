@@ -19,6 +19,13 @@ known one.
 | `reach` | Reach the component by the platform's own navigation (Tab, or swipe on touch). | Name, role and current state are announced together, and the name is the visible label. |
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 
+## Declared keyboard contract
+
+`DzScrollArea` declares `keyboard: 'none'` in `packages/core/src/components/layout/DzScrollArea.anatomy.ts` — an explicit claim that it
+has no keyboard behaviour of its own. Any key that appears to do something here is either the
+platform's or its container's, and is worth a note.
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

@@ -5,6 +5,7 @@
  */
 
 import type { CardVariant } from '@dzup-ui/contracts'
+import type { DzImageCardUi } from './DzImageCard.anatomy.ts'
 
 /**
  * Card variant — subset of the canonical {@link CardVariant} contract.
@@ -33,6 +34,12 @@ export interface DzImageCardProps {
   loading?: 'lazy' | 'eager'
   /** Unique element ID */
   id?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzImageCard.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target (the root surface); `ui`
+   * addresses the other parts by name, and a typo is a type error.
+   */
+  ui?: DzImageCardUi
 }
 
 // ---------------------------------------------------------------------------

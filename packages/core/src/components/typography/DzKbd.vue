@@ -15,6 +15,7 @@ import type { DzKbdProps, DzKbdSlots } from './DzKbd.types.ts'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { kbdVariants } from './DzKbd.variants.ts'
 
@@ -210,6 +211,9 @@ const slots = kbdVariants()
 const rootClass = computed(() => cn(slots.root(), attrs.class as string | undefined, props.ui?.root))
 const keyClass = computed(() => cn(slots.key(), props.ui?.item))
 const separatorClass = computed(() => cn(slots.separator(), props.ui?.separator))
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -220,7 +224,7 @@ const separatorClass = computed(() => cn(slots.separator(), props.ui?.separator)
     :data-size="size"
     :role="ariaLabel ? 'img' : undefined"
     :aria-label="ariaLabel"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-kbd'), ...$attrs, class: undefined }"
   >
     <template v-if="renderKeys.length">
       <template v-for="(item, i) in renderKeys" :key="i">

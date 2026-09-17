@@ -12,6 +12,7 @@ import type {
   CanonicalTone,
   ChipVariant,
 } from '@dzup-ui/contracts'
+import type { DzChipUi } from './DzChip.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -29,6 +30,13 @@ export interface DzChipProps extends BaseAccessibilityProps {
   closable?: boolean
   /** Disabled state -- prevents interaction */
   disabled?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzChip.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzChipUi
 }
 
 // ---------------------------------------------------------------------------

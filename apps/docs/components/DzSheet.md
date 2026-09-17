@@ -19,6 +19,14 @@ Slide-out side panel root component using Reka UI Dialog (ADR-07).
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/overlays`
 - **Risk tier:** B · **Status:** stable
 - **v-model:** `v-model:open` (`boolean | undefined`)
+- **Anatomy parts (ADR-19):** `close`, `content`, `description`, `overlay`, `title`
+
+## Intent and selection guidance
+
+**Not declared.** `DzSheet` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -45,13 +53,13 @@ never as asserted.
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `modal` | `boolean \| undefined` | no | `true` | Whether the sheet is modal (default true) |
-| `open` | `boolean \| undefined` | no | `false` | — |
+| `open` | `boolean \| undefined` | no | `false` | Whether the sheet is open; `false` keeps it closed. |
 
 ## Events (1)
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `update:open` | `[value: boolean]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:open` | `[value: boolean]` | Emitted when the `v-model:open` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:open` consumes it for you. |
 
 ## Slots (1)
 
@@ -105,6 +113,8 @@ Close button for DzSheet.
 | --- | --- | --- |
 | `default` | — | Close button content |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSheet`; see that component's usage snippet.
 
 ### DzSheetContent
@@ -134,15 +144,17 @@ Content panel for DzSheet compound.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `escapeKeyDown` | `[event: KeyboardEvent]` | — |
-| `interactOutside` | `[event: Event]` | — |
-| `pointerDownOutside` | `[event: Event]` | — |
+| `escapeKeyDown` | `[event: KeyboardEvent]` | Escape key pressed |
+| `interactOutside` | `[event: Event]` | Any interaction outside sheet content |
+| `pointerDownOutside` | `[event: Event]` | Pointer down outside sheet content |
 
 #### Slots (1)
 
 | Slot | Slot props | Description |
 | --- | --- | --- |
 | `default` | — | Sheet body content |
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzSheet`; see that component's usage snippet.
 
@@ -160,6 +172,8 @@ Description for DzSheet.
 | --- | --- | --- |
 | `default` | — | Description text |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSheet`; see that component's usage snippet.
 
 ### DzSheetTitle
@@ -175,6 +189,8 @@ Title for DzSheet.
 | Slot | Slot props | Description |
 | --- | --- | --- |
 | `default` | — | Title text |
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzSheet`; see that component's usage snippet.
 
@@ -192,7 +208,122 @@ Trigger button for DzSheet.
 | --- | --- | --- |
 | `default` | — | Trigger element |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSheet`; see that component's usage snippet.
+
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | — *(inherited or fixed; no prop of this name)* |
+
+**Controlled and uncontrolled — `open`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzSheet />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzSheet v-model:open="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzSheet :open="value" @update:open="value = $event" />
+```
+
+**Where each variant is shown.** 7 stories in
+`packages/core/stories/overlays/DzSheet.stories.ts`: `Default`, `Side Gallery`, `With Rich Slot Content`, `Interactive`, `Dark Mode Preview`, `Accessibility: Focus & Keyboard`, `Real World: Mobile Navigation`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `close` | `[data-part="close"]` | no — renders zero or more than once |
+| `content` | `[data-part="content"]` | no — renders zero or more than once |
+| `description` | `[data-part="description"]` | no — renders zero or more than once |
+| `overlay` | `[data-part="overlay"]` | no — renders zero or more than once |
+| `title` | `[data-part="title"]` | no — renders zero or more than once |
+
+```vue
+<DzSheet :ui="{ 'close': 'ring-2', 'content': 'ring-2', 'description': 'ring-2', 'overlay': 'ring-2', 'title': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `closed` | `[data-state="closed"]` |
+| `open` | `[data-state="open"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/overlays/DzSheet.anatomy.ts`.
+
+## Provider defaults and context
+
+**Not declared.** `DzSheet` calls no `DzProvider` reader, so **nothing an application
+sets on the provider reaches it** — not the locale, not the motion preference, not the
+direction, not the test-id prefix. Every value it uses comes from its own props and defaults.
+That is measured from its source rather than assumed, and it is a gap in the component (ADR-20
+adoption), not in this page.
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `none` | The geometry is **physical on purpose** — a claim, not an oversight. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/overlays/DzSheet.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Portal / teleport** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzSheet` advertises 2 states:
+`closed`, `open`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/overlays/DzSheet.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `80ce301`.
 
 ## Extraction fidelity
 
@@ -201,8 +332,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 2 | 1 | 2 declare a default |
-| Events | 1 | 0 | 0 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 2 | 2 | 2 declare a default |
+| Events | 1 | 1 | 0 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -210,8 +341,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -220,7 +351,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/)
 - **Traits:** `teleports`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `80ce3012`
 
 **Compound sub-parts are not matrix rows.** `DzSheetClose`, `DzSheetContent`, `DzSheetDescription`, `DzSheetTitle`, `DzSheetTrigger` are documented on this page and carry no evidence row of its own. Everything below describes `DzSheet`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
@@ -254,14 +385,21 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**3 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `Escape` | Close the sheet and return focus to the element that opened it. | `2.1.1`, `2.1.2` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) |
+| `Tab` | Move to the next focusable element, wrapping inside the sheet. | `2.1.2` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) |
+| `Shift` + `Tab` | Move to the previous focusable element, wrapping inside the sheet. | `2.1.2` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) |
+
+Declared in `packages/core/src/components/overlays/DzSheet.anatomy.ts`.
 
 - **Pattern:** [APG — `dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 3 binding(s); the unit spec asserts no key event for `Escape`, `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -295,16 +433,16 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/overlays/DzSheet.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/overlays/DzSheet.spec.ts` — The component declares 3 binding(s); the unit spec asserts no key event for `Escape`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/overlays/DzSheet.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/overlays/DzSheet.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/overlays/DzSheet.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSheet.md` — 6 AT/browser pairs, none executed. |
 
-**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

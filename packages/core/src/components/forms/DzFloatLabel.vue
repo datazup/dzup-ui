@@ -22,6 +22,7 @@
  */
 import type { DzFloatLabelProps, DzFloatLabelSlots } from './DzFloatLabel.types.ts'
 import { computed, onMounted, onUpdated, ref, useAttrs, useId } from 'vue'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
 import { floatLabelVariants } from './DzFloatLabel.variants.ts'
@@ -151,13 +152,27 @@ onUpdated(() => {
     detectFilled()
 })
 
-defineExpose({ controlId })
+defineExpose({
+  /**
+   * The id the label's `for` points at: the slotted control's own id when it
+   * has one, otherwise the id this component generated and assigned to it.
+   * `undefined` until the control has been found in the DOM.
+   */
+  controlId,
+})
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
   <div
     ref="rootRef"
     :class="rootClasses"
+    :data-dz-motion="dzMotionAttr"
     :data-variant="variant"
     :data-floated="floated ? '' : undefined"
     v-bind="{ ...$attrs, class: undefined }"

@@ -32,6 +32,16 @@ export const anatomy = {
    */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). A native text field plus the submit
+   * key handled in `DzSearchInput.vue` and a clear control.
+   */
+  keyboard: [
+    { key: 'Enter', action: 'Submit the search.', wcag: ['2.1.1'] },
+    { key: 'Enter', when: 'clear', action: 'Clear the field.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', when: 'clear', action: 'Clear the field.', wcag: ['2.1.1'], apg: 'button' },
+  ],
+
   /** Tier B — owns focus, a value and an Escape/Enter keyboard contract. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

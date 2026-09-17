@@ -11,7 +11,7 @@ import { tv } from 'tailwind-variants'
 
 /** Outer wrapper (label + track + legend stack) */
 export const meterGroupRootVariants = tv({
-  base: 'flex flex-col gap-[var(--dz-space-2)]',
+  base: 'flex flex-col gap-[var(--dz-spacing-2)]',
 })
 
 /** Track (background rail holding the segments) */
@@ -66,12 +66,12 @@ export const meterGroupSegmentVariants = tv({
 
 /** Legend list */
 export const meterGroupLegendVariants = tv({
-  base: 'flex flex-wrap items-center gap-x-[var(--dz-space-4)] gap-y-[var(--dz-space-1)]',
+  base: 'flex flex-wrap items-center gap-x-[var(--dz-spacing-4)] gap-y-[var(--dz-spacing-1)]',
 })
 
 /** A single legend item (color swatch + label + value) */
 export const meterGroupLegendItemVariants = tv({
-  base: 'inline-flex items-center gap-[var(--dz-space-2)] text-[length:var(--dz-font-size-sm)] text-[var(--dz-foreground)]',
+  base: 'inline-flex items-center gap-[var(--dz-spacing-2)] text-[length:var(--dz-text-sm)] text-[var(--dz-foreground)]',
 })
 
 /** Legend color swatch */

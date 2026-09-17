@@ -37,6 +37,12 @@ export const anatomy = {
    */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). A native multi-line text field. Text
+   * editing is the platform contract; DzTextarea adds no key of its own.
+   */
+  keyboard: 'none',
+
   /** Tier B — owns focus and a value, and resizes itself as that value grows. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

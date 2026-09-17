@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CanonicalSize } from '@dzup-ui/contracts'
 import type {
   DzMeterGroupComputedSegment,
   DzMeterGroupProps,
@@ -25,6 +26,7 @@ import type {
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzDefaults } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { meterGroupPalette, meterGroupToneColors } from './DzMeterGroup.tokens.ts'
 import {
@@ -43,7 +45,7 @@ defineOptions({
 const props = withDefaults(defineProps<DzMeterGroupProps>(), {
   values: () => [],
   orientation: 'horizontal',
-  size: 'md',
+  size: undefined,
   showLegend: true,
 })
 
@@ -105,9 +107,23 @@ const rootClasses = computed(() =>
   cn(meterGroupRootVariants(), attrs.class as string | undefined),
 )
 
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * `size` is the only canonical axis this component owns — segment `tone` is
+ * per-value data, not a component default, so it is deliberately NOT routed
+ * through the provider.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzMeterGroup', 'size', [props.size]) ?? 'md',
+)
+
 /** Track classes */
 const trackClasses = computed(() =>
-  meterGroupTrackVariants({ orientation: props.orientation, size: props.size }),
+  meterGroupTrackVariants({ orientation: props.orientation, size: resolvedSize.value }),
 )
 
 /** Inline sizing for a segment along the main axis */

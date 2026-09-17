@@ -1,4 +1,3 @@
-import { flushPromises, mount } from '@vue/test-utils'
 /**
  * DzPopconfirm -- Contract Spec v1 conformance tests.
  *
@@ -7,7 +6,10 @@ import { flushPromises, mount } from '@vue/test-utils'
  * its aria-labelledby/aria-describedby wiring. The popover teleports to
  * document.body, so assertions query the body rather than the wrapper subtree.
  */
+import { expectFallthrough } from '@dzup-ui/testing'
+import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
+import { anatomy } from './DzPopconfirm.anatomy.ts'
 import DzPopconfirm from './DzPopconfirm.vue'
 
 /** Default slot trigger used across the suite (string slot compiles to a template). */
@@ -16,6 +18,7 @@ const triggerSlot = { default: '<button data-testid="trigger">Delete</button>' }
 function mountPopconfirm(props: Record<string, unknown> = {}) {
   return mount(DzPopconfirm, {
     props: { title: 'Delete this run?', ...props },
+    attrs: { class: 'dz-fallthrough-probe' },
     slots: triggerSlot,
     attachTo: document.body,
   })
@@ -130,6 +133,29 @@ describe('dzPopconfirm -- Contract Spec v1', () => {
     cancelBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     await flushPromises()
     expect(wrapper.emitted('cancel')).toBeTruthy()
+    wrapper.unmount()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Attribute fallthrough (TASK-R5-O6)
+// ---------------------------------------------------------------------------
+
+describe('dzPopconfirm — attribute fallthrough', () => {
+  // Multi-root: the trigger <span> this component renders, and the teleported
+  // panel. The trigger is the intuitive guess because it is the node in the
+  // document flow — and it is the wrong one. The panel is the declared target,
+  // asserted here so the guess cannot quietly become true.
+  it('a consumer\'s class lands on the panel, not the trigger', async () => {
+    const wrapper = mountPopconfirm({ open: true })
+    await flushPromises()
+
+    expectFallthrough(
+      document.body,
+      anatomy.fallthrough,
+      { className: 'dz-fallthrough-probe' },
+      'DzPopconfirm',
+    )
     wrapper.unmount()
   })
 })

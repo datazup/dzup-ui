@@ -38,6 +38,16 @@ export const anatomy = {
   rtl: { mirrors: 'none', keyboard: 'none' },
 
   /**
+   * Keyboard contract (TASK-R5-O5). A renderless provider has no focusable node
+   * of its own, so there is no key for it to answer — which is the same reason
+   * its `keyboard-spec` cell is a recorded exception rather than an empty one.
+   * Declared explicitly, because "has no keyboard behaviour" and "nobody wrote
+   * the contract down" are different facts and the docs ratchet counts only the
+   * second.
+   */
+  keyboard: 'none',
+
+  /**
    * Tier B.
    *
    * The ladder has no rung for infrastructure, and this component is neither

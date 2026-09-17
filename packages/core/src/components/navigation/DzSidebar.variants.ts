@@ -59,7 +59,11 @@ export const sidebarVariants = tv({
   variants: {
     position: {
       static: { root: 'relative' },
-      fixed: { root: 'fixed inset-y-0 left-0 z-[var(--dz-sidebar-z-index)]' },
+      // A LOGICAL inline-start inset, not a physical one: a navigation rail
+      // sits on the edge the content reads FROM, which is the inline start.
+      // `inset-s-` is the spelling Tailwind 4 generates and is byte-identical
+      // in a LTR document (TASK-R5-O2).
+      fixed: { root: 'fixed inset-y-0 inset-s-0 z-[var(--dz-sidebar-z-index)]' },
     },
     collapsed: {
       true: {
@@ -76,12 +80,17 @@ export const sidebarVariants = tv({
     },
     mobile: {
       true: {
-        root: 'fixed inset-y-0 left-0 z-[var(--dz-sidebar-z-index)] w-[var(--dz-sidebar-width)] translate-x-0',
+        root: 'fixed inset-y-0 inset-s-0 z-[var(--dz-sidebar-z-index)] w-[var(--dz-sidebar-width)] translate-x-0',
       },
     },
     mobileHidden: {
       true: {
-        root: '-translate-x-full',
+        // The drawer hides by sliding off the edge it is pinned to. That edge is
+        // now logical (`inset-s-0`), so the transform has to follow: in an RTL
+        // document `-translate-x-full` would slide the rail INTO the page. The
+        // `rtl:` variant rule is emitted after the base one, so it wins where it
+        // applies and changes nothing in LTR (TASK-R5-O2).
+        root: '-translate-x-full rtl:translate-x-full',
       },
     },
     active: {

@@ -14,6 +14,8 @@ import type { DzKnobEmits, DzKnobProps, DzKnobSlots } from './DzKnob.types.ts'
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -31,7 +33,10 @@ defineOptions({
  * control in the catalog takes, and until now it silently did nothing here.
  */
 const legacyValueModel = defineModel<number>('value', { default: 0 })
+
+/** The dial's numeric value, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). */
 const primaryModel = defineModel<number | undefined>({ default: undefined })
+
 const props = withDefaults(defineProps<DzKnobProps>(), {
   min: 0,
   max: 100,
@@ -57,6 +62,11 @@ const props = withDefaults(defineProps<DzKnobProps>(), {
 const emit = defineEmits<DzKnobEmits>()
 
 defineSlots<DzKnobSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const model = useDualModel(primaryModel, legacyValueModel)
 
@@ -243,13 +253,16 @@ function handleKeydown(event: KeyboardEvent): void {
   if (!isInteractive.value)
     return
 
+  const increaseKey = dzDirection.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
+  const decreaseKey = dzDirection.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+
   let next: number | null = null
   switch (event.key) {
-    case 'ArrowRight':
+    case increaseKey:
     case 'ArrowUp':
       next = clamp(snap(model.value) + props.step)
       break
-    case 'ArrowLeft':
+    case decreaseKey:
     case 'ArrowDown':
       next = clamp(snap(model.value) - props.step)
       break
@@ -285,8 +298,12 @@ function handleBlur(event: FocusEvent): void {
 
 /** Expose programmatic focus for parity with other form controls. */
 defineExpose({
+  /** Move keyboard focus to the dial. */
   focus: (): void => rootRef.value?.focus(),
 })
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -294,7 +311,8 @@ defineExpose({
     :id="resolvedId"
     ref="rootRef"
     role="slider"
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
     :style="{ width: `${diameter}px`, height: `${diameter}px` }"
     :tabindex="resolvedDisabled ? -1 : 0"
     :aria-valuemin="min"
@@ -315,14 +333,15 @@ defineExpose({
     :aria-busy="loading || undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
     :data-tone="tone"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-knob'), ...$attrs, class: undefined }"
     @keydown="handleKeydown"
     @focus="handleFocus"
     @blur="handleBlur"
   >
     <svg
       ref="svgRef"
-      :class="styles.svg()"
+      data-part="control"
+      :class="[styles.svg(), ui?.control]"
       :viewBox="`0 0 ${VIEWBOX} ${VIEWBOX}`"
       :width="diameter"
       :height="diameter"
@@ -340,14 +359,15 @@ defineExpose({
       />
       <path
         v-if="fraction > 0"
-        :class="styles.valueArc()"
+        data-part="indicator"
+        :class="[styles.valueArc(), ui?.indicator]"
         :d="valuePath"
         :stroke-width="strokeWidth"
         stroke-linecap="round"
       />
     </svg>
 
-    <span v-if="showValue" :class="styles.label()">
+    <span v-if="showValue" data-part="label" :class="[styles.label(), ui?.label]">
       <slot name="value" :value="normalizedValue" :text="valueText">
         {{ valueText }}
       </slot>
@@ -358,7 +378,7 @@ defineExpose({
   </div>
 
   <!-- Error message -->
-  <p v-if="error" :id="errorId" :class="styles.error()" role="alert">
+  <p v-if="error" :id="errorId" data-part="error" :class="[styles.error(), ui?.error]" role="alert">
     {{ error }}
   </p>
 </template>

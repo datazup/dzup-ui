@@ -25,6 +25,7 @@ import {
  */
 import { computed, ref, useAttrs, watch } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { lightboxVariants } from './DzLightbox.variants.ts'
@@ -33,6 +34,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Whether the lightbox overlay is open; `false` keeps it closed. */
 const open = defineModel<boolean>({ default: false })
 
 const props = withDefaults(defineProps<DzLightboxProps>(), {
@@ -43,7 +45,14 @@ const props = withDefaults(defineProps<DzLightboxProps>(), {
 })
 
 const emit = defineEmits<DzLightboxEmits>()
+
 defineSlots<DzLightboxSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
+
 // Portal target: an explicit `portalTo` on this instance, then the application's
 // `DzProvider` target, then the portal's own default of `document.body`
 // (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
@@ -113,12 +122,15 @@ function next(): void {
 }
 
 function handleKeydown(event: KeyboardEvent): void {
+  const previousKey = dzDirection.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+  const nextKey = dzDirection.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
+
   switch (event.key) {
-    case 'ArrowLeft':
+    case previousKey:
       event.preventDefault()
       prev()
       break
-    case 'ArrowRight':
+    case nextKey:
       event.preventDefault()
       next()
       break
@@ -138,11 +150,12 @@ const dzMessages = useComponentMessages('DzLightbox')
       :disabled="portalDisabled"
       :defer="portalDefer"
     >
-      <DialogOverlay :class="styles.overlay()" />
+      <DialogOverlay data-part="overlay" :class="cn(styles.overlay(), props.ui?.overlay)" />
 
       <DialogContent
         :id="id"
-        :class="cn(styles.content(), attrs.class as string | undefined)"
+        data-part="content"
+        :class="cn(styles.content(), attrs.class as string | undefined, props.ui?.content)"
         style="contain: layout style"
         v-bind="{ ...contentAria, ...$attrs, class: undefined }"
         @keydown="handleKeydown"
@@ -154,14 +167,15 @@ const dzMessages = useComponentMessages('DzLightbox')
           {{ fallbackDescription }}
         </DialogDescription>
         <!-- Counter -->
-        <span v-if="images.length > 1" :class="styles.counter()">
+        <span v-if="images.length > 1" data-part="label" :class="cn(styles.counter(), props.ui?.label)">
           {{ currentIndex + 1 }} / {{ images.length }}
         </span>
 
         <!-- Close button -->
         <button
           type="button"
-          :class="styles.closeButton()"
+          data-part="close"
+          :class="cn(styles.closeButton(), props.ui?.close)"
           :aria-label="dzMessages.close"
           @click="open = false"
         >
@@ -185,7 +199,8 @@ const dzMessages = useComponentMessages('DzLightbox')
         <button
           v-if="images.length > 1"
           type="button"
-          :class="cn(styles.navButton(), styles.prevButton())"
+          data-part="action"
+          :class="cn(styles.navButton(), styles.prevButton(), props.ui?.action)"
           :disabled="!hasPrev"
           :aria-label="dzMessages.previous"
           @click="prev"
@@ -217,7 +232,8 @@ const dzMessages = useComponentMessages('DzLightbox')
         <button
           v-if="images.length > 1"
           type="button"
-          :class="cn(styles.navButton(), styles.nextButton())"
+          data-part="action"
+          :class="cn(styles.navButton(), styles.nextButton(), props.ui?.action)"
           :disabled="!hasNext"
           :aria-label="dzMessages.next"
           @click="next"
@@ -238,7 +254,7 @@ const dzMessages = useComponentMessages('DzLightbox')
         </button>
 
         <!-- Caption -->
-        <div v-if="currentImage?.caption" :class="styles.caption()">
+        <div v-if="currentImage?.caption" data-part="description" :class="cn(styles.caption(), props.ui?.description)">
           <slot name="caption" :image="currentImage" :index="currentIndex">
             {{ currentImage.caption }}
           </slot>

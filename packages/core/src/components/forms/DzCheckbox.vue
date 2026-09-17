@@ -15,6 +15,7 @@ import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
  * ```
  */
 import { computed, inject, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { checkboxVariants } from './DzCheckbox.variants.ts'
@@ -24,6 +25,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Whether the box is checked; `false` renders it unchecked. */
 const model = defineModel<boolean>({ default: false })
 
 const props = withDefaults(defineProps<DzCheckboxProps>(), {
@@ -109,16 +111,20 @@ const iconSizeClass = computed(() => {
   }
   return map[resolvedSize.value] ?? map.md
 })
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <label
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="checkedState === 'indeterminate' ? 'indeterminate' : checkedState ? 'checked' : 'unchecked'"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-checkbox'), ...$attrs, class: undefined }"
   >
     <CheckboxRoot
       :id="resolvedId"
@@ -130,12 +136,13 @@ const iconSizeClass = computed(() => {
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
       :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
-      :class="styles.indicator()"
+      data-part="control"
+      :class="[styles.indicator(), ui?.control]"
       @update:model-value="handleCheckedChange"
       @focus="handleFocus"
       @blur="handleBlur"
     >
-      <CheckboxIndicator class="flex items-center justify-center">
+      <CheckboxIndicator data-part="indicator" class="flex items-center justify-center" :class="[ui?.indicator]">
         <Minus
           v-if="checkedState === 'indeterminate'"
           :class="iconSizeClass"
@@ -148,7 +155,7 @@ const iconSizeClass = computed(() => {
         />
       </CheckboxIndicator>
     </CheckboxRoot>
-    <span v-if="$slots.default" :class="styles.label()">
+    <span v-if="$slots.default" data-part="label" :class="[styles.label(), ui?.label]">
       <slot />
     </span>
   </label>

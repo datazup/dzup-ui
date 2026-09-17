@@ -2,6 +2,7 @@
 import type { DzPopconfirmEmits, DzPopconfirmProps, DzPopconfirmSlots } from './DzPopconfirm.types.ts'
 import { computed, nextTick, ref, useId, watch } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { useClickOutside } from '../../composables/useClickOutside/index.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
 import { useFloating } from '../../composables/useFloating/index.ts'
@@ -16,6 +17,7 @@ import { popconfirmVariants } from './DzPopconfirm.variants.ts'
 defineOptions({
   inheritAttrs: false,
 })
+/** Whether the confirmation bubble is open; `false` keeps it closed. */
 const open = defineModel<boolean>('open', { default: false })
 
 /**
@@ -192,10 +194,16 @@ watch(open, async (isOpen, wasOpen) => {
 }, { immediate: true })
 
 const panelClasses = computed(() => cn(styles.value.panel()))
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
-  <span ref="referenceRef" :class="styles.trigger()" @click="toggle">
+  <span ref="referenceRef" data-part="trigger" :class="cn(styles.trigger(), props.ui?.trigger)" @click="toggle">
     <slot />
   </span>
 
@@ -203,18 +211,21 @@ const panelClasses = computed(() => cn(styles.value.panel()))
     <div
       ref="floatingRef"
       role="alertdialog"
+      data-part="panel"
       :aria-labelledby="titleId"
       :aria-describedby="(description || slots.content) ? descriptionId : undefined"
       :class="panelClasses"
+      :data-dz-motion="dzMotionAttr"
       :style="floatingStyles"
       data-testid="dz-popconfirm-panel"
       v-bind="$attrs"
     >
       <slot name="content">
-        <div :class="styles.header()">
+        <div data-part="header" :class="cn(styles.header(), props.ui?.header)">
           <span
             v-if="icon || slots.icon"
-            :class="styles.iconWrap()"
+            data-part="icon"
+            :class="cn(styles.iconWrap(), props.ui?.icon)"
             aria-hidden="true"
             data-testid="dz-popconfirm-icon"
           >
@@ -222,18 +233,18 @@ const panelClasses = computed(() => cn(styles.value.panel()))
               <DzIcon v-if="icon" :icon="icon" size="sm" />
             </slot>
           </span>
-          <div :class="styles.body()">
-            <p :id="titleId" :class="styles.title()">
+          <div data-part="body" :class="cn(styles.body(), props.ui?.body)">
+            <p :id="titleId" data-part="title" :class="cn(styles.title(), props.ui?.title)">
               {{ title }}
             </p>
-            <p v-if="description" :id="descriptionId" :class="styles.description()">
+            <p v-if="description" :id="descriptionId" data-part="description" :class="cn(styles.description(), props.ui?.description)">
               {{ description }}
             </p>
           </div>
         </div>
       </slot>
 
-      <div :class="styles.actions()">
+      <div data-part="action" :class="cn(styles.actions(), props.ui?.action)">
         <DzButton
           variant="ghost"
           tone="neutral"

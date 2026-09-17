@@ -21,6 +21,23 @@ known one.
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 | `non-drag` | Perform the drag interaction without a pointer drag. | A keyboard or single-pointer path exists, is discoverable, and narrates each step. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/media/DzImageComparison.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | — | Move the divider towards the right edge of the image. |
+| `ArrowLeft` | — | Move the divider towards the left edge of the image. |
+| `ArrowUp` | — | Move the divider towards the right edge of the image. |
+| `ArrowDown` | — | Move the divider towards the left edge of the image. |
+| `Home` | — | Move the divider fully to the left edge. |
+| `End` | — | Move the divider fully to the right edge. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

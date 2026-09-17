@@ -1,9 +1,9 @@
 {
   "generator": "yarn generate:docs-pages (TASK-N2-D1, evidence layer TASK-N2-D2)",
-  "artifactSha256": "f835f8f4c02a9737899135da922097d2725f6211ddfb8a5da3e060fec2dd4530",
+  "artifactSha256": "61b26a7350b9215761c7ff8cf0652d94064889c6a3e3dc0c40993a0217167d5e",
   "schemaVersion": "1.2.0",
   "extractor": "vue-component-meta@3.3.7",
-  "sourceCommit": "6f1f6533652343f76e073da2345e0b14c22913a0",
+  "sourceCommit": "99b963a03e1c0a9cd8077c9f1d0405a645174e4e",
   "publicComponents": 144,
   "compoundParts": 64,
   "groups": [
@@ -657,18 +657,18 @@
     }
   ],
   "evidenceSha256": {
-    "packages/core/docs/quality-matrix.json": "69fd88d079d8a1fc4dd17dc260eb7cff5f9ad896fd4bb6e4cbdebfd8c4757bde",
-    "packages/core/docs/capability-matrix.json": "02993453b1d97cee036c6fbdb127996012b6fb29885014e54fd7409b6ea45f2e",
-    "e2e/at-matrix/index.json": "9d3a42652df31ea400e621b6b209ddee8ddeec427e26d80f953e1676d282f949",
+    "packages/core/docs/quality-matrix.json": "f4c674109b6e2eacb84443b68d1fdc6f2fdec00b93c57475965a01dabd70f341",
+    "packages/core/docs/capability-matrix.json": "561b7852a04d4f92ba39a6412d0088958bf88bd61227206669645cdea221ad5d",
+    "e2e/at-matrix/index.json": "0abcc92ef6c3332f73073f09a6def24cfc5a24043048c3d8e686bb5f70deea94",
     "packages/core/docs/wcag-deviations.json": "c3fdab5ea679fbb0f39d0be91bcf0edcc6442c5021fb5a240e48153c89f1fcb8",
     "e2e/matrix/engine-ratchets.json": "cbcb8ba4657f5270b12bba458715cffdd59d343830eb13d7ebdda9d64e5183e4",
     "e2e/matrix/known-failures.json": "d579c5e0ea41a1560b76ef9be2570535910a588304982a0ca4ab9297c992bf83",
     "packages/core/security/security-deviations.json": "3d8470b437208355c868fba46d11c3f1bf4c7355bdbc50b5f38b3f00047b61b8",
-    "packages/core/src/styles/base.css": "a7de1afe7bbc24fa9fdc92801624f149c1548941758e62261ac15614403fd533"
+    "packages/core/src/styles/base.css": "ee7d5ca85e12a1eabd392d76779562655314a489c67a80240611e4f1d301ff35"
   },
   "evidence": {
     "cells": 1661,
-    "unrunCells": 494,
+    "unrunCells": 534,
     "atCells": 534,
     "atExecuted": 0
   }

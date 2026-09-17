@@ -55,6 +55,27 @@ export const anatomy = {
    */
   rtl: { mirrors: 'none', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). A code block does not mirror and
+   * takes no keyboard of its own; what it owns is the copy control.
+   */
+  keyboard: [
+    {
+      key: 'Enter',
+      when: 'copy-button',
+      action: 'Copy the code to the clipboard.',
+      wcag: ['2.1.1'],
+      apg: 'button',
+    },
+    {
+      key: ' ',
+      when: 'copy-button',
+      action: 'Copy the code to the clipboard.',
+      wcag: ['2.1.1'],
+      apg: 'button',
+    },
+  ],
+
   /** Tier A — presentational. It renders content and takes no focus of its own. */
   riskTier: 'A',
 } as const satisfies ComponentAnatomy

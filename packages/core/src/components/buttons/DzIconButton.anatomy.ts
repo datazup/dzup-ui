@@ -21,6 +21,15 @@ export const anatomy = {
   recipes: ['variant', 'size', 'tone'],
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Native `button` activation; the
+   * accessible name comes from `label`, not from the glyph.
+   */
+  keyboard: [
+    { key: 'Enter', action: 'Activate the button.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', action: 'Activate the button.', wcag: ['2.1.1'], apg: 'button' },
+  ],
+
   /** Tier B — owns focus and keyboard activation, and carries its whole label in aria. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

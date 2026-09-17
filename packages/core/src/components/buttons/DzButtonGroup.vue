@@ -16,6 +16,7 @@ import type { DzButtonGroupContext, DzButtonGroupProps, DzButtonGroupSlots } fro
  * ```
  */
 import { computed, provide, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_BUTTON_GROUP_KEY } from './DzButtonGroup.types.ts'
 import { buttonGroupVariants } from './DzButtonGroup.variants.ts'
@@ -54,6 +55,9 @@ const classes = computed(() =>
     props.ui?.root,
   ),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -67,7 +71,7 @@ const classes = computed(() =>
     :data-disabled="disabled ? '' : undefined"
     :data-tone="tone"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-button-group'), ...$attrs, class: undefined }"
   >
     <slot />
   </div>

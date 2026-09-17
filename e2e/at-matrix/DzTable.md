@@ -21,6 +21,21 @@ known one.
 | `non-drag` | Perform the drag interaction without a pointer drag. | A keyboard or single-pointer path exists, is discoverable, and narrates each step. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/data/DzTable.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Tab` | — | Move to the next interactive cell or header control; the table itself is not a tab stop. |
+| `Enter` | header sortable | Cycle the focused column sort. |
+| `Space` | header sortable | Cycle the focused column sort. |
+| `Shift` + `Enter` | header sortable | Add the focused column to the existing sort rather than replacing it. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

@@ -13,6 +13,7 @@ import type { DzTextareaEmits, DzTextareaProps } from './DzTextarea.types.ts'
  * ```
  */
 import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -23,6 +24,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The field's text value; the default empty string renders an empty textarea. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzTextareaProps>(), {
@@ -205,12 +207,19 @@ function handleBlur(event: FocusEvent): void {
 }
 
 /** Expose the native textarea ref for programmatic focus */
-defineExpose({ textareaRef })
+defineExpose({
+  /** The underlying `<textarea>` element, for focus, selection and measurement. `null` before mount. */
+  textareaRef,
+})
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     data-part="root"
+    v-bind="dzTestId('dz-textarea')"
     :class="rootClasses"
     :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined"
     :data-tone="tone"

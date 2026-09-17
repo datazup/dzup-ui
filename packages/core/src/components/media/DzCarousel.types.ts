@@ -8,6 +8,7 @@
 
 import type { BaseAccessibilityProps, CanonicalSize, Orientation } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzCarouselUi } from './DzCarousel.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Direction type
@@ -67,6 +68,12 @@ export interface DzCarouselProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Disabled state */
   disabled?: boolean
+  /**
+   * Per-part class overrides for the nodes DzCarousel itself renders, keyed by
+   * the names in `DzCarousel.anatomy.ts` (ADR-19 §5). Slides, dots and the
+   * navigation buttons are written at the call site and already take `class`.
+   */
+  ui?: DzCarouselUi
 }
 
 // ---------------------------------------------------------------------------

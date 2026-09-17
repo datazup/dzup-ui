@@ -47,7 +47,7 @@ vi.mock('@dzup-ui/core/ownership', () => ({
   },
 }))
 
-const { canResolvePro, componentsToRegister, proAvailability } = await import('./module.ts')
+const { canResolvePro, componentsToRegister, proAvailability, proMissingMessage } = await import('./module.ts')
 const moduleDefinition = (await import('./module.ts')).default as unknown as {
   defaults: DzupUiModuleOptions
   setup: (options: DzupUiModuleOptions, nuxt: FakeNuxt) => void
@@ -75,11 +75,76 @@ function projectWithPro(): string {
   return root
 }
 
+/**
+ * A project root with the Pro package as it is actually published: an
+ * **ESM-only `exports` map** plus the condition-free `./package.json` export
+ * Pro REL-01 added.
+ *
+ * This is the shape that made `canResolvePro` lie (finding R4a). CJS resolution
+ * of the bare name applies the `require` condition, finds no match, and throws
+ * `ERR_PACKAGE_PATH_NOT_EXPORTED` — indistinguishable, to the old
+ * implementation, from the package not being installed at all. No `main` field
+ * here on purpose: with an `exports` map present, `main` is not consulted, so
+ * leaving it out is what makes this fixture reproduce the defect rather than
+ * accidentally resolving through a legacy path.
+ */
+function projectWithEsmOnlyPro(): string {
+  const root = mkdtempSync(join(tmpdir(), 'dzup-nuxt-pro-esm-'))
+  const pkg = join(root, 'node_modules', '@dzup-ui-pro', 'pro')
+  mkdirSync(join(pkg, 'dist'), { recursive: true })
+  writeFileSync(
+    join(pkg, 'package.json'),
+    JSON.stringify({
+      name: '@dzup-ui-pro/pro',
+      version: '0.0.0-fixture',
+      type: 'module',
+      exports: {
+        '.': { types: './dist/index.d.ts', import: './dist/index.mjs' },
+        './package.json': './package.json',
+      },
+    }),
+  )
+  writeFileSync(join(pkg, 'dist', 'index.mjs'), 'export default {}\n')
+  return root
+}
+
+/**
+ * A project root with a Pro that has an `exports` map but does **not** export
+ * `./package.json`.
+ *
+ * This is the shape the R4a fix could have regressed: asking only for
+ * `@dzup-ui-pro/pro/package.json` throws ERR_PACKAGE_PATH_NOT_EXPORTED here,
+ * even though the bare name resolves perfectly through the `require`
+ * condition. Any Pro published before REL-01 added the `./package.json` export
+ * looks like this, so the fallback arm is what keeps an older installed Pro
+ * from being reported as missing.
+ */
+function projectWithLegacyPro(): string {
+  const root = mkdtempSync(join(tmpdir(), 'dzup-nuxt-pro-legacy-'))
+  const pkg = join(root, 'node_modules', '@dzup-ui-pro', 'pro')
+  mkdirSync(join(pkg, 'dist'), { recursive: true })
+  writeFileSync(
+    join(pkg, 'package.json'),
+    JSON.stringify({
+      name: '@dzup-ui-pro/pro',
+      version: '0.0.0-fixture',
+      exports: { '.': { require: './dist/index.cjs', import: './dist/index.mjs' } },
+    }),
+  )
+  writeFileSync(join(pkg, 'dist', 'index.cjs'), 'module.exports = {}\n')
+  writeFileSync(join(pkg, 'dist', 'index.mjs'), 'export default {}\n')
+  return root
+}
+
 const withPro = projectWithPro()
+const withEsmOnlyPro = projectWithEsmOnlyPro()
+const withLegacyPro = projectWithLegacyPro()
 const withoutPro = mkdtempSync(join(tmpdir(), 'dzup-nuxt-bare-'))
 
 afterAll(() => {
   rmSync(withPro, { recursive: true, force: true })
+  rmSync(withEsmOnlyPro, { recursive: true, force: true })
+  rmSync(withLegacyPro, { recursive: true, force: true })
   rmSync(withoutPro, { recursive: true, force: true })
 })
 
@@ -120,6 +185,29 @@ describe('canResolvePro', () => {
     // Two roots, two answers, from one unchanged workspace — only possible if
     // the argument really is the resolution base.
     expect(canResolvePro(withPro)).not.toBe(canResolvePro(withoutPro))
+  })
+
+  it('finds a Pro whose exports map is ESM-only (REL-01 R4a)', () => {
+    // The defect this pins: `require.resolve('@dzup-ui-pro/pro')` throws
+    // ERR_PACKAGE_PATH_NOT_EXPORTED against an ESM-only `exports` map, so a
+    // consumer with Pro correctly installed was told to install it. Resolving
+    // the condition-free `./package.json` export answers the question that was
+    // actually being asked: is the package on disk from here?
+    expect(canResolvePro(withEsmOnlyPro)).toBe(true)
+  })
+
+  it('still finds a Pro whose exports map omits ./package.json', () => {
+    // The regression the R4a fix could have caused: resolving *only*
+    // `@dzup-ui-pro/pro/package.json` throws against this shape, so a Pro
+    // published before REL-01 added that export would have been reported as
+    // not installed. The bare-name fallback is what prevents that.
+    expect(canResolvePro(withLegacyPro)).toBe(true)
+  })
+
+  it('still answers false for a bare root next to an ESM-only Pro fixture', () => {
+    // Guards the fixture itself: if `withEsmOnlyPro` leaked into an ancestor
+    // directory, the test above would pass for the wrong reason.
+    expect(canResolvePro(withoutPro)).toBe(false)
   })
 
   it('falls back to this module when no project root is given', () => {
@@ -195,6 +283,22 @@ describe('includePro when the table has a pro tier but the project has not insta
     expect(mocks.error.mock.calls[0]?.[0]).toContain('cannot be resolved')
     expect(registeredExports().sort()).toEqual(['DzButton', 'DzCardBody'])
     expect(nuxt.options.build.transpile).not.toContain('@dzup-ui-pro/pro')
+  })
+
+  it('emits the Pro-absent diagnostic byte for byte', () => {
+    // The R4a fix changes which specifier is resolved, and nothing else. A
+    // consumer who really has not installed Pro must see the same sentence as
+    // before, so the message is asserted whole rather than by substring — a
+    // `toContain` would not have caught a reworded diagnostic.
+    runSetup({ includePro: true }, withoutPro)
+
+    expect(mocks.error).toHaveBeenCalledTimes(1)
+    expect(mocks.error.mock.calls[0]?.[0]).toBe(proMissingMessage())
+    expect(proMissingMessage()).toBe(
+      '[@dzup-ui/nuxt] includePro is true, but "@dzup-ui-pro/pro" cannot be resolved from this '
+      + 'project. Install it (yarn add @dzup-ui-pro/pro) or set dzupUi.includePro to false. '
+      + 'Continuing with Core components only.',
+    )
   })
 })
 

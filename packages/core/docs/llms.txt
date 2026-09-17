@@ -107,34 +107,41 @@ These hold for every component below, so they are stated once here:
 ## Forms
 
 - **DzCascader** — cascading multi-level select built on Reka UI Popover.
-  - props: `changeOnSelect`, `cleaner`, `expandTrigger`, `filter`, `noResultsText`, `options`, `placeholder`, `searchPlaceholder`, `separator`
+  - props: `changeOnSelect`, `cleaner`, `expandTrigger`, `filter`, `noResultsText`, `options`, `placeholder`, `searchPlaceholder`, `separator`, `ui`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`, `v-model:value`
+  - parts (ADR-19): `clear`, `content`, `empty`, `error`, `group`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `label`, `list`, `options-message`, `options-retry`, `options-state`, `panel`, `root`, `trigger`
 - **DzCheckbox** — Checkbox component using Reka UI (ADR-07).
-  - props: `disabled`, `indeterminate`, `name`, `required`, `size`, `value`
+  - props: `disabled`, `indeterminate`, `name`, `required`, `size`, `ui`, `value`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `control`, `indicator`, `label`, `root`
 - **DzCheckboxGroup** — Groups DzCheckbox components with a shared string[] model.
   - props: `disabled`, `orientation`, `size`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `root`
 - **DzColorPicker** — Color selection component with popover panel.
-  - props: `canvasHeight`, `disabled`, `name`, `presets`, `showInput`, `size`
+  - props: `canvasHeight`, `disabled`, `name`, `presets`, `showInput`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `content`, `error`, `group`, `indicator`, `input`, `item`, `label`, `panel`, `root`, `trigger`
 - **DzCombobox** — Searchable select using Reka UI Combobox (ADR-07).
-  - props: `allowCustomValue`, `defaultOpen`, `disabled`, `displayValue`, `emptyText`, `filterFn`, `getItemDisabled`, `getItemLabel`, `getItemValue`, `items`, `loading`, `loadingText`, `name`, `noResultsText`, `openOnClick`, `openOnFocus`, `placeholder`, `size`, `variant`
+  - props: `allowCustomValue`, `defaultOpen`, `disabled`, `displayValue`, `emptyText`, `filterFn`, `getItemDisabled`, `getItemLabel`, `getItemValue`, `items`, `loading`, `loadingText`, `name`, `noResultsText`, `openOnClick`, `openOnFocus`, `placeholder`, `size`, `ui`, `variant`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `clear`, `content`, `control`, `empty`, `error`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`, `viewport`
 - **DzDatePicker** — Date selection using Reka UI DatePicker (ADR-07).
-  - props: `disabled`, `locale`, `max`, `min`, `name`, `placeholder`, `size`, `variant`
+  - props: `disabled`, `locale`, `max`, `min`, `name`, `placeholder`, `size`, `ui`, `variant`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `action`, `cell`, `content`, `control`, `error`, `group`, `header`, `icon`, `input`, `item`, `panel`, `root`, `row`, `title`, `trigger`
 - **DzDateRangePicker** — Date range selection using Reka UI (ADR-07).
-  - props: `disabled`, `locale`, `max`, `min`, `name`, `placeholder`, `size`, `variant`
+  - props: `disabled`, `locale`, `max`, `min`, `name`, `placeholder`, `size`, `ui`, `variant`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
-- **DzFieldArray**
+  - parts (ADR-19): `action`, `cell`, `content`, `control`, `error`, `group`, `header`, `icon`, `input`, `item`, `panel`, `root`, `row`, `separator`, `title`, `trigger`
+- **DzFieldArray** — renderless repeater for an array-valued form field, owning the bounds and the per-row ids.
   - props: `id`, `max`, `min`
   - v-model: `v-model`
 - **DzFileUpload** — File upload with drag-and-drop support.
@@ -147,72 +154,88 @@ These hold for every component below, so they are stated once here:
 - **DzFormField** — Compound wrapper that provides form field context.
   - props: `disabled`, `error`, `id`, `invalid`, `required`
 - **DzInplace** — display→edit toggle wrapper.
-  - props: `disabled`, `placeholder`, `saveOn`, `size`
+  - props: `disabled`, `placeholder`, `saveOn`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model:active`, `v-model`, `v-model:value`
+  - parts (ADR-19): `content`, `icon`, `root`, `trigger`
 - **DzKnob** — rotary numeric input rendered as an SVG circular dial (ADR-16 defineModel).
-  - props: `max`, `min`, `showValue`, `step`, `strokeWidth`, `valueTemplate`
+  - props: `max`, `min`, `showValue`, `step`, `strokeWidth`, `ui`, `valueTemplate`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`, `v-model:value`
+  - parts (ADR-19): `control`, `error`, `indicator`, `label`, `root`
 - **DzListbox** — Always-visible single/multi-select list using Reka UI Listbox
-  - props: `checkmark`, `emptyMessage`, `filter`, `filterPlaceholder`, `multiple`, `optionDisabled`, `optionGroup`, `optionLabel`, `options`, `optionValue`
+  - props: `checkmark`, `emptyMessage`, `filter`, `filterPlaceholder`, `multiple`, `optionDisabled`, `optionGroup`, `optionLabel`, `options`, `optionValue`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`
+  - parts (ADR-19): `control`, `empty`, `error`, `group`, `group-label`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `viewport`
 - **DzMention** — a textarea/input that surfaces a suggestion dropdown when a
-  - props: `allowSpaceInQuery`, `filter`, `insertSpace`, `loadingText`, `maxlength`, `multiline`, `noResultsText`, `placeholder`, `rows`, `triggers`
+  - props: `allowSpaceInQuery`, `filter`, `insertSpace`, `loadingText`, `maxlength`, `multiline`, `noResultsText`, `placeholder`, `rows`, `triggers`, `ui`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`, `v-model:value`
+  - parts (ADR-19): `content`, `control`, `empty`, `error`, `input`, `item`, `item-label`, `list`, `loader`, `root`
 - **DzMultiSelect** — Multi-value select using Reka UI Combobox (ADR-07).
-  - props: `disabled`, `items`, `maxSelections`, `name`, `placeholder`, `size`, `variant`
+  - props: `disabled`, `items`, `maxSelections`, `name`, `placeholder`, `size`, `ui`, `variant`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `clear`, `content`, `control`, `empty`, `error`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`, `viewport`
 - **DzPersonaSelector** — Searchable persona picker.
-  - props: `disabled`, `personas`, `placeholder`
+  - props: `disabled`, `personas`, `placeholder`, `ui`
   - v-model: `v-model`
+  - parts (ADR-19): `clear`, `content`, `control`, `empty`, `error`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`, `viewport`
 - **DzRadio** — Radio option using Reka UI (ADR-07).
-  - props: `disabled`, `size`, `value`
+  - props: `disabled`, `size`, `ui`, `value`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
+  - parts (ADR-19): `control`, `indicator`, `label`, `root`
 - **DzRadioGroup** — Radio group using Reka UI RadioGroupRoot (ADR-07).
   - props: `disabled`, `name`, `orientation`, `required`, `size`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `root`
 - **DzRangeSlider** — Dual-thumb range slider using Reka UI Slider (ADR-07).
-  - props: `disabled`, `max`, `min`, `name`, `orientation`, `size`, `step`, `tone`
+  - props: `disabled`, `max`, `min`, `name`, `orientation`, `size`, `step`, `tone`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`
+  - parts (ADR-19): `control`, `error`, `indicator`, `label`, `root`
 - **DzRating** — star/icon rating input (ADR-16 defineModel).
-  - props: `allowClear`, `allowHalf`, `count`, `emptyIcon`, `icon`
+  - props: `allowClear`, `allowHalf`, `count`, `emptyIcon`, `icon`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`, `v-model:value`
+  - parts (ADR-19): `control`, `error`, `item`, `item-indicator`, `root`
 - **DzSelect** — Select dropdown using Reka UI (ADR-07).
   - props: `defaultOpen`, `disabled`, `filterFn`, `items`, `name`, `noResultsText`, `placeholder`, `searchable`, `searchPlaceholder`, `size`, `ui`, `variant`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
   - parts (ADR-19): `content`, `empty`, `error`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`, `viewport`
 - **DzSlider** — Range slider using Reka UI Slider (ADR-07).
-  - props: `disabled`, `max`, `min`, `name`, `orientation`, `size`, `step`, `tone`
+  - props: `disabled`, `max`, `min`, `name`, `orientation`, `size`, `step`, `tone`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`
+  - parts (ADR-19): `control`, `error`, `indicator`, `label`, `root`
 - **DzSwitch** — Toggle switch using Reka UI (ADR-07).
-  - props: `disabled`, `name`, `required`, `size`
+  - props: `disabled`, `name`, `required`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `control`, `indicator`, `label`, `root`
 - **DzTagsInput** — free-text token / chips input.
-  - props: `addOnBlur`, `allowDuplicates`, `chipTone`, `chipVariant`, `delimiters`, `max`, `placeholder`, `validate`
+  - props: `addOnBlur`, `allowDuplicates`, `chipTone`, `chipVariant`, `delimiters`, `max`, `placeholder`, `ui`, `validate`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`, `v-model:value`
+  - parts (ADR-19): `control`, `error`, `input`, `root`
 - **DzTimePicker** — dropdown time picker (CoreUI-style) built on Reka UI Popover.
-  - props: `cancelText`, `cleaner`, `confirmText`, `disabled`, `footer`, `hour12`, `indicator`, `locale`, `max`, `min`, `name`, `placeholder`, `seconds`, `secondStep`, `selection`, `size`, `step`, `variant`
+  - props: `cancelText`, `cleaner`, `confirmText`, `disabled`, `footer`, `hour12`, `indicator`, `locale`, `max`, `min`, `name`, `placeholder`, `seconds`, `secondStep`, `selection`, `size`, `step`, `ui`, `variant`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `action`, `clear`, `content`, `control`, `error`, `footer`, `group`, `icon`, `input`, `item`, `label`, `list`, `panel`, `root`, `separator`, `trigger`
 - **DzTransfer** — Dual-list transfer component.
-  - props: `disabled`, `searchable`, `searchPlaceholder`, `size`, `source`, `target`
+  - props: `disabled`, `searchable`, `searchPlaceholder`, `size`, `source`, `target`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `action`, `body`, `control`, `empty`, `error`, `group`, `header`, `hint`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `list`, `options-message`, `options-retry`, `options-state`, `root`
 - **DzTreeSelect** — a form select whose overlay panel is a DzTree (TASK-NF-04).
-  - props: `defaultOpen`, `expandedKeys`, `filter`, `filterPlaceholder`, `nodes`, `noResultsText`, `placeholder`, `selectionMode`
+  - props: `defaultOpen`, `expandedKeys`, `filter`, `filterPlaceholder`, `nodes`, `noResultsText`, `placeholder`, `selectionMode`, `ui`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model:expandedKeys`, `v-model`, `v-model:value`
+  - parts (ADR-19): `content`, `empty`, `error`, `icon`, `indicator`, `input`, `label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`
 - **DzFormDescription** — Description sub-part for DzFormField compound.
   - part of `DzFormField`
 - **DzFormLabel** — Label sub-part for DzFormField compound.
@@ -223,18 +246,22 @@ These hold for every component below, so they are stated once here:
 ## Cards
 
 - **DzCard** — A surface container component.
-  - props: `clickable`, `hoverable`, `padding`, `variant`
+  - props: `clickable`, `hoverable`, `padding`, `ui`, `variant`
   - variant: `elevated` `outlined` `flat`
+  - parts (ADR-19): `action`, `body`, `footer`, `header`, `root`
 - **DzImageCard** — Card component with a prominent image.
-  - props: `alt`, `aspectRatio`, `id`, `loading`, `src`, `variant`
+  - props: `alt`, `aspectRatio`, `id`, `loading`, `src`, `ui`, `variant`
+  - parts (ADR-19): `body`, `footer`, `header`, `overlay`, `root`
 - **DzStatCard** — Statistics display card.
-  - props: `description`, `icon`, `id`, `title`, `trend`, `trendValue`, `value`, `variant`
+  - props: `description`, `icon`, `id`, `title`, `trend`, `trendValue`, `ui`, `value`, `variant`
+  - parts (ADR-19): `description`, `header`, `icon`, `root`, `title`
 - **DzCardBody** — Structural sub-part for the card body/content section.
   - part of `DzCard`
 - **DzCardFooter** — Structural sub-part for the card footer section.
   - part of `DzCard`
 - **DzCardHeader** — Structural sub-part for the card header section.
   - part of `DzCard`
+  - props: `ui`
 
 ## Layout
 
@@ -247,6 +274,7 @@ These hold for every component below, so they are stated once here:
 - **DzCollapse** — Animated expand/collapse container.
   - props: `duration`
   - v-model: `v-model`
+  - parts (ADR-19): `root`
 - **DzContainer** — Centered content container.
   - props: `as`, `centered`, `maxWidth`, `padding`
 - **DzDeferredContent** — viewport-triggered lazy renderer.
@@ -262,24 +290,29 @@ These hold for every component below, so they are stated once here:
 - **DzPageHero** — dark gradient hero band for top-level views: eyebrow,
   - props: `description`, `eyebrow`, `title`
 - **DzPanel** — titled container with optional header actions and collapse.
-  - props: `as`, `collapsible`, `header`
+  - props: `as`, `collapsible`, `header`, `ui`
   - variant: `outlined` `elevated` `legend` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model:collapsed`
+  - parts (ADR-19): `action`, `content`, `header`, `indicator`, `root`, `title`, `trigger`
 - **DzResizable** — Compound resizable panel root using Reka UI Splitter (ADR-07).
-  - props: `direction`, `disabled`, `keyboardResizeBy`, `size`
+  - props: `direction`, `disabled`, `keyboardResizeBy`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
+  - parts (ADR-19): `indicator`, `panel`, `root`, `separator`
 - **DzScrollArea** — Custom scrollbar area using Reka UI (ADR-07).
-  - props: `orientation`, `type`
+  - props: `orientation`, `type`, `ui`
+  - parts (ADR-19): `root`, `viewport`
 - **DzSpacer** — Flexible space filler.
   - props: `size`
 - **DzSplitter** — Naming alias for DzResizable.
-  - props: `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `direction`, `disabled`, `id`, `keyboardResizeBy`, `size`
+  - props: `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `direction`, `disabled`, `id`, `keyboardResizeBy`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
+  - parts (ADR-19): `indicator`, `panel`, `root`, `separator`
 - **DzStack** — Simplified vertical/horizontal stack layout.
   - props: `align`, `as`, `direction`, `gap`
 - **DzToolbar** — horizontal action bar with start/center/end regions.
-  - props: `as`, `orientation`, `sticky`, `wrap`
+  - props: `as`, `orientation`, `sticky`, `ui`, `wrap`
   - variant: `flat` `outlined` `elevated` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
+  - parts (ADR-19): `group`, `root`
 - **DzResizableHandle** — Resize handle between panels, using Reka UI
   - part of `DzResizable`
   - props: `disabled`, `withHandle`
@@ -296,51 +329,63 @@ These hold for every component below, so they are stated once here:
 ## Navigation
 
 - **DzAnchor** — Scrollspy section navigation (in-page table of contents).
-  - props: `affix`, `ariaLabel`, `items`, `offsetTop`
+  - props: `affix`, `ariaLabel`, `items`, `offsetTop`, `ui`
   - v-model: `v-model:active`
+  - parts (ADR-19): `item`, `list`, `root`
 - **DzBackTop** — Scroll-to-top button.
-  - props: `ariaLabel`, `duration`, `size`, `target`, `tone`, `variant`, `visibilityHeight`
+  - props: `ariaLabel`, `duration`, `size`, `target`, `tone`, `ui`, `variant`, `visibilityHeight`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
+  - parts (ADR-19): `icon`, `root`
 - **DzBreadcrumb** — Accessible breadcrumb navigation wrapper.
-  - props: `separator`
+  - props: `separator`, `ui`
+  - parts (ADR-19): `item`, `item-label`, `list`, `root`, `separator`
 - **DzColorModeToggle** — light / dark / system theme switch.
-  - props: `labels`, `showSystem`, `size`, `variant`
+  - props: `labels`, `showSystem`, `size`, `ui`, `variant`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
+  - parts (ADR-19): `root`
 - **DzMegaMenu** — horizontal (or vertical) navigation menubar whose top-level
-  - props: `breakpoint`, `collapsed`, `disabled`, `items`, `openOnHover`, `orientation`, `size`
+  - props: `breakpoint`, `collapsed`, `disabled`, `items`, `openOnHover`, `orientation`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
+  - parts (ADR-19): `group`, `group-label`, `indicator`, `item`, `list`, `panel`, `root`, `trigger`
 - **DzMenu** — Vertical navigation menu.
-  - props: `collapsed`, `size`
+  - props: `collapsed`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
+  - parts (ADR-19): `item`, `item-label`, `root`, `separator`
 - **DzPagination** — Page navigation using Reka UI Pagination primitives (ADR-07).
-  - props: `disabled`, `pageSize`, `showEdges`, `siblingCount`, `size`, `total`
+  - props: `disabled`, `pageSize`, `showEdges`, `siblingCount`, `size`, `total`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `action`, `item`, `list`, `root`, `separator`
 - **DzSegmented** — Segmented control (tab-like toggle).
-  - props: `disabled`, `items`, `size`
+  - props: `disabled`, `items`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `item`, `root`
 - **DzSidebar** — Collapsible navigation sidebar root component.
-  - props: `activeStyle`, `collapsed`, `collapsedWidth`, `isMobile`, `mobileBreakpoint`, `mobileOpen`, `portalTo`, `position`, `storageKey`, `width`
+  - props: `activeStyle`, `collapsed`, `collapsedWidth`, `isMobile`, `mobileBreakpoint`, `mobileOpen`, `portalTo`, `position`, `storageKey`, `ui`, `width`
   - v-model: `v-model:collapsed`, `v-model:mobileOpen`
+  - parts (ADR-19): `body`, `footer`, `group`, `group-label`, `header`, `icon`, `item`, `item-label`, `overlay`, `root`, `suffix`
 - **DzStepper** — Step-by-step progress indicator.
-  - props: `beforeChange`, `clickable`, `linear`, `orientation`
+  - props: `beforeChange`, `clickable`, `linear`, `orientation`, `ui`
   - v-model: `v-model`
+  - parts (ADR-19): `root`
 - **DzStepperItem** — A single step within DzStepper.
-  - props: `clickable`, `description`, `optional`, `title`
+  - props: `clickable`, `description`, `optional`, `title`, `ui`
+  - parts (ADR-19): `description`, `indicator`, `root`, `title`
 - **DzTabs** — Tabbed interface root component using Reka UI (ADR-07).
-  - props: `activationMode`, `orientation`, `size`, `tone`, `variant`
+  - props: `activationMode`, `orientation`, `size`, `tone`, `ui`, `variant`
   - variant: `line` `enclosed` `pills` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`
+  - parts (ADR-19): `close`, `content`, `list`, `root`, `trigger`
 - **DzBreadcrumbItem** — Individual breadcrumb entry.
   - part of `DzBreadcrumb`
-  - props: `current`, `disabled`, `href`
+  - props: `current`, `disabled`, `href`, `ui`
 - **DzBreadcrumbSeparator** — Visual separator between breadcrumb items.
   - part of `DzBreadcrumb`
   - props: `separator`
 - **DzMenuItem** — A single item within DzMenu.
   - part of `DzMenu`
-  - props: `active`, `ariaLabel`, `disabled`, `href`
+  - props: `active`, `ariaLabel`, `disabled`, `href`, `ui`
 - **DzMenuSeparator** — Visual divider between menu items.
   - part of `DzMenu`
 - **DzSidebarFooter** — Bottom section of the sidebar.
@@ -349,10 +394,10 @@ These hold for every component below, so they are stated once here:
   - part of `DzSidebar`
 - **DzSidebarItem** — Individual navigation item within a sidebar.
   - part of `DzSidebar`
-  - props: `active`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `as`, `disabled`, `href`, `id`, `to`
+  - props: `active`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `as`, `disabled`, `href`, `id`, `to`, `ui`
 - **DzSidebarSection** — Groups sidebar items with an optional title.
   - part of `DzSidebar`
-  - props: `collapsible`, `defaultOpen`, `title`
+  - props: `collapsible`, `defaultOpen`, `title`, `ui`
 - **DzTabContent** — Tab panel content using Reka UI TabsContent.
   - part of `DzTabs`
   - props: `forceMount`, `value`
@@ -361,48 +406,57 @@ These hold for every component below, so they are stated once here:
   - props: `loop`
 - **DzTabTrigger** — Individual tab button using Reka UI TabsTrigger.
   - part of `DzTabs`
-  - props: `closable`, `disabled`, `value`
+  - props: `closable`, `disabled`, `ui`, `value`
 
 ## Overlays
 
 - **DzCommandPalette** — A combined command palette with search, items, and groups.
-  - props: `enableGlobalShortcut`, `groups`, `items`, `placeholder`
+  - props: `enableGlobalShortcut`, `groups`, `items`, `placeholder`, `ui`
   - v-model: `v-model:open`
+  - parts (ADR-19): `content`, `control`, `empty`, `group`, `group-label`, `icon`, `input`, `item`, `item-label`, `list`, `overlay`, `suffix`
 - **DzConfirmDialog** — Pre-composed confirmation dialog.
-  - props: `cancelLabel`, `confirmLabel`, `id`, `loading`, `message`, `open`, `overlayClass`, `size`, `title`, `variant`
+  - props: `cancelLabel`, `confirmLabel`, `id`, `loading`, `message`, `open`, `overlayClass`, `size`, `title`, `ui`, `variant`
   - variant: `default` `danger` · size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model:open`
+  - parts (ADR-19): `action`, `content`, `description`, `icon`, `overlay`, `title`, `viewport`
 - **DzContextMenu** — Root context menu using Reka UI (ADR-07).
   - props: `modal`
   - v-model: `v-model:open`
+  - parts (ADR-19): `content`, `item`, `prefix`, `separator`, `suffix`
 - **DzDialog** — Root compound component wrapping Reka UI DialogRoot (ADR-07).
   - props: `animated`, `contentTransition`, `modal`, `overlayTransition`
   - v-model: `v-model:open`
 - **DzDropdownMenu** — Root dropdown menu using Reka UI (ADR-07).
   - props: `defaultOpen`, `modal`
   - v-model: `v-model:open`
+  - parts (ADR-19): `content`, `item`, `prefix`, `separator`, `suffix`
 - **DzPopconfirm** — An inline confirmation popover anchored to its trigger.
-  - props: `cancelText`, `confirmText`, `description`, `icon`, `loading`, `placement`, `portalTo`, `title`, `tone`
+  - props: `cancelText`, `confirmText`, `description`, `icon`, `loading`, `placement`, `portalTo`, `title`, `tone`, `ui`
   - tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model:open`
+  - parts (ADR-19): `action`, `body`, `description`, `header`, `icon`, `panel`, `title`, `trigger`
 - **DzPopover** — Root compound component wrapping Reka UI PopoverRoot (ADR-07).
   - props: `modal`
   - v-model: `v-model:open`
+  - parts (ADR-19): `content`, `indicator`
 - **DzSheet** — Slide-out side panel root component using Reka UI Dialog (ADR-07).
   - props: `modal`
   - v-model: `v-model:open`
+  - parts (ADR-19): `close`, `content`, `description`, `overlay`, `title`
 - **DzTooltip** — Root compound component wrapping Reka UI TooltipRoot (ADR-07).
   - props: `delayDuration`, `disableHoverableContent`
   - v-model: `v-model:open`
+  - parts (ADR-19): `content`, `indicator`
 - **DzTour** — Step-by-step product walkthrough that spotlights target elements
-  - props: `mask`, `portalTo`, `scrollIntoView`, `steps`
+  - props: `mask`, `portalTo`, `scrollIntoView`, `steps`, `ui`
   - v-model: `v-model:current`, `v-model:open`
+  - parts (ADR-19): `action`, `description`, `footer`, `header`, `item-indicator`, `list`, `overlay`, `panel`, `title`
 - **DzContextMenuContent** — Content panel for DzContextMenu.
   - part of `DzContextMenu`
   - props: `align`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `id`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`
 - **DzContextMenuItem** — A single item within DzContextMenuContent.
   - part of `DzContextMenu`
-  - props: `disabled`
+  - props: `disabled`, `ui`
 - **DzContextMenuSeparator** — Visual divider between context menu items.
   - part of `DzContextMenu`
 - **DzContextMenuTrigger** — Trigger area for DzContextMenu (right-click target).
@@ -427,14 +481,14 @@ These hold for every component below, so they are stated once here:
   - props: `align`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `id`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`
 - **DzDropdownMenuItem** — A single item within DzDropdownMenuContent.
   - part of `DzDropdownMenu`
-  - props: `disabled`
+  - props: `disabled`, `ui`
 - **DzDropdownMenuSeparator** — Visual divider between menu items.
   - part of `DzDropdownMenu`
 - **DzDropdownMenuTrigger** — Trigger for DzDropdownMenu.
   - part of `DzDropdownMenu`
 - **DzPopoverContent** — Content panel for DzPopover compound.
   - part of `DzPopover`
-  - props: `align`, `arrow`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`, `size`
+  - props: `align`, `arrow`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`, `size`, `ui`
 - **DzPopoverTrigger** — Trigger element for DzPopover compound.
   - part of `DzPopover`
 - **DzSheetClose** — Close button for DzSheet.
@@ -450,7 +504,7 @@ These hold for every component below, so they are stated once here:
   - part of `DzSheet`
 - **DzTooltipContent** — Content panel for DzTooltip compound.
   - part of `DzTooltip`
-  - props: `align`, `arrow`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`
+  - props: `align`, `arrow`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`, `ui`
 - **DzTooltipTrigger** — Trigger element for DzTooltip compound.
   - part of `DzTooltip`
 
@@ -459,25 +513,27 @@ These hold for every component below, so they are stated once here:
 - **DzAlert** — Contextual alert messages for user feedback.
   - props: `closable`, `icon`, `title`, `tone`, `variant`
   - variant: `filled` `outline` `subtle` `ghost` · tone: `neutral` `primary` `success` `warning` `danger` `info`
-- **DzAsyncBoundary**
+- **DzAsyncBoundary** — `<Suspense>` wrapper that shows a loading fallback, catches the errors its subtree throws, and can time a pending child out.
   - props: `delay`, `onError`, `timeout`
 - **DzBadge** — Compact label for status, counts, or categories.
   - props: `size`, `tone`, `variant`
   - variant: `solid` `outline` `subtle` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **DzBlockUI** — Content-loading mask.
-  - props: `fullScreen`, `message`, `portalTo`, `spinnerSize`, `tone`
+  - props: `fullScreen`, `message`, `portalTo`, `spinnerSize`, `tone`, `ui`
   - tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model:blocked`
+  - parts (ADR-19): `content`, `description`, `overlay`, `root`
 - **DzEmpty** — Empty state placeholder component.
   - props: `description`, `icon`, `id`, `title`
-- **DzErrorBoundary**
+- **DzErrorBoundary** — catches the render errors its subtree throws and swaps in a fallback slot instead of letting them reach the application root.
   - props: `onError`
 - **DzMeterGroup** — Segmented proportional meter with legend.
   - props: `max`, `orientation`, `showLegend`, `size`, `values`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
 - **DzNotification** — Persistent notification message with optional auto-dismiss.
-  - props: `closable`, `description`, `duration`, `icon`, `title`, `tone`
+  - props: `closable`, `description`, `duration`, `icon`, `title`, `tone`, `ui`
   - tone: `neutral` `primary` `success` `warning` `danger` `info`
+  - parts (ADR-19): `action`, `close`, `content`, `description`, `icon`, `root`, `title`
 - **DzProgress** — Visual indicator of task completion.
   - props: `indeterminate`, `max`, `size`, `tone`, `value`, `variant`
   - variant: `bar` `circular` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
@@ -494,8 +550,10 @@ These hold for every component below, so they are stated once here:
 - **DzSpinner** — Loading indicator with rotating animation.
   - props: `label`, `size`, `tone`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
+  - parts (ADR-19): `root`
 - **DzToast** — Individual toast notification using Reka UI (ADR-07).
-  - props: `defaultOpen`, `open`, `toast`
+  - props: `defaultOpen`, `open`, `toast`, `ui`
+  - parts (ADR-19): `action`, `close`, `description`, `indicator`, `root`, `title`
 - **DzTokenProgressBar** — Token-usage progress bar with threshold colors.
   - props: `showWarning`, `total`, `used`
 - **GovernanceBadge** — Coordinator pattern pill for team runs.
@@ -514,16 +572,22 @@ These hold for every component below, so they are stated once here:
 ## Data display
 
 - **DzAccordion** — Compound accordion root using Reka UI (ADR-07).
+  - props: `collapsible`, `disabled`, `size`, `type`, `ui`, `variant`
+  - size: `icon` `xs` `sm` `md` `lg` `xl`
+  - v-model: `v-model`
+  - parts (ADR-19): `content`, `indicator`, `item`, `root`, `trigger`
 - **DzAnimatedNumber** — a figure that counts from its previous value to the next.
   - props: `duration`, `easing`, `format`, `from`, `locale`, `size`, `startOnView`, `tone`, `value`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **DzCalendar** — full-surface month/week calendar for date selection and
-  - props: `disabled`, `disabledDate`, `firstDayOfWeek`, `locale`, `maxDate`, `minDate`, `mode`, `readonly`, `size`, `view`
+  - props: `disabled`, `disabledDate`, `firstDayOfWeek`, `locale`, `maxDate`, `minDate`, `mode`, `readonly`, `size`, `ui`, `view`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model:focusedDate`, `v-model:value`
+  - parts (ADR-19): `action`, `cell`, `content`, `group`, `header`, `item`, `root`, `row`, `title`
 - **DzChip** — Closable chip component with tone/variant styling.
-  - props: `closable`, `disabled`, `size`, `tone`, `variant`
+  - props: `closable`, `disabled`, `size`, `tone`, `ui`, `variant`
   - variant: `solid` `outline` `subtle` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
+  - parts (ADR-19): `close`, `root`
 - **DzCodeBlock** — Code display component with line numbers and copy support.
   - props: `ariaLabel`, `code`, `copyable`, `filename`, `id`, `language`, `maxHeight`, `showLineNumbers`
   - parts (ADR-19): `content`, `copy-button`, `filename`, `header`, `language`, `line-number`, `root`
@@ -531,36 +595,42 @@ These hold for every component below, so they are stated once here:
   - props: `autoStart`, `format`, `interval`, `mode`, `pauseOnHidden`, `size`, `target`, `tone`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **DzDataGrid** — Compound data grid root component.
-  - props: `columns`, `data`, `density`, `filterable`, `filters`, `loading`, `manual`, `pagination`, `rowKey`, `selectable`, `selectedRows`, `size`, `sortable`, `sortModel`, `total`
+  - props: `columns`, `data`, `density`, `filterable`, `filters`, `loading`, `manual`, `pagination`, `rowKey`, `selectable`, `selectedRows`, `size`, `sortable`, `sortModel`, `total`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model:filters`, `v-model:selectedRows`, `v-model:sortModel`
+  - parts (ADR-19): `body`, `cell`, `content`, `empty`, `footer`, `header`, `indicator`, `loader`, `panel`, `root`, `row`
 - **DzDataView** — list/grid switchable collection renderer.
-  - props: `cols`, `dataKey`, `disabled`, `emptyDescription`, `emptyTitle`, `gap`, `items`, `layoutToggle`, `loading`, `loadingRows`, `paginator`, `rows`, `size`, `sortOptions`
+  - props: `cols`, `dataKey`, `disabled`, `emptyDescription`, `emptyTitle`, `gap`, `items`, `layoutToggle`, `loading`, `loadingRows`, `paginator`, `rows`, `size`, `sortOptions`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model:first`, `v-model:layout`, `v-model:sortField`, `v-model:sortOrder`
+  - parts (ADR-19): `control`, `footer`, `header`, `item`, `list`, `root`
 - **DzDescriptions** — read-only label/value detail grid.
   - props: `bordered`, `columns`, `items`, `layout`, `size`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
 - **DzInfiniteScroll** — viewport-sentinel "load more" wrapper.
-  - props: `direction`, `disabled`, `distance`, `error`, `hasMore`, `loading`, `size`
+  - props: `direction`, `disabled`, `distance`, `error`, `hasMore`, `loading`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
+  - parts (ADR-19): `content`, `error`, `hint`, `loader`, `root`
 - **DzList** — Compound list root component.
   - props: `interactive`, `loading`, `ordered`, `size`, `tone`, `variant`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **DzListItem** — Child item within a DzList compound component.
-  - props: `active`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `disabled`, `id`, `tone`
+  - props: `active`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `disabled`, `id`, `tone`, `ui`
   - tone: `neutral` `primary` `success` `warning` `danger` `info`
+  - parts (ADR-19): `item-label`, `root`
 - **DzOrderList** — reorderable list with drag, control-button, and keyboard reorder.
-  - props: `controlsPosition`, `dataKey`, `disabled`, `dragHandle`, `dragHandleLabel`, `moveBottomLabel`, `moveDownLabel`, `moveTopLabel`, `moveUpLabel`, `selectable`, `showControls`, `size`, `variant`
+  - props: `controlsPosition`, `dataKey`, `disabled`, `dragHandle`, `dragHandleLabel`, `moveBottomLabel`, `moveDownLabel`, `moveTopLabel`, `moveUpLabel`, `selectable`, `showControls`, `size`, `ui`, `variant`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model:value`
+  - parts (ADR-19): `control`, `empty`, `group`, `item`, `item-label`, `list`, `root`
 - **DzTable** — Compound semantic table root component.
   - props: `captionVisible`, `density`, `hoverable`, `loading`, `maxHeight`, `overscan`, `rowHeight`, `size`, `striped`, `ui`, `variant`, `virtualScroll`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - parts (ADR-19): `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `title`
 - **DzTag** — Categorization tag component with tone/variant styling.
-  - props: `closable`, `disabled`, `size`, `tone`, `variant`
+  - props: `closable`, `disabled`, `size`, `tone`, `ui`, `variant`
   - variant: `solid` `outline` `subtle` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
+  - parts (ADR-19): `close`, `root`
 - **DzTimeline** — Compound timeline root component.
   - props: `orientation`, `size`, `tone`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
@@ -568,11 +638,13 @@ These hold for every component below, so they are stated once here:
   - props: `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `id`, `status`, `tone`
   - tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **DzTree** — Hierarchical tree view with expand/collapse, selection, and checkboxes.
-  - props: `activeKey`, `checkable`, `disabled`, `draggable`, `expandedKeys`, `items`, `loading`, `selectable`, `selectedKeys`, `size`
+  - props: `activeKey`, `checkable`, `disabled`, `draggable`, `expandedKeys`, `items`, `loading`, `selectable`, `selectedKeys`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model:activeKey`, `v-model:expandedKeys`, `v-model:selectedKeys`
+  - parts (ADR-19): `empty`, `root`
 - **DzTreeItem** — Single node in a DzTree hierarchy.
-  - props: `level`, `node`, `posInSet`, `setSize`
+  - props: `level`, `node`, `posInSet`, `setSize`, `ui`
+  - parts (ADR-19): `control`, `group`, `indicator`, `item`, `item-label`, `root`
 - **DzAccordionContent** — Accordion content wrapping Reka UI
   - part of `DzAccordion`
 - **DzAccordionItem** — Accordion item wrapping Reka UI AccordionItem (ADR-07).
@@ -580,6 +652,7 @@ These hold for every component below, so they are stated once here:
   - props: `disabled`, `value`
 - **DzAccordionTrigger** — Accordion trigger wrapping Reka UI
   - part of `DzAccordion`
+  - props: `ui`
 - **DzDataGridBody** — Internal body sub-part for DzDataGrid.
   - part of `DzDataGrid`
   - props: `rowKey`
@@ -615,9 +688,10 @@ These hold for every component below, so they are stated once here:
   - props: `ariaLabel`, `id`, `max`, `size`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
 - **DzCarousel** — Image/content carousel with autoplay and navigation.
-  - props: `autoplay`, `disabled`, `interval`, `loop`, `orientation`, `size`
+  - props: `autoplay`, `disabled`, `interval`, `loop`, `orientation`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
+  - parts (ADR-19): `action`, `content`, `item`, `item-indicator`, `list`, `root`, `viewport`
 - **DzEmoji** — Accessible emoji renderer with consistent sizing.
   - props: `emoji`, `id`, `label`, `size`
 - **DzIcon** — Icon wrapper component with consistent sizing and accessibility.
@@ -625,11 +699,13 @@ These hold for every component below, so they are stated once here:
 - **DzImage** — Enhanced image component with loading and error states.
   - props: `alt`, `aspectRatio`, `fallback`, `fit`, `lazy`, `src`
 - **DzImageComparison** — draggable before/after image reveal slider (ADR-16 defineModel).
-  - props: `afterAlt`, `afterLabel`, `afterSrc`, `beforeAlt`, `beforeLabel`, `beforeSrc`, `disabled`, `orientation`, `step`
+  - props: `afterAlt`, `afterLabel`, `afterSrc`, `beforeAlt`, `beforeLabel`, `beforeSrc`, `disabled`, `orientation`, `step`, `ui`
   - v-model: `v-model:position`
+  - parts (ADR-19): `control`, `label`, `panel`, `root`, `separator`
 - **DzLightbox** — Fullscreen image viewer overlay.
-  - props: `images`, `startIndex`
+  - props: `images`, `startIndex`, `ui`
   - v-model: `v-model`
+  - parts (ADR-19): `action`, `close`, `content`, `description`, `label`, `overlay`
 - **DzQRCode** — Token-styled QR code renderer.
   - props: `background`, `color`, `errorLevel`, `icon`, `margin`, `size`, `status`, `value`
 - **DzWatermark** — tiled content watermark overlay.
@@ -674,7 +750,7 @@ These hold for every component below, so they are stated once here:
 ## Providers
 
 - **DzProvider** — one root component for every concern an application configures.
-  - props: `defaults`, `direction`, `formats`, `locale`, `messages`, `motion`, `nonce`, `portal`, `testIdPrefix`, `testIds`, `theme`
+  - props: `defaults`, `direction`, `formats`, `locale`, `messages`, `motion`, `nonce`, `portal`, `sanitizer`, `testIdPrefix`, `testIds`, `theme`
 - **DzThemeProvider** — Provides theme context to the component tree.
   - props: `attribute`, `defaultTheme`, `disableTransitionOnChange`, `storageKey`
 

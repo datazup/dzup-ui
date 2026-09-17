@@ -28,7 +28,8 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * ```
  */
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
-import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
@@ -51,7 +52,10 @@ defineOptions({
  * writes go to both.
  */
 const legacyValueModel = defineModel<DzCascaderValue>('value', { default: () => [] })
+
+/** The selected path as an array of keys, root first, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). */
 const primaryModel = defineModel<DzCascaderValue | undefined>({ default: undefined })
+
 const props = withDefaults(defineProps<DzCascaderProps>(), {
   optionsState: undefined,
   optionsError: undefined,
@@ -82,7 +86,13 @@ const props = withDefaults(defineProps<DzCascaderProps>(), {
 })
 
 const emit = defineEmits<DzCascaderEmits>()
+
 defineSlots<DzCascaderSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 // The async-options rows are one shared group across all seven selection
 // controls, so a translator writes them once (renderer contract C9).
@@ -384,6 +394,12 @@ function onColumnsKeydown(event: KeyboardEvent): void {
   const cols = columns.value
   const a = active.value ?? { col: 0, index: firstEnabledIndex(0) }
   const opts = cols[a.col] ?? []
+
+  // A cascader steps along the INLINE axis: 'into the child column' is the
+  // forward key, which is ArrowLeft in an RTL document (ADR-20 §4, TASK-R5-O3).
+  const intoKey = dzDirection.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
+  const outKey = dzDirection.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+
   switch (event.key) {
     case 'ArrowDown':
       event.preventDefault()
@@ -395,7 +411,7 @@ function onColumnsKeydown(event: KeyboardEvent): void {
       active.value = { col: a.col, index: stepIndex(opts, a.index, -1) }
       focusActive()
       break
-    case 'ArrowRight': {
+    case intoKey: {
       event.preventDefault()
       const opt = opts[a.index]
       if (opt && hasChildren(opt) && !opt.disabled) {
@@ -404,7 +420,7 @@ function onColumnsKeydown(event: KeyboardEvent): void {
       }
       break
     }
-    case 'ArrowLeft': {
+    case outKey: {
       event.preventDefault()
       if (a.col > 0) {
         const parent = activePath.value[a.col - 1]
@@ -509,11 +525,15 @@ const rootClasses = computed(() =>
 const showCleaner = computed(
   () => props.cleaner && hasValue.value && !resolvedDisabled.value && !resolvedReadonly.value,
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
@@ -522,7 +542,7 @@ const showCleaner = computed(
     :data-loading="loading ? '' : undefined"
     :aria-busy="loading || undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-cascader'), ...$attrs, class: undefined }"
   >
     <PopoverRoot v-model:open="open">
       <PopoverTrigger
@@ -533,7 +553,8 @@ const showCleaner = computed(
           :id="resolvedId"
           type="button"
           role="combobox"
-          :class="styles.trigger()"
+          data-part="trigger"
+          :class="[styles.trigger(), ui?.trigger]"
           :aria-label="ariaLabel"
           :aria-labelledby="ariaLabelledby"
           :aria-describedby="resolvedAriaDescribedby"
@@ -553,13 +574,14 @@ const showCleaner = computed(
             :value="model"
             :labels="displayLabels"
           >
-            <span v-if="hasValue" :class="styles.valueText()">{{ displayText }}</span>
-            <span v-else :class="styles.placeholder()">{{ placeholder }}</span>
+            <span v-if="hasValue" data-part="label" :class="[styles.valueText(), ui?.label]">{{ displayText }}</span>
+            <span v-else data-part="label" :class="[styles.placeholder(), ui?.label]">{{ placeholder }}</span>
           </slot>
 
           <span
             v-if="showCleaner"
-            :class="styles.cleaner()"
+            data-part="clear"
+            :class="[styles.cleaner(), ui?.clear]"
             role="button"
             tabindex="-1"
             :aria-label="dzMessages.clearSelection"
@@ -570,7 +592,7 @@ const showCleaner = computed(
             <X class="h-3.5 w-3.5" aria-hidden="true" />
           </span>
 
-          <ChevronDown :class="styles.icon()" aria-hidden="true" />
+          <ChevronDown data-part="icon" :class="[styles.icon(), ui?.icon]" aria-hidden="true" />
         </button>
       </PopoverTrigger>
 
@@ -580,18 +602,21 @@ const showCleaner = computed(
         :defer="portalDefer"
       >
         <PopoverContent
+          data-part="content"
           :side-offset="4"
           align="start"
           class="z-50"
+          :class="[ui?.content]"
         >
-          <div :id="panelId" ref="panelEl" :class="styles.panel()">
+          <div :id="panelId" ref="panelEl" data-part="panel" :class="[styles.panel(), ui?.panel]">
             <!-- Filter (search) input -->
             <div v-if="filter" :class="styles.search()">
               <input
                 type="text"
                 :value="searchQuery"
+                data-part="input"
                 :placeholder="resolvedSearchPlaceholder"
-                :class="styles.searchInput()"
+                :class="[styles.searchInput(), ui?.input]"
                 role="searchbox"
                 :aria-label="dzMessages.searchPaths"
                 data-dz-cascader-search
@@ -619,7 +644,8 @@ const showCleaner = computed(
             <!-- Flat results (filter mode, with a query) -->
             <div
               v-else-if="showFlat"
-              :class="styles.flatList()"
+              data-part="list"
+              :class="[styles.flatList(), ui?.list]"
               role="listbox"
               :aria-label="dzMessages.matchingPaths"
             >
@@ -628,14 +654,15 @@ const showCleaner = computed(
                 :key="`flat-${i}`"
                 type="button"
                 role="option"
-                :class="styles.flatItem()"
+                data-part="item"
+                :class="[styles.flatItem(), ui?.item]"
                 :disabled="entry.disabled"
                 :aria-disabled="entry.disabled || undefined"
                 @click="selectFlat(entry)"
               >
                 {{ entry.labels.join(` ${separator} `) }}
               </button>
-              <div v-if="filteredPaths.length === 0" :class="styles.empty()" data-dz-cascader-empty>
+              <div v-if="filteredPaths.length === 0" data-part="empty" :class="[styles.empty(), ui?.empty]" data-dz-cascader-empty>
                 {{ resolvedNoResultsText }}
               </div>
             </div>
@@ -643,13 +670,15 @@ const showCleaner = computed(
             <!-- Sliding columns -->
             <div
               v-else
-              :class="styles.columns()"
+              data-part="list"
+              :class="[styles.columns(), ui?.list]"
               @keydown="onColumnsKeydown"
             >
               <ul
                 v-for="(col, colIndex) in columns"
                 :key="`col-${colIndex}`"
-                :class="styles.column()"
+                data-part="group"
+                :class="[styles.column(), ui?.group]"
                 role="listbox"
                 :aria-label="`Level ${colIndex + 1}`"
                 data-cascader-column
@@ -664,7 +693,8 @@ const showCleaner = computed(
                     role="option"
                     :data-col="colIndex"
                     :data-index="idx"
-                    :class="styles.option()"
+                    data-part="item"
+                    :class="[styles.option(), ui?.item]"
                     :aria-selected="isInPath(colIndex, opt)"
                     :aria-disabled="opt.disabled || undefined"
                     :aria-expanded="hasChildren(opt) ? isInPath(colIndex, opt) : undefined"
@@ -675,10 +705,11 @@ const showCleaner = computed(
                     @click="selectOption(colIndex, opt, idx)"
                     @mouseenter="expandTrigger === 'hover' ? expandOnHover(colIndex, opt, idx) : undefined"
                   >
-                    <span :class="styles.optionLabel()">{{ opt.label }}</span>
+                    <span data-part="item-label" :class="[styles.optionLabel(), ui?.['item-label']]">{{ opt.label }}</span>
                     <ChevronRight
                       v-if="hasChildren(opt)"
-                      :class="styles.optionArrow()"
+                      data-part="item-indicator"
+                      :class="[styles.optionArrow(), ui?.['item-indicator']]"
                       aria-hidden="true"
                     />
                   </button>
@@ -702,7 +733,9 @@ const showCleaner = computed(
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

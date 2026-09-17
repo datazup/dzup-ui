@@ -19,6 +19,14 @@ Color selection component with popover panel.
 - **Risk tier:** C · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **v-model:** `v-model` (`string | undefined`)
+- **Anatomy parts (ADR-19):** `content`, `error`, `group`, `indicator`, `input`, `item`, `label`, `panel`, `root`, `trigger`
+
+## Intent and selection guidance
+
+**Not declared.** `DzColorPicker` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (18, of which 11 inherited from `@dzup-ui/contracts`)
+## Props (19, of which 11 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -53,7 +61,7 @@ never as asserted.
 | `error` | `string \| undefined` | no | `undefined` | Error message to display |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `invalid` | `boolean \| undefined` | no | `false` | Whether the field value is invalid |
-| `modelValue` | `string \| undefined` | no | `""` | — |
+| `modelValue` | `string \| undefined` | no | `""` | The selected colour as a CSS colour string (hex or `rgb()`); the default empty string selects none. |
 | `name` | `string \| undefined` | no | `undefined` | Form field name |
 | `portalDefer` | `boolean \| undefined` | no | `false` | Defer target resolution until the application has mounted. |
 | `portalDisabled` | `boolean \| undefined` | no | `false` | Render inline instead of teleporting to the portal target. |
@@ -62,6 +70,7 @@ never as asserted.
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `showInput` | `boolean \| undefined` | no | `true` | Show hex/rgb text input |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
+| `ui` | `Partial<Record<"root" \| "item" \| "trigger" \| "indicator" \| "content" \| "error" \| "group" \| "label" \| "panel" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzColorPicker.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; the panel parts render into a portal, where `class` never reached them. |
 
 ## Events (4)
 
@@ -70,7 +79,7 @@ never as asserted.
 | `blur` | `[event: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `focus` | `[event: FocusEvent]` | Focus gained |
-| `update:modelValue` | `[value: string]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (2)
 
@@ -91,6 +100,130 @@ Editable, running the **Size Gallery** story from `packages/core/stories/forms/D
 
 <DzPlayground component="DzColorPicker" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzColorPicker />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzColorPicker v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzColorPicker :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 11 stories in
+`packages/core/stories/forms/DzColorPicker.stories.ts`: `Default`, `Size Gallery`, `Without Presets`, `Without Text Input`, `Disabled`, `Invalid State`, `States`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Brand Color`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `content` | `[data-part="content"]` | no — renders zero or more than once |
+| `error` | `[data-part="error"]` | no — renders zero or more than once |
+| `group` | `[data-part="group"]` | no — renders zero or more than once |
+| `indicator` | `[data-part="indicator"]` | no — renders zero or more than once |
+| `input` | `[data-part="input"]` | no — renders zero or more than once |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `label` | `[data-part="label"]` | no — renders zero or more than once |
+| `panel` | `[data-part="panel"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `trigger` | `[data-part="trigger"]` | yes |
+
+```vue
+<DzColorPicker :ui="{ 'content': 'ring-2', 'error': 'ring-2', 'group': 'ring-2', 'indicator': 'ring-2', 'input': 'ring-2', 'item': 'ring-2', 'label': 'ring-2', 'panel': 'ring-2', 'root': 'ring-2', 'trigger': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `closed` | `[data-state="closed"]` |
+| `disabled` | `[data-state="disabled"]` |
+| `open` | `[data-state="open"]` |
+| `required` | `[data-state="required"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/forms/DzColorPicker.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMessages` | the translated string catalogue |
+| `useDzPortalTarget` | where teleported content is mounted |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzColorPicker.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzColorPicker` advertises 4 states:
+`closed`, `disabled`, `open`, `required`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzColorPicker.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e986952`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -98,8 +231,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 18 | 17 | 10 declare a default, of which 8 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 4 | 3 | 3 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 19 | 19 | 10 declare a default, of which 8 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 4 | 4 | 3 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 2 | 2 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -107,8 +240,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -117,7 +250,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** `custom` — no WAI-ARIA Authoring Practices pattern describes this component.
 - **Traits:** `teleports`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `e986952e`
 
 **Why this pattern:** A popover panel combining a saturation surface, hue and alpha sliders and a text field over one colour model. APG has no colour-picker pattern; the sliders inside it follow the slider pattern individually.
@@ -152,14 +285,24 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**6 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- |
+| `ArrowRight` | Move the colour pointer one step along the saturation axis. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | fixed — maps to a visible direction |
+| `ArrowLeft` | Move the colour pointer one step back along the saturation axis. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | fixed — maps to a visible direction |
+| `ArrowUp` | Move the colour pointer one step up the value axis. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `ArrowDown` | Move the colour pointer one step down the value axis. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `Home` | Move the colour pointer to the start of the axis. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+| `End` | Move the colour pointer to the end of the axis. | `2.1.1` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | — |
+
+Declared in `packages/core/src/components/forms/DzColorPicker.anatomy.ts`.
 
 - **Pattern:** `custom` — **no APG pattern applies**, so there is no external
   keyboard contract to link. The recorded reason is quoted above.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 6 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowUp`, `ArrowDown`, `Home`, `End`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -193,19 +336,19 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzColorPicker.spec.ts` — The component declares 6 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowUp`, `ArrowDown`, `Home`, `End`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzColorPicker.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzColorPicker.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

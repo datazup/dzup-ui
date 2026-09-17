@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
 import type { CountdownRemaining } from '../../composables/useCountdown/index.ts'
 import type {
   DzCountdownEmits,
@@ -6,6 +7,7 @@ import type {
   DzCountdownSlots,
 } from './DzCountdown.types.ts'
 import { computed, ref, useAttrs, watch } from 'vue'
+import { useDzDefaults } from '../../composables/provider/useDzEnvironment.ts'
 import { formatRemaining, useCountdown } from '../../composables/useCountdown/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { countdownVariants } from './DzCountdown.variants.ts'
@@ -37,8 +39,8 @@ const props = withDefaults(defineProps<DzCountdownProps>(), {
   interval: 1000,
   autoStart: true,
   pauseOnHidden: false,
-  size: 'md',
-  tone: 'neutral',
+  size: undefined,
+  tone: undefined,
   id: undefined,
   ariaLabel: undefined,
   ariaLabelledby: undefined,
@@ -61,12 +63,38 @@ const { remaining, finished, start, pause, reset } = useCountdown({
   onFinish: () => emit('finish'),
 })
 
-defineExpose({ start, pause, reset })
+defineExpose({
+  /** Start, or resume from a pause. No-op while already running or once finished. */
+  start,
+  /** Stop the timer and freeze the remaining time, so a later `start()` resumes from here. No-op when not running. */
+  pause,
+  /** Stop the timer and restore the initial remaining time, clearing the finished state. */
+  reset,
+})
 
 /** The figure shown to sighted users, formatted against the token string. */
 const formatted = computed(() => formatRemaining(remaining.value.total, props.format))
 
-const styles = computed(() => countdownVariants({ size: props.size, tone: props.tone }))
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * Each axis keeps the literal it carried in `withDefaults` as `resolve`'s last
+ * link, and BOTH readers move together — the `tv()` recipe and the `data-size`
+ * / `data-tone` attributes ADR-19 publishes.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzCountdown', 'size', [props.size]) ?? 'md',
+)
+
+/** Resolved tone: prop, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzCountdown', 'tone', [props.tone]) ?? 'neutral',
+)
+
+const styles = computed(() => countdownVariants({ size: resolvedSize.value, tone: resolvedTone.value }))
 
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
@@ -112,8 +140,8 @@ watch(
   <div
     :id="id"
     :class="rootClasses"
-    :data-size="size"
-    :data-tone="tone"
+    :data-size="resolvedSize"
+    :data-tone="resolvedTone"
     :data-finished="finished ? '' : undefined"
     role="timer"
     :aria-label="ariaLabel"

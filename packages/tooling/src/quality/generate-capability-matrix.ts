@@ -23,6 +23,7 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { basename, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { parseAnatomySource } from '../ownership/anatomy-source.ts'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 import { readBaselineFile } from '../perf/read-baselines.ts'
 import { checkStoryDod } from '../validators/story-dod.ts'
@@ -467,17 +468,76 @@ function resolveCell(
       return cell(kind, origin, { state: has ? 'present' : 'unrun', artifacts: [story] })
     }
 
+    // TASK-R5-O5 replaced the regex boolean here.
+    //
+    // It used to test the unit spec against
+    // `/Arrow(?:Up|Down|Left|Right)|['"]Tab['"]|['"]Escape['"]|['"]Enter['"]|keydown/`
+    // and report `present` on a single hit — *that* some key is asserted, never
+    // *which*. A component declaring nine bindings and asserting one scored the
+    // same as a component asserting all nine, and the docs had nothing better
+    // to render than "not yet derived".
+    //
+    // Now the component's own declared keyboard contract is the yardstick: the
+    // cell measures how many of the keys the component PROMISES its spec
+    // actually exercises, and names the ones it does not. Where no contract is
+    // declared the old presence test still applies — that is the honest floor
+    // for a component that has not written its contract down, and the note says
+    // so rather than scoring it as if it had.
     case 'keyboard-spec': {
       const path = sidecar(sources, row, '.spec.ts')
       if (path === undefined)
         return cell(kind, origin, { state: 'unrun' })
       const source = readFileSync(resolve(ROOT, path), 'utf8')
-      const has = /Arrow(?:Up|Down|Left|Right)|['"]Tab['"]|['"]Escape['"]|['"]Enter['"]|keydown/
-        .test(source)
+      const anatomyPath = sidecar(sources, row, '.anatomy.ts')
+      const contract = anatomyPath === undefined
+        ? undefined
+        : parseAnatomySource(readFileSync(resolve(ROOT, anatomyPath), 'utf8'), anatomyPath)
+          .anatomy
+          ?.keyboard
+
+      if (contract === 'none') {
+        return cell(kind, origin, {
+          state: 'excepted',
+          artifacts: [path],
+          note: 'The component declares `keyboard: \'none\'` — an explicit claim that it has no '
+            + 'keyboard behaviour of its own, so there is no key sequence for a spec to assert.',
+        })
+      }
+
+      if (contract === undefined) {
+        const has = /Arrow(?:Up|Down|Left|Right)|['"]Tab['"]|['"]Escape['"]|['"]Enter['"]|keydown/
+          .test(source)
+        return cell(kind, origin, {
+          state: has ? 'present' : 'unrun',
+          artifacts: has ? [path] : [],
+          note: has
+            ? 'Presence only: the component declares no keyboard contract, so this measures that '
+            + 'SOME key is asserted, not which. Declare `keyboard` in its anatomy to measure the '
+            + 'keys it promises.'
+            : 'The unit spec exists and asserts no key sequence.',
+        })
+      }
+
+      // Each declared key, as the spec would have to spell it. `' '` is written
+      // as `' '` or as `'Space'` in practice, and both count.
+      const unasserted = contract
+        .map(b => b.key)
+        .filter((key, index, all) => all.indexOf(key) === index)
+        .filter((key) => {
+          if (key.startsWith('<'))
+            return false // a character class — no single literal to look for
+          const spellings = key === ' ' ? ['\' \'', '"Space"', '\'Space\''] : [`'${key}'`, `"${key}"`]
+          return !spellings.some(s => source.includes(s))
+        })
+      const declared = contract.length
       return cell(kind, origin, {
-        state: has ? 'present' : 'unrun',
-        artifacts: has ? [path] : [],
-        note: has ? undefined : 'The unit spec exists and asserts no key sequence.',
+        state: unasserted.length === 0 ? 'present' : 'unrun',
+        artifacts: [path],
+        note: unasserted.length === 0
+          ? `All ${declared} declared binding(s) are exercised by the unit spec.`
+          : `The component declares ${declared} binding(s); the unit spec asserts no key event for `
+            + `${unasserted.map(k => `\`${k === ' ' ? 'Space' : k}\``).join(', ')}. `
+            + 'The contract is the yardstick, not the presence of any key at all.',
       })
     }
 

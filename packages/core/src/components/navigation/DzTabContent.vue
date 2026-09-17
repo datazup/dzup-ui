@@ -46,6 +46,7 @@ const classes = computed(() =>
 
 <template>
   <TabsContent
+    data-part="content"
     :value="value"
     :force-mount="forceMount"
     :class="classes"

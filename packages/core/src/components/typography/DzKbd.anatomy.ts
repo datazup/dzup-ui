@@ -35,6 +35,12 @@ export const anatomy = {
   /** The key sequence runs along the inline axis and flips with the document. */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Presentational — it DEPICTS a key, it
+   * does not answer one.
+   */
+  keyboard: 'none',
+
   /** Tier A — presentational. It takes no focus and holds no value. */
   riskTier: 'A',
 } as const satisfies ComponentAnatomy

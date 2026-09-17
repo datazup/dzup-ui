@@ -18,6 +18,13 @@ Visual separator component.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** A · **Status:** stable
 
+## Intent and selection guidance
+
+**Not declared.** `DzDivider` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -68,6 +75,66 @@ Editable, running the **Orientation Gallery** story from `packages/core/stories/
 
 <DzPlayground component="DzDivider" />
 
+## Variants and controlled state
+
+**Not declared.** `DzDivider` declares no recipe axes in its anatomy and exposes no
+`v-model` pair, so it has neither variants to list nor a controlled form to show. For a
+presentational component that is the whole truth; for an interactive one it means the anatomy
+has not been written down yet.
+
+## Parts, states and tokens
+
+**Not declared.** `DzDivider` has no `DzDivider.anatomy.ts`, so
+nothing here says which nodes you may address, which states it advertises or which custom
+properties it reads. **That is not the same claim as having none** — it is that nobody has
+written them down. Until the declaration exists, a descendant selector against generated
+`tailwind-variants` class names is the only way in, and those names are free to change.
+
+## Provider defaults and context
+
+**Not declared.** `DzDivider` calls no `DzProvider` reader, so **nothing an application
+sets on the provider reaches it** — not the locale, not the motion preference, not the
+direction, not the test-id prefix. Every value it uses comes from its own props and defaults.
+That is measured from its source rather than assumed, and it is a gap in the component (ADR-20
+adoption), not in this page.
+
+## Locale, direction and formats
+
+**Not declared.** `DzDivider` declares no `rtl` contract, so this page cannot say
+whether its layout mirrors, whether the arrow keys swap, or which of its icons carry
+direction. "Does it mirror?" has three defensible answers and only the component knows which
+applies; leaving it undeclared is how a catalogue ends up mirroring some things and not
+others for no stated reason.
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is not a requirement at this tier, so nothing measures it.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+**Not declared.** `DzDivider` declares no anatomy, so there is no state union to show
+examples for.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `80ce301`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -84,8 +151,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -117,10 +184,11 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**Not declared.** This component declares no keyboard contract, so this page cannot say which
+key does what. **That is not a claim that it has no keyboard behaviour** — a component with
+none declares `keyboard: 'none'` explicitly, and those two facts are deliberately not
+collapsed. The contract is declared beside the component in its `*.anatomy.ts`; until it is,
+the only thing measuring this component's keyboard is the presence boolean below.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.

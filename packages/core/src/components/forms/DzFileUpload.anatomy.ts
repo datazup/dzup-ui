@@ -51,6 +51,16 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
+   * Keyboard contract (TASK-R5-O5). APG `button` on the drop zone — the
+   * keyboard path to a control whose other affordance is a pointer-only
+   * drag, which is what SC 2.1.1 requires of it.
+   */
+  keyboard: [
+    { key: 'Enter', when: 'dropzone', action: 'Open the file picker.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', when: 'dropzone', action: 'Open the file picker.', wcag: ['2.1.1'], apg: 'button' },
+  ],
+
+  /**
    * Tier D — security or data boundary. It reads files the user chooses, over
    * both a picker and a drop target, and hands them to the host. See
    * `packages/core/security/DzFileUpload.threat-model.md`.

@@ -17,6 +17,7 @@ import type { DzToolbarProps, DzToolbarSlots } from './DzToolbar.types.ts'
  * ```
  */
 import { computed, useAttrs, useSlots } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { toolbarRegionVariants, toolbarVariants } from './DzToolbar.variants.ts'
 
@@ -53,8 +54,12 @@ const classes = computed(() =>
       sticky: props.sticky || undefined,
     }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -68,10 +73,11 @@ const classes = computed(() =>
     :aria-describedby="ariaDescribedby"
     :data-size="size"
     :data-variant="variant"
+    data-part="root"
     :class="classes"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-toolbar'), ...$attrs, class: undefined }"
   >
-    <div :class="toolbarRegionVariants({ region: 'start' })" data-toolbar-region="start">
+    <div data-part="group" :class="cn(toolbarRegionVariants({ region: 'start' }), props.ui?.group)" data-toolbar-region="start">
       <slot name="start">
         <slot />
       </slot>
@@ -79,14 +85,15 @@ const classes = computed(() =>
 
     <div
       v-if="hasCenter"
-      :class="toolbarRegionVariants({ region: 'center' })"
+      data-part="group"
+      :class="cn(toolbarRegionVariants({ region: 'center' }), props.ui?.group)"
       data-toolbar-region="center"
     >
       <slot name="center" />
     </div>
     <div v-else aria-hidden="true" class="flex-1" data-toolbar-region="spacer" />
 
-    <div v-if="hasEnd" :class="toolbarRegionVariants({ region: 'end' })" data-toolbar-region="end">
+    <div v-if="hasEnd" data-part="group" :class="cn(toolbarRegionVariants({ region: 'end' }), props.ui?.group)" data-toolbar-region="end">
       <slot name="end" />
     </div>
   </component>

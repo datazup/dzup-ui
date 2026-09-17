@@ -16,6 +16,7 @@ import type { DzCheckboxGroupContext, DzCheckboxGroupEmits, DzCheckboxGroupProps
  * ```
  */
 import { computed, provide, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import {
@@ -27,6 +28,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Values of the options that are checked; the default empty array checks none. */
 const model = defineModel<string[]>({ default: () => [] })
 
 const props = withDefaults(defineProps<DzCheckboxGroupProps>(), {
@@ -94,11 +96,15 @@ const classes = computed(() =>
     attrs.class as string | undefined,
   ),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="resolvedId"
+    data-part="root"
     :class="classes"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
@@ -109,7 +115,7 @@ const classes = computed(() =>
     :data-orientation="orientation"
     role="group"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-checkbox-group'), ...$attrs, class: undefined }"
   >
     <slot />
   </div>

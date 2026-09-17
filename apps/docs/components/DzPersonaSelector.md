@@ -18,6 +18,14 @@ Searchable persona picker.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/forms`
 - **Risk tier:** C · **Status:** experimental
 - **v-model:** `v-model` (`string | undefined`)
+- **Anatomy parts (ADR-19):** `clear`, `content`, `control`, `empty`, `error`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`, `viewport`
+
+## Intent and selection guidance
+
+**Not declared.** `DzPersonaSelector` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -39,21 +47,22 @@ never as asserted.
 :::
 
 
-## Props (4)
+## Props (5)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state |
-| `modelValue` | `string \| undefined` | no | `""` | — |
+| `modelValue` | `string \| undefined` | no | `""` | Id of the selected persona; the default empty string selects none. |
 | `personas` | `Persona[]` | yes | — | Available personas |
 | `placeholder` | `string \| undefined` | no | `"Select persona"` | Placeholder text for the search input |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzPersonaSelector.anatomy.ts` (ADR-19 §5). This component renders no element of its own, so the map is forwarded whole to the `DzCombobox` that is* its root — one map still reaches every part the declaration names. |
 
 ## Events (2)
 
 | Event | Payload | Description |
 | --- | --- | --- |
 | `change` | `[persona: Persona \| undefined]` | Fires with the full persona object when one is selected |
-| `update:modelValue` | `[value: string]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (2)
 
@@ -74,6 +83,144 @@ Editable, running the **Avatars & Initials Fallback** story from `packages/core/
 
 <DzPlayground component="DzPersonaSelector" />
 
+## Variants and controlled state
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzPersonaSelector />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzPersonaSelector v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzPersonaSelector :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 10 stories in
+`packages/core/stories/forms/DzPersonaSelector.stories.ts`: `Default`, `Avatars & Initials Fallback`, `Empty State`, `Disabled`, `Interactive`, `Dark Mode Preview`, `Open & Select`, `States`, `Accessibility: Keyboard-Only Assignment`, `Real World: Review Request`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `clear` | `[data-part="clear"]` | no — renders zero or more than once |
+| `content` | `[data-part="content"]` | no — renders zero or more than once |
+| `control` | `[data-part="control"]` | no — renders zero or more than once |
+| `empty` | `[data-part="empty"]` | no — renders zero or more than once |
+| `error` | `[data-part="error"]` | no — renders zero or more than once |
+| `icon` | `[data-part="icon"]` | no — renders zero or more than once |
+| `input` | `[data-part="input"]` | no — renders zero or more than once |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `item-indicator` | `[data-part="item-indicator"]` | no — renders zero or more than once |
+| `item-label` | `[data-part="item-label"]` | no — renders zero or more than once |
+| `options-message` | `[data-part="options-message"]` | no — renders zero or more than once |
+| `options-retry` | `[data-part="options-retry"]` | no — renders zero or more than once |
+| `options-state` | `[data-part="options-state"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | no — renders zero or more than once |
+| `trigger` | `[data-part="trigger"]` | no — renders zero or more than once |
+| `viewport` | `[data-part="viewport"]` | no — renders zero or more than once |
+
+```vue
+<DzPersonaSelector :ui="{ 'clear': 'ring-2', 'content': 'ring-2', 'control': 'ring-2', 'empty': 'ring-2', 'error': 'ring-2', 'icon': 'ring-2', 'input': 'ring-2', 'item': 'ring-2', 'item-indicator': 'ring-2', 'item-label': 'ring-2', 'options-message': 'ring-2', 'options-retry': 'ring-2', 'options-state': 'ring-2', 'root': 'ring-2', 'trigger': 'ring-2', 'viewport': 'ring-2' }" />
+```
+
+**Where your `class` lands** — on another component, which this one wraps.
+
+Your `class`, `id` and `data-*` land on the `root` part —
+`[data-part="root"]`.
+This component renders no element of its own: its root **is** a `DzCombobox`, and your attributes pass straight through to it.
+
+The merge order above still holds: your `class` beats `ui.root`.
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `checked` | `[data-state="checked"]` |
+| `closed` | `[data-state="closed"]` |
+| `disabled` | `[data-state="disabled"]` |
+| `idle` | `[data-state="idle"]` |
+| `invalid` | `[data-state="invalid"]` |
+| `loading` | `[data-state="loading"]` |
+| `open` | `[data-state="open"]` |
+| `required` | `[data-state="required"]` |
+| `unchecked` | `[data-state="unchecked"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/forms/DzPersonaSelector.anatomy.ts`.
+
+## Provider defaults and context
+
+**Not declared.** `DzPersonaSelector` calls no `DzProvider` reader, so **nothing an application
+sets on the provider reaches it** — not the locale, not the motion preference, not the
+direction, not the test-id prefix. Every value it uses comes from its own props and defaults.
+That is measured from its source rather than assumed, and it is a gap in the component (ADR-20
+adoption), not in this page.
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | `icon` | These parts render a direction-bearing icon and mirror with the layout. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzPersonaSelector.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
+
+| Security lane | State |
+| --- | --- |
+| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. |
+| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `csp-fixture` | Not owed at this boundary. |
+| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzPersonaSelector` advertises 9 states:
+`checked`, `closed`, `disabled`, `idle`, `invalid`, `loading`, `open`, `required`, `unchecked`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzPersonaSelector.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `80ce301`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -81,8 +228,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 4 | 3 | 3 declare a default |
-| Events | 2 | 1 | 1 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 5 | 5 | 3 declare a default |
+| Events | 2 | 2 | 1 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 2 | 2 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -90,8 +237,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -100,7 +247,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `url` — Persona rows carry an avatar `src` supplied by the host.
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `80ce3012`
 
 **Why this pattern:** A searchable picker over a consumer-supplied collection, each row carrying an avatar image from a host URL.
@@ -136,14 +283,25 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**7 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `ArrowDown` | Move focus to the next option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `ArrowUp` | Move focus to the previous option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Home` | Move focus to the first option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `End` | Move focus to the last option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Enter` | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Space` | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| any character key | Move focus to the next option whose label starts with that character. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+
+Declared in `packages/core/src/components/forms/DzPersonaSelector.anatomy.ts`.
 
 - **Pattern:** [APG — `listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -177,12 +335,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzPersonaSelector.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzPersonaSelector.spec.ts` — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzPersonaSelector.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzPersonaSelector.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzPersonaSelector.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/forms/DzPersonaSelector.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzPersonaSelector.stories.ts` |
@@ -193,7 +351,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

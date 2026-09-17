@@ -21,6 +21,15 @@ export const anatomy = {
   recipes: ['variant', 'size', 'tone'],
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Native `button` activation against
+   * `aria-pressed`, so both keys TOGGLE rather than set.
+   */
+  keyboard: [
+    { key: 'Enter', action: 'Toggle the pressed state.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', action: 'Toggle the pressed state.', wcag: ['2.1.1'], apg: 'button' },
+  ],
+
   /** Tier B — owns focus, keyboard activation and a boolean value. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

@@ -19,6 +19,13 @@ a figure that counts from its previous value to the next.
 - **Risk tier:** A · **Status:** experimental
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
+## Intent and selection guidance
+
+**Not declared.** `DzAnimatedNumber` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
+
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
 never as asserted.
@@ -53,9 +60,9 @@ never as asserted.
 | `from` | `number \| undefined` | no | `0` | Value the first animation starts from (the count-up origin). Subsequent changes animate from the currently-displayed value, not this. |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `locale` | `string \| string[] \| undefined` | no | `undefined` | BCP-47 locale(s) for formatting (defaults to the runtime locale) |
-| `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size — scales the figure |
+| `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size — scales the figure |
 | `startOnView` | `boolean \| undefined` | no | `true` | Begin the first animation only once scrolled into view, via IntersectionObserver. Later value changes always animate immediately. |
-| `tone` | `CanonicalTone \| undefined` | no | `"neutral"` | Semantic colour tone of the figure |
+| `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic colour tone of the figure |
 | `value` | `number` | yes | — | The target value; animates from the previous value whenever this changes |
 
 ## Events (2)
@@ -102,6 +109,71 @@ No editable playground is published for this component.
 
 Every story in `packages/core/stories/data/DzAnimatedNumber.stories.ts` either has a computed template or binds Storybook's `args`, neither of which can be mounted outside Storybook. A playground here would have to be written by hand, and a hand-written example is not evidence of anything.
 
+## Variants and controlled state
+
+**Not declared.** `DzAnimatedNumber` declares no recipe axes in its anatomy and exposes no
+`v-model` pair, so it has neither variants to list nor a controlled form to show. For a
+presentational component that is the whole truth; for an interactive one it means the anatomy
+has not been written down yet.
+
+## Parts, states and tokens
+
+**Not declared.** `DzAnimatedNumber` has no `DzAnimatedNumber.anatomy.ts`, so
+nothing here says which nodes you may address, which states it advertises or which custom
+properties it reads. **That is not the same claim as having none** — it is that nobody has
+written them down. Until the declaration exists, a descendant selector against generated
+`tailwind-variants` class names is the only way in, and those names are free to change.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDefaults` | per-component prop defaults (`size`, `variant`, `tone`, `density`) |
+| `useDzFormats` | number, date and currency formatting |
+| `useDzLocale` | the active locale |
+| `useDzMotion` | the motion preference, including `prefers-reduced-motion` |
+
+## Locale, direction and formats
+
+**Not declared.** `DzAnimatedNumber` declares no `rtl` contract, so this page cannot say
+whether its layout mirrors, whether the arrow keys swap, or which of its icons carry
+direction. "Does it mirror?" has three defensible answers and only the component knows which
+applies; leaving it undeclared is how a catalogue ends up mirroring some things and not
+others for no stated reason.
+
+**Locale and formats.** Reads `useDzFormats`, `useDzLocale` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is not a requirement at this tier, so nothing measures it.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+**Not declared.** `DzAnimatedNumber` declares no anatomy, so there is no state union to show
+examples for.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `4c9fb7a`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -109,17 +181,17 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 14 | 14 | 6 declare a default, of which 7 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 14 | 14 | 4 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 2 | 2 | 2 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
 | Slots | 2 | 2 | 2 carry slot props |
-| Exposed on `ref` | 2 | 0 | no description exists in source for any exposed member, catalog-wide |
+| Exposed on `ref` | 2 | 2 | no description exists in source for any exposed member, catalog-wide |
 
 ## Accessibility and evidence
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -153,10 +225,11 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**Not declared.** This component declares no keyboard contract, so this page cannot say which
+key does what. **That is not a claim that it has no keyboard behaviour** — a component with
+none declares `keyboard: 'none'` explicitly, and those two facts are deliberately not
+collapsed. The contract is declared beside the component in its `*.anatomy.ts`; until it is,
+the only thing measuring this component's keyboard is the presence boolean below.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.

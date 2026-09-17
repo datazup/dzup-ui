@@ -33,7 +33,8 @@ import {
  * ```
  */
 import { computed, nextTick, ref, useAttrs, useId } from 'vue'
-import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
@@ -44,6 +45,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Value of the selected option; the default empty string selects none. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzSelectProps>(), {
@@ -75,7 +77,14 @@ const props = withDefaults(defineProps<DzSelectProps>(), {
 })
 
 const emit = defineEmits<DzSelectEmits>()
+
 defineSlots<DzSelectSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
+
 // Portal target: an explicit `portalTo` on this instance, then the application's
 // `DzProvider` target, then the portal's own default of `document.body`
 // (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
@@ -321,11 +330,15 @@ const errorClasses = computed(() => cn(
   'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
   props.ui?.error,
 ))
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div data-part="root" :class="rootClasses">
+  <div data-part="root" :class="rootClasses" v-bind="dzTestId('dz-select')">
     <SelectRoot
+      :dir="dzDirection"
       :model-value="toInternal(model)"
       :disabled="resolvedDisabled"
       :name="name"

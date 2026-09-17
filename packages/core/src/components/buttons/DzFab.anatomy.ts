@@ -38,6 +38,15 @@ export const anatomy = {
    */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Native `button` activation. Its
+   * corner `position` is physical on purpose and no key moves it.
+   */
+  keyboard: [
+    { key: 'Enter', action: 'Activate the action.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', action: 'Activate the action.', wcag: ['2.1.1'], apg: 'button' },
+  ],
+
   /** Tier B — owns focus and keyboard activation. */
   riskTier: 'B',
 } as const satisfies ComponentAnatomy

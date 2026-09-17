@@ -11,6 +11,7 @@
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 import type { ThemePreference } from '../../providers/DzThemeProvider.types.ts'
+import type { DzColorModeToggleUi } from './DzColorModeToggle.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Variant taxonomy
@@ -56,6 +57,13 @@ export interface DzColorModeToggleProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Per-mode label overrides for i18n. */
   labels?: DzColorModeToggleLabels
+  /**
+   * Per-part class overrides, keyed by the names in `DzColorModeToggle.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzColorModeToggleUi
 }
 
 // ---------------------------------------------------------------------------

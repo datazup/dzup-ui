@@ -45,6 +45,7 @@ const classes = computed(() =>
 
 <template>
   <li
+    data-part="separator"
     role="presentation"
     aria-hidden="true"
     :class="classes"

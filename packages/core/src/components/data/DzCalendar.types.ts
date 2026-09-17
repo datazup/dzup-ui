@@ -13,6 +13,7 @@ import type {
   CanonicalSize,
 } from '@dzup-ui/contracts'
 import type { CalendarView, WeekdayIndex } from '../../composables/useCalendar/index.ts'
+import type { DzCalendarUi } from './DzCalendar.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Selection model
@@ -63,6 +64,13 @@ export interface DzCalendarProps extends BaseAccessibilityProps {
   firstDayOfWeek?: WeekdayIndex
   /** Locale for formatting (BCP 47 tag, e.g. 'en-US') */
   locale?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzCalendar.anatomy.ts`
+   * (ADR-19 §5). Every node but the wrapper is generated from the visible
+   * period, so `ui` is the only route to the header, the navigation, the
+   * week rows and the day buttons.
+   */
+  ui?: DzCalendarUi
 }
 
 // ---------------------------------------------------------------------------

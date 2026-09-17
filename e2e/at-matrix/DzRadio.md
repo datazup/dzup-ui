@@ -20,6 +20,18 @@ known one.
 | `navigate` | Move through the collection with the pattern's own keys or gestures. | Each item is announced with its position and set size, and nothing is skipped. |
 | `select` | Select an item and confirm the selection. | The selected state is announced, and the control's value reflects it afterwards. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzRadio.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Space` | — | Select the focused radio. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

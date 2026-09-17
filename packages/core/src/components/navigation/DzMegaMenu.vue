@@ -32,6 +32,8 @@ import { ChevronDown } from 'lucide-vue-next'
  * ```
  */
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useClickOutside } from '../../composables/useClickOutside/index.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -51,7 +53,13 @@ const props = withDefaults(defineProps<DzMegaMenuProps>(), {
 })
 
 const emit = defineEmits<DzMegaMenuEmits>()
+
 defineSlots<DzMegaMenuSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
 const rootRef = ref<HTMLElement | null>(null)
@@ -68,7 +76,7 @@ const focusedIndex = ref(0)
 const styles = computed(() => megaMenuVariants({ orientation: props.orientation, size: props.size }))
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 /** Stable key for an item (used for :key + slot identity). */
@@ -247,9 +255,14 @@ function onTriggerKeydown(event: KeyboardEvent, index: number, item: DzMegaMenuI
     return
 
   const horizontal = props.orientation === 'horizontal'
-  const nextKey = horizontal ? 'ArrowRight' : 'ArrowDown'
-  const prevKey = horizontal ? 'ArrowLeft' : 'ArrowUp'
-  const intoKey = horizontal ? 'ArrowDown' : 'ArrowRight'
+  // The inline axis, resolved once: forward is ArrowRight in LTR and ArrowLeft
+  // in RTL, and every horizontal decision below is stated in those terms rather
+  // than in physical keys.
+  const inlineForward = dzDirection.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
+  const inlineBack = dzDirection.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+  const nextKey = horizontal ? inlineForward : 'ArrowDown'
+  const prevKey = horizontal ? inlineBack : 'ArrowUp'
+  const intoKey = horizontal ? 'ArrowDown' : inlineForward
 
   switch (event.key) {
     case nextKey:
@@ -344,21 +357,25 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
     return
   openIndex.value = openIndex.value === index ? null : index
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <nav
     :id="id"
     ref="rootRef"
+    data-part="root"
     :class="rootClasses"
     :aria-label="ariaLabel"
     :data-orientation="orientation"
     :data-collapsed="isCollapsed ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-mega-menu'), ...$attrs, class: undefined }"
   >
     <!-- ── Collapsed: stacked disclosure / accordion ── -->
-    <ul v-if="isCollapsed" :class="styles.stack()">
+    <ul v-if="isCollapsed" data-part="list" :class="cn(styles.stack(), ui?.list)">
       <li
         v-for="(item, index) in items"
         :key="itemKey(item, index)"
@@ -366,7 +383,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
         <a
           v-if="item.href && !hasPanel(item)"
           :href="item.href"
-          :class="styles.trigger()"
+          data-part="trigger"
+          :class="cn(styles.trigger(), ui?.trigger)"
           :aria-disabled="item.disabled || undefined"
           :data-disabled="item.disabled ? '' : undefined"
         >
@@ -375,7 +393,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
         <button
           v-else
           type="button"
-          :class="styles.trigger()"
+          data-part="trigger"
+          :class="cn(styles.trigger(), ui?.trigger)"
           :disabled="disabled || item.disabled || undefined"
           :aria-expanded="hasPanel(item) ? openIndex === index : undefined"
           :data-open="openIndex === index ? '' : undefined"
@@ -386,7 +405,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
           </slot>
           <ChevronDown
             v-if="hasPanel(item)"
-            :class="styles.caret()"
+            data-part="indicator"
+            :class="cn(styles.caret(), ui?.indicator)"
             :data-open="openIndex === index ? '' : undefined"
             class="h-4 w-4"
             aria-hidden="true"
@@ -396,15 +416,17 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
         <div
           v-if="hasPanel(item) && openIndex === index"
           :data-mega-panel="index"
-          :class="styles.disclosure()"
+          data-part="panel"
+          :class="cn(styles.disclosure(), ui?.panel)"
         >
           <div
             v-for="(group, gIndex) in item.items"
             :key="groupKey(group, gIndex)"
-            :class="styles.column()"
+            data-part="group"
+            :class="cn(styles.column(), ui?.group)"
           >
             <slot name="group" :group="group" :item="item" :index="gIndex">
-              <span v-if="group.label" :class="styles.columnHeading()">{{ group.label }}</span>
+              <span v-if="group.label" data-part="group-label" :class="cn(styles.columnHeading(), ui?.['group-label'])">{{ group.label }}</span>
               <component
                 :is="link.href ? 'a' : 'button'"
                 v-for="(link, lIndex) in group.items"
@@ -412,7 +434,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
                 data-mega-link
                 :type="link.href ? undefined : 'button'"
                 :href="link.href"
-                :class="styles.link()"
+                data-part="item"
+                :class="cn(styles.link(), ui?.item)"
                 :aria-disabled="link.disabled || undefined"
                 :data-disabled="link.disabled ? '' : undefined"
                 @click="onLinkClick(link, item, $event)"
@@ -434,7 +457,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
       role="menubar"
       :aria-orientation="orientation === 'vertical' ? 'vertical' : 'horizontal'"
       :aria-label="ariaLabel"
-      :class="styles.menubar()"
+      data-part="list"
+      :class="cn(styles.menubar(), ui?.list)"
     >
       <li
         v-for="(item, index) in items"
@@ -448,7 +472,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
           :href="item.href"
           role="menuitem"
           :data-mega-trigger="index"
-          :class="styles.trigger()"
+          data-part="trigger"
+          :class="cn(styles.trigger(), ui?.trigger)"
           :tabindex="index === focusedIndex ? 0 : -1"
           :aria-disabled="item.disabled || undefined"
           :data-disabled="item.disabled ? '' : undefined"
@@ -463,7 +488,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
           type="button"
           role="menuitem"
           :data-mega-trigger="index"
-          :class="styles.trigger()"
+          data-part="trigger"
+          :class="cn(styles.trigger(), ui?.trigger)"
           :tabindex="index === focusedIndex ? 0 : -1"
           :disabled="disabled || item.disabled || undefined"
           :aria-haspopup="hasPanel(item) ? 'true' : undefined"
@@ -478,7 +504,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
           </slot>
           <ChevronDown
             v-if="hasPanel(item)"
-            :class="styles.caret()"
+            data-part="indicator"
+            :class="cn(styles.caret(), ui?.indicator)"
             :data-open="openIndex === index ? '' : undefined"
             class="h-4 w-4"
             aria-hidden="true"
@@ -491,7 +518,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
           role="menu"
           :data-mega-panel="index"
           :aria-label="item.label"
-          :class="styles.panel()"
+          data-part="panel"
+          :class="cn(styles.panel(), ui?.panel)"
           @keydown="onLinkKeydown($event, index)"
         >
           <div
@@ -501,11 +529,12 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
             <div
               v-for="(group, gIndex) in item.items"
               :key="groupKey(group, gIndex)"
-              :class="styles.column()"
+              data-part="group"
+              :class="cn(styles.column(), ui?.group)"
               :data-featured="group.featured ? '' : undefined"
             >
               <slot name="group" :group="group" :item="item" :index="gIndex">
-                <span v-if="group.label" :class="styles.columnHeading()">{{ group.label }}</span>
+                <span v-if="group.label" data-part="group-label" :class="cn(styles.columnHeading(), ui?.['group-label'])">{{ group.label }}</span>
                 <component
                   :is="link.href ? 'a' : 'button'"
                   v-for="(link, lIndex) in group.items"
@@ -515,7 +544,8 @@ function toggleStack(index: number, item: DzMegaMenuItem): void {
                   tabindex="-1"
                   :type="link.href ? undefined : 'button'"
                   :href="link.href"
-                  :class="styles.link()"
+                  data-part="item"
+                  :class="cn(styles.link(), ui?.item)"
                   :aria-disabled="link.disabled || undefined"
                   :data-disabled="link.disabled ? '' : undefined"
                   @click="onLinkClick(link, item, $event)"

@@ -18,6 +18,7 @@ import type {
   InputVariant,
   SelectOpenableEvents,
 } from '@dzup-ui/contracts'
+import type { DzComboboxUi } from './DzCombobox.anatomy.ts'
 import type { DzSelectItem } from './DzSelect.types.ts'
 
 // ---------------------------------------------------------------------------
@@ -78,6 +79,13 @@ export interface DzComboboxProps extends BaseAccessibilityProps, BaseValidationP
   filterFn?: (item: DzComboboxResolvedItem, query: string) => boolean
   /** Override how the selected item is rendered back into the input */
   displayValue?: (item: DzComboboxResolvedItem | undefined, value: string) => string
+  /**
+   * Per-part class overrides, keyed by the names in `DzCombobox.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target — the field anchor,
+   * declared there as `control` — and the panel parts render into a portal,
+   * where `class` never reached them.
+   */
+  ui?: DzComboboxUi
 }
 
 // ---------------------------------------------------------------------------

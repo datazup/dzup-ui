@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
 import type { DzRangeSliderEmits, DzRangeSliderProps, DzRangeSliderSlots } from './DzRangeSlider.types.ts'
 import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 /**
@@ -13,6 +14,8 @@ import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { rangeSliderVariants } from './DzRangeSlider.variants.ts'
@@ -21,6 +24,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The `[start, end]` pair the two thumbs sit at; defaults to `[0, 100]`. */
 const model = defineModel<[number, number]>({ default: () => [0, 100] as [number, number] })
 
 const props = withDefaults(defineProps<DzRangeSliderProps>(), {
@@ -28,8 +32,8 @@ const props = withDefaults(defineProps<DzRangeSliderProps>(), {
   max: 100,
   step: 1,
   disabled: false,
-  size: 'md',
-  tone: 'primary',
+  size: undefined,
+  tone: undefined,
   orientation: 'horizontal',
   name: undefined,
   invalid: false,
@@ -43,7 +47,13 @@ const props = withDefaults(defineProps<DzRangeSliderProps>(), {
 })
 
 const emit = defineEmits<DzRangeSliderEmits>()
+
 defineSlots<DzRangeSliderSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -82,10 +92,28 @@ const resolvedAriaDescribedby = computed(() => {
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * Each axis keeps the literal it carried in `withDefaults` as `resolve`'s last
+ * link, so an unprovided tree renders exactly what it rendered before.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzRangeSlider', 'size', [props.size]) ?? 'md',
+)
+
+/** Resolved tone: prop, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzRangeSlider', 'tone', [props.tone]) ?? 'primary',
+)
+
 const styles = computed(() =>
   rangeSliderVariants({
-    size: props.size,
-    tone: props.tone,
+    size: resolvedSize.value,
+    tone: resolvedTone.value,
     orientation: props.orientation,
     disabled: resolvedDisabled.value || undefined,
   }),
@@ -115,6 +143,7 @@ const rootClasses = computed(() =>
 
 /** Expose programmatic focus (focuses the lower thumb) for parity with DzSlider. */
 defineExpose({
+  /** Move keyboard focus to the lower thumb. */
   focus: (): void => {
     const ref = thumbRef.value
     if (!ref)
@@ -123,12 +152,17 @@ defineExpose({
     el?.focus?.()
   },
 })
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div>
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-range-slider')">
     <SliderRoot
       :id="resolvedId"
+      :dir="dzDirection"
+      data-part="control"
       :model-value="sliderValue"
       :min="min"
       :max="max"
@@ -136,7 +170,7 @@ defineExpose({
       :disabled="resolvedDisabled"
       :orientation="orientation"
       :name="name"
-      :class="rootClasses"
+      :class="[rootClasses, ui?.control]"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
@@ -144,12 +178,12 @@ defineExpose({
       :data-disabled="resolvedDisabled ? '' : undefined"
       :data-required="resolvedRequired ? '' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
-      :data-tone="tone"
+      :data-tone="resolvedTone"
       style="contain: layout style"
       v-bind="{ ...$attrs, class: undefined }"
       @update:model-value="handleValueChange"
     >
-      <span v-if="$slots.default" :class="styles.label()">
+      <span v-if="$slots.default" data-part="label" :class="[styles.label(), ui?.label]">
         <slot />
       </span>
       <SliderTrack :class="styles.track()">
@@ -157,7 +191,8 @@ defineExpose({
       </SliderTrack>
       <SliderThumb
         ref="thumbRef"
-        :class="cn(styles.thumb(), resolvedInvalid && 'ring-2 ring-[var(--dz-danger)] border-[var(--dz-danger)]')"
+        data-part="indicator"
+        :class="[cn(styles.thumb(), resolvedInvalid && 'ring-2 ring-[var(--dz-danger)] border-[var(--dz-danger)]'), ui?.indicator]"
         :aria-label="ariaLabel ? `${ariaLabel} minimum` : 'Range minimum'"
         :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
         :aria-required="resolvedRequired || undefined"
@@ -165,7 +200,8 @@ defineExpose({
         @blur="handleBlur"
       />
       <SliderThumb
-        :class="cn(styles.thumb(), resolvedInvalid && 'ring-2 ring-[var(--dz-danger)] border-[var(--dz-danger)]')"
+        data-part="indicator"
+        :class="[cn(styles.thumb(), resolvedInvalid && 'ring-2 ring-[var(--dz-danger)] border-[var(--dz-danger)]'), ui?.indicator]"
         :aria-label="ariaLabel ? `${ariaLabel} maximum` : 'Range maximum'"
         :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
         :aria-required="resolvedRequired || undefined"
@@ -178,7 +214,9 @@ defineExpose({
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

@@ -22,6 +22,11 @@ export const anatomy = {
   /** Quoted prose reads in the document's direction, borders and all. */
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
+  /**
+   * Keyboard contract (TASK-R5-O5). Presentational typography.
+   */
+  keyboard: 'none',
+
   /** Tier A — presentational. It renders content and takes no focus. */
   riskTier: 'A',
 } as const satisfies ComponentAnatomy

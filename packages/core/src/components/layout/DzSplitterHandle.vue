@@ -43,13 +43,14 @@ const classes = computed(() =>
 <template>
   <SplitterResizeHandle
     :disabled="props.disabled"
+    data-part="separator"
     :class="classes"
     :data-direction="direction"
     :data-disabled="props.disabled ? '' : undefined"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <slot>
-      <div v-if="withHandle" :class="styles.handleIndicator()">
+      <div v-if="withHandle" data-part="indicator" :class="styles.handleIndicator()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"

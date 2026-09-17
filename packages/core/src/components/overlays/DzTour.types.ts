@@ -13,6 +13,7 @@
 
 import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 import type { FloatingPlacement } from '../../composables/useFloating/index.ts'
+import type { DzTourUi } from './DzTour.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Step data
@@ -64,6 +65,12 @@ export interface DzTourProps extends BaseAccessibilityProps {
   mask?: boolean
   /** Scroll an off-screen target into view when its step activates. */
   scrollIntoView?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzTour.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target (the step panel);
+   * `ui['item-indicator']` lands on every step dot.
+   */
+  ui?: DzTourUi
 }
 
 /** Events emitted by DzTour. */

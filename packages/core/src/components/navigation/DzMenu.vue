@@ -22,6 +22,7 @@ import type { DzMenuContext, DzMenuProps, DzMenuSlots } from './DzMenu.types.ts'
  * ```
  */
 import { computed, provide, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_MENU_KEY } from './DzMenu.types.ts'
 import { menuVariants } from './DzMenu.variants.ts'
@@ -49,19 +50,23 @@ provide(DZ_MENU_KEY, context)
 const styles = computed(() => menuVariants({ size: props.size }))
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <nav
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :aria-label="ariaLabel"
     data-state="ready"
     role="navigation"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-menu'), ...$attrs, class: undefined }"
   >
     <slot />
   </nav>

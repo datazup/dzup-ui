@@ -43,7 +43,7 @@
  * @module @dzup-ui/tooling/docs/evidence
  */
 
-import type { ComponentMetaArtifact, ComponentMetaRecord } from '../meta/component-meta.ts'
+import type { AnatomyJoin, ComponentMetaArtifact, ComponentMetaRecord, KeyboardBindingJoin } from '../meta/component-meta.ts'
 
 // ---------------------------------------------------------------------------
 // Artifact shapes — read-only views, only the fields this module uses
@@ -577,30 +577,111 @@ export function standingNote(ev: EvidenceSources): string[] {
 // Per-component: the evidence section
 // ---------------------------------------------------------------------------
 
+/** Render one key as a `<kbd>`-ish code span, spelling the space bar readably. */
+function keyLabel(key: string): string {
+  if (key === ' ')
+    return '`Space`'
+  if (key.startsWith('<') && key.endsWith('>'))
+    return `any ${key.slice(1, -1)} key`
+  return `\`${key}\``
+}
+
+/** `Shift` + `Enter`, or just the key when no modifier is required. */
+function chord(binding: KeyboardBindingJoin): string {
+  const mods = (binding.modifiers ?? []).map(m => `\`${m}\``)
+  return [...mods, keyLabel(binding.key)].join(' + ')
+}
+
 /**
- * Why a keyboard interaction table is not rendered, said once and precisely.
+ * The component's keyboard table, rendered from its declared contract
+ * (TASK-R5-O5).
  *
- * The task's own instruction: *"where only prose exists, the section links the
- * APG pattern and marks the table 'not yet derived' rather than hand-typing
- * one."* This is that sentence, and §4 of the handoff records the measurement
- * behind it: the repository's only machine-readable keyboard signal is a
- * boolean. `generate-capability-matrix.ts` resolves `keyboard-spec` by testing
- * the unit spec against
- * `/Arrow(?:Up|Down|Left|Right)|['"]Tab['"]|['"]Escape['"]|['"]Enter['"]|keydown/`
- * — it records *that* keys are asserted, never *which* keys do *what*.
+ * ## What this replaced, and why it had to
+ *
+ * Until this packet every one of the 144 generated pages said **"Not yet
+ * derived"** here, and the sentence was true: the repository's only generated
+ * keyboard signal was `capability-matrix.json`'s `keyboard-spec` cell, which
+ * `generate-capability-matrix.ts` resolves by testing the unit spec against
+ * `/Arrow(?:Up|Down|Left|Right)|['"]Tab['"]|['"]Escape['"]|['"]Enter['"]|keydown/`.
+ * That records *that* some key is asserted, never *which* key does *what* — a
+ * boolean where an accessibility buyer needs a table.
+ *
+ * The fix was not to write the tables here. A hand-typed keyboard table is
+ * wrong within a release and nothing notices; one rendered from the contract
+ * the component declares, the parser refuses to half-read, and the specs assert
+ * against, cannot be. So the table below is
+ * {@link @dzup-ui/contracts!ComponentAnatomy.keyboard}, projected.
+ *
+ * The `keyboard-spec` measurement is still printed beside it, because the two
+ * answer different questions: the contract says what the keys *are*, the cell
+ * says whether a test has *run* against them. Collapsing those would be the
+ * maturity-ladder violation `<evidence_rules>` forbids.
  */
-export function renderKeyboardSection(quality: QualityRow, capability: CapabilityRow): string[] {
+export function renderKeyboardSection(
+  quality: QualityRow,
+  capability: CapabilityRow,
+  anatomy?: AnatomyJoin,
+): string[] {
   const kbd = capability.cells.find(c => c.kind === 'keyboard-spec')
   const link = apgLink(quality.pattern)
   const lines: string[] = ['### Keyboard interaction', '']
 
-  lines.push(
-    '**Not yet derived.** This library has no machine-readable keyboard table: the only generated',
-    'keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than',
-    'hand-type a table that nothing could check, this page links the pattern the component is held',
-    'to and states what has actually been measured.',
-    '',
-  )
+  const contract = anatomy?.keyboard
+  if (contract === undefined) {
+    lines.push(
+      '**Not declared.** This component declares no keyboard contract, so this page cannot say which',
+      'key does what. **That is not a claim that it has no keyboard behaviour** — a component with',
+      'none declares `keyboard: \'none\'` explicitly, and those two facts are deliberately not',
+      'collapsed. The contract is declared beside the component in its `*.anatomy.ts`; until it is,',
+      'the only thing measuring this component\'s keyboard is the presence boolean below.',
+      '',
+    )
+  }
+  else if (contract === 'none') {
+    lines.push(
+      '**No keyboard behaviour of its own.** This component declares `keyboard: \'none\'` — an',
+      'explicit claim, checked like any other part of its contract, not an absence of information.',
+      'Whatever keys reach it are the platform\'s or its container\'s.',
+      '',
+    )
+  }
+  else {
+    const anyWcag = contract.some(b => b.wcag !== undefined && b.wcag.length > 0)
+    const anyRtl = contract.some(b => b.rtl !== undefined)
+    const anyWhen = contract.some(b => b.when !== undefined)
+    const header = ['Key', ...(anyWhen ? ['Where'] : []), 'Action', ...(anyWcag ? ['WCAG'] : []), 'Pattern', ...(anyRtl ? ['RTL'] : [])]
+    lines.push(
+      `**${contract.length} declared binding${contract.length === 1 ? '' : 's'}.** Rendered from the`,
+      'component\'s own keyboard contract, not from the APG pattern it is held to — where the two',
+      'differ, the difference is the point.',
+      '',
+      `| ${header.join(' | ')} |`,
+      `| ${header.map(() => '---').join(' | ')} |`,
+      ...contract.map((binding) => {
+        const cells = [chord(binding)]
+        if (anyWhen)
+          cells.push(binding.when === undefined ? '—' : `\`${binding.when}\``)
+        cells.push(cell(binding.action))
+        if (anyWcag) {
+          cells.push(binding.wcag === undefined || binding.wcag.length === 0
+            ? '—'
+            : binding.wcag.map(id => `\`${id}\``).join(', '))
+        }
+        cells.push(binding.apg === undefined ? '— *(component-specific)*' : `[\`${binding.apg}\`](${APG_PATTERN_BASE}${binding.apg}/)`)
+        if (anyRtl) {
+          cells.push(binding.rtl === undefined
+            ? '—'
+            : binding.rtl === 'mirrored'
+              ? 'swaps with the writing direction'
+              : 'fixed — maps to a visible direction')
+        }
+        return `| ${cells.join(' | ')} |`
+      }),
+      '',
+      `Declared in \`${anatomy?.source ?? '—'}\`.`,
+      '',
+    )
+  }
 
   if (link !== undefined) {
     lines.push(
@@ -969,7 +1050,7 @@ export function renderEvidence(record: ComponentMetaRecord, ev: EvidenceSources)
   lines.push(...renderWcagSection(quality, ev))
   if (surface !== undefined)
     lines.push(...renderDragSection(surface, ev))
-  lines.push(...renderKeyboardSection(quality, capability))
+  lines.push(...renderKeyboardSection(quality, capability, record.anatomy))
   lines.push(...renderAtSection(quality, ev, atEntryFor(record.name, ev)))
   lines.push(...renderCellsSection(quality, capability))
   lines.push(...renderSecuritySection(securityDeviationsFor(record.name, ev), ev))

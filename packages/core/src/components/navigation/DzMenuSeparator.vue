@@ -20,6 +20,7 @@ const classes = computed(() =>
 
 <template>
   <div
+    data-part="separator"
     :class="classes"
     role="separator"
     aria-orientation="horizontal"

@@ -9,6 +9,7 @@
 
 import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzBreadcrumbItemUi, DzBreadcrumbUi } from './DzBreadcrumb.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -32,6 +33,12 @@ export const DZ_BREADCRUMB_KEY: InjectionKey<DzBreadcrumbContext>
 export interface DzBreadcrumbProps extends BaseAccessibilityProps {
   /** Separator character displayed between breadcrumb items */
   separator?: string
+  /**
+   * Per-part class overrides for the two nodes DzBreadcrumb renders itself
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui.list` reaches the `<ol>`, which has no call site at all.
+   */
+  ui?: DzBreadcrumbUi
 }
 
 /** Slot definitions for DzBreadcrumb */
@@ -52,6 +59,12 @@ export interface DzBreadcrumbItemProps {
   current?: boolean
   /** Whether this item is disabled */
   disabled?: boolean
+  /**
+   * Per-part class overrides for the crumb (ADR-19 §5). `class` at the call
+   * site lands on the inner link, so `ui.item` is the only way to reach the
+   * `<li>` wrapper.
+   */
+  ui?: DzBreadcrumbItemUi
 }
 
 /** Slot definitions for DzBreadcrumbItem */

@@ -8,6 +8,53 @@ export type { AnatomyCheckOptions, AnatomyTarget, CheckableAnatomy } from './ana
 export { checkAnatomy, expectAnatomy } from './anatomy.js'
 
 /**
+ * The composition contract (TASK-R5-O6, ADR-19 §5 · finding R-021).
+ *
+ * The fourth reader of a component's declaration, beside the anatomy, keyboard
+ * and RTL checks above. `checkUiMergeOrder` is source-level and covers the
+ * whole catalogue; the rest need a rendered tree, and `checkExternalWrite`
+ * needs a sequence rather than a snapshot — which is why defect D8 survived a
+ * green suite in seven controls.
+ */
+export type {
+  AsChildRender,
+  CheckableAsChild,
+  CheckableFallthrough,
+  CompositionTarget,
+  ExternalWriteTrace,
+  FallthroughProbe,
+  MergeForm,
+  MergeSite,
+} from './composition.js'
+export {
+  arrayMergeSitesIn,
+  checkAsChild,
+  checkExternalWrite,
+  checkFallthrough,
+  checkHandlerComposition,
+  checkUiMergeOrder,
+  classCarryingIdentifiers,
+  elementOf,
+  expectAsChild,
+  expectExternalWrite,
+  expectFallthrough,
+  expectHandlerComposition,
+  expectUiMergeOrder,
+  mergeSitesIn,
+} from './composition.js'
+
+// The keyboard contract (TASK-R5-O5) — the third reader of `anatomy.keyboard`,
+// beside the docs generator that renders it and the parser that refuses to
+// half-read it.
+export type {
+  CheckableBinding,
+  CheckableKeyboardAnatomy,
+  KeyboardCheckOptions,
+  KeyboardTarget,
+} from './keyboard.js'
+export { checkKeyboardContract, expectKeyboardContract } from './keyboard.js'
+
+/**
  * Right-to-left conformance (TASK-OSS-P4-05).
  *
  * `expectRtl` is source-level and runs anywhere. `expectRtlComputed` needs an

@@ -11,6 +11,7 @@ import type {
   BaseAccessibilityProps,
   BasePortalProps,
 } from '@dzup-ui/contracts'
+import type { DzLightboxUi } from './DzLightbox.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Data types
@@ -36,6 +37,13 @@ export interface DzLightboxProps extends BaseAccessibilityProps, BasePortalProps
   images: LightboxImage[]
   /** Starting image index */
   startIndex?: number
+  /**
+   * Per-part class overrides, keyed by the names in `DzLightbox.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target (the portalled dialog
+   * content); `ui.action` lands on **both** navigation buttons — they share a
+   * part name.
+   */
+  ui?: DzLightboxUi
 }
 
 // ---------------------------------------------------------------------------

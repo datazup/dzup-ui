@@ -21,6 +21,7 @@
  */
 import type { DzInplaceEmits, DzInplaceProps, DzInplaceSlots } from './DzInplace.types.ts'
 import { computed, nextTick, ref, useAttrs, watch } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
@@ -42,6 +43,7 @@ const active = defineModel<boolean>('active', { default: false })
  * control in the catalog takes, and until now it silently did nothing here.
  */
 const legacyValueModel = defineModel<T>('value')
+/** The edited value, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). */
 const primaryModel = defineModel<T>({ default: undefined })
 const props = withDefaults(defineProps<DzInplaceProps>(), {
   saveOn: 'both',
@@ -174,22 +176,27 @@ function onEditorFocusout(event: FocusEvent): void {
 
 /** Programmatic control for consumers (e.g. table cells). */
 defineExpose({ activate, save, cancel })
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
     :data-state="active ? 'edit' : 'display'"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-inplace'), ...$attrs, class: undefined }"
   >
     <!-- Editor view -->
     <div
       v-if="active"
       ref="editorRef"
-      :class="styles.editor()"
+      data-part="content"
+      :class="[styles.editor(), ui?.content]"
       @keydown="onEditorKeydown"
       @focusout="onEditorFocusout"
     >
@@ -210,8 +217,9 @@ defineExpose({ activate, save, cancel })
       v-else
       ref="triggerRef"
       type="button"
+      data-part="trigger"
       class="group"
-      :class="styles.display()"
+      :class="[styles.display(), ui?.trigger]"
       :disabled="disabled || undefined"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
@@ -223,7 +231,8 @@ defineExpose({ activate, save, cancel })
       </slot>
       <svg
         v-if="!disabled"
-        :class="styles.hint()"
+        data-part="icon"
+        :class="[styles.hint(), ui?.icon]"
         xmlns="http://www.w3.org/2000/svg"
         width="14"
         height="14"

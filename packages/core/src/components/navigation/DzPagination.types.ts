@@ -12,6 +12,7 @@ import type {
   BaseEvents,
   CanonicalSize,
 } from '@dzup-ui/contracts'
+import type { DzPaginationUi } from './DzPagination.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -31,6 +32,13 @@ export interface DzPaginationProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Disabled state -- prevents interaction */
   disabled?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzPagination.anatomy.ts`
+   * (ADR-19 §5). Every node but the `<nav>` is generated from `total` and
+   * `pageSize`, so `ui` is the only route to the list, the page buttons, the
+   * edge controls and the ellipsis.
+   */
+  ui?: DzPaginationUi
 }
 
 // ---------------------------------------------------------------------------

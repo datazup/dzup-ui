@@ -19,6 +19,7 @@ import type {
   CanonicalSize,
 } from '@dzup-ui/contracts'
 import type { GridCols, LayoutGap, ResponsiveCols } from '../layout/DzGrid.types.ts'
+import type { DzDataViewUi } from './DzDataView.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Shared types
@@ -79,6 +80,13 @@ export interface DzDataViewProps<T = Record<string, unknown>> extends BaseAccess
   size?: CanonicalSize
   /** Disabled state — prevents layout/sort/paging interaction */
   disabled?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzDataView.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzDataViewUi
 }
 
 // ---------------------------------------------------------------------------

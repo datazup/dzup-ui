@@ -1,0 +1,290 @@
+{
+  "//": [
+    "Consumer-facing custom-property hooks — TASK-R5-O7, enforced by",
+    "packages/tooling/src/token-checks/token-references.ts.",
+    "",
+    "A hook is a `--dz-*` name the library REFERENCES with a fallback but never",
+    "DECLARES. It renders correctly today (the fallback supplies the value) and",
+    "exists so a consumer can set the property and re-skin one instance without",
+    "touching the global token layer.",
+    "",
+    "It is allowlisted rather than ignored because a hook and a typo-with-a-",
+    "fallback are textually identical. The allowlist is the line where somebody",
+    "states which one it is. An entry that stops matching any source is reported",
+    "as `stale-allowlist` and must be deleted — the list only shrinks unless a",
+    "new hook is deliberately added and documented.",
+    "",
+    "Every entry must also appear in apps/storybook/stories/Styling-Cookbook.mdx",
+    "so the hook is discoverable by the consumers it exists for.",
+    "",
+    "A reference with NO fallback is never allowlistable: the browser discards",
+    "the declaration outright. That is the N1-O3 §4.6 defect class (31 broken",
+    "`--dz-spacing-N-N` references, five components rendering collapsed)."
+  ],
+  "hooks": [
+    {
+      "token": "--dz-affix-z-index",
+      "owner": "DzAffix",
+      "fallback": "10",
+      "reason": "Stacking-context hook. DzAffix pins a node with `position: sticky` and the correct z-index depends entirely on the host layout, so the library declines to pick one and ships a conservative default in the fallback."
+    },
+    {
+      "token": "--dz-codeblock-font-family",
+      "owner": "DzCodeBlock",
+      "fallback": "var(--dz-font-mono)",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-codeblock-font-size",
+      "owner": "DzCodeBlock",
+      "fallback": "var(--dz-text-sm)",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-codeblock-header-font-size",
+      "owner": "DzCodeBlock",
+      "fallback": "var(--dz-text-xs)",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-codeblock-header-padding-x",
+      "owner": "DzCodeBlock",
+      "fallback": "var(--dz-spacing-4)",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-codeblock-header-padding-y",
+      "owner": "DzCodeBlock",
+      "fallback": "var(--dz-spacing-2)",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-codeblock-line-height",
+      "owner": "DzCodeBlock",
+      "fallback": "var(--dz-leading-normal)",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-codeblock-line-number-color",
+      "owner": "DzCodeBlock",
+      "fallback": "var(--dz-codeblock-line-number)",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-codeblock-line-number-width",
+      "owner": "DzCodeBlock",
+      "fallback": "2rem",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-codeblock-radius",
+      "owner": "DzCodeBlock",
+      "fallback": "var(--dz-radius-lg)",
+      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
+    },
+    {
+      "token": "--dz-colors-destructive-100",
+      "owner": "DzConfirmDialog",
+      "fallback": "theme(colors.red.100)",
+      "reason": "Destructive-intent icon wash. NOTE: the fallback is a Tailwind `theme()` call, not a dzup token, and `--dz-colors-destructive-*` is a palette @dzup-ui/tokens does not emit at all — so the destructive icon renders Tailwind red, not the brand destructive colour. See TASK-R5-O7 decision D46."
+    },
+    {
+      "token": "--dz-colors-destructive-600",
+      "owner": "DzConfirmDialog",
+      "fallback": "theme(colors.red.600)",
+      "reason": "Destructive-intent icon wash. NOTE: the fallback is a Tailwind `theme()` call, not a dzup token, and `--dz-colors-destructive-*` is a palette @dzup-ui/tokens does not emit at all — so the destructive icon renders Tailwind red, not the brand destructive colour. See TASK-R5-O7 decision D46."
+    },
+    {
+      "token": "--dz-descriptions-border-color",
+      "owner": "DzDescriptions",
+      "fallback": "var(--dz-border)",
+      "reason": "Per-instance theming hooks for the description list. The library never declares them; the fallback is the shipped appearance and a consumer sets the property to re-skin one instance."
+    },
+    {
+      "token": "--dz-descriptions-label-bg",
+      "owner": "DzDescriptions",
+      "fallback": "var(--dz-muted)",
+      "reason": "Per-instance theming hooks for the description list. The library never declares them; the fallback is the shipped appearance and a consumer sets the property to re-skin one instance."
+    },
+    {
+      "token": "--dz-descriptions-label-color",
+      "owner": "DzDescriptions",
+      "fallback": "var(--dz-muted-foreground)",
+      "reason": "Per-instance theming hooks for the description list. The library never declares them; the fallback is the shipped appearance and a consumer sets the property to re-skin one instance."
+    },
+    {
+      "token": "--dz-descriptions-label-width",
+      "owner": "DzDescriptions",
+      "fallback": "8rem",
+      "reason": "Per-instance theming hooks for the description list. The library never declares them; the fallback is the shipped appearance and a consumer sets the property to re-skin one instance."
+    },
+    {
+      "token": "--dz-descriptions-value-color",
+      "owner": "DzDescriptions",
+      "fallback": "var(--dz-foreground)",
+      "reason": "Per-instance theming hooks for the description list. The library never declares them; the fallback is the shipped appearance and a consumer sets the property to re-skin one instance."
+    },
+    {
+      "token": "--dz-image-comparison-divider-color",
+      "owner": "DzImageComparison",
+      "fallback": "var(--dz-background)",
+      "reason": "Per-instance theming hooks for the comparison divider, handle and labels. The library never declares them; the fallback is the shipped appearance."
+    },
+    {
+      "token": "--dz-image-comparison-divider-width",
+      "owner": "DzImageComparison",
+      "fallback": "2px",
+      "reason": "Per-instance theming hooks for the comparison divider, handle and labels. The library never declares them; the fallback is the shipped appearance."
+    },
+    {
+      "token": "--dz-image-comparison-handle-bg",
+      "owner": "DzImageComparison",
+      "fallback": "var(--dz-background)",
+      "reason": "Per-instance theming hooks for the comparison divider, handle and labels. The library never declares them; the fallback is the shipped appearance."
+    },
+    {
+      "token": "--dz-image-comparison-handle-color",
+      "owner": "DzImageComparison",
+      "fallback": "var(--dz-foreground)",
+      "reason": "Per-instance theming hooks for the comparison divider, handle and labels. The library never declares them; the fallback is the shipped appearance."
+    },
+    {
+      "token": "--dz-image-comparison-handle-size",
+      "owner": "DzImageComparison",
+      "fallback": "var(--dz-spacing-9, 36px)",
+      "reason": "Per-instance theming hooks for the comparison divider, handle and labels. The library never declares them; the fallback is the shipped appearance."
+    },
+    {
+      "token": "--dz-image-comparison-label-bg",
+      "owner": "DzImageComparison",
+      "fallback": "color-mix(in oklab, var(--dz-foreground) 70%, transparent)",
+      "reason": "Per-instance theming hooks for the comparison divider, handle and labels. The library never declares them; the fallback is the shipped appearance."
+    },
+    {
+      "token": "--dz-image-comparison-label-color",
+      "owner": "DzImageComparison",
+      "fallback": "var(--dz-background)",
+      "reason": "Per-instance theming hooks for the comparison divider, handle and labels. The library never declares them; the fallback is the shipped appearance."
+    },
+    {
+      "token": "--dz-listbox-active-ring",
+      "owner": "DzListbox",
+      "fallback": "var(--dz-ring)",
+      "reason": "Per-instance theming hooks for the listbox surface and its items. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-listbox-bg",
+      "owner": "DzListbox",
+      "fallback": "var(--dz-background)",
+      "reason": "Per-instance theming hooks for the listbox surface and its items. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-listbox-border",
+      "owner": "DzListbox",
+      "fallback": "var(--dz-border)",
+      "reason": "Per-instance theming hooks for the listbox surface and its items. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-listbox-fg",
+      "owner": "DzListbox",
+      "fallback": "var(--dz-foreground)",
+      "reason": "Per-instance theming hooks for the listbox surface and its items. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-listbox-item-active-bg",
+      "owner": "DzListbox",
+      "fallback": "var(--dz-muted)",
+      "reason": "Per-instance theming hooks for the listbox surface and its items. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-listbox-item-selected-bg",
+      "owner": "DzListbox",
+      "fallback": "var(--dz-primary-muted)",
+      "reason": "Per-instance theming hooks for the listbox surface and its items. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-listbox-item-selected-fg",
+      "owner": "DzListbox",
+      "fallback": "var(--dz-primary)",
+      "reason": "Per-instance theming hooks for the listbox surface and its items. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-listbox-radius",
+      "owner": "DzListbox",
+      "fallback": "var(--dz-radius-md)",
+      "reason": "Per-instance theming hooks for the listbox surface and its items. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-bg",
+      "owner": "DzPopconfirm",
+      "fallback": "var(--dz-background)",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-border",
+      "owner": "DzPopconfirm",
+      "fallback": "var(--dz-border)",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-fg",
+      "owner": "DzPopconfirm",
+      "fallback": "var(--dz-foreground)",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-icon-color",
+      "owner": "DzPopconfirm",
+      "fallback": "var(--dz-warning)",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-icon-size",
+      "owner": "DzPopconfirm",
+      "fallback": "var(--dz-spacing-5)",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-padding",
+      "owner": "DzPopconfirm",
+      "fallback": "var(--dz-spacing-4)",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-radius",
+      "owner": "DzPopconfirm",
+      "fallback": "var(--dz-radius-lg)",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-shadow",
+      "owner": "DzPopconfirm",
+      "fallback": "var(--dz-shadow-lg)",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-popconfirm-width",
+      "owner": "DzPopconfirm",
+      "fallback": "16rem",
+      "reason": "Per-instance theming hooks for the popconfirm surface. The library never declares them; the fallback resolves to the semantic token the component otherwise uses."
+    },
+    {
+      "token": "--dz-qrcode-padding",
+      "owner": "DzQRCode",
+      "fallback": "0.5rem",
+      "reason": "Quiet-zone padding hook. The QR quiet zone is a scanning requirement, so the value is exposed for consumers who render at unusual sizes."
+    },
+    {
+      "token": "--dz-tour-mask",
+      "owner": "DzTour",
+      "fallback": "var(--dz-overlay-bg)",
+      "reason": "Spotlight mask and cutout radius hooks for the tour overlay."
+    },
+    {
+      "token": "--dz-tour-radius",
+      "owner": "DzTour",
+      "fallback": "var(--dz-radius-md)",
+      "reason": "Spotlight mask and cutout radius hooks for the tour overlay."
+    }
+  ]
+}

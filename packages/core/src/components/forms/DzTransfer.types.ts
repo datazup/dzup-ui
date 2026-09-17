@@ -15,6 +15,7 @@ import type {
   BaseValidationProps,
   CanonicalSize,
 } from '@dzup-ui/contracts'
+import type { DzTransferUi } from './DzTransfer.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Data types
@@ -56,6 +57,12 @@ export interface DzTransferProps extends BaseAccessibilityProps, BaseValidationP
   size?: CanonicalSize
   /** Placeholder for search inputs */
   searchPlaceholder?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzTransfer.anatomy.ts`
+   * (ADR-19 §5). Every pane-level key reaches **both** panes — the source and
+   * the target are one declaration, not two.
+   */
+  ui?: DzTransferUi
 }
 
 // ---------------------------------------------------------------------------

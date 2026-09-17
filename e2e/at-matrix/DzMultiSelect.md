@@ -25,6 +25,24 @@ known one.
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzMultiSelect.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowDown` | — | Open the list when closed, otherwise move to the next option. |
+| `ArrowUp` | — | Open the list when closed, otherwise move to the previous option. |
+| `Home` | list open | Move to the first option. |
+| `End` | list open | Move to the last option. |
+| `Enter` | — | Toggle the highlighted option; the list stays open. |
+| `Escape` | — | Close the list without changing the selection. |
+| `Backspace` | input empty | Remove the last selected value when the text field is empty. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

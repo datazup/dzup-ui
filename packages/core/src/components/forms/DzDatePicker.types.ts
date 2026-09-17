@@ -15,6 +15,7 @@ import type {
   InputVariant,
   SelectOpenableEvents,
 } from '@dzup-ui/contracts'
+import type { DzDatePickerUi } from './DzDatePicker.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -38,6 +39,13 @@ export interface DzDatePickerProps extends BaseAccessibilityProps, BaseValidatio
   variant?: InputVariant
   /** Form field name */
   name?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target — the segment field,
+   * declared here as `control` — and the calendar parts render inside a popper
+   * where `class` never reached them.
+   */
+  ui?: DzDatePickerUi
 }
 
 // ---------------------------------------------------------------------------

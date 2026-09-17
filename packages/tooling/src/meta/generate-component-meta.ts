@@ -46,6 +46,7 @@ import {
 } from './component-meta.ts'
 import {
   componentDescription,
+  componentIntent,
   contractTaxonomies,
   createComponentChecker,
   extractComponent,
@@ -166,12 +167,82 @@ function anatomyJoin(sourceAbs: string): AnatomyJoin {
   const read = readAnatomyFor(sourceAbs)
   if (!read.anatomy)
     return { state: 'absent', parts: [] }
-  const parts = read.anatomy.parts === 'none' ? [] : [...read.anatomy.parts].sort()
-  return {
+  const a = read.anatomy
+  const parts = a.parts === 'none' ? [] : [...a.parts].sort()
+  const join: AnatomyJoin = {
     state: 'declared',
     parts,
     ...(read.file === undefined ? {} : { source: read.file.replace(/\\/g, '/').replace(`${ROOT.replace(/\\/g, '/')}/`, '') }),
   }
+  // TASK-R5-O5. Sorted where the declaration's order carries no meaning, and
+  // left in source order where it does: a keyboard table reads top-to-bottom in
+  // the order the author put the keys in, and alphabetising `ArrowDown, ArrowUp,
+  // End, Enter, Escape, Home` would publish a table nobody would write.
+  if (a.optionalParts !== undefined && a.optionalParts.length > 0)
+    join.optionalParts = [...a.optionalParts].sort()
+  if (a.states.length > 0)
+    join.states = [...a.states].sort()
+  if (a.componentTokens.length > 0)
+    join.componentTokens = [...a.componentTokens].sort()
+  if (a.recipes !== undefined && a.recipes.length > 0)
+    join.recipes = [...a.recipes].sort()
+  if (a.globalDefaults !== undefined && a.globalDefaults.length > 0)
+    join.globalDefaults = [...a.globalDefaults].sort()
+  join.riskTier = a.riskTier
+  if (a.rtl !== undefined)
+    join.rtl = a.rtl
+  if (a.keyboard !== undefined)
+    join.keyboard = a.keyboard === 'none' ? 'none' : a.keyboard.map(b => ({ ...b }))
+  // TASK-R5-O6. Copied verbatim: `target` names a declared part and
+  // `delegatesTo` a component, so neither is sorted or normalised.
+  if (a.fallthrough !== undefined)
+    join.fallthrough = { ...a.fallthrough }
+  return join
+}
+
+/**
+ * The published provider readers, plus the two wrappers that ARE an adoption of
+ * one (TASK-R5-O3, ADR-20).
+ *
+ * `useComponentMessages` is `useDzMessages` with a component's own catalog
+ * branch already applied, and `useDzMotionAttribute` is `useDzMotion` reduced to
+ * the one value a template binds. A component reaching a context through either
+ * has adopted that context; recording the wrapper name instead would make the
+ * artifact answer a question about this repository's internals rather than
+ * about the ADR-20 contract a host configures.
+ */
+const PROVIDER_HOOKS: readonly (readonly [reader: string, callee: RegExp])[] = [
+  ['useDzDefaults', /\buseDzDefaults\s*\(/],
+  ['useDzDirection', /\buseDzDirection\s*\(/],
+  ['useDzFormats', /\buseDzFormats\s*\(/],
+  ['useDzLocale', /\buseDzLocale\s*\(/],
+  ['useDzMessages', /\buse(?:DzMessages|ComponentMessages)\s*\(/],
+  ['useDzMotion', /\buseDzMotion(?:Attribute)?\s*\(/],
+  ['useDzNonce', /\buseDzNonce\s*\(/],
+  ['useDzPortalTarget', /\buseDzPortalTarget\s*\(/],
+  ['useDzSanitizer', /\buseDzSanitizer\s*\(/],
+  ['useDzTestIds', /\buseDzTestIds\s*\(/],
+  ['useDzTheme', /\buse(?:DzTheme|Theme)\s*\(/],
+]
+
+/**
+ * Which provider contexts a component honours, read from its own source.
+ *
+ * A projection of the file the extractor is already holding, not a second
+ * scanner: `vue-component-meta` reports props, events, slots and exposed
+ * members, and has no concept of a composable call. The alternative — a
+ * hand-kept list of which component reads what — is exactly the drift this
+ * artifact exists to remove, and ADR-20's acceptance packet had to measure
+ * these four counts by hand because nothing published them.
+ *
+ * Call sites only (`name(`), never the import line, so a component that stops
+ * calling one drops out of the list even if the import lingers.
+ */
+function providerHooks(sourceAbs: string): string[] {
+  if (!existsSync(sourceAbs))
+    return []
+  const source = readFileSync(sourceAbs, 'utf8')
+  return PROVIDER_HOOKS.filter(([, callee]) => callee.test(source)).map(([reader]) => reader)
 }
 
 function capabilityJoin(row: CapabilityRowLite | undefined): CapabilityJoin | undefined {
@@ -215,6 +286,7 @@ function emptyTotals(): CatalogExtractionQuality {
     eventsWithDescription: 0,
     eventsFromExtractor: 0,
     eventsFromEmitsInterface: 0,
+    eventsModelSynthesised: 0,
     eventsModelDerived: 0,
     slots: 0,
     slotsWithDescription: 0,
@@ -269,11 +341,15 @@ export function buildComponentMeta(): { artifact: ComponentMetaArtifact, warning
       ...members.exposed.filter(x => isUnresolvedType(x.type)).map(x => `exposed ${x.name}: ${x.type}`),
     ].sort()
 
+    const intent = componentIntent(sourceAbs)
     const record: ComponentMetaRecord = {
       name: target.name,
       kind: target.kind,
       ...(target.parentComponent === undefined ? {} : { parentComponent: target.parentComponent }),
       ...componentDescription(sourceAbs, target.name),
+      // TASK-R5-O5. Section 1 of the page contract, authored in the SFC header so
+      // that whoever changes the behaviour is holding the paragraph describing it.
+      ...(intent === undefined ? {} : { intent }),
       family: target.family,
       ...(target.status === undefined ? {} : { status: target.status }),
       subpaths: target.subpaths,
@@ -283,6 +359,7 @@ export function buildComponentMeta(): { artifact: ComponentMetaArtifact, warning
       componentType: members.componentType,
       ...(row?.tier === undefined ? {} : { tier: row.tier }),
       anatomy: anatomyJoin(sourceAbs),
+      providerHooks: providerHooks(sourceAbs),
       ...(capabilityJoin(row) === undefined ? {} : { capability: capabilityJoin(row)! }),
       props: members.props,
       globalPropCount: members.globalPropCount,
@@ -322,6 +399,7 @@ export function buildComponentMeta(): { artifact: ComponentMetaArtifact, warning
     totals.eventsWithDescription += record.extraction.eventsWithDescription
     totals.eventsFromExtractor += members.events.filter(e => e.descriptionSource === 'vue-component-meta').length
     totals.eventsFromEmitsInterface += members.events.filter(e => e.descriptionSource === 'emits-interface').length
+    totals.eventsModelSynthesised += members.events.filter(e => e.descriptionSource === 'model-synthesised').length
     totals.eventsModelDerived += record.extraction.eventsModelDerived
     totals.slots += record.extraction.slots
     totals.slotsWithDescription += record.extraction.slotsWithDescription
@@ -393,7 +471,8 @@ if (isMain) {
     + `${t.compoundParts} compound parts), ${t.unclassifiable} unclassifiable`)
   console.warn(`  props ${t.propsWithDescription}/${t.props} described · `
     + `events ${t.eventsWithDescription}/${t.events} described `
-    + `(${t.eventsFromExtractor} extractor, ${t.eventsFromEmitsInterface} emits-interface) · `
+    + `(${t.eventsFromExtractor} extractor, ${t.eventsFromEmitsInterface} emits-interface, `
+    + `${t.eventsModelSynthesised} model-synthesised) · `
     + `slots ${t.slotsWithDescription}/${t.slots} described · `
     + `exposed ${t.exposedWithDescription}/${t.exposed} described`)
   console.warn(`  unresolved types ${t.unresolvedTypes} · `

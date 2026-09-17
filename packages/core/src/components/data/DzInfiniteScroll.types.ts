@@ -12,6 +12,7 @@
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 import type { InfiniteScrollDirection } from '../../composables/useInfiniteScroll/index.ts'
+import type { DzInfiniteScrollUi } from './DzInfiniteScroll.anatomy.ts'
 
 export type { InfiniteScrollDirection }
 
@@ -38,6 +39,13 @@ export interface DzInfiniteScrollProps extends BaseAccessibilityProps {
   direction?: InfiniteScrollDirection
   /** Component size — scales the sentinel + status row spacing */
   size?: CanonicalSize
+  /**
+   * Per-part class overrides, keyed by the names in `DzInfiniteScroll.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * a key outside the declared parts is a type error, not a class that lands
+   * nowhere.
+   */
+  ui?: DzInfiniteScrollUi
 }
 
 // ---------------------------------------------------------------------------

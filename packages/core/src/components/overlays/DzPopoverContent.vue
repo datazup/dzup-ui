@@ -20,6 +20,7 @@ import { PopoverArrow, PopoverContent, PopoverPortal } from 'reka-ui'
  */
 import { computed, useAttrs } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { popoverVariants } from './DzPopover.variants.ts'
 
@@ -72,6 +73,12 @@ function handleOpenAutoFocus(event: Event): void {
 function handleCloseAutoFocus(event: Event): void {
   emit('closeAutoFocus', event)
 }
+
+// Reduced motion, as the APPLICATION asked for it (ADR-20 §7, TASK-R5-O3).
+// The `prefers-reduced-motion` gate in the recipe answers for the OS; this
+// answers for a host with its own accessibility setting, which the media
+// query cannot see.
+const dzMotionAttr = useDzMotionAttribute()
 </script>
 
 <template>
@@ -84,7 +91,9 @@ function handleCloseAutoFocus(event: Event): void {
       :side="props.side"
       :side-offset="props.sideOffset"
       :align="props.align"
+      data-part="content"
       :class="contentClasses"
+      :data-dz-motion="dzMotionAttr"
       style="contain: layout style"
       v-bind="{ ...$attrs, class: undefined }"
       @escape-key-down="handleEscapeKeyDown"
@@ -96,7 +105,8 @@ function handleCloseAutoFocus(event: Event): void {
       <slot />
       <PopoverArrow
         v-if="props.arrow"
-        :class="styles.arrow()"
+        data-part="indicator"
+        :class="cn(styles.arrow(), props.ui?.indicator)"
         :width="10"
         :height="5"
       />

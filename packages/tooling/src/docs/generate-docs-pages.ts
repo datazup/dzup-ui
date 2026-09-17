@@ -84,6 +84,7 @@ import {
   renderStylingPosturePage,
 } from './evidence-pages.ts'
 import { atManualTripwire, crossCheckCapabilityJoin, crossCheckWcagDeviations } from './evidence.ts'
+import { checkPageContract, measureSections, SECTION_CHECKS } from './page-contract.ts'
 import { buildPlaygroundSeeds, componentsWithSeed, refusalsOf } from './playground-seeds.ts'
 import { readEvidenceSources } from './read-evidence.ts'
 
@@ -276,6 +277,21 @@ if (isMain) {
     for (const orphan of orphanPages(expected))
       problems.push(`${rel(orphan)} is an ORPHAN — a fresh run produces no such page. Delete it or regenerate.`)
 
+    // ── The page contract (TASK-R5-O5) ──────────────────────────────────────
+    // One check and one ratchet per section of the ten-section contract. The
+    // freshness clause above proves a page matches a fresh render; it says
+    // nothing about whether that render CONTAINS the sections the contract
+    // promises — which is how 144 pages shipped for a year saying "Not yet
+    // derived" where the keyboard table belongs, with nothing counting them.
+    const rendered = new Map(
+      publicComponents(artifact).map(r => [
+        r.name,
+        files.find(f => f.path === join(DOCS_COMPONENTS_DIR, `${r.name}.md`))?.content ?? '',
+      ]),
+    )
+    for (const v of checkPageContract(artifact, rendered))
+      problems.push(`[${v.rule}] ${v.message}`)
+
     for (const p of problems)
       console.error(`  ✗ ${p}`)
     if (problems.length > 0) {
@@ -286,6 +302,7 @@ if (isMain) {
     const atExecuted = evidence.atMatrix.entries
       .reduce((n, e) => n + e.rows.filter(r => r.result !== 'unrun').length, 0)
     const cells = evidence.capability.rows.flatMap(r => r.cells)
+    const sections = measureSections(artifact)
     console.warn(
       `  ✓ docs pages fresh — ${artifact.totals.publicComponents} component pages + index `
       + `+ ${files.filter(f => f.path.startsWith(DOCS_EVIDENCE_DIR)).length} evidence pages `
@@ -294,7 +311,11 @@ if (isMain) {
       + `    evidence: ${cells.length} capability cells `
       + `(${cells.filter(c => c.state === 'unrun').length} unrun, `
       + `${cells.filter(c => c.state === 'stale').length} stale) · `
-      + `AT cells executed ${atExecuted}/${atCells}`,
+      + `AT cells executed ${atExecuted}/${atCells}
+`
+      + `    page contract: ${SECTION_CHECKS.length} sections, each rendered on all `
+      + `${artifact.totals.publicComponents} pages — "not declared" cells per section: `
+      + `${SECTION_CHECKS.map(c => `${c.id}=${sections[c.id]}`).join(' · ')}`,
     )
     process.exit(0)
   }

@@ -39,6 +39,7 @@ const dzMessages = useComponentMessages('DzCarouselPrevious')
 <template>
   <button
     type="button"
+    data-part="action"
     :class="classes"
     :disabled="!carouselContext?.canPrev.value"
     :aria-label="dzMessages.previousSlide"

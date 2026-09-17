@@ -54,6 +54,41 @@ export function extractorId(): string {
 export const CORE_TSCONFIG = join(ROOT, 'packages/core/tsconfig.json')
 
 /**
+ * Every documentation block in a `.vue`, in file order, comment markers
+ * stripped (TASK-R5-O8).
+ *
+ * Both header dialects are read — the `<!-- … -->` one before `<script setup>`
+ * that `packages/core/src/providers/` uses, and the JSDoc one inside it that
+ * every other family uses — and **all** of their blocks, not the first of each
+ * kind.
+ *
+ * Reading only the first was a positional assumption, and TASK-R5-O8 broke it
+ * by accident: documenting `defineModel` put a one-line JSDoc above the SFC
+ * header in `DzBlockUI`, `DzPopconfirm` and `DzTour`, and all three lost their
+ * component description to a `Whether the blocking overlay …` comment that
+ * happened to sort first. A header is a header wherever the file puts it — the
+ * lead-line match, which must name THIS component, is what identifies one, and
+ * file order still decides between two candidates.
+ */
+function documentationBlocks(text: string): string[] {
+  const blocks: { index: number, body: string }[] = []
+  for (const re of [/<!--([\s\S]*?)-->/g, /\/\*\*([\s\S]*?)\*\//g]) {
+    for (const m of text.matchAll(re)) {
+      blocks.push({
+        index: m.index,
+        body: m[1]!
+          .split(/\r?\n/)
+          .map(l => l.replace(/^\s*\*?\s?/, ''))
+          .join('\n'),
+      })
+    }
+  }
+  return blocks
+    .sort((a, b) => a.index - b.index)
+    .map(b => b.body)
+}
+
+/**
  * The component's one-line "what it is" description, read from its SFC header
  * (TASK-N2-A3).
  *
@@ -91,20 +126,8 @@ export function componentDescription(
     return { description: '', descriptionSource: 'none' }
   }
 
-  // Both dialects, in file order: whichever documentation block comes first.
-  const blocks: string[] = []
-  const html = /<!--([\s\S]*?)-->/.exec(text)
-  const jsdoc = /\/\*\*([\s\S]*?)\*\//.exec(text)
-  const found = [html, jsdoc].filter(m => m !== null) as RegExpExecArray[]
-  found.sort((a, b) => a.index - b.index)
-  for (const m of found) {
-    blocks.push(
-      m[1]!
-        .split(/\r?\n/)
-        .map(l => l.replace(/^\s*\*?\s?/, ''))
-        .join('\n'),
-    )
-  }
+  // Both dialects, every block, in file order.
+  const blocks = documentationBlocks(text)
 
   // `Name — description`, tolerating every dash the repository actually uses.
   const lead = new RegExp(`^\\s*${name}\\s*(?:—|–|--|-)\\s*(\\S.*)$`, 'm')
@@ -118,6 +141,50 @@ export function componentDescription(
     }
   }
   return { description: '', descriptionSource: 'none' }
+}
+
+/**
+ * The component's intent and selection guidance, from an `@intent` block in the
+ * same SFC header `componentDescription` reads (TASK-R5-O5).
+ *
+ * The documentation contract's first section is *"what is this for, and when
+ * should you reach for something else"*. That sentence has to be authored by a
+ * person — no extractor can derive it — but it must NOT be authored in
+ * `apps/docs`: a selection guide living next to the site drifts from the
+ * component the first time the component changes, and nothing notices. Putting
+ * it in the source header means whoever changes the behaviour is holding the
+ * paragraph that describes it, and `validate:docs-pages` counts the components
+ * that have none under a ratchet.
+ *
+ * Multi-line and markdown-bearing: the block runs from `@intent` to the next
+ * block tag or the end of the comment, and is published verbatim.
+ *
+ * Returns `undefined` when the component declares none. **Nothing is inferred**
+ * — an absent intent is published as absent.
+ */
+export function componentIntent(vueAbsPath: string): string | undefined {
+  let text: string
+  try {
+    text = readFileSync(vueAbsPath, 'utf8')
+  }
+  catch {
+    return undefined
+  }
+
+  const blocks = documentationBlocks(text)
+
+  for (const block of blocks) {
+    const at = /^[ \t]*@intent[ \t]*\n?/m.exec(block)
+    if (at === null)
+      continue
+    const rest = block.slice(at.index + at[0].length)
+    // Up to the next block tag at the start of a line, or the end of the header.
+    const next = /^[ \t]*@\w+/m.exec(rest)
+    const body = (next === null ? rest : rest.slice(0, next.index)).trim()
+    if (body !== '')
+      return body.replace(/[ \t]+$/gm, '')
+  }
+  return undefined
 }
 
 /** Repo-relative, forward-slashed. Absolute paths would make the artifact machine-specific. */
@@ -226,6 +293,122 @@ export function emitsInterfaceDocs(
     out = map
   })
   return out
+}
+
+/**
+ * Every `Dz…Emits` interface in the program, keyed by name (TASK-R5-O8).
+ *
+ * `emitsInterfaceDocs` above looks in `{Component}.types.ts`, which is right
+ * for a component that owns a types file. **Thirteen compound parts do not**:
+ * `DzContextMenuContent`, `DzDialogContent`, `DzPopoverContent`,
+ * `DzSheetContent`, `DzListItem`, `DzMenuItem`, `DzSidebarItem`,
+ * `DzSplitButtonAction`, `DzStepperItem` and the two `…MenuItem`s all declare
+ * `defineEmits<Dz{Part}Emits>()` against an interface that lives in their
+ * PARENT's types file — `DzContextMenu.types.ts`, not
+ * `DzContextMenuContent.types.ts`, which does not exist. Measured at `99b963a`:
+ * 26 of the 35 undescribed authored events were documented prose the path guess
+ * could not reach.
+ *
+ * So the lookup becomes name-keyed instead of path-keyed. This is the same
+ * `ts.Program`, the same `ts.TypeChecker` and the same symbols as
+ * `emitsInterfaceDocs` — one index built once per run rather than one file
+ * guess per component. Names are unique repository-wide by the `Dz` +
+ * PascalCase + `Emits` convention; if two files ever declared the same name the
+ * first in the program's (sorted) file order wins, which is deterministic.
+ *
+ * `.vue` files are included: `vue-component-meta`'s program carries all 209 of
+ * them, and a part whose emits interface is declared locally in its own
+ * `<script setup>` is as documentable as one with a types file.
+ */
+export function emitsDocIndex(program: ts.Program): Map<string, Map<string, string>> {
+  const tc = program.getTypeChecker()
+  const out = new Map<string, Map<string, string>>()
+  const files = [...program.getSourceFiles()]
+    .filter(sf => !sf.isDeclarationFile && sf.fileName.replace(/\\/g, '/').includes('/packages/'))
+    .sort((a, b) => a.fileName.localeCompare(b.fileName, 'en'))
+  for (const sf of files) {
+    ts.forEachChild(sf, (node) => {
+      if (!ts.isInterfaceDeclaration(node) && !ts.isTypeAliasDeclaration(node))
+        return
+      const name = node.name.text
+      if (!name.startsWith('Dz') || !name.endsWith('Emits') || out.has(name))
+        return
+      const map = new Map<string, string>()
+      for (const prop of tc.getTypeAtLocation(node.name).getProperties()) {
+        const doc = ts.displayPartsToString(prop.getDocumentationComment(tc)).trim()
+        if (doc !== '')
+          map.set(prop.getName(), doc)
+      }
+      if (map.size > 0)
+        out.set(name, map)
+    })
+  }
+
+  // Re-export aliases, in a second pass so the declarations they point at are
+  // already indexed. `DzSplitter.types.ts` does
+  // `export type { DzResizableEmits as DzSplitterEmits }` — the component's
+  // emits interface exists, under another name, and a declaration-only index
+  // would report its one documented event as undescribed.
+  for (const sf of files) {
+    ts.forEachChild(sf, (node) => {
+      if (!ts.isExportDeclaration(node) || node.exportClause === undefined)
+        return
+      if (!ts.isNamedExports(node.exportClause))
+        return
+      for (const el of node.exportClause.elements) {
+        const alias = el.name.text
+        const original = el.propertyName?.text
+        if (original === undefined || !alias.endsWith('Emits') || out.has(alias))
+          continue
+        const target = out.get(original)
+        if (target !== undefined)
+          out.set(alias, target)
+      }
+    })
+  }
+  return out
+}
+
+/**
+ * The index, built at most once per `ts.Program`.
+ *
+ * `extractComponent` runs 208 times against one program; walking 1,488 source
+ * files each time would turn a 40-second generate into a 2-hour one. Keyed on
+ * the program itself so a second checker in the same process (the validator
+ * builds its own) gets its own index rather than a stale one.
+ */
+const EMITS_INDEX_CACHE = new WeakMap<ts.Program, Map<string, Map<string, string>>>()
+
+function cachedEmitsDocIndex(program: ts.Program): Map<string, Map<string, string>> {
+  const hit = EMITS_INDEX_CACHE.get(program)
+  if (hit !== undefined)
+    return hit
+  const built = emitsDocIndex(program)
+  EMITS_INDEX_CACHE.set(program, built)
+  return built
+}
+
+/**
+ * The prose published for an `update:*` event `defineModel` synthesised
+ * (decision A2-D2, TASK-R5-O8).
+ *
+ * Measured at `99b963a`: 71 of the 106 undescribed events are `update:*`. There
+ * is no member anywhere in the repository to hang a JSDoc comment on — Vue
+ * generates the emit from the `defineModel` call — so the options were a
+ * permanently blank cell on every `v-model` component's page, or one generated
+ * sentence that is true by construction. This is that sentence.
+ *
+ * It says only what the mechanism guarantees: the event fires when the binding
+ * changes and carries the new value. It deliberately does NOT describe what the
+ * value means — that belongs on the prop, which IS authorable (and was authored
+ * in the same task), and a generator that guessed at meaning would be exactly
+ * the "plausible but untrue" failure this pipeline exists to prevent.
+ */
+export function synthesiseModelEventDescription(eventName: string): string {
+  const key = eventName.slice('update:'.length)
+  const binding = key === 'modelValue' ? '`v-model`' : `\`v-model:${key}\``
+  return `Emitted when the ${binding} binding changes, with the new value. `
+    + `Synthesised by \`defineModel\` (ADR-16); ${binding} consumes it for you.`
 }
 
 // ── Frozen taxonomies (ADR-02) ───────────────────────────────────────────────
@@ -578,20 +761,34 @@ export function extractComponent(
     ? emitsInterfaceDocs(program, typesAbs, `${target.name}Emits`)
     : null
 
+  // Name-keyed fallback for the thirteen compound parts whose emits interface
+  // lives in the PARENT's types file (TASK-R5-O8). File-local always wins.
+  const indexedDocs = program === undefined
+    ? undefined
+    : cachedEmitsDocIndex(program).get(`${target.name}Emits`)
+
   const events: EventMetaRecord[] = meta.events.map((e) => {
     const own = e.description.trim()
-    const recovered = own === '' ? emitDocs?.get(e.name) : undefined
-    const description = own !== '' ? own : (recovered ?? '')
+    const recovered = own === ''
+      ? (emitDocs?.get(e.name) ?? indexedDocs?.get(e.name))
+      : undefined
+    const modelDerived = e.name.startsWith('update:')
+    const synthesised = own === '' && recovered === undefined && modelDerived
+      ? synthesiseModelEventDescription(e.name)
+      : undefined
+    const description = own !== '' ? own : (recovered ?? synthesised ?? '')
     const descriptionSource: DescriptionSource = own !== ''
       ? 'vue-component-meta'
-      : recovered !== undefined ? 'emits-interface' : 'none'
+      : recovered !== undefined
+        ? 'emits-interface'
+        : synthesised !== undefined ? 'model-synthesised' : 'none'
     return {
       name: e.name,
       type: normalizeType(e.type),
       signature: normalizeType(e.signature),
       description,
       descriptionSource,
-      modelDerived: e.name.startsWith('update:'),
+      modelDerived,
     }
   }).sort((a, b) => a.name.localeCompare(b.name, 'en'))
 

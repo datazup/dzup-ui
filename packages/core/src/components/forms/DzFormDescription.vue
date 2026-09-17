@@ -22,6 +22,11 @@ defineOptions({
   inheritAttrs: false,
 })
 
+defineSlots<{
+  /** The help text. Rendered in the element the control's `aria-describedby` names. */
+  default?: () => unknown
+}>()
+
 const attrs = useAttrs()
 const context = useFormFieldContext()
 

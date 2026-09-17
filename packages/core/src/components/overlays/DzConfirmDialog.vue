@@ -140,7 +140,7 @@ function handleInteractOutside(): void {
       @interact-outside="handleInteractOutside"
     >
       <!-- Icon -->
-      <div :class="iconClasses" aria-hidden="true">
+      <div data-part="icon" :class="cn(iconClasses, props.ui?.icon)" aria-hidden="true">
         <slot name="icon">
           <!-- Default icon: question mark for default, exclamation for danger -->
           <svg
@@ -177,19 +177,19 @@ function handleInteractOutside(): void {
       </div>
 
       <!-- Title -->
-      <DzDialogTitle :class="titleClasses">
+      <DzDialogTitle data-part="title" :class="cn(titleClasses, props.ui?.title)">
         {{ title }}
       </DzDialogTitle>
 
       <!-- Message / default slot -->
-      <DzDialogDescription :class="messageClasses">
+      <DzDialogDescription data-part="description" :class="cn(messageClasses, props.ui?.description)">
         <slot>
           {{ message }}
         </slot>
       </DzDialogDescription>
 
       <!-- Actions -->
-      <div :class="actionsClasses">
+      <div data-part="action" :class="cn(actionsClasses, props.ui?.action)">
         <DzButton
           variant="ghost"
           tone="neutral"

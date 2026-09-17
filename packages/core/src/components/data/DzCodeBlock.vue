@@ -13,6 +13,7 @@ import type { DzCodeBlockProps, DzCodeBlockSlots } from './DzCodeBlock.types.ts'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzCopyButton from '../buttons/DzCopyButton.vue'
 import { codeBlockVariants } from './DzCodeBlock.variants.ts'
@@ -65,6 +66,9 @@ const contentStyles = computed(() => {
   }
   return result
 })
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -75,7 +79,7 @@ const contentStyles = computed(() => {
     :aria-label="ariaLabel"
     role="region"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-code-block'), ...$attrs, class: undefined }"
   >
     <!-- Header -->
     <div

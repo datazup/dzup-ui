@@ -392,13 +392,74 @@ describe('readCascadeLayers', () => {
   })
 })
 
+/**
+ * Migrated by TASK-R5-O5.
+ *
+ * The first assertion here used to be *"always says not yet derived, and never
+ * prints a key table"*, and it was correct for N2-D2: no machine-readable
+ * keyboard contract existed, so a table would have been hand-typed. It exists
+ * now, so the specs assert the three states the section can be in — declared,
+ * explicitly none, and not declared — and the distinction between the last two
+ * is the one the whole contract turns on.
+ */
 describe('renderKeyboardSection', () => {
-  it('always says not yet derived, and never prints a key table', () => {
+  it('says NOT DECLARED — never "has no keyboard" — when no contract exists', () => {
     const ev = makeSources()
     const out = renderKeyboardSection(ev.quality.components[0]!, ev.capability.rows[0]!).join('\n')
-    expect(out).toContain('**Not yet derived.**')
+    expect(out).toContain('**Not declared.**')
+    expect(out).toContain('not a claim that it has no keyboard behaviour')
     expect(out).toContain('https://www.w3.org/WAI/ARIA/apg/patterns/button/')
     expect(out).not.toContain('| Key |')
+  })
+
+  it('prints the declared table, with provenance, when a contract exists', () => {
+    const ev = makeSources()
+    const out = renderKeyboardSection(ev.quality.components[0]!, ev.capability.rows[0]!, {
+      state: 'declared',
+      parts: ['root'],
+      source: 'packages/core/src/components/buttons/DzThing.anatomy.ts',
+      keyboard: [
+        { key: 'Enter', action: 'Activate the button.', wcag: ['2.1.1'], apg: 'button' },
+        { key: ' ', action: 'Activate the button.', wcag: ['2.1.1'], apg: 'button' },
+      ],
+    }).join('\n')
+
+    expect(out).toContain('**2 declared bindings.**')
+    expect(out).toContain('| Key |')
+    expect(out).toContain('`Enter`')
+    // The space bar is spelled `' '` in the contract and must READ as Space.
+    expect(out).toContain('`Space`')
+    expect(out).toContain('DzThing.anatomy.ts')
+    expect(out).not.toContain('Not declared')
+  })
+
+  it('publishes an explicit `none` as the claim it is, not as an absence', () => {
+    const ev = makeSources()
+    const out = renderKeyboardSection(ev.quality.components[0]!, ev.capability.rows[0]!, {
+      state: 'declared',
+      parts: ['root'],
+      keyboard: 'none',
+    }).join('\n')
+
+    expect(out).toContain('No keyboard behaviour of its own')
+    expect(out).toContain('explicit claim')
+    expect(out).not.toContain('**Not declared.**')
+    expect(out).not.toContain('| Key |')
+  })
+
+  it('marks an rtl-mirrored row as swapping, and leaves the rest alone', () => {
+    const ev = makeSources()
+    const out = renderKeyboardSection(ev.quality.components[0]!, ev.capability.rows[0]!, {
+      state: 'declared',
+      parts: ['root'],
+      keyboard: [
+        { key: 'ArrowRight', action: 'Move to the next tab.', rtl: 'mirrored' },
+        { key: 'Enter', action: 'Activate.' },
+      ],
+    }).join('\n')
+
+    expect(out).toContain('swaps with the writing direction')
+    expect(out).toMatch(/\| `Enter` \|.*\| — \|/)
   })
 
   it('says there is no pattern to link rather than linking a nonexistent page', () => {
@@ -491,8 +552,32 @@ describe('the real catalogue', () => {
       expect(out.startsWith('## Accessibility and evidence'), record.name).toBe(true)
       expect(out, record.name).toContain('**Risk tier:**')
       expect(out, record.name).toContain('### WCAG 2.2 criteria in scope')
-      expect(out, record.name).toContain('**Not yet derived.**')
+      expect(out, record.name).toContain('### Keyboard interaction')
       expect(out, record.name).toContain('### Evidence cells')
+    }
+  })
+
+  it('no page in the catalogue says "not yet derived" any more', () => {
+    // The state TASK-R5-O5 found: 144 of 144 pages carried that sentence where
+    // the keyboard table belongs. Asserted as an absence so a renderer edit
+    // cannot bring it back.
+    for (const record of publics) {
+      const out = renderEvidence(record as ComponentMetaRecord, ev).join('\n')
+      expect(out.toLowerCase(), record.name).not.toContain('not yet derived')
+    }
+  })
+
+  it('renders a real keyboard table wherever the component declares one', () => {
+    const declared = publics.filter(r => (r as ComponentMetaRecord).anatomy.keyboard !== undefined
+      && (r as ComponentMetaRecord).anatomy.keyboard !== 'none')
+    // Guards against the whole section going vacuous: if the catalogue stopped
+    // declaring contracts this test would pass trivially, so the count is
+    // asserted too.
+    expect(declared.length).toBeGreaterThan(80)
+    for (const record of declared) {
+      const out = renderEvidence(record as ComponentMetaRecord, ev).join('\n')
+      expect(out, record.name).toContain('declared binding')
+      expect(out, record.name).toContain('| Key |')
     }
   })
 

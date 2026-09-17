@@ -5,6 +5,7 @@ import type {
   DzInfiniteScrollSlots,
 } from './DzInfiniteScroll.types.ts'
 import { computed, ref, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useInfiniteScroll } from '../../composables/useInfiniteScroll/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzButton from '../buttons/DzButton.vue'
@@ -76,14 +77,17 @@ function retry(): void {
   retryLoad()
 }
 
-defineExpose({ retry })
+defineExpose({
+  /** Re-arm the loader and re-request the page whose load failed. */
+  retry,
+})
 
 const styles = computed(() =>
   infiniteScrollVariants({ size: props.size, direction: props.direction }),
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
 
 /** Whether to render the sentinel at all (no point once exhausted/failed). */
@@ -99,11 +103,15 @@ const announcement = computed(() => {
     return 'End of results'
   return ''
 })
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :data-size="size"
     :data-direction="direction"
@@ -113,7 +121,7 @@ const announcement = computed(() => {
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-infinite-scroll'), ...$attrs, class: undefined }"
   >
     <!-- Live region: announces loading / end / error transitions -->
     <div class="sr-only" aria-live="polite" aria-atomic="true">
@@ -121,14 +129,15 @@ const announcement = computed(() => {
     </div>
 
     <!-- Already-rendered items -->
-    <div :class="styles.content()">
+    <div data-part="content" :class="cn(styles.content(), ui?.content)">
       <slot />
     </div>
 
     <!-- Error state (takes precedence; offers retry) -->
     <div
       v-if="error"
-      :class="cn(styles.status(), styles.error())"
+      data-part="error"
+      :class="cn(styles.status(), styles.error(), ui?.error)"
       role="alert"
     >
       <slot name="error" :retry="retry">
@@ -140,7 +149,7 @@ const announcement = computed(() => {
     </div>
 
     <!-- Loading state -->
-    <div v-else-if="loading" :class="styles.status()">
+    <div v-else-if="loading" data-part="loader" :class="cn(styles.status(), ui?.loader)">
       <slot name="loading">
         <DzSpinner :size="size" label="Loading more items" />
         <span>Loading more…</span>
@@ -148,7 +157,7 @@ const announcement = computed(() => {
     </div>
 
     <!-- End state (no more items) -->
-    <div v-else-if="!hasMore" :class="styles.status()">
+    <div v-else-if="!hasMore" data-part="hint" :class="cn(styles.status(), ui?.hint)">
       <slot name="end">
         <span>You've reached the end.</span>
       </slot>

@@ -21,6 +21,26 @@ known one.
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 | `non-drag` | Perform the drag interaction without a pointer drag. | A keyboard or single-pointer path exists, is discoverable, and narrates each step. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzRangeSlider.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | — | Increase the focused thumb by one step. |
+| `ArrowLeft` | — | Decrease the focused thumb by one step. |
+| `ArrowUp` | — | Increase the focused thumb by one step. |
+| `ArrowDown` | — | Decrease the focused thumb by one step. |
+| `PageUp` | — | Increase the focused thumb by the large step. |
+| `PageDown` | — | Decrease the focused thumb by the large step. |
+| `Home` | — | Set the focused thumb to its minimum. |
+| `End` | — | Set the focused thumb to its maximum. |
+| `Tab` | — | Move to the other thumb; each thumb is its own tab stop. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

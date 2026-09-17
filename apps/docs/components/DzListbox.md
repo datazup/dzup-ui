@@ -19,6 +19,14 @@ Always-visible single/multi-select list using Reka UI Listbox
 - **Risk tier:** B · **Status:** experimental
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **v-model:** `v-model` (`DzListboxValue | DzListboxValue[] | null | undefined`)
+- **Anatomy parts (ADR-19):** `control`, `empty`, `error`, `group`, `group-label`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `viewport`
+
+## Intent and selection guidance
+
+**Not declared.** `DzListbox` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (29, of which 18 inherited from `@dzup-ui/contracts`)
+## Props (30, of which 18 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -57,13 +65,13 @@ never as asserted.
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `invalid` | `boolean \| undefined` | no | `false` | Whether the field value is invalid |
 | `loading` | `boolean \| undefined` | no | — | Loading state -- shows loading indicator |
-| `modelValue` | `DzListboxValue \| DzListboxValue[] \| null \| undefined` | no | `null` | — |
+| `modelValue` | `DzListboxValue \| DzListboxValue[] \| null \| undefined` | no | `null` | Value of the selected option, or an array of values when `multiple` is set; `null` selects none. |
 | `multiple` | `boolean \| undefined` | no | `false` | Allow selecting multiple values — switches the model to an array |
 | `name` | `string \| undefined` | no | `undefined` | Component name for form integration |
 | `optionDisabled` | `string \| undefined` | no | `undefined` | Key used to read the disabled flag from arbitrary option objects |
 | `optionGroup` | `string \| undefined` | no | `undefined` | Key used to read the group name from arbitrary option objects |
 | `optionLabel` | `string \| undefined` | no | `undefined` | Key used to read the display label from arbitrary option objects |
-| `options` | `Record<string, unknown>[] \| DzListboxOption[]` | yes | — | Available options. Either canonical {@link DzListboxOption}s or arbitrary objects resolved through `optionLabel`/`optionValue`/`optionGroup`. |
+| `options` | `DzListboxOption[] \| Record<string, unknown>[]` | yes | — | Available options. Either canonical {@link DzListboxOption}s or arbitrary objects resolved through `optionLabel`/`optionValue`/`optionGroup`. |
 | `optionsError` | `string \| undefined` | no | `undefined` | Why the load failed, shown in the error row. Ignored unless `optionsState` is `'error'`. |
 | `optionsRetryable` | `boolean \| undefined` | no | `undefined` | Whether to offer a retry control in the error row. Defaults to true when `optionsState` can be `'error'`. Set false when the host retries on its own and a button would be a second, competing path. |
 | `optionsState` | `AsyncOptionsState \| undefined` | no | `undefined` | Where the option set is. Omitted means the options are static and the control renders no state rows at all. |
@@ -72,6 +80,7 @@ never as asserted.
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | — | Semantic color tone |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "error" \| "item-label" \| "group" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "group-label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzListbox.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the listbox box, declared there as `control`. |
 | `variant` | `undefined` | no | — | Visual style variant |
 
 ## Events (9)
@@ -86,7 +95,7 @@ never as asserted.
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
 | `select` | `[value: DzListboxModelValue]` | An item was selected from a list/collection |
-| `update:modelValue` | `[value: DzListboxValue \| DzListboxValue[] \| null]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: DzListboxValue \| DzListboxValue[] \| null]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (4)
 
@@ -114,6 +123,146 @@ Editable, running the **States** story from `packages/core/stories/forms/DzListb
 
 <DzPlayground component="DzListbox" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzListbox />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzListbox v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzListbox :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 8 stories in
+`packages/core/stories/forms/DzListbox.stories.ts`: `Single`, `Multiple`, `WithFilter`, `Grouped`, `Disabled`, `InsideFormField`, `DarkMode`, `States`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `control` | `[data-part="control"]` | yes |
+| `empty` | `[data-part="empty"]` | no — renders zero or more than once |
+| `error` | `[data-part="error"]` | no — renders zero or more than once |
+| `group` | `[data-part="group"]` | no — renders zero or more than once |
+| `group-label` | `[data-part="group-label"]` | no — renders zero or more than once |
+| `icon` | `[data-part="icon"]` | no — renders zero or more than once |
+| `input` | `[data-part="input"]` | no — renders zero or more than once |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `item-indicator` | `[data-part="item-indicator"]` | no — renders zero or more than once |
+| `item-label` | `[data-part="item-label"]` | no — renders zero or more than once |
+| `options-message` | `[data-part="options-message"]` | no — renders zero or more than once |
+| `options-retry` | `[data-part="options-retry"]` | no — renders zero or more than once |
+| `options-state` | `[data-part="options-state"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `viewport` | `[data-part="viewport"]` | yes |
+
+```vue
+<DzListbox :ui="{ 'control': 'ring-2', 'empty': 'ring-2', 'error': 'ring-2', 'group': 'ring-2', 'group-label': 'ring-2', 'icon': 'ring-2', 'input': 'ring-2', 'item': 'ring-2', 'item-indicator': 'ring-2', 'item-label': 'ring-2', 'options-message': 'ring-2', 'options-retry': 'ring-2', 'options-state': 'ring-2', 'root': 'ring-2', 'viewport': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `checked` | `[data-state="checked"]` |
+| `disabled` | `[data-state="disabled"]` |
+| `invalid` | `[data-state="invalid"]` |
+| `loading` | `[data-state="loading"]` |
+| `readonly` | `[data-state="readonly"]` |
+| `required` | `[data-state="required"]` |
+| `unchecked` | `[data-state="unchecked"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+| Custom property |
+| --- |
+| `--dz-listbox-active-ring` |
+| `--dz-listbox-bg` |
+| `--dz-listbox-border` |
+| `--dz-listbox-fg` |
+| `--dz-listbox-item-active-bg` |
+| `--dz-listbox-item-selected-bg` |
+| `--dz-listbox-item-selected-fg` |
+| `--dz-listbox-radius` |
+
+Declared in `packages/core/src/components/forms/DzListbox.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDirection` | the document writing direction |
+| `useDzMessages` | the translated string catalogue |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** Reads `useDzDirection`, `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzListbox.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzListbox` advertises 7 states:
+`checked`, `disabled`, `invalid`, `loading`, `readonly`, `required`, `unchecked`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzListbox.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `e986952`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -121,8 +270,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 29 | 28 | 8 declare a default, of which 16 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 9 | 8 | 8 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 30 | 30 | 8 declare a default, of which 16 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 9 | 9 | 8 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 4 | 4 | 3 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -130,8 +279,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -140,7 +289,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)
 - **Traits:** `dataset`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `e986952e`
 
 ### WCAG 2.2 criteria in scope (21)
@@ -175,16 +324,25 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**7 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `ArrowDown` | Move focus to the next option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `ArrowUp` | Move focus to the previous option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Home` | Move focus to the first option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `End` | Move focus to the last option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Enter` | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Space` | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| any character key | Move focus to the next option whose label starts with that character. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+
+Declared in `packages/core/src/components/forms/DzListbox.anatomy.ts`.
 
 - **Pattern:** [APG — `listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/forms/DzListbox.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowUp`, `Home`, `End`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -218,16 +376,16 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzListbox.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzListbox.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzListbox.spec.ts` — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowUp`, `Home`, `End`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzListbox.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzListbox.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzListbox.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzListbox.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzListbox.md` — 6 AT/browser pairs, none executed. |
 
-**5 unrun:** `axe`, `controlled-uncontrolled`, `rtl-contract`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

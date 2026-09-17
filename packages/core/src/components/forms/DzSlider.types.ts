@@ -15,6 +15,7 @@ import type {
   ChangeEvents,
   Orientation,
 } from '@dzup-ui/contracts'
+import type { DzSliderUi } from './DzSlider.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -38,6 +39,13 @@ export interface DzSliderProps extends BaseAccessibilityProps, BaseValidationPro
   orientation?: Orientation
   /** Form field name */
   name?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzSlider.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`,
+   * declared here as `control` — so `ui.root` is the only route to the
+   * wrapper element.
+   */
+  ui?: DzSliderUi
 }
 
 // ---------------------------------------------------------------------------

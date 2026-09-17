@@ -104,10 +104,14 @@ export default defineConfig({
     // The pre-existing functional lanes. `testIgnore` keeps e2e/matrix out of
     // them: without it, adding the matrix directory under `testDir: './e2e'`
     // would silently triple the runtime of every existing engine project and
-    // run each matrix spec once with no condition set.
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: /[\\/]matrix[\\/]/ },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testIgnore: /[\\/]matrix[\\/]/ },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testIgnore: /[\\/]matrix[\\/]/ },
+    // run each matrix spec once with no condition set. e2e/styling is excluded
+    // for the opposite reason — it has its own config
+    // (e2e/styling/playwright.layer-order.config.ts) because it needs NO web
+    // server, and running it here would make a two-stylesheet assertion wait on
+    // a Storybook build (TASK-R5-O1).
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: /[\\/](?:matrix|styling)[\\/]/ },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testIgnore: /[\\/](?:matrix|styling)[\\/]/ },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testIgnore: /[\\/](?:matrix|styling)[\\/]/ },
     ...matrixProjects,
   ],
   webServer: {

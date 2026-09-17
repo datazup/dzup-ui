@@ -28,6 +28,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Whether the dialog is open; `false` keeps it closed. */
 const open = defineModel<boolean>('open', { default: false })
 
 const props = withDefaults(defineProps<DzDialogProps>(), {

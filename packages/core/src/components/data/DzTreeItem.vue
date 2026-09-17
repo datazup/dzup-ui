@@ -7,6 +7,8 @@ import type { DzTreeItemProps, DzTreeItemSlots, TreeNode } from './DzTree.types.
  * Recursively renders children for nested tree structures.
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TREE_KEY } from './DzTree.types.ts'
 import { treeVariants } from './DzTree.variants.ts'
@@ -23,6 +25,11 @@ const props = withDefaults(defineProps<DzTreeItemProps>(), {
 })
 
 defineSlots<DzTreeItemSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
 const treeContext = inject(DZ_TREE_KEY, null)
@@ -66,6 +73,7 @@ const itemClasses = computed(() =>
     styles.value.item(),
     isSelected.value ? styles.value.itemSelected() : '',
     attrs.class as string | undefined,
+    props.ui?.item,
   ),
 )
 
@@ -102,6 +110,12 @@ function handleKeydown(event: KeyboardEvent, node: TreeNode): void {
   if (node.disabled)
     return
 
+  // APG's tree pattern is stated on the inline axis, not on physical keys: in
+  // an RTL tree ArrowLeft expands and ArrowRight collapses (ADR-20 §4,
+  // TASK-R5-O3).
+  const expandKey = dzDirection.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
+  const collapseKey = dzDirection.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+
   switch (event.key) {
     case 'Enter':
     case ' ':
@@ -124,7 +138,7 @@ function handleKeydown(event: KeyboardEvent, node: TreeNode): void {
       event.preventDefault()
       treeContext?.navigate(node.key, 'last')
       break
-    case 'ArrowRight':
+    case expandKey:
       // APG: collapsed branch → expand it; expanded branch → step into the
       // first child; leaf → no-op.
       if (hasChildren.value) {
@@ -135,7 +149,7 @@ function handleKeydown(event: KeyboardEvent, node: TreeNode): void {
           treeContext?.toggleExpand(node.key)
       }
       break
-    case 'ArrowLeft':
+    case collapseKey:
       // APG: expanded branch → collapse it; otherwise → step out to the parent.
       event.preventDefault()
       if (hasChildren.value && isExpanded.value)
@@ -152,11 +166,17 @@ function handleRowFocus(node: TreeNode): void {
     return
   treeContext?.setActiveKey(node.key)
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <li
     :id="itemId"
+    data-part="root"
+    v-bind="dzTestId('dz-tree-item')"
+    :class="cn(props.ui?.root)"
     role="treeitem"
     :aria-level="ariaLevel"
     :aria-posinset="posInSet"
@@ -168,6 +188,7 @@ function handleRowFocus(node: TreeNode): void {
     :data-disabled="node.disabled ? '' : undefined"
   >
     <div
+      data-part="item"
       :class="itemClasses"
       :tabindex="rowTabindex"
       data-dz-tree-row
@@ -186,20 +207,22 @@ function handleRowFocus(node: TreeNode): void {
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        :class="cn(styles.expandIcon(), isExpanded ? styles.expandIconOpen() : '')"
+        data-part="indicator"
+        :class="cn(styles.expandIcon(), isExpanded ? styles.expandIconOpen() : '', props.ui?.indicator)"
         data-dz-tree-toggle
         aria-hidden="true"
         @click.stop="handleToggleExpand(node)"
       >
         <polyline points="9 6 15 12 9 18" />
       </svg>
-      <span v-else :class="styles.expandIcon()" aria-hidden="true" />
+      <span v-else data-part="indicator" :class="cn(styles.expandIcon(), props.ui?.indicator)" aria-hidden="true" />
 
       <!-- Checkbox (if checkable). aria-label names the toggle (the visual box
            carries no text of its own) so it satisfies aria-toggle-field-name. -->
       <span
         v-if="treeContext?.checkable.value"
-        :class="styles.checkbox()"
+        data-part="control"
+        :class="cn(styles.checkbox(), props.ui?.control)"
         :data-state="isSelected ? 'checked' : 'unchecked'"
         role="checkbox"
         :aria-checked="isSelected"
@@ -216,15 +239,16 @@ function handleRowFocus(node: TreeNode): void {
 
       <!-- Node content -->
       <slot :node="node" :level="level" :expanded="isExpanded" :selected="isSelected">
-        <span :class="styles.nodeContent()">{{ node.label }}</span>
+        <span data-part="item-label" :class="cn(styles.nodeContent(), props.ui?.['item-label'])">{{ node.label }}</span>
       </slot>
     </div>
 
     <!-- Recursive children -->
     <ul
       v-if="hasChildren && isExpanded"
+      data-part="group"
       role="group"
-      :class="styles.children()"
+      :class="cn(styles.children(), props.ui?.group)"
     >
       <DzTreeItem
         v-for="(child, index) in node.children"

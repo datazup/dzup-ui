@@ -1,0 +1,546 @@
+{
+  "$schema": "./ui-merge-order-ceilings.schema.md",
+  "contract": "UI_MERGE_ORDER = recipe -> ui -> class (@dzup-ui/contracts/composition, TASK-R5-O6 decision D38)",
+  "sourceCommit": "99b963a",
+  "measuredAt": "2026-09-15",
+  "why": [
+    "ADR-19 §5 defined the `ui` prop and said class and ui merge through the same cn(),",
+    "but never said in which order. cn() is tailwind-merge, so the order IS the answer to",
+    "\"which wins\". D38 ratifies recipe -> ui -> class: the consumer class is passed last and",
+    "wins, which is what ADR-19 §5 promises (\"Nothing about existing usage changes\") and what",
+    "keeps a wrapper's `ui` overridable without !important.",
+    "The components below merge the other way. They are a recorded defect, NOT an exemption:",
+    "the ceiling is downward-only, so the count can fall and can never rise, and a NEW",
+    "component that merges the wrong way fails the contract lane immediately.",
+    "They are not fixed here because re-ordering a merge changes rendered output, and",
+    "TASK-R5-O6 writes the contract rather than migrating to it (task <stop_conditions>).",
+    "Two idioms carry this merge: a cn() call, and a template array binding whose first",
+    "element is a computed that already folded attrs.class in ([rootClasses, ui?.root]).",
+    "The array form is 19 of the sites in 18 components and was invisible to the first",
+    "version of this gate; the scanner reads both, and each entry records which."
+  ],
+  "maxDeviatingComponents": 73,
+  "maxDeviatingSites": 74,
+  "conformant": {
+    "count": 5,
+    "components": [
+      "DzButton",
+      "DzDialogContent",
+      "DzInput",
+      "DzSelect",
+      "DzTable"
+    ],
+    "note": "Exactly the P3-03 pilot set in packages/core/stories/compositions/styling/Overrides.stories.ts, the fixture behind the only browser evidence the override contract has (e2e/components/styling-overrides.spec.ts). They are also the only five that merge in the ratified order — which is why D38 ratifies theirs and not the majority's."
+  },
+  "deviating": [
+    {
+      "component": "DzAccordion",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzAnchor",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzBlockquote",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzBlockUI",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzBreadcrumbItem",
+      "sites": 1,
+      "parts": []
+    },
+    {
+      "component": "DzButtonGroup",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzCalendar",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzCaption",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzCard",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzCarousel",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzCascader",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzCheckbox",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzCode",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzColorModeToggle",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzColorPicker",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzCombobox",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzCopyButton",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzDataGrid",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzDataView",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzDatePicker",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzDateRangePicker",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzFab",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzHeading",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzIconButton",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzImageCard",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzImageComparison",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzInfiniteScroll",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzInplace",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzInputGroup",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzInputMask",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzKbd",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzKnob",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzLightbox",
+      "sites": 1,
+      "parts": [
+        "content"
+      ]
+    },
+    {
+      "component": "DzListbox",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzMegaMenu",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzMention",
+      "sites": 2,
+      "parts": [
+        "input"
+      ]
+    },
+    {
+      "component": "DzMenu",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzMultiSelect",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzNumberInput",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzOrderList",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzOtpInput",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzPagination",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzPanel",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzPasswordInput",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzRadio",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzRangeSlider",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzRating",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzRelativeTime",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzResizable",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzScrollArea",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzSearchInput",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzSegmented",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzSidebar",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzSlider",
+      "sites": 1,
+      "parts": [
+        "control"
+      ]
+    },
+    {
+      "component": "DzSpeedDial",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzSplitButton",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzSplitter",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzStatCard",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzStepper",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzSwitch",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzTabs",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzTagsInput",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzText",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzTextarea",
+      "sites": 1,
+      "parts": [
+        "input"
+      ]
+    },
+    {
+      "component": "DzTimePicker",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzToast",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzToggleButton",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzToolbar",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzTransfer",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzTree",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    },
+    {
+      "component": "DzTreeItem",
+      "sites": 1,
+      "parts": [
+        "item"
+      ]
+    },
+    {
+      "component": "DzTreeSelect",
+      "sites": 1,
+      "parts": [
+        "trigger"
+      ]
+    },
+    {
+      "component": "DzVisuallyHidden",
+      "sites": 1,
+      "parts": [
+        "root"
+      ]
+    }
+  ]
+}

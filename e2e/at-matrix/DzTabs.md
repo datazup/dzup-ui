@@ -20,6 +20,26 @@ known one.
 | `navigate` | Move through the collection with the pattern's own keys or gestures. | Each item is announced with its position and set size, and nothing is skipped. |
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/navigation/DzTabs.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowRight` | horizontal | Move to the next tab. |
+| `ArrowLeft` | horizontal | Move to the previous tab. |
+| `ArrowDown` | vertical | Move to the next tab. |
+| `ArrowUp` | vertical | Move to the previous tab. |
+| `Home` | — | Move to the first tab. |
+| `End` | — | Move to the last tab. |
+| `Enter` | activationMode manual | Activate the focused tab. |
+| `Space` | activationMode manual | Activate the focused tab. |
+| `Tab` | — | Move out of the tab list to the active panel; the list is one tab stop. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

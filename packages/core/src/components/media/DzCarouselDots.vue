@@ -42,6 +42,7 @@ const dzMessages = useComponentMessages('DzCarouselDots')
 
 <template>
   <div
+    data-part="list"
     :class="dotsClasses"
     role="tablist"
     :aria-label="dzMessages.slideNavigation"
@@ -52,6 +53,7 @@ const dzMessages = useComponentMessages('DzCarouselDots')
       :key="index"
       type="button"
       role="tab"
+      data-part="item-indicator"
       :aria-selected="index === carouselContext?.activeIndex.value"
       :aria-label="`Go to slide ${index + 1}`"
       :class="styles.dotButton()"

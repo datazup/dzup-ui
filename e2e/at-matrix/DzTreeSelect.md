@@ -25,6 +25,27 @@ known one.
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/forms/DzTreeSelect.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `ArrowDown` | — | Open the list when closed, otherwise move to the next option. |
+| `ArrowUp` | — | Open the list when closed, otherwise move to the previous option. |
+| `Home` | list open | Move to the first option. |
+| `End` | list open | Move to the last option. |
+| `Enter` | — | Select the highlighted option and close the list. |
+| `Escape` | — | Close the list without changing the value. |
+| `Tab` | — | Move out of the control, closing the list. |
+| `ArrowRight` | — | Expand the focused node. |
+| `ArrowLeft` | — | Collapse the focused node, or move to its parent. |
+| `Space` | — | Select the focused node. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

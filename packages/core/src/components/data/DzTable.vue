@@ -29,6 +29,7 @@ import type { DzTableContext, DzTableEmits, DzTableProps, DzTableSlots } from '.
  * ```
  */
 import { computed, provide, ref, toRef, useAttrs } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 import { tableVariants } from './DzTable.variants.ts'
@@ -161,6 +162,9 @@ const rootStyle = computed(() => {
 const tableClasses = computed(() => cn(styles.value.root(), props.ui?.content))
 
 const captionClasses = computed(() => cn(props.captionVisible ? undefined : 'sr-only', props.ui?.title))
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -172,7 +176,7 @@ const captionClasses = computed(() => cn(props.captionVisible ? undefined : 'sr-
     :data-loading="loading ? '' : undefined"
     :data-virtual="virtualScroll ? '' : undefined"
     :style="rootStyle"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-table'), ...$attrs, class: undefined }"
     @scroll="isVirtual ? onScroll() : undefined"
   >
     <table

@@ -19,8 +19,8 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * ```
  */
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
-import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
-import { useDzLocale } from '../../composables/provider/useDzLocale.ts'
+import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzFormats } from '../../composables/provider/useDzFormats.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cachedDateTimeFormat } from '../../i18n/intl-cache.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
@@ -31,6 +31,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** The selected time as a canonical 24-hour `HH:mm` or `HH:mm:ss` string; the default empty string selects no time. */
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzTimePickerProps>(), {
@@ -77,7 +78,10 @@ const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzTimePicker')
-const dzLocale = useDzLocale()
+// The application's date/time defaults (ADR-20 §5, TASK-R5-O3). Used when this
+// instance states no `locale`; see DzAnimatedNumber for why an instance locale
+// falls back to the shared cache instead.
+const dzFormats = useDzFormats()
 const resolvedConfirmText = computed(() => props.confirmText ?? dzMessages.value.confirm)
 const resolvedCancelText = computed(() => props.cancelText ?? dzMessages.value.cancel)
 
@@ -163,14 +167,20 @@ const displayValue = computed(() => {
   if (!p)
     return ''
   const date = new Date(2000, 0, 1, p.hour, p.minute, p.second)
-  // Was `props.locale ?? 'en-US'`. The fallback is now the application's
-  // declared locale, and `en-US` only when nothing declared one (ADR-20).
-  return cachedDateTimeFormat(props.locale ?? dzLocale.value, {
+  // Was `props.locale ?? 'en-US'`, then `props.locale ?? dzLocale.value`. It is
+  // now the application's FORMATS (TASK-R5-O3): `useDzFormats` binds the same
+  // provider locale and, on top of it, the host's `formats.date` defaults — so
+  // an application that asked for a 24-hour clock everywhere gets one here too.
+  // An instance that names its own `locale` still wins, through the cache.
+  const options: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit',
     second: showSeconds.value ? '2-digit' : undefined,
     hour12: props.hour12,
-  }).format(date)
+  }
+  return (props.locale === undefined
+    ? dzFormats.date(options)
+    : cachedDateTimeFormat(props.locale, options)).format(date)
 })
 
 // ---------------------------------------------------------------------------
@@ -448,20 +458,24 @@ const styles = computed(() =>
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
   <div
-    :class="rootClasses"
+    data-part="root"
+    :class="[rootClasses, ui?.root]"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-time-picker'), ...$attrs, class: undefined }"
   >
     <PopoverRoot v-model:open="open">
-      <div :class="styles.control()">
+      <div data-part="control" :class="[styles.control(), ui?.control]">
         <PopoverTrigger
           as-child
           :disabled="resolvedDisabled"
@@ -470,7 +484,8 @@ const rootClasses = computed(() =>
             :id="resolvedId"
             ref="triggerEl"
             type="button"
-            :class="styles.trigger()"
+            data-part="trigger"
+            :class="[styles.trigger(), ui?.trigger]"
             role="combobox"
             :aria-label="resolvedAriaLabel"
             :aria-labelledby="ariaLabelledby"
@@ -484,18 +499,19 @@ const rootClasses = computed(() =>
             @blur="handleBlur"
           >
             <slot name="trigger" :value="model" :display="displayValue">
-              <span v-if="displayValue" :class="styles.valueText()">{{ displayValue }}</span>
-              <span v-else :class="styles.placeholder()">{{ placeholder }}</span>
+              <span v-if="displayValue" data-part="label" :class="[styles.valueText(), ui?.label]">{{ displayValue }}</span>
+              <span v-else data-part="label" :class="[styles.placeholder(), ui?.label]">{{ placeholder }}</span>
             </slot>
 
-            <Clock v-if="indicator && !showCleaner" :class="styles.icon()" aria-hidden="true" />
+            <Clock v-if="indicator && !showCleaner" data-part="icon" :class="[styles.icon(), ui?.icon]" aria-hidden="true" />
           </button>
         </PopoverTrigger>
 
         <button
           v-if="showCleaner"
           type="button"
-          :class="styles.cleaner()"
+          data-part="clear"
+          :class="[styles.cleaner(), ui?.clear]"
           :aria-label="dzMessages.clearTime"
           @click="handleClear"
           @focus="handleFocus"
@@ -511,19 +527,23 @@ const rootClasses = computed(() =>
         :defer="portalDefer"
       >
         <PopoverContent
+          data-part="content"
           :side-offset="4"
           align="start"
           class="z-50"
+          :class="[ui?.content]"
         >
-          <div :class="styles.panel()">
+          <div data-part="panel" :class="[styles.panel(), ui?.panel]">
             <!-- Roll layout: scrollable unit columns -->
             <div
               v-if="selection === 'roll'"
               ref="columnsEl"
-              :class="styles.columns()"
+              data-part="list"
+              :class="[styles.columns(), ui?.list]"
             >
               <div
-                :class="styles.column()"
+                data-part="group"
+                :class="[styles.column(), ui?.group]"
                 data-roll-column
                 role="listbox"
                 :aria-label="dzMessages.hours"
@@ -532,7 +552,8 @@ const rootClasses = computed(() =>
                   v-for="h in hourValues"
                   :key="`h-${h}`"
                   type="button"
-                  :class="styles.option()"
+                  data-part="item"
+                  :class="[styles.option(), ui?.item]"
                   :data-selected="selectedHourDisplay === h"
                   :aria-selected="selectedHourDisplay === h"
                   :aria-disabled="!isHourEnabled(h) || undefined"
@@ -544,7 +565,8 @@ const rootClasses = computed(() =>
               </div>
 
               <div
-                :class="styles.column()"
+                data-part="group"
+                :class="[styles.column(), ui?.group]"
                 data-roll-column
                 role="listbox"
                 :aria-label="dzMessages.minutes"
@@ -553,7 +575,8 @@ const rootClasses = computed(() =>
                   v-for="m in minuteValues"
                   :key="`m-${m}`"
                   type="button"
-                  :class="styles.option()"
+                  data-part="item"
+                  :class="[styles.option(), ui?.item]"
                   :data-selected="draftMinute === m"
                   :aria-selected="draftMinute === m"
                   :aria-disabled="!isMinuteEnabled(m) || undefined"
@@ -566,7 +589,8 @@ const rootClasses = computed(() =>
 
               <div
                 v-if="showSeconds"
-                :class="styles.column()"
+                data-part="group"
+                :class="[styles.column(), ui?.group]"
                 data-roll-column
                 role="listbox"
                 :aria-label="dzMessages.seconds"
@@ -575,7 +599,8 @@ const rootClasses = computed(() =>
                   v-for="s in secondValues"
                   :key="`s-${s}`"
                   type="button"
-                  :class="styles.option()"
+                  data-part="item"
+                  :class="[styles.option(), ui?.item]"
                   :data-selected="draftSecond === s"
                   :aria-selected="draftSecond === s"
                   :aria-disabled="!isSecondEnabled(s) || undefined"
@@ -588,7 +613,8 @@ const rootClasses = computed(() =>
 
               <div
                 v-if="is12h"
-                :class="styles.column()"
+                data-part="group"
+                :class="[styles.column(), ui?.group]"
                 data-roll-column
                 role="listbox"
                 :aria-label="dzMessages.dayPeriod"
@@ -597,7 +623,8 @@ const rootClasses = computed(() =>
                   v-for="mer in (['AM', 'PM'] as const)"
                   :key="mer"
                   type="button"
-                  :class="styles.option()"
+                  data-part="item"
+                  :class="[styles.option(), ui?.item]"
                   :data-selected="draftHour !== null && draftMeridiem === mer"
                   :aria-selected="draftHour !== null && draftMeridiem === mer"
                   :aria-disabled="!isMeridiemEnabled(mer) || undefined"
@@ -612,10 +639,12 @@ const rootClasses = computed(() =>
             <!-- Select layout: native dropdowns -->
             <div
               v-else
-              :class="styles.selectRow()"
+              data-part="list"
+              :class="[styles.selectRow(), ui?.list]"
             >
               <select
-                :class="styles.select()"
+                data-part="input"
+                :class="[styles.select(), ui?.input]"
                 :aria-label="dzMessages.selectHours"
                 :value="selectedHourDisplay ?? ''"
                 @change="onSelectHour"
@@ -632,9 +661,10 @@ const rootClasses = computed(() =>
                   {{ hourLabel(h) }}
                 </option>
               </select>
-              <span :class="styles.selectSeparator()">:</span>
+              <span data-part="separator" :class="[styles.selectSeparator(), ui?.separator]">:</span>
               <select
-                :class="styles.select()"
+                data-part="input"
+                :class="[styles.select(), ui?.input]"
                 :aria-label="dzMessages.selectMinutes"
                 :value="draftMinute ?? ''"
                 @change="onSelectMinute"
@@ -652,9 +682,10 @@ const rootClasses = computed(() =>
                 </option>
               </select>
               <template v-if="showSeconds">
-                <span :class="styles.selectSeparator()">:</span>
+                <span data-part="separator" :class="[styles.selectSeparator(), ui?.separator]">:</span>
                 <select
-                  :class="styles.select()"
+                  data-part="input"
+                  :class="[styles.select(), ui?.input]"
                   :aria-label="dzMessages.selectSeconds"
                   :value="draftSecond ?? ''"
                   @change="onSelectSecond"
@@ -674,7 +705,8 @@ const rootClasses = computed(() =>
               </template>
               <select
                 v-if="is12h"
-                :class="styles.select()"
+                data-part="input"
+                :class="[styles.select(), ui?.input]"
                 :aria-label="dzMessages.selectDayPeriod"
                 :value="draftHour !== null ? draftMeridiem : ''"
                 @change="onSelectMeridiem"
@@ -694,17 +726,19 @@ const rootClasses = computed(() =>
             </div>
 
             <!-- Footer -->
-            <div v-if="footer" :class="styles.footer()">
+            <div v-if="footer" data-part="footer" :class="[styles.footer(), ui?.footer]">
               <button
                 type="button"
-                :class="styles.footerButton({ confirm: false })"
+                data-part="action"
+                :class="[styles.footerButton({ confirm: false }), ui?.action]"
                 @click="handleCancel"
               >
                 {{ resolvedCancelText }}
               </button>
               <button
                 type="button"
-                :class="styles.footerButton({ confirm: true })"
+                data-part="action"
+                :class="[styles.footerButton({ confirm: true }), ui?.action]"
                 @click="handleConfirm"
               >
                 {{ resolvedConfirmText }}
@@ -727,7 +761,9 @@ const rootClasses = computed(() =>
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

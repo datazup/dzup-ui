@@ -46,7 +46,7 @@ const dzMessages = useComponentMessages('DzDataGridPagination')
 </script>
 
 <template>
-  <div :class="styles.pagination()">
+  <div data-part="footer" :class="styles.pagination()">
     <div class="flex items-center gap-[var(--dz-spacing-2)]">
       <span>
         Showing {{ (page - 1) * pageSize + 1 }}

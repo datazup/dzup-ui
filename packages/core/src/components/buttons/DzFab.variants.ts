@@ -24,6 +24,17 @@ export const fabVariants = tv({
   ].join(' '),
 
   variants: {
+    /**
+     * rtl-physical-ok — the four corner values are author-named, deliberate
+     * physical positions (TASK-R5-O2, closing S1-D3).
+     *
+     * `position="bottom-right"` is a promise about the screen, not about the
+     * reading direction: an app that pins a FAB to the bottom-right corner
+     * wants it there in Arabic too, and an app that wants it to follow the
+     * text picks the opposite value per locale. Mirroring these would make the
+     * prop name a lie. The marker is file-wide by design, and this file's ONLY
+     * physical utilities are these four `position` values.
+     */
     position: {
       'static': '',
       'bottom-right': 'fixed bottom-[var(--dz-fab-offset)] right-[var(--dz-fab-offset)] z-[var(--dz-fab-z)]',

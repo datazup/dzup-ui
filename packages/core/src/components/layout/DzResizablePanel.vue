@@ -41,6 +41,7 @@ const classes = computed(() =>
     :collapsible="props.collapsible"
     :collapsed-size="props.collapsedSize"
     :order="props.order"
+    data-part="panel"
     :class="classes"
     v-bind="{ ...$attrs, class: undefined }"
   >

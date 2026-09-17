@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CanonicalSize, CanonicalTone, ProgressVariant } from '@dzup-ui/contracts'
 import type { DzScrollProgressEmits, DzScrollProgressProps, DzScrollProgressSlots } from './DzScrollProgress.types.ts'
 /**
  * DzScrollProgress — Scroll-position progress indicator.
@@ -18,6 +19,7 @@ import type { DzScrollProgressEmits, DzScrollProgressProps, DzScrollProgressSlot
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzDefaults } from '../../composables/provider/useDzEnvironment.ts'
 import { useScrollProgress } from '../../composables/useScrollProgress/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -35,10 +37,10 @@ defineOptions({
 const props = withDefaults(defineProps<DzScrollProgressProps>(), {
   target: undefined,
   position: 'top',
-  variant: 'bar',
+  variant: undefined,
   thickness: undefined,
-  size: 'md',
-  tone: 'primary',
+  size: undefined,
+  tone: undefined,
   ariaLabel: undefined,
 })
 
@@ -51,6 +53,31 @@ const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ari
 
 const attrs = useAttrs()
 
+/**
+ * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).
+ *
+ * Each axis keeps the literal it carried in `withDefaults` as `resolve`'s last
+ * link. `variant` is read by a `v-if`, a `data-variant` attribute AND the
+ * inline-thickness branch, so all three move together — leaving any one on the
+ * raw prop would split the component's idea of which variant it is.
+ */
+const { resolve } = useDzDefaults()
+
+/** Resolved variant: prop, then provider, then default */
+const resolvedVariant = computed(
+  () => resolve<ProgressVariant>('DzScrollProgress', 'variant', [props.variant]) ?? 'bar',
+)
+
+/** Resolved size: prop, then provider, then default */
+const resolvedSize = computed(
+  () => resolve<CanonicalSize>('DzScrollProgress', 'size', [props.size]) ?? 'md',
+)
+
+/** Resolved tone: prop, then provider, then default */
+const resolvedTone = computed(
+  () => resolve<CanonicalTone>('DzScrollProgress', 'tone', [props.tone]) ?? 'primary',
+)
+
 const { progress } = useScrollProgress({
   target: () => props.target ?? null,
   onChange: value => emit('change', value),
@@ -61,7 +88,7 @@ const valueNow = computed(() => Math.round(progress.value))
 
 const rootClasses = computed(() =>
   cn(
-    scrollProgressRootVariants({ variant: props.variant, position: props.position }),
+    scrollProgressRootVariants({ variant: resolvedVariant.value, position: props.position }),
     attrs.class as string | undefined,
   ),
 )
@@ -69,21 +96,21 @@ const rootClasses = computed(() =>
 /** Inline overrides: per-instance thickness for the bar variant. */
 const rootStyle = computed(() => {
   const style: Record<string, string> = {}
-  if (props.variant === 'bar' && props.thickness != null)
+  if (resolvedVariant.value === 'bar' && props.thickness != null)
     style['--dz-scroll-progress-height'] = `${props.thickness}px`
   return style
 })
 
-const barClasses = computed(() => scrollProgressBarVariants({ tone: props.tone }))
+const barClasses = computed(() => scrollProgressBarVariants({ tone: resolvedTone.value }))
 
 // -- Circular variant geometry -------------------------------------------------
 
-const circularDiameter = computed(() => scrollProgressCircularSize[props.size] ?? 44)
+const circularDiameter = computed(() => scrollProgressCircularSize[resolvedSize.value] ?? 44)
 const circularStroke = computed(() => props.thickness ?? Math.max(2, Math.round(circularDiameter.value * 0.1)))
 const circularRadius = computed(() => (circularDiameter.value - circularStroke.value) / 2)
 const circularCircumference = computed(() => 2 * Math.PI * circularRadius.value)
 const circularOffset = computed(() => circularCircumference.value * (1 - progress.value / 100))
-const circularToneVar = computed(() => scrollProgressToneVar[props.tone] ?? 'var(--dz-primary)')
+const circularToneVar = computed(() => scrollProgressToneVar[resolvedTone.value] ?? 'var(--dz-primary)')
 </script>
 
 <template>
@@ -98,8 +125,8 @@ const circularToneVar = computed(() => scrollProgressToneVar[props.tone] ?? 'var
     :aria-label="resolvedAriaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    :data-tone="tone"
-    :data-variant="variant"
+    :data-tone="resolvedTone"
+    :data-variant="resolvedVariant"
     :data-position="position"
     data-component="dz-scroll-progress"
     v-bind="{ ...$attrs, class: undefined }"
@@ -107,7 +134,7 @@ const circularToneVar = computed(() => scrollProgressToneVar[props.tone] ?? 'var
     <slot :value="progress">
       <!-- Bar variant: a horizontal fill whose width tracks the percentage. -->
       <div
-        v-if="variant === 'bar'"
+        v-if="resolvedVariant === 'bar'"
         :class="barClasses"
         :style="{ width: `${valueNow}%` }"
       />

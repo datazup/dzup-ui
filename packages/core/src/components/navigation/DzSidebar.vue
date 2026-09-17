@@ -25,7 +25,7 @@ import type {
  * ```
  */
 import { computed, onMounted, onUnmounted, provide, ref, useAttrs, watch } from 'vue'
-import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
@@ -179,9 +179,9 @@ const styles = computed(() =>
   }),
 )
 
-const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
-const overlayClasses = computed(() => styles.value.overlay())
-const bodyClasses = computed(() => styles.value.body())
+const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root))
+const overlayClasses = computed(() => cn(styles.value.overlay(), props.ui?.overlay))
+const bodyClasses = computed(() => cn(styles.value.body(), props.ui?.body))
 
 const rootStyles = computed(() => {
   const result: Record<string, string> = {}
@@ -197,6 +197,9 @@ const dataState = computed(() => (collapsedModel.value ? 'collapsed' : 'expanded
 function handleOverlayClick(): void {
   mobileOpenModel.value = false
 }
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -204,6 +207,7 @@ function handleOverlayClick(): void {
     <Transition name="dz-sidebar-overlay">
       <div
         v-if="isMobile && mobileOpenModel"
+        data-part="overlay"
         :class="overlayClasses"
         aria-hidden="true"
         @click="handleOverlayClick"
@@ -213,6 +217,7 @@ function handleOverlayClick(): void {
 
   <nav
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :style="rootStyles"
     :aria-label="resolvedAriaLabel"
@@ -223,9 +228,9 @@ function handleOverlayClick(): void {
     :data-state="dataState"
     role="navigation"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-sidebar'), ...$attrs, class: undefined }"
   >
-    <div :class="bodyClasses">
+    <div data-part="body" :class="bodyClasses">
       <slot :collapsed="collapsedModel" />
     </div>
   </nav>

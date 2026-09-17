@@ -23,6 +23,14 @@ export const anatomy = {
   rtl: { mirrors: 'none', keyboard: 'none' },
 
   /**
+   * Keyboard contract (TASK-R5-O5). Renders no focusable node, so there is no
+   * key for it to answer — the same reason its `keyboard-spec` cell is a
+   * recorded exception. Declared rather than left absent: the two facts are not
+   * the same and the docs ratchet counts only the absence.
+   */
+  keyboard: 'none',
+
+  /**
    * Tier B, for the same reason as `DzProvider`: a theme that resolves wrongly
    * is a contrast failure across an entire application, and the failure is
    * invisible to every component it affects. It carries the same two recorded

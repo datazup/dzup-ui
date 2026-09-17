@@ -1,5 +1,8 @@
+/** Props for the DzFieldArray component */
 export interface DzFieldArrayProps {
+  /** Fewest rows the array may hold — removing below it is a no-op. `undefined` sets no lower bound. */
   min?: number
+  /** Most rows the array may hold — appending past it is a no-op, and the `append` slot stops rendering. `undefined` sets no upper bound. */
   max?: number
   /**
    * Base for the per-item ids handed to the default slot.
@@ -11,9 +14,13 @@ export interface DzFieldArrayProps {
   id?: string
 }
 
+/** Events emitted by DzFieldArray */
 export interface DzFieldArrayEmits<T = unknown> {
+  /** Emitted after a row is appended, with the appended item. Suppressed when `max` blocked the append. */
   add: [item: T]
+  /** Emitted after a row is removed, with the index it occupied. Suppressed when `min` blocked the removal. */
   remove: [index: number]
+  /** Emitted after a row moves, with its old and new index. Suppressed for out-of-range or no-op moves. */
   reorder: [from: number, to: number]
 }
 
@@ -55,7 +62,10 @@ export interface DzFieldArrayAppendSlotProps<T = unknown> {
   canAppend: boolean
 }
 
+/** Slot definitions for DzFieldArray */
 export interface DzFieldArraySlots<T = unknown> {
+  /** Rendered once per row, with the row value, its index, its collision-free ids and the `remove` / `move` / `append` callbacks. */
   default?: (props: DzFieldArraySlotProps<T>) => unknown
+  /** Rendered after the rows while another may be appended, with `append`, `count` and `canAppend`. Omitted once `max` is reached. */
   append?: (props: DzFieldArrayAppendSlotProps<T>) => unknown
 }

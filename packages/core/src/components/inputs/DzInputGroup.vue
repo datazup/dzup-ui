@@ -19,6 +19,7 @@ import type { DzInputGroupContext, DzInputGroupProps, DzInputGroupSlots } from '
  * ```
  */
 import { computed, provide, toRef, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_INPUT_GROUP_KEY } from './DzInputGroup.types.ts'
 import { inputGroupVariants } from './DzInputGroup.variants.ts'
@@ -62,6 +63,9 @@ const suffixClasses = computed(() =>
   cn(styles.value.addon(), styles.value.addonSuffix(), props.ui?.suffix),
 )
 const contentClasses = computed(() => cn(styles.value.field(), props.ui?.content))
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
@@ -76,7 +80,7 @@ const contentClasses = computed(() => cn(styles.value.field(), props.ui?.content
     :aria-invalid="ariaInvalid || undefined"
     :data-disabled="disabled ? '' : undefined"
     :data-state="disabled ? 'disabled' : undefined"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="{ ...dzTestId('dz-input-group'), ...$attrs, class: undefined }"
   >
     <!-- Prefix addon -->
     <span

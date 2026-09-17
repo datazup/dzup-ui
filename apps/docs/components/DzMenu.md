@@ -19,6 +19,14 @@ Vertical navigation menu.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Risk tier:** B · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
+- **Anatomy parts (ADR-19):** `item`, `item-label`, `root`, `separator`
+
+## Intent and selection guidance
+
+**Not declared.** `DzMenu` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (7, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (8, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -51,6 +59,7 @@ never as asserted.
 | `collapsed` | `boolean \| undefined` | no | `false` | Collapse the menu to icon-only mode |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
+| `ui` | `DzMenuUi \| undefined` | no | — | Per-part class override for the `<nav>` this component renders (ADR-19 §5). Items and separators are sub-components the consumer writes, where `class` at the call site already lands. |
 
 ## Slots (1)
 
@@ -98,7 +107,7 @@ A single item within DzMenu.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Compound part of:** `DzMenu`
 
-#### Props (4)
+#### Props (5)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -106,12 +115,13 @@ A single item within DzMenu.
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `disabled` | `boolean \| undefined` | no | `false` | Whether this item is disabled |
 | `href` | `string \| undefined` | no | — | URL to navigate to (renders as &lt;a>) |
+| `ui` | `DzMenuItemUi \| undefined` | no | — | Per-part class override for the item's label wrapper (ADR-19 §5). The item's own element takes `class` at the call site; the `<span>` that holds the text — and that disappears when the surrounding sidebar collapses — is the node nothing else can reach. |
 
 #### Events (1)
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent]` | — |
+| `click` | `[event: MouseEvent]` | Item clicked |
 
 #### Slots (2)
 
@@ -119,6 +129,8 @@ A single item within DzMenu.
 | --- | --- | --- |
 | `default` | — | Item label content |
 | `icon` | — | Icon slot (rendered before the label) |
+
+#### Usage (no story of its own — it is documented through its parent)
 
 A compound sub-part of `DzMenu`; see that component's usage snippet.
 
@@ -132,7 +144,120 @@ Visual divider between menu items.
 
 This component declares no props, events or slots; it renders a fixed element and takes only Vue's standard attributes.
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzMenu`; see that component's usage snippet.
+
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `size` | `[data-size="…"]` | `size` |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 10 stories in
+`packages/core/stories/navigation/DzMenu.stories.ts`: `Default`, `Size Gallery`, `States`, `Collapsed (Icon-Only)`, `With Links (href)`, `Without Icons`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Sidebar Navigation`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `item` | `[data-part="item"]` | no — renders zero or more than once |
+| `item-label` | `[data-part="item-label"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `separator` | `[data-part="separator"]` | no — renders zero or more than once |
+
+```vue
+<DzMenu :ui="{ 'item': 'ring-2', 'item-label': 'ring-2', 'root': 'ring-2', 'separator': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `active` | `[data-state="active"]` |
+| `disabled` | `[data-state="disabled"]` |
+| `ready` | `[data-state="ready"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/navigation/DzMenu.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/navigation/DzMenu.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
+| **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
+
+| Security lane | State |
+| --- | --- |
+| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. |
+| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `csp-fixture` | Not owed at this boundary. |
+| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzMenu` advertises 3 states:
+`active`, `disabled`, `ready`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/navigation/DzMenu.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `80ce301`.
 
 ## Extraction fidelity
 
@@ -141,7 +266,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 7 | 7 | 2 declare a default |
+| Props | 8 | 8 | 2 declare a default |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -150,8 +275,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -160,7 +285,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/)
 - **Traits:** `dataset`
 - **Security boundary:** `url` — Menu entries carry a host-supplied `href` that becomes a navigation.
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `80ce3012`
 
 **Compound sub-parts are not matrix rows.** `DzMenuItem`, `DzMenuSeparator` are documented on this page and carry no evidence row of its own. Everything below describes `DzMenu`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
@@ -195,14 +320,21 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**3 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `Tab` | Move to the next item; every item is its own tab stop, and there is no roving index. | `2.1.2` | — *(component-specific)* |
+| `Enter` | Activate the focused item. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+| `Space` | Activate the focused item. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
+
+Declared in `packages/core/src/components/navigation/DzMenu.anatomy.ts`.
 
 - **Pattern:** [APG — `menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -236,19 +368,19 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzMenu.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzMenu.spec.ts` — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzMenu.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzMenu.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzMenu.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/navigation/DzMenu.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzMenu.md` — 6 AT/browser pairs, none executed. |
 | `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` — Covered by a class-level artifact, not a per-component one. |
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` — Covered by a class-level artifact, not a per-component one. |
 
-**6 unrun:** `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

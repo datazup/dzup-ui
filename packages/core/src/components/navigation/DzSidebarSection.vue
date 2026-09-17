@@ -62,6 +62,7 @@ const showContent = computed(() => !props.collapsible || isOpen.value)
 
 <template>
   <div
+    data-part="group"
     :class="sectionClasses"
     role="group"
     :aria-label="title"
@@ -72,7 +73,8 @@ const showContent = computed(() => !props.collapsible || isOpen.value)
       <button
         v-if="collapsible && !isCollapsed"
         type="button"
-        :class="cn(titleClasses, 'flex w-full items-center justify-between cursor-pointer py-[var(--dz-spacing-1)]')"
+        data-part="group-label"
+        :class="cn(titleClasses, ui?.['group-label'], 'flex w-full items-center justify-between cursor-pointer py-[var(--dz-spacing-1)]')"
         :aria-expanded="isOpen"
         @click="toggleSection"
       >
@@ -98,7 +100,8 @@ const showContent = computed(() => !props.collapsible || isOpen.value)
       </button>
       <span
         v-else
-        :class="cn(titleClasses, 'py-[var(--dz-spacing-1)]')"
+        data-part="group-label"
+        :class="cn(titleClasses, ui?.['group-label'], 'py-[var(--dz-spacing-1)]')"
       >
         <slot name="title">{{ title }}</slot>
       </span>

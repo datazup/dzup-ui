@@ -20,6 +20,13 @@ known one.
 | `activate` | Activate the control the way the AT recommends for its role. | The action happens once, and any resulting state change is announced. |
 | `error` | Put the control into an invalid state and move away from it. | The error text is announced and is programmatically associated with the control. |
 
+## Declared keyboard contract
+
+`DzInput` declares `keyboard: 'none'` in `packages/core/src/components/inputs/DzInput.anatomy.ts` — an explicit claim that it
+has no keyboard behaviour of its own. Any key that appears to do something here is either the
+platform's or its container's, and is worth a note.
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

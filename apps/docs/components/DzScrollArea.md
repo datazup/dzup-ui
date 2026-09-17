@@ -17,6 +17,14 @@ Custom scrollbar area using Reka UI (ADR-07).
 - **Install:** `npm i @dzup-ui/core` — then `import { DzScrollArea } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** B · **Status:** stable
+- **Anatomy parts (ADR-19):** `root`, `viewport`
+
+## Intent and selection guidance
+
+**Not declared.** `DzScrollArea` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -38,7 +46,7 @@ never as asserted.
 :::
 
 
-## Props (7, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (8, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -49,6 +57,7 @@ never as asserted.
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `orientation` | `ScrollOrientation \| undefined` | no | `"vertical"` | Which scrollbar(s) to display |
 | `type` | `"hover" \| "auto" \| "always" \| "scroll" \| undefined` | no | `"hover"` | Type of scrollbar: auto shows only when content overflows |
+| `ui` | `Partial<Record<"root" \| "viewport", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzScrollArea.anatomy.ts` (ADR-19 §5). `class` keeps its existing target (the scroll root); `ui` reaches the viewport. The scrollbar, thumb and corner have no ADR-19 vocabulary word yet and are not addressable — see the anatomy file. |
 
 ## Slots (1)
 
@@ -76,6 +85,102 @@ Editable, running the **Orientation Gallery** story from `packages/core/stories/
 
 <DzPlayground component="DzScrollArea" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `orientation` | `[data-orientation="…"]` | `orientation` |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 9 stories in
+`packages/core/stories/layout/DzScrollArea.stories.ts`: `Default`, `Orientation Gallery`, `Scrollbar Type Gallery`, `Horizontal Tag List`, `Dark Mode Preview`, `Real World: Chat Messages`, `Real World: Code Block`, `Interactive: Overflow Scroll`, `Accessibility: Scrollable Region`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `root` | `[data-part="root"]` | yes |
+| `viewport` | `[data-part="viewport"]` | yes |
+
+```vue
+<DzScrollArea :ui="{ 'root': 'ring-2', 'viewport': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+This component declares no states: nothing about it is advertised to CSS or to a test.
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/layout/DzScrollArea.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzDirection` | the document writing direction |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** Reads `useDzDirection` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/layout/DzScrollArea.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+This component declares no states, so there is no state matrix to show. A presentational
+component that renders the same way every time is the normal case for this.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `80ce301`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -83,7 +188,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 7 | 7 | 2 declare a default |
+| Props | 8 | 8 | 2 declare a default |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -92,8 +197,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -102,7 +207,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** `none` — no WAI-ARIA Authoring Practices pattern describes this component.
 - **Traits:** none declared
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `80ce3012`
 
 ### WCAG 2.2 criteria in scope (18)
@@ -134,14 +239,13 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**No keyboard behaviour of its own.** This component declares `keyboard: 'none'` — an
+explicit claim, checked like any other part of its contract, not an absence of information.
+Whatever keys reach it are the platform's or its container's.
 
 - **Pattern:** `none` — **no APG pattern applies**, so there is no external
   keyboard contract to link.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** the `keyboard-spec` requirement is **excepted** for this component — The component declares `keyboard: 'none'` — an explicit claim that it has no keyboard behaviour of its own, so there is no key sequence for a spec to assert.
 
 ### Assistive technology
 
@@ -175,15 +279,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/layout/DzScrollArea.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | `excepted` | `packages/core/src/components/layout/DzScrollArea.spec.ts` — The component declares `keyboard: 'none'` — an explicit claim that it has no keyboard behaviour of its own, so there is no key sequence for a spec to assert. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/layout/DzScrollArea.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/layout/DzScrollArea.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/layout/DzScrollArea.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzScrollArea.md` — 6 AT/browser pairs, none executed. |
 
-**5 unrun:** `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `ssr-sample`, `controlled-uncontrolled`, `browser-matrix`, `at-manual` · **1 excepted:** `keyboard-spec`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

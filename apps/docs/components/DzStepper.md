@@ -18,6 +18,14 @@ Step-by-step progress indicator.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Risk tier:** B · **Status:** stable
 - **v-model:** `v-model` (`number | undefined`)
+- **Anatomy parts (ADR-19):** `root`
+
+## Intent and selection guidance
+
+**Not declared.** `DzStepper` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -39,7 +47,7 @@ never as asserted.
 :::
 
 
-## Props (9, of which 4 inherited from `@dzup-ui/contracts`)
+## Props (10, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -50,8 +58,9 @@ never as asserted.
 | `clickable` | `boolean \| undefined` | no | `false` | Allow completed/active steps to be clicked to navigate back to them. Upcoming steps remain non-interactive regardless. Defaults to `false`. |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `linear` | `boolean \| undefined` | no | `false` | Only allow moving to an adjacent step, or back to a completed one. Off by default. A linear wizard is a policy about the flow, not about the component, so a stepper used as a progress indicator is unaffected. |
-| `modelValue` | `number \| undefined` | no | `0` | — |
+| `modelValue` | `number \| undefined` | no | `0` | Zero-based index of the active step; defaults to the first step. |
 | `orientation` | `Orientation \| undefined` | no | `"horizontal"` | Orientation of the stepper |
+| `ui` | `Partial<Record<"root", DzClassValue>> \| undefined` | no | — | Per-part class override for the `role="group"` wrapper (ADR-19 §5). `DzStepperItem` is a public component with an anatomy of its own, so the step's inner nodes are addressed through its `ui`, not through this one. |
 
 ## Events (5)
 
@@ -61,7 +70,7 @@ never as asserted.
 | `change` | `[step: number]` | Active step changed |
 | `navigate` | `[step: number]` | A clickable step was activated. Fired after v-model is updated; consumers can use this for analytics or to trigger side effects. |
 | `revealed` | `[step: number]` | A step was revealed imperatively and its panel has rendered |
-| `update:modelValue` | `[value: number]` | synthesised by `defineModel` (ADR-16) — no authored description exists |
+| `update:modelValue` | `[value: number]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (1)
 
@@ -93,6 +102,116 @@ Editable, running the **All Step States** story from `packages/core/stories/navi
 
 <DzPlayground component="DzStepper" />
 
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `orientation` | `[data-orientation="…"]` | `orientation` |
+
+**Controlled and uncontrolled — `modelValue`.** Both forms are supported, and they are
+different contracts rather than two spellings of one.
+
+```vue
+<!-- Uncontrolled: the component owns the value. -->
+<DzStepper />
+
+<!-- Controlled: you own it, and the component only ever asks. -->
+<DzStepper v-model="value" />
+
+<!-- Controlled, long form — the same thing, written out. -->
+<DzStepper :modelValue="value" @update:modelValue="value = $event" />
+```
+
+**Where each variant is shown.** 11 stories in
+`packages/core/stories/navigation/DzStepper.stories.ts`: `Default`, `All Step States`, `Vertical Orientation`, `With Optional Step`, `With Step Content`, `Custom Indicator (Slot)`, `Dark Mode Preview`, `Interactive`, `Accessibility: Step Semantics`, `Real World: Checkout Flow`, `Real World: Onboarding Wizard`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `root` | `[data-part="root"]` | yes |
+
+```vue
+<DzStepper :ui="{ 'root': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `ready` | `[data-state="ready"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/navigation/DzStepper.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/navigation/DzStepper.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `present` — `packages/core/tests/ssr/form-layouts-ssr.spec.ts`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzStepper` advertises 1 state:
+`ready`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/navigation/DzStepper.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `5773f65`.
+
 ## Extraction fidelity
 
 Published rather than assumed. These are this component's own numbers, measured by the
@@ -100,17 +219,17 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 9 | 8 | 4 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 5 | 4 | 4 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 10 | 10 | 4 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 5 | 5 | 4 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 1 | 1 | 0 carry slot props |
-| Exposed on `ref` | 1 | 0 | no description exists in source for any exposed member, catalog-wide |
+| Exposed on `ref` | 1 | 1 | no description exists in source for any exposed member, catalog-wide |
 
 ## Accessibility and evidence
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -119,8 +238,8 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** `custom` — no WAI-ARIA Authoring Practices pattern describes this component.
 - **Traits:** none declared
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
-- **Component last changed at:** `e986952e`
+- **Declared anatomy:** `declared`
+- **Component last changed at:** `5773f65c`
 
 **Why this pattern:** A progress indicator whose steps can be made navigable. APG has no stepper; when the steps are clickable the contract this repository documents is the tabs one, minus the automatic activation.
 
@@ -154,16 +273,19 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**1 declared binding.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern |
+| --- | --- | --- | --- |
+| `Tab` | Move to the next navigable step; each step is its own tab stop. | `2.1.2` | — *(component-specific)* |
+
+Declared in `packages/core/src/components/navigation/DzStepper.anatomy.ts`.
 
 - **Pattern:** `custom` — **no APG pattern applies**, so there is no external
   keyboard contract to link. The recorded reason is quoted above.
-- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
-  sequence in `packages/core/src/components/navigation/DzStepper.spec.ts`.
-  That is a presence measurement, not a table: it does not say which keys, or what they do.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 1 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -197,15 +319,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzStepper.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-layouts-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | `present` | `packages/core/src/components/navigation/DzStepper.spec.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzStepper.spec.ts` — The component declares 1 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzStepper.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzStepper.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzStepper.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzStepper.md` — 6 AT/browser pairs, none executed. |
 
-**3 unrun:** `controlled-uncontrolled`, `rtl-contract`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -62,13 +62,38 @@ export function applyPrefix(name: string, prefix: string): string {
  * Passing no root resolves from this module instead, which finds the workspace
  * `node_modules` — right for a direct unit call, wrong for answering a question
  * about a consumer's project.
+ *
+ * The specifier asked for is `@dzup-ui-pro/pro/package.json`, not the bare
+ * package name (Pro REL-01 finding **R4a**). Pro's `exports` map is ESM-only, so
+ * CJS resolution of the bare name applies the `require` condition, matches
+ * nothing, and throws `ERR_PACKAGE_PATH_NOT_EXPORTED` for a package that is
+ * installed and perfectly importable — telling the consumer to install what they
+ * already have. `./package.json` is a condition-free export declared for exactly
+ * this question, so it answers "is it on disk here?" without asserting anything
+ * about how the entry point is loaded.
+ *
+ * The bare name remains as a fallback for a Pro published before that export
+ * existed. It can only turn a `false` into a `true` for a package that really is
+ * installed — a missing package fails both attempts — so "not installed" keeps
+ * its meaning and its diagnostic.
  */
 export function canResolvePro(projectRoot?: string): boolean {
   const resolveFrom = projectRoot === undefined
     ? import.meta.url
     : pathToFileURL(join(projectRoot, 'package.json')).href
+  const resolver = createRequire(resolveFrom)
+
   try {
-    createRequire(resolveFrom).resolve(PRO_PACKAGE)
+    resolver.resolve(`${PRO_PACKAGE}/package.json`)
+    return true
+  }
+  catch {
+    // Fall through to the bare name: a Pro that predates the `./package.json`
+    // export, or one that ships no `exports` map at all, still resolves there.
+  }
+
+  try {
+    resolver.resolve(PRO_PACKAGE)
     return true
   }
   catch {

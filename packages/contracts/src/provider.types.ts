@@ -202,6 +202,171 @@ export interface DzTestIds {
 }
 
 // ---------------------------------------------------------------------------
+// Sanitizer
+// ---------------------------------------------------------------------------
+
+/**
+ * What a piece of HTML is being sanitised **for**.
+ *
+ * Sanitised output built for one context must never be reused in another — a
+ * fragment that is safe inside rendered markdown is not safe as an SVG — so the
+ * context travels with the call rather than being implied by whoever installed
+ * the adapter.
+ *
+ * The five names are the ones `@dzup-ui-pro/pro` already records in
+ * `docs/security.md` §4 and `packages/pro/manifests/html-sinks.manifest.json`;
+ * none is invented here and none of Pro's is dropped. The open `(string & {})`
+ * arm is what lets a host or a future tier add one without a Core release,
+ * while keeping the five in autocomplete.
+ */
+export type DzSanitizeSink
+  = | 'markdown'
+    | 'mermaid-svg'
+    | 'notebook-output'
+    | 'diff-highlight'
+    | 'rich-text-paste'
+    | (string & {})
+
+/**
+ * The other half of the registry's context vocabulary — the sinks that are
+ * **not** guarded by a sanitizer.
+ *
+ * `URL.createObjectURL` takes a `Blob`, not markup: these are guarded by
+ * construction (the component serialises its own bytes and sets the MIME) or by
+ * an allowlist, never by {@link DzSanitizerAdapter}. Declared so the whole
+ * vocabulary is expressible in one place, and typed *apart* so that
+ * `sanitize(html, { sink: 'download-blob' })` cannot be written by accident.
+ */
+export type DzObjectUrlSink = 'file-preview' | 'image-source' | 'download-blob'
+
+/**
+ * Input ceilings applied **before** the sanitizer parses.
+ *
+ * `maxLength` is in **characters, not bytes**. That is Pro's measured field
+ * (`SanitizeLimits` in `components/editors/composables/markdown/sanitize.ts`),
+ * and its numbers were chosen against character counts; renaming it to bytes
+ * would silently change what every recorded measurement means.
+ *
+ * The pair bounds *amplification* rather than document size: the cost lives in
+ * the HTML parser, and depth and length multiply.
+ */
+export interface DzSanitizeLimits {
+  /** Maximum input length, in characters. */
+  readonly maxLength: number
+  /** Maximum element nesting depth. */
+  readonly maxDepth: number
+}
+
+/** Where a sanitised string is going, and under what ceilings. */
+export interface DzSanitizeContext {
+  /** What the output is for. Sanitised output is not portable between sinks. */
+  readonly sink: DzSanitizeSink
+  /** The component asking, for diagnostics and for policy that varies by it. */
+  readonly component: string
+  /**
+   * Per-call ceiling override, merged over the adapter's own.
+   *
+   * The counterpart of Pro's `sanitizeHtml(libs, html, limits?)` third
+   * argument. Widen one only with a recorded reason.
+   */
+  readonly limits?: Partial<DzSanitizeLimits>
+  /**
+   * Whether the caller wants a Trusted-Types-backed value rather than a plain
+   * string (DOMPurify's `RETURN_TRUSTED_TYPE`). Advisory: an adapter that
+   * cannot produce one still returns a sanitised string.
+   */
+  readonly trustedTypes?: boolean
+}
+
+/**
+ * The organisation-wide HTML sanitizer an application configures once.
+ *
+ * 08-11 doc 06 asks for exactly one of these per application: allowed schemes,
+ * a Trusted Types policy name and size ceilings set at the root, not re-solved
+ * by every component that happens to render rich content.
+ *
+ * The **contract of the seam, not of the adapter**, is that `limits` are
+ * enforced before `sanitize` is reached — so a host supplying nothing but a
+ * `sanitize` function still gets the ceilings, and an adapter that enforces
+ * them again is merely redundant, never wrong.
+ */
+export interface DzSanitizerAdapter {
+  /**
+   * Trusted Types policy name, one per application.
+   *
+   * Defaults to `'dzup-ui'`, which is the name the published consumer CSP
+   * recipe already tells hosts to allowlist (`trusted-types vue dompurify
+   * dzup-ui`).
+   */
+  readonly policyName: string
+  /** Ceilings applied before parsing. */
+  readonly limits: DzSanitizeLimits
+  /** Returns sanitised HTML, or throws. It must never return its input unchanged. */
+  sanitize: (html: string, context: DzSanitizeContext) => string
+}
+
+/**
+ * What a host hands `DzProvider` — every field optional, so a nested provider
+ * can tighten `limits` without restating the adapter.
+ *
+ * This is the shape ADR-20 §3's per-key override needs one level down: the
+ * provider overrides a whole concern per key, and this overrides that concern's
+ * own three fields per field. A full {@link DzSanitizerAdapter} satisfies it,
+ * so passing one is the common case.
+ */
+export interface DzSanitizerOptions {
+  readonly policyName?: string
+  readonly limits?: Partial<DzSanitizeLimits>
+  readonly sanitize?: (html: string, context: DzSanitizeContext) => string
+}
+
+/**
+ * Thrown when input exceeds a {@link DzSanitizeLimits} ceiling.
+ *
+ * A **class in a types-first package**, and the third runtime export it carries
+ * after `assertNever` and the form-value codecs. It is here for the same reason
+ * the injection keys are: catching an error by class is an *identity* question,
+ * and a consumer or a Pro component must be able to write `e instanceof
+ * DzSanitizeLimitError` against the same constructor Core threw — which a
+ * per-package copy would break, silently, in the direction that swallows the
+ * error.
+ *
+ * Fail-closed by construction: it carries no markup, and every path that throws
+ * it has not parsed the input.
+ */
+export class DzSanitizeLimitError extends Error {
+  /** Which ceiling was exceeded. */
+  readonly limit: keyof DzSanitizeLimits
+  /** The measured value. */
+  readonly actual: number
+  /** The ceiling it exceeded. */
+  readonly allowed: number
+  /** The sink the call was for. */
+  readonly sink: DzSanitizeSink
+  /** The component that asked. */
+  readonly component: string
+
+  constructor(
+    limit: keyof DzSanitizeLimits,
+    actual: number,
+    allowed: number,
+    context: Pick<DzSanitizeContext, 'component' | 'sink'>,
+  ) {
+    super(
+      limit === 'maxLength'
+        ? `${context.component}: content is too large to render safely (${actual} characters, limit ${allowed}).`
+        : `${context.component}: content is nested too deeply to render safely (${actual} levels, limit ${allowed}).`,
+    )
+    this.name = 'DzSanitizeLimitError'
+    this.limit = limit
+    this.actual = actual
+    this.allowed = allowed
+    this.sink = context.sink
+    this.component = context.component
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Injection keys
 // ---------------------------------------------------------------------------
 
@@ -221,6 +386,19 @@ export const DZ_MOTION_KEY: InjectionKey<DzMotion> = Symbol('dz-motion')
 export const DZ_DEFAULTS_KEY: InjectionKey<Ref<DzDefaults>> = Symbol('dz-defaults')
 export const DZ_NONCE_KEY: InjectionKey<Ref<string | undefined>> = Symbol('dz-nonce')
 export const DZ_TEST_IDS_KEY: InjectionKey<Ref<DzTestIds>> = Symbol('dz-test-ids')
+/**
+ * The eleventh concern (TASK-R3-O2). A resolved adapter, not a ref, for the
+ * reason `DZ_FORMATS_KEY` is not one: it is a method-bearing object whose
+ * methods read the current configuration at call time, so a consumer does not
+ * re-subscribe when the host changes a ceiling.
+ *
+ * `null` is a **provided** value with a meaning of its own — "the host said it
+ * would supply an adapter and supplied none" — and is deliberately not the same
+ * state as *uninjected*, which means "nobody has configured one" and resolves to
+ * the documented default. Collapsing the two would turn a configuration mistake
+ * into a rendering difference no one goes looking for.
+ */
+export const DZ_SANITIZER_KEY: InjectionKey<DzSanitizerAdapter | null> = Symbol('dz-sanitizer')
 
 // ---------------------------------------------------------------------------
 // Documented defaults
@@ -241,6 +419,22 @@ export const DZ_PROVIDER_DEFAULTS = {
   portalTarget: undefined,
   nonce: undefined,
   testIds: { enabled: false, attribute: 'data-testid' },
+  /**
+   * The sanitizer's **data** half only — the policy name and the ceilings.
+   *
+   * The default `sanitize` function is Core's, not this package's: it is real
+   * code with a real HTML depth scanner, and `@dzup-ui/contracts` stays the
+   * place where a value is *declared* rather than implemented. The two fields
+   * that both tiers must agree on numerically are here, for exactly the reason
+   * this object exists at all — "because Pro must resolve to the same values".
+   *
+   * `128 KiB` / depth `64` are Pro's measured `DEFAULT_SANITIZE_LIMITS`, not a
+   * fresh guess; see {@link DzSanitizeLimits}.
+   */
+  sanitizer: {
+    policyName: 'dzup-ui',
+    limits: { maxLength: 128 * 1024, maxDepth: 64 },
+  },
 } as const satisfies {
   locale: DzLocale
   direction: DzDirectionPreference
@@ -248,4 +442,5 @@ export const DZ_PROVIDER_DEFAULTS = {
   portalTarget: string | undefined
   nonce: string | undefined
   testIds: DzTestIds
+  sanitizer: { policyName: string, limits: DzSanitizeLimits }
 }

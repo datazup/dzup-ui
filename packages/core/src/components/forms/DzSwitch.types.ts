@@ -12,6 +12,7 @@ import type {
   BaseEvents,
   CanonicalSize,
 } from '@dzup-ui/contracts'
+import type { DzSwitchUi } from './DzSwitch.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -27,6 +28,11 @@ export interface DzSwitchProps extends BaseAccessibilityProps {
   name?: string
   /** Whether the switch is required */
   required?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzSwitch.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target.
+   */
+  ui?: DzSwitchUi
 }
 
 // ---------------------------------------------------------------------------

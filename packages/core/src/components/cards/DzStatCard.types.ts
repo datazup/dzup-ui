@@ -6,6 +6,7 @@
 
 import type { CardVariant } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
+import type { DzStatCardUi } from './DzStatCard.anatomy.ts'
 
 /** Trend direction */
 export type StatTrend = 'up' | 'down' | 'neutral'
@@ -38,6 +39,12 @@ export interface DzStatCardProps {
   variant?: StatCardVariant
   /** Unique element ID */
   id?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzStatCard.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing target (the root surface); `ui`
+   * addresses the other parts by name, and a typo is a type error.
+   */
+  ui?: DzStatCardUi
 }
 
 // ---------------------------------------------------------------------------

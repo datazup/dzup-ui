@@ -10,6 +10,7 @@
       "import": "./dist/index.js"
     },
     "./css": "./dist/tokens.css",
+    "./css/high-contrast": "./dist/tokens.high-contrast.css",
     "./dtcg": "./dist/tokens.dtcg.json",
     "./tailwind": {
       "types": "./dist/tailwind-theme.d.ts",

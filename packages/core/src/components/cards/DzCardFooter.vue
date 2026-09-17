@@ -10,6 +10,7 @@
  * </DzCardFooter>
  * ```
  */
+import type { DzCardFooterSlots } from './DzCard.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { cardFooterVariants } from './DzCard.variants.ts'
@@ -17,6 +18,8 @@ import { cardFooterVariants } from './DzCard.variants.ts'
 defineOptions({
   inheritAttrs: false,
 })
+
+defineSlots<DzCardFooterSlots>()
 
 const attrs = useAttrs()
 
@@ -27,7 +30,7 @@ const classes = computed(() =>
 </script>
 
 <template>
-  <div :class="classes">
+  <div data-part="footer" :class="classes">
     <slot />
   </div>
 </template>

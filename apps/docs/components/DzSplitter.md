@@ -19,6 +19,14 @@ Naming alias for DzResizable.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** B · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
+- **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`
+
+## Intent and selection guidance
+
+**Not declared.** `DzSplitter` declares no `@intent` block in its source header, so
+nothing here says what it is for or when to reach for something else. That is a gap in the
+component, not in this page: the guidance is authored in the SFC header and extracted by
+`yarn generate:component-meta`, never typed into the site.
 
 ::: info How to read the tables on this page
 Everything below is extracted from source by `vue-component-meta` and published as measured,
@@ -40,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (9, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (10, of which 5 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -53,12 +61,13 @@ never as asserted.
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `keyboardResizeBy` | `number \| undefined` | no | `10` | Keyboard resize step in percentage (default 10) |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size (affects handle dimensions) |
+| `ui` | `DzResizableUi \| undefined` | no | — | Per-part class override for the group, keyed by the name in `DzResizable.anatomy.ts` (ADR-19 §5). Panels and handles are written by the consumer at the call site and already take `class`. |
 
 ## Events (1)
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `layoutChange` | `[sizes: number[]]` | — |
+| `layoutChange` | `[sizes: number[]]` | Emitted when any panel layout changes |
 
 ## Slots (1)
 
@@ -117,6 +126,8 @@ Naming alias for DzResizableHandle.
 | --- | --- | --- |
 | `default` | — | Custom handle indicator |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSplitter`; see that component's usage snippet.
 
 ### DzSplitterPanel
@@ -144,7 +155,114 @@ Naming alias for DzResizablePanel.
 | --- | --- | --- |
 | `default` | — | Panel content |
 
+#### Usage (no story of its own — it is documented through its parent)
+
 A compound sub-part of `DzSplitter`; see that component's usage snippet.
+
+## Variants and controlled state
+
+**Recipe axes.** Each axis is mirrored onto the root as `data-{axis}` carrying the
+**resolved** value — after group and provider inheritance, not the raw prop — which is what
+makes `[data-size="lg"]` a selector you can rely on.
+
+| Axis | Root attribute | Prop |
+| --- | --- | --- |
+| `orientation` | `[data-orientation="…"]` | — *(inherited or fixed; no prop of this name)* |
+
+**Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
+controlled form: it holds no value a parent could own.
+
+**Where each variant is shown.** 7 stories in
+`packages/core/stories/layout/DzSplitter.stories.ts`: `Default`, `Vertical Direction`, `Disabled`, `Dark Mode Preview`, `Real World: Email Client`, `Interactive: Keyboard Resize`, `Accessibility: Keyboard Navigation`.
+
+## Parts, states and tokens
+
+**Parts** — addressable nodes, emitted as `data-part`. Reach one with the selector, or pass
+classes by name through the typed `ui` prop; a typo in `ui` is a type error rather than a class
+that lands nowhere.
+
+When your `class` and a `ui` entry set the same Tailwind utility, **your `class` wins**: the
+merge order is recipe → `ui` → `class`, and `cn()` is tailwind-merge, so the last one through
+takes effect. That is what lets you restyle a wrapper someone else built without `!important`.
+
+| Part | Selector | Always present |
+| --- | --- | --- |
+| `indicator` | `[data-part="indicator"]` | no — renders zero or more than once |
+| `panel` | `[data-part="panel"]` | no — renders zero or more than once |
+| `root` | `[data-part="root"]` | yes |
+| `separator` | `[data-part="separator"]` | no — renders zero or more than once |
+
+```vue
+<DzSplitter :ui="{ 'indicator': 'ring-2', 'panel': 'ring-2', 'root': 'ring-2', 'separator': 'ring-2' }" />
+```
+
+**States** — the values `data-state` may take, plus the presence-only boolean attributes.
+
+| State | Selector |
+| --- | --- |
+| `disabled` | `[data-state="disabled"]` |
+| `drag` | `[data-state="drag"]` |
+| `hover` | `[data-state="hover"]` |
+| `inactive` | `[data-state="inactive"]` |
+
+**Component tokens** — the custom properties this component reads, and therefore every one you
+may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
+not a promise.
+
+This component declares no component tokens of its own: it is styled entirely from the global
+semantic layer, which the theme owns.
+
+Declared in `packages/core/src/components/layout/DzSplitter.anatomy.ts`.
+
+## Provider defaults and context
+
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzTestIds` | the test-id attribute name and prefix |
+
+## Locale, direction and formats
+
+| Axis | Declared | What it means |
+| --- | --- | --- |
+| `mirrors` | `layout` | Margins, padding, borders and insets are logical, so the box flips with the document. |
+| `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
+| `icons` | — | No icon on this component carries direction, so none is mirrored. |
+
+**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+
+**Measured:** `rtl-contract` is `present` — `packages/core/src/components/layout/DzSplitter.anatomy.ts`.
+
+## Server rendering, portals, performance and security
+
+| Concern | State |
+| --- | --- |
+| **Server rendering** | `unrun`. |
+| **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
+| **Performance baseline** | Not a dataset component; no baseline is owed. |
+| **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
+
+**Peer packages.** Which external packages this component can reach is a property of the built
+artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
+report with no baseline and no ratchet, deliberately outside `validate:all`, because the
+numbers depend on decisions the owner has not taken. It is not summarised here rather than
+summarised wrongly.
+
+## States and migration
+
+`DzSplitter` advertises 4 states:
+`disabled`, `drag`, `hover`, `inactive`. Each is emitted as `data-state` or as a
+presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
+
+**Published examples:** `state-stories` is `pass` — `packages/core/stories/layout/DzSplitter.stories.ts`.
+
+**Migration.** Breaking changes to this component are recorded in the repository's changesets
+and published in the release notes; nothing is restated here, because a hand-typed migration
+note drifts from the release it describes the first time the release changes. This component
+last changed at `80ce301`.
 
 ## Extraction fidelity
 
@@ -153,8 +271,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 9 | 9 | 4 declare a default |
-| Events | 1 | 0 | 0 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
+| Props | 10 | 10 | 4 declare a default |
+| Events | 1 | 1 | 1 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -162,8 +280,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `51dec93c` for the capability matrix,
-`51dec93c` for the quality matrix. It is **locally qualified**:
+artifact records — `99b963a0` for the capability matrix,
+`99b963a0` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -172,7 +290,7 @@ production evidence, and it must not be read as a conformance claim.
 - **APG pattern:** [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/)
 - **Traits:** `drags`
 - **Security boundary:** `none`
-- **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
+- **Declared anatomy:** `declared`
 - **Component last changed at:** `80ce3012`
 
 **Compound sub-parts are not matrix rows.** `DzSplitterHandle`, `DzSplitterPanel` are documented on this page and carry no evidence row of its own. Everything below describes `DzSplitter`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
@@ -222,14 +340,25 @@ at `51dec93c`.
 
 ### Keyboard interaction
 
-**Not yet derived.** This library has no machine-readable keyboard table: the only generated
-keyboard signal is whether a spec asserts *some* key, not which key does what. Rather than
-hand-type a table that nothing could check, this page links the pattern the component is held
-to and states what has actually been measured.
+**7 declared bindings.** Rendered from the
+component's own keyboard contract, not from the APG pattern it is held to — where the two
+differ, the difference is the point.
+
+| Key | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- |
+| `ArrowRight` | Move the separator towards the inline end. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | swaps with the writing direction |
+| `ArrowLeft` | Move the separator towards the inline start. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | swaps with the writing direction |
+| `ArrowDown` | Move the separator down when the panes stack vertically. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
+| `ArrowUp` | Move the separator up when the panes stack vertically. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
+| `Home` | Move the separator to its minimum position. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
+| `End` | Move the separator to its maximum position. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
+| `Enter` | Collapse the pane, or restore it when already collapsed. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
+
+Declared in `packages/core/src/components/layout/DzSplitter.anatomy.ts`.
 
 - **Pattern:** [APG — `window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The unit spec exists and asserts no key sequence.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -263,16 +392,16 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/layout/DzSplitter.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | The unit spec exists and asserts no key sequence. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/layout/DzSplitter.spec.ts` — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/layout/DzSplitter.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/layout/DzSplitter.stories.ts` |
-| `rtl-contract` | tier B | **`unrun`** | No anatomy, so no declared RTL contract. The logical-property migration in TASK-OSS-P4-05 covered the whole catalog; only the declaration is missing. |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — chromium 149.0.7827.55 (playwright chromium v1228): all 6 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 6 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 6 conditions, no expected failure in what it ran |
+| `rtl-contract` | tier B | `present` | `packages/core/src/components/layout/DzSplitter.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
+| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSplitter.md` — 6 AT/browser pairs, none executed. |
 | `non-drag-alternative` | trait drags | **`unrun`** | The component drags and its spec asserts no keyboard equivalent (WCAG 2.5.7). |
 
-**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `rtl-contract`, `at-manual`, `non-drag-alternative`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`, `non-drag-alternative`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

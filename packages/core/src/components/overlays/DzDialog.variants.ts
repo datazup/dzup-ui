@@ -44,7 +44,14 @@ export const dialogVariants = tv({
       'mt-[var(--dz-spacing-1_5)]',
     ].join(' '),
     close: [
-      'absolute right-[var(--dz-spacing-4)] top-[var(--dz-spacing-4)]',
+      // A logical inline-end inset, not a physical one: the dialog's anatomy declares
+      // `mirrors: 'layout'`, so the close control has to sit on the inline-END
+      // edge and follow the document direction. It was pinned physically right,
+      // which put it on the wrong side of every RTL dialog — the real defect in
+      // the 14 sites TASK-N2-S1 measured (S1-D3), fixed in TASK-R5-O2.
+      // `inset-e-` is the spelling Tailwind 4 actually generates; `end-` does
+      // not exist and would silently unpin the button (S1-F4c).
+      'absolute inset-e-[var(--dz-spacing-4)] top-[var(--dz-spacing-4)]',
       'inline-flex items-center justify-center',
       'rounded-[var(--dz-radius-sm)]',
       'opacity-70 transition-opacity',

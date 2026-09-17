@@ -15,6 +15,8 @@ import { Star } from 'lucide-vue-next'
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -32,7 +34,10 @@ defineOptions({
  * control in the catalog takes, and until now it silently did nothing here.
  */
 const legacyValueModel = defineModel<number>('value', { default: 0 })
+
+/** The rating, in icons, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). */
 const primaryModel = defineModel<number | undefined>({ default: undefined })
+
 const props = withDefaults(defineProps<DzRatingProps>(), {
   count: 5,
   allowHalf: false,
@@ -57,6 +62,11 @@ const props = withDefaults(defineProps<DzRatingProps>(), {
 const emit = defineEmits<DzRatingEmits>()
 
 defineSlots<DzRatingSlots>()
+
+// ArrowLeft and ArrowRight follow the writing direction (ADR-20 §4,
+// TASK-R5-O3). This component declares `rtl: { keyboard: 'swap-horizontal' }`
+// in its anatomy; until now nothing read the context that makes it true.
+const dzDirection = useDzDirection()
 
 const model = useDualModel(primaryModel, legacyValueModel)
 
@@ -194,13 +204,16 @@ function handleKeydown(event: KeyboardEvent): void {
   if (!isInteractive.value)
     return
 
+  const increaseKey = dzDirection.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
+  const decreaseKey = dzDirection.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+
   let next: number | null = null
   switch (event.key) {
-    case 'ArrowRight':
+    case increaseKey:
     case 'ArrowUp':
       next = clamp(snap(model.value) + step.value)
       break
-    case 'ArrowLeft':
+    case decreaseKey:
     case 'ArrowDown':
       next = clamp(snap(model.value) - step.value)
       break
@@ -234,17 +247,22 @@ function handleBlur(event: FocusEvent): void {
 
 /** Expose programmatic focus for parity with other form controls. */
 defineExpose({
+  /** Move keyboard focus to the rating control. */
   focus: (): void => rootRef.value?.focus(),
 })
+
+// Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
+const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div>
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-rating')">
     <div
       :id="resolvedId"
       ref="rootRef"
       role="slider"
-      :class="rootClasses"
+      data-part="control"
+      :class="[rootClasses, ui?.control]"
       :tabindex="resolvedDisabled ? -1 : 0"
       :aria-valuemin="0"
       :aria-valuemax="count"
@@ -274,7 +292,8 @@ defineExpose({
       <span
         v-for="index in count"
         :key="index"
-        :class="styles.item()"
+        data-part="item"
+        :class="[styles.item(), ui?.item]"
         :title="`${index} ${index === 1 ? 'star' : 'stars'}`"
         aria-hidden="true"
         @mousemove="handlePointerMove($event, index)"
@@ -285,7 +304,7 @@ defineExpose({
             <DzIcon :icon="resolvedEmptyIcon" :size="iconSize" />
           </slot>
         </span>
-        <span :class="styles.overlay()" :style="{ width: `${fillPercent(index)}%` }">
+        <span data-part="item-indicator" :class="[styles.overlay(), ui?.['item-indicator']]" :style="{ width: `${fillPercent(index)}%` }">
           <span :class="styles.filled()">
             <slot name="icon" :index="index">
               <DzIcon :icon="resolvedFilledIcon" :size="iconSize" />
@@ -302,7 +321,9 @@ defineExpose({
     <p
       v-if="error"
       :id="errorId"
+      data-part="error"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      :class="[ui?.error]"
       role="alert"
     >
       {{ error }}

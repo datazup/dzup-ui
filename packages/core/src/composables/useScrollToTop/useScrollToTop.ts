@@ -4,8 +4,13 @@
  * Watches a scroll container (defaults to `window`), reports whether it has
  * scrolled past a configured threshold, and exposes a `scrollToTop` action that
  * animates back to the origin over a configurable duration. The animation is
- * skipped (an instant jump) when the user prefers reduced motion or `duration`
- * is non-positive.
+ * skipped (an instant jump) when motion resolves to reduced or `duration` is
+ * non-positive.
+ *
+ * Reduced motion comes from the provider (ADR-20 §7, TASK-R5-O3), not from a
+ * local `matchMedia` read: an application that has its own accessibility
+ * setting is invisible to the media query, and this composable is what
+ * `DzBackTop` animates through.
  *
  * Scroll handling is throttled via `requestAnimationFrame`. SSR-safe: no
  * `window`/`document` access at module scope — listeners attach on mount.
@@ -15,6 +20,7 @@
 
 import type { MaybeRefOrGetter, Ref } from 'vue'
 import { onBeforeUnmount, onMounted, ref, toValue, watch } from 'vue'
+import { useDzMotion } from '../provider/useDzMotion.ts'
 
 /** Options for the useScrollToTop composable */
 export interface UseScrollToTopOptions {
@@ -51,6 +57,7 @@ function easeInOutQuad(t: number): number {
  */
 export function useScrollToTop(options: UseScrollToTopOptions = {}): UseScrollToTopReturn {
   const visible = ref(false)
+  const motion = useDzMotion()
 
   function getTarget(): HTMLElement | Window {
     return options.target?.() ?? window
@@ -69,14 +76,6 @@ export function useScrollToTop(options: UseScrollToTopOptions = {}): UseScrollTo
       window.scrollTo(0, y)
   }
 
-  function prefersReducedMotion(): boolean {
-    return (
-      typeof window !== 'undefined'
-      && typeof window.matchMedia === 'function'
-      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    )
-  }
-
   function update(): void {
     const threshold = toValue(options.visibilityHeight) ?? DEFAULT_VISIBILITY_HEIGHT
     visible.value = getScrollTop(getTarget()) >= threshold
@@ -89,7 +88,7 @@ export function useScrollToTop(options: UseScrollToTopOptions = {}): UseScrollTo
       return
 
     const duration = toValue(options.duration) ?? DEFAULT_DURATION
-    if (duration <= 0 || prefersReducedMotion()) {
+    if (duration <= 0 || motion.reduced.value) {
       setScrollTop(target, 0)
       update()
       return

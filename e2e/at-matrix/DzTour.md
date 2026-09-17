@@ -21,6 +21,22 @@ known one.
 | `dismiss` | Dismiss with Escape, and again by activating the close affordance. | Focus returns to the trigger and the AT announces where it landed. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/overlays/DzTour.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Escape` | — | Close the tour and return focus to the element that opened it. |
+| `Tab` | — | Move to the next focusable element, wrapping inside the tour. |
+| `Shift` + `Tab` | — | Move to the previous focusable element, wrapping inside the tour. |
+| `ArrowRight` | — | Advance to the next step. |
+| `ArrowLeft` | — | Return to the previous step. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |

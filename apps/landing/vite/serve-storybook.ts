@@ -10,8 +10,15 @@ import process from 'node:process'
  *
  * `apps/storybook/storybook-static` is a BUILD INPUT, not a committed artifact:
  * it is gitignored (`.gitignore` → `storybook-static/`), so it is absent on every
- * clean clone and every CI runner until `yarn storybook:build` runs. ADR-12
- * covers the committed package `dist/` artifacts — it does NOT cover this one.
+ * clean clone and every CI runner until `yarn storybook:build` runs.
+ *
+ * (Corrected 2026-09-04, TASK-N0-04: this comment used to contrast the case with
+ * "the committed package `dist/` artifacts" covered by ADR-12. There are none —
+ * `dist/` is gitignored at `.gitignore:9` and zero `dist/` files are tracked
+ * repo-wide. ADR-12's real content is that generated `dist/` is *published* via
+ * each `package.json`'s `files` entry, never committed. So `storybook-static`
+ * differs from a package `dist/` not in whether it is committed — neither is —
+ * but in that nothing packs or publishes it.)
  * Its assets are referenced with relative URLs (`./sb-manager/...`), so once
  * built it can be served from any sub-path verbatim.
  *

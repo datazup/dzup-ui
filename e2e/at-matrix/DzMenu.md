@@ -23,6 +23,20 @@ known one.
 | `dismiss` | Dismiss with Escape, and again by activating the close affordance. | Focus returns to the trigger and the AT announces where it landed. |
 | `live` | Trigger the loading, empty and error states while focus is elsewhere. | Each is announced without moving focus, exactly once. |
 
+## Declared keyboard contract
+
+Drive **these** keys, not the pattern's from memory. They are declared in
+`packages/core/src/components/navigation/DzMenu.anatomy.ts` and are the same rows the component's documentation page publishes. A key that
+does not do what this table says is a defect in the component **or** in the contract — record which,
+in a note.
+
+| Key | Where | Must |
+|---|---|---|
+| `Tab` | — | Move to the next item; every item is its own tab stop, and there is no roving index. |
+| `Enter` | — | Activate the focused item. |
+| `Space` | — | Activate the focused item. |
+
+
 ## Pairs
 
 | id | Pairing | What it exposes |
