@@ -44,7 +44,7 @@ const active = defineModel<boolean>('active', { default: false })
  */
 const legacyValueModel = defineModel<T>('value')
 /** The edited value, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). */
-const primaryModel = defineModel<T>({ default: undefined })
+const primaryModel = defineModel<T | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzInplaceProps>(), {
   saveOn: 'both',
   disabled: false,
