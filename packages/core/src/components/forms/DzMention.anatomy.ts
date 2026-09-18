@@ -9,6 +9,13 @@ import type { AnatomyPart, ComponentAnatomy, UiOverrides } from '@dzup-ui/contra
  * loading row, `list` / `item` / `item-label` the suggestions, and `empty` the
  * no-results row.
  *
+ * **`options-state`, `options-message`, `options-retry`** — the shared async
+ * row (renderer contract C9) that `DzOptionsState.vue` renders in place of the
+ * list. DzMention joined the seam in TASK-R3-O3 and so declares the three parts
+ * itself, as every host does under owner decision D15 option (d). Host-driven
+ * (`optionsState`) mentions render all three states through it; a resolver keeps
+ * `loader` / `empty` and uses it for the failed state only.
+ *
  * **`class` reaches `input`, not `root`.** `$attrs` are bound on the text
  * control, because that is what a consumer passing `class` to a mention field
  * has always been styling. Documented rather than moved; `ui.root` is the route
@@ -31,14 +38,28 @@ export const anatomy = {
     'item-label',
     'empty',
     'error',
+    'options-state',
+    'options-message',
+    'options-retry',
   ],
 
   /**
    * The menu and everything in it render only while a trigger character is
-   * active; `loader` and `empty` are the two rows that replace the list; the
-   * items repeat.
+   * active; `loader`, `empty` and the `options-*` row replace the list; the
+   * items repeat; `options-retry` renders only for a failed load.
    */
-  optionalParts: ['content', 'loader', 'list', 'item', 'item-label', 'empty', 'error'],
+  optionalParts: [
+    'content',
+    'loader',
+    'list',
+    'item',
+    'item-label',
+    'empty',
+    'error',
+    'options-state',
+    'options-message',
+    'options-retry',
+  ],
 
   /**
    * All presence-only on the root, plus `active` — the suggestion under the

@@ -90,6 +90,16 @@ Reference:
 - Prefer shared tokens first; add local `*.tokens.ts` indirection only when the component needs its own anatomy mapping or stable subpart semantics.
 - Export the component from `packages/core/src/index.ts`.
 - Add a Storybook story under `apps/storybook/src/stories/`.
+- Put every user-visible string in the message catalog (`packages/core/src/i18n/messages.ts`) and read it with `useComponentMessages`. A string that carries a number is a message, not a concatenation: `{count, plural, one {# tag} other {# tags}}`, typed `DzMessage<{ count: number }>` and formatted with `useComponentMessageFormat`. Then run `yarn generate:i18n-packs` so `en.json` and every pack's `fallback` list pick the key up.
+
+### Translations
+
+A translation is a locale pack: JSON under `packages/core/src/i18n/locales/`, validated by `yarn validate:i18n-packs`. The full guide — message syntax, the fallback rule, how to publish a pack — is [`packages/core/docs/i18n.md` §5](packages/core/docs/i18n.md#5-contributing-a-locale-pack). In short:
+
+1. `yarn generate:i18n-packs --scaffold <locale>` (or open the existing scaffold, e.g. `de.json`).
+2. Translate from `locales/en.json`: add each key under `messages` and remove it from `fallback`. Keep argument names; write the plural branches your language needs.
+3. **No machine translation.** Name the person who reads the language in the pull request.
+4. `yarn validate:i18n-packs`, then add the pack's `./i18n/locales/<locale>.json` export and a `patch` changeset for `@dzup-ui/core`.
 
 ### Commit Messages
 

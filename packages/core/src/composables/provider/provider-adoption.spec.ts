@@ -308,6 +308,53 @@ interface AdoptionCase {
 }
 
 const adoptionCases: AdoptionCase[] = [
+  // The four adopters that predate this table (TASK-R5-O3 sessions 1–2). They
+  // were covered only by the hand-written `defaults` block above, which pins
+  // one attribute each; `validate:provider-defaults` (D32(a)) found them with
+  // no row on its first run, because a row is now mandatory for every
+  // `useDzDefaults` consumer in component-meta.json.
+  {
+    // `size` never becomes an attribute here: it reaches the shared recipe and
+    // the spinner ladder only, so the recipe's height token pins it.
+    name: 'DzButton',
+    component: DzButton,
+    defaults: { DzButton: { size: 'lg', tone: 'danger' } },
+    classToken: ['h-[var(--dz-button-md-height)]', 'h-[var(--dz-button-lg-height)]'],
+    bare: { 'data-tone': 'primary' },
+    configured: { 'data-tone': 'danger' },
+  },
+  {
+    // `w-` exists only in the square-footprint lookup map, not in the shared
+    // recipe, so this token pins that second reader of `size`.
+    name: 'DzIconButton',
+    component: DzIconButton,
+    props: { ariaLabel: 'Add' },
+    defaults: { DzIconButton: { size: 'lg', tone: 'danger' } },
+    classToken: ['w-[var(--dz-button-md-height)]', 'w-[var(--dz-button-lg-height)]'],
+    bare: { 'data-tone': 'primary' },
+    configured: { 'data-tone': 'danger' },
+  },
+  {
+    // Its own literal `size` is `sm`, not the family's `md`; `w-` comes only
+    // from the icon-only footprint recipe.
+    name: 'DzCopyButton',
+    component: DzCopyButton,
+    props: { value: 'test' },
+    defaults: { DzCopyButton: { variant: 'ghost', size: 'lg', tone: 'info' } },
+    classToken: ['w-[var(--dz-button-sm-height)]', 'w-[var(--dz-button-lg-height)]'],
+    bare: { 'data-variant': 'outline', 'data-tone': 'neutral' },
+    configured: { 'data-variant': 'ghost', 'data-tone': 'info' },
+  },
+  {
+    // `tone` has no literal: bare it renders NO attribute, and must keep not
+    // rendering one.
+    name: 'DzToggleButton',
+    component: DzToggleButton,
+    defaults: { DzToggleButton: { size: 'lg', tone: 'success' } },
+    classToken: ['h-[var(--dz-button-md-height)]', 'h-[var(--dz-button-lg-height)]'],
+    bare: { 'data-tone': undefined },
+    configured: { 'data-tone': 'success' },
+  },
   {
     name: 'DzFab',
     component: DzFab,

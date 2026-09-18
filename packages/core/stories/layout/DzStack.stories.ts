@@ -17,8 +17,8 @@ const meta = {
     // Appearance
     direction: {
       control: 'select',
-      options: ['vertical', 'horizontal'],
-      description: 'Stack direction',
+      options: ['vertical', 'horizontal', 'column', 'row'],
+      description: 'Stack direction (`row`/`column` are aliases of `horizontal`/`vertical`)',
       table: { category: 'Appearance', defaultValue: { summary: 'vertical' } },
     },
     gap: {

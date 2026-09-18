@@ -67,10 +67,21 @@ export interface VisualBaselineRecord {
   replaces: string | null
 }
 
+/** A stress fixture over a covered family (TASK-R5-O4, schema 1.1.0). See `e2e/visual/coverage.ts`. */
+export interface VisualFixture {
+  id: string
+  family: string
+  story: string
+  source: string
+  components: string[]
+  note: string
+}
+
 export interface VisualLedger {
   schemaVersion: string
   scope: {
     families: string[]
+    fixtures?: VisualFixture[]
     engine: string
     themes: string[]
     direction: string
@@ -232,6 +243,46 @@ export function checkVisualBaselines(
         message: `${component} / ${record.theme}: baseline captured at `
           + `${record.sourceCommit.slice(0, 8)}, component last changed at `
           + `${componentCommit.slice(0, 8)}. The image is a pass about different code.`,
+      })
+    }
+  }
+
+  // Fixtures (TASK-R5-O4): the same coverage and staleness rules as a covered
+  // component, keyed `fixture:<id>`. A fixture over a family that is not in
+  // scope is a declaration nothing drives, so it is an error rather than silence.
+  const families = new Set(ledger.scope.families)
+  for (const fixture of ledger.scope.fixtures ?? []) {
+    const key = `fixture:${fixture.id}`
+    if (!families.has(fixture.family)) {
+      violations.push({
+        rule: 'coverage',
+        level: 'error',
+        message: `fixture \`${fixture.id}\` extends \`${fixture.family}\`, which is not in `
+          + `scope.families — the lane would never drive it.`,
+      })
+      continue
+    }
+    const mine = ledger.baselines.filter(b => b.component === key && b.platform === ledger.scope.platform)
+    for (const theme of ledger.scope.themes) {
+      if (mine.some(b => b.theme === theme))
+        continue
+      violations.push({
+        rule: 'coverage',
+        level: 'error',
+        message: `fixture \`${fixture.id}\` has no accepted \`${theme}\` baseline on `
+          + `${ledger.scope.platform}. Capture it with \`yarn visual:accept --fixture ${fixture.id} `
+          + `--theme ${theme} --by … --reason …\`, or remove the fixture from scope.fixtures.`,
+      })
+    }
+    const fixtureCommit = commitFor(fixture.source)
+    for (const record of mine) {
+      if (evidenceIsCurrent(record.sourceCommit, fixtureCommit))
+        continue
+      violations.push({
+        rule: 'stale',
+        level: 'report',
+        message: `fixture ${fixture.id} / ${record.theme}: baseline captured at `
+          + `${record.sourceCommit.slice(0, 8)}, story last changed at ${fixtureCommit.slice(0, 8)}.`,
       })
     }
   }

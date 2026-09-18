@@ -21,7 +21,9 @@
  *      records, so a machine without a Pro checkout does not fail a file that
  *      was generated with one; if the file claims a Pro tier and no Pro
  *      manifest is available, that is reported as a missing input rather than
- *      as drift.
+ *      as drift. An unresolved cross-tier collision fails this gate too: the
+ *      merged table omits the colliding name, so freshness alone would pass —
+ *      both files agree, because both dropped it (TASK-R3-O1 F3).
  *
  * Usage:
  *   tsx packages/tooling/src/validators/ownership-manifest.ts
@@ -41,6 +43,7 @@ import { fileURLToPath } from 'node:url'
 // erases; this one is a runtime value.
 import { ANATOMY_PART_VOCABULARY } from '../../../contracts/src/anatomy.types.ts'
 import { referencedComponentTokens } from '../ownership/anatomy-source.ts'
+import { unresolvedCollisions } from '../ownership/build-ownership-map.ts'
 import { renderAnatomyData } from '../ownership/emit-anatomy-data.ts'
 import {
   ANATOMY_DATA_PATH,
@@ -162,9 +165,19 @@ export function checkReferences(manifest: OwnershipManifest): OwnershipViolation
  * whatever this machine happens to have: a Core-only checkout must not fail a
  * table that a Pro-equipped machine generated, and vice versa. What it must
  * never do is pass silently when the file claims a tier nobody can supply.
+ *
+ * @param manifest - the manifest to re-derive the table from.
+ * @param lookupPath - the committed table to check. Overridable so the specs can
+ * point at a copy instead of writing to the real generated file.
+ * @param proManifestPath - the Pro manifest to re-derive a Pro-claiming table
+ * with. Defaults to whatever `DZUP_PRO_OWNERSHIP_MANIFEST` names.
  */
-export function checkRuntimeLookup(manifest: OwnershipManifest): OwnershipViolation[] {
-  if (!existsSync(RUNTIME_LOOKUP_PATH)) {
+export function checkRuntimeLookup(
+  manifest: OwnershipManifest,
+  lookupPath: string = RUNTIME_LOOKUP_PATH,
+  proManifestPath: string | undefined = process.env[PRO_MANIFEST_ENV],
+): OwnershipViolation[] {
+  if (!existsSync(lookupPath)) {
     return [{
       rule: 'runtime-lookup',
       message: 'packages/core/src/generated/component-ownership.ts does not exist. '
@@ -172,11 +185,10 @@ export function checkRuntimeLookup(manifest: OwnershipManifest): OwnershipViolat
     }]
   }
 
-  const committed = readFileSync(RUNTIME_LOOKUP_PATH, 'utf8')
+  const committed = readFileSync(lookupPath, 'utf8')
   const claimsPro = /OWNERSHIP_TIERS = \[[^\]]*'pro'/.test(committed)
-  const proManifest = process.env[PRO_MANIFEST_ENV]
 
-  if (claimsPro && (proManifest === undefined || !existsSync(proManifest))) {
+  if (claimsPro && (proManifestPath === undefined || !existsSync(proManifestPath))) {
     return [{
       rule: 'runtime-lookup',
       message: 'the committed runtime lookup includes a Pro tier, but no Pro ownership manifest '
@@ -185,11 +197,28 @@ export function checkRuntimeLookup(manifest: OwnershipManifest): OwnershipViolat
     }]
   }
 
-  const { source, problems } = buildRuntimeLookup(manifest, claimsPro ? proManifest : undefined)
+  const { source, problems, collisions } = buildRuntimeLookup(
+    manifest,
+    claimsPro ? proManifestPath : undefined,
+  )
   const violations: OwnershipViolation[] = problems.map(problem => ({
     rule: 'runtime-lookup',
     message: problem,
   }))
+
+  // Freshness cannot see a collision: the colliding name is left out of the
+  // merged table, so the committed file and the regenerated one agree — both
+  // dropped it. Without this the resolver answers `undefined` for a name two
+  // tiers ship, and every gate stays green (TASK-R3-O1 F3).
+  for (const collision of unresolvedCollisions(collisions)) {
+    violations.push({
+      rule: 'runtime-lookup',
+      message: `${collision.symbol} is exported by ${collision.tiers.join(' and ')}, and no `
+        + 'collision-decisions.json entry settles it, so it is absent from the runtime lookup '
+        + 'and the resolver answers undefined for it. Record the winning tier and the ADR that '
+        + 'decided it — a collision is never resolved by the generator.',
+    })
+  }
 
   if (source !== committed) {
     violations.push({

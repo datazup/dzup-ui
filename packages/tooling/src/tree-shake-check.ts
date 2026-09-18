@@ -14,6 +14,7 @@ import { execSync } from 'node:child_process'
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import process from 'node:process'
+import { sentinelPresent } from './tree-shake-sentinel.ts'
 
 interface TreeShakeResult {
   component: string
@@ -105,10 +106,21 @@ export default defineConfig({
         const bundleContent = readFileSync(join(distDir, jsFile), 'utf-8')
         const bundleSize = Buffer.byteLength(bundleContent)
 
-        // Check for sentinel components that should NOT be in the bundle
+        // Check for sentinel components that should NOT be in the bundle.
+        //
+        // The match is identifier-aware, NOT a substring: `DzDataGrid` must not
+        // fire on `DzDataGridHeader`. The i18n catalog carries message-group
+        // keys named after compound parts (`DzDataGridHeader`,
+        // `DzDataGridPagination` — packages/core/src/i18n/messages.ts), and
+        // those keys are plain strings that travel with the catalog into every
+        // bundle, so a substring test reported all three sentinels as "leaked"
+        // in a bundle that had tree-shaken them perfectly. That false positive
+        // is what made this gate exit 1 regardless of the bundle's real
+        // contents, which is worse than no gate: it cannot distinguish a leak
+        // it should fail on from a name that merely shares a prefix.
         const unexpectedIncludes: string[] = []
         for (const sentinel of SENTINEL_COMPONENTS) {
-          if (bundleContent.includes(sentinel)) {
+          if (sentinelPresent(bundleContent, sentinel)) {
             unexpectedIncludes.push(sentinel)
           }
         }

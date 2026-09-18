@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { DzButton, DzErrorBoundary, DzHeading, DzText, DzThemeProvider, DzToastProvider, DzToastViewport, DzVisuallyHidden } from '@dzup-ui/core'
+import type { DzDirection } from '@dzup-ui/contracts'
+import { DzButton, DzErrorBoundary, DzHeading, DzProvider, DzText, DzThemeProvider, DzToastProvider, DzToastViewport, DzVisuallyHidden } from '@dzup-ui/core'
 import { computed, nextTick, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AnnouncementBanner from './components/AnnouncementBanner.vue'
@@ -7,6 +8,7 @@ import AppFooter from './components/Footer.vue'
 import GlobalCommandPalette from './components/GlobalCommandPalette.vue'
 import ThemeRecipeController from './components/ThemeRecipeController.ts'
 import TopNav from './components/TopNav.vue'
+import { useThemeDesigner } from './composables/useThemeDesigner.ts'
 import { supportsViewTransitions, useReducedMotion } from './motion/index.ts'
 
 // The preview routes render chromeless — they are the iframe / fullscreen /
@@ -16,6 +18,21 @@ import { supportsViewTransitions, useReducedMotion } from './motion/index.ts'
 const CHROMELESS_ROUTES = new Set(['template-preview', 'block-preview'])
 const route = useRoute()
 const isPreview = computed(() => CHROMELESS_ROUTES.has(route.name as string))
+
+// Writing direction, through the library's provider contract (ADR-20; TASK-R5-O4).
+// The Direction control wrote `<html dir>` and nothing else, so every
+// `useDzDirection()` below this shell — the APP-1 fix in BlockCategoryNav, and
+// every Core component's arrow keys — kept answering `ltr` in an RTL document.
+// Providing it here, once, is what every route and every component shares; a
+// fix in one component's copy of the key handling is what APP-1 already had.
+// The chromeless preview routes take `?dir=` (they are iframe targets whose
+// parent owns the direction), so the provider agrees with what those pages set.
+const designer = useThemeDesigner()
+const direction = computed<DzDirection>(() =>
+  isPreview.value
+    ? (route.query.dir === 'rtl' ? 'rtl' : 'ltr')
+    : designer.recipe.direction,
+)
 
 // Native route transition (docs/animations.md §3.1, §4 — effect 30). When the
 // View Transitions API is available and motion is allowed, the route swap is
@@ -80,89 +97,91 @@ router.afterEach((to, from, failure) => {
        synchronization bridge remains. -->
   <DzThemeProvider>
     <ThemeRecipeController />
-    <DzToastProvider>
-      <a class="skip-link" href="#main">Skip to content</a>
-      <div class="landing-shell">
-        <!-- Config-driven announcement bar above the nav. Hidden on the chromeless
-           preview routes (iframe / new-tab render targets), like the nav/footer. -->
-        <AnnouncementBanner v-if="!isPreview" />
-        <TopNav v-if="!isPreview" />
-        <!-- `tabindex="-1"` is PERMANENT, not something the router adds later
-             (TASK-FREE3-07). The skip link above targets `#main`, and moving focus
-             on fragment activation is only guaranteed for a focusable target —
-             browsers vary on what they do when the target cannot take focus, some
-             moving the viewport without moving focus at all. The afterEach guard
-             below also sets it, but that fires on NAVIGATION: on the first painted
-             route no navigation has happened yet, so the very first use of the skip
-             link — the one a keyboard user hits within seconds of arriving — was
-             the one case with no tabindex on the target. -1 keeps it unreachable by
-             Tab; the unscoped rule below suppresses the ring for this programmatic
-             focus alone. -->
-        <main id="main" tabindex="-1" class="landing-main">
-          <!-- The library's own error boundary around the routed view: a throw in
-             any page renders this recoverable fallback, never a blank screen. -->
-          <DzErrorBoundary :on-error="logRouteError">
-            <template #fallback="{ reset }">
-              <div class="route-error" role="alert">
-                <DzHeading :level="1" size="xl" weight="semibold">
-                  This page hit an error
-                </DzHeading>
-                <DzText tone="muted">
-                  Something inside this page threw while rendering. You can retry it, or head back
-                  to the home page — the rest of the site is unaffected.
-                </DzText>
-                <div class="route-error-actions">
-                  <DzButton variant="solid" tone="primary" @click="reset()">
-                    Try again
-                  </DzButton>
-                  <DzButton variant="outline" tone="neutral" @click="recoverHome(reset)">
-                    Go home
-                  </DzButton>
+    <DzProvider :direction="direction">
+      <DzToastProvider>
+        <a class="skip-link" href="#main">Skip to content</a>
+        <div class="landing-shell">
+          <!-- Config-driven announcement bar above the nav. Hidden on the chromeless
+             preview routes (iframe / new-tab render targets), like the nav/footer. -->
+          <AnnouncementBanner v-if="!isPreview" />
+          <TopNav v-if="!isPreview" />
+          <!-- `tabindex="-1"` is PERMANENT, not something the router adds later
+               (TASK-FREE3-07). The skip link above targets `#main`, and moving focus
+               on fragment activation is only guaranteed for a focusable target —
+               browsers vary on what they do when the target cannot take focus, some
+               moving the viewport without moving focus at all. The afterEach guard
+               below also sets it, but that fires on NAVIGATION: on the first painted
+               route no navigation has happened yet, so the very first use of the skip
+               link — the one a keyboard user hits within seconds of arriving — was
+               the one case with no tabindex on the target. -1 keeps it unreachable by
+               Tab; the unscoped rule below suppresses the ring for this programmatic
+               focus alone. -->
+          <main id="main" tabindex="-1" class="landing-main">
+            <!-- The library's own error boundary around the routed view: a throw in
+               any page renders this recoverable fallback, never a blank screen. -->
+            <DzErrorBoundary :on-error="logRouteError">
+              <template #fallback="{ reset }">
+                <div class="route-error" role="alert">
+                  <DzHeading :level="1" size="xl" weight="semibold">
+                    This page hit an error
+                  </DzHeading>
+                  <DzText tone="muted">
+                    Something inside this page threw while rendering. You can retry it, or head back
+                    to the home page — the rest of the site is unaffected.
+                  </DzText>
+                  <div class="route-error-actions">
+                    <DzButton variant="solid" tone="primary" @click="reset()">
+                      Try again
+                    </DzButton>
+                    <DzButton variant="outline" tone="neutral" @click="recoverHome(reset)">
+                      Go home
+                    </DzButton>
+                  </div>
                 </div>
-              </div>
-            </template>
-            <!-- Route transition (docs/animations.md §6.8, effect 30) — a fade+slide
-             between landing routes. Keyed by path so it fires on route changes
-             (not in-page hash nav); `out-in` lets scrollBehavior land cleanly
-             after the swap. Reduced motion degrades to an instant opacity swap
-             via the scoped @media block below. -->
-            <router-view v-slot="{ Component, route: current }">
-              <!-- Native path: the router guard wraps the swap in a View Transition,
-               so render bare (no Vue <Transition>) to avoid double-animating. The
-               wrapper still carries one root so the routed `root` snapshot is the
-               whole view. -->
-              <div v-if="useNativeRoute" :key="current.path" class="route-view">
-                <component :is="Component" />
-              </div>
-              <!-- Fallback path (unsupported / reduced motion): the original Vue
-               <Transition>, unchanged. -->
-              <Transition v-else name="route" mode="out-in">
-                <!-- Wrap the routed component in a single element so the transition
-                 always has one root to animate. Page components may have
-                 multiple root nodes (e.g. HomePage), which <Transition> cannot
-                 transition directly — without this wrapper, leaving a multi-root
-                 page breaks the out-in enter step and the next page never mounts
-                 (blank screen on client-side navigation). -->
-                <div :key="current.path" class="route-view">
+              </template>
+              <!-- Route transition (docs/animations.md §6.8, effect 30) — a fade+slide
+               between landing routes. Keyed by path so it fires on route changes
+               (not in-page hash nav); `out-in` lets scrollBehavior land cleanly
+               after the swap. Reduced motion degrades to an instant opacity swap
+               via the scoped @media block below. -->
+              <router-view v-slot="{ Component, route: current }">
+                <!-- Native path: the router guard wraps the swap in a View Transition,
+                 so render bare (no Vue <Transition>) to avoid double-animating. The
+                 wrapper still carries one root so the routed `root` snapshot is the
+                 whole view. -->
+                <div v-if="useNativeRoute" :key="current.path" class="route-view">
                   <component :is="Component" />
                 </div>
-              </Transition>
-            </router-view>
-          </DzErrorBoundary>
-        </main>
-        <AppFooter v-if="!isPreview" />
-      </div>
-      <!-- Site-wide ⌘K / Ctrl+K palette (its own global shortcut + focus trap).
-         Skipped on the chromeless preview routes — those are iframe/new-tab
-         render targets, not surfaces a visitor navigates from. -->
-      <GlobalCommandPalette v-if="!isPreview" />
-      <!-- Route announcer: speaks the new page title after client-side navigation
-         (aria-live, visually hidden). See the afterEach guard above. -->
-      <DzVisuallyHidden aria-live="polite" role="status">
-        {{ routeAnnouncement }}
-      </DzVisuallyHidden>
-      <DzToastViewport position="bottom-right" />
-    </DzToastProvider>
+                <!-- Fallback path (unsupported / reduced motion): the original Vue
+                 <Transition>, unchanged. -->
+                <Transition v-else name="route" mode="out-in">
+                  <!-- Wrap the routed component in a single element so the transition
+                   always has one root to animate. Page components may have
+                   multiple root nodes (e.g. HomePage), which <Transition> cannot
+                   transition directly — without this wrapper, leaving a multi-root
+                   page breaks the out-in enter step and the next page never mounts
+                   (blank screen on client-side navigation). -->
+                  <div :key="current.path" class="route-view">
+                    <component :is="Component" />
+                  </div>
+                </Transition>
+              </router-view>
+            </DzErrorBoundary>
+          </main>
+          <AppFooter v-if="!isPreview" />
+        </div>
+        <!-- Site-wide ⌘K / Ctrl+K palette (its own global shortcut + focus trap).
+           Skipped on the chromeless preview routes — those are iframe/new-tab
+           render targets, not surfaces a visitor navigates from. -->
+        <GlobalCommandPalette v-if="!isPreview" />
+        <!-- Route announcer: speaks the new page title after client-side navigation
+           (aria-live, visually hidden). See the afterEach guard above. -->
+        <DzVisuallyHidden aria-live="polite" role="status">
+          {{ routeAnnouncement }}
+        </DzVisuallyHidden>
+        <DzToastViewport position="bottom-right" />
+      </DzToastProvider>
+    </DzProvider>
   </DzThemeProvider>
 </template>
 

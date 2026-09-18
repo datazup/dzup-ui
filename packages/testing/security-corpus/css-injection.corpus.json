@@ -1,5 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
+  "$schema": "./security-corpus.schema.json",
+  "schemaVersion": "1.1.0",
   "category": "css-injection",
   "description": "Host-supplied strings that reach a CSS value — a colour prop, an inline style binding, a custom-property override. CSS injection rarely executes script on a current engine; what it reliably does is exfiltrate (an attribute-selector plus a `url()` leaks a value one request at a time), overlay (position a transparent element over a real control) and erase (paint a security-relevant element out of existence). The required outcome for a style sink is `escaped`: the value stays in the one declaration it was given and cannot open a second one.",
   "fixtures": [

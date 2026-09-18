@@ -1,5 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
+  "$schema": "./security-corpus.schema.json",
+  "schemaVersion": "1.1.0",
   "category": "encoded-payload",
   "description": "Values a component encodes into something another system decodes and acts on. The defining property is that the browser is not in the loop: a QR code is read by a camera, and whatever the value turns out to be is followed with none of the protections a page would have applied. The required outcome is therefore never about the page's own safety — inside the document these values are geometry. It is about the component encoding exactly what it was given, refusing what it cannot encode correctly, and never letting the value become live in the page as well.",
   "fixtures": [

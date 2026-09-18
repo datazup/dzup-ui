@@ -6,6 +6,7 @@ import {
   DZ_PROVIDER_DEFAULTS,
 } from '@dzup-ui/contracts'
 import { computed, inject, provide, readonly, ref } from 'vue'
+import { directionForLocale } from '../../i18n/direction.ts'
 
 /**
  * Locale and direction (TASK-OSS-P4-01, ADR-20).
@@ -19,41 +20,11 @@ import { computed, inject, provide, readonly, ref } from 'vue'
  * loop, and the write side belongs to `DzProvider` (TASK-OSS-P4-02).
  */
 
-/**
- * Scripts written right-to-left, by ISO 639 language subtag.
- *
- * A list rather than `Intl.Locale.prototype.getTextInfo()`, which is
- * Baseline-2023 and unavailable in the repository's Node floor
- * (`^20.19.0 || >=22.13.0`) on every platform. When the floor moves past it,
- * this becomes a one-line delegation — the ADR records that as the intended
- * direction rather than leaving a hand-maintained list to discover.
- */
-const RTL_LANGUAGES = new Set([
-  'ar', // Arabic
-  'arc', // Aramaic
-  'ckb', // Central Kurdish
-  'dv', // Divehi
-  'fa', // Persian
-  'ha', // Hausa (Ajami)
-  'he', // Hebrew
-  'khw', // Khowar
-  'ks', // Kashmiri
-  'ps', // Pashto
-  'sd', // Sindhi
-  'ur', // Urdu
-  'uz-AF', // Uzbek (Afghanistan)
-  'yi', // Yiddish
-])
-
-/** Resolve a BCP-47 tag to a writing direction. */
-export function directionForLocale(locale: DzLocale): DzDirection {
-  const normalised = locale.toLowerCase()
-  if (RTL_LANGUAGES.has(normalised))
-    return 'rtl'
-
-  const language = normalised.split('-')[0] ?? ''
-  return RTL_LANGUAGES.has(language) ? 'rtl' : 'ltr'
-}
+// `directionForLocale` and its subtag list moved to `../../i18n/direction.ts`
+// in TASK-R5-O4 — unchanged — so the locale-pack gate can check a pack's declared
+// direction against the same list without importing Vue. Re-exported here, where
+// `DzProvider` and the provider specs already import it from.
+export { directionForLocale } from '../../i18n/direction.ts'
 
 /**
  * The active locale.

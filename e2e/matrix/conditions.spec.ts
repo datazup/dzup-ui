@@ -3,6 +3,7 @@ import {
   canvas,
   declareUnrun,
   expectRendered,
+  forceMotionPolicy,
   knownFailure,
   matrixProject,
   openTarget,
@@ -36,32 +37,30 @@ declareUnrun()
  * as the engine's (TASK-R5-O3, ADR-20 §7).
  *
  * `reducedMotion: 'reduce'` in `playwright.config.ts` sets what the *engine*
- * reports for `prefers-reduced-motion`. Until this packet that was the only
- * thing the condition exercised, so the assertion below proved that Chromium
- * implements a media query — a component could honour the OS in CSS, ignore the
- * provider entirely, and pass.
+ * reports for `prefers-reduced-motion`. `__DZ_MOTION__` is the deterministic
+ * mode `useDzMotion` reads (`packages/core/src/composables/provider/useDzMotion.ts`),
+ * ahead of the provider and the OS both; `forceMotionPolicy` sets it before any
+ * page script runs. It is forced here rather than through a `DzProvider` because
+ * these are Storybook stories: none mounts one with a `motion` prop, and a lane
+ * that had to would be testing the harness.
  *
- * `__DZ_MOTION__` is the deterministic mode `useDzMotion` reads
- * (`packages/core/src/composables/provider/useDzMotion.ts`). It outranks the
- * provider and the OS both, and it is set here rather than through a
- * `DzProvider` because these are Storybook stories: none of them mounts one, and
- * a lane that had to would be testing the harness.
- *
- * `addInitScript` runs before any of the page's own scripts, which is why the
- * value has to be a global rather than a function call.
- *
- * What this does **not** yet prove is the provider path *alone* — both switches
- * are on, so either could be the one that stopped an animation. Separating them
- * needs a seventh condition with the media query left at its default, which is
- * owner decision D27 in the TASK-R5-O3 handoff.
+ * **This cell does not assert the policy — `motion-policy.spec.ts` does.** With
+ * both switches on, the `getAnimations` check below cannot tell which one stopped
+ * an animation, and the tokens stylesheet answers the media query on its own, so
+ * a component that ignored the provider entirely would still pass here. That was
+ * measured on 2026-09-17, not assumed: with the forced mode broken, every cell of
+ * this condition stayed green while `motion-policy.spec.ts` went red. The
+ * contract spec runs on the same three reduced-motion projects with the engine
+ * set back to `no-preference`, so the forced mode is the only thing left that
+ * can reduce motion, and asserts `data-dz-motion="reduce"` plus an immediate end
+ * state per motion-consuming component. This cell keeps the WCAG half: under a
+ * real OS preference, nothing in any Tier B–D component still animates.
  */
 test.beforeEach(async ({ page }) => {
   if (matrixProject().condition !== 'reduced-motion')
     return
 
-  await page.addInitScript(() => {
-    ;(globalThis as { __DZ_MOTION__?: string }).__DZ_MOTION__ = 'reduced'
-  })
+  await forceMotionPolicy(page)
 })
 
 for (const target of RUNNABLE_TARGETS) {

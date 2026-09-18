@@ -55,11 +55,37 @@ export interface VisualBaselineRecord {
   readonly replaces: string | null
 }
 
+/**
+ * A declared stress fixture (TASK-R5-O4, schema 1.1.0): one story that renders a
+ * covered family's text-bearing components under text English never produces —
+ * CJK, combining marks, a 4,096-character run, +40 % pseudo expansion.
+ *
+ * A fixture is not a component, so its baselines are recorded with
+ * `component: "fixture:<id>"` — a name no quality-matrix row can match, which is
+ * what keeps fixtures out of the capability matrix's per-component join. It owes
+ * every theme in `scope.themes`, exactly as a covered component does.
+ */
+export interface VisualFixture {
+  /** Kebab-case; the snapshot is `fixture-<id>-<theme>`. */
+  readonly id: string
+  /** A family in `scope.families` — fixtures extend a covered family, never widen scope. */
+  readonly family: string
+  /** Storybook story id. */
+  readonly story: string
+  /** The story file, for staleness. */
+  readonly source: string
+  /** The components the fixture renders, for a reader of the ledger. */
+  readonly components: readonly string[]
+  readonly note: string
+}
+
 export interface VisualLedger {
   readonly schemaVersion: string
   readonly scope: {
     /** Families whose components owe a baseline. Everything else is `not-covered`. */
     readonly families: readonly string[]
+    /** Stress fixtures over covered families (schema 1.1.0). Absent means none. */
+    readonly fixtures?: readonly VisualFixture[]
     readonly engine: string
     readonly themes: readonly VisualTheme[]
     readonly direction: string
@@ -106,7 +132,7 @@ export interface VisualShot {
  */
 export function visualShots(ledger: VisualLedger = readVisualLedger()): readonly VisualShot[] {
   const families = new Set(ledger.scope.families)
-  return MATRIX_TARGETS
+  const components = MATRIX_TARGETS
     .filter(target => families.has(target.family))
     .flatMap(target =>
       ledger.scope.themes.map(theme => ({
@@ -119,6 +145,21 @@ export function visualShots(ledger: VisualLedger = readVisualLedger()): readonly
       })),
     )
     .filter(shot => shot.story !== '')
+
+  const fixtures = (ledger.scope.fixtures ?? [])
+    .filter(fixture => families.has(fixture.family))
+    .flatMap(fixture =>
+      ledger.scope.themes.map(theme => ({
+        component: `fixture:${fixture.id}`,
+        family: fixture.family,
+        story: fixture.story,
+        theme,
+        arg: `fixture-${fixture.id}-${theme}`,
+        title: `visual fixture ${fixture.id} ${theme}`,
+      })),
+    )
+
+  return [...components, ...fixtures]
 }
 
 /** Covered components that have no story to drive — a gap, not an exemption. */

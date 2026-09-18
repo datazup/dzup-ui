@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "99b963a03e1c0a9cd8077c9f1d0405a645174e4e",
+  "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -268,29 +268,29 @@
     ]
   },
   "totals": {
-    "components": 208,
+    "components": 209,
     "publicComponents": 144,
-    "compoundParts": 64,
+    "compoundParts": 65,
     "unclassifiable": 0,
-    "props": 1810,
-    "propsWithDescription": 1810,
-    "propsWithDeclaredDefault": 682,
-    "propsWithLiteralUndefinedDefault": 558,
-    "events": 362,
-    "eventsWithDescription": 362,
+    "props": 1818,
+    "propsWithDescription": 1818,
+    "propsWithDeclaredDefault": 683,
+    "propsWithLiteralUndefinedDefault": 565,
+    "events": 366,
+    "eventsWithDescription": 366,
     "eventsFromExtractor": 0,
-    "eventsFromEmitsInterface": 292,
+    "eventsFromEmitsInterface": 296,
     "eventsModelSynthesised": 70,
     "eventsModelDerived": 84,
-    "slots": 327,
-    "slotsWithDescription": 327,
+    "slots": 328,
+    "slotsWithDescription": 328,
     "slotsWithPayload": 86,
     "exposed": 27,
     "exposedWithDescription": 27,
     "unresolvedTypes": 0,
     "componentsWithStories": 143,
     "componentsWithPrimaryExample": 143,
-    "componentsWithStaticTemplate": 128
+    "componentsWithStaticTemplate": 129
   },
   "components": [
     {
@@ -7749,93 +7749,101 @@
           {
             "id": "Default",
             "lines": [
-              171,
-              206
+              174,
+              209
             ]
           },
           {
             "id": "ChangeOnSelect",
             "name": "Change on Select",
             "lines": [
-              212,
-              258
+              215,
+              261
             ]
           },
           {
             "id": "HoverExpand",
             "name": "Hover Expand",
             "lines": [
-              264,
-              278
+              267,
+              281
             ]
           },
           {
             "id": "Filterable",
             "lines": [
-              284,
-              327
+              287,
+              330
             ]
           },
           {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              333,
-              350
+              336,
+              353
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              356,
-              369
+              359,
+              372
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              375,
-              384
+              378,
+              387
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              390,
-              405
+              393,
+              408
             ]
           },
           {
             "id": "States",
             "lines": [
-              411,
-              509
+              414,
+              512
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Keyboard-Only Cascade",
             "lines": [
-              515,
-              592
+              518,
+              595
             ]
           },
           {
             "id": "RealWorldShippingRegion",
             "name": "Real World: Shipping Region",
             "lines": [
-              598,
-              685
+              601,
+              688
+            ]
+          },
+          {
+            "id": "AsyncOptions",
+            "name": "Async Options: loading → ready → error → retry",
+            "lines": [
+              701,
+              749
             ]
           }
         ],
         "primary": {
           "id": "Default",
           "lines": [
-            171,
-            206
+            174,
+            209
           ],
           "source": "export const Default: Story = {\n  render: args => ({\n    components: { DzCascader },\n    setup() {\n      return { args }\n    },\n    template: '<DzCascader v-bind=\"args\" class=\"max-w-xs\" />',\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n\n    // Trigger is a combobox button; initially collapsed.\n    const trigger = canvas.getByRole('combobox')\n    await expect(trigger).toHaveAttribute('aria-expanded', 'false')\n\n    // Click opens the first-level listbox.\n    await userEvent.click(trigger)\n    // Popover is portalled to document.body — use screen, not canvas.\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))\n\n    // First item in the root column is \"China\" which has children.\n    const options = screen.getAllByRole('option')\n    const chinaOption = options.find(el => el.textContent?.includes('China'))!\n    await userEvent.click(chinaOption)\n\n    // Clicking a parent reveals the second-level listbox (two listboxes now visible).\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))\n\n    // The child column contains Zhejiang as first option.\n    await waitFor(() =>\n      expect(screen.getAllByRole('option').some(el => el.textContent?.includes('Zhejiang'))).toBe(\n        true,\n      ),\n    )\n  },\n}",
           "template": "<DzCascader v-bind=\"args\" class=\"max-w-xs\" />"
@@ -7844,8 +7852,8 @@
           "id": "ChangeOnSelect",
           "name": "Change on Select",
           "lines": [
-            212,
-            258
+            215,
+            261
           ],
           "source": "export const ChangeOnSelect: Story = {\n  name: 'Change on Select',\n  render: () => ({\n    components: { DzCascader },\n    data() {\n      return { value: [], regions }\n    },\n    template: `\n      <div class=\"space-y-2 max-w-xs\">\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Any level commits; the popover stays open to drill deeper.</p>\n        <DzCascader v-model:value=\"value\" :options=\"regions\" change-on-select placeholder=\"Select region\" />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n    const trigger = canvas.getByRole('combobox')\n\n    // Open the panel.\n    await userEvent.click(trigger)\n    // Popover is portalled to document.body — use screen, not canvas.\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))\n\n    // Click \"USA\" (a parent) — with change-on-select it commits immediately.\n    const usaOption = screen.getAllByRole('option').find(el => el.textContent?.includes('USA'))!\n    await userEvent.click(usaOption)\n\n    // Panel stays open (change-on-select keeps it open to drill deeper).\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))\n\n    // Click the leaf \"California → Los Angeles\" path: click California first.\n    const californiaOption = screen\n      .getAllByRole('option')\n      .find(el => el.textContent?.includes('California'))!\n    await userEvent.click(californiaOption)\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(3))\n\n    // Select leaf \"Los Angeles\" — panel closes and trigger shows the full path.\n    const laOption = screen\n      .getAllByRole('option')\n      .find(el => el.textContent?.includes('Los Angeles'))!\n    await userEvent.click(laOption)\n    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))\n    await expect(trigger).toHaveTextContent(/Los Angeles/)\n  },\n}",
           "template": "\n      <div class=\"space-y-2 max-w-xs\">\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Any level commits; the popover stays open to drill deeper.</p>\n        <DzCascader v-model:value=\"value\" :options=\"regions\" change-on-select placeholder=\"Select region\" />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>\n      </div>\n    "
@@ -11018,125 +11026,133 @@
           {
             "id": "Default",
             "lines": [
-              130,
-              138
+              132,
+              140
             ]
           },
           {
             "id": "AllVariants",
             "name": "Variant Gallery",
             "lines": [
-              144,
-              159
+              146,
+              161
             ]
           },
           {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              165,
-              182
+              167,
+              184
             ]
           },
           {
             "id": "AllowCustomValue",
             "name": "Allow Custom Value",
             "lines": [
-              188,
-              216
+              190,
+              218
             ]
           },
           {
             "id": "OpenByDefault",
             "name": "Open by Default",
             "lines": [
-              222,
-              234
+              224,
+              236
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              240,
-              249
+              242,
+              251
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              255,
-              268
+              257,
+              270
             ]
           },
           {
             "id": "States",
             "lines": [
-              274,
-              288
+              276,
+              290
             ]
           },
           {
             "id": "LoadingState",
             "name": "Loading State",
             "lines": [
-              290,
-              303
+              292,
+              305
             ]
           },
           {
             "id": "WithSlots",
             "name": "Custom Slots",
             "lines": [
-              309,
-              324
+              311,
+              326
             ]
           },
           {
             "id": "RichObjects",
             "name": "Rich Objects",
             "lines": [
-              326,
-              369
+              328,
+              371
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              375,
-              392
+              377,
+              394
             ]
           },
           {
             "id": "Interactive",
             "lines": [
-              398,
-              428
+              400,
+              430
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Focus States",
             "lines": [
-              434,
-              448
+              436,
+              450
             ]
           },
           {
             "id": "RealWorldUserSearch",
             "name": "Real World: User Search",
             "lines": [
-              454,
-              475
+              456,
+              477
+            ]
+          },
+          {
+            "id": "AsyncOptions",
+            "name": "Async Options: loading → ready → error → retry",
+            "lines": [
+              491,
+              539
             ]
           }
         ],
         "primary": {
           "id": "Default",
           "lines": [
-            130,
-            138
+            132,
+            140
           ],
           "source": "export const Default: Story = {\n  render: args => ({\n    components: { DzCombobox },\n    setup() {\n      return { args }\n    },\n    template: '<DzCombobox v-bind=\"args\" class=\"max-w-xs\" />',\n  }),\n}",
           "template": "<DzCombobox v-bind=\"args\" class=\"max-w-xs\" />"
@@ -11145,8 +11161,8 @@
           "id": "AllVariants",
           "name": "Variant Gallery",
           "lines": [
-            144,
-            159
+            146,
+            161
           ],
           "source": "export const AllVariants: Story = {\n  name: 'Variant Gallery',\n  render: () => ({\n    components: { DzCombobox },\n    setup() {\n      return { items: sampleItems }\n    },\n    template: `\n      <div class=\"space-y-4 max-w-xs\">\n        <DzCombobox :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n        <DzCombobox :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n        <DzCombobox :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n      </div>\n    `,\n  }),\n}",
           "template": "\n      <div class=\"space-y-4 max-w-xs\">\n        <DzCombobox :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n        <DzCombobox :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n        <DzCombobox :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n      </div>\n    "
@@ -13252,7 +13268,10 @@
         "parts": []
       },
       "providerHooks": [
-        "useDzDefaults"
+        "useDzDefaults",
+        "useDzFormats",
+        "useDzLocale",
+        "useDzMessages"
       ],
       "capability": {
         "tier": "A",
@@ -14416,6 +14435,7 @@
         ]
       },
       "providerHooks": [
+        "useDzLocale",
         "useDzMessages",
         "useDzTestIds"
       ],
@@ -20683,95 +20703,103 @@
             "id": "Default",
             "lines": [
               86,
-              107
+              115
             ]
           },
           {
             "id": "AllColumns",
             "name": "Column Gallery",
             "lines": [
-              113,
-              131
+              121,
+              139
             ]
           },
           {
             "id": "AllGaps",
             "name": "Gap Gallery",
             "lines": [
-              137,
-              155
+              145,
+              163
             ]
           },
           {
             "id": "ResponsiveColumns",
             "name": "Responsive Columns",
             "lines": [
-              161,
-              179
+              169,
+              187
+            ]
+          },
+          {
+            "id": "SpanningItems",
+            "name": "Spanning Items (DzGridItem)",
+            "lines": [
+              193,
+              237
             ]
           },
           {
             "id": "ExplicitRows",
             "name": "Explicit Rows",
             "lines": [
-              185,
-              203
+              243,
+              261
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              209,
-              223
+              267,
+              281
             ]
           },
           {
             "id": "RealWorldCardGrid",
             "name": "Real World: Card Grid",
             "lines": [
-              229,
-              244
+              287,
+              302
             ]
           },
           {
             "id": "RealWorldDashboardStats",
             "name": "Real World: Dashboard Stats",
             "lines": [
-              250,
-              275
+              308,
+              333
             ]
           },
           {
             "id": "ResponsiveMobile",
             "name": "Responsive: Mobile",
             "lines": [
-              306,
-              311
+              364,
+              369
             ]
           },
           {
             "id": "ResponsiveTablet",
             "name": "Responsive: Tablet",
             "lines": [
-              313,
-              318
+              371,
+              376
             ]
           },
           {
             "id": "ResponsiveDesktop",
             "name": "Responsive: Desktop",
             "lines": [
-              320,
-              325
+              378,
+              383
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Semantic Grid",
             "lines": [
-              331,
-              346
+              389,
+              404
             ]
           }
         ],
@@ -20779,16 +20807,17 @@
           "id": "Default",
           "lines": [
             86,
-            107
+            115
           ],
-          "source": "export const Default: Story = {\n  render: args => ({\n    components: { DzGrid },\n    setup() {\n      return { args }\n    },\n    template: `\n      <DzGrid v-bind=\"args\">\n        ${gridItems(6)}\n      </DzGrid>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n    const gridContainer = canvasElement.querySelector('div')\n    await expect(gridContainer).toBeInTheDocument()\n    const item1 = canvas.getByText('1')\n    await expect(item1).toBeInTheDocument()\n    const item6 = canvas.getByText('6')\n    await expect(item6).toBeInTheDocument()\n  },\n}"
+          "source": "export const Default: Story = {\n  render: args => ({\n    components: { DzGrid },\n    setup() {\n      return { args }\n    },\n    // A static template (no `${…}` interpolation), so component-meta can publish\n    // it as paste-ready markup (TASK-R3-O3).\n    template: `\n      <DzGrid v-bind=\"args\">\n        <div\n          v-for=\"n in 6\"\n          :key=\"n\"\n          class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded text-center font-medium\"\n        >\n          {{ n }}\n        </div>\n      </DzGrid>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n    const gridContainer = canvasElement.querySelector('div')\n    await expect(gridContainer).toBeInTheDocument()\n    const item1 = canvas.getByText('1')\n    await expect(item1).toBeInTheDocument()\n    const item6 = canvas.getByText('6')\n    await expect(item6).toBeInTheDocument()\n  },\n}",
+          "template": "\n      <DzGrid v-bind=\"args\">\n        <div\n          v-for=\"n in 6\"\n          :key=\"n\"\n          class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded text-center font-medium\"\n        >\n          {{ n }}\n        </div>\n      </DzGrid>\n    "
         },
         "runnable": {
           "id": "AllColumns",
           "name": "Column Gallery",
           "lines": [
-            113,
-            131
+            121,
+            139
           ],
           "source": "export const AllColumns: Story = {\n  name: 'Column Gallery',\n  render: () => ({\n    components: { DzGrid },\n    template: `\n      <div class=\"space-y-6\">\n        <div v-for=\"c in [1, 2, 3, 4, 6, 12]\" :key=\"c\">\n          <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">cols={{ c }}</p>\n          <DzGrid :cols=\"c\" gap=\"sm\">\n            <div v-for=\"i in c\" :key=\"i\"\n              class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded text-center\">\n              {{ i }}\n            </div>\n          </DzGrid>\n        </div>\n      </div>\n    `,\n  }),\n}",
           "template": "\n      <div class=\"space-y-6\">\n        <div v-for=\"c in [1, 2, 3, 4, 6, 12]\" :key=\"c\">\n          <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">cols={{ c }}</p>\n          <DzGrid :cols=\"c\" gap=\"sm\">\n            <div v-for=\"i in c\" :key=\"i\"\n              class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded text-center\">\n              {{ i }}\n            </div>\n          </DzGrid>\n        </div>\n      </div>\n    "
@@ -20798,6 +20827,75 @@
         "props": 8,
         "propsWithDescription": 8,
         "propsWithDeclaredDefault": 3,
+        "events": 0,
+        "eventsWithDescription": 0,
+        "eventsModelDerived": 0,
+        "slots": 1,
+        "slotsWithDescription": 1,
+        "slotsWithPayload": 0,
+        "exposed": 0,
+        "exposedWithDescription": 0,
+        "unresolvedTypes": []
+      }
+    },
+    {
+      "name": "DzGridItem",
+      "kind": "compound-part",
+      "parentComponent": "DzGrid",
+      "description": "a `DzGrid` child that says how many columns it occupies.",
+      "descriptionSource": "sfc-header",
+      "family": "layout",
+      "subpaths": [
+        ".",
+        "./layout"
+      ],
+      "source": "packages/core/src/components/layout/DzGridItem.vue",
+      "componentCommit": "unknown",
+      "componentType": "class",
+      "anatomy": {
+        "state": "absent",
+        "parts": []
+      },
+      "providerHooks": [],
+      "props": [
+        {
+          "name": "as",
+          "type": "string | undefined",
+          "required": false,
+          "default": "\"div\"",
+          "description": "HTML element to render as",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
+        },
+        {
+          "name": "span",
+          "type": "GridSpan | ResponsiveSpan | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Columns this item occupies, fixed or per breakpoint. Omitted means one\r\ncolumn, the CSS default. A numeric span outside 1–12 is clamped into that\r\nrange; a span wider than the grid's own column count creates implicit\r\ncolumns, exactly as the CSS it compiles to would — clamp to your grid.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
+        }
+      ],
+      "globalPropCount": 12,
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "type": "any",
+          "description": "The item's content — usually one field",
+          "descriptionSource": "vue-component-meta",
+          "hasPayload": false
+        }
+      ],
+      "exposed": [],
+      "stories": {
+        "stories": []
+      },
+      "extraction": {
+        "props": 2,
+        "propsWithDescription": 2,
+        "propsWithDeclaredDefault": 1,
         "events": 0,
         "eventsWithDescription": 0,
         "eventsModelDerived": 0,
@@ -23151,8 +23249,8 @@
         },
         {
           "name": "update:modelValue",
-          "type": "[value: T]",
-          "signature": "(event: \"update:modelValue\", value: T): void",
+          "type": "[value: T | undefined]",
+          "signature": "(event: \"update:modelValue\", value: T | undefined): void",
           "description": "Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you.",
           "descriptionSource": "model-synthesised",
           "modelDerived": true
@@ -26604,65 +26702,73 @@
           {
             "id": "Single",
             "lines": [
-              106,
-              142
+              108,
+              144
             ]
           },
           {
             "id": "Multiple",
             "lines": [
-              148,
-              164
+              150,
+              166
             ]
           },
           {
             "id": "WithFilter",
             "lines": [
-              170,
-              184
+              172,
+              186
             ]
           },
           {
             "id": "Grouped",
             "lines": [
-              190,
-              204
+              192,
+              206
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              210,
-              236
+              212,
+              238
             ]
           },
           {
             "id": "InsideFormField",
             "lines": [
-              242,
-              260
+              244,
+              262
             ]
           },
           {
             "id": "DarkMode",
             "lines": [
-              262,
-              276
+              264,
+              278
             ]
           },
           {
             "id": "States",
             "lines": [
-              282,
-              385
+              284,
+              387
+            ]
+          },
+          {
+            "id": "AsyncOptions",
+            "name": "Async Options: loading → ready → error → retry",
+            "lines": [
+              401,
+              447
             ]
           }
         ],
         "primary": {
           "id": "Single",
           "lines": [
-            106,
-            142
+            108,
+            144
           ],
           "source": "export const Single: Story = {\n  render: args => ({\n    components: { DzListbox },\n    setup() {\n      const value = ref<string | null>('ber')\n      return { args, value }\n    },\n    template: `\n      <div class=\"max-w-xs\">\n        <DzListbox v-bind=\"args\" v-model=\"value\" aria-label=\"City\" class=\"max-h-64\" />\n        <p class=\"mt-2 text-sm text-[var(--dz-muted-foreground)]\">Selected: {{ value ?? '—' }}</p>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n\n    // The listbox is always-visible — Berlin is pre-selected.\n    const listbox = canvas.getByRole('listbox', { name: /city/i })\n    await expect(listbox).toBeVisible()\n\n    // Click Amsterdam — it should become selected.\n    const amsterdam = canvas.getByRole('option', { name: /amsterdam/i })\n    await userEvent.click(amsterdam)\n    await waitFor(() => expect(amsterdam).toHaveAttribute('aria-selected', 'true'))\n\n    // ArrowDown moves keyboard focus to Berlin; press Enter/Space to select.\n    await userEvent.keyboard('{ArrowDown}')\n    const berlin = canvas.getByRole('option', { name: /^berlin$/i })\n    await expect(berlin).toBeInTheDocument()\n    await userEvent.keyboard('{Enter}')\n    await waitFor(() => expect(berlin).toHaveAttribute('aria-selected', 'true'))\n\n    // Disabled option (none in Single story) — verify Copenhagen is present.\n    await expect(canvas.getByRole('option', { name: /copenhagen/i })).toBeInTheDocument()\n  },\n}",
           "template": "\n      <div class=\"max-w-xs\">\n        <DzListbox v-bind=\"args\" v-model=\"value\" aria-label=\"City\" class=\"max-h-64\" />\n        <p class=\"mt-2 text-sm text-[var(--dz-muted-foreground)]\">Selected: {{ value ?? '—' }}</p>\n      </div>\n    "
@@ -26670,8 +26776,8 @@
         "runnable": {
           "id": "States",
           "lines": [
-            282,
-            385
+            284,
+            387
           ],
           "source": "/**\n * The states DzListbox can be in, and the difference a screenshot hides: a\n * disabled listbox* takes the whole control out of the tab order, while a\n * disabled option* leaves the list navigable and only refuses that one row.\n * The invalid case adds `data-invalid` for the styling contract, `aria-invalid`\n * on the `role=\"listbox\"` itself, and a `role=\"alert\"` message beneath it.\n *\n * The play function asserts each of those, and confirms that selection still\n * works in the enabled control so \"disabled\" is measured against a live\n * baseline rather than asserted in isolation.\n */\nexport const States: Story = {\n  render: () => ({\n    components: { DzListbox },\n    setup() {\n      const enabled = ref<string | null>('ber')\n      const partial = ref<string | null>(null)\n      const options: DzListboxOption[] = [\n        { label: 'Amsterdam', value: 'ams' },\n        { label: 'Berlin', value: 'ber' },\n        { label: 'Copenhagen (unavailable)', value: 'cph', disabled: true },\n      ]\n      return { enabled, partial, options }\n    },\n    template: `\n      <div class=\"grid max-w-5xl gap-6 lg:grid-cols-3\">\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Enabled</p>\n          <DzListbox\n            v-model=\"enabled\"\n            :options=\"options.slice(0, 2)\"\n            aria-label=\"Enabled city list\"\n            data-testid=\"lb-enabled\"\n          />\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Disabled control</p>\n          <DzListbox\n            disabled\n            :options=\"options.slice(0, 2)\"\n            aria-label=\"Disabled city list\"\n            data-testid=\"lb-disabled\"\n          />\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Disabled option + invalid</p>\n          <DzListbox\n            v-model=\"partial\"\n            invalid\n            error=\"Pick a city that is still available.\"\n            :options=\"options\"\n            aria-label=\"Partly available city list\"\n            data-testid=\"lb-invalid\"\n          />\n        </section>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n\n    const enabled = canvas.getByTestId('lb-enabled')\n    const disabled = canvas.getByTestId('lb-disabled')\n    const invalid = canvas.getByTestId('lb-invalid')\n\n    // Enabled: nothing is flagged, and the bound value is reflected as selected.\n    await expect(enabled).not.toHaveAttribute('data-disabled')\n    await expect(enabled).not.toHaveAttribute('data-invalid')\n    await expect(within(enabled).getByRole('option', { name: 'Berlin' }))\n      .toHaveAttribute('aria-selected', 'true')\n\n    // …and selection still moves, so the disabled cases below mean something.\n    await userEvent.click(within(enabled).getByRole('option', { name: 'Amsterdam' }))\n    await waitFor(() =>\n      expect(within(enabled).getByRole('option', { name: 'Amsterdam' }))\n        .toHaveAttribute('aria-selected', 'true'),\n    )\n\n    // Disabled control: flagged on the root, and every option inherits it.\n    await expect(disabled).toHaveAttribute('data-disabled')\n    for (const option of within(disabled).getAllByRole('option'))\n      await expect(option).toHaveAttribute('data-disabled')\n\n    // Invalid: flagged for CSS, announced to AT, and explained in an alert.\n    // The error message is a sibling of the listbox root, so it is looked up on\n    // the component's outer wrapper rather than inside the root.\n    await expect(invalid).toHaveAttribute('data-invalid')\n    await expect(within(invalid).getByRole('listbox'))\n      .toHaveAttribute('aria-invalid', 'true')\n    await expect(within(invalid.parentElement as HTMLElement).getByRole('alert'))\n      .toHaveTextContent('Pick a city that is still available.')\n\n    // A disabled *option* is the only one refused — its siblings still work.\n    const unavailable = within(invalid).getByRole('option', { name: /copenhagen/i })\n    await expect(unavailable).toHaveAttribute('data-disabled')\n    const available = within(invalid).getByRole('option', { name: 'Amsterdam' })\n    await expect(available).not.toHaveAttribute('data-disabled')\n    await userEvent.click(available)\n    await waitFor(() => expect(available).toHaveAttribute('aria-selected', 'true'))\n    await expect(unavailable).toHaveAttribute('aria-selected', 'false')\n  },\n}",
           "template": "\n      <div class=\"grid max-w-5xl gap-6 lg:grid-cols-3\">\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Enabled</p>\n          <DzListbox\n            v-model=\"enabled\"\n            :options=\"options.slice(0, 2)\"\n            aria-label=\"Enabled city list\"\n            data-testid=\"lb-enabled\"\n          />\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Disabled control</p>\n          <DzListbox\n            disabled\n            :options=\"options.slice(0, 2)\"\n            aria-label=\"Disabled city list\"\n            data-testid=\"lb-disabled\"\n          />\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Disabled option + invalid</p>\n          <DzListbox\n            v-model=\"partial\"\n            invalid\n            error=\"Pick a city that is still available.\"\n            :options=\"options\"\n            aria-label=\"Partly available city list\"\n            data-testid=\"lb-invalid\"\n          />\n        </section>\n      </div>\n    "
@@ -27653,6 +27759,9 @@
           "item-label",
           "list",
           "loader",
+          "options-message",
+          "options-retry",
+          "options-state",
           "root"
         ],
         "source": "packages/core/src/components/forms/DzMention.anatomy.ts",
@@ -27663,7 +27772,10 @@
           "item",
           "item-label",
           "list",
-          "loader"
+          "loader",
+          "options-message",
+          "options-retry",
+          "options-state"
         ],
         "states": [
           "active",
@@ -27742,6 +27854,7 @@
         }
       },
       "providerHooks": [
+        "useDzLocale",
         "useDzMessages",
         "useDzTestIds"
       ],
@@ -27884,7 +27997,7 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Copy shown while an async resolver is pending",
+          "description": "Copy shown while options load (an async resolver, or a host-driven `optionsState=\"loading\"`)",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzMention.types.ts"
         },
@@ -27928,9 +28041,36 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Copy shown when a resolved/filtered query yields no options",
+          "description": "Copy shown when a resolved, host-driven or filtered query yields no options",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzMention.types.ts"
+        },
+        {
+          "name": "optionsError",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Why the load failed, shown in the error row. Ignored unless\n`optionsState` is `'error'`.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/contracts/src/async-options.types.ts"
+        },
+        {
+          "name": "optionsRetryable",
+          "type": "boolean | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Whether to offer a retry control in the error row.\n\nDefaults to true when `optionsState` can be `'error'`. Set false when the\nhost retries on its own and a button would be a second, competing path.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/contracts/src/async-options.types.ts"
+        },
+        {
+          "name": "optionsState",
+          "type": "AsyncOptionsState | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Where the option set is. Omitted means the options are static and the\ncontrol renders no state rows at all.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/contracts/src/async-options.types.ts"
         },
         {
           "name": "placeholder",
@@ -27997,7 +28137,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"item\" | \"content\" | \"list\" | \"error\" | \"item-label\" | \"empty\" | \"control\" | \"input\" | \"loader\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"item\" | \"content\" | \"list\" | \"error\" | \"item-label\" | \"empty\" | \"control\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"loader\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzMention.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the text control, declared\nthere as `input` — so `ui.root` is the route to the wrapper.",
@@ -28057,10 +28197,26 @@
           "modelDerived": false
         },
         {
+          "name": "loadOptions",
+          "type": "[request: LoadOptionsRequest]",
+          "signature": "(event: \"loadOptions\", request: LoadOptionsRequest): void",
+          "description": "The control needs options. See {@link LoadOptionsRequest}.",
+          "descriptionSource": "emits-interface",
+          "modelDerived": false
+        },
+        {
           "name": "open",
           "type": "[]",
           "signature": "(event: \"open\"): void",
           "description": "Popup/overlay opened",
+          "descriptionSource": "emits-interface",
+          "modelDerived": false
+        },
+        {
+          "name": "retryOptions",
+          "type": "[]",
+          "signature": "(event: \"retryOptions\"): void",
+          "description": "The user asked to try again after an error.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
@@ -28134,101 +28290,109 @@
           {
             "id": "Default",
             "lines": [
-              110,
-              147
+              113,
+              150
             ]
           },
           {
             "id": "UserMentions",
             "name": "User Mentions (@)",
             "lines": [
-              153,
-              188
+              156,
+              191
             ]
           },
           {
             "id": "Hashtags",
             "lines": [
-              194,
-              228
+              197,
+              231
             ]
           },
           {
             "id": "RichSuggestions",
             "name": "Rich Suggestions (#option slot)",
             "lines": [
-              234,
-              263
+              237,
+              266
             ]
           },
           {
             "id": "AsyncSearch",
             "lines": [
-              269,
-              293
+              272,
+              296
             ]
           },
           {
             "id": "MultiTrigger",
             "name": "Multiple Triggers (@ + #)",
             "lines": [
-              299,
-              321
+              302,
+              324
             ]
           },
           {
             "id": "SingleLine",
             "name": "Single Line",
             "lines": [
-              327,
-              344
+              330,
+              347
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              350,
-              367
+              353,
+              370
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              373,
-              394
+              376,
+              397
             ]
           },
           {
             "id": "States",
             "lines": [
-              400,
-              520
+              403,
+              523
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Combobox Keyboard Pattern",
             "lines": [
-              526,
-              618
+              529,
+              621
             ]
           },
           {
             "id": "RealWorldCommentComposer",
             "name": "Real World: Issue Comment Composer",
             "lines": [
-              624,
-              713
+              627,
+              716
+            ]
+          },
+          {
+            "id": "AsyncOptions",
+            "name": "Async Options: loading → ready → error → retry",
+            "lines": [
+              731,
+              784
             ]
           }
         ],
         "primary": {
           "id": "Default",
           "lines": [
-            110,
-            147
+            113,
+            150
           ],
           "source": "export const Default: Story = {\n  render: () => ({\n    components: { DzMention },\n    setup() {\n      const triggers = [{ char: '@', options: users }]\n      return { triggers }\n    },\n    data() {\n      return { value: '' }\n    },\n    template: `\n      <div class=\"max-w-md p-4\">\n        <DzMention v-model:value=\"value\" :triggers=\"triggers\" placeholder=\"Type @ to mention…\" aria-label=\"Comment\" />\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n\n    // The textarea is a combobox; focus it and type @ to open the listbox\n    const combobox = canvas.getByRole('combobox', { name: 'Comment' })\n    await expect(combobox).toBeInTheDocument()\n    await userEvent.click(combobox)\n    await userEvent.type(combobox, '@')\n\n    // A listbox should appear with @ suggestions\n    const listbox = await waitFor(() => canvas.getByRole('listbox'))\n    await expect(listbox).toBeVisible()\n\n    // At least one option is rendered\n    const options = within(listbox).getAllByRole('option')\n    await expect(options.length).toBeGreaterThan(0)\n\n    // Click the first option and assert the combobox value contains @ + label\n    await userEvent.click(options[0]!)\n    await expect((combobox as HTMLTextAreaElement).value).toMatch(/@\\w/)\n  },\n}",
           "template": "\n      <div class=\"max-w-md p-4\">\n        <DzMention v-model:value=\"value\" :triggers=\"triggers\" placeholder=\"Type @ to mention…\" aria-label=\"Comment\" />\n      </div>\n    "
@@ -28236,19 +28400,19 @@
         "runnable": {
           "id": "Default",
           "lines": [
-            110,
-            147
+            113,
+            150
           ],
           "source": "export const Default: Story = {\n  render: () => ({\n    components: { DzMention },\n    setup() {\n      const triggers = [{ char: '@', options: users }]\n      return { triggers }\n    },\n    data() {\n      return { value: '' }\n    },\n    template: `\n      <div class=\"max-w-md p-4\">\n        <DzMention v-model:value=\"value\" :triggers=\"triggers\" placeholder=\"Type @ to mention…\" aria-label=\"Comment\" />\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n\n    // The textarea is a combobox; focus it and type @ to open the listbox\n    const combobox = canvas.getByRole('combobox', { name: 'Comment' })\n    await expect(combobox).toBeInTheDocument()\n    await userEvent.click(combobox)\n    await userEvent.type(combobox, '@')\n\n    // A listbox should appear with @ suggestions\n    const listbox = await waitFor(() => canvas.getByRole('listbox'))\n    await expect(listbox).toBeVisible()\n\n    // At least one option is rendered\n    const options = within(listbox).getAllByRole('option')\n    await expect(options.length).toBeGreaterThan(0)\n\n    // Click the first option and assert the combobox value contains @ + label\n    await userEvent.click(options[0]!)\n    await expect((combobox as HTMLTextAreaElement).value).toMatch(/@\\w/)\n  },\n}",
           "template": "\n      <div class=\"max-w-md p-4\">\n        <DzMention v-model:value=\"value\" :triggers=\"triggers\" placeholder=\"Type @ to mention…\" aria-label=\"Comment\" />\n      </div>\n    "
         }
       },
       "extraction": {
-        "props": 28,
-        "propsWithDescription": 28,
+        "props": 31,
+        "propsWithDescription": 31,
         "propsWithDeclaredDefault": 13,
-        "events": 9,
-        "eventsWithDescription": 9,
+        "events": 11,
+        "eventsWithDescription": 11,
         "eventsModelDerived": 2,
         "slots": 3,
         "slotsWithDescription": 3,
@@ -29457,93 +29621,101 @@
           {
             "id": "Default",
             "lines": [
-              120,
-              128
+              122,
+              130
             ]
           },
           {
             "id": "AllVariants",
             "name": "Variant Gallery",
             "lines": [
-              134,
-              149
+              136,
+              151
             ]
           },
           {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              155,
-              172
+              157,
+              174
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              178,
-              187
+              180,
+              189
             ]
           },
           {
             "id": "MaxSelections",
             "name": "Max Selections (3)",
             "lines": [
-              193,
-              206
+              195,
+              208
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              212,
-              225
+              214,
+              227
             ]
           },
           {
             "id": "States",
             "lines": [
-              231,
-              245
+              233,
+              247
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              251,
-              268
+              253,
+              270
             ]
           },
           {
             "id": "Interactive",
             "lines": [
-              274,
-              303
+              276,
+              305
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Focus States",
             "lines": [
-              309,
-              323
+              311,
+              325
             ]
           },
           {
             "id": "RealWorldTagPicker",
             "name": "Real World: Tag Picker",
             "lines": [
-              329,
-              351
+              331,
+              353
+            ]
+          },
+          {
+            "id": "AsyncOptions",
+            "name": "Async Options: loading → ready → error → retry",
+            "lines": [
+              367,
+              415
             ]
           }
         ],
         "primary": {
           "id": "Default",
           "lines": [
-            120,
-            128
+            122,
+            130
           ],
           "source": "export const Default: Story = {\n  render: args => ({\n    components: { DzMultiSelect },\n    setup() {\n      return { args }\n    },\n    template: '<DzMultiSelect v-bind=\"args\" class=\"max-w-sm\" />',\n  }),\n}",
           "template": "<DzMultiSelect v-bind=\"args\" class=\"max-w-sm\" />"
@@ -29552,8 +29724,8 @@
           "id": "AllVariants",
           "name": "Variant Gallery",
           "lines": [
-            134,
-            149
+            136,
+            151
           ],
           "source": "export const AllVariants: Story = {\n  name: 'Variant Gallery',\n  render: () => ({\n    components: { DzMultiSelect },\n    setup() {\n      return { items: sampleItems }\n    },\n    template: `\n      <div class=\"space-y-4 max-w-sm\">\n        <DzMultiSelect :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n        <DzMultiSelect :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n        <DzMultiSelect :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n      </div>\n    `,\n  }),\n}",
           "template": "\n      <div class=\"space-y-4 max-w-sm\">\n        <DzMultiSelect :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n        <DzMultiSelect :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n        <DzMultiSelect :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n      </div>\n    "
@@ -32922,6 +33094,33 @@
           "descriptionSource": "vue-component-meta"
         },
         {
+          "name": "optionsError",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Why the load failed, shown in the error row. Ignored unless\n`optionsState` is `'error'`.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/contracts/src/async-options.types.ts"
+        },
+        {
+          "name": "optionsRetryable",
+          "type": "boolean | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Whether to offer a retry control in the error row.\n\nDefaults to true when `optionsState` can be `'error'`. Set false when the\nhost retries on its own and a button would be a second, competing path.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/contracts/src/async-options.types.ts"
+        },
+        {
+          "name": "optionsState",
+          "type": "AsyncOptionsState | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Where the option set is. Omitted means the options are static and the\ncontrol renders no state rows at all.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/contracts/src/async-options.types.ts"
+        },
+        {
           "name": "personas",
           "type": "Persona[]",
           "required": true,
@@ -32956,6 +33155,22 @@
           "type": "[persona: Persona | undefined]",
           "signature": "(event: \"change\", persona: Persona | undefined): void",
           "description": "Fires with the full persona object when one is selected",
+          "descriptionSource": "emits-interface",
+          "modelDerived": false
+        },
+        {
+          "name": "loadOptions",
+          "type": "[request: LoadOptionsRequest]",
+          "signature": "(event: \"loadOptions\", request: LoadOptionsRequest): void",
+          "description": "The control needs options. See {@link LoadOptionsRequest}.",
+          "descriptionSource": "emits-interface",
+          "modelDerived": false
+        },
+        {
+          "name": "retryOptions",
+          "type": "[]",
+          "signature": "(event: \"retryOptions\"): void",
+          "description": "The user asked to try again after an error.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
@@ -33086,11 +33301,11 @@
         }
       },
       "extraction": {
-        "props": 5,
-        "propsWithDescription": 5,
+        "props": 8,
+        "propsWithDescription": 8,
         "propsWithDeclaredDefault": 3,
-        "events": 2,
-        "eventsWithDescription": 2,
+        "events": 4,
+        "eventsWithDescription": 4,
         "eventsModelDerived": 1,
         "slots": 2,
         "slotsWithDescription": 2,
@@ -35989,6 +36204,8 @@
       },
       "providerHooks": [
         "useDzDirection",
+        "useDzLocale",
+        "useDzMessages",
         "useDzTestIds"
       ],
       "capability": {
@@ -39477,101 +39694,109 @@
           {
             "id": "Default",
             "lines": [
-              132,
-              140
+              134,
+              142
             ]
           },
           {
             "id": "AllVariants",
             "name": "Variant Gallery",
             "lines": [
-              146,
-              161
+              148,
+              163
             ]
           },
           {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              167,
-              184
+              169,
+              186
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              190,
-              201
+              192,
+              203
             ]
           },
           {
             "id": "DisabledItems",
             "name": "Disabled Items",
             "lines": [
-              207,
-              216
+              209,
+              218
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              222,
-              235
+              224,
+              237
             ]
           },
           {
             "id": "States",
             "lines": [
-              241,
-              255
+              243,
+              257
             ]
           },
           {
             "id": "WithSlots",
             "name": "Custom Slots",
             "lines": [
-              261,
-              276
+              263,
+              278
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              282,
-              300
+              284,
+              302
             ]
           },
           {
             "id": "Interactive",
             "lines": [
-              306,
-              334
+              308,
+              336
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Focus States",
             "lines": [
-              340,
-              354
+              342,
+              356
             ]
           },
           {
             "id": "RealWorldCountrySelector",
             "name": "Real World: Country Selector",
             "lines": [
-              360,
-              383
+              362,
+              385
+            ]
+          },
+          {
+            "id": "AsyncOptions",
+            "name": "Async Options: loading → ready → error → retry",
+            "lines": [
+              399,
+              447
             ]
           }
         ],
         "primary": {
           "id": "Default",
           "lines": [
-            132,
-            140
+            134,
+            142
           ],
           "source": "export const Default: Story = {\n  render: args => ({\n    components: { DzSelect },\n    setup() {\n      return { args }\n    },\n    template: '<DzSelect v-bind=\"args\" />',\n  }),\n}",
           "template": "<DzSelect v-bind=\"args\" />"
@@ -39580,8 +39805,8 @@
           "id": "AllVariants",
           "name": "Variant Gallery",
           "lines": [
-            146,
-            161
+            148,
+            163
           ],
           "source": "export const AllVariants: Story = {\n  name: 'Variant Gallery',\n  render: () => ({\n    components: { DzSelect },\n    setup() {\n      return { items: sampleItems }\n    },\n    template: `\n      <div class=\"space-y-4 max-w-xs\">\n        <DzSelect :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n        <DzSelect :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n        <DzSelect :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n      </div>\n    `,\n  }),\n}",
           "template": "\n      <div class=\"space-y-4 max-w-xs\">\n        <DzSelect :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n        <DzSelect :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n        <DzSelect :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n      </div>\n    "
@@ -43553,7 +43778,7 @@
           "type": "StackDirection | undefined",
           "required": false,
           "default": "\"vertical\"",
-          "description": "Stack direction",
+          "description": "Stack direction. `vertical` (default) and `column` stack along the block\r\naxis; `horizontal` and `row` lay out along the inline axis, which follows\r\n`dir`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/layout/DzStack.types.ts"
         },
@@ -46858,6 +47083,8 @@
         ]
       },
       "providerHooks": [
+        "useDzLocale",
+        "useDzMessages",
         "useDzTestIds"
       ],
       "capability": {
@@ -51896,100 +52123,108 @@
           {
             "id": "Default",
             "lines": [
-              95,
-              103
+              97,
+              105
             ]
           },
           {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              109,
-              130
+              111,
+              132
             ]
           },
           {
             "id": "Searchable",
             "lines": [
-              136,
-              148
+              138,
+              150
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              154,
-              163
+              156,
+              165
             ]
           },
           {
             "id": "DisabledItems",
             "name": "Disabled Items",
             "lines": [
-              169,
-              183
+              171,
+              185
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              189,
-              202
+              191,
+              204
             ]
           },
           {
             "id": "States",
             "lines": [
-              208,
-              236
+              210,
+              238
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              242,
-              254
+              244,
+              256
             ]
           },
           {
             "id": "Interactive",
             "lines": [
-              260,
-              278
+              262,
+              280
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Focus States",
             "lines": [
-              284,
-              298
+              286,
+              300
             ]
           },
           {
             "id": "RealWorldPermissions",
             "name": "Real World: Permission Assignment",
             "lines": [
-              304,
-              328
+              306,
+              330
             ]
           },
           {
             "id": "MoveBothDirections",
             "name": "Move Both Directions",
             "lines": [
-              334,
-              374
+              336,
+              376
+            ]
+          },
+          {
+            "id": "AsyncOptions",
+            "name": "Async Options: loading → ready → error → retry",
+            "lines": [
+              390,
+              435
             ]
           }
         ],
         "primary": {
           "id": "Default",
           "lines": [
-            95,
-            103
+            97,
+            105
           ],
           "source": "export const Default: Story = {\n  render: args => ({\n    components: { DzTransfer },\n    setup() {\n      return { args }\n    },\n    template: '<DzTransfer v-bind=\"args\" />',\n  }),\n}",
           "template": "<DzTransfer v-bind=\"args\" />"
@@ -51998,8 +52233,8 @@
           "id": "AllSizes",
           "name": "Size Gallery",
           "lines": [
-            109,
-            130
+            111,
+            132
           ],
           "source": "export const AllSizes: Story = {\n  name: 'Size Gallery',\n  render: () => ({\n    components: { DzTransfer },\n    setup() {\n      const small: TransferItem[] = [\n        { key: '1', label: 'Item A' },\n        { key: '2', label: 'Item B' },\n        { key: '3', label: 'Item C' },\n      ]\n      return { small }\n    },\n    template: `\n      <div class=\"space-y-8\">\n        <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n          <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n          <DzTransfer :source=\"small\" :size=\"size\" />\n        </div>\n      </div>\n    `,\n  }),\n}",
           "template": "\n      <div class=\"space-y-8\">\n        <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n          <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n          <DzTransfer :source=\"small\" :size=\"size\" />\n        </div>\n      </div>\n    "
@@ -53370,71 +53605,79 @@
           {
             "id": "Single",
             "lines": [
-              107,
-              150
+              109,
+              152
             ]
           },
           {
             "id": "MultipleChips",
             "name": "Multiple (chips)",
             "lines": [
-              156,
-              204
+              158,
+              206
             ]
           },
           {
             "id": "CheckboxPropagation",
             "name": "Checkbox propagation",
             "lines": [
-              210,
-              263
+              212,
+              265
             ]
           },
           {
             "id": "Filterable",
             "lines": [
-              269,
-              290
+              271,
+              292
             ]
           },
           {
             "id": "InFormField",
             "name": "In FormField",
             "lines": [
-              296,
-              320
+              298,
+              322
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              326,
-              349
+              328,
+              351
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Keyboard-Only Tree Combobox",
             "lines": [
-              355,
-              456
+              357,
+              458
             ]
           },
           {
             "id": "RealWorldCatalogFilter",
             "name": "Real World: Catalog Category Filter",
             "lines": [
-              462,
-              558
+              464,
+              560
+            ]
+          },
+          {
+            "id": "AsyncOptions",
+            "name": "Async Options: loading → ready → error → retry",
+            "lines": [
+              573,
+              621
             ]
           }
         ],
         "primary": {
           "id": "Single",
           "lines": [
-            107,
-            150
+            109,
+            152
           ],
           "source": "export const Single: Story = {\n  render: args => ({\n    components: { DzTreeSelect },\n    setup() {\n      return { args }\n    },\n    data() {\n      return { value: undefined as string | undefined }\n    },\n    template: `\n      <div class=\"max-w-xs space-y-3\">\n        <DzTreeSelect v-bind=\"args\" v-model:value=\"value\" :expanded-keys=\"['fruit']\" />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Selected: <strong>{{ value || 'none' }}</strong></p>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n    const body = within(document.body)\n\n    // Open the dropdown via the combobox trigger.\n    const trigger = canvas.getByRole('combobox')\n    await userEvent.click(trigger)\n\n    // Tree panel is portalled to document.body.\n    await waitFor(() => expect(body.getByRole('tree')).toBeVisible())\n\n    // \"Fruit\" branch is pre-expanded; find \"Apple\" leaf (no aria-expanded = leaf node).\n    // Click the inner row div (the actual interactive element).\n    const appleItem = await waitFor(() => {\n      const items = body.getAllByRole('treeitem', { name: /apple/i })\n      const leaf = items.find(el => !el.hasAttribute('aria-expanded'))\n      expect(leaf).toBeDefined()\n      return leaf!\n    })\n    const appleRow = (appleItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? appleItem\n\n    // Click Apple to select it.\n    await userEvent.click(appleRow)\n    await waitFor(() =>\n      expect(canvas.getByText(/selected:/i).closest('p')).not.toHaveTextContent('none'),\n    )\n  },\n}",
           "template": "\n      <div class=\"max-w-xs space-y-3\">\n        <DzTreeSelect v-bind=\"args\" v-model:value=\"value\" :expanded-keys=\"['fruit']\" />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Selected: <strong>{{ value || 'none' }}</strong></p>\n      </div>\n    "
@@ -53443,8 +53686,8 @@
           "id": "MultipleChips",
           "name": "Multiple (chips)",
           "lines": [
-            156,
-            204
+            158,
+            206
           ],
           "source": "export const MultipleChips: Story = {\n  name: 'Multiple (chips)',\n  render: () => ({\n    components: { DzTreeSelect },\n    setup() {\n      return { categories }\n    },\n    data() {\n      return { value: ['apple', 'carrot'] as string[] }\n    },\n    template: `\n      <div class=\"max-w-xs space-y-3\">\n        <DzTreeSelect\n          :nodes=\"categories\"\n          v-model:value=\"value\"\n          selection-mode=\"multiple\"\n          :expanded-keys=\"['fruit', 'vegetable']\"\n          placeholder=\"Select categories...\"\n        />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Selected: <strong>{{ value.join(', ') || 'none' }}</strong></p>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n    const body = within(document.body)\n\n    // Initial chips for pre-selected values.\n    expect(canvas.getByRole('button', { name: /remove apple/i })).toBeInTheDocument()\n    expect(canvas.getByRole('button', { name: /remove carrot/i })).toBeInTheDocument()\n\n    // Open and select Banana.\n    const trigger = canvas.getByRole('combobox')\n    await userEvent.click(trigger)\n    await waitFor(() => expect(body.getByRole('tree')).toBeVisible())\n    const bananaItem = body\n      .getAllByRole('treeitem', { name: /banana/i })\n      .find(el => !el.hasAttribute('aria-expanded'))!\n    const bananaRow = (bananaItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? bananaItem\n    await userEvent.click(bananaRow)\n    await waitFor(() =>\n      expect(canvas.getByRole('button', { name: /remove banana/i })).toBeInTheDocument(),\n    )\n\n    // Remove Apple chip.\n    await userEvent.click(canvas.getByRole('button', { name: /remove apple/i }))\n    await waitFor(() => expect(canvas.queryByRole('button', { name: /remove apple/i })).toBeNull())\n  },\n}",
           "template": "\n      <div class=\"max-w-xs space-y-3\">\n        <DzTreeSelect\n          :nodes=\"categories\"\n          v-model:value=\"value\"\n          selection-mode=\"multiple\"\n          :expanded-keys=\"['fruit', 'vegetable']\"\n          placeholder=\"Select categories...\"\n        />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Selected: <strong>{{ value.join(', ') || 'none' }}</strong></p>\n      </div>\n    "

@@ -11,7 +11,7 @@
 |---|---|---|---|
 | screen-level | `gallery.spec.ts` | 8 demo screens × light/dark | 16, `chromium-linux` |
 | theme recipes | `theme-recipe-matrix.spec.ts` | 2 screens × 9 theme/density/direction/motion cases | 18, `chromium-linux` |
-| **per-component** | `component-baselines.spec.ts` | every component in an opted-in **family**, light + dark | 16, `chromium-win32` (pilot: `buttons`) |
+| **per-component** | `component-baselines.spec.ts` | every component in an opted-in **family**, light + dark — plus declared **stress fixtures** over those families | 16 + 8 fixture, `chromium-win32` (pilot: `buttons`) |
 
 The first two answer "does the composition still look right". Only the third
 answers "which component moved", which is the question TASK-N1-O3 had to answer
@@ -35,6 +35,26 @@ follows from it:
 
 To widen the scope: add the family, run `visual:accept` once per component per
 theme, regenerate the capability matrix.
+
+### Stress fixtures (schema 1.1.0, TASK-R5-O4)
+
+`scope.fixtures` declares stories that render a covered family's text-bearing
+components under text English never produces — today four, over `buttons`:
+CJK, combining marks, a 4,096-character run and +40 % pseudo expansion
+(`packages/core/stories/compositions/i18n/TextStress.stories.ts`). Each owes every
+theme, is recorded as `component: "fixture:<id>"` (a name no capability-matrix
+row can match, so fixtures never change a component's `visual` cell), and is
+accepted one snapshot at a time exactly like a component:
+
+```bash
+yarn visual:accept --fixture text-stress-cjk --theme light --by "<name>" --reason "<why>"
+```
+
+A fixture over a family that is not in `scope.families` fails the gate — it
+would be a declaration nothing drives. The first captures record **current**
+behaviour, including a finding rather than a pass: button labels neither wrap
+nor truncate, so CJK, combining-mark and 4,096-character labels overflow a
+16rem container.
 
 ## Baselines are platform-locked. This is not a bug
 

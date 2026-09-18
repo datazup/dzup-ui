@@ -171,6 +171,134 @@ export function knownFailure(component: string, condition: string): KnownFailure
   return match(KNOWN_FAILURES.entries, component, condition)
 }
 
+// ---------------------------------------------------------------------------
+// Motion policy (ADR-20 §7, TASK-R5-O3)
+// ---------------------------------------------------------------------------
+
+/**
+ * The value the reduced-motion condition forces through `__DZ_MOTION__`.
+ *
+ * It is a `DzMotionPreference` (`'system' | 'reduced' | 'full'`), NOT the
+ * attribute value components emit (`data-dz-motion="reduce"`). The two spellings
+ * differ by one letter, and `dzMotionTestMode()` ignores anything that is not a
+ * valid preference — so a typo here silently releases the forced mode. That is
+ * exactly the seeded failure the motion-policy spec was proven against.
+ */
+export const FORCED_MOTION_PREFERENCE = 'reduced'
+
+/**
+ * Force the library's deterministic motion mode for every document this page
+ * loads (`packages/core/src/composables/provider/useDzMotion.ts`).
+ *
+ * `addInitScript` runs before any of the page's own scripts, which is why the
+ * channel is a global rather than a call to `setDzMotionTestMode`: no module of
+ * the library exists yet when the value has to be in place, and `useDzMotion`
+ * reads it lazily inside its computed, on first render.
+ */
+export async function forceMotionPolicy(page: Page, preference: string = FORCED_MOTION_PREFERENCE): Promise<void> {
+  await page.addInitScript((value) => {
+    ;(globalThis as { __DZ_MOTION__?: string }).__DZ_MOTION__ = value
+  }, preference)
+}
+
+interface MotionMetaRecord {
+  name: string
+  kind: 'public-component' | 'compound-part'
+  parentComponent?: string
+  source: string
+  providerHooks?: string[]
+}
+
+/** One lane target whose rendered tree reads the motion policy. */
+export interface MotionTarget {
+  component: string
+  target: MatrixTarget & { story: string }
+  /** The records that call `useDzMotion` / `useDzMotionAttribute` — the target itself or its compound parts. */
+  parts: readonly string[]
+  /**
+   * `attribute` when a part binds `data-dz-motion` (`useDzMotionAttribute`), so
+   * the policy reaches CSS and is observable in the DOM; `script` when the policy
+   * is only read in script (`DzAnchor` passes `behavior` to `window.scrollTo`).
+   */
+  emits: 'attribute' | 'script'
+}
+
+const COMPONENT_META = JSON.parse(
+  readFileSync(new URL('../../packages/core/docs/component-meta.json', import.meta.url), 'utf8'),
+) as { components: MotionMetaRecord[] }
+
+const motionParts = COMPONENT_META.components.filter(r =>
+  (r.providerHooks ?? []).includes('useDzMotion')
+  && !r.source.replace(/\\/g, '/').startsWith('packages/core/src/providers/'))
+
+function emitsAttribute(record: MotionMetaRecord): boolean {
+  const source = readFileSync(new URL(`../../${record.source}`, import.meta.url), 'utf8')
+  return /\buseDzMotionAttribute\s*\(/.test(source)
+}
+
+/**
+ * The lane targets that consume the motion policy, DERIVED from the generated
+ * `component-meta.json` rather than listed by hand.
+ *
+ * `providerHooks` is re-derived from source by `validate:component-meta`, so a
+ * component that adopts `useDzMotion` joins this list on the next regeneration
+ * and its motion-policy test then fails until somebody writes the one-line
+ * recipe that reveals its animated node. A compound part (`DzDialogContent`) is
+ * credited to the component whose story renders it (`DzDialog`).
+ */
+export const MOTION_TARGETS: readonly MotionTarget[] = (() => {
+  const byOwner = new Map<string, MotionMetaRecord[]>()
+  for (const record of motionParts) {
+    const owner = record.kind === 'compound-part' && record.parentComponent !== undefined
+      ? record.parentComponent
+      : record.name
+    byOwner.set(owner, [...(byOwner.get(owner) ?? []), record])
+  }
+  const out: MotionTarget[] = []
+  for (const [component, parts] of [...byOwner.entries()].sort(([a], [b]) => a.localeCompare(b))) {
+    const target = RUNNABLE_TARGETS.find(t => t.component === component)
+    if (target === undefined)
+      continue
+    out.push({
+      component,
+      target: target as MatrixTarget & { story: string },
+      parts: parts.map(p => p.name).sort(),
+      emits: parts.some(emitsAttribute) ? 'attribute' : 'script',
+    })
+  }
+  return out
+})()
+
+/**
+ * Motion consumers this lane does not drive — Tier A, or no story — named so
+ * the report says what is NOT browser-proven instead of implying full coverage.
+ */
+export const MOTION_CONSUMERS_OUTSIDE_LANE: readonly string[] = [...new Set(
+  motionParts.map(r => (r.kind === 'compound-part' && r.parentComponent !== undefined ? r.parentComponent : r.name)),
+)].filter(name => !MOTION_TARGETS.some(t => t.component === name)).sort()
+
+/**
+ * Wait until Storybook has finished rendering the story, including its `play`
+ * function.
+ *
+ * `loadStoryCanvas` waits for `sb-show-main`, which Storybook sets BEFORE `play`
+ * runs. A story such as `DzCommandPalette`'s opens and closes its own dialog in
+ * `play`; revealing the component while that is still running races the story.
+ * The preview's current render moves through `playing` → `played` →
+ * `completing` (Storybook's own wait for animations) → `completed` and settles
+ * on `finished` — measured on the built Storybook 10 preview, 2026-09-17, where
+ * a wait for `completed` alone timed out on every story because the phase had
+ * already moved past it.
+ */
+export async function storyCompleted(page: Page): Promise<void> {
+  await page.waitForFunction(() => {
+    const preview = (globalThis as { __STORYBOOK_PREVIEW__?: { currentRender?: { phase?: string } } })
+      .__STORYBOOK_PREVIEW__
+    const phase = preview?.currentRender?.phase
+    return phase === 'completed' || phase === 'finished' || phase === 'errored' || phase === 'aborted'
+  }, undefined, { timeout: 30_000 })
+}
+
 /**
  * Assert the story actually rendered something.
  *

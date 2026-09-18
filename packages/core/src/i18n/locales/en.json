@@ -1,0 +1,203 @@
+{
+  "locale": "en",
+  "direction": "ltr",
+  "fallback": [],
+  "messages": {
+    "DzAlert": {
+      "close": "Close"
+    },
+    "DzAnchor": {
+      "ariaLabel": "Page navigation"
+    },
+    "DzAsyncOptions": {
+      "loading": "Loading options",
+      "empty": "No options found",
+      "error": "Could not load options",
+      "retry": "Try again"
+    },
+    "DzBackTop": {
+      "ariaLabel": "Back to top"
+    },
+    "DzBreadcrumb": {
+      "ariaLabel": "Breadcrumb"
+    },
+    "DzCarouselDots": {
+      "slideNavigation": "Slide navigation"
+    },
+    "DzCarouselNext": {
+      "nextSlide": "Next slide"
+    },
+    "DzCarouselPrevious": {
+      "previousSlide": "Previous slide"
+    },
+    "DzCascader": {
+      "clearSelection": "Clear selection",
+      "searchPaths": "Search paths",
+      "matchingPaths": "Matching paths",
+      "searchPlaceholder": "Search…",
+      "noResults": "No matching paths"
+    },
+    "DzColorPicker": {
+      "ariaLabel": "Choose a color",
+      "colorArea": "Color area",
+      "hexValue": "Hex color value"
+    },
+    "DzCombobox": {
+      "clearSelection": "Clear selection",
+      "toggleOptions": "Toggle options",
+      "loading": "Loading options…",
+      "empty": "No options available",
+      "noResults": "No results found"
+    },
+    "DzCommandPalette": {
+      "ariaLabel": "Command palette"
+    },
+    "DzConfirmDialog": {
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "DzCountdown": {
+      "finished": "Countdown finished",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "hours": "{count, plural, one {# hour} other {# hours}}",
+      "minutes": "{count, plural, one {# minute} other {# minutes}}",
+      "seconds": "{count, plural, one {# second} other {# seconds}}",
+      "remaining": "{duration} remaining"
+    },
+    "DzDataGridHeader": {
+      "selectAllRows": "Select all rows"
+    },
+    "DzDataGridPagination": {
+      "rowsPerPage": "Rows per page",
+      "previousPage": "Previous page",
+      "nextPage": "Next page"
+    },
+    "DzDataView": {
+      "sortBy": "Sort by",
+      "viewLayout": "View layout",
+      "loading": "Loading items",
+      "showingAll": "{count, plural, one {Showing # item} other {Showing # items}}",
+      "showingRange": "{total, plural, one {Showing {start} to {end} of # item} other {Showing {start} to {end} of # items}}"
+    },
+    "DzFileUpload": {
+      "ariaLabel": "Upload files"
+    },
+    "DzInput": {
+      "clear": "Clear input",
+      "loading": "Loading"
+    },
+    "DzLightbox": {
+      "close": "Close lightbox",
+      "previous": "Previous image",
+      "next": "Next image"
+    },
+    "DzListbox": {
+      "filterOptions": "Filter options",
+      "filterPlaceholder": "Search...",
+      "empty": "No options"
+    },
+    "DzMention": {
+      "loading": "Loading…",
+      "noResults": "No matches",
+      "suggestionsAvailable": "{count, plural, one {# suggestion available} other {# suggestions available}}"
+    },
+    "DzMultiSelect": {
+      "clearAll": "Clear all",
+      "toggleOptions": "Toggle options"
+    },
+    "DzNotification": {
+      "dismiss": "Dismiss notification"
+    },
+    "DzNumberInput": {
+      "decrease": "Decrease value",
+      "increase": "Increase value"
+    },
+    "DzOrderList": {
+      "reorderControls": "Reorder controls",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "moveTop": "Move to top",
+      "moveBottom": "Move to bottom",
+      "dragHandle": "Drag to reorder"
+    },
+    "DzPagination": {
+      "ariaLabel": "Pagination",
+      "firstPage": "Go to first page",
+      "previousPage": "Go to previous page",
+      "nextPage": "Go to next page",
+      "lastPage": "Go to last page"
+    },
+    "DzPasswordInput": {
+      "loading": "Loading"
+    },
+    "DzPopconfirm": {
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "DzRating": {
+      "starTitle": "{count, plural, one {# star} other {# stars}}"
+    },
+    "DzScrollProgress": {
+      "ariaLabel": "Page scroll progress"
+    },
+    "DzSearchInput": {
+      "clear": "Clear search",
+      "loading": "Loading"
+    },
+    "DzSelect": {
+      "filterOptions": "Filter options",
+      "searchPlaceholder": "Search...",
+      "noResults": "No results found"
+    },
+    "DzSidebar": {
+      "ariaLabel": "Sidebar navigation"
+    },
+    "DzTabTrigger": {
+      "closeTab": "Close tab"
+    },
+    "DzTableCell": {
+      "resizeColumn": "Resize column"
+    },
+    "DzTagsInput": {
+      "count": "{count, plural, one {# tag} other {# tags}}",
+      "countOfMax": "{count, plural, one {# tag of {max}} other {# tags of {max}}}"
+    },
+    "DzTextarea": {
+      "loading": "Loading"
+    },
+    "DzTimePicker": {
+      "clearTime": "Clear time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "dayPeriod": "AM/PM",
+      "selectHours": "Select hours",
+      "selectMinutes": "Select minutes",
+      "selectSeconds": "Select seconds",
+      "selectDayPeriod": "Select AM/PM",
+      "confirm": "OK",
+      "cancel": "Cancel"
+    },
+    "DzToast": {
+      "close": "Close notification"
+    },
+    "DzTokenProgressBar": {
+      "tokenUsage": "Token usage"
+    },
+    "DzTransfer": {
+      "ariaLabel": "Transfer list",
+      "searchSource": "Search source items",
+      "sourceItems": "Source items",
+      "moveToTarget": "Move selected to target",
+      "moveToSource": "Move selected to source",
+      "searchTarget": "Search target items",
+      "targetItems": "Target items",
+      "searchPlaceholder": "Search..."
+    },
+    "DzTreeSelect": {
+      "filterOptions": "Filter options",
+      "filterPlaceholder": "Search...",
+      "noResults": "No results found"
+    }
+  }
+}

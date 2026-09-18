@@ -23,10 +23,17 @@
  *   yarn visual:accept --component DzButton --theme dark --record-only --by … --reason …
  *       Re-digest and record an image already on disk, without running a browser.
  *
+ *   yarn visual:accept --fixture text-stress-cjk --theme light --by … --reason …
+ *       A declared stress fixture (`scope.fixtures`, TASK-R5-O4) instead of a
+ *       component. Same cardinality, same attribution; recorded as
+ *       `component: "fixture:<id>"`.
+ *
  *   yarn visual:accept --bootstrap --by … --reason …
  *       Record every baseline that has NO entry yet. Adds only; it can never
  *       re-accept a file whose digest already disagrees with the ledger, so the
- *       "a changed baseline needs a stated cause" rule survives it.
+ *       "a changed baseline needs a stated cause" rule survives it. Fixture
+ *       images are skipped: their names cannot be parsed back into a component,
+ *       so they are accepted with `--fixture` or not at all.
  */
 
 import type { VisualBaselineRecord, VisualLedger } from '../validators/visual-baselines.ts'
@@ -186,7 +193,7 @@ if (isMain) {
     const known = new Set(ledger.baselines.map(b => b.file))
     const added: string[] = []
     for (const file of baselineFiles(ledger)) {
-      if (known.has(file))
+      if (known.has(file) || file.slice(file.lastIndexOf('/') + 1).startsWith('fixture-'))
         continue
       const dir = file.slice(0, file.lastIndexOf('/'))
       const name = file.slice(file.lastIndexOf('/') + 1)
@@ -220,18 +227,25 @@ if (isMain) {
     process.exit(0)
   }
 
-  const component = arg('component')
+  const fixtureId = arg('fixture')
   const theme = arg('theme')
-  if (component === undefined || theme === undefined)
-    die('--component and --theme are both required (one snapshot per invocation, by design).')
+  if ((arg('component') === undefined) === (fixtureId === undefined) || theme === undefined)
+    die('exactly one of --component / --fixture, and --theme, are required (one snapshot per invocation, by design).')
   if (!ledger.scope.themes.includes(theme))
     die(`--theme must be one of ${ledger.scope.themes.join(', ')}.`)
 
-  if (!/^[A-Z]\w+$/.test(component))
+  const fixture = fixtureId === undefined
+    ? undefined
+    : ledger.scope.fixtures?.find(declared => declared.id === fixtureId)
+  if (fixtureId !== undefined && (fixture === undefined || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(fixtureId)))
+    die(`--fixture must name a fixture declared in scope.fixtures (got ${JSON.stringify(fixtureId)}).`)
+
+  const component = fixture === undefined ? arg('component')! : `fixture:${fixture.id}`
+  if (fixture === undefined && !/^[A-Z]\w+$/.test(component))
     die(`--component must be a bare component name (got ${JSON.stringify(component)}).`)
 
-  const snapshotArg = `component-${component}-${theme}`
-  const title = `visual ${component} ${theme}`
+  const snapshotArg = fixture === undefined ? `component-${component}-${theme}` : `fixture-${fixture.id}-${theme}`
+  const title = fixture === undefined ? `visual ${component} ${theme}` : `visual fixture ${fixture.id} ${theme}`
 
   if (!process.argv.includes('--record-only')) {
     console.warn(`visual:accept: capturing \`${snapshotArg}\` …`)
@@ -254,8 +268,9 @@ if (isMain) {
           // silently selects zero tests. `$` alone is enough to keep
           // `visual DzButton light` off `visual DzButtonGroup light`, and the
           // in-run guard refuses any snapshot but the named one if it were not.
-          // No escaping: a title is `visual Dz<Name> <theme>`, word characters
-          // and spaces only, which is checked below.
+          // No escaping: a title is `visual Dz<Name> <theme>` or
+          // `visual fixture <kebab-id> <theme>` — word characters, hyphens and
+          // spaces only, which is checked above.
           '--grep',
           `${title}$`,
           '--output=.pw-out/visual-accept',
@@ -295,11 +310,13 @@ if (isMain) {
   if (found.length === 0)
     die(`no image matching ${prefix}*.png under ${PILOT_SNAPSHOT_DIR}.`)
 
-  const story = (() => {
-    const targets = readFileSync(resolve(ROOT, 'e2e/matrix/targets.generated.ts'), 'utf8')
-    const hit = new RegExp(`component: '${component}'[^\\n]*story: '([^']+)'`).exec(targets)
-    return hit?.[1] ?? ''
-  })()
+  const story = fixture !== undefined
+    ? fixture.story
+    : (() => {
+        const targets = readFileSync(resolve(ROOT, 'e2e/matrix/targets.generated.ts'), 'utf8')
+        const hit = new RegExp(`component: '${component}'[^\\n]*story: '([^']+)'`).exec(targets)
+        return hit?.[1] ?? ''
+      })()
 
   for (const name of found) {
     const file = `${PILOT_SNAPSHOT_DIR}/${name}`

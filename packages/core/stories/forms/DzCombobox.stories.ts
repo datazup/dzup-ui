@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { DzComboboxItem, DzSelectItem } from '../../src/components/forms'
-import { expect, screen, userEvent, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
+import { DzButton } from '../../src/components/buttons'
 import { DzCombobox } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
+import { createMockOptionsHost, walkAsyncOptionsStates } from '../_shared/asyncOptionsHost.ts'
 
 const sampleItems: DzSelectItem[] = [
   { label: 'New York', value: 'nyc' },
@@ -472,4 +474,66 @@ export const RealWorldUserSearch: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Async options (renderer contract C9, TASK-R3-O3)
+// ---------------------------------------------------------------------------
+
+const asyncPeople: DzSelectItem[] = [
+  { label: 'Ada Lovelace', value: 'ada' },
+  { label: 'Grace Hopper', value: 'grace' },
+  { label: 'Katherine Johnson', value: 'katherine' },
+]
+
+const comboboxHost = createMockOptionsHost(asyncPeople)
+
+/**
+ * Options from a remote source, through the shared `useAsyncOptions` seam.
+ *
+ * the combobox emits `load-options` (with an `AbortSignal`) and renders whatever
+ * `options-state` the host passes back; Core never fetches. The host here is a
+ * mock with no network and no timers, so `play()` walks loading → ready →
+ * error → retry deterministically — and the buttons let you do it by hand.
+ */
+export const AsyncOptions: Story = {
+  name: 'Async Options: loading → ready → error → retry',
+  render: () => ({
+    components: { DzCombobox, DzButton },
+    setup() {
+      comboboxHost.reset()
+      return { host: comboboxHost }
+    },
+    template: `
+      <div class="space-y-3 max-w-xs">
+        <DzCombobox
+          :items="host.items.value"
+          :options-state="host.state.value"
+          :options-error="host.error.value"
+          placeholder="Search people"
+          aria-label="Person"
+          @load-options="host.onLoadOptions"
+          @retry-options="host.onRetryOptions"
+        />
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Mock host">
+          <DzButton size="sm" variant="outline" @click="host.resolve()">Resolve</DzButton>
+          <DzButton size="sm" variant="outline" @click="host.fail()">Fail</DzButton>
+          <DzButton size="sm" variant="outline" @click="host.reload()">Reload</DzButton>
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]" data-testid="host-log">
+          state: {{ host.state.value }} · requests: {{ host.requests.value }} · retries: {{ host.retries.value }}
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement)
+    await walkAsyncOptionsStates({
+      host: comboboxHost,
+      root: canvasElement.ownerDocument.body,
+      open: () => userEvent.click(canvas.getByRole('button', { name: /toggle options/i })),
+      expectOptions: () => waitFor(() => expect(screen.getByRole('option', { name: 'Ada Lovelace' })).toBeVisible()),
+      step,
+    })
+  },
 }

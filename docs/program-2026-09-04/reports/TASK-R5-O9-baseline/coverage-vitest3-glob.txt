@@ -1,0 +1,15 @@
+packages/*/src/**  files=647
+   statements  87.10%  (52120/59840)
+   branches    84.66%  (11753/13882)
+   functions   87.33%  (1806/2068)
+   lines       87.10%  (52120/59840)
+apps/landing/src/**  files=391
+   statements  94.21%  (29118/30906)
+   branches    91.12%  (5612/6159)
+   functions   82.46%  (1678/2035)
+   lines       94.21%  (29118/30906)
+TOTAL statements 89.52% (81238/90746)
+TOTAL branches   86.64% (17365/20041)
+TOTAL functions  84.91% (3484/4103)
+TOTAL lines      89.52% (81238/90746)
+FILES 1038

@@ -47,21 +47,26 @@ never as asserted.
 :::
 
 
-## Props (5)
+## Props (8, of which 3 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state |
 | `modelValue` | `string \| undefined` | no | `""` | Id of the selected persona; the default empty string selects none. |
+| `optionsError` | `string \| undefined` | no | `undefined` | Why the load failed, shown in the error row. Ignored unless `optionsState` is `'error'`. |
+| `optionsRetryable` | `boolean \| undefined` | no | `undefined` | Whether to offer a retry control in the error row. Defaults to true when `optionsState` can be `'error'`. Set false when the host retries on its own and a button would be a second, competing path. |
+| `optionsState` | `AsyncOptionsState \| undefined` | no | `undefined` | Where the option set is. Omitted means the options are static and the control renders no state rows at all. |
 | `personas` | `Persona[]` | yes | — | Available personas |
 | `placeholder` | `string \| undefined` | no | `"Select persona"` | Placeholder text for the search input |
 | `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzPersonaSelector.anatomy.ts` (ADR-19 §5). This component renders no element of its own, so the map is forwarded whole to the `DzCombobox` that is* its root — one map still reaches every part the declaration names. |
 
-## Events (2)
+## Events (4)
 
 | Event | Payload | Description |
 | --- | --- | --- |
 | `change` | `[persona: Persona \| undefined]` | Fires with the full persona object when one is selected |
+| `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
+| `retryOptions` | `[]` | The user asked to try again after an error. |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 ## Slots (2)
@@ -228,8 +233,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 5 | 5 | 3 declare a default |
-| Events | 2 | 2 | 1 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
+| Props | 8 | 8 | 3 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 4 | 4 | 3 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 2 | 2 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
 
@@ -238,7 +243,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

@@ -31,10 +31,12 @@
  * @module @dzup-ui/core/i18n/useComponentMessages
  */
 
-import type { DzMessageCatalog } from '@dzup-ui/contracts'
+import type { DzMessageArgsOf, DzMessageCatalog, DzMessageValues } from '@dzup-ui/contracts'
 import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
+import { useDzLocale } from '../composables/provider/useDzLocale.ts'
 import { useDzMessages } from '../composables/provider/useDzMessages.ts'
+import { formatMessage } from './message-format.ts'
 import { enMessages } from './messages.ts'
 
 /**
@@ -74,4 +76,55 @@ export function useComponentMessages<K extends keyof DzMessageCatalog>(
     }
     return resolved as DzMessageCatalog[K]
   })
+}
+
+/** Broken host messages already reported, so a re-render does not repeat the warning. */
+const warned = new Set<string>()
+
+/**
+ * A formatter for one component's count-bearing messages (TASK-R5-O4).
+ *
+ * ```ts
+ * const dzFormat = useComponentMessageFormat('DzTagsInput')
+ * const status = computed(() => dzFormat('count', { count: model.value.length }))
+ * ```
+ *
+ * `values` is typed from the catalog: `DzTagsInput.count` is declared
+ * `DzMessage<{ count: number }>`, so a missing or string `count` is a type
+ * error here rather than an `{count}` rendered to a user.
+ *
+ * **A broken translation never breaks the component.** A host message that
+ * does not parse, or names an argument the component does not pass, renders
+ * the English default instead — the same rule `useComponentMessages` applies
+ * to a non-string override — and warns once in development. The English
+ * default's branches are chosen by **English** plural rules, whatever the
+ * application's locale, while its numbers still group for that locale: an
+ * untranslated key in a French application says "0 items", not "0 item".
+ */
+export function useComponentMessageFormat<K extends keyof DzMessageCatalog>(
+  component: K,
+): <M extends keyof DzMessageCatalog[K] & string>(key: M, values: DzMessageArgsOf<DzMessageCatalog[K][M]>) => string {
+  const messages = useComponentMessages(component)
+  const locale = useDzLocale()
+
+  return (key, values) => {
+    const defaults = enMessages[component as keyof typeof enMessages] as Record<string, string>
+    const english = defaults[key] ?? ''
+    const message = (messages.value as Record<string, string>)[key] ?? english
+    const args = values as DzMessageValues
+
+    if (message !== english) {
+      try {
+        return formatMessage(message, args, locale.value)
+      }
+      catch (error) {
+        const report = `${String(component)}.${key}: ${(error as Error).message}`
+        if (import.meta.env?.DEV && !warned.has(report)) {
+          warned.add(report)
+          console.warn(`[dzup-ui] ${report}; rendering the English default.`)
+        }
+      }
+    }
+    return formatMessage(english, args, locale.value, { pluralLocale: 'en' })
+  }
 }

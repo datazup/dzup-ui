@@ -44,9 +44,14 @@ warnRemovedProps('DzStack', attrs, {
   ariaInvalid: 'A layout box is not invalid; the fields inside it are — put aria-invalid on the field, or bind `invalid` on the control.',
 })
 
-/** Map stack direction to flex direction */
+/**
+ * Map stack direction to flex direction.
+ *
+ * `row` is an alias of `horizontal` and `column` of `vertical` (TASK-R3-O3). An
+ * unknown value still falls back to vertical, the form case.
+ */
 const flexDirection = computed(() =>
-  props.direction === 'horizontal' ? 'row' as const : 'column' as const,
+  props.direction === 'horizontal' || props.direction === 'row' ? 'row' as const : 'column' as const,
 )
 
 /** Merged class string using cn() (ADR-10) */

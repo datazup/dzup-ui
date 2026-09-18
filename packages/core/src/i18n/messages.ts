@@ -21,6 +21,13 @@
  * as it did until a host supplies a catalog — the property that let this land
  * as one mechanical change rather than 51 behavioural ones.
  *
+ * **Count-bearing messages (TASK-R5-O4)** are the one exception to "byte-identical":
+ * they are written in the message syntax (`{count, plural, one {# day} other
+ * {# days}}`, `packages/core/docs/i18n.md`) and typed as `DzMessage<Args>`, and
+ * they render the same English below 1,000 and group digits from 1,000. They
+ * were never literals in a template — each was a concatenation in a `<script>`
+ * block, which `validate:hardcoded-strings` does not read.
+ *
  * **What is deliberately NOT here.** Strings inside JSDoc `@example` blocks —
  * 11 of them, in `DzFab`, `DzIconButton`, `DzSpeedDial`, `DzSplitButtonMenu`,
  * `DzInplace`, `DzIcon`, `DzQRCode`, `DzMenu` and `DzPopconfirm`. They are
@@ -41,7 +48,7 @@
  * @module @dzup-ui/core/i18n/messages
  */
 
-import type { DzMessageCatalog } from '@dzup-ui/contracts'
+import type { DzMessage, DzMessageCatalog } from '@dzup-ui/contracts'
 
 declare module '@dzup-ui/contracts' {
   /**
@@ -89,14 +96,37 @@ declare module '@dzup-ui/contracts' {
     }
     DzCommandPalette: { ariaLabel: string }
     DzConfirmDialog: { confirm: string, cancel: string }
+    /**
+     * The live-region phrase a running countdown announces (TASK-R5-O4).
+     * `remaining` receives the unit phrases already joined by `Intl.ListFormat`
+     * for the locale, so a translator orders the sentence, not the list.
+     */
+    DzCountdown: {
+      finished: string
+      days: DzMessage<{ count: number }>
+      hours: DzMessage<{ count: number }>
+      minutes: DzMessage<{ count: number }>
+      seconds: DzMessage<{ count: number }>
+      remaining: DzMessage<{ duration: string }>
+    }
     DzDataGridHeader: { selectAllRows: string }
     DzDataGridPagination: { rowsPerPage: string, previousPage: string, nextPage: string }
-    DzDataView: { sortBy: string, viewLayout: string }
+    DzDataView: {
+      sortBy: string
+      viewLayout: string
+      loading: string
+      showingAll: DzMessage<{ count: number }>
+      showingRange: DzMessage<{ start: number, end: number, total: number }>
+    }
     DzFileUpload: { ariaLabel: string }
     DzInput: { clear: string, loading: string }
     DzLightbox: { close: string, previous: string, next: string }
     DzListbox: { filterOptions: string, filterPlaceholder: string, empty: string }
-    DzMention: { loading: string, noResults: string }
+    DzMention: {
+      loading: string
+      noResults: string
+      suggestionsAvailable: DzMessage<{ count: number }>
+    }
     DzMultiSelect: { clearAll: string, toggleOptions: string }
     DzNotification: { dismiss: string }
     DzNumberInput: { decrease: string, increase: string }
@@ -117,12 +147,17 @@ declare module '@dzup-ui/contracts' {
     }
     DzPasswordInput: { loading: string }
     DzPopconfirm: { confirm: string, cancel: string }
+    DzRating: { starTitle: DzMessage<{ count: number }> }
     DzScrollProgress: { ariaLabel: string }
     DzSearchInput: { clear: string, loading: string }
     DzSelect: { filterOptions: string, searchPlaceholder: string, noResults: string }
     DzSidebar: { ariaLabel: string }
     DzTabTrigger: { closeTab: string }
     DzTableCell: { resizeColumn: string }
+    DzTagsInput: {
+      count: DzMessage<{ count: number }>
+      countOfMax: DzMessage<{ count: number, max: number }>
+    }
     DzTextarea: { loading: string }
     DzTimePicker: {
       clearTime: string
@@ -200,13 +235,32 @@ export const enMessages = {
   },
   DzCommandPalette: { ariaLabel: 'Command palette' },
   DzConfirmDialog: { confirm: 'Confirm', cancel: 'Cancel' },
+  // Count-bearing messages (TASK-R5-O4). Each was built by concatenation —
+  // `${n} day${n === 1 ? '' : 's'}` — which is English's two forms and nobody
+  // else's. English output is unchanged below 1,000; from 1,000 the number
+  // gains the locale's grouping separator, which is the point of formatting it.
+  DzCountdown: {
+    finished: 'Countdown finished',
+    days: '{count, plural, one {# day} other {# days}}',
+    hours: '{count, plural, one {# hour} other {# hours}}',
+    minutes: '{count, plural, one {# minute} other {# minutes}}',
+    seconds: '{count, plural, one {# second} other {# seconds}}',
+    remaining: '{duration} remaining',
+  },
   DzDataGridHeader: { selectAllRows: 'Select all rows' },
   DzDataGridPagination: {
     rowsPerPage: 'Rows per page',
     previousPage: 'Previous page',
     nextPage: 'Next page',
   },
-  DzDataView: { sortBy: 'Sort by', viewLayout: 'View layout' },
+  DzDataView: {
+    sortBy: 'Sort by',
+    viewLayout: 'View layout',
+    loading: 'Loading items',
+    showingAll: '{count, plural, one {Showing # item} other {Showing # items}}',
+    // The one deliberate English change: the literal said "of 1 items".
+    showingRange: '{total, plural, one {Showing {start} to {end} of # item} other {Showing {start} to {end} of # items}}',
+  },
   DzFileUpload: { ariaLabel: 'Upload files' },
   DzInput: { clear: 'Clear input', loading: 'Loading' },
   DzLightbox: {
@@ -219,7 +273,11 @@ export const enMessages = {
     filterPlaceholder: 'Search...',
     empty: 'No options',
   },
-  DzMention: { loading: 'Loading…', noResults: 'No matches' },
+  DzMention: {
+    loading: 'Loading…',
+    noResults: 'No matches',
+    suggestionsAvailable: '{count, plural, one {# suggestion available} other {# suggestions available}}',
+  },
   DzMultiSelect: { clearAll: 'Clear all', toggleOptions: 'Toggle options' },
   DzNotification: { dismiss: 'Dismiss notification' },
   DzNumberInput: { decrease: 'Decrease value', increase: 'Increase value' },
@@ -240,6 +298,7 @@ export const enMessages = {
   },
   DzPasswordInput: { loading: 'Loading' },
   DzPopconfirm: { confirm: 'Confirm', cancel: 'Cancel' },
+  DzRating: { starTitle: '{count, plural, one {# star} other {# stars}}' },
   DzScrollProgress: { ariaLabel: 'Page scroll progress' },
   DzSearchInput: { clear: 'Clear search', loading: 'Loading' },
   DzSelect: {
@@ -250,6 +309,10 @@ export const enMessages = {
   DzSidebar: { ariaLabel: 'Sidebar navigation' },
   DzTabTrigger: { closeTab: 'Close tab' },
   DzTableCell: { resizeColumn: 'Resize column' },
+  DzTagsInput: {
+    count: '{count, plural, one {# tag} other {# tags}}',
+    countOfMax: '{count, plural, one {# tag of {max}} other {# tags of {max}}}',
+  },
   DzTextarea: { loading: 'Loading' },
   DzTimePicker: {
     clearTime: 'Clear time',
@@ -282,3 +345,13 @@ export const enMessages = {
     noResults: 'No results found',
   },
 } as const satisfies DzMessageCatalog
+
+/**
+ * The component groups Core contributes to `DzMessageCatalog`.
+ *
+ * Exported so that `@dzup-ui/core`'s declarations reference this module — and
+ * with it the `declare module '@dzup-ui/contracts'` augmentation above. Before
+ * TASK-R5-O4 nothing reachable from `dist/index.d.ts` did, so a consumer's
+ * TypeScript saw the empty interface `contracts` declares (N5-04 F9).
+ */
+export type DzCoreMessageGroup = keyof typeof enMessages

@@ -1,5 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
+  "$schema": "./security-corpus.schema.json",
+  "schemaVersion": "1.1.0",
   "category": "url-scheme",
   "description": "Host-supplied URLs whose scheme decides whether the value is a resource reference or an execution vector. The split that matters is navigation versus subresource: a `javascript:` URL in an `<a href>` runs the moment somebody clicks it, and the same string in an `<img src>` has been unable to run in any shipping engine for well over a decade. Every case below therefore states both.",
   "fixtures": [

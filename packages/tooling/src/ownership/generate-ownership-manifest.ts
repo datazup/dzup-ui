@@ -15,6 +15,7 @@
  *   tsx packages/tooling/src/ownership/generate-ownership-manifest.ts --check    # print, do not write
  */
 
+import type { CollisionDecisions, MapCollision } from './build-ownership-map.ts'
 import type { Classification } from './classify.ts'
 import type {
   OwnershipEntry,
@@ -27,7 +28,12 @@ import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:pat
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { readAnatomyFor } from './anatomy-source.ts'
-import { buildOwnershipMap, readManifest } from './build-ownership-map.ts'
+import {
+  buildOwnershipMap,
+  readCollisionDecisions,
+  readManifest,
+  unresolvedCollisions,
+} from './build-ownership-map.ts'
 import { classifyComponent, resolveCompoundParents } from './classify.ts'
 import { buildContextGraph, contextComposablePairs, contextParentsOf } from './context-graph.ts'
 import { renderAnatomyData } from './emit-anatomy-data.ts'
@@ -73,21 +79,46 @@ export const PRO_MANIFEST_ENV = 'DZUP_PRO_OWNERSHIP_MANIFEST'
  * The returned `tiers` are recorded in the emitted file so the freshness check
  * can regenerate with the same inputs instead of failing on a machine that
  * happens not to have a Pro checkout.
+ *
+ * `collisions` is returned, not swallowed (TASK-R3-O1 F3). An unresolved
+ * collision is *excluded* from the merged `symbols`
+ * (`build-ownership-map.ts:171-180`), so a caller that reads only `problems`
+ * emits a table with a component name silently missing from it — a `Dz*` import
+ * that resolves to nothing, which is the failure this whole chain exists to
+ * prevent. The CLI below and `validate:ownership` both fail on any
+ * `resolution === 'unresolved'`.
+ *
+ * @param manifest - the Core ownership manifest the table is rendered from.
+ * @param proManifestPath - a Pro ownership manifest a Pro checkout produced.
+ * Ignored when the path is unset or absent, so a Core-only checkout still
+ * generates — and says so in the emitted header.
+ * @param decisions - checked-in collision decisions. Defaults to
+ * `collision-decisions.json`, the same file `generate:ownership:map` reads
+ * (TASK-R3-O1 F2 — this path ignored it, so an owner's recorded decision was
+ * honoured by one CLI and dropped by the one that writes the file the resolver
+ * actually reads). Injectable so a spec can drive it without editing the real
+ * file.
  */
-export function buildRuntimeLookup(manifest: OwnershipManifest, proManifestPath?: string): {
+export function buildRuntimeLookup(
+  manifest: OwnershipManifest,
+  proManifestPath?: string,
+  decisions: CollisionDecisions = readCollisionDecisions(),
+): {
   source: string
   tiers: string[]
   problems: string[]
+  collisions: MapCollision[]
 } {
   const inputs = [manifest]
   if (proManifestPath !== undefined && existsSync(proManifestPath))
     inputs.push(readManifest(proManifestPath))
 
-  const { map, problems } = buildOwnershipMap(inputs)
+  const { map, problems } = buildOwnershipMap(inputs, decisions)
   return {
     source: renderRuntimeLookup(map),
     tiers: map.inputs.map(input => input.tier),
     problems,
+    collisions: map.collisions,
   }
 }
 
@@ -545,10 +576,30 @@ if (isMain) {
   for (const problem of runtime.problems)
     console.error(`✗ runtime lookup: ${problem}`)
 
+  // An unresolved collision is absent from the table this command just wrote.
+  // Printing it and failing is the only thing that tells the difference between
+  // "Pro does not export that name" and "two tiers export it and nobody has
+  // said which wins" — `generate:ownership:map` has always drawn it
+  // (build-ownership-map.ts), and this command, which writes the file the
+  // resolver reads, drew nothing at all until TASK-R3-O1.
+  const unresolved = unresolvedCollisions(runtime.collisions)
+  for (const collision of unresolved) {
+    console.error(
+      `✗ collision: ${collision.symbol} is exported by ${collision.tiers.join(' and ')}. `
+      + 'It is absent from the runtime lookup and resolves to null until '
+      + 'collision-decisions.json records a tier and the ADR that decided it.',
+    )
+  }
+
   if (warnings.length > 0) {
     console.warn(`\n${warnings.length} drift note(s) — reported, not resolved:`)
     for (const warning of warnings)
       console.warn(`  · ${warning}`)
   }
+
+  // Same exit condition as the sibling CLI (build-ownership-map.ts): a merge
+  // problem or an unresolved collision fails. Drift notes do not — they are
+  // reported, never resolved, and 47 of them are open by design.
+  process.exit(unresolved.length + runtime.problems.length > 0 ? 1 : 0)
 }
 /* c8 ignore stop */

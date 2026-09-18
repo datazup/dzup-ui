@@ -1,0 +1,21 @@
+files before=1038 after=1038 onlyBefore=0 onlyAfter=0
+
+DzButton.vue
+   statements  100% (131/131)  ->  100% (46/46)
+   branches    96.42% (81/84)  ->  96.38% (80/83)
+   functions   100% (3/3)  ->  100% (14/14)
+   lines       100% (131/131)  ->  100% (40/40)
+
+DzSelect.vue
+   statements  94.03% (284/302)  ->  90.29% (121/134)
+   branches    92.5% (111/120)  ->  88.5% (77/87)
+   functions   85.71% (12/14)  ->  91.66% (55/60)
+   lines       94.03% (284/302)  ->  89.09% (98/110)
+
+cn.ts
+   statements  100% (5/5)  ->  100% (1/1)
+   branches    100% (1/1)  ->  100% (0/0)
+   functions   100% (1/1)  ->  100% (1/1)
+   lines       100% (5/5)  ->  100% (1/1)
+
+line-pct movement across files: worse=361 better=47 unchanged=630

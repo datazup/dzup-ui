@@ -120,7 +120,7 @@ never as asserted.
 
 ## Playground
 
-Editable, running the **Variant Gallery** story from `packages/core/stories/forms/DzCombobox.stories.ts` (lines 144–159) **verbatim**. Edits run in a sandbox; nothing here is saved.
+Editable, running the **Variant Gallery** story from `packages/core/stories/forms/DzCombobox.stories.ts` (lines 146–161) **verbatim**. Edits run in a sandbox; nothing here is saved.
 
 <DzPlayground component="DzCombobox" />
 
@@ -149,8 +149,8 @@ different contracts rather than two spellings of one.
 <DzCombobox :modelValue="value" @update:modelValue="value = $event" />
 ```
 
-**Where each variant is shown.** 15 stories in
-`packages/core/stories/forms/DzCombobox.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Allow Custom Value`, `Open by Default`, `Disabled`, `Invalid State`, `States`, `Loading State`, `Custom Slots`, `Rich Objects`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: User Search`.
+**Where each variant is shown.** 16 stories in
+`packages/core/stories/forms/DzCombobox.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Allow Custom Value`, `Open by Default`, `Disabled`, `Invalid State`, `States`, `Loading State`, `Custom Slots`, `Rich Objects`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: User Search`, `Async Options: loading → ready → error → retry`.
 
 ## Parts, states and tokens
 
@@ -277,7 +277,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

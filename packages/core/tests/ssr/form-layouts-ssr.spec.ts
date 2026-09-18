@@ -57,6 +57,22 @@ describe('sSR: form layouts render their preselected panel', () => {
     expect(html).toContain('id="last"')
   })
 
+  it('dzGridItem renders its span on the server, identical to the client class (D67)', async () => {
+    // SSR neutrality: the span is a pure computed class — no DOM read, no id —
+    // so the server markup already carries it and hydration has nothing to fix.
+    const DzGrid = await load('layout', 'DzGrid')
+    const DzGridItem = await load('layout', 'DzGridItem')
+    const html = await ssrRender(DzGrid, { cols: { sm: 1, md: 12 } }, {
+      default: () => [
+        h(DzGridItem, { span: { base: 'full', md: 6 } }, () => h('input', { id: 'city' })),
+        h(DzGridItem, { span: 'full' }, () => h('input', { id: 'street' })),
+      ],
+    })
+    expect(html).toContain('id="city"')
+    expect(html).toMatch(/class="col-span-full md:col-span-6"/)
+    expect(html).toContain('id="street"')
+  })
+
   it('dzTabs renders the selected tab on the server, not the first one', async () => {
     // The case that loses data: server renders tab 1, client hydrates into
     // tab 2, and whatever was in tab 2's fields never existed.

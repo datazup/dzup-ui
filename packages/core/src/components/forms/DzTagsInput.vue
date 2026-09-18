@@ -29,6 +29,7 @@ import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessageFormat } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzChip from '../data/DzChip.vue'
 import { tagsInputVariants } from './DzTagsInput.variants.ts'
@@ -157,10 +158,15 @@ const chipSize = computed<CanonicalSize>(() => {
 // ---------------------------------------------------------------------------
 
 const tokenCount = computed(() => model.value.length)
+// Count-bearing, on Intl.PluralRules (TASK-R5-O4). Two messages rather than a
+// suffix appended to one: "of {max}" sits inside the plural phrase in other
+// languages, so it cannot be concatenated on afterwards either.
+const dzFormat = useComponentMessageFormat('DzTagsInput')
 const statusText = computed(() => {
-  const n = tokenCount.value
-  const limit = props.max ? ` of ${props.max}` : ''
-  return `${n} ${n === 1 ? 'tag' : 'tags'}${limit}`
+  const count = tokenCount.value
+  return props.max
+    ? dzFormat('countOfMax', { count, max: props.max })
+    : dzFormat('count', { count })
 })
 
 // ---------------------------------------------------------------------------

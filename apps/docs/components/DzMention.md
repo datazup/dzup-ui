@@ -19,7 +19,7 @@ a textarea/input that surfaces a suggestion dropdown when a
 - **Risk tier:** C · **Status:** experimental
 - **Taxonomy:** variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **v-model:** `v-model` (`string | undefined`), `v-model:value` (`string | undefined`)
-- **Anatomy parts (ADR-19):** `content`, `control`, `empty`, `error`, `input`, `item`, `item-label`, `list`, `loader`, `root`
+- **Anatomy parts (ADR-19):** `content`, `control`, `empty`, `error`, `input`, `item`, `item-label`, `list`, `loader`, `options-message`, `options-retry`, `options-state`, `root`
 
 ## Intent and selection guidance
 
@@ -48,7 +48,7 @@ never as asserted.
 :::
 
 
-## Props (28, of which 15 inherited from `@dzup-ui/contracts`)
+## Props (31, of which 18 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -64,12 +64,15 @@ never as asserted.
 | `insertSpace` | `boolean \| undefined` | no | `true` | Insert a trailing space after a committed mention |
 | `invalid` | `boolean \| undefined` | no | `false` | Whether the field value is invalid |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows loading indicator |
-| `loadingText` | `string \| undefined` | no | `undefined` | Copy shown while an async resolver is pending |
+| `loadingText` | `string \| undefined` | no | `undefined` | Copy shown while options load (an async resolver, or a host-driven `optionsState="loading"`) |
 | `maxlength` | `number \| undefined` | no | `undefined` | Maximum number of characters allowed |
 | `modelValue` | `string \| undefined` | no | `undefined` | The raw text including the mention trigger characters, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). |
 | `multiline` | `boolean \| undefined` | no | `true` | Render a multi-line textarea (default) or a single-line input |
 | `name` | `string \| undefined` | no | `undefined` | Component name for form integration |
-| `noResultsText` | `string \| undefined` | no | `undefined` | Copy shown when a resolved/filtered query yields no options |
+| `noResultsText` | `string \| undefined` | no | `undefined` | Copy shown when a resolved, host-driven or filtered query yields no options |
+| `optionsError` | `string \| undefined` | no | `undefined` | Why the load failed, shown in the error row. Ignored unless `optionsState` is `'error'`. |
+| `optionsRetryable` | `boolean \| undefined` | no | `undefined` | Whether to offer a retry control in the error row. Defaults to true when `optionsState` can be `'error'`. Set false when the host retries on its own and a button would be a second, competing path. |
+| `optionsState` | `AsyncOptionsState \| undefined` | no | `undefined` | Where the option set is. Omitted means the options are static and the control renders no state rows at all. |
 | `placeholder` | `string \| undefined` | no | `undefined` | Placeholder text shown when empty |
 | `readonly` | `boolean \| undefined` | no | `false` | Read-only state -- visible but not editable |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
@@ -77,11 +80,11 @@ never as asserted.
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
 | `triggers` | `DzMentionTrigger[]` | yes | — | Configured triggers — each maps a char to its (sync or async) options |
-| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "list" \| "error" \| "item-label" \| "empty" \| "control" \| "input" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMention.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the text control, declared there as `input` — so `ui.root` is the route to the wrapper. |
+| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "list" \| "error" \| "item-label" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMention.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the text control, declared there as `input` — so `ui.root` is the route to the wrapper. |
 | `value` | `string \| undefined` | no | `""` | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
-## Events (9)
+## Events (11)
 
 | Event | Payload | Description |
 | --- | --- | --- |
@@ -89,7 +92,9 @@ never as asserted.
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Raw text value changed |
 | `close` | `[]` | Popup/overlay closed |
 | `focus` | `[event: FocusEvent]` | Focus gained |
+| `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Popup/overlay opened |
+| `retryOptions` | `[]` | The user asked to try again after an error. |
 | `search` | `[char: string, query: string]` | The active trigger's query changed |
 | `select` | `[char: string, option: DzMentionOption]` | An option was selected and inserted at the caret |
 | `update:modelValue` | `[value: string \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -121,7 +126,7 @@ never as asserted.
 
 ## Playground
 
-Editable, running the **Default** story from `packages/core/stories/forms/DzMention.stories.ts` (lines 110–147) **verbatim**. Edits run in a sandbox; nothing here is saved.
+Editable, running the **Default** story from `packages/core/stories/forms/DzMention.stories.ts` (lines 113–150) **verbatim**. Edits run in a sandbox; nothing here is saved.
 
 <DzPlayground component="DzMention" />
 
@@ -164,8 +169,8 @@ different contracts rather than two spellings of one.
 <DzMention :value="value" @update:value="value = $event" />
 ```
 
-**Where each variant is shown.** 12 stories in
-`packages/core/stories/forms/DzMention.stories.ts`: `Default`, `User Mentions (@)`, `Hashtags`, `Rich Suggestions (#option slot)`, `AsyncSearch`, `Multiple Triggers (@ + #)`, `Single Line`, `Invalid State`, `Dark Mode Preview`, `States`, `Accessibility: Combobox Keyboard Pattern`, `Real World: Issue Comment Composer`.
+**Where each variant is shown.** 13 stories in
+`packages/core/stories/forms/DzMention.stories.ts`: `Default`, `User Mentions (@)`, `Hashtags`, `Rich Suggestions (#option slot)`, `AsyncSearch`, `Multiple Triggers (@ + #)`, `Single Line`, `Invalid State`, `Dark Mode Preview`, `States`, `Accessibility: Combobox Keyboard Pattern`, `Real World: Issue Comment Composer`, `Async Options: loading → ready → error → retry`.
 
 ## Parts, states and tokens
 
@@ -188,10 +193,13 @@ takes effect. That is what lets you restyle a wrapper someone else built without
 | `item-label` | `[data-part="item-label"]` | no — renders zero or more than once |
 | `list` | `[data-part="list"]` | no — renders zero or more than once |
 | `loader` | `[data-part="loader"]` | no — renders zero or more than once |
+| `options-message` | `[data-part="options-message"]` | no — renders zero or more than once |
+| `options-retry` | `[data-part="options-retry"]` | no — renders zero or more than once |
+| `options-state` | `[data-part="options-state"]` | no — renders zero or more than once |
 | `root` | `[data-part="root"]` | yes |
 
 ```vue
-<DzMention :ui="{ 'content': 'ring-2', 'control': 'ring-2', 'empty': 'ring-2', 'error': 'ring-2', 'input': 'ring-2', 'item': 'ring-2', 'item-label': 'ring-2', 'list': 'ring-2', 'loader': 'ring-2', 'root': 'ring-2' }" />
+<DzMention :ui="{ 'content': 'ring-2', 'control': 'ring-2', 'empty': 'ring-2', 'error': 'ring-2', 'input': 'ring-2', 'item': 'ring-2', 'item-label': 'ring-2', 'list': 'ring-2', 'loader': 'ring-2', 'options-message': 'ring-2', 'options-retry': 'ring-2', 'options-state': 'ring-2', 'root': 'ring-2' }" />
 ```
 
 **Where your `class` lands** — read this before you size or position it.
@@ -230,6 +238,7 @@ then the component's own default.**
 
 | Reader | What the provider supplies through it |
 | --- | --- |
+| `useDzLocale` | the active locale |
 | `useDzMessages` | the translated string catalogue |
 | `useDzTestIds` | the test-id attribute name and prefix |
 
@@ -241,7 +250,7 @@ then the component's own default.**
 | `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
 | `icons` | — | No icon on this component carries direction, so none is mirrored. |
 
-**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+**Locale and formats.** Reads `useDzLocale`, `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzMention.anatomy.ts`.
 
@@ -280,8 +289,8 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 28 | 28 | 13 declare a default, of which 13 declare `undefined` (ADR-20 provider supplies the value) |
-| Events | 9 | 9 | 7 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
+| Props | 31 | 31 | 13 declare a default, of which 16 declare `undefined` (ADR-20 provider supplies the value) |
+| Events | 11 | 11 | 9 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 3 | 3 | 3 carry slot props |
 | Exposed on `ref` | 1 | 1 | no description exists in source for any exposed member, catalog-wide |
 
@@ -290,7 +299,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

@@ -166,7 +166,12 @@ describe('output shape', () => {
 })
 
 describe('collision-decisions.json', () => {
-  it('is checked in and empty while no real Core/Pro name collides', () => {
+  it('is checked in and empty — resolving a collision is an owner act, never a default', () => {
+    // Empty no longer means "nothing collides". TASK-R3-O1 re-measured it on
+    // 2026-09-18 and found one overlap, `CalendarView`, between the Core
+    // manifest and the Pro public-api manifest that Pro TASK-R1-P4 derives its
+    // ownership entries from. It stays unresolved here on purpose: awarding a
+    // tier names a winner, and only an owner does that.
     expect(readCollisionDecisions().decisions).toEqual({})
   })
 

@@ -1,5 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
+  "$schema": "./security-corpus.schema.json",
+  "schemaVersion": "1.1.0",
   "category": "file-metadata",
   "description": "Names, MIME types and sizes attached to files a user chose. All three are attacker-influenced: the name comes from the file system, and `File.type` is a browser guess from the extension and the OS registry rather than a measurement of the bytes. The `file` sink asks whether the control's own limits held on the path they are actually enforced on; the `text` and `attribute` sinks ask whether the name is rendered as data once it is in the list.",
   "fixtures": [

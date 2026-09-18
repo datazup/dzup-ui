@@ -73,7 +73,7 @@ never as asserted.
 | `open` | `[]` | Editor was opened (display → edit) |
 | `save` | `[value: T]` | Value committed; payload is the current model value |
 | `update:active` | `[value: boolean]` | Emitted when the `v-model:active` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:active` consumes it for you. |
-| `update:modelValue` | `[value: T]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
+| `update:modelValue` | `[value: T \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 | `update:value` | `[value: T \| undefined]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
 
 ## Slots (2)
@@ -261,7 +261,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

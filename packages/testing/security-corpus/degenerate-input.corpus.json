@@ -1,5 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
+  "$schema": "./security-corpus.schema.json",
+  "schemaVersion": "1.1.0",
   "category": "degenerate-input",
   "description": "Input that is not an exploit and is still hostile: too long, invisible, or shaped to be read differently by the person than by the program. Nothing here executes anything. Every case is about a component staying legible and contained when a value it was never sized for arrives — which is a real availability and deception surface, and the one class a corpus built only from XSS strings misses entirely.",
   "fixtures": [

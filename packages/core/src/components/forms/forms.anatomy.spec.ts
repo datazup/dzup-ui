@@ -467,7 +467,8 @@ describe('forms — the Tier B+ slice is complete, and so is the catalogue', () 
 
 describe('dzOptionsState — owner decision D15 / S1-D4, option (d)', () => {
   /**
-   * The seven public controls that import `DzOptionsState.vue`. The internal is
+   * The public controls that import `DzOptionsState.vue` — seven at D15, eight
+   * since `DzMention` joined the seam (TASK-R3-O3). The internal is
    * unexported, absent from the ownership manifest and absent from
    * `component-meta.json`, so `validate:anatomy-parts` governs its parts only
    * when **every** one of these declares them. That is the whole of option (d),
@@ -477,6 +478,7 @@ describe('dzOptionsState — owner decision D15 / S1-D4, option (d)', () => {
     DzCascader: cascaderAnatomy,
     DzCombobox: comboboxAnatomy,
     DzListbox: listboxAnatomy,
+    DzMention: mentionAnatomy,
     DzMultiSelect: multiSelectAnatomy,
     DzSelect: selectAnatomy,
     DzTransfer: transferAnatomy,
@@ -530,6 +532,28 @@ describe('dzOptionsState — owner decision D15 / S1-D4, option (d)', () => {
     })
     expect(wrapper.find('[data-part="options-state"]').exists()).toBe(true)
     expectAnatomy(wrapper, transferAnatomy)
+  })
+
+  it('and inside DzMention, whose suggestion menu renders it in-tree (TASK-R3-O3)', async () => {
+    const wrapper = mount(DzMention, {
+      props: {
+        triggers: [{ char: '@', options: [] }],
+        optionsState: 'error',
+        optionsError: 'Could not load',
+        optionsRetryable: true,
+      },
+      attachTo: document.body,
+    })
+    const textarea = wrapper.find('textarea')
+    const el = textarea.element as HTMLTextAreaElement
+    el.value = '@a'
+    el.selectionStart = 2
+    el.selectionEnd = 2
+    await textarea.trigger('input')
+    expect(wrapper.find('[data-part="options-state"]').exists()).toBe(true)
+    expect(wrapper.find('[data-part="options-retry"]').exists()).toBe(true)
+    expectAnatomy(wrapper, mentionAnatomy)
+    wrapper.unmount()
   })
 
   it('the loading row renders without a retry control, and still conforms', () => {

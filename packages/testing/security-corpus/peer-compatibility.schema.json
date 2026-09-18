@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:dzup-ui:testing:peer-compatibility:1",
+  "title": "@dzup-ui/testing peer-compatibility fixture file",
+  "description": "Claims about a declared peer in one install state — absent, installed (in range) or incompatible (out of range) — and the diagnostic a consumer must then see. Schema 1.1.0. A sibling of a consumer-matrix lane: the lane is how the state is produced, the fixture is what must then be true. Authority: checkPeerCompatibilityFile() in @dzup-ui/testing/security-corpus, which also enforces unique ids, an id that names its peer, and a diagnostic that names the peer.",
+  "$comment": "Draft-07, restricted to the keywords packages/tooling/src/token-checks/json-schema-draft07.ts implements — see security-corpus.schema.json.",
+  "type": "object",
+  "required": ["schemaVersion", "description", "fixtures"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^1\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "fixtures": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/fixture" }
+    },
+    "extensions": { "$ref": "#/definitions/extensions" }
+  },
+  "definitions": {
+    "extensions": {
+      "description": "Consumer-specific data keyed by a reverse-DNS namespace (com.dzup.pro).",
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$": { "type": "object" }
+      }
+    },
+    "packageName": {
+      "type": "string",
+      "pattern": "^(?:@[a-z0-9~-][a-z0-9._~-]*\\/)?[a-z0-9~-][a-z0-9._~-]*$"
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": ["stage", "severity", "mustContain"],
+      "additionalProperties": false,
+      "properties": {
+        "stage": {
+          "description": "install: the package manager. validate: a repository's peer gate. build: the bundler. runtime: the component itself.",
+          "enum": ["install", "validate", "build", "runtime"]
+        },
+        "severity": { "enum": ["error", "warning"] },
+        "mustContain": {
+          "description": "Substrings the diagnostic must contain; at least one names the peer.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "\\S" }
+        }
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "required": ["id", "title", "dependent", "peer", "declaredRange", "optional", "state", "installedVersion", "diagnostics", "rationale", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "peer.{peer-slug}.{case}; the slug is the peer name with @ dropped and every other separator as -.",
+          "type": "string",
+          "pattern": "^peer\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": { "type": "string", "pattern": "\\S" },
+        "dependent": { "$ref": "#/definitions/packageName" },
+        "peer": { "$ref": "#/definitions/packageName" },
+        "declaredRange": {
+          "description": "Verbatim from the dependent's peerDependencies.",
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "optional": {
+          "description": "peerDependenciesMeta[peer].optional === true.",
+          "type": "boolean"
+        },
+        "state": {
+          "description": "absent: nothing resolvable. installed: a version inside the declared range. incompatible: a version outside it.",
+          "enum": ["absent", "installed", "incompatible"]
+        },
+        "installedVersion": {
+          "description": "The exact installed version; null exactly when state is absent.",
+          "type": ["string", "null"],
+          "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/diagnostic" }
+        },
+        "rationale": { "type": "string", "pattern": "\\S" },
+        "provenance": { "type": "string", "pattern": "\\S" },
+        "extensions": { "$ref": "#/definitions/extensions" }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["state"], "properties": { "state": { "const": "absent" } } },
+          "then": { "properties": { "installedVersion": { "type": "null" } } },
+          "else": { "properties": { "installedVersion": { "type": "string" } } }
+        },
+        {
+          "if": { "required": ["state"], "properties": { "state": { "enum": ["absent", "incompatible"] } } },
+          "then": { "properties": { "diagnostics": { "minItems": 1 } } }
+        }
+      ]
+    }
+  }
+}

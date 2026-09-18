@@ -8,7 +8,7 @@ import type {
 } from './DzDataView.types.ts'
 import { computed, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { useComponentMessageFormat, useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzEmpty from '../feedback/DzEmpty.vue'
 import DzSkeleton from '../feedback/DzSkeleton.vue'
@@ -208,21 +208,23 @@ function itemKey(item: T, index: number): string {
   return `dz-data-view-${pageOffset.value + index}`
 }
 
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzDataView')
+// Count-bearing ones, on Intl.PluralRules (TASK-R5-O4).
+const dzFormat = useComponentMessageFormat('DzDataView')
+
 /** Live-region text announcing the rendered window */
 const announcement = computed(() => {
   if (props.loading)
-    return 'Loading items'
+    return dzMessages.value.loading
   if (total.value === 0)
     return props.emptyTitle
   if (!props.paginator)
-    return `Showing ${total.value} item${total.value === 1 ? '' : 's'}`
+    return dzFormat('showingAll', { count: total.value })
   const start = pageOffset.value + 1
   const end = Math.min(pageOffset.value + props.rows, total.value)
-  return `Showing ${start} to ${end} of ${total.value} items`
+  return dzFormat('showingRange', { start, end, total: total.value })
 })
-
-// User-visible strings, resolved against the application's catalog (ADR-20).
-const dzMessages = useComponentMessages('DzDataView')
 
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
 const { testId: dzTestId } = useDzTestIds()

@@ -201,12 +201,15 @@ function anatomyJoin(sourceAbs: string): AnatomyJoin {
 }
 
 /**
- * The published provider readers, plus the two wrappers that ARE an adoption of
+ * The published provider readers, plus the wrappers that ARE an adoption of
  * one (TASK-R5-O3, ADR-20).
  *
  * `useComponentMessages` is `useDzMessages` with a component's own catalog
  * branch already applied, and `useDzMotionAttribute` is `useDzMotion` reduced to
- * the one value a template binds. A component reaching a context through either
+ * the one value a template binds. `useComponentMessageFormat` (TASK-R5-O4)
+ * adopts two contexts — the component's catalog branch **and** the locale whose
+ * plural rules choose a branch — and the public `useDzMessageFormat` adopts the
+ * locale. A component reaching a context through any of them
  * has adopted that context; recording the wrapper name instead would make the
  * artifact answer a question about this repository's internals rather than
  * about the ADR-20 contract a host configures.
@@ -215,8 +218,8 @@ const PROVIDER_HOOKS: readonly (readonly [reader: string, callee: RegExp])[] = [
   ['useDzDefaults', /\buseDzDefaults\s*\(/],
   ['useDzDirection', /\buseDzDirection\s*\(/],
   ['useDzFormats', /\buseDzFormats\s*\(/],
-  ['useDzLocale', /\buseDzLocale\s*\(/],
-  ['useDzMessages', /\buse(?:DzMessages|ComponentMessages)\s*\(/],
+  ['useDzLocale', /\buse(?:DzLocale|DzMessageFormat|ComponentMessageFormat)\s*\(/],
+  ['useDzMessages', /\buse(?:DzMessages|ComponentMessages|ComponentMessageFormat)\s*\(/],
   ['useDzMotion', /\buseDzMotion(?:Attribute)?\s*\(/],
   ['useDzNonce', /\buseDzNonce\s*\(/],
   ['useDzPortalTarget', /\buseDzPortalTarget\s*\(/],

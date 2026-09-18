@@ -19,6 +19,7 @@ import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessageFormat } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzIcon from '../media/DzIcon.vue'
 import { ratingVariants } from './DzRating.variants.ts'
@@ -125,6 +126,10 @@ const resolvedAriaDescribedby = computed(() => {
 
 /** Spoken value, e.g. "3 of 5". */
 const valueText = computed(() => `${model.value} of ${props.count}`)
+
+// Each star's tooltip is count-bearing — "1 star", "2 stars" — so it is a
+// catalog message on Intl.PluralRules rather than a concatenation (TASK-R5-O4).
+const dzFormat = useComponentMessageFormat('DzRating')
 
 const styles = computed(() =>
   ratingVariants({
@@ -294,7 +299,7 @@ const { testId: dzTestId } = useDzTestIds()
         :key="index"
         data-part="item"
         :class="[styles.item(), ui?.item]"
-        :title="`${index} ${index === 1 ? 'star' : 'stars'}`"
+        :title="dzFormat('starTitle', { count: index })"
         aria-hidden="true"
         @mousemove="handlePointerMove($event, index)"
         @click="handleClick($event, index)"

@@ -264,6 +264,8 @@ describe('the real repository', () => {
         "@dzup-ui/core/data",
         "@dzup-ui/core/feedback",
         "@dzup-ui/core/forms",
+        "@dzup-ui/core/i18n",
+        "@dzup-ui/core/i18n/locales/en.json",
         "@dzup-ui/core/inputs",
         "@dzup-ui/core/layout",
         "@dzup-ui/core/media",

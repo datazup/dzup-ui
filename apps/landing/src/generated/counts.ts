@@ -52,7 +52,7 @@ export const FAMILY_COUNTS: FamilyCount[] = [
   { key: 'cards', label: 'Cards', catalog: 6, documented: 3, examples: ['DzCard', 'DzImageCard', 'DzStatCard'] },
   { key: 'data', label: 'Data', catalog: 31, documented: 19, examples: ['DzAccordion', 'DzAnimatedNumber', 'DzCalendar', 'DzChip', 'DzCodeBlock'] },
   { key: 'feedback', label: 'Feedback', catalog: 20, documented: 14, examples: ['DzAlert', 'DzAsyncBoundary', 'DzBadge', 'DzBlockUI', 'DzEmpty'] },
-  { key: 'layout', label: 'Layout', catalog: 22, documented: 18, examples: ['DzAffix', 'DzAppShell', 'DzAspectRatio', 'DzCollapse', 'DzContainer'] },
+  { key: 'layout', label: 'Layout', catalog: 23, documented: 18, examples: ['DzAffix', 'DzAppShell', 'DzAspectRatio', 'DzCollapse', 'DzContainer'] },
   { key: 'navigation', label: 'Navigation', catalog: 23, documented: 12, examples: ['DzAnchor', 'DzBackTop', 'DzBreadcrumb', 'DzColorModeToggle', 'DzMegaMenu'] },
   { key: 'overlays', label: 'Overlays', catalog: 33, documented: 10, examples: ['DzCommandPalette', 'DzConfirmDialog', 'DzContextMenu', 'DzDialog', 'DzDropdownMenu'] },
   { key: 'media', label: 'Media', catalog: 14, documented: 10, examples: ['DzAvatar', 'DzAvatarGroup', 'DzCarousel', 'DzEmoji', 'DzIcon'] },
@@ -62,7 +62,7 @@ export const FAMILY_COUNTS: FamilyCount[] = [
 /** Every published figure, derived. */
 export const COUNTS = {
   /** Every exported `.vue` under `packages/core/src/components`. @see CATALOG_COUNT_RULE */
-  catalogComponents: 207,
+  catalogComponents: 208,
   /** Components with a dedicated Storybook page. @see DOCUMENTED_COUNT_RULE */
   documentedComponents: 138,
   /** Component families. */
@@ -76,5 +76,5 @@ export const COUNTS = {
   /** Full-page templates — `TEMPLATES.length` in `src/templates/registry.ts`. */
   templates: 44,
   /** Story files across the 11 families, `*Parts` bundles included. */
-  storyFiles: 180,
+  storyFiles: 181,
 } as const

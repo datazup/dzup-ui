@@ -1,0 +1,45 @@
+{
+  "$schema": "./peer-compatibility.schema.json",
+  "schemaVersion": "1.1.0",
+  "description": "What a consumer must be told when a peer a dzup-ui package declares is absent, installed, or installed OUTSIDE the declared range. The incompatible case is the one 08-11 doc 06 (§Files/engines, R-058d) asked for and neither repository had: a consumer matrix that installs peers present and absent calls a wrong major green. Each record is a claim, not a procedure — a consumer-matrix lane decides how the install state is produced. OSS executes the `validate`-stage diagnostics below against `yarn validate:peers` (packages/tooling/src/validators/peer-ranges.ts) in `yarn validate:security-corpus`, and binds `declaredRange`/`optional` to the dependent's real package.json so a record cannot outlive the declaration it describes. OSS declares no optional peer today (packages/nuxt/test/fixtures/optional-peer/README.md), so both OSS records use required peers; Pro instantiates the optional case (e.g. pdfjs-dist, mermaid) with `install` and `runtime` diagnostics.",
+  "fixtures": [
+    {
+      "id": "peer.vue.wrong-major",
+      "title": "Vue 2 installed where @dzup-ui/core declares vue ^3.5.0",
+      "dependent": "@dzup-ui/core",
+      "peer": "vue",
+      "declaredRange": "^3.5.0",
+      "optional": false,
+      "state": "incompatible",
+      "installedVersion": "2.7.16",
+      "diagnostics": [
+        {
+          "stage": "validate",
+          "severity": "error",
+          "mustContain": ["vue", "^3.5.0", "2.7.16 does NOT satisfy"]
+        }
+      ],
+      "rationale": "A wrong major is the incompatible install a real consumer has: a Vue 2.7 application adopting the library during a migration. Nothing in either consumer matrix installs it, so today it is only caught if a gate names the installed version against the declared range. The diagnostic must say both, or the consumer cannot tell whether to upgrade the peer or pin the library.",
+      "provenance": "vue@2.7.16 is the final Vue 2 release on npm. The range is packages/core/package.json peerDependencies.vue; the message format is validate:peers' own."
+    },
+    {
+      "id": "peer.reka-ui.absent",
+      "title": "reka-ui not installed where @dzup-ui/core declares it as a required peer",
+      "dependent": "@dzup-ui/core",
+      "peer": "reka-ui",
+      "declaredRange": "^2.0.0",
+      "optional": false,
+      "state": "absent",
+      "installedVersion": null,
+      "diagnostics": [
+        {
+          "stage": "validate",
+          "severity": "error",
+          "mustContain": ["reka-ui", "not installed but required"]
+        }
+      ],
+      "rationale": "The sibling record: the shape describes the absent state both repositories already model, so the incompatible record above is a third state of one claim rather than a new mechanism. reka-ui is required, not optional, which is why absence is an error and not the warning an optional peer earns.",
+      "provenance": "packages/core/package.json peerDependencies['reka-ui'] with no peerDependenciesMeta; measured in packages/nuxt/test/fixtures/optional-peer/README.md (removing it fails the build)."
+    }
+  ]
+}

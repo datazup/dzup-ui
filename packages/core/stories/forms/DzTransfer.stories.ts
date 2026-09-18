@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { TransferItem } from '../../src/components/forms'
-import { expect, userEvent, within } from 'storybook/test'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { DzButton } from '../../src/components/buttons'
 import { DzTransfer } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
+import { createMockOptionsHost, walkAsyncOptionsStates } from '../_shared/asyncOptionsHost.ts'
 
 const sampleSource: TransferItem[] = [
   { key: '1', label: 'JavaScript' },
@@ -370,5 +372,64 @@ export const MoveBothDirections: Story = {
     await userEvent.click(toSource)
     await expect(toSource).toBeDisabled()
     await expect(canvas.getByText(/target keys:/i)).toHaveTextContent(/none/i)
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Async options (renderer contract C9, TASK-R3-O3)
+// ---------------------------------------------------------------------------
+
+const asyncPeople: TransferItem[] = [
+  { key: 'ada', label: 'Ada Lovelace' },
+  { key: 'grace', label: 'Grace Hopper' },
+  { key: 'katherine', label: 'Katherine Johnson' },
+]
+
+const transferHost = createMockOptionsHost(asyncPeople)
+
+/**
+ * Options from a remote source, through the shared `useAsyncOptions` seam.
+ *
+ * the transfer list emits `load-options` (with an `AbortSignal`) and renders whatever
+ * `options-state` the host passes back; Core never fetches. The host here is a
+ * mock with no network and no timers, so `play()` walks loading → ready →
+ * error → retry deterministically — and the buttons let you do it by hand.
+ */
+export const AsyncOptions: Story = {
+  name: 'Async Options: loading → ready → error → retry',
+  render: () => ({
+    components: { DzTransfer, DzButton },
+    setup() {
+      transferHost.reset()
+      return { host: transferHost }
+    },
+    template: `
+      <div class="space-y-3 max-w-xs">
+        <DzTransfer
+          :source="host.items.value"
+          :options-state="host.state.value"
+          :options-error="host.error.value"
+          @load-options="host.onLoadOptions"
+          @retry-options="host.onRetryOptions"
+        />
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Mock host">
+          <DzButton size="sm" variant="outline" @click="host.resolve()">Resolve</DzButton>
+          <DzButton size="sm" variant="outline" @click="host.fail()">Fail</DzButton>
+          <DzButton size="sm" variant="outline" @click="host.reload()">Reload</DzButton>
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]" data-testid="host-log">
+          state: {{ host.state.value }} · requests: {{ host.requests.value }} · retries: {{ host.retries.value }}
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement)
+    await walkAsyncOptionsStates({
+      host: transferHost,
+      root: canvasElement,
+      expectOptions: () => waitFor(() => expect(canvas.getByText('Ada Lovelace')).toBeVisible()),
+      step,
+    })
   },
 }

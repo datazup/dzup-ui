@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import type { DzCascaderOption } from '../../src/components/forms'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
+import { DzButton } from '../../src/components/buttons'
 import { DzCascader } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
+import { createMockOptionsHost, walkAsyncOptionsStates } from '../_shared/asyncOptionsHost.ts'
 
 const regions = [
   {
@@ -681,5 +684,66 @@ export const RealWorldShippingRegion: Story = {
       expect(canvas.getByTestId('csc-rw-summary')).toHaveTextContent('incomplete'),
     )
     await expect(canvas.getByTestId('csc-rw-submit')).toBeDisabled()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Async options (renderer contract C9, TASK-R3-O3)
+// ---------------------------------------------------------------------------
+
+const asyncPeople: DzCascaderOption[] = [
+  { label: 'Engineering', value: 'eng', children: [{ label: 'Ada Lovelace', value: 'ada' }] },
+  { label: 'Research', value: 'research', children: [{ label: 'Grace Hopper', value: 'grace' }] },
+]
+
+const cascaderHost = createMockOptionsHost(asyncPeople)
+
+/**
+ * Options from a remote source, through the shared `useAsyncOptions` seam.
+ *
+ * the cascader emits `load-options` (with an `AbortSignal`) and renders whatever
+ * `options-state` the host passes back; Core never fetches. The host here is a
+ * mock with no network and no timers, so `play()` walks loading → ready →
+ * error → retry deterministically — and the buttons let you do it by hand.
+ */
+export const AsyncOptions: Story = {
+  name: 'Async Options: loading → ready → error → retry',
+  render: () => ({
+    components: { DzCascader, DzButton },
+    setup() {
+      cascaderHost.reset()
+      return { host: cascaderHost }
+    },
+    template: `
+      <div class="space-y-3 max-w-xs">
+        <DzCascader
+          :options="host.items.value"
+          :options-state="host.state.value"
+          :options-error="host.error.value"
+          placeholder="Pick a team member"
+          aria-label="Team member"
+          @load-options="host.onLoadOptions"
+          @retry-options="host.onRetryOptions"
+        />
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Mock host">
+          <DzButton size="sm" variant="outline" @click="host.resolve()">Resolve</DzButton>
+          <DzButton size="sm" variant="outline" @click="host.fail()">Fail</DzButton>
+          <DzButton size="sm" variant="outline" @click="host.reload()">Reload</DzButton>
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]" data-testid="host-log">
+          state: {{ host.state.value }} · requests: {{ host.requests.value }} · retries: {{ host.retries.value }}
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement)
+    await walkAsyncOptionsStates({
+      host: cascaderHost,
+      root: canvasElement.ownerDocument.body,
+      open: () => userEvent.click(canvas.getByRole('combobox')),
+      expectOptions: () => waitFor(() => expect(screen.getByRole('option', { name: /engineering/i })).toBeVisible()),
+      step,
+    })
   },
 }

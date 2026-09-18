@@ -24,6 +24,11 @@
       "types": "./dist/providers/index.d.ts",
       "import": "./dist/providers/index.js"
     },
+    "./i18n": {
+      "types": "./dist/i18n/index.d.ts",
+      "import": "./dist/i18n/index.js"
+    },
+    "./i18n/locales/en.json": "./dist/i18n/locales/en.json",
     "./styles": "./dist/core.css",
     "./buttons": {
       "types": "./dist/components/buttons/index.d.ts",

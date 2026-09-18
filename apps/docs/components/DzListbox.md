@@ -119,7 +119,7 @@ never as asserted.
 
 ## Playground
 
-Editable, running the **States** story from `packages/core/stories/forms/DzListbox.stories.ts` (lines 282–385) **verbatim**. Edits run in a sandbox; nothing here is saved.
+Editable, running the **States** story from `packages/core/stories/forms/DzListbox.stories.ts` (lines 284–387) **verbatim**. Edits run in a sandbox; nothing here is saved.
 
 <DzPlayground component="DzListbox" />
 
@@ -147,8 +147,8 @@ different contracts rather than two spellings of one.
 <DzListbox :modelValue="value" @update:modelValue="value = $event" />
 ```
 
-**Where each variant is shown.** 8 stories in
-`packages/core/stories/forms/DzListbox.stories.ts`: `Single`, `Multiple`, `WithFilter`, `Grouped`, `Disabled`, `InsideFormField`, `DarkMode`, `States`.
+**Where each variant is shown.** 9 stories in
+`packages/core/stories/forms/DzListbox.stories.ts`: `Single`, `Multiple`, `WithFilter`, `Grouped`, `Disabled`, `InsideFormField`, `DarkMode`, `States`, `Async Options: loading → ready → error → retry`.
 
 ## Parts, states and tokens
 
@@ -280,7 +280,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

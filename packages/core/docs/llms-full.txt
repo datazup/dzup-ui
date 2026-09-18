@@ -2,7 +2,7 @@
 
 > The Vue 3 component library published as `@dzup-ui/core`. Every component is a named export of a single entry point, is styled exclusively through `--dz-*` design tokens (no hardcoded colours, no scoped styles), themes via a `data-theme` attribute, and takes v-model through `defineModel` (ADR-16). This file is generated from the same metadata extraction the library documents itself with, so it cannot disagree with the shipped code.
 
-144 public components and 64 compound sub-parts across 12 families, extracted from source by `vue-component-meta@3.3.7`. Each carries its full props / events / slots tables and a usage snippet. For the index alone see [/storybook/llms.txt](/storybook/llms.txt); the ready-made blocks catalog is at [/llms.txt](/llms.txt).
+144 public components and 65 compound sub-parts across 12 families, extracted from source by `vue-component-meta@3.3.7`. Each carries its full props / events / slots tables and a usage snippet. For the index alone see [/storybook/llms.txt](/storybook/llms.txt); the ready-made blocks catalog is at [/llms.txt](/llms.txt).
 
 Fidelity is published rather than assumed. Descriptions come from source JSDoc; where a member has none, the cell is `—` and nothing is invented. Usage snippets are verbatim slices of the component's Storybook story — never synthesised markup — and a component with no story says so.
 
@@ -1657,7 +1657,7 @@ display→edit toggle wrapper.
 | `open` | `[]` | Editor was opened (display → edit) |
 | `save` | `[value: T]` | Value committed; payload is the current model value |
 | `update:active` | `[value: boolean]` | Emitted when the `v-model:active` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:active` consumes it for you. |
-| `update:modelValue` | `[value: T]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
+| `update:modelValue` | `[value: T \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 | `update:value` | `[value: T \| undefined]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
 
 **Slots** (2):
@@ -1841,9 +1841,9 @@ a textarea/input that surfaces a suggestion dropdown when a
 - **Risk tier:** C · **Status:** experimental
 - **Taxonomy:** variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **v-model:** `v-model` (`string | undefined`), `v-model:value` (`string | undefined`)
-- **Anatomy parts (ADR-19):** `content`, `control`, `empty`, `error`, `input`, `item`, `item-label`, `list`, `loader`, `root`
+- **Anatomy parts (ADR-19):** `content`, `control`, `empty`, `error`, `input`, `item`, `item-label`, `list`, `loader`, `options-message`, `options-retry`, `options-state`, `root`
 
-**Props** (28, of which 15 inherited from `@dzup-ui/contracts`):
+**Props** (31, of which 18 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -1859,12 +1859,15 @@ a textarea/input that surfaces a suggestion dropdown when a
 | `insertSpace` | `boolean \| undefined` | no | `true` | Insert a trailing space after a committed mention |
 | `invalid` | `boolean \| undefined` | no | `false` | Whether the field value is invalid |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows loading indicator |
-| `loadingText` | `string \| undefined` | no | `undefined` | Copy shown while an async resolver is pending |
+| `loadingText` | `string \| undefined` | no | `undefined` | Copy shown while options load (an async resolver, or a host-driven `optionsState="loading"`) |
 | `maxlength` | `number \| undefined` | no | `undefined` | Maximum number of characters allowed |
 | `modelValue` | `string \| undefined` | no | `undefined` | The raw text including the mention trigger characters, bound with the contract-conforming default `v-model`. Left `undefined` the component reads the legacy `v-model:value` instead; writes go to both (ADR-16, `useDualModel`). |
 | `multiline` | `boolean \| undefined` | no | `true` | Render a multi-line textarea (default) or a single-line input |
 | `name` | `string \| undefined` | no | `undefined` | Component name for form integration |
-| `noResultsText` | `string \| undefined` | no | `undefined` | Copy shown when a resolved/filtered query yields no options |
+| `noResultsText` | `string \| undefined` | no | `undefined` | Copy shown when a resolved, host-driven or filtered query yields no options |
+| `optionsError` | `string \| undefined` | no | `undefined` | Why the load failed, shown in the error row. Ignored unless `optionsState` is `'error'`. |
+| `optionsRetryable` | `boolean \| undefined` | no | `undefined` | Whether to offer a retry control in the error row. Defaults to true when `optionsState` can be `'error'`. Set false when the host retries on its own and a button would be a second, competing path. |
+| `optionsState` | `AsyncOptionsState \| undefined` | no | `undefined` | Where the option set is. Omitted means the options are static and the control renders no state rows at all. |
 | `placeholder` | `string \| undefined` | no | `undefined` | Placeholder text shown when empty |
 | `readonly` | `boolean \| undefined` | no | `false` | Read-only state -- visible but not editable |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
@@ -1872,11 +1875,11 @@ a textarea/input that surfaces a suggestion dropdown when a
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
 | `triggers` | `DzMentionTrigger[]` | yes | — | Configured triggers — each maps a char to its (sync or async) options |
-| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "list" \| "error" \| "item-label" \| "empty" \| "control" \| "input" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMention.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the text control, declared there as `input` — so `ui.root` is the route to the wrapper. |
+| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "list" \| "error" \| "item-label" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMention.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the text control, declared there as `input` — so `ui.root` is the route to the wrapper. |
 | `value` | `string \| undefined` | no | `""` | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
-**Events** (9):
+**Events** (11):
 
 | Event | Payload | Description |
 | --- | --- | --- |
@@ -1884,7 +1887,9 @@ a textarea/input that surfaces a suggestion dropdown when a
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Raw text value changed |
 | `close` | `[]` | Popup/overlay closed |
 | `focus` | `[event: FocusEvent]` | Focus gained |
+| `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Popup/overlay opened |
+| `retryOptions` | `[]` | The user asked to try again after an error. |
 | `search` | `[char: string, query: string]` | The active trigger's query changed |
 | `select` | `[char: string, option: DzMentionOption]` | An option was selected and inserted at the caret |
 | `update:modelValue` | `[value: string \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -1993,21 +1998,26 @@ Searchable persona picker.
 - **v-model:** `v-model` (`string | undefined`)
 - **Anatomy parts (ADR-19):** `clear`, `content`, `control`, `empty`, `error`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`, `viewport`
 
-**Props** (5):
+**Props** (8, of which 3 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state |
 | `modelValue` | `string \| undefined` | no | `""` | Id of the selected persona; the default empty string selects none. |
+| `optionsError` | `string \| undefined` | no | `undefined` | Why the load failed, shown in the error row. Ignored unless `optionsState` is `'error'`. |
+| `optionsRetryable` | `boolean \| undefined` | no | `undefined` | Whether to offer a retry control in the error row. Defaults to true when `optionsState` can be `'error'`. Set false when the host retries on its own and a button would be a second, competing path. |
+| `optionsState` | `AsyncOptionsState \| undefined` | no | `undefined` | Where the option set is. Omitted means the options are static and the control renders no state rows at all. |
 | `personas` | `Persona[]` | yes | — | Available personas |
 | `placeholder` | `string \| undefined` | no | `"Select persona"` | Placeholder text for the search input |
 | `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzPersonaSelector.anatomy.ts` (ADR-19 §5). This component renders no element of its own, so the map is forwarded whole to the `DzCombobox` that is* its root — one map still reaches every part the declaration names. |
 
-**Events** (2):
+**Events** (4):
 
 | Event | Payload | Description |
 | --- | --- | --- |
 | `change` | `[persona: Persona \| undefined]` | Fires with the full persona object when one is selected |
+| `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
+| `retryOptions` | `[]` | The user asked to try again after an error. |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (2):
@@ -3397,31 +3407,20 @@ CSS Grid layout component.
 | --- | --- | --- |
 | `default` | — | Grid items |
 
-**Usage** (verbatim story source from `packages/core/stories/layout/DzGrid.stories.ts`, story `Default`):
+**Usage** (from `packages/core/stories/layout/DzGrid.stories.ts`, story `Default`):
 
-```ts
-export const Default: Story = {
-  render: args => ({
-    components: { DzGrid },
-    setup() {
-      return { args }
-    },
-    template: `
+```vue
+
       <DzGrid v-bind="args">
-        ${gridItems(6)}
+        <div
+          v-for="n in 6"
+          :key="n"
+          class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded text-center font-medium"
+        >
+          {{ n }}
+        </div>
       </DzGrid>
-    `,
-  }),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const gridContainer = canvasElement.querySelector('div')
-    await expect(gridContainer).toBeInTheDocument()
-    const item1 = canvas.getByText('1')
-    await expect(item1).toBeInTheDocument()
-    const item6 = canvas.getByText('6')
-    await expect(item6).toBeInTheDocument()
-  },
-}
+    
 ```
 
 ### DzMasonry
@@ -3772,7 +3771,7 @@ Simplified vertical/horizontal stack layout.
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
-| `direction` | `StackDirection \| undefined` | no | `"vertical"` | Stack direction |
+| `direction` | `StackDirection \| undefined` | no | `"vertical"` | Stack direction. `vertical` (default) and `column` stack along the block axis; `horizontal` and `row` lay out along the inline axis, which follows `dir`. |
 | `gap` | `LayoutGap \| undefined` | no | `"md"` | Gap between stack items |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 
@@ -3873,6 +3872,31 @@ export const Default: Story = {
   }),
 }
 ```
+
+### DzGridItem
+
+a `DzGrid` child that says how many columns it occupies.
+
+- **Install:** `npm i @dzup-ui/core` — then `import { DzGridItem } from '@dzup-ui/core'`
+- **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
+- **Compound part of:** `DzGrid`
+
+**Props** (2):
+
+| Prop | Type | Required | Declared default | Description |
+| --- | --- | --- | --- | --- |
+| `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
+| `span` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Columns this item occupies, fixed or per breakpoint. Omitted means one column, the CSS default. A numeric span outside 1–12 is clamped into that range; a span wider than the grid's own column count creates implicit columns, exactly as the CSS it compiles to would — clamp to your grid. |
+
+**Slots** (1):
+
+| Slot | Slot props | Description |
+| --- | --- | --- |
+| `default` | — | The item's content — usually one field |
+
+**Usage** (no story of its own — it is documented through its parent):
+
+A compound sub-part of `DzGrid`; see that component's usage snippet.
 
 ### DzResizableHandle
 

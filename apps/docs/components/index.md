@@ -10,7 +10,7 @@ outline: [2, 2]
 
 # Components
 
-144 public components across 12 families, plus 64 compound sub-parts documented on their parent's page. Every table on every component page is extracted from source by `vue-component-meta@3.3.7`; nothing here is hand-typed.
+144 public components across 12 families, plus 65 compound sub-parts documented on their parent's page. Every table on every component page is extracted from source by `vue-component-meta@3.3.7`; nothing here is hand-typed.
 
 ## Buttons
 

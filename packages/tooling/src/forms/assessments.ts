@@ -242,10 +242,13 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   DzCheckboxGroup: {
     kind: 'selection',
     reviewed: {
+      // Re-reviewed 2026-09-17 (TASK-R3-O3, decision D70): was `future`, but the
+      // seam exists; what is absent is an option source. If the group ever
+      // declares AsyncOptionsProps, the derived C9 (a HARD clause) overrides this.
       C9: {
-        verdict: 'future',
-        note: 'renders whatever children it is given rather than an option list of its own, so the seam belongs on a future group that takes options',
-        evidence: 'DzCheckboxGroup.vue — a slot, not an options prop',
+        verdict: 'n-a',
+        note: 'owns no option source: the host slots in DzCheckbox children, so the host renders any remote options (contract C9: a control with only static options is n-a)',
+        evidence: 'DzCheckboxGroup.vue — a slot, not an options prop · docs/program-2026-09-04/reports/TASK-R3-O3-decisions.md D70',
       },
       C1: { verdict: 'pass', note: 'string[] with [] as the empty value', evidence: 'DzCheckboxGroup.vue defineModel<string[]>' },
     },
@@ -394,11 +397,8 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   DzMention: {
     kind: 'selection',
     reviewed: {
-      C9: {
-        verdict: 'future',
-        note: 'has a loading prop and its own suggestion menu; wiring it to the shared seam needs the menu to render the state rows, which is a bigger change than the six selection controls took',
-        evidence: 'DzMention.types.ts — loading present, AsyncOptionsProps absent',
-      },
+      // C9 was a reviewed `future` until TASK-R3-O3 moved DzMention onto the
+      // shared seam; it is now derived from DzMention.types.ts.
       C1: {
         verdict: 'pass',
         note: 'takes both v-model and v-model:value; the value is the raw text including the @ markers, which is what a mention field means by its value',
@@ -416,11 +416,8 @@ export const ASSESSMENTS: Record<string, Assessment> = {
     kind: 'selection',
     delegatesTo: 'DzCombobox',
     reviewed: {
-      C9: {
-        verdict: 'future',
-        note: 'the DzCombobox it delegates to now has the seam, but this control declares none of the props and so cannot forward them — a pass-through, not a reimplementation',
-        evidence: 'DzPersonaSelector.types.ts + DzCombobox.types.ts AsyncOptionsProps',
-      },
+      // C9 was a reviewed `future` until TASK-R3-O3 declared and forwarded the
+      // DzCombobox seam; it is now derived from DzPersonaSelector.types.ts.
       C1: { verdict: 'pass', note: 'string id, empty value \'\'', evidence: 'DzPersonaSelector.vue defineModel<string>({ default: \'\' })' },
       C2: {
         verdict: 'pass',
@@ -448,10 +445,11 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   DzRadioGroup: {
     kind: 'selection',
     reviewed: {
+      // Re-reviewed 2026-09-17 (TASK-R3-O3, decision D70) — see DzCheckboxGroup.
       C9: {
-        verdict: 'future',
-        note: 'same as DzCheckboxGroup — the radios are children, not an option list this control owns',
-        evidence: 'DzRadioGroup.vue — a slot, not an options prop',
+        verdict: 'n-a',
+        note: 'same as DzCheckboxGroup — the radios are children the host renders, not an option list this control owns',
+        evidence: 'DzRadioGroup.vue — a slot, not an options prop · docs/program-2026-09-04/reports/TASK-R3-O3-decisions.md D70',
       },
       C1: { verdict: 'pass', note: 'string, empty value \'\'', evidence: 'DzRadioGroup.vue defineModel<string>({ default: \'\' })' },
     },
@@ -493,10 +491,13 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   DzTagsInput: {
     kind: 'selection',
     reviewed: {
+      // Re-reviewed 2026-09-17 (TASK-R3-O3, decision D70): was `future`, but the
+      // seam exists; this control has no options to drive. A suggestion source
+      // that declares AsyncOptionsProps re-derives the cell automatically.
       C9: {
-        verdict: 'future',
-        note: 'has no suggestion source at all today; the seam lands when one does',
-        evidence: 'DzTagsInput.types.ts',
+        verdict: 'n-a',
+        note: 'free-text tags with no suggestion source, so there is no option set to load',
+        evidence: 'DzTagsInput.types.ts — no options prop · docs/program-2026-09-04/reports/TASK-R3-O3-decisions.md D70',
       },
       C1: {
         verdict: 'pass',

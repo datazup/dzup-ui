@@ -14,6 +14,7 @@ CSS Grid layout component.
 
 - **Family:** Layout
 - **Source:** `packages/core/src/components/layout/DzGrid.vue` · types `packages/core/src/components/layout/DzGrid.types.ts`
+- **Compound parts:** `DzGridItem`
 - **Install:** `npm i @dzup-ui/core` — then `import { DzGrid } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** A · **Status:** stable
@@ -64,38 +65,56 @@ never as asserted.
 | --- | --- | --- |
 | `default` | — | Grid items |
 
-## Usage (verbatim story source from `packages/core/stories/layout/DzGrid.stories.ts`, story `Default`)
+## Usage (from `packages/core/stories/layout/DzGrid.stories.ts`, story `Default`)
 
-```ts
-export const Default: Story = {
-  render: args => ({
-    components: { DzGrid },
-    setup() {
-      return { args }
-    },
-    template: `
+```vue
+
       <DzGrid v-bind="args">
-        ${gridItems(6)}
+        <div
+          v-for="n in 6"
+          :key="n"
+          class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded text-center font-medium"
+        >
+          {{ n }}
+        </div>
       </DzGrid>
-    `,
-  }),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const gridContainer = canvasElement.querySelector('div')
-    await expect(gridContainer).toBeInTheDocument()
-    const item1 = canvas.getByText('1')
-    await expect(item1).toBeInTheDocument()
-    const item6 = canvas.getByText('6')
-    await expect(item6).toBeInTheDocument()
-  },
-}
+    
 ```
 
 ## Playground
 
-Editable, running the **Column Gallery** story from `packages/core/stories/layout/DzGrid.stories.ts` (lines 113–131) **verbatim**. Edits run in a sandbox; nothing here is saved.
+Editable, running the **Column Gallery** story from `packages/core/stories/layout/DzGrid.stories.ts` (lines 121–139) **verbatim**. Edits run in a sandbox; nothing here is saved.
 
 <DzPlayground component="DzGrid" />
+
+## Compound parts
+
+`DzGrid` is used with 1 sub-part, documented here rather than on pages of their own because they are not usable outside it.
+
+### DzGridItem
+
+a `DzGrid` child that says how many columns it occupies.
+
+- **Install:** `npm i @dzup-ui/core` — then `import { DzGridItem } from '@dzup-ui/core'`
+- **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
+- **Compound part of:** `DzGrid`
+
+#### Props (2)
+
+| Prop | Type | Required | Declared default | Description |
+| --- | --- | --- | --- | --- |
+| `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
+| `span` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Columns this item occupies, fixed or per breakpoint. Omitted means one column, the CSS default. A numeric span outside 1–12 is clamped into that range; a span wider than the grid's own column count creates implicit columns, exactly as the CSS it compiles to would — clamp to your grid. |
+
+#### Slots (1)
+
+| Slot | Slot props | Description |
+| --- | --- | --- |
+| `default` | — | The item's content — usually one field |
+
+#### Usage (no story of its own — it is documented through its parent)
+
+A compound sub-part of `DzGrid`; see that component's usage snippet.
 
 ## Variants and controlled state
 
@@ -174,7 +193,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -185,6 +204,8 @@ production evidence, and it must not be read as a conformance claim.
 - **Security boundary:** `none`
 - **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
 - **Component last changed at:** `5773f65c`
+
+**Compound sub-parts are not matrix rows.** `DzGridItem` is documented on this page and carries no evidence row of its own. Everything below describes `DzGrid`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
 
 ### WCAG 2.2 criteria in scope (9)
 

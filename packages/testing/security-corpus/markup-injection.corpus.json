@@ -1,5 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
+  "$schema": "./security-corpus.schema.json",
+  "schemaVersion": "1.1.0",
   "category": "markup-injection",
   "description": "Host-supplied strings that are markup. In this catalog they arrive as labels, alt text, captions, file names and accessible names — values a component renders as text or writes into an attribute. The required outcome for a text or attribute sink is `escaped`, and `escaped` is asserted against the DOM, never against serialized HTML: `wrapper.html()` re-serializes, so a correctly escaped text node still contains the substring `onerror` while containing no element and no handler. An assertion on the string fails the component that got it right.",
   "fixtures": [

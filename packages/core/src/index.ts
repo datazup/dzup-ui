@@ -85,6 +85,15 @@ export * from './composables/useTabs/index.ts'
 export * from './composables/useToast/index.ts'
 export * from './composables/useTransfer/index.ts'
 
+// i18n (TASK-R5-O4). Added by hand for the reason the block above gives. Two
+// jobs: `useDzMessageFormat` joins the provider readers, and re-exporting this
+// module makes `dist/index.d.ts` reference `i18n/messages.d.ts` — the file that
+// augments `DzMessageCatalog`. Before, nothing reachable from the root
+// declarations did, so a consumer's TypeScript saw an empty catalog (N5-04 F9).
+// The same module is the `./i18n` subpath; the manifest carries an `i18n`
+// composables entry so a regeneration keeps this line.
+export * from './i18n/index.ts'
+
 // ── Providers ──
 
 export * from './providers/index.ts'

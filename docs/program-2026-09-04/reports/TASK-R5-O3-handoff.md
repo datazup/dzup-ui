@@ -805,3 +805,434 @@ invert ADR-20 §6.
 above is a local run against a worktree carrying seven packets of uncommitted
 work, bound to `99b963a` — *locally qualified*, per the maturity ladder, and no
 further.
+
+---
+
+# Continuation 2026-09-17 — the motion browser lane and the D32(a)/D33(a) gate
+
+> **Fourth session, 2026-09-17.** Scope: the two agent-actionable items §C8
+> left open — the browser half of `<requirements><motion_test_mode>` (§C8 item 2)
+> and turning the `defaults` residual into a gate (§C8 item 1, as owner
+> decisions **D32(a)** and **D33(a)**, taken under delegation). Item 3, the five
+> amend-ADR divergences (D28), is owner-only and was not touched. No component
+> adopted `useDzDefaults` (that is the separate adoption tranche); no provider
+> prop, resolution order, Pro file or ADR changed; no component source changed.
+>
+> **Repo / commit:** `ui/dzup-ui` `main` @ `569d887` (HEAD did not move; the
+> worktree carries several packets' uncommitted work, all preserved). The browser
+> runs drove `apps/storybook/storybook-static`, built 2026-09-17 12:45. That is
+> newer than every motion-consumer source and the tokens rule they rely on
+> (`find packages/core/src packages/tokens/src … -newer iframe.html` lists only
+> R3-O3's forms/layout files), and `[data-dz-motion=reduce]{animation-duration:.01ms!important;…}`
+> is present in the built `assets/iframe-*.css`.
+
+## E1. "Unrunnable here" was wrong — measured before any edit
+
+§C6/§C8 recorded the browser half as unrunnable because
+`test-results/matrix-report.json` is absent. That file is an **output** the
+capability matrix reads; its absence says nothing about whether Playwright runs
+on this machine. It does:
+
+```
+STORYBOOK_E2E_STATIC=1 STORYBOOK_E2E_PREBUILT=1 \
+  node node_modules/@playwright/test/cli.js test e2e/matrix --project=matrix-chromium-reduced-motion
+  → exit 0 · 176 passed · 1 skipped (DzThemeProvider fixme: no story) · 3.4 min
+```
+
+Playwright 1.61.1 with chromium-1228, firefox-1532 and webkit-2311 installed.
+Every JSON report this session wrote went to the scratchpad; nothing was written
+to `test-results/matrix-report.json`, so the capability matrix's inputs are
+untouched and its link stays red for its own recorded reason (§E6).
+
+## E2. The reduced-motion condition — before and after
+
+**Before** (as committed in `a01965f`, i.e. by the crashed first session):
+
+- `playwright.config.ts:58` — the condition is the engine option
+  `reducedMotion: 'reduce'`.
+- `e2e/matrix/conditions.spec.ts:58–65` (HEAD) — a `beforeEach` already set
+  `globalThis.__DZ_MOTION__ = 'reduced'` through `addInitScript`, but **no
+  assertion read the result**.
+- `e2e/matrix/conditions.spec.ts:106–149` (HEAD) — the only assertion:
+  `document.getAnimations()` has nothing `running` one second after the story
+  settles.
+- Its comment conceded that either switch could be the one that stopped an
+  animation, and deferred the separation to "owner decision D27" — a wrong
+  reference (D27 is the defaults slice).
+
+**That cell cannot see the library's policy — measured, not argued.** With the
+forced channel deliberately broken (seed A1, §E2.3), the old condition on
+chromium went **exit 0, 176 passed / 1 skipped**, the same counts as unseeded.
+The tokens stylesheet answers the engine's media query by itself, so a component
+that ignored `DzProvider`'s `motion` would pass.
+
+**After:**
+
+| File:line | Change |
+|---|---|
+| `e2e/matrix/motion-policy.spec.ts` (new, 250 lines) | **The contract.** `beforeEach` (`:98`) forces the channel and sets the page back to `reducedMotion: 'no-preference'` (`:109`), so the media query says *animate* and cannot take credit; the precondition is asserted, not assumed. Per motion-consuming target: reveal the animated node (`REVEAL`, `:78`); assert `[data-dz-motion="reduce"]` is in the DOM (`:195`) — the policy resolved to reduced and reached CSS; then sample every frame for 20 frames (`:210`) and fail on any animation or transition inside that subtree whose `getComputedTiming().duration` exceeds 1 ms. `DzAnchor`, whose policy lives in script, is asserted on `window.scrollTo`: every call must be `behavior: 'auto'` (`:186`). Each result carries a `motion-policy` annotation (`marked=`, `governedAnimations=`, `lingering=`), so a report shows whether the end-state arm had anything to measure. |
+| `e2e/matrix/fixtures.ts:187–300` | `FORCED_MOTION_PREFERENCE` (`:187`) and `forceMotionPolicy(page)` (`:198`) — the one `addInitScript` → `__DZ_MOTION__` writer; `MOTION_TARGETS` (`:249`) **derived from `component-meta.json` `providerHooks`**, compound parts credited to `parentComponent`, `attribute` vs `script` decided by reading each part's source for `useDzMotionAttribute(`; `MOTION_CONSUMERS_OUTSIDE_LANE` (`:276`); `storyCompleted(page)` (`:293`). |
+| `e2e/matrix/conditions.spec.ts:35–64` | The `beforeEach` calls `forceMotionPolicy`; the comment now says what this cell proves (the WCAG half, under a real OS preference, over all 88 runnable Tier B–D targets) and what it does not, and points at the contract spec. The `getAnimations` assertion (`:105`) is **unchanged**. |
+| `playwright.config.ts:78–82` | `testIgnore: /motion-policy\.spec\.ts$/` on every matrix project except `*-reduced-motion`. **No project renamed** — the 18 names are identical. `reducedMotion: 'reduce'` (`:58`) is kept, because the WCAG cell still needs it. |
+
+A second spec on the existing projects rather than a seventh condition or an
+in-spec skip: a seventh project is a matrix name the capability matrix does not
+know, and a skip would print ~210 "skipped" cells across the other fifteen
+projects (D81). `--list` confirms the scope: `motion-policy.spec.ts` appears 14×
+under `matrix-webkit-reduced-motion` and 0× under `matrix-chromium-default` and
+`matrix-firefox-rtl`.
+
+**Two harness facts had to be measured on the way:**
+
+1. Storybook sets `sb-show-main` **before** `play` runs, and `DzCommandPalette`'s
+   `play` opens and closes its own dialog. The first wait, for
+   `__STORYBOOK_PREVIEW__.currentRender.phase === 'completed'`, timed out on
+   **14/14**; a probe of the built preview showed the phase settles on
+   **`finished`**. `storyCompleted` accepts both, with the measurement in its doc
+   comment.
+2. The end-state arm first read `getAnimations()` once, straight after the
+   attribute appeared. Seed A2 turned **7** red and left `DzDialog` green — yet a
+   diagnostic listing every animation showed `DzDialog`'s overlay and content
+   running `opacity`/`transform` transitions at the seeded 2000 ms on the next
+   run. The attribute lands when the node mounts; the enter transition starts a
+   frame or two later. Sampling 20 frames removed the race: the same seed now
+   turns **8** red, `DzDialog` included, on chromium **and** webkit.
+
+### E2.1 Which components — derived, not listed
+
+`component-meta.json` has **17** records calling `useDzMotion` (writers
+excluded). Credited to the component whose story renders them they are **16**
+components; **14** are in the lane (Tier B–D with a story) and **2** are Tier A,
+outside it (`DzAnimatedNumber`, `DzFloatLabel`):
+
+| Family | Lane target (consuming parts) | Reveal |
+|---|---|---|
+| overlays | `DzCommandPalette` · `DzContextMenu` (Content) · `DzDialog` (Content, Overlay) · `DzDropdownMenu` (Content) · `DzPopconfirm` · `DzPopover` (Content) · `DzSheet` (Content) · `DzTooltip` (Content) · `DzTour` | the trigger a user would use: click, right-click, or focus for the tooltip |
+| feedback | `DzBlockUI` | click "Block panel" |
+| data | `DzAccordion` (Content) | expand the first item |
+| forms | `DzSwitch` | toggle |
+| navigation | `DzColorModeToggle` (rendered) · `DzAnchor` (script: `scrollTo`) | none · click the second link |
+
+The run covers **every** lane consumer, not a sample: overlays 9/9, feedback 1/1,
+plus data, forms and navigation.
+
+### E2.2 Runs and pass counts
+
+| Run | Exit | Result |
+|---|---|---|
+| **Before**, chromium, `e2e/matrix` (only `conditions.spec.ts` existed) | **0** | 176 passed · 1 skipped · 3.4 min |
+| **After**, `e2e/matrix` × `matrix-{chromium,firefox,webkit}-reduced-motion`, 18:18–18:33 | **0** | **570 passed · 3 skipped · 0 unexpected · 0 flaky** · 14.8 min. Per project: `conditions.spec.ts` **176/176**, `motion-policy.spec.ts` **14/14**, 1 fixme skipped (`DzThemeProvider`, no story) — identical on all three engines |
+| **Final** (after the 20-frame fix), `motion-policy.spec.ts` × 3 engines | **0** | **42/42** · 0 flaky · 1.3 min. `conditions.spec.ts` was not edited after the run above |
+| **Independent re-run on the final code** (verified 2026-09-17, §E12), `e2e/matrix` × 3 reduced-motion projects | **0** | chromium **190 passed · 1 skipped** (4.4 min); firefox + webkit **380 passed · 2 skipped** (14.1 min) — **570 / 3** on the code as it stands. The 570 row above ran BEFORE the 20-frame fix, so until this re-run the full-lane number was not measured on the final spec |
+
+Final-run annotations (`marked` · `governedAnimations` peak · `lingering`), every
+cell `lingering=0`:
+
+| Component | chromium | firefox | webkit |
+|---|---|---|---|
+| `DzAccordion` | 3 · 0 | 3 · 0 | 3 · 0 |
+| `DzAnchor` | `scrollTo` ×1, `auto` | ×1, `auto` | ×1, `auto` |
+| `DzBlockUI` | 2 · 1 | 2 · 0 | 2 · 1 |
+| `DzColorModeToggle` | 1 · 0 | 1 · 0 | 1 · 0 |
+| `DzCommandPalette` | 2 · 0 | 2 · 0 | 2 · 0 |
+| `DzContextMenu` | 1 · 0 | 1 · 0 | 1 · 0 |
+| `DzDialog` | 2 · 3 | 2 · 0 | 2 · 3 |
+| `DzDropdownMenu` | 1 · 0 | 1 · 0 | 1 · 0 |
+| `DzPopconfirm` | 1 · 0 | 1 · 0 | 1 · 0 |
+| `DzPopover` | 1 · 0 | 1 · 0 | 1 · 3 |
+| `DzSheet` | 2 · 0 | 2 · 0 | 2 · 0 |
+| `DzSwitch` | 1 · 2 | 1 · 0 | 1 · 0 |
+| `DzTooltip` | 1 · 0 | 1 · 0 | 1 · 3 |
+| `DzTour` | 2 · 0 | 2 · 0 | 2 · 0 |
+
+Under the real reduced rule a governed animation lasts 0.01 ms, so whether a
+sampled frame catches one is timing-dependent; that is why the arm judges
+computed durations rather than counting, and why seed A2 — not this column — is
+the evidence the arm bites.
+
+### E2.3 Seeded proofs — the new assertion bites, the old one could not
+
+Every seed ran through a script that backs up the file, edits it, runs, and
+restores the original buffer in `finally`; SHA-256 of both touched files was
+checked unchanged afterwards (`sha256sum -c` OK).
+
+| Seed | Engine | Exit | Result |
+|---|---|---|---|
+| **A1 — break the channel**: `FORCED_MOTION_PREFERENCE` `'reduced'` → `'reduce'` (a value `dzMotionTestMode()` rejects) | chromium | **1** | `motion-policy.spec.ts` **14 failed / 0 passed**: 13× `DzX rendered no [data-dz-motion="reduce"] under __DZ_MOTION__=reduce: the provider did not resolve the forced motion policy to reduced`, and `DzAnchor scrolled with ["smooth"]` |
+| A1, the **old** `conditions.spec.ts` reduced-motion cell | chromium | **0** | **176 passed / 1 skipped** — blind to the broken channel |
+| A1 | firefox | **1** | 14 failed / 0 passed |
+| **A2 — keep the attribute, break the end state**: a 2 s `!important` duration on `[data-dz-motion="reduce"]` subtrees before the reveal | chromium | **1** | **8 failed / 6 passed**. Red: `DzAccordion` (`accordion-down`), `DzBlockUI`, `DzCommandPalette`, `DzDialog`, `DzPopover`, `DzSwitch`, `DzTooltip`, `DzTour` — each `still animates inside [data-dz-motion="reduce"]` |
+| A2 | webkit | **1** | 8 failed / 6 passed, the same eight |
+| every seed restored, unseeded | chromium | **0** | 14/14 |
+
+The six A2 survivors are not misses. `DzAnchor` is the script arm, which CSS
+cannot touch. `DzColorModeToggle` is not revealed. `DzContextMenu`,
+`DzDropdownMenu`, `DzPopconfirm` and `DzSheet` ran **no** governed animation in
+20 frames even at 2 s, because their `transition-*` utilities do not fire when a
+node is inserted: there is no enter motion to reduce. For those four the
+attribute arm is the one that counts, and seed A1 shows it biting on all four.
+Recorded as **D82**.
+
+## E3. D32(a) + D33(a) — `yarn validate:provider-defaults`
+
+Built on the existing machinery, not beside it: a validator in
+`packages/tooling/src/validators/` with a pure `check…()` the specs drive and a
+`tsx` CLI; a `…-ceilings.json` data file whose ratchet fails on a rise **and** on
+an unrecorded fall, the rule `component-meta-ceilings.json` and
+`page-contract-ceilings.json` already follow; a `//validate:…` comment key in
+`package.json`; one link in `validate:all`. It reads the **generated**
+`component-meta.json`, so it is **link 29 of 43**, straight after
+`validate:component-meta` (28) proves that artifact fresh and before
+`validate:llms` (30).
+
+| File | What |
+|---|---|
+| `packages/tooling/src/validators/provider-defaults.ts` (new, 465 lines) | **Clause 1 — D32(a).** Every `useDzDefaults` consumer in `providerHooks` (writers under `packages/core/src/providers/` excluded) must be mounted by a row of `adoptionCases` in `provider-adoption.spec.ts` that **can fail** — a non-empty `configured` map, a `classToken` or an `appearsWhenConfigured`. A row mounting a non-consumer is stale. The table must still be run by `describe.each(adoptionCases)`. Rows are read from source text by their `component:` field, not their title. **Clause 2 — D33(a).** Exclusions need a reason (≥ 20 characters), a real record, a declared axis, and a component that still does not resolve; the residual is ratcheted. `--all` lists the residual. |
+| `packages/tooling/src/validators/provider-defaults-ceilings.json` (new) | `residual.ceiling` **76**; three exclusions, each with a reason and a decision. |
+| `packages/tooling/src/validators/provider-defaults.spec.ts` (new) | **28** cases: every clause driven red with fabricated inputs, plus the real catalogue at zero violations and an exact partition invariant (`resolving + excluded + residual = canonical-axis`). No pinned count — the ceiling file holds the one number that moves. |
+| `packages/core/src/composables/provider/provider-adoption.spec.ts` | **+4 audit rows** (`DzButton`, `DzIconButton`, `DzCopyButton`, `DzToggleButton`), §E3.1. File 62 → **70** cases; provider suites 107 → **115**. |
+| `package.json` | `//validate:provider-defaults` + `validate:provider-defaults`; `validate:all` 42 → **43** links. |
+
+**"Canonical axis", defined so the hand count reproduces.** A prop named `size`,
+`tone` or `variant` whose type, minus `undefined`, is non-empty and not numeric.
+That rules out `DzQRCode.size: number` (a pixel count) and the bare `undefined`
+that `variant?: never` extracts to on `DzKnob`, `DzListbox` and `DzRating`.
+Measured from the artifact: **101** canonical-axis components · **22** resolving ·
+**79** unresolved — D33's hand numbers, reproduced exactly — · **3** excluded ·
+**76** residual, the ceiling. Counting by prop name alone gives 102 / 80; the one
+extra is `DzQRCode`.
+
+**Exclusions** — per axis, so a component is excluded only when every axis it
+declares is excluded:
+
+| Component | Axes | Decision | Reason (full text in the JSON) |
+|---|---|---|---|
+| `DzButtonGroup` | size · tone · variant | D31 | its axes are forwarded as group context, which `DzButton` reads ahead of the provider; resolving in the group would invert ADR-20 §6 |
+| `DzListItem` | tone | D33 | a per-row marker; the list-wide axes resolve on `DzList` and arrive through inject |
+| `DzTimelineItem` | tone | D33 | one event's status colour; size and orientation resolve on `DzTimeline` |
+
+### E3.1 What the gate found on its first run
+
+**exit 1** — four consumers with no audit row: `DzButton`, `DzCopyButton`,
+`DzIconButton`, `DzToggleButton`. These are the adopters that predate the table
+(sessions 1–2), covered only by the hand-written `defaults` block, which pins one
+attribute each. Rows added, each asserting the readers a root attribute cannot
+see: `DzButton`'s recipe height, `DzIconButton`'s square-footprint lookup map
+(`w-[…]`, which the shared recipe never emits), `DzCopyButton`'s icon-only recipe
+and its own `sm` literal, and `DzToggleButton`'s `tone`, which must stay
+**absent** with no provider. The new rows are not vacuous: seeding
+`DzIconButton`'s `squareSizeClass` back to `props.size` turned
+`provider-adoption.spec.ts` **exit 1, 2 failed / 68 passed**
+(`expected [ Array(19) ] to include 'w-[var(--dz-button-lg-height)]'`); restored,
+`cmp` exit 0.
+
+### E3.2 Seeded proofs of the gate (live CLI)
+
+Each seed backs up, mutates, runs `tsx …/provider-defaults.ts`, restores the
+original buffer (`Buffer.compare` identical), and re-runs to exit 0. SHA-256 of
+both touched files checked unchanged at the end.
+
+| Seed | Exit | Violation |
+|---|---|---|
+| delete the `DzToggleButton` row | **1** | `[audit-row] DzToggleButton calls useDzDefaults … and has no row in the raw-binding audit` |
+| keep that row but empty it (`configured: {}`, no `classToken`) | **1** | `[audit-row] DzToggleButton's raw-binding audit row asserts nothing` |
+| `describe.each(adoptionCases)` → `describe.skip.each` | **1** | `[audit-table] … no describe.each(adoptionCases) runs it` |
+| remove the `DzListItem` exclusion (a rise) | **1** | `[ratchet] The ADR-20 §6 residual ROSE 76 → 77` |
+| ceiling 76 → 77 (a fall nobody recorded) | **1** | `[ratchet] … residual FELL 77 → 76. Lower residual.ceiling …` |
+| blank `DzButtonGroup`'s reason | **1** | `[exclusion] exclusion DzButtonGroup (size, tone, variant) carries no reason` |
+| after every restore | **0** | — |
+
+The second seed exists because of a hole found while writing the first: a row
+that mounts a component and asserts nothing would have satisfied a presence
+check. The vacuity clause went in before the gate was called done.
+
+## E4. Focused validation — exact commands and exit codes
+
+All read from a log with `echo $?` straight after, never through a pipe.
+
+| Command | Exit | Result |
+|---|---|---|
+| `node node_modules/vitest/vitest.mjs run packages/tooling/src/validators/provider-defaults.spec.ts packages/core/src/composables/provider` | **0** | 3 files, **143/143** (28 gate + 45 `provider.spec` + 70 `provider-adoption.spec`) |
+| `yarn validate:provider-defaults` | **0** | 22 consumers · 22 audited · 101 / 22 / 79 / 3 / **76** (ceiling 76) |
+| `yarn typecheck` | **0** | |
+| `yarn lint` | **0** | |
+| `node node_modules/eslint/bin/eslint.js e2e/matrix/{motion-policy.spec,fixtures,conditions.spec}.ts playwright.config.ts` (outside the `lint` target) | **0** | after one `--fix` for `style/operator-linebreak` |
+| `node node_modules/typescript/bin/tsc --noEmit -p packages/tooling/tsconfig.json` | **2** | **12** errors, the pre-existing set (D78); **none** in the new files |
+| `yarn test:ssr` | not run | no provider or composable source changed — the brief's condition for it |
+
+## E5. Artifacts
+
+Nothing this session touched feeds a generated artifact: no component source,
+anatomy, story, token or manifest input changed. `component-meta.json` was read,
+not regenerated; `validate:component-meta` (link 28) confirms it is still fresh.
+No Playwright JSON was written to `test-results/`.
+
+## E6. Aggregate qualification
+
+```
+yarn validate:all   → VALIDATE_ALL_EXIT=1   (18:26–18:29)
+```
+
+It fails at **link 19 of 43, `validate:capability-matrix`**: `22 stale cell(s)`,
+`[tier-d] DzFileUpload … browser-matrix cell is unrun with no artifact`, and
+`[freshness] packages/core/docs/capability-matrix.json is stale` — **the
+pre-existing red TASK-R3-O4 recorded at link 19 of 42**, one link later in the
+count only because `provider-defaults` sits after it. Links **1–18 passed** inside
+the aggregate.
+
+> **Attribution, verified 2026-09-17 (§E12).** The ledger's ratchet board still
+> said **12** stale cells (bound to `99b963a`). The extra **10** are not from this
+> session or any dirty-tree packet: all 22 are `perf-baseline` cells, and staleness
+> is pure git history (`evidenceIsCurrent` = `merge-base --is-ancestor` of the
+> component's last commit vs the baseline's `sourceCommit` `4c9fb7a`). Commit
+> **`a01965f`** (2026-09-17 11:43, "land program-2026-09-04 R3/R5") touched every
+> component source, flipping `DzCalendar`, `DzCommandPalette`, `DzDataGrid`,
+> `DzDataView`, `DzMegaMenu`, `DzPersonaSelector`, `DzSidebar`, `DzTable`, `DzTour`,
+> `DzTree` from `pass` to `stale`. The committed `capability-matrix.json` still
+> records 12 (C 11 + D 1), which is most of its `freshness` failure; the rest is
+> the `visual-baselines` input note going 8 → 12 components, from TASK-R5-O4's
+> four text-stress fixtures. Nothing TASK-R5-O3 changed feeds this matrix. Links **20–43** were then run one by one, each to its own log, and
+**all exit 0**:
+
+```
+20 visual-baselines 0 · 21 tokens 0 · 22 tokens:refs 0 · 23 tokens:dtcg 0 · 24 tokens:schema 0
+25 exports 0 · 26 ownership 0 · 27 mcp 0 · 28 component-meta 0 · 29 provider-defaults 0
+30 llms 0 · 31 docs-pages 0 · 32 playground-parity 0 · 33 package-names 0 · 34 doc-snippets 0
+35 engines 0 · 36 adr-references 0 · 37 readme-facts 0 · 38 externals 0 · 39 dts 0
+40 changelog 0 · 41 release-policy 0 · 42 peers 0 · 43 licenses 0
+```
+
+**Not called green.**
+
+```
+yarn test   → YARN_TEST_EXIT=1   (18:44–18:51, 388.7 s)
+  Test Files  3 failed | 531 passed (534)
+  Tests       3 failed | 9975 passed | 4 skipped | 1 todo (9983)
+  Errors      695
+```
+
+The **three failures are the inherited set the brief names, and nothing else**:
+`story-dod-tiers > countOpen > subtracts a waiver`, `landing token fallbacks > every
+fallback matches the value its token resolves to`, and `dzup-resolution > the real
+repository > covers exactly the specifiers the packages declare` (the inline snapshot
+missing `high-contrast`). **All 695 unhandled errors** are
+`ReferenceError: requestAnimationFrame is not defined` attributed to
+`apps/landing/src/pages/AnimationsPage.v2.spec.ts` — the known load-dependent race
+(R3-O4 counted 656). Both new spec files ran green inside the full suite:
+`provider-adoption.spec.ts` 70 tests and `provider-defaults.spec.ts` 28 tests.
+**New red introduced by this packet: none.**
+
+## E7. Ratchet movements
+
+| Ratchet | Old | New | Bound to |
+|---|---|---|---|
+| `validate:all` links / first failing link | 42 / 19 | **43 / 19** — `provider-defaults` is link 29, after the failing one | `569d887` + dirty tree |
+| reduced-motion condition asserting the ADR-20 §7 policy through `__DZ_MOTION__` (lane consumers × engines) | 0 | **14 × 3**, derived from `providerHooks` | same |
+| `useDzDefaults` consumers with no raw-binding audit row | 4 (unmeasured until now) | **0**, gated | same |
+| ADR-20 §6 residual — canonical-axis components not resolving, net of argued exclusions | 79 of 101, hand-measured | **76**, generated ceiling | same |
+| provider suites (`provider.spec` + `provider-adoption.spec`) | 107 | **115** | same |
+
+## E8. Owner decisions
+
+**D32 and D33 are taken as option (a), under delegation** (the brief's
+instruction), and recorded as **D79** and **D80** in EXECUTION-STATUS. New
+decisions: **D81** (the shape of the motion browser lane — recommendation: keep
+it as built) and **D82** (four overlays with no enter motion — a design call).
+
+## E9. Ranked next packet
+
+1. **🟠 The defaults adoption tranche, against the new ceiling.** Start with the
+   16 three-axis form controls (§C6). Each adoption now meets a forcing function
+   from both sides: the gate fails until the component has an asserting audit
+   row, and fails again until `residual.ceiling` is lowered.
+2. **🟠 TASK-R0-O2 — ADR-20 acceptance**, using §4's table. D20-1's fix-code half
+   now has browser evidence on three engines, not only jsdom.
+3. **🟢 D82** — decide whether the four overlays get an enter motion; if they do,
+   the end-state arm becomes load-bearing for them with no spec change.
+4. **🟢 Persist a real matrix report** (`PLAYWRIGHT_JSON_OUTPUT=test-results/matrix-report.json`
+   over all 18 projects). Its absence is what keeps the capability matrix's
+   `browser-matrix` cells `unrun` and link 19 red. That belongs to TASK-R2-O1,
+   not here.
+
+## E10. `git status --short` at START and END
+
+| | Paths |
+|---|---|
+| **START** (before any edit, HEAD `569d887`) | **271** |
+| **END** (HEAD `569d887`, no commit) | **279** |
+
+`diff <(sort start) <(sort end)` → **+8 additions, 0 removals**:
+
+```
++  M e2e/matrix/conditions.spec.ts
++  M e2e/matrix/fixtures.ts
++  M packages/core/src/composables/provider/provider-adoption.spec.ts
++  M playwright.config.ts
++ ?? e2e/matrix/motion-policy.spec.ts
++ ?? packages/tooling/src/validators/provider-defaults.spec.ts
++ ?? packages/tooling/src/validators/provider-defaults.ts
++ ?? packages/tooling/src/validators/provider-defaults-ceilings.json
+```
+
+`package.json` was already dirty, and `docs/program-2026-09-04/` is untracked and
+collapses to one `??` line, so the handoff and ledger edits add none.
+
+> **Corrected, verified 2026-09-17 (§E12):** `docs/program-2026-09-04/` is
+> **tracked** (committed in `a01965f`), not untracked. `EXECUTION-STATUS.md` was
+> already ` M` from other packets, but this handoff was clean at HEAD (HEAD has §C8
+> and no Continuation 2026-09-17), so the session added a ninth path,
+> ` M docs/program-2026-09-04/reports/TASK-R5-O3-handoff.md`. Measured
+> `git status --short | wc -l` = **280**, i.e. **271 → 280, +9**, not 279 / +8. No
+`checkout`, `revert`, `stash` or `clean` was run. Every seeded edit (to
+`DzIconButton.vue`, `fixtures.ts`, `motion-policy.spec.ts`,
+`provider-adoption.spec.ts` and the ceilings file) was restored from a byte copy
+and verified with `cmp`, `Buffer.compare` or `sha256sum -c`. `DzIconButton.vue` is
+not in the added set because it was already dirty and its restored bytes equal its
+pre-seed bytes. Failure artifacts the seeded Playwright runs left in the ignored
+`test-results/` directory were deleted, so it is back to Playwright's own
+`.last-run.json`.
+
+## E11. Final state of TASK-R5-O3
+
+| Context / requirement | Before this session | Now |
+|---|---|---|
+| motion / direction / formats / testIds consumers | 17 / 16 / 2 / 88 | unchanged — closed in session 1 |
+| `useDzDefaults` consumers | 22 | 22 — unchanged; every one audited, gated |
+| `<motion_test_mode>` unit half | done (session 1) | done |
+| `<motion_test_mode>` browser half | "unrunnable" | **done** — the reduced-motion condition asserts through `__DZ_MOTION__` on 14 components × 3 engines, seeded red and restored |
+| D32 / D33 | open | **taken (a)** — D79 / D80, one gate at link 29 |
+
+**Task status: `[x]`.** What remains is outside this task's authority or its
+scope, by construction:
+
+1. **The five amend-ADR / open-question divergences (D20-5…D20-9)** — `[!owner]`,
+   decision **D28**.
+2. **The 76-component `defaults` residual** — the separately scoped adoption
+   tranche, now a generated ceiling instead of a hand-typed list.
+
+**Nothing in this session is CI, release or production evidence.** Every number
+above is a local run against a dirty worktree bound to `569d887` — *locally
+qualified* and browser-lane-qualified on this machine, and no further.
+
+## E12. Independent verification (2026-09-17)
+
+An adversarial re-check by an agent that did not write this work, same machine,
+same `569d887` + dirty tree, same `storybook-static` (12:45). Every exit code read
+from a log file, never through a pipe. **No source change resulted**; every seed
+was restored and checked with `sha256sum -c` (OK). Only this section, the three
+"verified 2026-09-17" notes above and the ledger annotations were written.
+
+| # | Claim | Verdict | Evidence |
+|---|---|---|---|
+| 1 | capability-matrix "22 stale cells, pre-existing" | **holds; attribution added** | `capability-matrix.ts --all` exit 1 lists 22 cells, **all `perf-baseline`**. Recomputed from git: at `99b963a` 12 of them were stale (the ledger's 12); at HEAD 22. The +10 (`DzCalendar`, `DzCommandPalette`, `DzDataGrid`, `DzDataView`, `DzMegaMenu`, `DzPersonaSelector`, `DzSidebar`, `DzTable`, `DzTour`, `DzTree`) are **commit `a01965f`** touching every component source after the `4c9fb7a` baselines. Staleness reads `git log` only, and `packages/core/perf/baselines.json` is clean, so **no dirty-tree packet (R5-O3, R5-O4, R3-O3, R3-O4) can move it**. A fresh-vs-committed cell diff shows exactly those 10 cells plus the `visual-baselines` input note (8 → 12 components, R5-O4's text-stress fixtures) |
+| 2 | `testIgnore` scopes only `motion-policy.spec.ts` | **holds** | `playwright test --list` with the current config vs `git show HEAD:playwright.config.ts` (a temporary sibling copy, deleted; real config hash unchanged): 3807 vs 4017. Per project, `chromium`/`firefox`/`webkit` **193 = 193**; the three `*-reduced-motion` **191 = 191**; the other 15 matrix projects **191 → 177**. The 210 missing entries are all `motion-policy.spec.ts` (15 × 14); **0** other tests differ |
+| 3 | `conditions.spec.ts` not weakened | **holds** | `git diff HEAD`: the comment block is rewritten and the inline `addInitScript` is replaced by `forceMotionPolicy(page)`, which writes the same `'reduced'`. The `getAnimations` assertion is untouched |
+| 4 | the motion assertion bites | **holds** | Seed A1 (`FORCED_MOTION_PREFERENCE` → `'reduce'`), chromium, whole `e2e/matrix`: **exit 1, 14 failed / 176 passed / 1 skipped** — all 14 motion-policy cells red (13 × "rendered no `[data-dz-motion="reduce"]`", `DzAnchor` "scrolled with `["smooth"]`"), and every `conditions.spec.ts` cell still green, so the old cell's blindness is confirmed too. Not vacuous: `MOTION_TARGETS` has 14 entries in every reduced-motion project. A throwaway diagnostic (deleted) listed the marked nodes before and after each reveal: for the nine overlays the attribute appears **only after** the reveal, on the revealed `content`/`panel`/`overlay`, so the page-wide locator is not satisfied by an unrelated node; `DzAccordion`, `DzBlockUI`, `DzColorModeToggle` and `DzSwitch` carry it on their own root/content from mount, which is correct |
+| 5 | the gate is real | **holds** | `yarn validate:provider-defaults` exit 0; `--all` prints 22 consumers · 101 / 22 / 79 / 3 / 76, computed by `measureResidual()` from `component-meta.json` (no constant except the ceiling). Seed: delete the `DzToggleButton` row → **exit 1** `[audit-row] DzToggleButton calls useDzDefaults … has no row`; restored, exit 0. Extra seed: `DzToggleButton.vue` `:data-tone="resolvedTone"` → `"tone"` → `provider-adoption.spec.ts` **1 failed / 69 passed** (its new row); restored. The three exclusions check out against source: `DzButton` resolves `[props.size, groupContext?.size.value]` before the provider (D31), `DzList`/`DzTimeline` resolve their axes through `useDzDefaults` and `provide` them, and the items' `tone` binds only that item's `data-tone` |
+| 6 | gates | **holds** | `yarn typecheck` **0** · `yarn lint` **0** · eslint on the 6 new/changed e2e + tooling files **0** · vitest `provider-defaults.spec.ts` + `composables/provider` **143/143** (28 + 45 + 70) · `tsc -p packages/tooling` exit 2 with **12** errors, **0** in the new files · reduced-motion lane on the final code: chromium 190/1, firefox + webkit 380/2, **570 / 3, exit 0** |
+| 7 | ledger/handoff counts | **two overclaims, corrected** | (a) the 570/3 lane figure was measured before the 20-frame fix; it now holds on the final code (§E2.2). (b) `git status` "271 → 279, +8" rested on `docs/program-2026-09-04/` being untracked; it is tracked, the handoff itself became ` M`, measured **280, +9** (§E10) |
+
+**Status I would stand behind: `[x]`** for the task's agent-actionable scope — the
+browser half of `<motion_test_mode>` and D32(a)/D33(a) are real and seeded red.
+`validate:all` remains red at link 19 for reasons outside this packet (above), and
+none of this is CI evidence.

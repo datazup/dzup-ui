@@ -374,3 +374,52 @@ because the last time anybody checked was long enough ago to matter.
 - **It does not price the work.** Nothing here carries an estimate, because an
   estimate for a migration blocked on a third party's release is a guess wearing
   a number.
+
+---
+
+## 11. Execution status (appended by TASK-R5-O9, 2026-09-18)
+
+This memo was written 2026-09-03 as a schedule, not a record. TASK-R5-O9 executed
+against it in three phases — **phase 1** (2026-09-17, discovery, baseline, probes),
+**phase 2** (2026-09-18, Track A), **phase 3** (2026-09-18, Track B). **Status
+column, bound to `569d887` + uncommitted work:**
+
+| Track | Memo's position (2026-09-03) | Status (2026-09-18) | Evidence |
+|---|---|---|---|
+| **A — Vitest** | 3.2.6 → **5.x**, blocked by `@storybook/addon-vitest` | **RETARGETED to 4.1.11, executed in full, then REFUSED and reverted byte-identically.** The Storybook blocker **does not exist for Vitest 4** (`addon-vitest@10.5.1` peers `vitest ^3 \|\| ^4`); Vitest **5** is blocked instead by `engines.node ^22.12.0` against the ADR-18 floor. Every functional gate returned identical, and `dist/` + all four tarballs were byte-identical; the refusal is **solely** the coverage ratchet — Vitest 4 makes v8 AST-aware remapping unconditional and four committed thresholds drop below their bars. Repair = an owner re-baseline (**D91**) | [`../../program-2026-09-04/reports/TASK-R5-O9-handoff.md`](../../program-2026-09-04/reports/TASK-R5-O9-handoff.md) §7 |
+| **B — Vite 8** | blocked by Track A | **BLOCKED behind D91 — not refused, and deliberately not attempted (phase 3, 2026-09-18).** The range was verified from `node_modules/vitest/package.json`, not quoted: `vitest@3.2.6` declares `vite` as a **dependency** `^5.0.0 \|\| ^6.0.0 \|\| ^7.0.0-0`, so `vite@8.3.0` is outside it and Vite 8 requires Vitest 4 — which is refused pending **D91**. Because it is a *dependency* and not a peer, the failure mode is **silent**: `yarn install` would exit 0 with no peer warning and leave `vite@8` building the packages while a nested `vite@7` transformed every test lane — trigger **B2**'s "two incompatible Vite majors in one tree", which no gate in this repository can detect (**D95**). `vite@8.3.0` is itself floor-compatible (`^20.19.0 \|\| >=22.12.0`) and **trigger B1 has not fired** — `vite@7.3.6` is the `previous` dist-tag, i.e. the 7.x line is still shipping, and every build-path plugin still admits `^7`; the one untested link is `vite-plugin-dts@4.5.4`'s `vite: "*"` peer (**D96**). **What phase 2 bought it for free:** all four classifiers this track needs are instrumented and proven — the dist hash manifest returned exact equality across a runner major (1,629 files, `diff` exit 0 on both `.tsv`), `validate:dts` 272/862, `validate:externals` 8 passed/1 skipped, `report:component-sizes` 206 / 1,110,232 B / 389,982 B | handoff **§8b**, **D95**, **D96** |
+| **B — tsdown** | "adoption, not upgrade", trigger **B3** | **REFUSED, dated and measured, 2026-09-18 (phase 3) — D85 option (a) taken.** Registry re-read on the day: `tsdown` `latest` is **0.23.0**, declaring `engines.node ^22.18.0 \|\| ^24.11.0 \|\| >=26.0.0` — *worse* than the 09-17 reading; 0.22.0 was the first release to break the floor; the newest floor-compatible release is **still 0.21.10 (2026-04-22, `>=20.19.0`)** with no later backport, carrying `rolldown@1.0.0-rc.17` (against `rolldown@1.2.9` current) and `rolldown-plugin-dts@^0.23.2`, whose peer `vue-tsc ~3.2.0` conflicts with this repo's **3.3.3** (and whose 0.23.x line is dead — `latest` 0.28.6). `validate:engines` could not catch the breach: `tsdown` is absent from its `GATE_DEPENDENCIES` (`['vite','vitest','eslint','tsx','typescript','jsdom','@playwright/test']`), so the gate would stay green while ADR-18's floor broke. **Trigger B3 re-tested, not assumed: `yarn validate:dts` exit 0, 272 `.js` / 862 `.d.ts`, 0 errors — it has not fired.** Re-evaluate only when (i) tsdown admits the declared floor, (ii) ADR-18 moves for an unrelated reason, or (iii) B3 fires | handoff **§8a**, **D85** |
+| **C — Nuxt floor** | event-driven | not attempted — out of TASK-R5-O9's `<scope>` | — |
+| **D — Vue 3.6** | advisory lane | unchanged in kind (`vue` 3.5.31 installed, 3.5.43 latest, rc 3.6.0-rc.8) | handoff §2a |
+| **E — `vue-component-meta` pin** | event-driven, never for currency | **not required** — TASK-R5-O8 closed the `DzAccordion` extraction gap without a toolchain move (**D51**) | R5-O8 handoff |
+| **F — docs size ceiling** | cheap, `[!owner]` | TASK-R1-O5's lane, unchanged | — |
+
+**Three of this memo's own facts were stale by 2026-09-17 and are corrected in
+the handoff §2a**, the largest being §3's twice-stated claim that *"ADR-12
+commits `dist/`, so a bundler swap rewrites committed bytes"* — **ADR-12 was
+corrected on 2026-09-04**; `dist/` is gitignored and no package's is tracked, so
+Track B's biggest stated cost does not exist and byte comparison needs a recorded
+hash manifest instead (which now exists at
+`../../program-2026-09-04/reports/TASK-R5-O9-baseline/`).
+
+**The memo's own HIGH-risk call for Track A was correct.** It said the coverage
+ratchet must be re-measured in the same change because a major can move measured
+coverage and CI will read it as a regression. That is exactly what happened, and
+it is the only thing that stopped the migration.
+
+**Track B is now closed to the extent this memo can close it** (phase 3,
+2026-09-18): tsdown is **refused** with a dated measurement and a three-condition
+re-evaluation trigger, and Vite 8 is **blocked behind one owner decision (D91)**
+rather than left as an open question. Both of the memo's Track-B trigger
+conditions were re-tested rather than assumed, and **neither has fired** — **B1**
+(Vite 7 leaving support, or a dependency dropping it) is contradicted by
+`vite@7.3.6` shipping after the installed 7.3.5, and **B3** (`vite-plugin-dts`
+blocking a `validate:dts` fix) is contradicted by `yarn validate:dts` exiting 0 at
+272 `.js` / 862 `.d.ts`. So Track B is not merely blocked — **nothing is asking for
+it.** Two corrections to this memo's Track-B text follow from phase 3 and are
+worth carrying: §3's *"Vitest and Vite move together: `vitest@3.2.6` is built
+against Vite 5–7"* is right about the range but understates the hazard, because
+`vite` is a **dependency** of vitest rather than a peer — the mismatch installs
+cleanly and splits the tree instead of failing (**D95**); and §3's cost list is
+one item lighter than it looks, since ADR-12 no longer commits `dist/` and the
+recorded hash manifest has now been proven against a real toolchain change.

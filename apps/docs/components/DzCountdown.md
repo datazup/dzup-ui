@@ -125,6 +125,9 @@ then the component's own default.**
 | Reader | What the provider supplies through it |
 | --- | --- |
 | `useDzDefaults` | per-component prop defaults (`size`, `variant`, `tone`, `density`) |
+| `useDzFormats` | number, date and currency formatting |
+| `useDzLocale` | the active locale |
+| `useDzMessages` | the translated string catalogue |
 
 ## Locale, direction and formats
 
@@ -134,7 +137,7 @@ direction. "Does it mirror?" has three defensible answers and only the component
 applies; leaving it undeclared is how a catalogue ends up mirroring some things and not
 others for no stated reason.
 
-**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+**Locale and formats.** Reads `useDzFormats`, `useDzLocale`, `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is not a requirement at this tier, so nothing measures it.
 
@@ -180,7 +183,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

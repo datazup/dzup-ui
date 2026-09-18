@@ -93,7 +93,7 @@ SHA-256 of the exact bytes these pages were rendered from:
 | `packages/core/docs/capability-matrix.json` | `561b7852a04d4f92…` | yes |
 | `packages/core/src/styles/base.css` | `ee7d5ca85e12a1ea…` | yes |
 
-Capability matrix `sourceCommit` `99b963a0` · quality matrix `99b963a0`.
+Capability matrix `sourceCommit` `99b963a0` · quality matrix `569d8872`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

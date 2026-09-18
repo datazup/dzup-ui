@@ -1,0 +1,29 @@
+{
+  "//": "TASK-R5-O3 continuation 2026-09-17 — owner decisions D32(a) and D33(a), taken under delegation. Read by `yarn validate:provider-defaults` (packages/tooling/src/validators/provider-defaults.ts), which measures everything from the GENERATED packages/core/docs/component-meta.json and never from a hand-kept list. Measured at 569d887 with the uncommitted working tree, over 209 records.",
+
+  "residual": {
+    "//": "ADR-20 §6 residual (D33): components declaring a canonical size/tone/variant axis that do not resolve it through useDzDefaults, minus the argued exclusions below. 101 components declare a canonical axis (a prop named size, tone or variant whose type, minus `undefined`, is neither empty nor numeric — DzQRCode's pixel `size: number` is not an axis); 22 resolve through the provider; 79 do not; 3 of those are excluded with a reason; 76 remain. The number TASK-R5-O3's third session quoted by hand as '79 of 101' is the `unresolved` count, reproduced exactly. It may only FALL: the gate fails when it rises AND when it falls without this ceiling being lowered. Lowering it is how the next adoption tranche (the 16 three-axis form controls named in handoff §C6) records its progress.",
+    "ceiling": 76
+  },
+
+  "exclusions": [
+    {
+      "component": "DzButtonGroup",
+      "axes": ["size", "tone", "variant"],
+      "decision": "D31",
+      "reason": "Precedence inversion. The group's axes default to undefined so they can be FORWARDED as group context, and DzButton reads group context at position 2 of its chain — ahead of the provider. Resolving in the group would let the shared axis outrank a child's per-component default: `defaults: { size: 'xs', DzButton: { size: 'lg' } }` would render xs buttons, inverting the rule ADR-20 §6 states. Both keys already reach every button through DzButton's own adoption."
+    },
+    {
+      "component": "DzListItem",
+      "axes": ["tone"],
+      "decision": "D33",
+      "reason": "Per-item data, not an application default. The item's `tone` marks ONE row (`<DzListItem active tone=\"primary\">`, bound only to that row's data-tone); the list-wide axes — size, variant and tone — are resolved by DzList, which adopted useDzDefaults, and reach every item through inject. A provider default here would paint every row of every list the same marker colour."
+    },
+    {
+      "component": "DzTimelineItem",
+      "axes": ["tone"],
+      "decision": "D33",
+      "reason": "Per-item data, not an application default. The item's `tone` is the status colour of one event's indicator (`<DzTimelineItem tone=\"success\">`), chosen per entry from the data it renders; size and orientation come from DzTimeline, which adopted useDzDefaults, through inject. The same shape as DzMeterGroup's per-value tone, which D27 deliberately did not route."
+    }
+  ]
+}

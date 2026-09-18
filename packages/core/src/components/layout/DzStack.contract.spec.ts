@@ -23,6 +23,35 @@ describe('dzStack -- Contract Spec v1', () => {
     expect(wrapper.classes()).toContain('flex-row')
   })
 
+  // -- Direction aliases (TASK-R3-O3) --
+
+  it('accepts `row` and `column` as additive aliases of `horizontal` and `vertical`', () => {
+    const pairs = [
+      ['row', 'horizontal', 'flex-row'],
+      ['column', 'vertical', 'flex-col'],
+    ] as const
+    for (const [alias, original, expected] of pairs) {
+      const viaAlias = mount(DzStack, { props: { direction: alias }, slots: { default: '<div>Item</div>' } })
+      const viaOriginal = mount(DzStack, { props: { direction: original }, slots: { default: '<div>Item</div>' } })
+      expect(viaAlias.classes(), alias).toContain(expected)
+      // The alias is the same component output, not a near-copy of it.
+      expect(viaAlias.classes().sort(), alias).toEqual(viaOriginal.classes().sort())
+    }
+  })
+
+  it('keeps every direction writing-mode relative under dir="rtl" — no -reverse, no physical spacing', () => {
+    for (const direction of ['vertical', 'horizontal', 'row', 'column'] as const) {
+      const host = mount({
+        components: { DzStack },
+        template: `<div dir="rtl"><DzStack direction="${direction}"><span>a</span><span>b</span></DzStack></div>`,
+      })
+      const classes = host.find('div > div').classes().join(' ')
+      expect(classes, direction).not.toMatch(/flex-(?:row|col)-reverse/)
+      expect(classes, direction).not.toMatch(/(?:^|\s)-?(?:ml|mr|pl|pr|left|right)-/)
+      expect(host.findAll('span').map(s => s.text()), direction).toEqual(['a', 'b'])
+    }
+  })
+
   it('accepts all canonical gap values', () => {
     const gaps = ['none', 'xs', 'sm', 'md', 'lg', 'xl'] as const
     for (const gap of gaps) {

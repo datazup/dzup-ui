@@ -127,6 +127,7 @@ export const COMPONENT_OWNERSHIP: Readonly<Record<string, OwnedComponent>> = {
   DzFormLabel: { from: '@dzup-ui/core', kind: 'compound-part' },
   DzFormMessage: { from: '@dzup-ui/core', kind: 'compound-part' },
   DzGrid: { from: '@dzup-ui/core', kind: 'public-component' },
+  DzGridItem: { from: '@dzup-ui/core', kind: 'compound-part' },
   DzHeading: { from: '@dzup-ui/core', kind: 'public-component' },
   DzIcon: { from: '@dzup-ui/core', kind: 'public-component' },
   DzIconButton: { from: '@dzup-ui/core', kind: 'public-component' },

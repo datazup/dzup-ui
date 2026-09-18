@@ -120,7 +120,7 @@ never as asserted.
 
 ## Playground
 
-Editable, running the **Multiple (chips)** story from `packages/core/stories/forms/DzTreeSelect.stories.ts` (lines 156–204) **verbatim**. Edits run in a sandbox; nothing here is saved.
+Editable, running the **Multiple (chips)** story from `packages/core/stories/forms/DzTreeSelect.stories.ts` (lines 158–206) **verbatim**. Edits run in a sandbox; nothing here is saved.
 
 <DzPlayground component="DzTreeSelect" />
 
@@ -177,8 +177,8 @@ different contracts rather than two spellings of one.
 <DzTreeSelect :value="value" @update:value="value = $event" />
 ```
 
-**Where each variant is shown.** 8 stories in
-`packages/core/stories/forms/DzTreeSelect.stories.ts`: `Single`, `Multiple (chips)`, `Checkbox propagation`, `Filterable`, `In FormField`, `Dark Mode Preview`, `Accessibility: Keyboard-Only Tree Combobox`, `Real World: Catalog Category Filter`.
+**Where each variant is shown.** 9 stories in
+`packages/core/stories/forms/DzTreeSelect.stories.ts`: `Single`, `Multiple (chips)`, `Checkbox propagation`, `Filterable`, `In FormField`, `Dark Mode Preview`, `Accessibility: Keyboard-Only Tree Combobox`, `Real World: Catalog Category Filter`, `Async Options: loading → ready → error → retry`.
 
 ## Parts, states and tokens
 
@@ -302,7 +302,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

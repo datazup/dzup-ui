@@ -100,7 +100,7 @@ never as asserted.
 
 ## Playground
 
-Editable, running the **Size Gallery** story from `packages/core/stories/forms/DzTransfer.stories.ts` (lines 109–130) **verbatim**. Edits run in a sandbox; nothing here is saved.
+Editable, running the **Size Gallery** story from `packages/core/stories/forms/DzTransfer.stories.ts` (lines 111–132) **verbatim**. Edits run in a sandbox; nothing here is saved.
 
 <DzPlayground component="DzTransfer" />
 
@@ -128,8 +128,8 @@ different contracts rather than two spellings of one.
 <DzTransfer :modelValue="value" @update:modelValue="value = $event" />
 ```
 
-**Where each variant is shown.** 12 stories in
-`packages/core/stories/forms/DzTransfer.stories.ts`: `Default`, `Size Gallery`, `Searchable`, `Disabled`, `Disabled Items`, `Invalid State`, `States`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Permission Assignment`, `Move Both Directions`.
+**Where each variant is shown.** 13 stories in
+`packages/core/stories/forms/DzTransfer.stories.ts`: `Default`, `Size Gallery`, `Searchable`, `Disabled`, `Disabled Items`, `Invalid State`, `States`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Permission Assignment`, `Move Both Directions`, `Async Options: loading → ready → error → retry`.
 
 ## Parts, states and tokens
 
@@ -252,7 +252,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

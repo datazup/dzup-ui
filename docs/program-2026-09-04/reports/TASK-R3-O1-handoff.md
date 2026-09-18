@@ -2,7 +2,12 @@
 
 **Status: `[!]` BLOCKED on Pro TASK-R1-P4.**
 **Commit observed: `99b963a`** (`main`, verified at start and end). Every number
-below is bound to that commit.
+in §0–§8 is bound to that commit.
+
+> **§9 (2026-09-18, `569d887`) is a later session** and supersedes §1.4: the two
+> latent defects F2 and F3 are **fixed and pinned**, and the collision list is
+> **not empty** — `CalendarView` already overlaps. Numbers in §9 are bound to
+> `569d887`. The block itself is unchanged.
 
 ## 0. Why this is blocked, and what was deliberately not run
 
@@ -88,11 +93,41 @@ count) must be filled in by whoever resumes this task after Pro TASK-R1-P4.
 
 ### 1.4 Collision list
 
-**Empty — but only provisionally, and only by proxy.** With no Pro manifest, no
+> **Superseded on 2026-09-18 (§9).** What follows was the state at `99b963a`;
+> the list is **not** empty, and the correction is below it.
+
+~~**Empty — but only provisionally, and only by proxy.** With no Pro manifest, no
 collision can be computed at `99b963a`. The last real measurement is the one
 recorded in `collision-decisions.json`: zero overlapping symbols between Core @
 `be76ddb` and Pro @ `origin/main`, on 2026-08-20. Core has moved since. This
-must be recomputed against the real Pro manifest before step 2 is called done.
+must be recomputed against the real Pro manifest before step 2 is called done.~~
+
+**Measured 2026-09-18 at `569d887`: one latent cross-tier collision,
+`CalendarView`.**
+
+Pro still emits no ownership manifest, so the collision cannot be computed from
+the two ownership manifests. It can be computed from the input Pro TASK-R1-P4
+will *derive* that manifest from — Pro's hand-maintained
+`packages/pro/manifests/public-api.manifest.json` — and that is the measurement
+that matters, because it says what will collide on the day the manifest lands.
+
+| Side | Fact | Evidence |
+|---|---|---|
+| Core | `CalendarView`, `kind: "type"`, `package: @dzup-ui/core`, subpath `.` | `packages/core/manifests/component-ownership.manifest.json` (`sourceCommit 569d887`, 1,336 entries); the entry's own evidence path is `packages/core/src/composables/useCalendar/useCalendar.ts` |
+| Pro | `CalendarView` is listed in `exports.types` (700 type names) | `../dzup-ui-pro/packages/pro/manifests/public-api.manifest.json#exports.types` |
+| Pro source | **no such export exists** | `grep -rn "\bCalendarView\b" ../dzup-ui-pro/packages/pro/src` → no match. The only real symbol is `EventCalendarView` (`packages/pro/src/components/planning/DzCalendar.types.ts`), which `\b` excludes |
+| Overlap size | **1** of 1,012 distinct Pro public-api symbols against 1,336 Core symbols | recomputed this session, read-only, both manifests |
+
+So the row looks **stale in Pro's hand-maintained manifest** — but Pro
+TASK-R1-P4 derives its ownership entries from exactly that manifest, so unless
+Pro drops the row first, the collision ships on day one of the Pro tier. That is
+a **pre-known output to file against Pro TASK-R1-P4**, not an OSS defect:
+`CalendarView` would be withheld from `COMPONENT_OWNERSHIP` (it is a `type`, so
+no runtime row is lost — but the collision still fails the gates added in §9).
+
+Not resolved here, and deliberately: `collision-decisions.json` awards a winning
+tier, and naming a winner is an owner act. The file's `$comment` now records the
+measurement instead of the superseded "zero overlapping symbols" claim.
 
 ### 1.5 Resolver and Nuxt module — Pro-absent behaviour
 
@@ -513,3 +548,188 @@ arbitrate it.
    next agent is not chasing a check that cannot pass.
 6. **TASK-R1-O2** — its pack-freshness gate is the permanent fix for N5-04 F10,
    which step 4 currently has to work around by hand.
+
+---
+
+## 9. Session 2026-09-18 — F2 and F3 fixed, the collision list corrected
+
+**Commit observed: `569d887`** (`main`, 0 ahead / 0 behind `origin/main`).
+**The working tree is dirty with several other packets' uncommitted work**
+(1,100+ modified files at session start, including `apps/docs/`, the generated
+ownership artifacts and `packages/core/manifests/`). Nothing of it was touched,
+reverted, stashed or regenerated. No commit, push or publish.
+
+**The block is unchanged.** `../dzup-ui-pro/packages/pro/manifests/` still holds
+only `html-sinks`, `public-api` and `risk-tiers` — no
+`component-ownership.manifest.json`, and Pro has no ownership generator at all.
+Steps 2, 4 and 5 remain unexecuted; `OWNERSHIP_TIERS` is still `['core']`.
+
+What *was* done is the work that does not need the Pro manifest: **the two
+latent defects §2 reported (D4) are fixed and pinned**, because they sit in the
+code that runs the moment the manifest lands, and D4's own recommendation —
+"fold them into step 2" — assumed step 2 was imminent. It is now three sessions
+old. Fixing them blind was the objection; that objection is answered by the
+fixture-driven specs below, which exercise both paths against a real Pro-shaped
+manifest without a Pro checkout.
+
+### 9.1 Files changed
+
+| File | Change |
+|---|---|
+| `packages/tooling/src/ownership/build-ownership-map.ts:225-234` | New exported `unresolvedCollisions(collisions)`. One predicate for the `'unresolved'` literal, now shared by three call sites; `:284` (the CLI) uses it in place of its inline filter. No behaviour change. |
+| `packages/tooling/src/ownership/generate-ownership-manifest.ts:75-124` | **F2 + F3.** `buildRuntimeLookup` takes a third parameter, `decisions: CollisionDecisions = readCollisionDecisions()`, and passes it to `buildOwnershipMap` (F2); it returns `collisions: MapCollision[]` alongside `source`/`tiers`/`problems` (F3). The default reads the same `collision-decisions.json` the sibling CLI reads; the parameter exists so a spec can drive it without editing the real file. |
+| `packages/tooling/src/ownership/generate-ownership-manifest.ts:578-603` | **F3, CLI.** Prints `✗ collision: <symbol> is exported by <tiers>. It is absent from the runtime lookup and resolves to null until collision-decisions.json records a tier and the ADR that decided it.` for each unresolved collision, then `process.exit(unresolved.length + problems.length > 0 ? 1 : 0)` — the same exit condition as `build-ownership-map.ts:295`. The command previously exited 0 unconditionally. Drift notes stay non-fatal (47 are open by design). |
+| `packages/tooling/src/validators/ownership-manifest.ts:158-232` | **F3, gate.** `checkRuntimeLookup` gains two overridable parameters (`lookupPath`, `proManifestPath`) in the style `validateOwnershipManifest(manifestPath)` already documents, and raises one `runtime-lookup` violation per unresolved collision. Freshness alone cannot see one: the colliding name is omitted from *both* the committed and the regenerated table, so they agree. |
+| `packages/tooling/src/ownership/emit-runtime-lookup.spec.ts` | **New, 21 tests.** `buildRuntimeLookup` and `emit-runtime-lookup.ts` had zero coverage. |
+| `packages/tooling/src/validators/ownership-manifest.spec.ts:330-384` | **+4 tests** (36 → 40): the collision gate, the fresh-Pro control, drift-reported-separately, and the missing-input branch. |
+| `packages/tooling/src/ownership/collision-decisions.json` | `$comment` rewritten: the "zero overlapping symbols, verified 2026-08-20" claim is superseded by the 2026-09-18 measurement in §1.4. **No decision entry added** — awarding a tier is an owner act. |
+| `packages/tooling/src/ownership/__fixtures__/collision.pro.manifest.json` | Same stale claim in its `$comment`, same correction. |
+| `packages/tooling/src/ownership/build-ownership-map.spec.ts:169-176` | The spec title `'is checked in and empty while no real Core/Pro name collides'` asserted the same stale fact. Retitled and annotated; the assertion (`decisions === {}`) is unchanged and still correct. |
+| `docs/program-2026-09-04/reports/TASK-R3-O1-handoff.md` | §1.4 superseded with the measured collision; this section. |
+
+No `packages/core` source, no generated artifact, and nothing in
+`ui/dzup-ui-pro` was modified. The three generated ownership artifacts were last
+written **2026-09-17 13:51** by another session and still carry that mtime — the
+generator was only ever run with `--check`.
+
+### 9.2 What each defect would have caused in production
+
+**F3 — a component name deleted from the resolver with every gate green.**
+`buildOwnershipMap` puts unresolved collisions in `map.collisions`, never in
+`problems`, and excludes them from `symbols`. `buildRuntimeLookup` returned only
+`{ source, tiers, problems }`, so the row vanished from `COMPONENT_OWNERSHIP`
+and *nothing* said why: the generator printed nothing and exited 0, and
+`checkRuntimeLookup` compared a committed file that had dropped the name against
+a regenerated file that had dropped the name — identical, therefore fresh. The
+Nuxt module registers only what the table contains, so a consumer writing
+`<DzX />` gets an unresolved component: a silent `Dz*` import that resolves to
+nothing, which is the precise failure this whole task exists to eliminate, one
+level up. It was reachable the first time any Core and Pro name overlapped —
+and §1.4 now shows one already does.
+
+**F2 — two artifacts disagreeing about the same decision.**
+`generate:ownership:map` passed `readCollisionDecisions()`;
+`generate:ownership`, the command that writes the file the resolver actually
+reads, did not. An owner recording `{"DzX": {"tier": "core", "adr": "…"}}` would
+have seen the map honour it and the runtime table ignore it — the symbol
+withheld from the resolver by a decision that says it belongs to Core. The
+reviewable-reasoning contract the file exists for would have been reviewable and
+inert.
+
+**Demonstrated end to end, this session** (`--check`, nothing written; a
+synthetic schema-1.1.0 Pro manifest carrying the *real* latent `CalendarView`
+overlap from §1.4):
+
+```
+$ DZUP_PRO_OWNERSHIP_MANIFEST=<clean synthetic pro> tsx …/generate-ownership-manifest.ts --check
+✓ runtime lookup → packages/core/src/generated/component-ownership.ts (tiers: core, pro)     exit 0
+
+$ DZUP_PRO_OWNERSHIP_MANIFEST=<synthetic pro with CalendarView> tsx …/generate-ownership-manifest.ts --check
+✓ runtime lookup → packages/core/src/generated/component-ownership.ts (tiers: core, pro)
+✗ collision: CalendarView is exported by core and pro. It is absent from the runtime
+  lookup and resolves to null until collision-decisions.json records a tier and the
+  ADR that decided it.                                                                       exit 1
+```
+
+Before this session the second run also printed `✓ … (tiers: core, pro)` and
+exited **0**.
+
+### 9.3 Seed-and-prove
+
+Both fixes were proven to bite by seeding the pre-fix behaviour back in and
+re-running, then restoring byte-identically:
+
+| Seed | Result |
+|---|---|
+| `buildRuntimeLookup` reverted to `buildOwnershipMap(inputs)` + `collisions: []` | `emit-runtime-lookup.spec.ts` **exit 1 — 5 failed / 16 passed** (the one F3 assertion and all four F2 assertions). The "withholds the colliding name" spec passes in both, correctly: that half of the defect is the *intended* fail-closed behaviour, and its silence was the bug. |
+| validator's collision loop neutralised | `ownership-manifest.spec.ts` **exit 1 — 1 failed / 39 passed** ("fails on an unresolved collision, which freshness alone cannot see"). |
+| both restored | 21/21 and 40/40, exit 0. |
+
+### 9.4 Gate results — every exit code read directly from `$?`, never through a pipe
+
+| Command | Baseline before | After | Verdict |
+|---|---|---|---|
+| `node node_modules/vitest/vitest.mjs run packages/tooling/src/ownership packages/nuxt/src` | **0** — 8 files / 178 tests | **0** — **9 files / 199 tests** | +1 file, **+21 tests** |
+| `node node_modules/vitest/vitest.mjs run packages/tooling/src/validators/ownership-manifest.spec.ts` | 0 — 36 tests | **0** — **40 tests** | +4. *Not covered by the command above*, which globs `src/ownership` only |
+| `node node_modules/tsx/dist/cli.mjs packages/tooling/src/validators/ownership-manifest.ts` | **0** | **0** | 1,336 entries fresh, runtime lookup in sync, 29/29 unclassified, 41/41 without anatomy |
+| `node node_modules/tsx/dist/cli.mjs …/generate-ownership-manifest.ts --check` | 0 | **0** | `tiers: core`; 47 drift notes (pre-existing, non-fatal by design) |
+| `yarn typecheck` | 0 | **0** | clean |
+| `yarn lint` | 0 | **0** | clean, `--max-warnings 0` over `packages/ apps/` |
+| `node node_modules/typescript/bin/tsc --noEmit -p packages/tooling/tsconfig.json` | — | **2** — **12** errors | **pre-existing, and none in a file this session touched** (`anatomy-source{,.spec}`, `perf-bench.spec`, `playground.spec`, `accept-visual-baseline`, `story-dod-triage`, `at-matrix.spec`, `component-meta.spec`, `story-dod-tiers.spec`, `vendor-sublayers.spec`). Note the program's standing figure for this lane is **7**; it is 12 in this tree, which is dirty with three other packets |
+
+`yarn validate:all`, `yarn test`, `build`, `storybook:*` and the e2e lanes were
+**not** run: nothing here touches a link of the aggregate other than
+`validate:ownership`, which was run directly and is green. The aggregate is not
+claimed green — its documented red at `99b963a` (link 16, capability-matrix)
+stands.
+
+### 9.5 Ratchet movements (old → new)
+
+| Ratchet | Before | After |
+|---|---|---|
+| Specs covering `buildRuntimeLookup` / `emit-runtime-lookup.ts` | **0** | **21** |
+| `packages/tooling/src/ownership` + `packages/nuxt/src` suite | 8 files / 178 tests | **9 files / 199 tests** |
+| `validators/ownership-manifest.spec.ts` | 36 tests | **40 tests** |
+| Exit code of `generate:ownership` on an unresolved collision | **0** (silent) | **1**, with the symbol and both tiers named |
+| `validate:ownership` violations on an unresolved collision | **0** | **1 per collision** |
+| Collision decisions honoured by `generate:ownership` | **none** — argument never passed | the checked-in file, same as `generate:ownership:map` |
+| Known cross-tier collisions | "zero, verified 2026-08-20" | **1 — `CalendarView`, measured 2026-09-18** (§1.4) |
+| `OWNERSHIP_TIERS` | `['core']` | `['core']` — **unmoved, still blocked** |
+| 1.0 exit criterion **C7** | "Core half done" | **"Core half done"** — unmoved |
+
+### 9.6 Owner decisions
+
+**D4 is closed** — taken as option (a) minus the "only inside step 2" clause:
+both fixes landed, exercised against fixture Pro manifests rather than against a
+Pro manifest that does not exist. D1, D2, D3 and D5 remain open as written.
+
+**D6 (new) — recording the first collision decision will turn every Pro-less
+checkout red, and the culprit is not the collision.**
+Now that `generate:ownership` reads `collision-decisions.json`, a decision
+recorded there is evaluated on *every* run — including the Core-only runs that
+are all this repository can do today and all CI can do. With one tier there are
+no collisions by construction, so `buildOwnershipMap:186-193` reports the
+decision as one that "resolves no collision", `problems` gains an entry, and
+both `generate:ownership` and `validate:ownership` fail. The dead-decision
+report is right in general (it stops the file accreting entries that outlive
+their conflict) and wrong for this case.
+
+- *(a)* Scope the dead-decision report to inputs that could collide — i.e. skip
+  it when fewer than two tiers were merged. Small, and it keeps the report's
+  purpose intact for the multi-tier case.
+- *(b)* Vendor the Pro manifest into OSS (**D3 option (a)**), so every checkout
+  merges two tiers and the question disappears.
+- *(c)* Accept it: record no decision until the Pro manifest is vendored.
+- **Recommendation: (a) now, (b) as the real fix.** (a) is ~3 lines in
+  `build-ownership-map.ts` and is not this task's to take — it changes the
+  semantics of a report an owner reads. Until one of them is chosen, **do not
+  record a decision for `CalendarView`**, which is the other reason §1.4 leaves
+  it open.
+
+**D7 (new) — `CalendarView` in Pro's `public-api.manifest.json` looks like a
+stale row; file it against Pro TASK-R1-P4 before that task derives from it.**
+Core owns `CalendarView` as a `type`
+(`packages/core/src/composables/useCalendar/useCalendar.ts`). Pro lists it in
+`exports.types` but no Pro source exports it — the real symbol is
+`EventCalendarView`. Pro TASK-R1-P4 derives its ownership entries from that
+manifest, so the stale row becomes a real cross-tier collision the day the
+manifest lands, and the gates added in §9.1 will (correctly) fail on it.
+
+- *(a)* Pro drops the row from `public-api.manifest.json` — the collision never
+  exists. **Recommended**, if the row is indeed stale.
+- *(b)* Pro genuinely re-exports Core's `CalendarView`; then it is a legitimate
+  re-export and an owner records a decision naming Core as the winner (subject
+  to D6).
+- The determination is Pro's to make; this repository has no authority over
+  Pro's manifest and did not touch it.
+
+### 9.7 Ranked next packet
+
+1. **[owner] Run Pro TASK-R1-P4** (D1, open across four sessions now) — and
+   resolve **D7** while doing it, since that task is the one reading the row.
+2. **Resume step 2** — regenerate with `DZUP_PRO_OWNERSHIP_MANIFEST`, diff twice
+   for determinism, run `validate:ownership` with the env var exported. F2/F3
+   are no longer part of it.
+3. **[owner] Decide D3, then D6** — in that order: D3 option (a) makes D6 moot.
+4. **Steps 4–5** unchanged (build both repos before packing — N5-04 F10).
+5. **Correct the `<done_check>`** per D2.

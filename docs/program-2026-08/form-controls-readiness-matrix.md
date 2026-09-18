@@ -22,11 +22,11 @@
 
 | Verdict | Count | Meaning |
 | --- | ---: | --- |
-| ✅ pass | 278 | satisfies the clause today |
+| ✅ pass | 280 | satisfies the clause today |
 | ⛔ gap | 0 | fails the clause; work for TASK-FORM-OSS-02 |
-| 🕓 future | 5 | the seam does not exist yet; work for TASK-FORM-OSS-03 |
+| 🕓 future | 0 | the seam does not exist yet; work for TASK-FORM-OSS-03 |
 | ◻ unrun | 20 | the check exists and has not been run for this control |
-| – n-a | 93 | the clause does not apply to this kind of control |
+| – n-a | 96 | the clause does not apply to this kind of control |
 
 | Clause | | ✅ | ⛔ | 🕓 | ◻ | – |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
@@ -38,7 +38,7 @@
 | C6 | RTL | 37 | 0 | 0 | 7 | 0 |
 | C7 | motion | 5 | 0 | 0 | 0 | 39 |
 | C8 | keyboard | 30 | 0 | 0 | 3 | 11 |
-| C9 | async | 8 | 0 | 5 | 5 | 26 |
+| C9 | async | 10 | 0 | 0 | 5 | 29 |
 
 ## Pro may rely on today
 
@@ -52,6 +52,7 @@
 - `DzTextarea`
 - `DzCascader`
 - `DzCheckbox`
+- `DzCheckboxGroup`
 - `DzColorPicker`
 - `DzCombobox`
 - `DzDatePicker`
@@ -61,13 +62,17 @@
 - `DzInplace`
 - `DzKnob`
 - `DzListbox`
+- `DzMention`
 - `DzMultiSelect`
+- `DzPersonaSelector`
 - `DzRadio`
+- `DzRadioGroup`
 - `DzRangeSlider`
 - `DzRating`
 - `DzSelect`
 - `DzSlider`
 - `DzSwitch`
+- `DzTagsInput`
 - `DzTimePicker`
 - `DzTransfer`
 - `DzTreeSelect`
@@ -93,7 +98,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `DzCascader` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled, Invalid |
 | `DzCheckbox` | boolean | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
-| `DzCheckboxGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — renders whatever children it is given rather than an option list of its own, so the seam belongs on a future group that takes options | ✓/·/✓ | Disabled |
+| `DzCheckboxGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled |
 | `DzColorPicker` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
 | `DzCombobox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Loading, Invalid |
 | `DzDatePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled, Invalid |
@@ -108,17 +113,17 @@
 | `DzInplace` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
 | `DzKnob` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Readonly |
 | `DzListbox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled |
-| `DzMention` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — has a loading prop and its own suggestion menu; wiring it to the shared seam needs the menu to render the state rows, which is a bigger change than the six selection controls took | ✓/·/✓ | Invalid |
+| `DzMention` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Invalid |
 | `DzMultiSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
-| `DzPersonaSelector` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — the DzCombobox it delegates to now has the seam, but this control declares none of the props and so cannot forward them — a pass-through, not a reimplementation | ✓/·/✓ | Disabled |
+| `DzPersonaSelector` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled |
 | `DzRadio` | boolean | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
-| `DzRadioGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — same as DzCheckboxGroup — the radios are children, not an option list this control owns | ✓/✓/✓ | Disabled |
+| `DzRadioGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
 | `DzRangeSlider` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled |
 | `DzRating` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Readonly |
 | `DzSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
 | `DzSlider` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
 | `DzSwitch` | boolean | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
-| `DzTagsInput` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | 🕓 future — has no suggestion source at all today; the seam lands when one does | ✓/·/✓ | Disabled, Invalid |
+| `DzTagsInput` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
 | `DzTimePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
 | `DzTransfer` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled, Invalid |
 | `DzTreeSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | — |
@@ -157,14 +162,9 @@ No open gaps.
 
 ## Deferred to TASK-FORM-OSS-03
 
-5 cells wait on a seam Core does not have. They are listed as `future` rather than
+0 cells wait on a seam Core does not have. They are listed as `future` rather than
 `gap` because no amount of work on the control alone closes them.
 
 | Control | Clause | Missing |
 | --- | --- | --- |
-| `DzCheckboxGroup` | C9 | renders whatever children it is given rather than an option list of its own, so the seam belongs on a future group that takes options |
-| `DzMention` | C9 | has a loading prop and its own suggestion menu; wiring it to the shared seam needs the menu to render the state rows, which is a bigger change than the six selection controls took |
-| `DzPersonaSelector` | C9 | the DzCombobox it delegates to now has the seam, but this control declares none of the props and so cannot forward them — a pass-through, not a reimplementation |
-| `DzRadioGroup` | C9 | same as DzCheckboxGroup — the radios are children, not an option list this control owns |
-| `DzTagsInput` | C9 | has no suggestion source at all today; the seam lands when one does |
 

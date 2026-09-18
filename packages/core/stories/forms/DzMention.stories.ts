@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import type { DzMentionOption } from '../../src/components/forms'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { DzButton } from '../../src/components/buttons'
 import { DzMention } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
+import { createMockOptionsHost, walkAsyncOptionsStates } from '../_shared/asyncOptionsHost.ts'
 
 const users = [
   { label: 'Alice Johnson', value: 'alice', role: 'Designer' },
@@ -709,5 +712,73 @@ export const RealWorldCommentComposer: Story = {
     await expect(canvas.getByTestId('mn-thread')).toHaveTextContent('@Carol Williams')
     await expect((box as HTMLTextAreaElement).value).toBe('')
     await expect(submit).toBeDisabled()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Async options (renderer contract C9, TASK-R3-O3)
+// ---------------------------------------------------------------------------
+
+const asyncPeople: DzMentionOption[] = [
+  { label: 'Ada Lovelace', value: 'ada' },
+  { label: 'Grace Hopper', value: 'grace' },
+  { label: 'Katherine Johnson', value: 'katherine' },
+]
+
+const mentionHost = createMockOptionsHost(asyncPeople, (person, query) =>
+  person.label.toLowerCase().includes(query.toLowerCase()))
+
+/**
+ * Suggestions from a remote source, through the shared `useAsyncOptions` seam
+ * that DzMention joined in TASK-R3-O3.
+ *
+ * With `options-state` set, each trigger token emits `load-options` (with an
+ * `AbortSignal`) and the host writes its answer into the trigger's `options`;
+ * Core never fetches. The host here is a mock with no network and no timers, so
+ * `play()` walks loading → ready → error → retry deterministically — and the
+ * buttons let you do it by hand while the menu is open.
+ */
+export const AsyncOptions: Story = {
+  name: 'Async Options: loading → ready → error → retry',
+  render: () => ({
+    components: { DzMention, DzButton },
+    setup() {
+      mentionHost.reset()
+      return { host: mentionHost }
+    },
+    template: `
+      <div class="space-y-3 max-w-md">
+        <DzMention
+          :triggers="[{ char: '@', options: host.items.value }]"
+          :options-state="host.state.value"
+          :options-error="host.error.value"
+          placeholder="Type @ to mention someone"
+          aria-label="Comment"
+          @load-options="host.onLoadOptions"
+          @retry-options="host.onRetryOptions"
+        />
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Mock host">
+          <DzButton size="sm" variant="outline" @mousedown.prevent @click="host.resolve()">Resolve</DzButton>
+          <DzButton size="sm" variant="outline" @mousedown.prevent @click="host.fail()">Fail</DzButton>
+          <DzButton size="sm" variant="outline" @mousedown.prevent @click="host.reload()">Reload</DzButton>
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]" data-testid="host-log">
+          state: {{ host.state.value }} · requests: {{ host.requests.value }} · retries: {{ host.retries.value }}
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement)
+    await walkAsyncOptionsStates({
+      host: mentionHost,
+      root: canvasElement,
+      open: async () => {
+        await userEvent.click(canvas.getByRole('combobox'))
+        await userEvent.keyboard('@')
+      },
+      expectOptions: () => waitFor(() => expect(canvas.getByRole('option', { name: 'Ada Lovelace' })).toBeVisible()),
+      step,
+    })
   },
 }

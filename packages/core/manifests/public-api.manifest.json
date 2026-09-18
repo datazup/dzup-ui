@@ -72,6 +72,7 @@
         "exports": [
           "DzContainer",
           "DzGrid",
+          "DzGridItem",
           "DzFlex",
           "DzStack",
           "DzDivider",
@@ -365,6 +366,12 @@
         "exports": [
           "useRevealAndFocus"
         ]
+      },
+      "i18n": {
+        "path": "./src/i18n/index.ts",
+        "exports": [
+          "useDzMessageFormat"
+        ]
       }
     },
     "providers": {
@@ -646,6 +653,10 @@
       "GridCols",
       "LayoutGap",
       "ResponsiveCols",
+      "DzGridItemProps",
+      "DzGridItemSlots",
+      "GridSpan",
+      "ResponsiveSpan",
       "GridVariantProps",
       "DzFlexProps",
       "DzFlexSlots",
@@ -1048,7 +1059,9 @@
       "DzProviderProps",
       "DzProviderSlots",
       "DzProviderThemeOptions",
-      "DzProviderDefaults"
+      "DzProviderDefaults",
+      "DzCoreMessageGroup",
+      "DzMessageFormatter"
     ]
   }
 }

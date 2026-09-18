@@ -216,6 +216,8 @@ then the component's own default.**
 | Reader | What the provider supplies through it |
 | --- | --- |
 | `useDzDirection` | the document writing direction |
+| `useDzLocale` | the active locale |
+| `useDzMessages` | the translated string catalogue |
 | `useDzTestIds` | the test-id attribute name and prefix |
 
 ## Locale, direction and formats
@@ -226,7 +228,7 @@ then the component's own default.**
 | `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
 | `icons` | — | No icon on this component carries direction, so none is mirrored. |
 
-**Locale and formats.** Reads `useDzDirection` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+**Locale and formats.** Reads `useDzDirection`, `useDzLocale`, `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzRating.anatomy.ts`.
 
@@ -275,7 +277,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

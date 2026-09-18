@@ -8,7 +8,9 @@ import type {
 } from './DzCountdown.types.ts'
 import { computed, ref, useAttrs, watch } from 'vue'
 import { useDzDefaults } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzFormats } from '../../composables/provider/useDzFormats.ts'
 import { formatRemaining, useCountdown } from '../../composables/useCountdown/index.ts'
+import { useComponentMessageFormat } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { countdownVariants } from './DzCountdown.variants.ts'
 
@@ -109,18 +111,26 @@ const slotProps = computed(() => ({ remaining: remaining.value, formatted: forma
 const liveLabel = ref('')
 let lastWholeSecond = -1
 
+// Count-bearing announcement (TASK-R5-O4). Each unit was a concatenated
+// English plural; the units are now catalog messages on Intl.PluralRules and
+// the list is joined by Intl.ListFormat, whose `unit`/`long` style is exactly
+// the ", " English joined with — and "1 Tag, 2 Stunden und 3 Sekunden" in German.
+const dzFormat = useComponentMessageFormat('DzCountdown')
+const dzFormats = useDzFormats()
+
 function humanize(parts: CountdownRemaining): string {
   if (parts.total <= 0)
-    return 'Countdown finished'
+    return dzFormat('finished', {})
   const segments: string[] = []
   if (parts.days)
-    segments.push(`${parts.days} day${parts.days === 1 ? '' : 's'}`)
+    segments.push(dzFormat('days', { count: parts.days }))
   if (parts.hours)
-    segments.push(`${parts.hours} hour${parts.hours === 1 ? '' : 's'}`)
+    segments.push(dzFormat('hours', { count: parts.hours }))
   if (parts.minutes)
-    segments.push(`${parts.minutes} minute${parts.minutes === 1 ? '' : 's'}`)
-  segments.push(`${parts.seconds} second${parts.seconds === 1 ? '' : 's'}`)
-  return `${segments.join(', ')} remaining`
+    segments.push(dzFormat('minutes', { count: parts.minutes }))
+  segments.push(dzFormat('seconds', { count: parts.seconds }))
+  const duration = dzFormats.list({ type: 'unit', style: 'long' }).format(segments)
+  return dzFormat('remaining', { duration })
 }
 
 watch(

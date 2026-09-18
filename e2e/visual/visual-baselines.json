@@ -1,8 +1,58 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "scope": {
     "families": [
       "buttons"
+    ],
+    "fixtures": [
+      {
+        "id": "text-stress-cjk",
+        "family": "buttons",
+        "story": "compositions-localisation-text-stress--cjk",
+        "source": "packages/core/stories/compositions/i18n/TextStress.stories.ts",
+        "components": [
+          "DzButton",
+          "DzSplitButton",
+          "DzToggleButton"
+        ],
+        "note": "TASK-R5-O4. Japanese, Simplified Chinese and Korean labels in a 16rem frame: no break opportunities, full-width glyphs, a fallback face."
+      },
+      {
+        "id": "text-stress-combining-marks",
+        "family": "buttons",
+        "story": "compositions-localisation-text-stress--combining-marks",
+        "source": "packages/core/stories/compositions/i18n/TextStress.stories.ts",
+        "components": [
+          "DzButton",
+          "DzSplitButton",
+          "DzToggleButton"
+        ],
+        "note": "TASK-R5-O4. Vietnamese, Devanagari, Thai and stacked Latin combining marks: glyphs taller than the line box, graphemes a naive truncation splits."
+      },
+      {
+        "id": "text-stress-long-run-4096",
+        "family": "buttons",
+        "story": "compositions-localisation-text-stress--long-run-4096",
+        "source": "packages/core/stories/compositions/i18n/TextStress.stories.ts",
+        "components": [
+          "DzButton",
+          "DzSplitButton",
+          "DzToggleButton"
+        ],
+        "note": "TASK-R5-O4. One unbroken 4,096-character word: does the control wrap, clip or blow out its container."
+      },
+      {
+        "id": "text-stress-pseudo-expansion-40",
+        "family": "buttons",
+        "story": "compositions-localisation-text-stress--pseudo-expansion-40",
+        "source": "packages/core/stories/compositions/i18n/TextStress.stories.ts",
+        "components": [
+          "DzButton",
+          "DzSplitButton",
+          "DzToggleButton"
+        ],
+        "note": "TASK-R5-O4. The pseudo-locale transform padded to +40 % of the English length; a missing `!!!]` tail is a clipped label."
+      }
     ],
     "engine": "chromium",
     "themes": [
@@ -262,6 +312,126 @@
       "acceptedBy": "TASK-N1-O6 (agent), on behalf of the repository owner",
       "acceptedAt": "2026-09-01",
       "reason": "First per-component visual baseline for DzToggleButton (light). Captured at 51dec93 AFTER TASK-N1-O3's target-size and reflow geometry changes landed in this worktree, so this image records POST-fix appearance and must not be read as pre-fix truth. Story core-buttons-dztogglebutton--default, chromium 1280x720 LTR; three cold probe runs were byte-identical before acceptance.",
+      "replaces": null
+    },
+    {
+      "component": "fixture:text-stress-cjk",
+      "theme": "dark",
+      "story": "compositions-localisation-text-stress--cjk",
+      "engine": "chromium",
+      "platform": "win32",
+      "file": "e2e/visual/component-baselines.spec.ts-snapshots/fixture-text-stress-cjk-dark-chromium-win32.png",
+      "sha256": "c63a71ec33bc390eb6c864dc2cc253788317bc4f278930b5183323f9f9621817",
+      "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+      "worktreeDirty": true,
+      "acceptedBy": "TASK-R5-O4 (agent), on behalf of the repository owner under the 2026-09-17 delegation",
+      "acceptedAt": "2026-09-17",
+      "reason": "First capture of the CJK text-stress fixture: ja/zh/ko labels in a 16rem frame. Records CURRENT behaviour, including the finding that button labels neither wrap nor truncate and overflow the frame. Chromium 1280x720 LTR, three probe runs byte-identical.",
+      "replaces": null
+    },
+    {
+      "component": "fixture:text-stress-cjk",
+      "theme": "light",
+      "story": "compositions-localisation-text-stress--cjk",
+      "engine": "chromium",
+      "platform": "win32",
+      "file": "e2e/visual/component-baselines.spec.ts-snapshots/fixture-text-stress-cjk-light-chromium-win32.png",
+      "sha256": "8b22800b228592452fdd670643cfdb8df703413a5d810ed43ec48a5e166f20be",
+      "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+      "worktreeDirty": true,
+      "acceptedBy": "TASK-R5-O4 (agent), on behalf of the repository owner under the 2026-09-17 delegation",
+      "acceptedAt": "2026-09-17",
+      "reason": "First capture of the CJK text-stress fixture: ja/zh/ko labels in a 16rem frame. Records CURRENT behaviour, including the finding that button labels neither wrap nor truncate and overflow the frame. Chromium 1280x720 LTR, three probe runs byte-identical.",
+      "replaces": null
+    },
+    {
+      "component": "fixture:text-stress-combining-marks",
+      "theme": "dark",
+      "story": "compositions-localisation-text-stress--combining-marks",
+      "engine": "chromium",
+      "platform": "win32",
+      "file": "e2e/visual/component-baselines.spec.ts-snapshots/fixture-text-stress-combining-marks-dark-chromium-win32.png",
+      "sha256": "a97d8a377cf6dc77de8a9a12ad3303192adf72592a2330745c63364b651869b8",
+      "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+      "worktreeDirty": true,
+      "acceptedBy": "TASK-R5-O4 (agent), on behalf of the repository owner under the 2026-09-17 delegation",
+      "acceptedAt": "2026-09-17",
+      "reason": "First capture of the combining-marks text-stress fixture: Vietnamese, Devanagari, Thai and stacked Latin marks. Records CURRENT behaviour (labels overflow the 16rem frame; stacked marks exceed the line box). Chromium 1280x720 LTR, three probe runs byte-identical.",
+      "replaces": null
+    },
+    {
+      "component": "fixture:text-stress-combining-marks",
+      "theme": "light",
+      "story": "compositions-localisation-text-stress--combining-marks",
+      "engine": "chromium",
+      "platform": "win32",
+      "file": "e2e/visual/component-baselines.spec.ts-snapshots/fixture-text-stress-combining-marks-light-chromium-win32.png",
+      "sha256": "127a0d56e78d3b1b450b0cc3bb5a0aae567c7500caddc4fb5943d35a39922d68",
+      "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+      "worktreeDirty": true,
+      "acceptedBy": "TASK-R5-O4 (agent), on behalf of the repository owner under the 2026-09-17 delegation",
+      "acceptedAt": "2026-09-17",
+      "reason": "First capture of the combining-marks text-stress fixture: Vietnamese, Devanagari, Thai and stacked Latin marks. Records CURRENT behaviour (labels overflow the 16rem frame; stacked marks exceed the line box). Chromium 1280x720 LTR, three probe runs byte-identical.",
+      "replaces": null
+    },
+    {
+      "component": "fixture:text-stress-long-run-4096",
+      "theme": "dark",
+      "story": "compositions-localisation-text-stress--long-run-4096",
+      "engine": "chromium",
+      "platform": "win32",
+      "file": "e2e/visual/component-baselines.spec.ts-snapshots/fixture-text-stress-long-run-4096-dark-chromium-win32.png",
+      "sha256": "c8781bd3962ffdae94ec46c8415c2d95bab338dd40908136ce47199e5cd42ede",
+      "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+      "worktreeDirty": true,
+      "acceptedBy": "TASK-R5-O4 (agent), on behalf of the repository owner under the 2026-09-17 delegation",
+      "acceptedAt": "2026-09-17",
+      "reason": "First capture of the 4,096-character unbroken-run fixture. Records CURRENT behaviour: no wrap, no truncation, the label overflows the frame and the small outline button shows no visible text. Chromium 1280x720 LTR, three probe runs byte-identical.",
+      "replaces": null
+    },
+    {
+      "component": "fixture:text-stress-long-run-4096",
+      "theme": "light",
+      "story": "compositions-localisation-text-stress--long-run-4096",
+      "engine": "chromium",
+      "platform": "win32",
+      "file": "e2e/visual/component-baselines.spec.ts-snapshots/fixture-text-stress-long-run-4096-light-chromium-win32.png",
+      "sha256": "5abd8be606a049d6ccc98423cf826102f99198bb292953c43995041ce10ea9d7",
+      "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+      "worktreeDirty": true,
+      "acceptedBy": "TASK-R5-O4 (agent), on behalf of the repository owner under the 2026-09-17 delegation",
+      "acceptedAt": "2026-09-17",
+      "reason": "First capture of the 4,096-character unbroken-run fixture. Records CURRENT behaviour: no wrap, no truncation, the label overflows the frame and the small outline button shows no visible text. Chromium 1280x720 LTR, three probe runs byte-identical.",
+      "replaces": null
+    },
+    {
+      "component": "fixture:text-stress-pseudo-expansion-40",
+      "theme": "dark",
+      "story": "compositions-localisation-text-stress--pseudo-expansion-40",
+      "engine": "chromium",
+      "platform": "win32",
+      "file": "e2e/visual/component-baselines.spec.ts-snapshots/fixture-text-stress-pseudo-expansion-40-dark-chromium-win32.png",
+      "sha256": "c4569de84cd8bc1b758d6116393f381906cc4ac20355d72fb09743423ed46d1a",
+      "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+      "worktreeDirty": true,
+      "acceptedBy": "TASK-R5-O4 (agent), on behalf of the repository owner under the 2026-09-17 delegation",
+      "acceptedAt": "2026-09-17",
+      "reason": "First capture of the +40 % pseudo-expansion fixture. All four controls fit the 16rem frame with the !!!] tail intact at this label length. Chromium 1280x720 LTR, three probe runs byte-identical.",
+      "replaces": null
+    },
+    {
+      "component": "fixture:text-stress-pseudo-expansion-40",
+      "theme": "light",
+      "story": "compositions-localisation-text-stress--pseudo-expansion-40",
+      "engine": "chromium",
+      "platform": "win32",
+      "file": "e2e/visual/component-baselines.spec.ts-snapshots/fixture-text-stress-pseudo-expansion-40-light-chromium-win32.png",
+      "sha256": "fd2cb817e2cf2b1f8af843f7ff61f38deac27280f3a4fb5453751896e3497d77",
+      "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+      "worktreeDirty": true,
+      "acceptedBy": "TASK-R5-O4 (agent), on behalf of the repository owner under the 2026-09-17 delegation",
+      "acceptedAt": "2026-09-17",
+      "reason": "First capture of the +40 % pseudo-expansion fixture. All four controls fit the 16rem frame with the !!!] tail intact at this label length. Chromium 1280x720 LTR, three probe runs byte-identical.",
       "replaces": null
     },
     {

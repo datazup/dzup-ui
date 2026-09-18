@@ -222,6 +222,18 @@ export function buildOwnershipMap(
 }
 
 /**
+ * The collisions no checked-in decision settles.
+ *
+ * They are absent from `symbols` by construction (above), so a caller that
+ * emits or validates the table and does not ask for them reports a *smaller*
+ * table with no explanation of what went missing. Every such caller shares this
+ * one predicate rather than re-spelling the `'unresolved'` literal.
+ */
+export function unresolvedCollisions(collisions: readonly MapCollision[]): MapCollision[] {
+  return collisions.filter(collision => collision.resolution === 'unresolved')
+}
+
+/**
  * The one lookup every consumer should use.
  *
  * Returns `null` for an unknown symbol and for one held in an unresolved
@@ -269,7 +281,7 @@ if (isMain) {
   if (out !== undefined)
     writeFileSync(resolve(out), serializeMap(map), 'utf8')
 
-  const unresolved = map.collisions.filter(collision => collision.resolution === 'unresolved')
+  const unresolved = unresolvedCollisions(map.collisions)
   console.warn(
     `✓ ownership-map: ${Object.keys(map.symbols).length} symbols from `
     + `${map.inputs.map(input => input.tier).join(' + ')}`,

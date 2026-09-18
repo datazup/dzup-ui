@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:dzup-ui:testing:security-corpus:1",
+  "title": "@dzup-ui/testing security corpus file",
+  "description": "One category of hostile inputs and the outcome each sink kind owes them. Schema 1.1.0. Authority: checkCorpusFile() in @dzup-ui/testing/security-corpus, which also enforces what JSON Schema cannot (unique fixture ids); `yarn validate:security-corpus` fails if this schema and that checker ever disagree about a data file. Vocabulary and contribution path: security-corpus/README.md.",
+  "$comment": "Draft-07 and only the keywords packages/tooling/src/token-checks/json-schema-draft07.ts implements (no minLength, no propertyNames, no $defs): the gate evaluates this file with that evaluator and refuses any keyword it does not know. Non-empty strings are therefore `pattern: \\S`.",
+  "type": "object",
+  "required": ["schemaVersion", "category", "description", "fixtures"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "description": "Editor hint: a path or URL to this file.",
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "schemaVersion": {
+      "description": "x.y.z. The major must be 1; a file with another major is rejected rather than best-effort parsed.",
+      "type": "string",
+      "pattern": "^1\\.\\d+\\.\\d+$"
+    },
+    "category": { "$ref": "#/definitions/category" },
+    "description": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "fixtures": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/fixture" }
+    },
+    "extensions": { "$ref": "#/definitions/extensions" }
+  },
+  "allOf": [
+    { "if": { "properties": { "category": { "const": "url-scheme" } }, "required": ["category"] }, "then": { "properties": { "fixtures": { "items": { "properties": { "category": { "const": "url-scheme" }, "id": { "pattern": "^url-scheme\\." } } } } } } },
+    { "if": { "properties": { "category": { "const": "markup-injection" } }, "required": ["category"] }, "then": { "properties": { "fixtures": { "items": { "properties": { "category": { "const": "markup-injection" }, "id": { "pattern": "^markup-injection\\." } } } } } } },
+    { "if": { "properties": { "category": { "const": "css-injection" } }, "required": ["category"] }, "then": { "properties": { "fixtures": { "items": { "properties": { "category": { "const": "css-injection" }, "id": { "pattern": "^css-injection\\." } } } } } } },
+    { "if": { "properties": { "category": { "const": "degenerate-input" } }, "required": ["category"] }, "then": { "properties": { "fixtures": { "items": { "properties": { "category": { "const": "degenerate-input" }, "id": { "pattern": "^degenerate-input\\." } } } } } } },
+    { "if": { "properties": { "category": { "const": "file-metadata" } }, "required": ["category"] }, "then": { "properties": { "fixtures": { "items": { "properties": { "category": { "const": "file-metadata" }, "id": { "pattern": "^file-metadata\\." } } } } } } },
+    { "if": { "properties": { "category": { "const": "encoded-payload" } }, "required": ["category"] }, "then": { "properties": { "fixtures": { "items": { "properties": { "category": { "const": "encoded-payload" }, "id": { "pattern": "^encoded-payload\\." } } } } } } }
+  ],
+  "definitions": {
+    "category": {
+      "description": "The class of hostile input. url-scheme: a URL whose scheme decides reference vs execution. markup-injection: a string that is markup. css-injection: a string reaching a CSS value or style attribute. degenerate-input: too long, invisible, or read differently by human and machine. file-metadata: a name, MIME type or size on a user-chosen file. encoded-payload: a value encoded for another system to decode.",
+      "enum": ["url-scheme", "markup-injection", "css-injection", "degenerate-input", "file-metadata", "encoded-payload"]
+    },
+    "sink": {
+      "description": "Where the value lands — the property that decides what safe means. navigation: followed on activation (<a href>). subresource: fetched (<img src>). html: reaches an HTML parser. markdown: Markdown source whose rendered HTML reaches an HTML parser. mermaid-svg: Mermaid source whose rendered SVG reaches an HTML parser. text: a text node. attribute: an attribute value. style: a CSS declaration. encoded-payload: encoded for another system. file: a user-chosen File.",
+      "enum": ["navigation", "subresource", "html", "markdown", "mermaid-svg", "text", "attribute", "style", "encoded-payload", "file"]
+    },
+    "outcome": {
+      "description": "What must be observably true, strongest first. rejected: never reached the sink. stripped: the dangerous part removed, the remainder kept. escaped: present verbatim as data, built no element/attribute/handler. inert: present verbatim and the sink cannot act on it (rationale required). admitted: reaches the sink live and unchanged because a named policy deliberately admits it — not a neutralization (rationale required, naming the policy).",
+      "enum": ["rejected", "stripped", "escaped", "inert", "admitted"]
+    },
+    "extensions": {
+      "description": "Consumer-specific data keyed by a reverse-DNS namespace (com.dzup.pro). A reader ignores namespaces it does not know; an extension never changes the meaning of a shared field.",
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$": { "type": "object" }
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "required": ["id", "category", "title", "payload", "outcomes", "rationale", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "{category}.{family}.{case}, lowercase kebab segments. Never reused for a different payload.",
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "category": { "$ref": "#/definitions/category" },
+        "title": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "payload": {
+          "description": "The input verbatim, or with `repeat` the unit it is built from. Always resolve through payloadOf().",
+          "type": "string",
+          "pattern": "[\\s\\S]"
+        },
+        "repeat": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "outcomes": {
+          "description": "The required outcome per sink kind. A sink absent from the map is one the fixture says nothing about — never 'anything goes'.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "navigation": { "$ref": "#/definitions/outcome" },
+            "subresource": { "$ref": "#/definitions/outcome" },
+            "html": { "$ref": "#/definitions/outcome" },
+            "markdown": { "$ref": "#/definitions/outcome" },
+            "mermaid-svg": { "$ref": "#/definitions/outcome" },
+            "text": { "$ref": "#/definitions/outcome" },
+            "attribute": { "$ref": "#/definitions/outcome" },
+            "style": { "$ref": "#/definitions/outcome" },
+            "encoded-payload": { "$ref": "#/definitions/outcome" },
+            "file": { "$ref": "#/definitions/outcome" }
+          },
+          "not": {
+            "description": "Non-empty: a fixture that names no required outcome asserts only 'does not crash'.",
+            "type": "object",
+            "additionalProperties": false
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "provenance": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "extensions": { "$ref": "#/definitions/extensions" }
+      },
+      "if": {
+        "required": ["outcomes"],
+        "properties": {
+          "outcomes": {
+            "type": "object",
+            "not": { "additionalProperties": { "not": { "enum": ["inert", "admitted"] } } }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "rationale": {
+            "description": "Longer than 80 characters wherever inert or admitted is claimed.",
+            "pattern": "[\\s\\S]{81}"
+          }
+        }
+      }
+    }
+  }
+}

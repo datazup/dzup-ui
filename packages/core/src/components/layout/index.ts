@@ -62,16 +62,22 @@ export { type FlexVariantProps, flexVariants } from './DzFlex.variants.ts'
 export { default as DzFlex } from './DzFlex.vue'
 
 export type {
+  DzGridItemProps,
+  DzGridItemSlots,
   DzGridProps,
   DzGridSlots,
   GridCols,
+  GridSpan,
   LayoutGap,
   ResponsiveCols,
+  ResponsiveSpan,
 } from './DzGrid.types.ts'
 
 export { type GridVariantProps, gridVariants, responsiveColsMap } from './DzGrid.variants.ts'
 
 export { default as DzGrid } from './DzGrid.vue'
+
+export { default as DzGridItem } from './DzGridItem.vue'
 
 export type {
   DzMasonryProps,

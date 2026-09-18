@@ -464,12 +464,12 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
     rtl: { mirrors: 'layout', keyboard: 'swap-horizontal', icons: ['indicator'] },
   },
   DzMention: {
-    parts: ['root', 'control', 'input', 'content', 'loader', 'list', 'item', 'item-label', 'empty', 'error'],
+    parts: ['root', 'control', 'input', 'content', 'loader', 'list', 'item', 'item-label', 'empty', 'error', 'options-state', 'options-message', 'options-retry'],
     states: ['disabled', 'invalid', 'required', 'readonly', 'loading', 'active'],
     componentTokens: [],
     riskTier: 'C',
     recipes: ['size', 'variant'],
-    optionalParts: ['content', 'loader', 'list', 'item', 'item-label', 'empty', 'error'],
+    optionalParts: ['content', 'loader', 'list', 'item', 'item-label', 'empty', 'error', 'options-state', 'options-message', 'options-retry'],
     rtl: { mirrors: 'layout', keyboard: 'none' },
   },
   DzMenu: {

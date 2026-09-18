@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { DzGrid } from '../../src/components/layout'
+import { DzGrid, DzGridItem } from '../../src/components/layout'
 import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 
 /**
@@ -89,9 +89,17 @@ export const Default: Story = {
     setup() {
       return { args }
     },
+    // A static template (no `${…}` interpolation), so component-meta can publish
+    // it as paste-ready markup (TASK-R3-O3).
     template: `
       <DzGrid v-bind="args">
-        ${gridItems(6)}
+        <div
+          v-for="n in 6"
+          :key="n"
+          class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded text-center font-medium"
+        >
+          {{ n }}
+        </div>
       </DzGrid>
     `,
   }),
@@ -176,6 +184,56 @@ export const ResponsiveColumns: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Spanning items (DzGridItem, TASK-R3-O3 / decision D67)
+// ---------------------------------------------------------------------------
+
+/**
+ * `DzGridItem` says how many columns a child occupies — a typed `span` instead
+ * of a raw `col-span-*` class. The second grid is `dir="rtl"`: the same markup
+ * fills from the inline-start (right) edge, with nothing to configure.
+ */
+export const SpanningItems: Story = {
+  name: 'Spanning Items (DzGridItem)',
+  render: () => ({
+    components: { DzGrid, DzGridItem },
+    template: `
+      <div class="space-y-6">
+        <DzGrid :cols="3" gap="md" data-testid="grid-ltr">
+          <DzGridItem :span="2" data-testid="ltr-wide"
+            class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded">span 2</DzGridItem>
+          <DzGridItem data-testid="ltr-single"
+            class="bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)] text-sm p-4 rounded">span 1</DzGridItem>
+          <DzGridItem span="full"
+            class="bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)] text-sm p-4 rounded">span full</DzGridItem>
+        </DzGrid>
+        <div dir="rtl">
+          <DzGrid :cols="3" gap="md" data-testid="grid-rtl">
+            <DzGridItem :span="2" data-testid="rtl-wide"
+              class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded">span 2</DzGridItem>
+            <DzGridItem data-testid="rtl-single"
+              class="bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)] text-sm p-4 rounded">span 1</DzGridItem>
+          </DzGrid>
+        </div>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const wide = canvas.getByTestId('ltr-wide').getBoundingClientRect()
+    const single = canvas.getByTestId('ltr-single').getBoundingClientRect()
+    // Two columns plus a gap is wider than one and a half columns.
+    await expect(wide.width).toBeGreaterThan(single.width * 1.5)
+    // LTR: the wide item starts at the left.
+    await expect(wide.left).toBeLessThan(single.left)
+    // RTL: the same markup starts at the right.
+    const rtlWide = canvas.getByTestId('rtl-wide').getBoundingClientRect()
+    const rtlSingle = canvas.getByTestId('rtl-single').getBoundingClientRect()
+    await expect(rtlWide.width).toBeGreaterThan(rtlSingle.width * 1.5)
+    await expect(rtlWide.left).toBeGreaterThan(rtlSingle.left)
+  },
 }
 
 // ---------------------------------------------------------------------------

@@ -36,6 +36,11 @@ const model = defineModel<string>({ default: '' })
 const props = withDefaults(defineProps<DzPersonaSelectorProps>(), {
   placeholder: 'Select persona',
   disabled: false,
+  // `undefined`, not `false`: an absent boolean would otherwise be cast to
+  // `false` and silently switch off the combobox's default retry.
+  optionsState: undefined,
+  optionsError: undefined,
+  optionsRetryable: undefined,
 })
 
 const emit = defineEmits<DzPersonaSelectorEmits>()
@@ -76,9 +81,14 @@ const rootClass = computed(() => cn(attrs.class as string | undefined))
     :disabled="disabled"
     :class="rootClass"
     :ui="ui"
+    :options-state="optionsState"
+    :options-error="optionsError"
+    :options-retryable="optionsRetryable"
     data-component="DzPersonaSelector"
     v-bind="{ ...$attrs, class: undefined }"
     @update:model-value="handleUpdate"
+    @load-options="emit('loadOptions', $event)"
+    @retry-options="emit('retryOptions')"
   >
     <template #item="{ item, selected }">
       <template v-if="personaById.get(item.value)">

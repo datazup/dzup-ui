@@ -1,11 +1,11 @@
 {
   "generator": "yarn generate:docs-pages (TASK-N2-D1, evidence layer TASK-N2-D2)",
-  "artifactSha256": "61b26a7350b9215761c7ff8cf0652d94064889c6a3e3dc0c40993a0217167d5e",
+  "artifactSha256": "379ac60cec1e630ed52bb27627429a38f9dd21323fdf1212f3236255725ffc3f",
   "schemaVersion": "1.2.0",
   "extractor": "vue-component-meta@3.3.7",
-  "sourceCommit": "99b963a03e1c0a9cd8077c9f1d0405a645174e4e",
+  "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
   "publicComponents": 144,
-  "compoundParts": 64,
+  "compoundParts": 65,
   "groups": [
     {
       "key": "buttons",
@@ -657,7 +657,7 @@
     }
   ],
   "evidenceSha256": {
-    "packages/core/docs/quality-matrix.json": "f4c674109b6e2eacb84443b68d1fdc6f2fdec00b93c57475965a01dabd70f341",
+    "packages/core/docs/quality-matrix.json": "3da85132fa579847e00cbf10e4923c2104d11449050767fc88063ba221039d66",
     "packages/core/docs/capability-matrix.json": "561b7852a04d4f92ba39a6412d0088958bf88bd61227206669645cdea221ad5d",
     "e2e/at-matrix/index.json": "0abcc92ef6c3332f73073f09a6def24cfc5a24043048c3d8e686bb5f70deea94",
     "packages/core/docs/wcag-deviations.json": "c3fdab5ea679fbb0f39d0be91bcf0edcc6442c5021fb5a240e48153c89f1fcb8",

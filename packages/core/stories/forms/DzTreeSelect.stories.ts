@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { TreeNode } from '../../src/components/data'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { DzButton } from '../../src/components/buttons'
 import { DzFormField, DzFormLabel, DzTreeSelect } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
+import { createMockOptionsHost, walkAsyncOptionsStates } from '../_shared/asyncOptionsHost.ts'
 
 const categories: TreeNode[] = [
   {
@@ -554,5 +556,66 @@ export const RealWorldCatalogFilter: Story = {
     await expect(within(root).queryByRole('button', { name: /remove potato/i })).toBeNull()
     await expect(within(root).getByRole('button', { name: /remove carrot/i }))
       .toBeInTheDocument()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Async options (renderer contract C9, TASK-R3-O3)
+// ---------------------------------------------------------------------------
+
+const asyncPeople: TreeNode[] = [
+  { key: 'eng', label: 'Engineering', children: [{ key: 'ada', label: 'Ada Lovelace' }] },
+  { key: 'research', label: 'Research', children: [{ key: 'grace', label: 'Grace Hopper' }] },
+]
+
+const treeSelectHost = createMockOptionsHost(asyncPeople)
+
+/**
+ * Options from a remote source, through the shared `useAsyncOptions` seam.
+ *
+ * the tree select emits `load-options` (with an `AbortSignal`) and renders whatever
+ * `options-state` the host passes back; Core never fetches. The host here is a
+ * mock with no network and no timers, so `play()` walks loading → ready →
+ * error → retry deterministically — and the buttons let you do it by hand.
+ */
+export const AsyncOptions: Story = {
+  name: 'Async Options: loading → ready → error → retry',
+  render: () => ({
+    components: { DzTreeSelect, DzButton },
+    setup() {
+      treeSelectHost.reset()
+      return { host: treeSelectHost }
+    },
+    template: `
+      <div class="space-y-3 max-w-xs">
+        <DzTreeSelect
+          :nodes="host.items.value"
+          :options-state="host.state.value"
+          :options-error="host.error.value"
+          placeholder="Pick a team"
+          aria-label="Team"
+          @load-options="host.onLoadOptions"
+          @retry-options="host.onRetryOptions"
+        />
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Mock host">
+          <DzButton size="sm" variant="outline" @click="host.resolve()">Resolve</DzButton>
+          <DzButton size="sm" variant="outline" @click="host.fail()">Fail</DzButton>
+          <DzButton size="sm" variant="outline" @click="host.reload()">Reload</DzButton>
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]" data-testid="host-log">
+          state: {{ host.state.value }} · requests: {{ host.requests.value }} · retries: {{ host.retries.value }}
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement)
+    await walkAsyncOptionsStates({
+      host: treeSelectHost,
+      root: canvasElement.ownerDocument.body,
+      open: () => userEvent.click(canvas.getByRole('combobox')),
+      expectOptions: () => waitFor(() => expect(within(canvasElement.ownerDocument.body).getByRole('treeitem', { name: /engineering/i })).toBeVisible()),
+      step,
+    })
   },
 }

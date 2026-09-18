@@ -1,16 +1,20 @@
 import type { OwnershipEntry, OwnershipManifest } from '../ownership/ownership-manifest.types.ts'
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { readManifest } from '../ownership/build-ownership-map.ts'
 import {
   buildOwnershipManifest,
+  buildRuntimeLookup,
   OWNERSHIP_MANIFEST_PATH,
   serializeManifest,
 } from '../ownership/generate-ownership-manifest.ts'
 import {
   checkEntry,
   checkReferences,
+  checkRuntimeLookup,
   componentsWithoutAnatomy,
   partsOutsideVocabulary,
   readCeiling,
@@ -320,5 +324,61 @@ describe('the vocabulary report (ADR-19 §3)', () => {
       .find(entry => entry.symbol === 'DzTable')
 
     expect(table).toBeUndefined()
+  })
+})
+
+describe('checkRuntimeLookup and the cross-tier collision gate (TASK-R3-O1 F3)', () => {
+  // Fixture manifests, not the live Pro checkout: Core never reads Pro source,
+  // only a JSON file a Pro checkout produced, so a fixture of that file is a
+  // faithful input — and the real Pro manifest does not exist yet.
+  const FIXTURES = resolve(dirname(fileURLToPath(import.meta.url)), '../ownership/__fixtures__')
+  const core = readManifest(resolve(FIXTURES, 'core.manifest.json'))
+  const PRO = resolve(FIXTURES, 'pro.manifest.json')
+  const COLLIDING_PRO = resolve(FIXTURES, 'collision.pro.manifest.json')
+
+  const dir = mkdtempSync(join(tmpdir(), 'dzup-runtime-lookup-'))
+
+  /** A committed-table stand-in: exactly what the generator would have written. */
+  function commit(proManifestPath: string, name: string): string {
+    const path = join(dir, name)
+    writeFileSync(path, buildRuntimeLookup(core, proManifestPath).source, 'utf8')
+    return path
+  }
+
+  it('passes a Pro-claiming table that its inputs reproduce exactly', () => {
+    const path = commit(PRO, 'fresh.ts')
+    expect(checkRuntimeLookup(core, path, PRO)).toEqual([])
+  })
+
+  it('fails on an unresolved collision, which freshness alone cannot see', () => {
+    // Seeded: a Pro manifest re-exporting Core's `DzButton`. The committed file
+    // and the regenerated one AGREE — both leave the name out — so the drift
+    // clause passes and the resolver answers undefined for a name two tiers
+    // ship. Until this gate the whole run was green.
+    const path = commit(COLLIDING_PRO, 'collision.ts')
+    const violations = checkRuntimeLookup(core, path, COLLIDING_PRO)
+
+    expect(violations).toHaveLength(1)
+    expect(violations[0]?.rule).toBe('runtime-lookup')
+    expect(violations[0]?.message).toContain('DzButton is exported by core and pro')
+    expect(violations[0]?.message).toContain('collision-decisions.json')
+  })
+
+  it('still reports drift, and does so separately from the collision', () => {
+    const path = join(dir, 'stale.ts')
+    writeFileSync(path, `${buildRuntimeLookup(core, PRO).source}// hand-edited
+`, 'utf8')
+    const messages = checkRuntimeLookup(core, path, PRO).map(violation => violation.message)
+
+    expect(messages).toHaveLength(1)
+    expect(messages[0]).toContain('differs from what the')
+  })
+
+  it('reports a Pro-claiming table with no Pro manifest as a missing input, not as drift', () => {
+    const path = commit(PRO, 'no-input.ts')
+    const violations = checkRuntimeLookup(core, path, undefined)
+
+    expect(violations).toHaveLength(1)
+    expect(violations[0]?.message).toContain('missing input, not drift')
   })
 })

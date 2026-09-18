@@ -6,6 +6,7 @@
  * @module @dzup-ui/core/components/forms/DzPersonaSelector
  */
 
+import type { AsyncOptionsEmits, AsyncOptionsProps } from '@dzup-ui/contracts'
 import type { DzPersonaSelectorUi } from './DzPersonaSelector.anatomy.ts'
 
 // ---------------------------------------------------------------------------
@@ -33,8 +34,14 @@ export interface Persona {
  *
  * Note: the selected persona id is exposed as `v-model` via `defineModel`
  * (ADR-16) and is intentionally not declared here.
+ *
+ * Extends {@link AsyncOptionsProps} (renderer contract C9, TASK-R3-O3). The
+ * `DzCombobox` this component renders already had the seam; declaring it here
+ * makes the pass-through typed — `optionsState`, `optionsError` and
+ * `optionsRetryable` are forwarded, and the host answers `load-options` by
+ * updating `personas`.
  */
-export interface DzPersonaSelectorProps {
+export interface DzPersonaSelectorProps extends AsyncOptionsProps {
   /** Available personas */
   personas: Persona[]
   /** Placeholder text for the search input */
@@ -58,9 +65,10 @@ export interface DzPersonaSelectorProps {
  * Events emitted by DzPersonaSelector.
  *
  * Note: `update:modelValue` is provided by `defineModel` (ADR-16) and is not
- * declared here.
+ * declared here. `load-options` / `retry-options` are re-emitted from the
+ * `DzCombobox` this component renders ({@link AsyncOptionsEmits}).
  */
-export interface DzPersonaSelectorEmits {
+export interface DzPersonaSelectorEmits extends AsyncOptionsEmits {
   /** Fires with the full persona object when one is selected */
   change: [persona: Persona | undefined]
 }

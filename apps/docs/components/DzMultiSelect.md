@@ -108,7 +108,7 @@ never as asserted.
 
 ## Playground
 
-Editable, running the **Variant Gallery** story from `packages/core/stories/forms/DzMultiSelect.stories.ts` (lines 134–149) **verbatim**. Edits run in a sandbox; nothing here is saved.
+Editable, running the **Variant Gallery** story from `packages/core/stories/forms/DzMultiSelect.stories.ts` (lines 136–151) **verbatim**. Edits run in a sandbox; nothing here is saved.
 
 <DzPlayground component="DzMultiSelect" />
 
@@ -137,8 +137,8 @@ different contracts rather than two spellings of one.
 <DzMultiSelect :modelValue="value" @update:modelValue="value = $event" />
 ```
 
-**Where each variant is shown.** 11 stories in
-`packages/core/stories/forms/DzMultiSelect.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Disabled`, `Max Selections (3)`, `Invalid State`, `States`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Tag Picker`.
+**Where each variant is shown.** 12 stories in
+`packages/core/stories/forms/DzMultiSelect.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Disabled`, `Max Selections (3)`, `Invalid State`, `States`, `Dark Mode Preview`, `Interactive`, `Accessibility: Focus States`, `Real World: Tag Picker`, `Async Options: loading → ready → error → retry`.
 
 ## Parts, states and tokens
 
@@ -264,7 +264,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

@@ -167,12 +167,23 @@ export function installDzupUiDomTestEnvironment(): () => void {
  * The schema is shared by design with `ui/dzup-ui-pro`'s QUAL-04
  * (TASK-N1-P1): its sink registry names a `SecuritySink` per entry and reads
  * the required outcome for that sink out of these same fixture files.
+ *
+ * Schema 1.1.0 (TASK-R3-O4) adds the peer-compatibility record — a declared
+ * peer that is absent, installed, or installed at an incompatible version, and
+ * the diagnostic a consumer must then see — and a JSON Schema for both file
+ * kinds, shipped beside the data.
  */
 export type {
   CorpusViolation,
   NeutralizationOutcome,
+  PeerCompatibilityFile,
+  PeerCompatibilityFixture,
+  PeerDiagnostic,
+  PeerDiagnosticStage,
+  PeerState,
   SecurityCategory,
   SecurityCorpusFile,
+  SecurityExtensions,
   SecurityFixture,
   SecuritySink,
 } from './security-corpus.js'

@@ -166,7 +166,12 @@ const displayValue = computed(() => {
   const p = parseTime(model.value)
   if (!p)
     return ''
-  const date = new Date(2000, 0, 1, p.hour, p.minute, p.second)
+  // A PLAIN time (TASK-R5-O4): a wall-clock value with no date and no zone.
+  // It is built in UTC and formatted in UTC, so a host's `formats.date.timeZone`
+  // default — correct for instants — cannot move it. Before this, 09:00 built
+  // as a local Date and formatted under a host `timeZone: 'UTC'` rendered 07:00
+  // for a user in UTC+2. Identical output for every host that sets no zone.
+  const date = new Date(Date.UTC(2000, 0, 1, p.hour, p.minute, p.second))
   // Was `props.locale ?? 'en-US'`, then `props.locale ?? dzLocale.value`. It is
   // now the application's FORMATS (TASK-R5-O3): `useDzFormats` binds the same
   // provider locale and, on top of it, the host's `formats.date` defaults — so
@@ -177,6 +182,8 @@ const displayValue = computed(() => {
     minute: '2-digit',
     second: showSeconds.value ? '2-digit' : undefined,
     hour12: props.hour12,
+    // The caller's options win over the host's defaults, so this pins the zone.
+    timeZone: 'UTC',
   }
   return (props.locale === undefined
     ? dzFormats.date(options)

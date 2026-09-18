@@ -79,6 +79,99 @@ export interface DzMessages {
 
 export interface DzMessageCatalog {}
 
+/**
+ * A value one message argument accepts (TASK-R5-O4).
+ *
+ * Numbers are formatted for the active locale — `1234` renders `1,234` in
+ * `en-US` and `1.234` in `de-DE` — which is the reason a count is passed as a
+ * number rather than pre-stringified by the caller.
+ */
+export type DzMessageArg = string | number
+
+/** The named arguments one message is formatted with. */
+export type DzMessageValues = Readonly<Record<string, DzMessageArg>>
+
+/**
+ * Phantom brand carrying a message's argument types. Type-only: nothing with
+ * this name exists at runtime, and a plain string is still assignable to every
+ * {@link DzMessage}, so a host's catalog and a translator's JSON never need a
+ * cast.
+ */
+declare const dzMessageArgs: unique symbol
+
+/**
+ * A catalog string that takes arguments (TASK-R5-O4).
+ *
+ * Written in the dzup-ui message syntax — a documented subset of ICU
+ * MessageFormat (`packages/core/docs/i18n.md`):
+ *
+ * ```text
+ * {name}                                              an argument
+ * {count, plural, one {# item} other {# items}}       Intl.PluralRules (cardinal)
+ * {place, selectordinal, one {#st} other {#th}}       Intl.PluralRules (ordinal)
+ * {kind, select, file {File} other {Item}}            exact match, `other` required
+ * ```
+ *
+ * The type parameter is what makes the syntax *typed*: Core declares
+ * `itemCount: DzMessage<{ count: number }>` in its `DzMessageCatalog`
+ * augmentation, and formatting that key without a numeric `count` is a type
+ * error at the call site rather than an `{count}` rendered to a user.
+ */
+export type DzMessage<A extends DzMessageValues = Record<never, never>> = string & {
+  readonly [dzMessageArgs]?: A
+}
+
+/**
+ * The arguments a catalog entry declares — `{}` for a plain string.
+ *
+ * `unknown extends A` catches the case where TypeScript infers the brand from a
+ * bare `string` (it has no brand to read), so a plain message asks for no
+ * arguments instead of accepting anything.
+ */
+export type DzMessageArgsOf<M> = M extends { readonly [dzMessageArgs]?: infer A }
+  ? (unknown extends A ? Record<never, never> : A)
+  : Record<never, never>
+
+/**
+ * Every dotted key the merged catalog declares, e.g. `'DzInput.clear'`.
+ *
+ * Derived from {@link DzMessageCatalog}, so it grows with each tier's
+ * augmentation and is `never` in a program that loaded none.
+ */
+export type DzMessageKey = {
+  [G in keyof DzMessageCatalog & string]: `${G}.${keyof DzMessageCatalog[G] & string}`
+}[keyof DzMessageCatalog & string]
+
+/**
+ * A locale pack as it ships: `@dzup-ui/core/i18n/locales/<locale>.json`
+ * (TASK-R5-O4).
+ *
+ * **Data, not code.** A pack is what a translator or a translation-management
+ * tool edits, so it is JSON — no build step, no TypeScript, no import graph that
+ * could pull a second language into every bundle.
+ *
+ * `fallback` is the explicit half of the completeness rule
+ * `yarn validate:i18n-packs` enforces: **every catalog key is either translated
+ * in `messages` or listed here**, never silently missing. A listed key renders
+ * the English default, per key, exactly as a partial host catalog does.
+ *
+ * `direction` is declared rather than inferred. The gate fails when it disagrees
+ * with the locale list `useDzDirection()` resolves `'auto'` from, so the two
+ * sources of the same answer cannot drift apart unseen.
+ *
+ * @example
+ * ```ts
+ * import de from '@dzup-ui/core/i18n/locales/de.json' with { type: 'json' }
+ * // <DzProvider :locale="de.locale" :messages="de.messages">
+ * ```
+ */
+export interface DzLocalePack {
+  readonly locale: DzLocale
+  readonly direction: DzDirection
+  readonly fallback: readonly string[]
+  readonly messages: DzMessages
+}
+
 /** Direction for layout and logical properties. */
 export type DzDirection = 'ltr' | 'rtl'
 
@@ -92,6 +185,37 @@ export type DzDirectionPreference = DzDirection | 'auto'
 // ---------------------------------------------------------------------------
 // Formats
 // ---------------------------------------------------------------------------
+
+/**
+ * A moment on the global timeline: a `Date`, epoch milliseconds, or an ISO 8601
+ * string **with** an offset or `Z` (TASK-R5-O4).
+ *
+ * An instant has no wall-clock value of its own until it is rendered in a time
+ * zone, so it is the one date kind a host's `formats.date.timeZone` applies to.
+ * `DzRelativeTime`'s `value` and `DzCountdown`'s `target` are instants.
+ */
+export type DzInstant = Date | number | string
+
+/**
+ * A calendar date with no time and no zone: ISO 8601 `YYYY-MM-DD`
+ * (TASK-R5-O4).
+ *
+ * The same date in every zone, so it is never converted through one — a
+ * birthday picked in Sarajevo is not the day before in New York. `DzCalendar`,
+ * `DzDatePicker` and `DzDateRangePicker` take and emit plain dates.
+ *
+ * An alias of `string`, not a template-literal type, on purpose: narrowing the
+ * existing `string` props to it would reject every consumer variable typed
+ * `string`, which is a breaking change for a documentation gain.
+ */
+export type DzPlainDate = string
+
+/**
+ * A wall-clock time with no date and no zone: `HH:mm` or `HH:mm:ss`, 24-hour
+ * (TASK-R5-O4). `DzTimePicker`'s model is a plain time, and a host's
+ * `formats.date.timeZone` never moves it.
+ */
+export type DzPlainTime = string
 
 /**
  * Cached `Intl` factories bound to the active locale.
@@ -125,6 +249,16 @@ export interface DzFormatDefaults {
   /** ISO 4217 code used when a caller asks for `style: 'currency'`. */
   readonly currency?: string
   readonly number?: Intl.NumberFormatOptions
+  /**
+   * Defaults for formatting **instants** ({@link DzInstant}).
+   *
+   * A `timeZone` here is honoured by every instant a component renders — a
+   * relative time's absolute tooltip, for one. It is deliberately **not**
+   * honoured by plain values ({@link DzPlainDate}, {@link DzPlainTime}): a
+   * birthday or a 09:00 opening time is the same wall-clock value in every zone,
+   * and running it through one moves it (TASK-R5-O4; the semantics table is in
+   * `packages/core/docs/i18n.md`).
+   */
   readonly date?: Intl.DateTimeFormatOptions
   readonly relativeTime?: Intl.RelativeTimeFormatOptions
   readonly list?: Intl.ListFormatOptions

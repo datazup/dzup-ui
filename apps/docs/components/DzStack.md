@@ -54,7 +54,7 @@ never as asserted.
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
-| `direction` | `StackDirection \| undefined` | no | `"vertical"` | Stack direction |
+| `direction` | `StackDirection \| undefined` | no | `"vertical"` | Stack direction. `vertical` (default) and `column` stack along the block axis; `horizontal` and `row` lay out along the inline axis, which follows `dir`. |
 | `gap` | `LayoutGap \| undefined` | no | `"md"` | Gap between stack items |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 
@@ -159,7 +159,7 @@ extraction that produced the tables above.
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
 artifact records — `99b963a0` for the capability matrix,
-`99b963a0` for the quality matrix. It is **locally qualified**:
+`569d8872` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

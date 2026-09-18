@@ -75,6 +75,11 @@ const matrixProjects: Project[] = Object.entries(ENGINES).flatMap(([engine, devi
   MATRIX_CONDITIONS.map(condition => ({
     name: `matrix-${engine}-${condition}`,
     testDir: './e2e/matrix',
+    // The ADR-20 §7 motion-policy contract is a property of ONE condition
+    // (TASK-R5-O3). Ignoring the file elsewhere, rather than skipping inside
+    // it, keeps fifteen projects from reporting ~200 "skipped" cells that were
+    // never meant to run there.
+    testIgnore: condition === 'reduced-motion' ? undefined : /motion-policy\.spec\.ts$/,
     metadata: { engine, condition, lane: 'matrix' },
     use: { ...device, ...conditionUse(condition) },
   })),

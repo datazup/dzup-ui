@@ -26,6 +26,7 @@
  */
 
 import type { DzMessages } from '@dzup-ui/contracts'
+import { mapMessageText } from './message-format.ts'
 import { enMessages } from './messages.ts'
 
 /**
@@ -93,22 +94,48 @@ const ACCENTS: Record<string, string> = {
 /** Padding characters, cycled so the tail is not one repeated glyph. */
 const PADDING = '·~·'
 
+function accent(text: string): string {
+  return text.replace(/%[sd]|./gu, segment => (segment.length > 1 ? segment : ACCENTS[segment] ?? segment))
+}
+
+function pad(length: number): string {
+  const padLength = Math.ceil(length * 0.3)
+  let padding = ''
+  while (padding.length < padLength)
+    padding += PADDING[padding.length % PADDING.length]
+  return padding
+}
+
 /**
  * Pseudo-localise one string: accent it, pad it by ~30%, frame it.
  *
  * Interpolation placeholders (`{count}`, `%s`) pass through untouched — a
  * pseudo-locale that mangles them would fail for a reason that has nothing to
  * do with what it is testing.
+ *
+ * **Syntax-aware since TASK-R5-O4.** A count-bearing message
+ * (`{count, plural, one {# day} other {# days}}`) is rewritten through the
+ * message parser: only its translatable text is accented and padded, each
+ * branch is framed, and argument names, selectors and `#` survive — so the
+ * pseudo catalog still *formats*, which is what makes it a test of the plural
+ * path rather than a string that throws. The regex it replaced stopped at the
+ * first `}` and accented `other` into `ötĥéŕ`.
  */
 export function pseudoLocalise(value: string): string {
+  if (value.includes('{')) {
+    try {
+      const framed = mapMessageText(value, text => (text.trim() === '' ? text : accent(text)))
+      return `[!!! ${framed}${value.length === 0 ? '' : ` ${pad(value.length)}`} !!!]`
+    }
+    catch {
+      // Not message syntax — a brace in plain prose. Fall through to the
+      // character-level transform, which keeps `{…}` runs verbatim.
+    }
+  }
+
   const accented = value.replace(/\{[^}]*\}|%[sd]|./gu, segment =>
     (segment.length > 1 ? segment : ACCENTS[segment] ?? segment))
-
-  const padLength = Math.ceil(value.length * 0.3)
-  let padding = ''
-  while (padding.length < padLength)
-    padding += PADDING[padding.length % PADDING.length]
-
+  const padding = pad(value.length)
   return `[!!! ${accented}${padding === '' ? '' : ` ${padding}`} !!!]`
 }
 

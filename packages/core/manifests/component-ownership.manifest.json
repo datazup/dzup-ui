@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "99b963a03e1c0a9cd8077c9f1d0405a645174e4e",
+  "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -5975,6 +5975,19 @@
       ]
     },
     {
+      "symbol": "DzCoreMessageGroup",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "subpaths": [
+        ".",
+        "./i18n"
+      ],
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/i18n/messages.ts"
+      ]
+    },
+    {
       "symbol": "DzCountdown",
       "package": "@dzup-ui/core",
       "subpath": ".",
@@ -8607,6 +8620,49 @@
       ]
     },
     {
+      "symbol": "DzGridItem",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "subpaths": [
+        ".",
+        "./layout"
+      ],
+      "kind": "compound-part",
+      "parentComponent": "DzGrid",
+      "evidence": [
+        "packages/core/src/components/layout/index.ts",
+        "packages/core/src/components/layout/DzGridItem.vue",
+        "name prefix of DzGrid",
+        "no story of its own"
+      ]
+    },
+    {
+      "symbol": "DzGridItemProps",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "subpaths": [
+        ".",
+        "./layout"
+      ],
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/components/layout/DzGrid.types.ts"
+      ]
+    },
+    {
+      "symbol": "DzGridItemSlots",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "subpaths": [
+        ".",
+        "./layout"
+      ],
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/components/layout/DzGrid.types.ts"
+      ]
+    },
+    {
       "symbol": "DzGridProps",
       "package": "@dzup-ui/core",
       "subpath": ".",
@@ -10767,7 +10823,10 @@
           "item",
           "item-label",
           "empty",
-          "error"
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
         ],
         "states": [
           "disabled",
@@ -10790,7 +10849,10 @@
           "item",
           "item-label",
           "empty",
-          "error"
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
         ],
         "rtl": {
           "mirrors": "layout",
@@ -11136,6 +11198,19 @@
       "kind": "type",
       "evidence": [
         "packages/core/src/components/navigation/DzMenu.types.ts"
+      ]
+    },
+    {
+      "symbol": "DzMessageFormatter",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "subpaths": [
+        ".",
+        "./i18n"
+      ],
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/i18n/useDzMessageFormat.ts"
       ]
     },
     {
@@ -19761,6 +19836,19 @@
       ]
     },
     {
+      "symbol": "GridSpan",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "subpaths": [
+        ".",
+        "./layout"
+      ],
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/components/layout/DzGrid.types.ts"
+      ]
+    },
+    {
       "symbol": "GridVariantProps",
       "package": "@dzup-ui/core",
       "subpath": ".",
@@ -20777,6 +20865,19 @@
       "evidence": [
         "packages/core/src/components/layout/DzMasonry.types.ts",
         "type-only export not listed in public-api.manifest.json#exports.types"
+      ]
+    },
+    {
+      "symbol": "ResponsiveSpan",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "subpaths": [
+        ".",
+        "./layout"
+      ],
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/components/layout/DzGrid.types.ts"
       ]
     },
     {
@@ -24647,6 +24748,20 @@
       "evidence": [
         "packages/core/src/composables/provider/useDzLocale.ts",
         "packages/core/manifests/public-api.manifest.json#exports.composables"
+      ]
+    },
+    {
+      "symbol": "useDzMessageFormat",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "subpaths": [
+        ".",
+        "./i18n"
+      ],
+      "kind": "composable",
+      "evidence": [
+        "packages/core/src/i18n/useDzMessageFormat.ts",
+        "composable naming convention (use* prefix)"
       ]
     },
     {

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "sourceCommit": "99b963a03e1c0a9cd8077c9f1d0405a645174e4e",
+  "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
     "packages/contracts/src/quality-tiers.ts",
@@ -3431,7 +3431,9 @@
         "token-contrast": "tier A"
       },
       "source": "packages/core/src/components/layout/DzGrid.vue",
-      "parts": [],
+      "parts": [
+        "DzGridItem"
+      ],
       "hasAnatomy": false
     },
     {

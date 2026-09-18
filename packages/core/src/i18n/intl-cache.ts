@@ -93,6 +93,20 @@ export function cachedRelativeTimeFormat(
   )
 }
 
+/**
+ * Plural rules for a locale (TASK-R5-O4).
+ *
+ * Cached for the same reason as the formatters: `select()` is cheap, the
+ * constructor resolves locale data. The message formatter calls it once per
+ * plural argument per render, and a data grid renders many.
+ */
+export function cachedPluralRules(
+  locale: IntlLocaleArg,
+  options?: Intl.PluralRulesOptions,
+): Intl.PluralRules {
+  return cached('plural', locale, options, () => new Intl.PluralRules(locale as string, options))
+}
+
 export function cachedListFormat(
   locale: IntlLocaleArg,
   options?: Intl.ListFormatOptions,

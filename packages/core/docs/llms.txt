@@ -2,7 +2,7 @@
 
 > The Vue 3 component library published as `@dzup-ui/core`. Every component is a named export of a single entry point, is styled exclusively through `--dz-*` design tokens (no hardcoded colours, no scoped styles), themes via a `data-theme` attribute, and takes v-model through `defineModel` (ADR-16). This file is generated from the same metadata extraction the library documents itself with, so it cannot disagree with the shipped code.
 
-144 public components and 64 compound sub-parts across 12 families, extracted from source by `vue-component-meta@3.3.7`. This is the index; for full props / events / slots tables plus a usage snippet per component see [/storybook/llms-full.txt](/storybook/llms-full.txt).
+144 public components and 65 compound sub-parts across 12 families, extracted from source by `vue-component-meta@3.3.7`. This is the index; for full props / events / slots tables plus a usage snippet per component see [/storybook/llms-full.txt](/storybook/llms-full.txt).
 
 ## Conventions
 
@@ -172,7 +172,7 @@ These hold for every component below, so they are stated once here:
   - props: `allowSpaceInQuery`, `filter`, `insertSpace`, `loadingText`, `maxlength`, `multiline`, `noResultsText`, `placeholder`, `rows`, `triggers`, `ui`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`, `v-model:value`
-  - parts (ADR-19): `content`, `control`, `empty`, `error`, `input`, `item`, `item-label`, `list`, `loader`, `root`
+  - parts (ADR-19): `content`, `control`, `empty`, `error`, `input`, `item`, `item-label`, `list`, `loader`, `options-message`, `options-retry`, `options-state`, `root`
 - **DzMultiSelect** — Multi-value select using Reka UI Combobox (ADR-07).
   - props: `disabled`, `items`, `maxSelections`, `name`, `placeholder`, `size`, `ui`, `variant`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl`
@@ -313,6 +313,9 @@ These hold for every component below, so they are stated once here:
   - props: `as`, `orientation`, `sticky`, `ui`, `wrap`
   - variant: `flat` `outlined` `elevated` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - parts (ADR-19): `group`, `root`
+- **DzGridItem** — a `DzGrid` child that says how many columns it occupies.
+  - part of `DzGrid`
+  - props: `as`, `span`
 - **DzResizableHandle** — Resize handle between panels, using Reka UI
   - part of `DzResizable`
   - props: `disabled`, `withHandle`

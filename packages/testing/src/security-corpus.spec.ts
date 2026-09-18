@@ -1,13 +1,20 @@
+import { existsSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import {
   checkCorpusFile,
+  checkPeerCompatibilityFile,
   corpusFileName,
   fixturesForSink,
   listSecurityCorpusFiles,
   loadAllSecurityFixtures,
+  loadPeerCompatibilityFixtures,
   loadSecurityCorpus,
+  NEUTRALIZATION_OUTCOMES,
   payloadOf,
+  PEER_COMPATIBILITY_SCHEMA_FILE,
+  peerSlug,
   SECURITY_CATEGORIES,
+  SECURITY_CORPUS_SCHEMA_FILE,
   SECURITY_CORPUS_SCHEMA_VERSION,
   SECURITY_SINKS,
 } from './security-corpus.js'
@@ -92,5 +99,85 @@ describe('security corpus — selection', () => {
     const plain = fixturesForSink('navigation', ['url-scheme'])
       .find(f => f.id === 'url-scheme.javascript.plain')
     expect(plain?.required).toBe('rejected')
+  })
+})
+
+/**
+ * Schema 1.1.0 (TASK-R3-O4): the format is shared, so what matters is that a
+ * second repository's file is judged by the same rules as this one's. The
+ * JSON Schema ⇔ checker agreement itself is proven by
+ * `yarn validate:security-corpus` and its spec in packages/tooling, which owns
+ * the draft-07 evaluator; these are the checker's own rules.
+ */
+describe('security corpus — schema 1.1.0 (shared format)', () => {
+  const base = (): ReturnType<typeof JSON.parse> => JSON.parse(JSON.stringify(loadSecurityCorpus('url-scheme')))
+
+  it('carries the current version in every file, and publishes both JSON Schemas', () => {
+    expect(SECURITY_CORPUS_SCHEMA_VERSION).toBe('1.1.0')
+    for (const category of SECURITY_CATEGORIES)
+      expect(loadSecurityCorpus(category).schemaVersion, category).toBe(SECURITY_CORPUS_SCHEMA_VERSION)
+    for (const file of [SECURITY_CORPUS_SCHEMA_FILE, PEER_COMPATIBILITY_SCHEMA_FILE]) {
+      expect(existsSync(file), file).toBe(true)
+      expect(JSON.parse(readFileSync(file, 'utf8')).$schema).toBe('http://json-schema.org/draft-07/schema#')
+    }
+  })
+
+  it('refuses a field the format does not define, and points at extensions', () => {
+    const file = base()
+    file.fixtures[0].why = 'Pro spells rationale this way'
+    expect(checkCorpusFile(file)).toEqual([{
+      path: '<corpus>.fixtures[0].why',
+      message: 'not a field of this format — put consumer-specific data under extensions["<namespace>"]',
+    }])
+  })
+
+  it('accepts consumer data under a reverse-DNS namespace and nowhere else', () => {
+    const file = base()
+    file.fixtures[0].extensions = { 'com.dzup.pro': { mustNotSurvive: ['javascript:'] } }
+    expect(checkCorpusFile(file)).toEqual([])
+    file.fixtures[0].extensions = { pro: { mustNotSurvive: ['javascript:'] } }
+    expect(checkCorpusFile(file).map(p => p.path)).toEqual(['<corpus>.fixtures[0].extensions.pro'])
+  })
+
+  it('makes `admitted` as expensive as `inert`', () => {
+    expect(NEUTRALIZATION_OUTCOMES.at(-1)).toBe('admitted')
+    const file = base()
+    file.fixtures[0].outcomes = { html: 'admitted' }
+    file.fixtures[0].rationale = 'The URL policy allows it.'
+    expect(checkCorpusFile(file).map(p => p.path)).toEqual(['<corpus>.fixtures[0].rationale'])
+  })
+
+  it('names the two sanitizer-seam contexts as sinks, so a markdown payload never reaches a raw-HTML query', () => {
+    expect(SECURITY_SINKS).toContain('markdown')
+    expect(SECURITY_SINKS).toContain('mermaid-svg')
+    const file = base()
+    file.fixtures[0].outcomes = { markdown: 'stripped' }
+    expect(checkCorpusFile(file)).toEqual([])
+  })
+})
+
+describe('peer compatibility — the incompatible-version shape', () => {
+  it('loads, and covers the incompatible state the consumer matrices lacked', () => {
+    const fixtures = loadPeerCompatibilityFixtures()
+    expect(new Set(fixtures.map(f => f.id)).size).toBe(fixtures.length)
+    const incompatible = fixtures.find(f => f.state === 'incompatible')
+    expect(incompatible?.id).toBe('peer.vue.wrong-major')
+    expect(incompatible?.diagnostics.some(d => d.mustContain.some(text => text.includes(incompatible.peer)))).toBe(true)
+  })
+
+  it('refuses a version on an absent peer and a silent incompatible one', () => {
+    const file = JSON.parse(JSON.stringify({ schemaVersion: '1.1.0', description: 'x', fixtures: loadPeerCompatibilityFixtures() }))
+    file.fixtures[1].installedVersion = '2.1.0'
+    file.fixtures[0].diagnostics = []
+    expect(checkPeerCompatibilityFile(file).map(p => p.path)).toEqual([
+      '<peer-compatibility>.fixtures[0].diagnostics',
+      '<peer-compatibility>.fixtures[1].installedVersion',
+    ])
+  })
+
+  it('slugs a scoped or dotted peer name the way ids spell it', () => {
+    expect(peerSlug('@vue/reactivity')).toBe('vue-reactivity')
+    expect(peerSlug('chart.js')).toBe('chart-js')
+    expect(peerSlug('pdfjs-dist')).toBe('pdfjs-dist')
   })
 })
