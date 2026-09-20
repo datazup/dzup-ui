@@ -412,10 +412,90 @@ un-run rollout. It is stated here so acceptance records it: what ships is *the
 contract and its default*, exercised by its own suite and by Pro
 TASK-R5-P2, not adoption across 144 components.
 
+
+### A7. An eleventh concern: the URL policy (TASK-R2-O4, 2026-09-18)
+
+08-11 doc 06 asks for a URL/DOM policy on the navigation sinks. TASK-N1-O5 then
+**measured** that none existed anywhere in `packages/core/src` — no scheme
+check, no allowlist, no normalization — and that all nine `url-scheme` corpus
+fixtures reached the rendered `href` verbatim on all six navigation-sink
+components: **54 measurements**, severity high, recorded as `S1`–`S12` in
+`packages/core/security/security-deviations.json` and as finding U1 in
+`packages/core/security/url-boundary.threat-model.md` §2a. It reported rather
+than fixed, because refusing `javascript:void(0)` is a public-behaviour change.
+This amendment is the fix.
+
+**`urlPolicy` is the eleventh concern by §1's count** — the nine keys plus
+theme, plus A6's sanitizer — and the *twelfth* by the composables barrel's,
+which counts `useDzTheme` as one of its readers. Both numbers are in the source
+and neither is wrong; they count different lists.
+
+`DZ_URL_POLICY_KEY` lives in
+`@dzup-ui/contracts`; `useDzUrlPolicy()` in Core; `DzProvider`'s `urlPolicy`
+prop is the one writer. Default allowlist:
+`http`, `https`, `mailto`, `tel`, `sms`, plus every relative, query and fragment
+URL — those carry no scheme and resolve against the document the host already
+served. Everything else is refused.
+
+**Four properties, and each is a decision rather than an implementation detail.**
+
+1. **An allowlist, not a denylist.** A denylist is a list of the attacks
+   somebody thought of; `javascript:` alone is four evasions wide, and the next
+   scheme a browser ships is admitted by default. An allowlist is wrong in the
+   direction where a legitimate scheme is visibly refused until a host adds it.
+2. **The decision is made after WHATWG normalization** (§4.4: strip leading and
+   trailing C0 controls and spaces, remove tab/LF/CR from anywhere, compare the
+   scheme case-insensitively). A check written as `startsWith('javascript:')`
+   closes one of the four evasions the corpus carries and admits the other
+   three, which is exactly the shape of a security control that tests green.
+3. **A rejected URL is omitted, never rewritten.** Every one of the six keeps
+   the non-link branch it already had, so the element degrades instead of
+   disappearing: `DzButton`, `DzMenuItem` and `DzSidebarItem` render their
+   `<button>` and still emit `click`; `DzBreadcrumbItem` renders its
+   `<span role="link">`; `DzAnchor` renders the same `<a>` with no `href`, which
+   by definition is not a link. Rewriting to `#` or to `javascript:void(0)`
+   would produce a control that looks operable and is not — a worse failure
+   than refusing to draw a link, and one nothing except a click can see. The
+   element carries `data-state="url-rejected"`, declared in each anatomy, so a
+   consumer can style it and a test can assert it.
+4. **The escape hatch is the provider, once.** `urlPolicy.allow` receives the
+   library's own verdict as `allowedByDefault`, so widening is one line that
+   cannot accidentally disable the base policy, and narrowing is the same line
+   inverted. A per-component opt-out prop was rejected: it re-opens the hole for
+   exactly the consumers most likely to reach for it, one call site at a time,
+   with no central record of where.
+
+**The asymmetry with A6 is deliberate.** `DZ_SANITIZER_KEY` has a `null` arm
+meaning "the host said it would supply one and did not"; `DZ_URL_POLICY_KEY` has
+none. A URL policy has no such state, because the library's answer with nothing
+configured is the **strict** one — a tree that forgot its provider is the strict
+tree, not the open one, and a key whose absent value is the safe value cannot be
+switched off by forgetting something. Nesting still folds per field: a nested
+provider narrowing `allowedSchemes` keeps an ancestor's `allow`, which A6's
+per-field fold established and which required Core to carry the resolved `allow`
+beside the verdict (`DzResolvedUrlPolicy`, Core-internal).
+
+**Consequences for §2 and for the ratchet.** `DZ_PROVIDER_DEFAULTS` grows a
+`urlPolicy` key, the second growth after A6's, and for the same reason: a
+defaults object that cannot describe a concern stops being the answer to "what
+do I get with no provider", and Pro must resolve to the same scheme list.
+Security-corpus deviations move **54 → 0**, and the ceiling moves with them, so
+a regression fails the corpus rather than matching a pin.
+
+**What this amendment does *not* claim.** It governs the **navigation** sink
+only. The eight subresource sinks (`<img src>`) still pass their URL through and
+still measure `inert`: no shipping engine has fetched a `javascript:`
+subresource this decade, `data:image/svg+xml` in an `<img>` is script-disabled
+by specification, and the residual — an unconditional GET to an origin the
+page's author did not choose — is the host's `img-src` directive. No component
+can decide which origins a consumer trusts, and one that tried would be useless.
+`DzUrlSink` names both kinds so a host *can* opt an image sink in; the library
+does not do it for them.
+
 ### What did not change
 
-Every default in §2 **that existed before A6** (A6 adds a key rather than
-changing one), the deep-merge rule for messages in §3, the direction
+Every default in §2 **that existed before A6 and A7** (both add a key rather
+than changing one), the deep-merge rule for messages in §3, the direction
 resolution in §4, the formatter cache in §5, the precedence in §6, the motion
 policy in §7, and the Pro extension rule in §9. No component's default changed,
 and every concern still resolves with no provider mounted.
@@ -436,6 +516,9 @@ media-query value, not this contract's. The implementation follows this ADR.
 | `packages/core/src/providers/DzProvider.contract.spec.ts` · `DzThemeProvider.contract.spec.ts` | Contract Spec v1 and anatomy conformance — including `parts: 'none'`, i.e. that neither renders an element |
 | `packages/core/tests/ssr/dz-provider-ssr.spec.ts` | server render with the browser globals deleted, **plus** hydration with zero mismatch warnings for a configured, a nested, and a themed tree |
 | `packages/core/src/security/sanitize.spec.ts` | A6: escaping default is not a pass-through · ceilings enforced before parsing, length before depth · the depth scanner's over-count and under-count bypasses · per-field fold · options read at call time |
+| `packages/core/src/security/url-policy.spec.ts` | A7: WHATWG normalization on all three steps · all four `javascript:` evasions · allowlist refuses what nobody has thought of yet · the provider fold, including a nested list keeping an ancestor's `allow` · rejection is omission, with neither `#` nor `javascript:void(0)` substituted · the dev warning fires once per component, prop and scheme · agreement with the corpus oracle, which keeps its own normalizer |
+| `packages/core/security/url-boundary.url-policy.spec.ts` · `.malicious-corpus.spec.ts` | A7: the 54 measurements that found the gap, now asserting the REQUIRED outcome with an empty deviation register behind them |
+| `yarn test:e2e:csp` | A7 and A6 §8: `DzThemeProvider` + `DzFileUpload` render identically under a real `Content-Security-Policy` header with no `'unsafe-inline'`, no un-nonced `<style>` survives, and the URL policy holds in chromium, firefox and webkit |
 | `yarn validate:contract-parity` | now covers `packages/core/src/providers`, which it never did |
 | `yarn validate:hardcoded-strings` | no static `aria-label` in a template and no literal default on a user-visible prop, unless a comment says why |
 | `packages/core/src/i18n/i18n.spec.ts` | every catalog value equals the literal it replaced · per-key override · a non-string override falls back rather than rendering `[object Object]` · 1,000 rows construct at most one formatter per (locale, options) pair |

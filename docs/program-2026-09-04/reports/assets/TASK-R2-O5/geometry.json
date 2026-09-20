@@ -1,0 +1,156 @@
+{
+  "measuredAt": "2026-09-18",
+  "base": "http://127.0.0.1:6107",
+  "rows": [
+    {
+      "change": "V1",
+      "component": "DzDatePicker",
+      "story": "core-forms-dzdatepicker--default",
+      "before": {
+        "w": 218.02,
+        "h": 122
+      },
+      "after": {
+        "w": 226.02,
+        "h": 122
+      }
+    },
+    {
+      "change": "V1",
+      "component": "DzDateRangePicker",
+      "story": "core-forms-dzdaterangepicker--default",
+      "before": {
+        "w": 246.38,
+        "h": 122
+      },
+      "after": {
+        "w": 254.38,
+        "h": 122
+      }
+    },
+    {
+      "change": "V2",
+      "component": "DzBreadcrumb",
+      "story": "core-navigation-dzbreadcrumb--default",
+      "before": {
+        "w": 278.7,
+        "h": 101
+      },
+      "after": {
+        "w": 278.7,
+        "h": 104
+      }
+    },
+    {
+      "change": "V3",
+      "component": "DzRating",
+      "story": "core-forms-dzrating--default",
+      "before": {
+        "w": 196,
+        "h": 136
+      },
+      "after": {
+        "w": 196,
+        "h": 138
+      }
+    },
+    {
+      "change": "V4",
+      "component": "DzResizable",
+      "story": "core-layout-dzresizable--default",
+      "before": {
+        "w": 315.66,
+        "h": 154
+      },
+      "after": {
+        "w": 315.66,
+        "h": 154
+      }
+    },
+    {
+      "change": "V4",
+      "component": "DzSplitter",
+      "story": "core-layout-dzsplitter--default",
+      "before": {
+        "w": 315.66,
+        "h": 154
+      },
+      "after": {
+        "w": 315.66,
+        "h": 154
+      }
+    },
+    {
+      "change": "V8",
+      "component": "DzCheckbox",
+      "story": "core-forms-dzcheckbox--default",
+      "before": {
+        "w": 282.42,
+        "h": 104
+      },
+      "after": {
+        "w": 282.42,
+        "h": 110
+      }
+    },
+    {
+      "change": "V8",
+      "component": "DzCheckboxGroup",
+      "story": "core-forms-dzcheckboxgroup--default",
+      "before": {
+        "w": 151.25,
+        "h": 158
+      },
+      "after": {
+        "w": 151.25,
+        "h": 176
+      }
+    },
+    {
+      "change": "V8",
+      "component": "DzRadio",
+      "story": "core-forms-dzradio--default",
+      "before": {
+        "w": 160.44,
+        "h": 101
+      },
+      "after": {
+        "w": 160.44,
+        "h": 104
+      }
+    },
+    {
+      "change": "V8",
+      "component": "DzRadioGroup",
+      "story": "core-forms-dzradiogroup--default",
+      "before": {
+        "w": 151.25,
+        "h": 159
+      },
+      "after": {
+        "w": 151.25,
+        "h": 168
+      }
+    },
+    {
+      "change": "V5",
+      "component": "DzTree",
+      "story": "core-data-dztree--default",
+      "before": null,
+      "after": {
+        "w": 217.11,
+        "h": 344
+      }
+    },
+    {
+      "change": "V6",
+      "component": "DzLightbox",
+      "story": "core-media-dzlightbox--default",
+      "before": null,
+      "after": {
+        "w": 205.63,
+        "h": 118
+      }
+    }
+  ]
+}

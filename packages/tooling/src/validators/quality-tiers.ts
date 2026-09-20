@@ -196,18 +196,62 @@ export function checkQualityTiers(
       })
     }
 
-    if (!SECURITY_BOUNDARIES.includes(row.securityBoundary)) {
+    // The boundary is a SET since TASK-R2-O4 (owner decision O5-2). Four
+    // invariants, because a set has three ways to be malformed that a single
+    // value did not.
+    const boundaries = row.securityBoundary
+    const printed = boundaries.join(' + ')
+
+    if (boundaries.length === 0) {
       violations.push({
         rule: 'catalog',
-        message: `${row.component} declares boundary \`${row.securityBoundary}\`, which is not a `
-          + `SecurityBoundary.`,
+        message: `${row.component} declares an EMPTY boundary set. A component that crosses `
+          + `nothing declares \`['none']\`; an empty list is the absence of a declaration, `
+          + `which is the state this matrix exists to make impossible.`,
       })
     }
 
-    if (row.securityBoundary !== 'none' && row.boundaryJustification === undefined) {
+    for (const boundary of boundaries) {
+      if (!SECURITY_BOUNDARIES.includes(boundary)) {
+        violations.push({
+          rule: 'catalog',
+          message: `${row.component} declares boundary \`${boundary}\`, which is not a `
+            + `SecurityBoundary.`,
+        })
+      }
+    }
+
+    if (new Set(boundaries).size !== boundaries.length) {
+      violations.push({
+        rule: 'catalog',
+        message: `${row.component} lists a boundary twice (\`${printed}\`). The generator `
+          + `de-duplicates; a repeat here means the assignment was edited by hand.`,
+      })
+    }
+
+    const ordered = SECURITY_BOUNDARIES.filter(b => boundaries.includes(b))
+    if (ordered.join(' ') !== boundaries.join(' ')) {
+      violations.push({
+        rule: 'catalog',
+        message: `${row.component} lists its boundaries as \`${printed}\`; the canonical order `
+          + `is \`${ordered.join(' + ')}\`. Two spellings of one fact is how a diff stops `
+          + `meaning something changed.`,
+      })
+    }
+
+    if (boundaries.length > 1 && boundaries.includes('none')) {
+      violations.push({
+        rule: 'catalog',
+        message: `${row.component} declares \`${printed}\`. \`none\` is exclusive: it is not `
+          + `"crosses nothing and also a URL", it is a contradiction, and accepting it would `
+          + `let a real boundary hide behind the word that means there is not one.`,
+      })
+    }
+
+    if (boundaries.some(b => b !== 'none') && row.boundaryJustification === undefined) {
       violations.push({
         rule: 'justification',
-        message: `${row.component} declares \`boundary: '${row.securityBoundary}'\` with no `
+        message: `${row.component} declares \`boundary: '${printed}'\` with no `
           + `\`boundaryWhy\`. Name the prop and what it reaches.`,
       })
     }

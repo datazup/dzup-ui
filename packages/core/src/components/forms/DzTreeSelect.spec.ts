@@ -452,3 +452,31 @@ describe('dzTreeSelect — Filter', () => {
     wrapper.unmount()
   })
 })
+
+// -- D8: controlled/uncontrolled -------------------------------------------
+
+describe('dzTreeSelect — D8: an external write after a user edit is honoured', () => {
+  it('defect D8 -- a parent that rewrites `v-model:value` after a node was picked is obeyed', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true, placeholder: 'Pick a category' },
+      attachTo: document.body,
+    })
+    await flush()
+
+    expect(clickRow('Cherry')).toBe(true)
+    await flush()
+    expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toBe('cherry')
+
+    await wrapper.setProps({ value: 'cherry' })
+    await flush()
+    expect(wrapper.text()).toContain('Cherry')
+
+    // The parent loads a different record. Before the fix the trigger kept
+    // showing the node the user had picked (N1-O1 defect D8).
+    await wrapper.setProps({ value: 'apple' })
+    await flush()
+    expect(wrapper.text()).toContain('Apple')
+
+    wrapper.unmount()
+  })
+})

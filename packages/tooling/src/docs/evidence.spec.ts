@@ -25,6 +25,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
+import { buildTargetIn, classifyBrowserTargetSources, probeBrowserTarget } from './browser-target.ts'
 import { isAllowedComponentLine, renderComponentPage } from './docs-pages.ts'
 import {
   renderAccessibilityPage,
@@ -73,7 +74,7 @@ function makeSources(overrides: Partial<EvidenceSources> = {}): EvidenceSources 
       family: 'buttons',
       tier: 'B',
       pattern: 'button',
-      securityBoundary: 'none',
+      securityBoundary: ['none'],
       traits: [],
       wcag: ['2.1.1'],
       evidence: ['unit-spec', 'at-manual', 'keyboard-spec'],
@@ -91,7 +92,7 @@ function makeSources(overrides: Partial<EvidenceSources> = {}): EvidenceSources 
       family: 'buttons',
       tier: 'B',
       pattern: 'button',
-      securityBoundary: 'none',
+      securityBoundary: ['none'],
       traits: [],
       anatomy: 'absent',
       source: 'packages/core/src/components/buttons/DzThing.vue',
@@ -148,6 +149,7 @@ function makeSources(overrides: Partial<EvidenceSources> = {}): EvidenceSources 
     atMatrix,
     wcagDeviations,
     cascadeLayers: ['dz-tokens'],
+    browserTarget: { declared: [], syntaxLevels: [], scanned: ['package.json'] },
     atScripts: {},
     fingerprints: {},
     ...overrides,
@@ -656,5 +658,85 @@ describe('the real catalogue', () => {
       .join('\n')
     const printed = rendered.split('**`unrun`**').length - 1
     expect(printed).toBe(unrunTotal)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// The browser-floor probe (TASK-R2-O5)
+// ---------------------------------------------------------------------------
+
+describe('browser-target probe', () => {
+  it('reads a browserslist file and a package.json key as declarations', () => {
+    const probe = classifyBrowserTargetSources([
+      { path: '.browserslistrc', content: '# comment\nlast 2 versions\nnot dead\n' },
+      { path: 'packages/core/package.json', content: '{"browserslist":["chrome >= 120"]}' },
+    ])
+    expect(probe.declared).toEqual([
+      { kind: 'browserslist', where: '.browserslistrc', value: 'last 2 versions, not dead' },
+      { kind: 'browserslist', where: 'packages/core/package.json', value: 'chrome >= 120' },
+    ])
+  })
+
+  it('reads a build target as a declaration and a tsconfig target as a syntax level', () => {
+    const probe = classifyBrowserTargetSources([
+      { path: 'packages/core/vite.config.ts', content: 'export default {\n  build: {\n    target: \'es2022\',\n  },\n}\n' },
+      { path: 'tsconfig.base.json', content: '{\n  "compilerOptions": {\n    "target": "ES2022"\n  }\n}\n' },
+    ])
+    expect(probe.declared).toEqual([
+      { kind: 'build-target', where: 'packages/core/vite.config.ts', value: 'es2022' },
+    ])
+    expect(probe.syntaxLevels).toEqual([{ where: 'tsconfig.base.json', value: 'ES2022' }])
+  })
+
+  // The failure this probe exists to not repeat: the task's own done-check
+  // greps `target` in `packages/core/vite.config.ts`, and the two lines it
+  // matches are English sentences in a doc comment.
+  it('does not mistake the word "target" in a comment for a declaration', () => {
+    expect(buildTargetIn([
+      '/**',
+      ' * copied verbatim to `dist/i18n/locales/`, the target of the',
+      ' * asset to `dist/core.css`, the target of the `./styles` export.',
+      ' */',
+      'export default { build: { lib: {} } }',
+    ].join('\n'))).toBeUndefined()
+  })
+
+  it('reads the floor the six published packages declare', () => {
+    // Until 2026-09-19 this asserted `declared` was EMPTY, which was true and
+    // was the point: the probe existed so that the day an owner declared a
+    // floor, the published statement would change with it. That day came —
+    // owner decision D118 option (a), TASK-R2-O5 — so the assertion is now the
+    // other half of the same contract, and it is stricter: every published
+    // package must declare, and all of them must declare the SAME range. A
+    // floor that is declared in five packages out of six is a floor the build
+    // does not actually hold to.
+    const probe = probeBrowserTarget()
+    const published = ['contracts', 'core', 'mcp', 'nuxt', 'testing', 'tokens']
+
+    expect(probe.declared.map(d => d.where))
+      .toEqual(published.map(p => `packages/${p}/package.json`))
+    expect(new Set(probe.declared.map(d => d.value)).size).toBe(1)
+    expect(probe.declared.every(d => d.kind === 'browserslist')).toBe(true)
+    expect(probe.scanned.length).toBeGreaterThan(0)
+    // A `compilerOptions.target` is still NOT a browser declaration, and is
+    // still reported separately.
+    expect(probe.syntaxLevels.length).toBeGreaterThan(0)
+  })
+
+  it('states the absence on the page, and states a declaration when there is one', () => {
+    const undeclared = renderBrowserSupportPage(makeSources())
+    expect(undeclared).toContain('The supported-browser floor is undecided')
+    expect(undeclared).toContain('What was searched')
+
+    const declared = renderBrowserSupportPage(makeSources({
+      browserTarget: {
+        declared: [{ kind: 'browserslist', where: 'package.json', value: 'last 2 versions' }],
+        syntaxLevels: [],
+        scanned: ['package.json'],
+      },
+    }))
+    expect(declared).toContain('## The supported-browser floor')
+    expect(declared).not.toContain('is undecided')
+    expect(declared).toContain('last 2 versions')
   })
 })

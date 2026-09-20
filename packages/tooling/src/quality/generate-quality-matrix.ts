@@ -46,6 +46,7 @@ import {
   BOUNDARY_EVIDENCE,
   evidenceFor,
   evidenceOrigin,
+  normaliseBoundaries,
   TIER_EVIDENCE_INCREMENT,
   TRAIT_EVIDENCE,
   TRAIT_WCAG,
@@ -141,7 +142,7 @@ export function buildQualityMatrix(
     }
 
     const tier = assignment.tier
-    const boundary = assignment.boundary ?? 'none'
+    const boundary = normaliseBoundaries(assignment.boundary)
     const traits = [...(assignment.traits ?? [])].sort()
 
     const evidence = evidenceFor(tier, boundary, traits)

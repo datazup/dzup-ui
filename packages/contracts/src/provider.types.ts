@@ -501,6 +501,121 @@ export class DzSanitizeLimitError extends Error {
 }
 
 // ---------------------------------------------------------------------------
+// URL policy
+// ---------------------------------------------------------------------------
+
+/**
+ * What a host-supplied URL is about to become (TASK-R2-O4).
+ *
+ * The two kinds are not two flavours of one risk, they are two different
+ * threats, and the corpus keyed its expected outcomes by exactly this
+ * distinction (`packages/core/security/url-boundary.threat-model.md` §2a/§2b):
+ *
+ * - `navigation` — the value becomes an `<a href>` a person activates, so the
+ *   scheme decides whether a click is a link or **script execution in the
+ *   host's own origin**. This is the sink the policy guards.
+ * - `subresource` — the value becomes an `<img src>` the browser fetches. No
+ *   shipping engine has executed a `javascript:` subresource this decade and
+ *   `data:image/svg+xml` in an `<img>` is script-disabled by specification, so
+ *   the residual is a *request* to an origin the page's author did not choose.
+ *   No component can decide which origins a consumer trusts (avatars come from
+ *   CDNs); that is the host's `img-src` directive. Declared here so the
+ *   vocabulary is complete and so a host CAN opt an image sink in, not because
+ *   the library filters one by default.
+ */
+export type DzUrlSink = 'navigation' | 'subresource'
+
+/** Which component asked, about which prop, for which sink. */
+export interface DzUrlPolicyContext {
+  /** The exported component name, as the quality matrix spells it. */
+  readonly component: string
+  /** The prop the value arrived on — `href`, `items[].href`, `src`. */
+  readonly prop: string
+  /** What the value is about to become. */
+  readonly sink: DzUrlSink
+}
+
+/**
+ * The application-wide answer to "may this URL be rendered as a live link?".
+ *
+ * An **allowlist**, never a denylist. A denylist is a list of the attacks
+ * somebody thought of: `javascript:` is four evasions wide on its own (mixed
+ * case, a leading C0 control, an embedded tab, and percent-encoding), and the
+ * next scheme a browser ships is admitted by default. An allowlist is wrong in
+ * the safe direction — a legitimate scheme is refused until a host adds it,
+ * and the refusal is visible in the DOM rather than silent.
+ *
+ * The decision is **after WHATWG normalization**, not on the raw string: the
+ * URL parser strips leading/trailing C0 controls and spaces, removes tab/LF/CR
+ * from anywhere in the input, and compares schemes ASCII case-insensitively
+ * (WHATWG URL §4.4). A check built on `startsWith('javascript:')` closes one of
+ * the four evasions the corpus carries and admits the other three.
+ */
+export interface DzUrlPolicy {
+  /**
+   * Schemes admitted for a `navigation` sink, lowercase and without the colon.
+   *
+   * Relative and fragment URLs carry no scheme and are always admitted: they
+   * resolve against the document's own origin, which the host already chose.
+   */
+  readonly allowedSchemes: readonly string[]
+  /**
+   * The decision. `true` renders the link; `false` omits the attribute.
+   *
+   * A host replaces this to widen or narrow — it is the escape hatch, and it is
+   * here rather than on a component prop on purpose: a per-instance
+   * `:unsafe-href` boolean re-opens the hole for exactly the consumers most
+   * likely to reach for it, one call site at a time and with no central record.
+   */
+  readonly isAllowed: (url: string, context: DzUrlPolicyContext) => boolean
+}
+
+/**
+ * What a host hands `DzProvider` — every field optional, so a nested provider
+ * can narrow the scheme list without restating the decision function.
+ *
+ * `allow` receives the same context the default does **plus** the default's own
+ * verdict, so the common extension ("everything the library allows, and
+ * `slack:`") is one line that cannot accidentally disable the base policy.
+ */
+export interface DzUrlPolicyOptions {
+  /** Replaces the default list outright. Lowercase, no colon. */
+  readonly allowedSchemes?: readonly string[]
+  /**
+   * The explicit allow function. Called only for values the library would
+   * otherwise refuse is **not** the contract — it is called for every value,
+   * with `allowedByDefault` saying what the scheme list decided, so a host can
+   * both widen and narrow.
+   */
+  readonly allow?: (
+    url: string,
+    context: DzUrlPolicyContext & { readonly allowedByDefault: boolean },
+  ) => boolean
+}
+
+/**
+ * The schemes a navigation sink admits with no provider mounted.
+ *
+ * `http`/`https` are the web. `mailto`, `tel` and `sms` hand off to another
+ * application and cannot execute in this document; all three are ordinary
+ * contents of a navigation menu and refusing them would make the policy the
+ * thing consumers route around. Every other scheme — `javascript`, `vbscript`,
+ * `data`, `file`, `blob`, `filesystem`, and whatever ships next — is refused
+ * until a host says otherwise.
+ *
+ * Recorded as data rather than baked into the function so a consumer can read
+ * the list, and so {@link DZ_PROVIDER_DEFAULTS} can publish the same values Pro
+ * must resolve to.
+ */
+export const DZ_ALLOWED_URL_SCHEMES: readonly string[] = [
+  'http',
+  'https',
+  'mailto',
+  'tel',
+  'sms',
+]
+
+// ---------------------------------------------------------------------------
 // Injection keys
 // ---------------------------------------------------------------------------
 
@@ -533,6 +648,20 @@ export const DZ_TEST_IDS_KEY: InjectionKey<Ref<DzTestIds>> = Symbol('dz-test-ids
  * into a rendering difference no one goes looking for.
  */
 export const DZ_SANITIZER_KEY: InjectionKey<DzSanitizerAdapter | null> = Symbol('dz-sanitizer')
+/**
+ * The twelfth concern (TASK-R2-O4, ADR-20 amendment A7). A resolved policy, not
+ * a ref, for the same reason {@link DZ_SANITIZER_KEY} is not one: it is a
+ * method-bearing object whose method reads the current configuration at call
+ * time.
+ *
+ * There is deliberately **no `null` arm** here, unlike the sanitizer. `null`
+ * there means "the host said it would supply an adapter and supplied none",
+ * which is a configuration mistake worth a dev-mode throw. A URL policy has no
+ * such state: the library's answer with nothing configured is the *strict* one,
+ * and a key whose absent value is the safe value cannot be turned off by
+ * forgetting something.
+ */
+export const DZ_URL_POLICY_KEY: InjectionKey<DzUrlPolicy> = Symbol('dz-url-policy')
 
 // ---------------------------------------------------------------------------
 // Documented defaults
@@ -569,6 +698,17 @@ export const DZ_PROVIDER_DEFAULTS = {
     policyName: 'dzup-ui',
     limits: { maxLength: 128 * 1024, maxDepth: 64 },
   },
+  /**
+   * The URL policy's **data** half — the scheme allowlist (TASK-R2-O4).
+   *
+   * The decision *function* is Core's, for the same reason the sanitizer's is:
+   * it is real code with a WHATWG normalizer, and `@dzup-ui/contracts` is where
+   * a value is declared rather than implemented. The list is the part both
+   * tiers must agree on, which is what this object is for.
+   */
+  urlPolicy: {
+    allowedSchemes: DZ_ALLOWED_URL_SCHEMES,
+  },
 } as const satisfies {
   locale: DzLocale
   direction: DzDirectionPreference
@@ -577,4 +717,5 @@ export const DZ_PROVIDER_DEFAULTS = {
   nonce: string | undefined
   testIds: DzTestIds
   sanitizer: { policyName: string, limits: DzSanitizeLimits }
+  urlPolicy: { allowedSchemes: readonly string[] }
 }

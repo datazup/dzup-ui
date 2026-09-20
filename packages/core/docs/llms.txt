@@ -84,12 +84,12 @@ These hold for every component below, so they are stated once here:
   - v-model: `v-model`
   - parts (ADR-19): `control`, `decrement`, `error`, `increment`, `input`, `prefix`, `root`
 - **DzOtpInput** — One-time password / PIN input using Reka UI PinInput (ADR-07).
-  - props: `disabled`, `length`, `mask`, `name`, `size`, `type`, `ui`
+  - props: `disabled`, `length`, `mask`, `name`, `otp`, `size`, `type`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
   - parts (ADR-19): `control`, `error`, `input`, `root`
 - **DzPasswordInput** — Password input with visibility toggle.
-  - props: `loadingLabel`, `maxlength`, `placeholder`, `ui`
+  - props: `autocomplete`, `loadingLabel`, `maxlength`, `placeholder`, `ui`
   - variant: `outline` `filled` `underlined` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - v-model: `v-model`
   - parts (ADR-19): `control`, `error`, `input`, `prefix`, `root`, `spinner`, `toggle`
@@ -297,7 +297,7 @@ These hold for every component below, so they are stated once here:
 - **DzResizable** — Compound resizable panel root using Reka UI Splitter (ADR-07).
   - props: `direction`, `disabled`, `keyboardResizeBy`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
-  - parts (ADR-19): `indicator`, `panel`, `root`, `separator`
+  - parts (ADR-19): `indicator`, `panel`, `root`, `separator`, `step-decrease`, `step-increase`
 - **DzScrollArea** — Custom scrollbar area using Reka UI (ADR-07).
   - props: `orientation`, `type`, `ui`
   - parts (ADR-19): `root`, `viewport`
@@ -306,7 +306,7 @@ These hold for every component below, so they are stated once here:
 - **DzSplitter** — Naming alias for DzResizable.
   - props: `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `direction`, `disabled`, `id`, `keyboardResizeBy`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
-  - parts (ADR-19): `indicator`, `panel`, `root`, `separator`
+  - parts (ADR-19): `indicator`, `panel`, `root`, `separator`, `step-decrease`, `step-increase`
 - **DzStack** — Simplified vertical/horizontal stack layout.
   - props: `align`, `as`, `direction`, `gap`
 - **DzToolbar** — horizontal action bar with start/center/end regions.
@@ -629,7 +629,7 @@ These hold for every component below, so they are stated once here:
 - **DzTable** — Compound semantic table root component.
   - props: `captionVisible`, `density`, `hoverable`, `loading`, `maxHeight`, `overscan`, `rowHeight`, `size`, `striped`, `ui`, `variant`, `virtualScroll`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
-  - parts (ADR-19): `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `title`
+  - parts (ADR-19): `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `separator`, `step-decrease`, `step-increase`, `title`
 - **DzTag** — Categorization tag component with tone/variant styling.
   - props: `closable`, `disabled`, `size`, `tone`, `ui`, `variant`
   - variant: `solid` `outline` `subtle` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
@@ -753,7 +753,7 @@ These hold for every component below, so they are stated once here:
 ## Providers
 
 - **DzProvider** — one root component for every concern an application configures.
-  - props: `defaults`, `direction`, `formats`, `locale`, `messages`, `motion`, `nonce`, `portal`, `sanitizer`, `testIdPrefix`, `testIds`, `theme`
+  - props: `defaults`, `direction`, `formats`, `locale`, `messages`, `motion`, `nonce`, `portal`, `sanitizer`, `testIdPrefix`, `testIds`, `theme`, `urlPolicy`
 - **DzThemeProvider** — Provides theme context to the component tree.
   - props: `attribute`, `defaultTheme`, `disableTransitionOnChange`, `storageKey`
 

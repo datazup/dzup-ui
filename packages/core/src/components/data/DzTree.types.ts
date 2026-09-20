@@ -55,6 +55,15 @@ export interface DzTreeContext {
   /** Whether checkboxes are shown */
   checkable: Ref<boolean>
   /**
+   * Whether the WHOLE tree is disabled (N1-O1 defect D1).
+   *
+   * `<DzTree disabled>` used to stamp `data-state="disabled"` on the root and
+   * nothing else, because the prop never reached the context: every row kept
+   * its roving `tabindex`, its click handler, its chevron and its selection.
+   * A node is inert when this is true **or** when its own `node.disabled` is.
+   */
+  disabled: Ref<boolean>
+  /**
    * Key of the single treeitem that holds the roving `tabindex="0"`; every
    * other treeitem is `tabindex="-1"` (APG roving-tabindex pattern).
    */

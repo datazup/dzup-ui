@@ -144,6 +144,7 @@ takes effect. That is what lets you restyle a wrapper someone else built without
 | State | Selector |
 | --- | --- |
 | `disabled` | `[data-state="disabled"]` |
+| `url-rejected` | `[data-state="url-rejected"]` |
 
 **Component tokens** — the custom properties this component reads, and therefore every one you
 may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
@@ -188,15 +189,15 @@ then the component's own default.**
 | --- | --- |
 | **Server rendering** | `unrun`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
-| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
 
 | Security lane | State |
 | --- | --- |
-| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. |
-| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `csp-fixture` | Not owed at this boundary. |
-| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
 artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
@@ -206,8 +207,8 @@ summarised wrongly.
 
 ## States and migration
 
-`DzMegaMenu` advertises 1 state:
-`disabled`. Each is emitted as `data-state` or as a
+`DzMegaMenu` advertises 2 states:
+`disabled`, `url-rejected`. Each is emitted as `data-state` or as a
 presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
 
 **Published examples:** `state-stories` is `pass` — `packages/core/stories/navigation/DzMegaMenu.stories.ts`.
@@ -215,7 +216,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `80ce301`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -233,8 +234,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `2d51eec4` for the capability matrix,
+`2d51eec4` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -244,7 +245,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`
 - **Security boundary:** `url` — Menu entries carry a host-supplied `href` that becomes a navigation.
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `a01965fa`
 
 **Why this pattern:** A menubar whose panels are multi-column compositions rather than item lists, so the menu keyboard contract has to survive content APG does not model.
 
@@ -339,32 +340,19 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzMegaMenu.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
-| `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` — Covered by a class-level artifact, not a per-component one. |
-| `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` — Covered by a class-level artifact, not a per-component one. |
-| `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` — Covered by a class-level artifact, not a per-component one. |
+| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
+| `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records
 themselves, and the generator refuses to build this page if the summary claims more than those
 records support. [Why](/evidence/accessibility#why-this-site-reads-the-raw-scaffold-and-not-the-summary-cell).
-
-::: danger Measured security deviations
-The hostile-input corpus measured **2 deviation(s)** on this component
-(1 of them high severity), across 9 fixture(s). A deviation is a
-defect the library owes, not a waiver — and the security evidence cells above can read `present`
-while these stand, because a corpus that runs is a different fact from a corpus that passes.
-
-- **`S11`** · sink `navigation` · required `rejected`, measured `passed-through` · severity `high` · **fixing it is a breaking change**
-- **`S12`** · sink `navigation` · required `rejected`, measured `passed-through` · severity `low` · **fixing it is a breaking change**
-
-Recorded by `TASK-N1-O5` in
-`packages/core/security/security-deviations.json`.
-:::

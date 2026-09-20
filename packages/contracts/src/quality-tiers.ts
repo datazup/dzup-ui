@@ -219,6 +219,91 @@ export function requiredEvidence(tier: RiskTier): readonly EvidenceKind[] {
 }
 
 // ---------------------------------------------------------------------------
+// Manual AT pairings by tier (TASK-R2-O2)
+// ---------------------------------------------------------------------------
+
+/**
+ * What each tier adds, on top of the tier below, to the set of AT/browser
+ * pairings whose run record it **requires** before its `at-manual` evidence row
+ * can read `pass`.
+ *
+ * **Why this lives here and not in the scaffold.** TASK-N1-O4 §1c measured that
+ * the scaffold declared no tier differentiation at all: `AT_PAIRS` was a flat
+ * array consumed unconditionally, so `DzFileUpload` — the one Tier D component
+ * in the catalog, whose primary job is a data boundary — owed exactly what a
+ * Tier B `DzBadge` owed, and the capability matrix stamped `origin: "tier B"` on
+ * every Tier C and D row to say so. An obligation that does not vary with risk
+ * is not a risk-tiered obligation; it is a constant wearing one's clothes. What
+ * a component owes is a *published contract*, the same place
+ * {@link TIER_EVIDENCE_INCREMENT} lives, so that a generator continues to
+ * report it and never to decide it.
+ *
+ * **The ladder is monotonic by construction.** {@link requiredAtPairs}
+ * accumulates from A upward exactly as {@link requiredEvidence} does, so Tier D
+ * ⊇ Tier C ⊇ Tier B is a property of the data structure rather than a rule
+ * somebody has to remember. Tier A owes none: it is excluded from the scaffold
+ * entirely.
+ *
+ * **This narrows nothing.** The scaffold still generates a row for all six
+ * pairings on all 89 Tier B–D components — 534 cells, unchanged — because
+ * `<evidence_rules>` says unrun cells stay visible. What this table changes is
+ * only which of those cells a component must have *passed* to be called
+ * qualified. A pairing outside a component's required set is still recorded if
+ * somebody runs it, and still reads `unrun` if nobody does; it simply does not
+ * hold the component's evidence row hostage. Reporting it as a smaller
+ * denominator would be the ratchet-gaming this note exists to forbid: quote
+ * both, always — `executed n/534 (required m/136)`.
+ *
+ * The values follow the 2026-08-11 reassessment doc 06 (NVDA first, because it
+ * is the pairing the largest share of screen-reader users actually run) and the
+ * precedent already set by the Pro repository's `docs/qa/at/README.md`, which
+ * tier-differentiates and which the pairing packet for this task proposes to
+ * reconcile with.
+ */
+export const TIER_AT_PAIR_INCREMENT: Readonly<Record<RiskTier, readonly string[]>> = {
+  /** Excluded from the manual AT scaffold altogether. */
+  A: [],
+  /**
+   * One pairing. A Tier B component is a single interactive widget with a
+   * settled APG pattern; the question a manual run answers for it is "are name,
+   * role and state announced", and one competent screen reader answers it.
+   */
+  B: ['nvda-firefox'],
+  /**
+   * Two more. Tier C is composite and stateful, where the pairings start to
+   * disagree: JAWS applies its own heuristics over ARIA and overrides author
+   * intent more often than NVDA, and VoiceOver exposes WebKit's tree and the
+   * rotor rather than Gecko's. A component can be correct under NVDA and
+   * unusable under either.
+   */
+  C: ['jaws-chrome', 'voiceover-safari'],
+  /**
+   * The remaining three. Tier D crosses a data boundary, which is where a
+   * mis-announcement stops being an inconvenience: the touch pairings reach a
+   * control by gesture rather than by Tab, so a control that is unreachable by
+   * keyboard can still be pressed there, and `nvda-chrome` is the same AT over a
+   * different engine, which is how virtualized and composite widgets diverge.
+   */
+  D: ['nvda-chrome', 'voiceover-ios', 'talkback-android'],
+}
+
+/**
+ * The complete set of AT/browser pairings a tier requires, accumulated from A
+ * upward — the manual-AT analogue of {@link requiredEvidence}.
+ *
+ * @example
+ * ```ts
+ * requiredAtPairs('B')  // ['nvda-firefox']
+ * requiredAtPairs('C')  // ['nvda-firefox', 'jaws-chrome', 'voiceover-safari']
+ * requiredAtPairs('D')  // all six
+ * ```
+ */
+export function requiredAtPairs(tier: RiskTier): readonly string[] {
+  const upTo = RISK_TIER_ORDER.slice(0, RISK_TIER_ORDER.indexOf(tier) + 1)
+  return upTo.flatMap(t => TIER_AT_PAIR_INCREMENT[t])
+}
+
+// ---------------------------------------------------------------------------
 // The security boundary, which is NOT the tier
 // ---------------------------------------------------------------------------
 
@@ -264,6 +349,92 @@ export const BOUNDARY_EVIDENCE: Readonly<Record<SecurityBoundary, readonly Evide
   file: ['threat-model', 'malicious-corpus'],
   html: ['threat-model', 'malicious-corpus', 'csp-fixture'],
   payload: ['threat-model', 'malicious-corpus'],
+}
+
+/**
+ * The boundaries **one component** crosses (TASK-R2-O4, owner decision O5-2).
+ *
+ * A set, not a value, because a component can cross two at once and one of them
+ * did: `DzQRCode` encodes an arbitrary `value` into a machine-readable code
+ * (`payload`) **and** renders a host-supplied `icon` as an `<img src>` (`url`).
+ * With a single value it declared `payload`, and the `url-policy` row was
+ * therefore never asked for — so the sink existed, was bound and was asserted in
+ * `packages/core/security/boundary-bindings.ts`, and the matrix could not say
+ * so. TASK-N1-O5 recorded that as finding U3 and routed it here.
+ *
+ * Invariants, enforced by `validate:quality-tiers`:
+ *
+ * - the set is **non-empty** and **sorted** in {@link SECURITY_BOUNDARIES}
+ *   order, so two runs cannot produce two spellings of one fact;
+ * - no duplicates;
+ * - `none` is **exclusive** — `['none', 'url']` is not "crosses nothing and also
+ *   a URL", it is a contradiction, and a validator that accepted it would let a
+ *   real boundary hide behind the word that means there is not one.
+ */
+export type SecurityBoundarySet = readonly SecurityBoundary[]
+
+/**
+ * Accept the single value or the set, and return the canonical set.
+ *
+ * The authoring file (`component-tiers.ts`) keeps `boundary: 'url'` for the 14
+ * components that cross exactly one — a list of one is noise in a review
+ * artifact whose whole job is to be read. The *generated* row is always a set,
+ * so every consumer has one shape.
+ */
+export function normaliseBoundaries(
+  input: SecurityBoundary | SecurityBoundarySet | undefined,
+): SecurityBoundarySet {
+  if (input === undefined)
+    return ['none']
+  const values = typeof input === 'string' ? [input] : input
+  if (values.length === 0)
+    return ['none']
+  const unique = new Set(values)
+  return SECURITY_BOUNDARIES.filter(b => unique.has(b))
+}
+
+/**
+ * **The parent-covers rule** (TASK-R2-O4, owner decision O5-3).
+ *
+ * Three `url` declarers have **no sink of their own**: `DzMenu`, `DzSidebar`
+ * and `DzBreadcrumb` are containers, and the `href` lives on `DzMenuItem`,
+ * `DzSidebarItem` and `DzBreadcrumbItem` — compound sub-parts, which are not
+ * rows in the quality matrix. `DzAvatarGroup` is the same shape for `src`.
+ * TASK-N1-O5 recorded that as finding U4 and left the choice open: either the
+ * sub-parts become rows, or the matrix writes down that a parent's boundary
+ * covers its parts.
+ *
+ * **The rule is: a parent's declared boundary covers every sink carried by its
+ * own compound sub-parts, and the binding table names which part carries
+ * which.** The table is `packages/core/security/boundary-bindings.ts`, one entry
+ * per component, and it mounts the parent *with the child inside it* — which is
+ * both how the boundary is actually crossed and how a consumer writes it.
+ *
+ * Making the 65 compound sub-parts rows was the alternative and it was rejected
+ * on what it would have cost in truth, not in effort. A row owes its **tier's
+ * whole evidence set** — `contract-spec`, `unit-spec`, `axe`, `story-light-dark`
+ * and the rest — and `DzMenuItem` has no story of its own, by design: it is not
+ * usable outside `DzMenu` and a story that mounted one would be documenting a
+ * thing consumers cannot write. So 65 rows would have arrived owing ~400 cells
+ * that are `unrun` because the evidence is *unwritable*, not because nobody
+ * wrote it, and the matrix's one job is to keep that distinction legible. A
+ * rule that is stated and enforced beats rows that are permanently empty.
+ *
+ * What the rule costs, stated so it is not discovered later: *"which components
+ * own a URL sink"* cannot be answered from the matrix alone. It is answered
+ * from the binding table, which is a file with one entry per component and a
+ * sentence per sink — the artifact a reviewer actually wants.
+ */
+export const BOUNDARY_COVERS_COMPOUND_PARTS = true
+
+/** `none` · `url` · `payload + url` — one spelling, for a message or a cell. */
+export function formatBoundaries(boundaries: SecurityBoundarySet): string {
+  return boundaries.length === 0 ? 'none' : boundaries.join(' + ')
+}
+
+/** True when the set names a real boundary rather than the absence of one. */
+export function crossesBoundary(boundaries: SecurityBoundarySet): boolean {
+  return boundaries.some(b => b !== 'none')
 }
 
 // ---------------------------------------------------------------------------
@@ -482,7 +653,11 @@ export interface ComponentQuality {
    * the tier is C or D, per TASK-OSS-P5-01's validator rule.
    */
   readonly patternJustification?: string
-  readonly securityBoundary: SecurityBoundary
+  /**
+   * Every boundary this component crosses, sorted and non-empty
+   * (TASK-R2-O4). `['none']` when it crosses none.
+   */
+  readonly securityBoundary: SecurityBoundarySet
   /** Why the boundary is what it is. Required when it is not `none`. */
   readonly boundaryJustification?: string
   /** Behaviours that add evidence on their own. */
@@ -508,12 +683,17 @@ export interface ComponentQuality {
  */
 export function evidenceFor(
   tier: RiskTier,
-  boundary: SecurityBoundary = 'none',
+  boundary: SecurityBoundary | SecurityBoundarySet = 'none',
   traits: readonly ComponentTrait[] = [],
 ): readonly EvidenceKind[] {
+  // The UNION across the set, so a component that crosses two boundaries owes
+  // what both ask for. `DzQRCode` is the case: `payload` owes a threat model and
+  // a corpus, `url` adds the url-policy row that its `icon` sink needs, and
+  // taking the union is the only reading under which declaring the second
+  // boundary is not a way to owe less.
   const owed = new Set<EvidenceKind>([
     ...requiredEvidence(tier),
-    ...BOUNDARY_EVIDENCE[boundary],
+    ...normaliseBoundaries(boundary).flatMap(b => BOUNDARY_EVIDENCE[b]),
     ...traits.flatMap(t => TRAIT_EVIDENCE[t]),
   ])
   return EVIDENCE_KINDS.filter(kind => owed.has(kind))
@@ -526,7 +706,7 @@ export function evidenceFor(
 export function evidenceOrigin(
   kind: EvidenceKind,
   tier: RiskTier,
-  boundary: SecurityBoundary,
+  boundary: SecurityBoundary | SecurityBoundarySet,
   traits: readonly ComponentTrait[],
 ): string {
   for (const t of RISK_TIER_ORDER.slice(0, RISK_TIER_ORDER.indexOf(tier) + 1)) {
@@ -537,8 +717,12 @@ export function evidenceOrigin(
     if (TRAIT_EVIDENCE[trait].includes(kind))
       return `trait ${trait}`
   }
-  if (BOUNDARY_EVIDENCE[boundary].includes(kind))
-    return `boundary ${boundary}`
+  // Names EVERY boundary that asks for this kind, not the first. `DzQRCode`'s
+  // `threat-model` is owed by `payload` and by `url`; attributing it to one of
+  // them would make deleting the other look free.
+  const from = normaliseBoundaries(boundary).filter(b => BOUNDARY_EVIDENCE[b].includes(kind))
+  if (from.length > 0)
+    return `boundary ${from.join(' + ')}`
   return 'unattributed'
 }
 

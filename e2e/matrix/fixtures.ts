@@ -73,6 +73,99 @@ export function declareUnrun(): void {
 }
 
 /**
+ * The two conditions no engine can emulate, expressed as the stylesheet the
+ * user agent would carry (TASK-R2-O5).
+ *
+ * **`text-200` — WCAG 1.4.4 Resize Text.** The criterion is about the user
+ * raising the *default font size*, which is a user-stylesheet change to the root
+ * em, not a zoom factor and not a viewport change. `zoom-400` already covers the
+ * viewport axis (SC 1.4.10 Reflow) and cannot stand in for this one: at 200 %
+ * text the layout keeps its 1280 CSS px of width while every `rem`-sized box and
+ * every token-driven type size doubles, which is the state a fixed-height
+ * control or a `overflow: hidden` label actually breaks in. Percentages resolve
+ * against the parent, and `html`'s parent is the initial containing block, so
+ * `200%` is exactly the browser default doubled however the page spells its own
+ * root size.
+ *
+ * **`spacing` — WCAG 1.4.12 Text Spacing.** These are the criterion's four
+ * numbers verbatim (line height 1.5×, paragraph spacing 2×, letter spacing
+ * 0.12×, word spacing 0.16× the font size), in the same shape as the WAI's own
+ * text-spacing bookmarklet. `em` units are used so each value stays relative to
+ * the element's own font size, which is what "times the font size" means; a
+ * fixed `px` sheet would under-apply on large text and over-apply on small.
+ *
+ * Both are applied with `!important` for the same reason the WAI bookmarklet
+ * does: the criterion is about what happens when a *user* overrides the author,
+ * and an override the author's specificity defeats is not the condition.
+ */
+const CONDITION_STYLESHEET: Partial<Record<MatrixCondition, string>> = {
+  'text-200': 'html { font-size: 200% !important }',
+  'spacing': [
+    '*, *::before, *::after {',
+    '  line-height: 1.5 !important;',
+    '  letter-spacing: 0.12em !important;',
+    '  word-spacing: 0.16em !important;',
+    '}',
+    'p, li, dd, dt, blockquote, figcaption { margin-block-end: 2em !important }',
+  ].join('\n'),
+}
+
+/**
+ * Install the current condition's user stylesheet, if it has one.
+ *
+ * Called from {@link openTarget} rather than from a `beforeEach`, so every spec
+ * in this directory gets the condition by opening a story — the same way the
+ * `rtl` global arrives. A spec that navigates by hand and skips this would
+ * silently measure the default rendering under a condition project's name,
+ * which is why `expectConditionEngaged` exists beside it.
+ */
+export async function applyConditionStyles(page: Page): Promise<void> {
+  const css = CONDITION_STYLESHEET[matrixProject().condition]
+  if (css === undefined)
+    return
+  // Injected by hand rather than through `addStyleTag` so the element carries a
+  // marker: `withConditionSuspended` below needs to find this sheet and only
+  // this one, and a lane that measured "with" and "without" by loading the story
+  // twice would pay for a second render and still compare two renders.
+  await page.evaluate((content) => {
+    const style = document.createElement('style')
+    style.setAttribute('data-dz-condition', '')
+    style.textContent = content
+    document.head.append(style)
+  }, css)
+}
+
+/**
+ * Run `fn` with the condition's user stylesheet switched off, then switch it
+ * back on.
+ *
+ * This is what makes `text-200` and `spacing` measure the *condition* rather
+ * than the component's resting state: a box that already clips its text at the
+ * default font size is a defect, but it is not a 1.4.4 defect, and a lane that
+ * could not tell the two apart would report 88 components' worth of pre-existing
+ * design decisions as WCAG failures on its first run. `CSSStyleSheet.disabled`
+ * is the switch, so nothing is removed and re-parsed between the two reads.
+ */
+export async function withConditionSuspended<T>(page: Page, fn: () => Promise<T>): Promise<T> {
+  await setConditionDisabled(page, true)
+  try {
+    return await fn()
+  }
+  finally {
+    await setConditionDisabled(page, false)
+  }
+}
+
+async function setConditionDisabled(page: Page, disabled: boolean): Promise<void> {
+  await page.evaluate((value) => {
+    for (const style of document.querySelectorAll<HTMLStyleElement>('style[data-dz-condition]')) {
+      if (style.sheet !== null)
+        style.sheet.disabled = value
+    }
+  }, disabled)
+}
+
+/**
  * Open a target's story under the current condition.
  *
  * `rtl` is passed as a Storybook global rather than as a context option because
@@ -84,7 +177,9 @@ export async function openTarget(page: Page, target: MatrixTarget): Promise<Page
   const { condition } = matrixProject()
   const globals = condition === 'rtl' ? 'direction:rtl' : undefined
   try {
-    return await loadStoryCanvas(page, target.story!, globals)
+    const loaded = await loadStoryCanvas(page, target.story!, globals)
+    await applyConditionStyles(loaded)
+    return loaded
   }
   catch (error) {
     // Storybook answers an unknown story id by swapping a class on <body> and

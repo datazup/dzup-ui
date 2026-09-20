@@ -86,7 +86,7 @@ more than the lowest is an open owner decision, recorded rather than quietly ans
 | [DzColorModeToggle](/components/DzColorModeToggle#assistive-technology) | `B` | `button` | 2 | **0 of 6** | — |
 | [DzColorPicker](/components/DzColorPicker#assistive-technology) | `C` | `custom` | 2 | **0 of 6** | `e2e/at-matrix/scripts/DzColorPicker.at-script.md` |
 | [DzCombobox](/components/DzCombobox#assistive-technology) | `C` | `combobox` | 8 | **0 of 6** | `e2e/at-matrix/scripts/DzCombobox.at-script.md` |
-| [DzCommandPalette](/components/DzCommandPalette#assistive-technology) | `C` | `combobox` | 8 | **0 of 6** | `e2e/at-matrix/scripts/DzCommandPalette.at-script.md` |
+| [DzCommandPalette](/components/DzCommandPalette#assistive-technology) | `C` | `combobox` | 7 | **0 of 6** | `e2e/at-matrix/scripts/DzCommandPalette.at-script.md` |
 | [DzConfirmDialog](/components/DzConfirmDialog#assistive-technology) | `B` | `alertdialog` | 4 | **0 of 6** | — |
 | [DzContextMenu](/components/DzContextMenu#assistive-technology) | `B` | `menu` | 5 | **0 of 6** | — |
 | [DzCopyButton](/components/DzCopyButton#assistive-technology) | `B` | `button` | 2 | **0 of 6** | — |
@@ -134,7 +134,7 @@ more than the lowest is an open owner decision, recorded rather than quietly ans
 | [DzSegmented](/components/DzSegmented#assistive-technology) | `B` | `radio-group` | 3 | **0 of 6** | — |
 | [DzSelect](/components/DzSelect#assistive-technology) | `B` | `combobox` | 8 | **0 of 6** | — |
 | [DzSheet](/components/DzSheet#assistive-technology) | `B` | `dialog` | 3 | **0 of 6** | — |
-| [DzSidebar](/components/DzSidebar#assistive-technology) | `C` | `treeview` | 5 | **0 of 6** | `e2e/at-matrix/scripts/DzSidebar.at-script.md` |
+| [DzSidebar](/components/DzSidebar#assistive-technology) | `C` | `landmarks` | 4 | **0 of 6** | `e2e/at-matrix/scripts/DzSidebar.at-script.md` |
 | [DzSlider](/components/DzSlider#assistive-technology) | `B` | `slider` | 4 | **0 of 6** | — |
 | [DzSpeedDial](/components/DzSpeedDial#assistive-technology) | `B` | `menu-button` | 6 | **0 of 6** | — |
 | [DzSplitButton](/components/DzSplitButton#assistive-technology) | `B` | `menu-button` | 5 | **0 of 6** | — |
@@ -175,10 +175,10 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `e2e/at-matrix/index.json` | `0abcc92ef6c3332f…` | yes |
-| `packages/core/docs/capability-matrix.json` | `561b7852a04d4f92…` | yes |
+| `e2e/at-matrix/index.json` | `d35ef2dfa049e253…` | yes |
+| `packages/core/docs/capability-matrix.json` | `06470abfebefa2b5…` | yes |
 
-Capability matrix `sourceCommit` `99b963a0` · quality matrix `569d8872`.
+Capability matrix `sourceCommit` `2d51eec4` · quality matrix `2d51eec4`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

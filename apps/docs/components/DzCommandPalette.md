@@ -198,7 +198,7 @@ then the component's own default.**
 | --- | --- |
 | **Server rendering** | `unrun`. |
 | **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
-| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
@@ -218,7 +218,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `4c9fb7a`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -236,8 +236,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `2d51eec4` for the capability matrix,
+`2d51eec4` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -247,7 +247,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `4c9fb7a1`
+- **Component last changed at:** `a01965fa`
 
 **Why this pattern:** A dialog containing a combobox over a grouped, consumer-supplied action set, opened by a global shortcut — so it owes the dialog, the combobox and the shortcut contracts.
 
@@ -305,7 +305,7 @@ Declared in `packages/core/src/components/overlays/DzCommandPalette.anatomy.ts`.
 
 **0 of 6 AT/browser pairs executed.** Nothing below has been run: every row is `unrun`, which means the pairing was not available and not attempted — a different fact from a failure.
 
-Tasks this component owes on each pair: `reach`, `open`, `navigate`, `typeahead`, `select`, `dismiss`, `error`, `live`.
+Tasks this component owes on each pair: `reach`, `open`, `navigate`, `typeahead`, `select`, `dismiss`, `live`.
 
 | Pair | AT | Browser | Platform | Result | Tester | Date | AT/browser versions | Recorded at |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -338,15 +338,15 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/overlays/DzCommandPalette.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/overlays/DzCommandPalette.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/overlays/DzCommandPalette.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/overlays/DzCommandPalette.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/overlays/DzCommandPalette.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzCommandPalette.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
+| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**8 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `portal-hydration`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -35,7 +35,7 @@ export const anatomy = {
    * duplicating it as a data attribute would give a consumer two sources for
    * one truth.
    */
-  states: ['ready', 'disabled'],
+  states: ['ready', 'disabled', 'url-rejected'],
 
   /**
    * Empty and measured. `DzBreadcrumb.tokens.ts` maps to global semantic

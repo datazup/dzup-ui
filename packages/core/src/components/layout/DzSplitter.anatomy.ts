@@ -16,13 +16,18 @@ import type { AnatomyPart, ComponentAnatomy, UiOverrides } from '@dzup-ui/contra
  * the name.
  */
 export const anatomy = {
-  parts: ['root', 'panel', 'separator', 'indicator'],
+  parts: ['root', 'panel', 'separator', 'indicator', 'step-decrease', 'step-increase'],
 
   /**
    * Every part but the group is composed by the consumer, and the grip
    * `indicator` renders only when a handle sets `withHandle`.
+   *
+   * The two stepper controls (`step-decrease` / `step-increase`) are the WCAG 2.2
+   * SC 2.5.7 single-pointer path, added 2026-09-19 by owner decision **D117
+   * option A**. They are `optionalParts` because a frozen handle renders neither:
+   * a control that cannot act would be a 24 x 24 target that does nothing.
    */
-  optionalParts: ['panel', 'separator', 'indicator'],
+  optionalParts: ['panel', 'separator', 'indicator', 'step-decrease', 'step-increase'],
 
   /**
    * `inactive` / `hover` / `drag` come from reka-ui's `SplitterResizeHandle`,
@@ -59,27 +64,27 @@ export const anatomy = {
     {
       key: 'ArrowRight',
       action: 'Move the separator towards the inline end.',
-      wcag: ['2.1.1'],
+      wcag: ['2.1.1', '2.5.7'],
       apg: 'window-splitter',
       rtl: 'mirrored',
     },
     {
       key: 'ArrowLeft',
       action: 'Move the separator towards the inline start.',
-      wcag: ['2.1.1'],
+      wcag: ['2.1.1', '2.5.7'],
       apg: 'window-splitter',
       rtl: 'mirrored',
     },
     {
       key: 'ArrowDown',
       action: 'Move the separator down when the panes stack vertically.',
-      wcag: ['2.1.1'],
+      wcag: ['2.1.1', '2.5.7'],
       apg: 'window-splitter',
     },
     {
       key: 'ArrowUp',
       action: 'Move the separator up when the panes stack vertically.',
-      wcag: ['2.1.1'],
+      wcag: ['2.1.1', '2.5.7'],
       apg: 'window-splitter',
     },
     {

@@ -39,7 +39,7 @@ export const anatomy = {
    * rendering mode. ADR-19 §4 keeps modes out of `states` for the same reason
    * `DzTable` does not declare `data-virtual`.
    */
-  states: ['disabled'],
+  states: ['disabled', 'url-rejected'],
 
   /**
    * The five `--dz-menu-*` properties this component owns. The rest of what it

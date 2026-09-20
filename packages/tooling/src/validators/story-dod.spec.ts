@@ -84,10 +84,46 @@ describe('declaredStateProps', () => {
   it('returns nothing for an unresolved component', () => {
     expect(declaredStateProps(undefined)).toEqual([])
   })
+
+  // -- N1-O1 defect D6 ------------------------------------------------------
+
+  it('defect D6 -- does not count a same-named SLOT as a prop', () => {
+    // DzMention declares a `loading` SLOT and, separately, inherits a `loading`
+    // PROP. The whole-file scan matched the slot, so a component was reported
+    // applicable for a state it did not declare there.
+    const types = `export interface DzMentionProps {\n  triggers: DzMentionTrigger[]\n}\n\n`
+      + `export interface DzMentionSlots {\n  loading?: (props: { char: string }) => unknown\n}`
+    expect(declaredStateProps(types)).toEqual([])
+  })
+
+  it('defect D6 -- does not count an ITEM-level state member as a component prop', () => {
+    // DzAnchor's and DzSidebar's link items carry their own `disabled`.
+    const types = `export interface DzAnchorItem {\n  disabled?: boolean\n}\n\n`
+      + `export interface DzAnchorProps {\n  items: DzAnchorItem[]\n}`
+    expect(declaredStateProps(types)).toEqual([])
+  })
+
+  it('defect D6 -- still counts a prop declared after a nested object type', () => {
+    // The brace-balanced reader is what makes this work: a non-greedy
+    // `{[^}]*}` would stop at the inline type and miss everything after it.
+    const types = `export interface DzFooProps {\n  shape?: { width: number }\n  disabled?: boolean\n}`
+    expect(declaredStateProps(types)).toEqual(['disabled'])
+  })
+
+  it('defect D6 -- reads every Props interface in the file, not only the first', () => {
+    const types = `export interface DzFooProps {\n  as?: string\n}\n\n`
+      + `export interface DzFooItemProps {\n  loading?: boolean\n}`
+    expect(declaredStateProps(types)).toEqual(['loading'])
+  })
+
+  it('defect D6 -- a generic Props interface is still read', () => {
+    const types = `export interface DzListProps<T = unknown> extends BaseProps {\n  disabled?: boolean\n}`
+    expect(declaredStateProps(types)).toEqual(['disabled'])
+  })
 })
 
 describe('checkStorySource', () => {
-  const types = new Map([['DzButton', 'export interface P {\n  disabled?: boolean\n}']])
+  const types = new Map([['DzButton', 'export interface DzButtonProps {\n  disabled?: boolean\n}']])
 
   it('passes a story that meets every enforced check', () => {
     const errors = checkStorySource(FILE, completeStory(), new Map())

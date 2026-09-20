@@ -227,3 +227,23 @@ describe('dzKnob — Unit Tests', () => {
     expect(() => (wrapper.vm as unknown as { focus: () => void }).focus()).not.toThrow()
   })
 })
+
+// -- D8: controlled/uncontrolled -------------------------------------------
+
+describe('dzKnob — D8: an external write after a user edit is honoured', () => {
+  it('defect D8 -- a parent that rewrites `v-model:value` after a keyboard edit is obeyed', async () => {
+    // See `packages/core/src/composition/controlledModel.contract.spec.ts`:
+    // the legacy-only binding left the default model as component-local state,
+    // and the first user edit latched a value into it.
+    const wrapper = mount(DzKnob, { props: { value: 50 } })
+
+    await wrapper.find('[role="slider"]').trigger('keydown', { key: 'ArrowRight' })
+    expect(wrapper.emitted('update:value')?.at(-1)).toEqual([51])
+
+    await wrapper.setProps({ value: 51 })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('51')
+
+    await wrapper.setProps({ value: 20 })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('20')
+  })
+})

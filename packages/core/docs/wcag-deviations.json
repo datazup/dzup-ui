@@ -2,10 +2,11 @@
   "schemaVersion": "1.0.0",
   "note": "Measured WCAG 2.2 AA conformance gaps that survive the browser matrix. An entry is a DEFECT, not a waiver: the library owes it. This file exists because no other generated artifact in the repository can express it -- `non-drag-alternative` in the capability matrix measures whether a KEYBOARD path is asserted, and a keyboard path satisfies SC 2.1.1, not SC 2.5.7, which requires a single pointer without dragging. A component can therefore read `non-drag-alternative: present` and still fail 2.5.7, which is exactly what happens to DzTable. Rendered by the docs site (TASK-N2-D2) on every affected component page and on /evidence/accessibility.",
   "recordedAt": {
-    "measuredBy": "TASK-N1-O3",
+    "measuredBy": "TASK-N1-O3 (the audit) and TASK-R2-O5 (the browser re-measurement and the affordance that closed the three gaps)",
     "transcribedBy": "TASK-N2-D2",
     "source": "docs/program-2026-09/reports/N1-O3-wcag-fixes-handoff.md section 6.3",
-    "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+    "resolvedIn": "docs/program-2026-09-04/reports/TASK-R2-O5-handoff.md, decision sheet TASK-R2-O5-2-5-7-decision.md (D117)",
+    "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
     "worktree": "dirty",
     "admissibility": "locally qualified, worktree-dirty -- not release evidence"
   },
@@ -18,9 +19,9 @@
     "url": "https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html"
   },
   "scope": "Every component carrying the `drags` trait in packages/core/docs/quality-matrix.json. The trait names 9; all 9 were audited. The audited set is gated against the trait, so a tenth drag surface cannot appear without this file failing.",
-  "conformanceStatement": "SC 2.5.7 AA is met for 6 of 9 drag surfaces. The three resize surfaces are keyboard-operable but require a drag for pointer operation.",
-  "ceiling": 3,
-  "openGaps": 3,
+  "conformanceStatement": "SC 2.5.7 AA is met for 9 of 9 drag surfaces. The three resize surfaces -- DzResizable, DzSplitter and DzTable column resize -- gained a single-pointer stepper path on 2026-09-19 (owner decision D117 option A); the other six already had one. This is a claim about these nine surfaces, re-measured in three engines by e2e/matrix/non-drag.spec.ts, and not a conformance claim about the library or about any page built with it.",
+  "ceiling": 0,
+  "openGaps": 0,
   "surfaces": [
     {
       "component": "DzOrderList",
@@ -69,32 +70,42 @@
       "component": "DzResizable",
       "operation": "drag the separator to resize panes",
       "keyboardAlternative": "Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6.",
-      "singlePointerNoDrag": null,
-      "state": "gap",
-      "gapReason": "SplitterResizeHandle binds only onFocus/onBlur plus the pointer drag; there is no tap, no double-tap and no stepper control. Resizing by a single pointer requires a drag.",
-      "ownerDecision": "The affordance is a design decision with no APG precedent -- the Window Splitter pattern specifies keyboard interaction only, and APG has no column-resize pattern at all. Steppers, tap-to-place and preset cycling each change the component's visual language.",
-      "notEssential": "Dragging is not essential to resizing a pane: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies."
+      "singlePointerNoDrag": "A stepper pair on the gutter (`data-part=\"step-decrease\"` / `\"step-increase\"`, 24 x 24 CSS px each), revealed by hovering the gutter, by focusing the separator, or by one tap on a device with no hover. Each press moves the separator one step -- it dispatches the very `keydown` Reka's own `useWindowSplitterResizeHandlerBehavior` listens for, so the step is `keyboardResizeBy` and Shift is still the full sweep. No prop can switch it off. The pair is a SIBLING of the separator, never a child of it: axe's `nested-interactive` (WCAG 4.1.2) refuses focusable content inside an interactive control and `tabindex=\"-1\"` does not exempt it, which `apps/landing/src/blocks/a11y.spec.ts` caught on the first implementation.",
+      "state": "met",
+      "closedBy": "Owner decision D117 option A, taken 2026-09-19 and implemented by TASK-R2-O5. Before it, SplitterResizeHandle bound only onFocus/onBlur plus the pointer drag -- no tap, no double-tap, no stepper -- so resizing by a single pointer required a drag. The affordance had no APG precedent (the Window Splitter pattern specifies keyboard interaction only), which is why it was an owner design decision and not an agent's."
     },
     {
       "component": "DzSplitter",
       "operation": "drag the separator to resize panes (DzSplitterHandle renders the same Reka SplitterResizeHandle)",
       "keyboardAlternative": "Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6.",
-      "singlePointerNoDrag": null,
-      "state": "gap",
-      "gapReason": "The same shared Reka handle, so the same absence: focus and blur plus the pointer drag, and nothing else.",
-      "ownerDecision": "One implementation closes both DzResizable and DzSplitter.",
-      "notEssential": "Dragging is not essential to resizing a pane: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies."
+      "singlePointerNoDrag": "The same stepper pair as DzResizable: one shared Reka handle, one implementation, and DzSplitter.spec.ts asserts the two render the same control attribute for attribute so the claim cannot hold for only one of them.",
+      "state": "met",
+      "closedBy": "Owner decision D117 option A, taken 2026-09-19 and implemented by TASK-R2-O5. The same shared Reka handle carried the same absence: focus and blur plus the pointer drag, and nothing else."
     },
     {
       "component": "DzTable",
       "operation": "drag the column-resize handle",
       "keyboardAlternative": "onResizeKey on the focusable handle button: ArrowLeft/ArrowRight step 8px, 24px with Shift.",
-      "singlePointerNoDrag": null,
-      "state": "gap",
-      "gapReason": "The handle responds to pointerdown plus pointermove only.",
-      "ownerDecision": "APG has no pattern for column resizing at all, so there is no precedent to follow.",
-      "notEssential": "Dragging is not essential to resizing a column: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies."
+      "singlePointerNoDrag": "A stepper pair overlaying the header cell (`data-part=\"step-decrease\"` / `\"step-increase\"`, 24 x 24 CSS px each -- the handle's own visible band is 8px and cannot hold them). Each press calls `stepColumn`, which is the same function the Arrow keys call, so the pointer step and the keyboard step are 8px, or 24px with Shift, by construction.",
+      "state": "met",
+      "closedBy": "Owner decision D117 option A, taken 2026-09-19 and implemented by TASK-R2-O5. This surface was the worst of the three: the handle responded to pointerdown plus pointermove only, and `@click.stop` on it actively discarded the one plain press that might have been a non-drag path. That handler is gone, and DzTable.spec.ts asserts a plain click now reaches the table."
     }
   ],
-  "followUp": "Add a single-pointer, non-drag path for two operations: (a) resize a splitter pane (DzResizable / DzSplitter, one shared Reka handle, so one implementation), and (b) resize a table column (DzTableCell). Each needs an affordance decision -- steppers, tap-to-place, or preset cycling -- and, if it is a rendered control, a data-part, an anatomy entry and a message id. Neither requires a public prop, and neither is a breaking change."
+  "followUp": "Closed. What remains is a standing obligation rather than a task: re-run `e2e/matrix/non-drag.spec.ts` on all three engines whenever a drag surface changes, because that lane is the only thing that keeps this record and the shipped components from disagreeing silently. One conditional verdict also stands -- DzOrderList meets the criterion only while `showControls` is true, and whether that prop should be refused while a drag handle is on is an open question in TASK-R2-O5's decision sheet section 6, not something this record can answer.",
+  "verifiedInBrowser": {
+    "measuredBy": "TASK-R2-O5",
+    "lane": "e2e/matrix/non-drag.spec.ts",
+    "engines": [
+      "chromium 149.0.7827.55",
+      "firefox 151.0",
+      "webkit 26.5"
+    ],
+    "measuredAt": "2026-09-19",
+    "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+    "worktree": "dirty",
+    "admissibility": "locally qualified, worktree-dirty -- not release evidence",
+    "result": "27 of 27 cells agree with this record: 9 surfaces x 3 engines. Each cell presses the surface with a single pointer and no drag (page.mouse.click, never down-move-up) and asserts the outcome EQUALS the `state` recorded below -- so a `met` that stops working and a `gap` that is quietly closed both turn the lane red. On 2026-09-19 all nine surfaces changed their value on a single press. Each cell also measures every `[data-dz-resize-step]` control in the canvas against the SC 2.5.8 floor and found none under 24 x 24 CSS px.",
+    "priorResult": "Measured 2026-09-18 at the same commit, before the affordance: 27 of 27 also agreed with the record as it then stood -- the six met surfaces changed their value on a single press and the three resize surfaces did not, on any engine. The lane's expected value is read out of this file, so the same 27 cells measured the gap and then measured its closure, and not one expectation was edited to accommodate the change.",
+    "note": "The audit above was a source reading (TASK-N1-O3 section 6.3) and had never been put to a browser, which is what let N2-D2 finding F-3 stand: the generated `non-drag-alternative` cell measures a KEYBOARD path (SC 2.1.1) and disagreed with this record on four of the nine surfaces. Two probe defects were found and fixed before any verdict was trusted: pressing `[role=\"slider\"]` presses the THUMB, not the track, and probing before a story`s play() function has run measures a component whose pointer handlers are not mounted. The SC 2.5.8 measurement was added on 2026-09-19 because the `touch` matrix condition skips an element at `opacity: 0` as a visually-hidden native control, and the new steppers rest at `opacity: 0` by design -- left alone, an undersized stepper would have passed that lane in three engines while failing the criterion it was added for."
+  }
 }

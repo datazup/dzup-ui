@@ -31,7 +31,34 @@
 
 ## 🔴 Make the built evidence citable
 
-### [ ] TASK-R2-O1 — Re-run the built evidence from the committed tree and persist the browser record 🔴
+### [~] TASK-R2-O1 — Re-run the built evidence from the committed tree and persist the browser record 🔴
+
+> **2026-09-19 — five of six deliverables done and measured; one is owner-only.**
+> Handoff: [`./reports/TASK-R2-O1-handoff.md`](./reports/TASK-R2-O1-handoff.md).
+> The tracked artifact (`e2e/matrix/browser-evidence.json`), the degradation gate
+> (proven by a seeded regression: 26 violations, exit 1, each naming
+> component/engine/condition), all **24** projects re-run at `2d51eec`
+> (**1,431 passed / 8 skipped / 0 failed per engine, exit 0 each**), the visual
+> pilot (24/24), the stamped security corpus (403/403) and the regenerated
+> capability matrix (**browser cells 89 `unrun` → 88 `pass` + 1 declared-unrun**;
+> `validate:capability-matrix` **exit 1 → exit 0**) are all landed.
+>
+> `[~]` and not `[x]` for one reason, stated rather than papered over: the task
+> says to re-run **"from the clean committed tree"**, and at `2d51eec` there is
+> no clean tree — 420 uncommitted paths belong to R2-O2/O3/O4/O5 and R3/R5, and
+> committing is the owner's. Every artifact is therefore stamped
+> `sourceCommit: 2d51eec` **plus `worktreeDirty: true` and `dirtyPathCount`**,
+> and full commit-binding is routed as owner action **D127**. The degradation
+> gate is **inert until HEAD carries the ledger** and goes live on that commit.
+>
+> This prompt's `<done_check>` is the fifth defective one in this programme
+> (**D124**): check 3 greps the same file that declares the platform and compares
+> the value with itself — `win32`, `linux` and `solaris` all pass it — while
+> checks 1 and 4 can only be satisfied by `git add` / `git commit`, which the
+> prompt's own `<authority>` reserves to the owner. Also corrected here: the gap
+> note's "18 projects / 3,168" is stale (R2-O5 made it **24 projects**; the
+> reconciled figure is **4,293 attributed executions**), and the report is
+> N0-05's finding **X3/D5**, not "F4".
 
 _Gap: N1-O2 ran the 12 Firefox/WebKit projects (176 outcomes, harness defect
 H1 fixed) and N1-O3 drove measured failures 46 → 0 with 1,056/1,056 × 3
@@ -101,7 +128,17 @@ run either. Sources: OSS-R2, `../program-2026-09/reports/N1-O2-firefox-webkit-ha
 
 ## 🟠 Execute the human-only evidence; fix what was measured
 
-### [ ] TASK-R2-O2 — AT matrix: fix the schema, then wave 1 🟠 `[!owner tester + cadence]`
+### [~] TASK-R2-O2 — AT matrix: fix the schema, then wave 1 🟠 `[!owner tester + cadence]`
+
+> **2026-09-18 — phase 1 done, phase 2 owed to a human.** Schema fixed and
+> proved (`CellState` gains `fail`; all-fail → `fail` by seeded regression),
+> tier-differentiated pairings in contracts, task column, `DzSidebar` and
+> `DzCommandPalette` corrected, `validate:at-scripts` chained. Wave 1 is
+> **blocked on a named tester (D112)**. AT cells executed **0/534 — unchanged,
+> and an agent never moves it.**
+> See [`./reports/TASK-R2-O2-handoff.md`](./reports/TASK-R2-O2-handoff.md),
+> [`./reports/at-pairing-decision-packet.md`](./reports/at-pairing-decision-packet.md),
+> [`./reports/TASK-R2-O2-wave-1-runbook.md`](./reports/TASK-R2-O2-wave-1-runbook.md).
 
 _Gap: 0 of 534 AT cells executed (22 Tier C/D components scripted: 126
 steps, 397 expectations — N1-O4). Before a human runs one cell, the scaffold
@@ -173,7 +210,7 @@ CAND-23, `../program-2026-09/reports/N1-O4-at-matrix-handoff.md`,
 
 ---
 
-### [ ] TASK-R2-O3 — Close the N1-O1 defect register (D8 controlled/uncontrolled first) 🟠
+### [x] TASK-R2-O3 — Close the N1-O1 defect register (D8 controlled/uncontrolled first) 🟠
 
 _Gap: N1-O1 reported 11 component defects it did not fix. The highest:
 **D8** — `useDualModel` silently ignores external writes after the first user
@@ -237,7 +274,7 @@ OSS-R16, `../program-2026-09/reports/N1-O1-story-dod-handoff.md` §defects._
 
 ---
 
-### [ ] TASK-R2-O4 — URL policy for the six navigation sinks, and the CSP posture 🟠
+### [x] TASK-R2-O4 — URL policy for the six navigation sinks, and the CSP posture 🟠
 
 _Gap: there is **no URL policy anywhere in `packages/core/src`** — six
 navigation components (`DzButton`, `DzAnchor`, `DzBreadcrumb`, `DzMenu`,
@@ -304,7 +341,7 @@ as a `minor` under VERSIONING.md. Sources: CAND-03, OSS-R5, OSS-R18,
 
 ---
 
-### [ ] TASK-R2-O5 — WCAG 2.5.7 resize affordance, the missing WCAG lanes, and the Baseline statement 🟠 `[!owner design]`
+### [x] TASK-R2-O5 — WCAG 2.5.7 resize affordance, the missing WCAG lanes, and the Baseline statement 🟠 *(was `[!owner design]`; D117 / D118 / D121 taken by the owner 2026-09-19 and implemented the same day)*
 
 _Gap: N1-O3 drove target-size and reflow to 0 but left **2.5.7 Dragging
 Movements open on three resize surfaces** — `DzResizable`, `DzSplitter`,
@@ -377,7 +414,23 @@ G5, `N2-D2-evidence-pages-handoff.md` F-2._
 
 ## 🟢 Lanes that complete the contract
 
-### [ ] TASK-R2-O6 — Visual-regression rollout and the CI gate 🟢
+### [~] TASK-R2-O6 — Visual-regression rollout and the CI gate 🟢
+
+> **2026-09-19 — `[~]`, with a measured blocker.** `<done_check>` **0 of 4 by
+> intent**; clause 2 can never fail (**D136**) and clause 4 can never pass
+> (**D137**). Every platform-independent deliverable landed: the
+> [Chromatic finish-or-retire packet](./reports/TASK-R2-O6-chromatic-finish-or-retire.md),
+> the [`visual-baseline` EvidenceKind proposal](./reports/TASK-R2-O6-evidence-kind-proposal.md),
+> the fifth-input verification plus a coverage-note fix (**D138**), the measured
+> runtime budget (**286 snapshots in 182 s — no sharding**) and the CI-gate
+> analysis. **The capture half is stopped, not skipped.** The container route
+> works and is deterministic, but installing two font packages inside the same
+> image changed **20 of 24** baselines and **10 of them dimensionally**, and
+> `ci.yml` runs a bare `ubuntu-latest` — so no baseline captured anywhere today
+> is CI evidence until the lane's container is pinned (**O6-D2**). Coverage
+> stays **8 of 144**, deliberately. `continue-on-error` at `ci.yml:531` was left
+> in place: comparison mode on linux fails **24 of 24** today, measured.
+> Full detail: [`./reports/TASK-R2-O6-handoff.md`](./reports/TASK-R2-O6-handoff.md).
 
 _Gap: N1-O6 decided the scope and built a per-component lane, but coverage is
 **8 of 144** (pilot `buttons`, 16 baselines, `maxDiffPixels: 0`), 136
@@ -436,7 +489,18 @@ R-032, `../program-2026-09/reports/N1-O6-visual-regression-{memo,handoff}.md`._
 
 ---
 
-### [ ] TASK-R2-O7 — Performance contract completion: leak, long-task, memory, hydration 🟢
+### [~] TASK-R2-O7 — Performance contract completion: leak, long-task, memory, hydration 🟢
+
+> **State at 2026-09-19** (see [`reports/TASK-R2-O7-handoff.md`](./reports/TASK-R2-O7-handoff.md)).
+> All four lanes are **built, verified and captured over 5 runs** — 33 → **212**
+> metrics proposed, leak clean on 22/22 components at tolerance 0. The one
+> remaining deliverable, "stale perf cells 11 → 0", is **structurally
+> unavailable to an agent**: a perf cell is stale iff the baseline's
+> `sourceCommit` predates the component's, so only writing
+> `packages/core/perf/baselines.json` can clear it, and README §5 `<authority>`
+> withholds baseline replacement. Captured to a proposal instead and routed as
+> **O7-D1**. The gap note's "11 stale perf cells" is stale — the measured count
+> at `2d51eec` is **22**. Defects raised: **D131–D135**.
 
 _Gap: `packages/core/perf/baselines.json` holds 33 metrics under the variance
 policy (median + max(3σ, 5 %), ≥5 runs, downward ratchet) and

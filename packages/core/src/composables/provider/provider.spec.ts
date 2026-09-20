@@ -14,6 +14,7 @@ import {
   useDzPortalTarget,
   useDzSanitizer,
   useDzTestIds,
+  useDzUrlPolicy,
 } from './index.ts'
 // The write half is intentionally absent from the barrel (see index.ts); it is
 // imported the way `DzProvider` will import it, so these tests exercise the
@@ -36,6 +37,7 @@ import {
   useDzMotionAttribute,
 } from './useDzMotion.ts'
 import { createDzSanitizer, provideDzSanitizer } from './useDzSanitizer.ts'
+import { createDzUrlPolicy, provideDzUrlPolicy, useDzUrlGuard } from './useDzUrlPolicy.ts'
 
 /**
  * Provider composables (TASK-OSS-P4-01, ADR-20).
@@ -636,6 +638,81 @@ describe('sanitizer (ADR-20 amendment A6)', () => {
         },
       }), () => h(child as never)),
     )).toThrow(/set `sanitizer` to null/)
+    warn.mockRestore()
+  })
+})
+
+describe('url policy (ADR-20 amendment A7)', () => {
+  const nav = { component: 'DzTest', prop: 'href', sink: 'navigation' } as const
+
+  it('resolves to the strict default with nothing installed', () => {
+    // The asymmetry with every other concern is the point: forgetting to mount
+    // a provider gives you the STRICT policy, not an open one. A default that
+    // is safe is the only kind a security concern can have, because the tree
+    // that most needs the policy is the one nobody configured.
+    const policy = probe(() => useDzUrlPolicy())
+    expect(policy.allowedSchemes).toEqual(['http', 'https', 'mailto', 'tel', 'sms'])
+    expect(policy.isAllowed('https://example.test/', nav)).toBe(true)
+    expect(policy.isAllowed('javascript:alert(1)', nav)).toBe(false)
+  })
+
+  it('takes the policy a provider installed', () => {
+    const policy = probe(
+      () => useDzUrlPolicy(),
+      child => h(defineComponent({
+        setup(_, { slots }) {
+          provideDzUrlPolicy(createDzUrlPolicy(ref({ allowedSchemes: ['https'] }), undefined))
+          return () => slots.default?.()
+        },
+      }), () => h(child as never)),
+    )
+
+    expect(policy.isAllowed('https://example.test/', nav)).toBe(true)
+    expect(policy.isAllowed('http://example.test/', nav)).toBe(false)
+  })
+
+  it('lets an instance override narrow further', () => {
+    const policy = probe(
+      () => useDzUrlPolicy({ allowedSchemes: ['https'] }),
+      child => h(defineComponent({
+        setup(_, { slots }) {
+          provideDzUrlPolicy(createDzUrlPolicy(ref({ allowedSchemes: ['http', 'https'] }), undefined))
+          return () => slots.default?.()
+        },
+      }), () => h(child as never)),
+    )
+
+    expect(policy.isAllowed('http://example.test/', nav)).toBe(false)
+  })
+
+  it('keeps an ancestor\'s escape hatch when a nested provider narrows the list', () => {
+    const outer = createDzUrlPolicy(
+      ref({ allow: (url: string, c: { allowedByDefault: boolean }) => c.allowedByDefault || url.startsWith('slack:') }),
+      undefined,
+    )
+    const policy = probe(
+      () => useDzUrlPolicy(),
+      child => h(defineComponent({
+        setup(_, { slots }) {
+          provideDzUrlPolicy(createDzUrlPolicy(ref({ allowedSchemes: ['https'] }), outer))
+          return () => slots.default?.()
+        },
+      }), () => h(child as never)),
+    )
+
+    expect(policy.isAllowed('slack://team/x', nav)).toBe(true)
+    expect(policy.isAllowed('http://example.test/', nav)).toBe(false)
+    expect(policy.isAllowed('javascript:alert(1)', nav)).toBe(false)
+  })
+
+  it('useDzUrlGuard binds the component name and returns an omission, not a rewrite', () => {
+    const guard = probe(() => useDzUrlGuard('DzWidget'))
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+    expect(guard('/products')).toEqual({ href: '/products', rejected: false })
+    expect(guard(undefined)).toEqual({ href: undefined, rejected: false })
+    expect(guard('javascript:alert(1)')).toEqual({ href: undefined, rejected: true })
+    expect(warn.mock.calls.at(-1)?.[0]).toContain('DzWidget')
     warn.mockRestore()
   })
 })

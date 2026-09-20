@@ -108,7 +108,6 @@ The scaffold says this component owes 4 task(s):
 
 **Read from:** WCAG 3.3.1 Error Identification; `aria-invalid` + `aria-errormessage`; ARIA live region for the rejection itself.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -116,4 +115,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 None on the register for this component. Anything that fails here is new — file it.
-

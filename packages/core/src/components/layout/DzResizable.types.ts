@@ -24,6 +24,15 @@ export interface DzResizableContext {
   direction: Ref<ResizableDirection>
   /** Component size */
   size: Ref<CanonicalSize>
+  /**
+   * Whether the WHOLE group is frozen (N1-O1 defect D2).
+   *
+   * `<DzResizable disabled>` used to stamp `data-disabled` on the group and
+   * nothing else, because the context carried only `direction` and `size`:
+   * the handles stayed focusable and Arrow keys still resized. Freezing a
+   * layout meant repeating `disabled` on every `DzResizableHandle`.
+   */
+  disabled: Ref<boolean>
 }
 
 /** Typed injection key for DzResizable context (ADR-08, SCREAMING_SNAKE) */

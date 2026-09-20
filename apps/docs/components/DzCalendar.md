@@ -230,7 +230,7 @@ then the component's own default.**
 | --- | --- |
 | **Server rendering** | `unrun`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
-| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
@@ -250,7 +250,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `a170c9a`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -268,8 +268,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `2d51eec4` for the capability matrix,
+`2d51eec4` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -279,7 +279,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `a170c9a9`
+- **Component last changed at:** `a01965fa`
 
 **Why this pattern:** A month grid with roving focus, range selection and locale-dependent week starts — the composite case APG models as a grid rather than as a set of buttons.
 
@@ -376,13 +376,13 @@ Every kind of evidence required of this component — by Tier C — and what was
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzCalendar.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzCalendar.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
+| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

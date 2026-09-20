@@ -142,6 +142,24 @@ export const ANATOMY_PART_EXTENSIONS = {
     status: 'reviewed',
     reason: 'See `decrement`.',
   },
+  'step-decrease': {
+    owners: ['DzResizable', 'DzSplitter', 'DzTable'],
+    status: 'reviewed',
+    reason: 'The pointer control that moves a splitter separator or a column edge one step '
+      + 'smaller — the WCAG 2.2 SC 2.5.7 single-pointer path added 2026-09-19 by owner decision '
+      + 'D117 option A. Deliberately NOT `decrement`: that name is shipped by DzNumberInput on a '
+      + 'spinbutton, where it changes a VALUE a consumer bound, and reusing it would make one '
+      + 'selector match two nodes whose contract differs (one emits a v-model update, the other '
+      + 'resizes a layout). Kept component-specific rather than folded into the vocabulary until a '
+      + 'third family needs a resize stepper; ADR-19 §3 grows the vocabulary on evidence of '
+      + 'recurrence, and three surfaces sharing one implementation are one occurrence.',
+  },
+  'step-increase': {
+    owners: ['DzResizable', 'DzSplitter', 'DzTable'],
+    status: 'reviewed',
+    reason: 'See `step-decrease`. The two are not interchangeable, so one `action` for both would '
+      + 'lose the distinction a consumer needs to style or test them apart.',
+  },
   'options-state': {
     owners: [
       'DzCascader',

@@ -46,6 +46,7 @@ const attrs = useAttrs()
 const context: DzResizableContext = {
   direction: toRef(() => props.direction),
   size: toRef(() => props.size),
+  disabled: toRef(() => props.disabled),
 }
 
 provide(DZ_RESIZABLE_KEY, context)

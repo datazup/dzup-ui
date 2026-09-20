@@ -40,6 +40,25 @@ describe('dzPasswordInput — Unit Tests', () => {
     expect(wrapper.find('input').attributes('autocomplete')).toBe('current-password')
   })
 
+  // WCAG 2.2 SC 3.3.8 Accessible Authentication (AA) accepts a password manager
+  // as the mechanism that removes the recall test. The manager reads the token
+  // on the <input>, and `inheritAttrs: false` used to send a consumer's
+  // `autocomplete` to the wrapper <div>, where nothing reads it: a registration
+  // form could not say `new-password` at all (TASK-R2-O5).
+  it('puts a consumer autocomplete token on the input, not on the wrapper', () => {
+    const wrapper = mount(DzPasswordInput, { props: { autocomplete: 'new-password' } })
+    expect(wrapper.find('input').attributes('autocomplete')).toBe('new-password')
+    expect(wrapper.element.getAttribute('autocomplete')).toBeNull()
+  })
+
+  // The reveal control is the other SC 3.3.8 support technique, and it had
+  // `tabindex="-1"`: the only way to read back what you typed was a mouse, which
+  // is also a plain SC 2.1.1 failure on a control with a function of its own.
+  it('reaches the visibility toggle by keyboard', () => {
+    const wrapper = mount(DzPasswordInput)
+    expect(wrapper.find('button').attributes('tabindex')).toBeUndefined()
+  })
+
   it('renders error message when error prop is provided', () => {
     const wrapper = mount(DzPasswordInput, {
       props: { error: 'Password is too short' },

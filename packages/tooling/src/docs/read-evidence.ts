@@ -23,6 +23,14 @@
  * a confident page when the record has gone missing repeats that mistake with a
  * public audience.
  *
+ * TASK-R2-O1 removed the underlying hazard — the capability matrix now reads the
+ * tracked `e2e/matrix/browser-evidence.json` instead, and the Playwright report
+ * turned out to be even less durable than F4 said: it lives inside the directory
+ * Playwright empties at the start of every run, and the 2026-08-25 record was
+ * destroyed by R2-O5's own sweep. The rule this paragraph states is unchanged
+ * and is why the optional records are still printed absent rather than routed
+ * around.
+ *
  * @module @dzup-ui/tooling/docs/read-evidence
  */
 
@@ -40,6 +48,7 @@ import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
+import { probeBrowserTarget } from './browser-target.ts'
 
 /** Repo-relative paths of every artifact the evidence layer reads. */
 export const EVIDENCE_PATHS = {
@@ -147,6 +156,11 @@ export function readEvidenceSources(root: string = ROOT): EvidenceSources {
     knownFailures: readJson<KnownFailures>(EVIDENCE_PATHS.knownFailures, root),
     securityDeviations: readJson<SecurityDeviations>(EVIDENCE_PATHS.securityDeviations, root),
     cascadeLayers,
+    // A source probe, like `cascadeLayers` above and for the same reason: the
+    // browser-support page may not state a floor the tree does not declare, and
+    // the only way that stays true is for the page to read the tree every time
+    // it is rendered (TASK-R2-O5, closing N2-D2 finding F-2's blind spot).
+    browserTarget: probeBrowserTarget(root),
     atScripts: readAtScripts(root),
     fingerprints,
   }

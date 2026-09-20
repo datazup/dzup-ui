@@ -44,7 +44,7 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
   },
   DzAnchor: {
     parts: ['root', 'list', 'item'],
-    states: ['ready', 'active'],
+    states: ['ready', 'active', 'url-rejected'],
     componentTokens: ['--dz-anchor-color', '--dz-anchor-hover-color', '--dz-anchor-active-color', '--dz-anchor-rail-color', '--dz-anchor-font-size', '--dz-anchor-item-gap', '--dz-anchor-indent'],
     riskTier: 'B',
     optionalParts: ['list', 'item'],
@@ -77,7 +77,7 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
   },
   DzBreadcrumb: {
     parts: ['root', 'list', 'item', 'item-label', 'separator'],
-    states: ['ready', 'disabled'],
+    states: ['ready', 'disabled', 'url-rejected'],
     componentTokens: [],
     riskTier: 'B',
     optionalParts: ['item', 'item-label', 'separator'],
@@ -85,7 +85,7 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
   },
   DzButton: {
     parts: ['root', 'spinner'],
-    states: ['idle', 'loading', 'disabled'],
+    states: ['idle', 'loading', 'disabled', 'url-rejected'],
     componentTokens: ['--dz-button-disabled-opacity', '--dz-button-focus-ring-color', '--dz-button-focus-ring-offset', '--dz-button-focus-ring-width', '--dz-button-font-family', '--dz-button-font-weight', '--dz-button-icon-font-size', '--dz-button-icon-height', '--dz-button-icon-width', '--dz-button-lg-font-size', '--dz-button-lg-gap', '--dz-button-lg-height', '--dz-button-lg-padding-x', '--dz-button-md-font-size', '--dz-button-md-gap', '--dz-button-md-height', '--dz-button-md-padding-x', '--dz-button-radius', '--dz-button-sm-font-size', '--dz-button-sm-gap', '--dz-button-sm-height', '--dz-button-sm-padding-x', '--dz-button-transition', '--dz-button-xl-font-size', '--dz-button-xl-gap', '--dz-button-xl-height', '--dz-button-xl-padding-x', '--dz-button-xs-font-size', '--dz-button-xs-gap', '--dz-button-xs-height', '--dz-button-xs-padding-x'],
     riskTier: 'B',
     recipes: ['variant', 'size', 'tone'],
@@ -456,7 +456,7 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
   },
   DzMegaMenu: {
     parts: ['root', 'list', 'trigger', 'indicator', 'panel', 'group', 'group-label', 'item'],
-    states: ['disabled'],
+    states: ['disabled', 'url-rejected'],
     componentTokens: ['--dz-menu-bar-gap', '--dz-menu-panel-offset', '--dz-menu-panel-padding', '--dz-menu-column-gap', '--dz-menu-column-min-width'],
     riskTier: 'C',
     recipes: ['size', 'orientation'],
@@ -474,7 +474,7 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
   },
   DzMenu: {
     parts: ['root', 'item', 'item-label', 'separator'],
-    states: ['ready', 'active', 'disabled'],
+    states: ['ready', 'active', 'disabled', 'url-rejected'],
     componentTokens: [],
     riskTier: 'B',
     recipes: ['size'],
@@ -631,12 +631,12 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
     rtl: { mirrors: 'layout', keyboard: 'none' },
   },
   DzResizable: {
-    parts: ['root', 'panel', 'separator', 'indicator'],
+    parts: ['root', 'panel', 'separator', 'indicator', 'step-decrease', 'step-increase'],
     states: ['inactive', 'hover', 'drag', 'disabled'],
     componentTokens: [],
     riskTier: 'B',
     recipes: ['orientation'],
-    optionalParts: ['panel', 'separator', 'indicator'],
+    optionalParts: ['panel', 'separator', 'indicator', 'step-decrease', 'step-increase'],
     rtl: { mirrors: 'layout', keyboard: 'swap-horizontal' },
   },
   DzScrollArea: {
@@ -685,7 +685,7 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
   },
   DzSidebar: {
     parts: ['root', 'overlay', 'body', 'header', 'footer', 'group', 'group-label', 'item', 'icon', 'item-label', 'suffix'],
-    states: ['collapsed', 'expanded', 'active', 'inactive'],
+    states: ['collapsed', 'expanded', 'active', 'inactive', 'url-rejected'],
     componentTokens: ['--dz-sidebar-width', '--dz-sidebar-collapsed-width', '--dz-sidebar-bg', '--dz-sidebar-foreground', '--dz-sidebar-border', '--dz-sidebar-transition', '--dz-sidebar-header-bg', '--dz-sidebar-header-border', '--dz-sidebar-header-padding', '--dz-sidebar-footer-bg', '--dz-sidebar-footer-border', '--dz-sidebar-footer-padding', '--dz-sidebar-section-padding-y', '--dz-sidebar-section-title-color', '--dz-sidebar-section-title-font-size', '--dz-sidebar-section-title-letter-spacing', '--dz-sidebar-item-radius', '--dz-sidebar-item-padding-x', '--dz-sidebar-item-padding-y', '--dz-sidebar-item-gap', '--dz-sidebar-item-font-size', '--dz-sidebar-item-font-weight', '--dz-sidebar-item-hover-bg', '--dz-sidebar-item-hover-text', '--dz-sidebar-item-active-bg', '--dz-sidebar-item-active-text', '--dz-sidebar-overlay-bg', '--dz-sidebar-overlay-z-index'],
     riskTier: 'C',
     optionalParts: ['overlay', 'header', 'footer', 'group', 'group-label', 'item', 'icon', 'item-label', 'suffix'],
@@ -727,12 +727,12 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
     rtl: { mirrors: 'layout', keyboard: 'none' },
   },
   DzSplitter: {
-    parts: ['root', 'panel', 'separator', 'indicator'],
+    parts: ['root', 'panel', 'separator', 'indicator', 'step-decrease', 'step-increase'],
     states: ['inactive', 'hover', 'drag', 'disabled'],
     componentTokens: [],
     riskTier: 'B',
     recipes: ['orientation'],
-    optionalParts: ['panel', 'separator', 'indicator'],
+    optionalParts: ['panel', 'separator', 'indicator', 'step-decrease', 'step-increase'],
     rtl: { mirrors: 'layout', keyboard: 'swap-horizontal' },
   },
   DzStatCard: {
@@ -770,12 +770,12 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
     rtl: { mirrors: 'layout', keyboard: 'none', icons: ['indicator'] },
   },
   DzTable: {
-    parts: ['root', 'content', 'title', 'header', 'body', 'row', 'cell', 'footer'],
+    parts: ['root', 'content', 'title', 'header', 'body', 'row', 'cell', 'footer', 'separator', 'step-decrease', 'step-increase'],
     states: ['ready', 'loading', 'selected', 'expanded'],
     componentTokens: [],
     riskTier: 'C',
     recipes: ['size', 'variant'],
-    optionalParts: ['title', 'header', 'body', 'row', 'cell', 'footer'],
+    optionalParts: ['title', 'header', 'body', 'row', 'cell', 'footer', 'separator', 'step-decrease', 'step-increase'],
     rtl: { mirrors: 'layout', keyboard: 'swap-horizontal' },
   },
   DzTabs: {

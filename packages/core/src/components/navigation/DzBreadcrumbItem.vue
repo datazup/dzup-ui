@@ -13,6 +13,7 @@ import type { DzBreadcrumbItemProps, DzBreadcrumbItemSlots } from './DzBreadcrum
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzUrlGuard } from '../../composables/provider/useDzUrlPolicy.ts'
 import { cn } from '../../utilities/cn.ts'
 import { breadcrumbVariants } from './DzBreadcrumb.variants.ts'
 
@@ -37,14 +38,32 @@ const linkClasses = computed(() => {
   return cn(base, disabled, attrs.class as string | undefined, props.ui?.['item-label'])
 })
 
-const isLink = computed(() => !!props.href && !props.current && !props.disabled)
+/**
+ * The URL policy (ADR-20 §12, TASK-R2-O4).
+ *
+ * `DzBreadcrumb` declares the `url` boundary and has no sink of its own — this
+ * sub-part carries the `href` (finding U4). The guard is named for the file a
+ * reader would open, not for the declarer.
+ */
+const guardUrl = useDzUrlGuard('DzBreadcrumbItem')
+const urlDecision = computed(() => guardUrl(props.href))
+
+/**
+ * A refused URL falls into the existing non-link branch — the `<span
+ * role="link">` this component already renders for the current page and for a
+ * disabled crumb. The trail keeps its shape and the label stays readable; what
+ * disappears is the navigation.
+ */
+const isLink = computed(() =>
+  urlDecision.value.href !== undefined && !props.current && !props.disabled,
+)
 </script>
 
 <template>
   <li data-part="item" :class="cn(styles.item(), ui?.item)">
     <a
       v-if="isLink"
-      :href="href"
+      :href="urlDecision.href"
       data-part="item-label"
       :class="linkClasses"
       v-bind="{ ...$attrs, class: undefined }"
@@ -58,6 +77,7 @@ const isLink = computed(() => !!props.href && !props.current && !props.disabled)
       :aria-current="current ? 'page' : undefined"
       :aria-disabled="disabled || undefined"
       :class="linkClasses"
+      :data-state="urlDecision.rejected ? 'url-rejected' : undefined"
       :data-disabled="disabled ? '' : undefined"
       v-bind="{ ...$attrs, class: undefined }"
     >

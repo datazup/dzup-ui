@@ -1,9 +1,9 @@
 {
   "generator": "yarn generate:docs-pages (TASK-N2-D1, evidence layer TASK-N2-D2)",
-  "artifactSha256": "379ac60cec1e630ed52bb27627429a38f9dd21323fdf1212f3236255725ffc3f",
+  "artifactSha256": "fbf92c3522bb7eac25ab314a3ec572f3acc120f44fb5be478d5ef51643925812",
   "schemaVersion": "1.2.0",
   "extractor": "vue-component-meta@3.3.7",
-  "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+  "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
   "publicComponents": 144,
   "compoundParts": 65,
   "groups": [
@@ -657,18 +657,18 @@
     }
   ],
   "evidenceSha256": {
-    "packages/core/docs/quality-matrix.json": "3da85132fa579847e00cbf10e4923c2104d11449050767fc88063ba221039d66",
-    "packages/core/docs/capability-matrix.json": "561b7852a04d4f92ba39a6412d0088958bf88bd61227206669645cdea221ad5d",
-    "e2e/at-matrix/index.json": "0abcc92ef6c3332f73073f09a6def24cfc5a24043048c3d8e686bb5f70deea94",
-    "packages/core/docs/wcag-deviations.json": "c3fdab5ea679fbb0f39d0be91bcf0edcc6442c5021fb5a240e48153c89f1fcb8",
-    "e2e/matrix/engine-ratchets.json": "cbcb8ba4657f5270b12bba458715cffdd59d343830eb13d7ebdda9d64e5183e4",
+    "packages/core/docs/quality-matrix.json": "20b9004aa504ec55f1403ddbba2b195b5eb3b0afff1b13736d312380e74a3786",
+    "packages/core/docs/capability-matrix.json": "06470abfebefa2b5f13013e89c79d6e5a18b31e63895a31954f705077a1d4ac8",
+    "e2e/at-matrix/index.json": "d35ef2dfa049e253205cfca1b49b4841fe46e40d598c8fc1fdc88242a99b8de4",
+    "packages/core/docs/wcag-deviations.json": "bde6dc788456481dd1a28216640d57adbe0c62a482aa45192df3ad78ec014f3c",
+    "e2e/matrix/engine-ratchets.json": "43a6f0ee01e1df5eba6e07d4949da99513733775bf37653aa9410e19da99b8f0",
     "e2e/matrix/known-failures.json": "d579c5e0ea41a1560b76ef9be2570535910a588304982a0ca4ab9297c992bf83",
-    "packages/core/security/security-deviations.json": "3d8470b437208355c868fba46d11c3f1bf4c7355bdbc50b5f38b3f00047b61b8",
+    "packages/core/security/security-deviations.json": "d512d3fd7bef273d7a638e17faab698dc5e9ef609e52705584bee0f937b5df25",
     "packages/core/src/styles/base.css": "ee7d5ca85e12a1eabd392d76779562655314a489c67a80240611e4f1d301ff35"
   },
   "evidence": {
-    "cells": 1661,
-    "unrunCells": 534,
+    "cells": 1662,
+    "unrunCells": 441,
     "atCells": 534,
     "atExecuted": 0
   }

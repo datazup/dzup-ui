@@ -114,8 +114,26 @@ async function measure(id: string, run: () => void | Promise<void>): Promise<Dis
  * declaration — set it on a dedicated perf job, where the number means
  * something, and leave it off everywhere else.
  *
- * `size` baselines are unaffected. A gzipped byte count is deterministic, and
- * it gates always.
+ * `size` baselines are deterministic — a gzipped byte count does not vary with
+ * machine load — but the claim that once stood here, that `size` "gates always",
+ * is **false in three independent ways**, and was corrected on 2026-09-19 by the
+ * independent verification of the 09-19 programme work (defect **D140**):
+ *
+ *  1. **No spec asserts a `size:*` metric at all.** The only producer of those
+ *     ids is `perf/capture-baselines.ts:250`; this file benches runtime
+ *     scenarios only. A `size:*` baseline is written and then read by nobody.
+ *  2. **`component-size-report.ts` cannot fail.** It `console.log`s a table and
+ *     a JSON blob; it contains no `process.exit` and no assertion.
+ *  3. **`RUNTIME_GATE` below is not size-exempt anyway.** `assertAgainstBaseline`
+ *     returns early on `if (!RUNTIME_GATE)` for *every* metric kind, so even if a
+ *     `size:*` metric were routed through it, `DZUP_PERF_GATE` unset would skip it.
+ *
+ * None of the 22 per-export `size:*` budgets is in any of `validate:all`'s 44
+ * links. They are reported numbers, not budgets — re-measured 2026-09-19 against
+ * TASK-R2-O7's capture at `2d51eec`, **20 of the 22 are over their recorded
+ * threshold**, worst `size:DzMention` 22,421 → 25,965 B (+15.8 %), then
+ * `size:DzDataView` +9.4 % and `size:DzPersonaSelector` +7.2 %. See D135 and D140; fixing
+ * the breach with `perf:capture` would raise 22 thresholds instead (D132).
  */
 const RUNTIME_GATE = process.env.DZUP_PERF_GATE === '1'
 

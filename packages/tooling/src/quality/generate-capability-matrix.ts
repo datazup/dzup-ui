@@ -17,6 +17,8 @@
 
 import type { EvidenceKind } from '@dzup-ui/contracts'
 import type { VisualLedger } from '../validators/visual-baselines.ts'
+import type { AtMatrixIndex } from './at-matrix.ts'
+import type { BrowserEvidenceLedger } from './browser-evidence.ts'
 import type { CapabilityMatrix, CapabilityRow, CellState, EvidenceCell, VisualEvidence } from './capability-matrix.ts'
 import type { QualityMatrixRow } from './generate-quality-matrix.ts'
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
@@ -27,7 +29,9 @@ import { parseAnatomySource } from '../ownership/anatomy-source.ts'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 import { readBaselineFile } from '../perf/read-baselines.ts'
 import { checkStoryDod } from '../validators/story-dod.ts'
-import { CAPABILITY_SCHEMA_VERSION, emptyTally } from './capability-matrix.ts'
+import { resolveAtManual } from './at-matrix.ts'
+import { BROWSER_EVIDENCE_PATH, cellKey, readBrowserEvidence, readDeclaredMatrixProjects } from './browser-evidence.ts'
+import { CAPABILITY_SCHEMA_VERSION, CELL_STATES, emptyTally } from './capability-matrix.ts'
 import { renderCapabilityData } from './emit-capability-data.ts'
 import { AT_MATRIX_INDEX } from './generate-at-matrix.ts'
 import { readCommittedMatrix } from './generate-quality-matrix.ts'
@@ -41,15 +45,35 @@ export const CAPABILITY_DATA_PATH = resolve(
   'apps/storybook/stories/_data/capability.generated.ts',
 )
 
-/** Playwright's JSON reporter output, when the matrix lane has been run. */
-const PLAYWRIGHT_REPORT = resolve(ROOT, 'test-results/matrix-report.json')
+/**
+ * Playwright's JSON reporter output — **no longer read here** (TASK-R2-O1).
+ *
+ * Kept as a named constant and a signpost, because deriving the path again from
+ * the Playwright docs is exactly what a future reader would do. Three measured
+ * reasons it cannot be this generator's input:
+ *
+ *  - `.gitignore` excludes `test-results/`, so a fresh clone had no browser
+ *    evidence at all and every Tier B–D cell read `unrun` (N0-05 finding F4).
+ *  - Playwright **empties `outputDir` at the start of every run**. The
+ *    2026-08-25 chromium record that N1-O2 decision D1 set out to protect, and
+ *    that TASK-R2-O5 declined to overwrite for that reason, was destroyed by
+ *    R2-O5's own sweep on 2026-09-18. It is gone.
+ *  - Its presence was read as a *boolean*: one chromium/default run made all 88
+ *    components read `pass` on all three engines, because the file cannot say
+ *    which of the 24 projects ran.
+ *
+ * The tracked projection `e2e/matrix/browser-evidence.json` replaces it. The
+ * report is still what produces the numbers — `yarn generate:browser-evidence`
+ * reads it — it is just not what the matrix *cites*.
+ */
+const PLAYWRIGHT_REPORT_SUPERSEDED = 'test-results/matrix-report.json'
 const KNOWN_FAILURES = resolve(ROOT, 'e2e/matrix/known-failures.json')
 
 /**
  * The committed per-engine browser-lane ledger (TASK-N1-O2).
  *
  * The Playwright report is git-ignored, so it can say *whether* a lane ran and
- * nothing durable about *which of the eighteen projects* did. Reading engine
+ * nothing durable about *which of the 24 projects* did. Reading engine
  * coverage from a committed file instead is what lets a `browser-matrix` cell
  * distinguish "chromium only, two of six conditions" from "three engines, six
  * conditions each" — which is the whole claim the row is making.
@@ -69,15 +93,20 @@ const ENGINE_RATCHETS = resolve(ROOT, 'e2e/matrix/engine-ratchets.json')
  */
 const VISUAL_BASELINES = resolve(ROOT, 'e2e/visual/visual-baselines.json')
 
-/** All six matrix conditions, in the order `playwright.config.ts` declares them. */
-const MATRIX_CONDITIONS = [
-  'default',
-  'forced-colors',
-  'reduced-motion',
-  'rtl',
-  'touch',
-  'zoom-400',
-] as const
+/**
+ * Every matrix condition, in the order `playwright.config.ts` declares them.
+ *
+ * The count is derived from this list wherever it is printed (TASK-R2-O5): the
+ * sentences below used to spell `/6` by hand, so the day the lane gained the
+ * SC 1.4.4 and SC 1.4.12 conditions, a coverage note would have read
+ * `6/6 conditions` about a lane with eight of them.
+ *
+ * TASK-R2-O1: it is no longer a *copy* of that list either. It is read from
+ * `playwright.config.ts` at load, because the transcription R2-O5 corrected had
+ * been wrong for exactly as long as it had existed, and a second correct copy is
+ * a copy waiting to go wrong.
+ */
+const MATRIX_CONDITIONS: readonly string[] = readDeclaredMatrixProjects().conditions
 
 interface EngineRatchets {
   engines: Record<string, {
@@ -128,9 +157,15 @@ interface Sources {
   ssrSpecs: { path: string, source: string }[]
   storyDod: Map<string, Set<string>>
   storyFile: Map<string, string>
-  atIndex?: { entries: { component: string, componentCommit: string, file: string, rows: { result: string, sourceCommit: string }[] }[] }
+  // The real type, not a structural restatement of it (TASK-R2-O2). The inline
+  // shape this replaces named four fields and omitted `tasks`, `tier` and the
+  // result *values* — which is how the resolver came to be written against a
+  // row it could not see the outcome of. Importing the type makes the next
+  // scaffold field a compile error here rather than a silent no-op.
+  atIndex?: AtMatrixIndex
   baselines?: ReturnType<typeof readBaselineFile>
-  playwright?: { suites?: unknown[] }
+  /** The tracked browser ledger (TASK-R2-O1), replacing the git-ignored report. */
+  browserEvidence?: BrowserEvidenceLedger
   knownFailures: Set<string>
   engineRatchets?: EngineRatchets
   visual?: VisualLedger
@@ -169,8 +204,8 @@ function browserEngineNote(component: string, sources: Sources): string | undefi
     const uncovered = expected.filter(c => !state.conditionsRun.includes(c))
 
     const coverage = ran === MATRIX_CONDITIONS.length
-      ? 'all 6 conditions'
-      : `${ran}/6 conditions (${state.conditionsRun.join(', ')})`
+      ? `all ${MATRIX_CONDITIONS.length} conditions`
+      : `${ran}/${MATRIX_CONDITIONS.length} conditions (${state.conditionsRun.join(', ')})`
     const verdict = failing.length === 0
       ? 'no expected failure in what it ran'
       : `expected failure in ${failing.join(', ')}`
@@ -228,9 +263,7 @@ function loadSources(): Sources {
       ? JSON.parse(readFileSync(AT_MATRIX_INDEX, 'utf8'))
       : undefined,
     baselines: readBaselineFile(),
-    playwright: existsSync(PLAYWRIGHT_REPORT)
-      ? JSON.parse(readFileSync(PLAYWRIGHT_REPORT, 'utf8'))
-      : undefined,
+    browserEvidence: readBrowserEvidence(),
     knownFailures,
     engineRatchets: existsSync(ENGINE_RATCHETS)
       ? JSON.parse(readFileSync(ENGINE_RATCHETS, 'utf8'))
@@ -573,46 +606,113 @@ function resolveCell(
     }
 
     case 'browser-matrix': {
-      if (sources.playwright === undefined) {
+      const evidence = sources.browserEvidence
+      if (evidence === undefined) {
         return cell(kind, origin, {
           state: 'unrun',
-          note: 'No Playwright report at test-results/matrix-report.json. Run '
-            + '`yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set.',
+          note: `No tracked browser ledger at ${rel(BROWSER_EVIDENCE_PATH)}. Run the lane into a `
+            + 'Playwright JSON report (PLAYWRIGHT_JSON_OUTPUT, written OUTSIDE test-results/) '
+            + 'and project it with `yarn generate:browser-evidence --report <path>`.',
         })
       }
+
+      const entry = evidence.components.find(c => c.component === row.component)
+      if (entry === undefined) {
+        return cell(kind, origin, {
+          state: 'unrun',
+          artifacts: [rel(BROWSER_EVIDENCE_PATH)],
+          note: `${row.component} is not a target of the browser matrix: `
+            + '`e2e/matrix/targets.generated.ts` covers Tier B–D. That is a scope statement, '
+            + 'not a result.',
+        })
+      }
+
+      // Per-project counting, not a boolean over one file. The whole claim a
+      // browser cell makes is "three engines × eight conditions", and the input
+      // this replaced could not distinguish that from one chromium project.
+      const runs = new Map(evidence.runs.map(r => [cellKey(r.engine, r.condition), r]))
+      const failing: string[] = []
+      const missing: string[] = []
+      const staleProjects: string[] = []
+      let passed = 0
+      for (const [key, result] of Object.entries(entry.cells)) {
+        if (result === 'fail') {
+          failing.push(key)
+          continue
+        }
+        if (result === 'unrun') {
+          missing.push(key)
+          continue
+        }
+        passed++
+        const at = runs.get(key)?.sourceCommit
+        if (at !== undefined && !evidenceIsCurrent(at, componentCommit))
+          staleProjects.push(key)
+      }
+
+      const total = Object.keys(entry.cells).length
       const known = [...sources.knownFailures].filter(k => k.startsWith(`${row.component}:`))
-      const engines = browserEngineNote(row.component, sources)
-      const ledger = known.length > 0
-        ? `Known failures in ${known.map(k => k.split(':')[1]).join(', ')}; see the ledger.`
-        : undefined
-      return cell(kind, origin, {
-        state: known.length > 0 ? 'present' : 'pass',
-        artifacts: [
-          'e2e/matrix/conditions.spec.ts',
-          'e2e/matrix/known-failures.json',
-          ...(sources.engineRatchets === undefined ? [] : ['e2e/matrix/engine-ratchets.json']),
-        ],
-        note: [ledger, engines].filter(part => part !== undefined).join(' ') || undefined,
-      })
+      const artifacts = [
+        'e2e/matrix/conditions.spec.ts',
+        rel(BROWSER_EVIDENCE_PATH),
+        'e2e/matrix/known-failures.json',
+        ...(sources.engineRatchets === undefined ? [] : ['e2e/matrix/engine-ratchets.json']),
+      ]
+
+      // Never resolved upward: a recorded failure outranks a pass in the same
+      // cell, and it outranks staleness too (see CellState's contract).
+      const state: CellState = failing.length > 0
+        ? 'fail'
+        : passed === 0
+          ? 'unrun'
+          : missing.length > 0 || known.length > 0
+            ? 'present'
+            : staleProjects.length > 0 ? 'stale' : 'pass'
+
+      const commits = [...new Set(
+        Object.keys(entry.cells)
+          .map(key => runs.get(key))
+          .filter(run => run?.state === 'run')
+          .map(run => `${run!.sourceCommit}${run!.worktreeDirty === true ? ' (worktree dirty)' : ''}`),
+      )].sort()
+
+      const sentences = [
+        `${passed}/${total} projects measured green at ${commits.join(', ') || 'no recorded run'}`,
+        failing.length === 0 ? undefined : `FAILING in ${failing.join(', ')}`,
+        missing.length === 0
+          ? undefined
+          : `${missing.length} project(s) unrun: ${missing.join(', ')}`,
+        staleProjects.length === 0
+          ? undefined
+          : `${staleProjects.length} measured before the component's last change`,
+        known.length === 0
+          ? undefined
+          : `Known cross-engine failures in ${known.map(k => k.split(':')[1]).join(', ')}; see the ledger.`,
+        browserEngineNote(row.component, sources),
+      ].filter(part => part !== undefined)
+
+      return cell(kind, origin, { state, artifacts, note: sentences.join('. ') })
     }
 
     case 'at-manual': {
       const entry = sources.atIndex?.entries.find(e => e.component === row.component)
       if (entry === undefined)
         return cell(kind, origin, { state: 'unrun' })
-      const executed = entry.rows.filter(r => r.result !== 'unrun')
-      if (executed.length === 0) {
-        return cell(kind, origin, {
-          state: 'unrun',
-          artifacts: [entry.file],
-          note: `${entry.rows.length} AT/browser pairs, none executed.`,
-        })
-      }
-      const stale = executed.some(r => !evidenceIsCurrent(r.sourceCommit, entry.componentCommit))
+      // TASK-R2-O2. The resolution used to live here, and it counted rows whose
+      // `result !== 'unrun'` without ever reading the value — so an all-`fail`
+      // component published `pass` (N1-O4 §6.2). It now lives in
+      // `resolveAtManual`, which is a pure function a regression spec drives
+      // directly; keeping it inline is what made the defect unreachable by a
+      // test for a year.
+      const resolved = resolveAtManual(
+        entry,
+        entry.requiredPairs,
+        evidenceIsCurrent,
+      )
       return cell(kind, origin, {
-        state: stale ? 'stale' : 'pass',
-        artifacts: [entry.file],
-        note: `${executed.length}/${entry.rows.length} pairs executed`,
+        state: resolved.state,
+        artifacts: resolved.state === 'unrun' && entry.rows.length === 0 ? [] : [entry.file],
+        note: resolved.note,
       })
     }
 
@@ -672,14 +772,26 @@ function resolveCell(
       // the claim.
       const shared = sharedSecurityArtifacts(row.component, kind)
       const found = [...own, ...shared]
+      // The state stays `present`, deliberately (TASK-R2-O1). The suite is run
+      // and green, and the run record below cites the commit — but `pass` in
+      // this matrix means "an artifact exists AND something recorded *this
+      // component's* row passing", and the security suites are corpus-level: one
+      // green `yarn test` does not resolve to 60 per-component passes. Promoting
+      // them would be exactly the aggregate-standing-in-for-components move the
+      // scope field exists to prevent. Whether the corpus deserves a `corpus`
+      // -scoped `pass` cell of its own is an owner decision, not a generator's.
+      const cited = securityCorpusRunNote()
       return cell(kind, origin, {
         state: found.length === 0 ? 'unrun' : 'present',
-        artifacts: found,
-        note: found.length === 0 && !existsSync(dir)
-          ? 'packages/core/security/ does not exist yet.'
-          : shared.length > 0 && own.length === 0
-            ? 'Covered by a class-level artifact, not a per-component one.'
-            : undefined,
+        artifacts: found.length === 0 ? [] : [...found, 'packages/core/security/coverage.json'],
+        note: [
+          found.length === 0 && !existsSync(dir)
+            ? 'packages/core/security/ does not exist yet.'
+            : shared.length > 0 && own.length === 0
+              ? 'Covered by a class-level artifact, not a per-component one.'
+              : undefined,
+          found.length === 0 ? undefined : cited,
+        ].filter(part => part !== undefined).join(' ') || undefined,
       })
     }
   }
@@ -692,8 +804,20 @@ interface SharedSecurityArtifact {
   readonly covers: readonly string[]
 }
 
+/** The stamped run record TASK-R2-O1 adds beside the coverage declaration. */
+interface SecurityCorpusRun {
+  readonly ranAt: string
+  readonly sourceCommit: string
+  readonly worktreeDirty?: boolean
+  readonly exitCode: number
+  readonly tests: number
+  readonly passed: number
+  readonly failed: number
+}
+
 interface SecurityCoverageManifest {
   readonly artifacts: readonly SharedSecurityArtifact[]
+  readonly lastRun?: SecurityCorpusRun
 }
 
 /**
@@ -721,11 +845,55 @@ const SECURITY_COVERAGE: SecurityCoverageManifest = (() => {
   return parsed
 })()
 
+/**
+ * The security corpus's last recorded run, as one citable sentence.
+ *
+ * A function declaration rather than an inline read so the constant it reads can
+ * stay beside the manifest it belongs to, and so the security cells keep citing
+ * a run they do not themselves perform.
+ */
+function securityCorpusRunNote(): string | undefined {
+  const run = SECURITY_COVERAGE.lastRun
+  if (run === undefined)
+    return undefined
+  const dirty = run.worktreeDirty === true ? ' (worktree dirty)' : ''
+  return `Corpus last run ${run.ranAt} at ${run.sourceCommit}${dirty}: `
+    + `${run.passed}/${run.tests} passed, ${run.failed} failed, exit ${run.exitCode} `
+    + `— locally qualified.`
+}
+
 /** The shared artifacts that cover `component` for `kind`. */
 function sharedSecurityArtifacts(component: string, kind: string): string[] {
   return SECURITY_COVERAGE.artifacts
     .filter(a => a.kind === kind && a.covers.includes(component))
     .map(a => a.path)
+}
+
+/**
+ * The sentence the docs page prints above the matrix for the browser input.
+ *
+ * It names the projects run out of the projects declared, and it names the
+ * admissibility* of the numbers, because "1,408 cells passed" and "1,408 cells
+ * passed on a tree nobody can check out" are different claims and the page has
+ * been printing the first while meaning the second.
+ */
+function browserInputNote(ledger: BrowserEvidenceLedger | undefined): string {
+  if (ledger === undefined) {
+    return `The browser lane has not been projected into ${rel(BROWSER_EVIDENCE_PATH)}, so every `
+      + '`browser-matrix` cell below is `unrun` — which is not the same as "it ran and failed". '
+      + `It is superseded by nothing: ${PLAYWRIGHT_REPORT_SUPERSEDED} is git-ignored AND is `
+      + 'emptied by Playwright at the start of every run, so it never was a record.'
+  }
+  const t = ledger.totals
+  const dirty = ledger.runs.some(r => r.state === 'run' && r.worktreeDirty === true)
+  const admissibility = dirty
+    ? 'At least one run was measured on a DIRTY worktree — locally qualified only, not release '
+    + 'or CI evidence. Each run carries its own worktreeDirty/dirtyPathCount.'
+    : 'Every run was measured on a clean worktree at its stated commit; still a developer '
+      + 'machine, not CI.'
+  return `${t.projectsRun}/${t.projects} projects (${ledger.engines.join(', ')} × `
+    + `${ledger.conditions.length} conditions) projected over ${t.components} Tier B–D `
+    + `components: ${t.pass} pass, ${t.fail} fail, ${t.unrun} unrun. ${admissibility}`
 }
 
 /** The sentence the docs page prints above the matrix for the visual input. */
@@ -735,17 +903,36 @@ function visualInputNote(ledger: VisualLedger | undefined): string {
       + 'an input, not a lane that ran and failed.'
   }
 
+  // `fixture:<id>` records are stress fixtures over a covered family (schema
+  // 1.1.0, TASK-R5-O4), NOT components — the prefix exists precisely so no
+  // capability row can match one. They were nonetheless counted here, so this
+  // note claimed "12 component(s)" over 8 covered components and 4 fixtures, on
+  // every one of the 144 generated docs pages that prints it (TASK-R2-O6, D138).
+  // The per-component join was always right; only this sentence was not.
   const covered = new Set(
-    ledger.baselines.filter(b => b.platform === ledger.scope.platform).map(b => b.component),
+    ledger.baselines
+      .filter(b => b.platform === ledger.scope.platform && !b.component.startsWith('fixture:'))
+      .map(b => b.component),
+  )
+  const fixtures = new Set(
+    ledger.baselines
+      .filter(b => b.platform === ledger.scope.platform && b.component.startsWith('fixture:'))
+      .map(b => b.component),
   )
   const platform = ledger.scope.platform === ledger.scope.ciPlatform
     ? 'The gating platform matches CI.'
     : `Baselines are platform-locked and CI runs ${ledger.scope.ciPlatform}, so this lane is `
       + `developer-local evidence until one accept pass is made there.`
 
+  const fixtureNote = fixtures.size === 0
+    ? ''
+    : `${fixtures.size} stress fixture(s) also carry baselines over these families; a fixture `
+      + `is not a component and changes no row's \`visual\` state. `
+
   return `Per-component baselines for families [${ledger.scope.families.join(', ')}]: `
     + `${covered.size} component(s), ${ledger.scope.themes.join(' + ')}, `
     + `${ledger.scope.engine}/${ledger.scope.platform}, ${ledger.scope.direction}. `
+    + `${fixtureNote}`
     + `Every component outside those families reads \`not-covered\`, never \`unknown\`. ${
       platform}`
 }
@@ -792,7 +979,7 @@ export function buildCapabilityMatrix(
       'packages/core/perf/baselines.json',
       'e2e/matrix/known-failures.json',
       'e2e/matrix/engine-ratchets.json',
-      'test-results/matrix-report.json',
+      'e2e/matrix/browser-evidence.json',
       'e2e/visual/visual-baselines.json',
     ],
     inputs: {
@@ -806,12 +993,9 @@ export function buildCapabilityMatrix(
         path: 'packages/core/perf/baselines.json',
       },
       'browser-matrix': {
-        available: sources.playwright !== undefined,
-        path: 'test-results/matrix-report.json',
-        note: sources.playwright === undefined
-          ? 'The browser lane has not been run into a JSON report, so every browser-matrix cell '
-          + 'below is `unrun` — which is not the same as "it ran and failed".'
-          : undefined,
+        available: sources.browserEvidence !== undefined,
+        path: rel(BROWSER_EVIDENCE_PATH),
+        note: browserInputNote(sources.browserEvidence),
       },
       'visual-baselines': {
         available: sources.visual !== undefined,
@@ -823,10 +1007,10 @@ export function buildCapabilityMatrix(
         path: 'e2e/matrix/engine-ratchets.json',
         note: sources.engineRatchets === undefined
           ? 'No committed per-engine ledger, so a `browser-matrix` cell can say the lane ran '
-          + 'and cannot say which of the eighteen projects did.'
-          : `Engine coverage of the 6-condition sweep: ${
+          + 'and cannot say which of the 24 projects did.'
+          : `Engine coverage of the ${MATRIX_CONDITIONS.length}-condition sweep: ${
             Object.entries(sources.engineRatchets.engines)
-              .map(([engine, s]) => `${engine} ${s.conditionsRun.length}/6`)
+              .map(([engine, s]) => `${engine} ${s.conditionsRun.length}/${MATRIX_CONDITIONS.length}`)
               .join(', ')
           }.`,
       },
@@ -861,12 +1045,13 @@ if (isMain) {
 
   const cells = matrix.rows.reduce((n, r) => n + r.cells.length, 0)
   console.warn(`capability-matrix: ${matrix.rows.length} components, ${cells} evidence cells\n`)
-  console.warn('  tier   pass  present  stale  unrun  excepted')
+  // Driven from CELL_STATES, not a hand-written column list. See the same change
+  // in `validators/capability-matrix.ts` (TASK-R2-O2).
+  console.warn(`  tier  ${CELL_STATES.map(s => s.padStart(9)).join('')}`)
   for (const tier of ['A', 'B', 'C', 'D'] as const) {
     const t = matrix.totals[tier]
     console.warn(
-      `  ${tier}     ${String(t.pass).padStart(5)}${String(t.present).padStart(9)}`
-      + `${String(t.stale).padStart(7)}${String(t.unrun).padStart(7)}${String(t.excepted).padStart(10)}`,
+      `  ${tier}    ${CELL_STATES.map(s => String(t[s] ?? 0).padStart(9)).join('')}`,
     )
   }
   const visual = { 'covered': 0, 'not-covered': 0, 'stale': 0 }

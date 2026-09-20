@@ -295,7 +295,16 @@ describe('dzButton — Contract Spec v1', () => {
   })
 
   it('declares every data-state value it can emit', () => {
-    const cases: DzButtonProps[] = [{}, { loading: true }, { disabled: true }]
+    // `url-rejected` is the fourth (TASK-R2-O4): a host-supplied `href` whose
+    // scheme the URL policy refuses. The component renders as a `<button>` with
+    // no `href` at all, and the state is what a consumer can style and a test
+    // can see — which is why it is declared here rather than left implicit.
+    const cases: DzButtonProps[] = [
+      {},
+      { loading: true },
+      { disabled: true },
+      { href: 'javascript:alert(1)' },
+    ]
     const emitted = new Set<string>()
     for (const props of cases) {
       const wrapper = mount(DzButton, { props, slots: { default: 'btn' } })

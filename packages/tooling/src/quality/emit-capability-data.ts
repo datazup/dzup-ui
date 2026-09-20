@@ -63,7 +63,7 @@ export function renderCapabilityData(matrix: CapabilityMatrix): string {
         `    family: ${str(row.family)},`,
         `    tier: ${str(row.tier)},`,
         `    pattern: ${str(row.pattern)},`,
-        `    boundary: ${str(row.securityBoundary)},`,
+        `    boundary: [${row.securityBoundary.map(str).join(', ')}],`,
         `    anatomy: ${str(row.anatomy)},`,
         `    source: ${str(row.source)},`,
         `    visual: { ${[
@@ -105,7 +105,7 @@ export interface DocCapabilityRow {
   readonly family: string
   readonly tier: 'A' | 'B' | 'C' | 'D'
   readonly pattern: string
-  readonly boundary: string
+  readonly boundary: readonly string[]
   readonly anatomy: 'declared' | 'absent'
   readonly source: string
   /**

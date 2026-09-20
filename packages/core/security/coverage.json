@@ -1,5 +1,48 @@
 {
   "schemaVersion": "1.0.0",
+  "sourceCommit": "2d51eec",
+  "worktreeDirty": true,
+  "dirtyPathCount": 427,
+  "lastRun": {
+    "runBy": "TASK-R2-O1",
+    "ranAt": "2026-09-19",
+    "sourceCommit": "2d51eec",
+    "worktreeDirty": true,
+    "dirtyPathCount": 427,
+    "admissibility": "LOCALLY QUALIFIED ONLY - measured on a worktree carrying 427 uncommitted paths (TASK-R2-O2/O3/O4/O5 and R3/R5, plus this task's own files). Not CI, not release evidence. Full commit-binding needs the owner to commit and re-run; that is an owner action. This block is the run record the capability matrix cites; the `artifacts` list below is the class-level COVERAGE declaration and is a different claim.",
+    "command": "yarn test packages/testing packages/core/security",
+    "exitCode": 0,
+    "files": 9,
+    "tests": 403,
+    "passed": 403,
+    "failed": 0,
+    "skipped": 0,
+    "duration": "7.13s",
+    "platform": "win32 - Windows 11 Pro 10.0.26200, node v24.14.1",
+    "perFile": {
+      "packages/testing/src/index.spec.ts": 3,
+      "packages/testing/src/anatomy.spec.ts": 34,
+      "packages/testing/src/security-corpus.spec.ts": 22,
+      "packages/core/security/inline-style-inventory.spec.ts": 7,
+      "packages/core/security/DzFileUpload.malicious-corpus.spec.ts": 17,
+      "packages/core/security/DzFileUpload.url-policy.spec.ts": 16,
+      "packages/core/security/DzFileUpload.csp-fixture.spec.ts": 9,
+      "packages/core/security/url-boundary.url-policy.spec.ts": 144,
+      "packages/core/security/url-boundary.malicious-corpus.spec.ts": 151
+    },
+    "corpus": {
+      "validator": "yarn validate:security-corpus",
+      "exitCode": 0,
+      "schemaVersion": "1.1.0",
+      "categoryFiles": 6,
+      "fixtures": 34,
+      "outcomes": { "rejected": 13, "stripped": 7, "escaped": 35, "inert": 11, "admitted": 0 },
+      "peerFixtures": 2,
+      "validateStageDiagnostics": 2
+    },
+    "notMeasuredHere": "e2e/csp (the strict-CSP browser lane, TASK-R2-O4) is Playwright and is not part of `yarn test`. It was NOT run by this task and this record does not speak for it.",
+    "note": "The counts are the whole suite `yarn test packages/testing packages/core/security` runs, not a subset chosen to look complete. The task prompt's figures (34 fixtures, 15 declarers, 372 tests) were bound to `e0d1707`; the fixture count is unchanged at 34, the test count is 403 because TASK-R2-O4 added the url-policy assertions for the six navigation sinks and TASK-R3-O4 added the corpus-format checker tests."
+  },
   "note": "Class-level security evidence (TASK-N1-O5). Thirteen components declare the same `url` boundary and cross it in the same two ways, so their threat model is one document and their corpus is one suite driven by shared fixture data. The capability-matrix generator resolves security evidence by the filename convention `{Component}.{kind}.{md,spec.ts}`, which cannot see either; the alternative was thirteen stub documents whose only content is a pointer, which is the box-ticking this matrix exists to expose. So the coverage is declared here and the generator checks both that the file exists and that the claim is about a real component. DzFileUpload is absent on purpose: it is the Tier D component and carries its own four per-component artifacts.",
   "artifacts": [
     {
@@ -39,9 +82,10 @@
         "DzMegaMenu",
         "DzMenu",
         "DzPersonaSelector",
+        "DzQRCode",
         "DzSidebar"
       ],
-      "why": "Every url declarer is bound to its own sink in boundary-bindings.ts and measured against the shared url-scheme fixtures. DzQRCode is not covered: its declared boundary is `payload`, which owes no url-policy row — though its undeclared `icon` sink is asserted in the same file (finding U3)."
+      "why": "Every url declarer is bound to its own sink in boundary-bindings.ts and measured against the shared url-scheme fixtures. Since TASK-R2-O4 that includes DzQRCode: `securityBoundary` is a set, the component declares `['url', 'payload']`, and its `icon` sink — asserted here since TASK-N1-O5 as finding U3 — is now the evidence for a row the matrix asks for. The six navigation sinks assert the allowlist in packages/core/src/security/url-policy.ts; the eight subresource sinks assert `inert`, which is a property of `<img>` and not of a policy."
     },
     {
       "kind": "malicious-corpus",

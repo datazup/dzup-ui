@@ -91,14 +91,20 @@ const dzMotionAttr = useDzMotionAttribute()
     :defer="portalDefer"
   >
     <DialogOverlay data-part="overlay" :class="overlayClasses" :data-dz-motion="dzMotionAttr" />
+    <!--
+      N1-O1 defect D11: `:id="id"` with no `id` handed an explicit `undefined`
+      to the Reka component, which OVERRODE the content id Reka generates for
+      itself. The trigger then advertised `aria-controls=""` and the panel
+      carried no id at all -- axe `aria-valid-attr-value`, and an AT user
+      following the reference found nothing. Bind it only when there is one.
+    -->
     <DialogContent
-      :id="id"
       data-part="content"
       :class="contentClasses"
       :data-dz-motion="dzMotionAttr"
       :data-side="side"
       style="contain: layout style"
-      v-bind="{ ...contentAria, ...$attrs, class: undefined }"
+      v-bind="{ ...(id === undefined ? {} : { id }), ...contentAria, ...$attrs, class: undefined }"
       @escape-key-down="handleEscapeKeyDown"
       @pointer-down-outside="handlePointerDownOutside"
       @interact-outside="handleInteractOutside"

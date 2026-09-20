@@ -185,7 +185,7 @@ export interface ComponentMetaRecord {
   capability?: {
     tier: string
     pattern: string
-    securityBoundary: string
+    securityBoundary: string[]
     traits: string[]
     cells: Record<string, number>
     unrun: string[]

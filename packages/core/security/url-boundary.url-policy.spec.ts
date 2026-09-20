@@ -6,18 +6,26 @@ import { deviationTriples, effectiveScheme, loadDeviationRegister, runBoundarySu
  * `url-policy` for every component whose declared `SecurityBoundary` is `url`
  * (TASK-N1-O5).
  *
- * The evidence kind is defined as "URL/protocol allowlist behaviour asserted",
- * and the honest finding this file records is that **there is no allowlist**:
- * nothing in `packages/core/src` inspects a scheme, and the thirteen declarers
- * hand whatever they were given straight to an `href` or a `src`. That is a
- * defensible position for the seven subresource sinks — an `<img src>` cannot
- * execute a `javascript:` URL and an image component that refused off-origin
- * URLs would be useless — and it is not a defensible position for the six
- * navigation sinks, where the same string runs on click.
+ * The evidence kind is defined as "URL/protocol allowlist behaviour asserted".
+ * When this file was written there was no allowlist — nothing in
+ * `packages/core/src` inspected a scheme, and every declarer handed whatever it
+ * was given straight to an `href` or a `src`. That was a defensible position
+ * for the subresource sinks (an `<img src>` cannot execute a `javascript:` URL,
+ * and an image component that refused off-origin URLs would be useless) and not
+ * a defensible position for the six navigation sinks, where the same string
+ * runs on click. The gap was measured rather than asserted away: 54 triples,
+ * pinned in `security-deviations.json` with a severity.
  *
- * So the suite states the policy per sink kind, measures each component against
- * it, and records the gap in `security-deviations.json` with a severity rather
- * than quietly asserting what the components already do.
+ * **TASK-R2-O4 closed it.** `packages/core/src/security/url-policy.ts` is the
+ * allowlist, installed through `DZ_URL_POLICY_KEY` and applied at every
+ * navigation sink including the three compound sub-parts. The register is empty
+ * and its ceiling is 0, so these suites now assert the REQUIRED outcome
+ * directly, with nothing to fall back on — which is what makes them the
+ * regression suite for the fix rather than a record of the defect.
+ *
+ * The subresource half is unchanged and still `inert` by design: filtering the
+ * origins an avatar may load from is the host's `img-src` directive, not a
+ * decision any component can make for it (finding U2).
  */
 
 for (const [name, binding] of Object.entries(BINDINGS.navigation))
@@ -47,7 +55,7 @@ describe('the policy itself', () => {
     // no corpus with it.
     const matrix = (await import('../docs/quality-matrix.json', { with: { type: 'json' } })).default
     const declared = matrix.components
-      .filter(c => c.securityBoundary === 'url')
+      .filter(c => c.securityBoundary.includes('url'))
       .map(c => c.component)
       .sort()
     expect(URL_BOUNDARY_COMPONENTS).toEqual(declared)

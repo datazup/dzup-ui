@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "569d88720cea605161e8731eb7bc94187ab2848a",
+  "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -1819,7 +1819,8 @@
         ],
         "states": [
           "ready",
-          "active"
+          "active",
+          "url-rejected"
         ],
         "componentTokens": [
           "--dz-anchor-color",
@@ -2588,7 +2589,8 @@
         ],
         "states": [
           "ready",
-          "disabled"
+          "disabled",
+          "url-rejected"
         ],
         "componentTokens": [],
         "riskTier": "B",
@@ -2772,7 +2774,8 @@
         "states": [
           "idle",
           "loading",
-          "disabled"
+          "disabled",
+          "url-rejected"
         ],
         "componentTokens": [
           "--dz-button-disabled-opacity",
@@ -10540,7 +10543,8 @@
           "item"
         ],
         "states": [
-          "disabled"
+          "disabled",
+          "url-rejected"
         ],
         "componentTokens": [
           "--dz-menu-bar-gap",
@@ -11027,7 +11031,8 @@
         "states": [
           "ready",
           "active",
-          "disabled"
+          "disabled",
+          "url-rejected"
         ],
         "componentTokens": [],
         "riskTier": "B",
@@ -13703,7 +13708,9 @@
           "root",
           "panel",
           "separator",
-          "indicator"
+          "indicator",
+          "step-decrease",
+          "step-increase"
         ],
         "states": [
           "inactive",
@@ -13719,7 +13726,9 @@
         "optionalParts": [
           "panel",
           "separator",
-          "indicator"
+          "indicator",
+          "step-decrease",
+          "step-increase"
         ],
         "rtl": {
           "mirrors": "layout",
@@ -13730,7 +13739,8 @@
             "key": "ArrowRight",
             "action": "Move the separator towards the inline end.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.5.7"
             ],
             "apg": "window-splitter",
             "rtl": "mirrored"
@@ -13739,7 +13749,8 @@
             "key": "ArrowLeft",
             "action": "Move the separator towards the inline start.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.5.7"
             ],
             "apg": "window-splitter",
             "rtl": "mirrored"
@@ -13748,7 +13759,8 @@
             "key": "ArrowDown",
             "action": "Move the separator down when the panes stack vertically.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.5.7"
             ],
             "apg": "window-splitter"
           },
@@ -13756,7 +13768,8 @@
             "key": "ArrowUp",
             "action": "Move the separator up when the panes stack vertically.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.5.7"
             ],
             "apg": "window-splitter"
           },
@@ -14934,7 +14947,8 @@
           "collapsed",
           "expanded",
           "active",
-          "inactive"
+          "inactive",
+          "url-rejected"
         ],
         "componentTokens": [
           "--dz-sidebar-width",
@@ -15944,7 +15958,9 @@
           "root",
           "panel",
           "separator",
-          "indicator"
+          "indicator",
+          "step-decrease",
+          "step-increase"
         ],
         "states": [
           "inactive",
@@ -15960,7 +15976,9 @@
         "optionalParts": [
           "panel",
           "separator",
-          "indicator"
+          "indicator",
+          "step-decrease",
+          "step-increase"
         ],
         "rtl": {
           "mirrors": "layout",
@@ -15971,7 +15989,8 @@
             "key": "ArrowRight",
             "action": "Move the separator towards the inline end.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.5.7"
             ],
             "apg": "window-splitter",
             "rtl": "mirrored"
@@ -15980,7 +15999,8 @@
             "key": "ArrowLeft",
             "action": "Move the separator towards the inline start.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.5.7"
             ],
             "apg": "window-splitter",
             "rtl": "mirrored"
@@ -15989,7 +16009,8 @@
             "key": "ArrowDown",
             "action": "Move the separator down when the panes stack vertically.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.5.7"
             ],
             "apg": "window-splitter"
           },
@@ -15997,7 +16018,8 @@
             "key": "ArrowUp",
             "action": "Move the separator up when the panes stack vertically.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.5.7"
             ],
             "apg": "window-splitter"
           },
@@ -16742,7 +16764,10 @@
           "body",
           "row",
           "cell",
-          "footer"
+          "footer",
+          "separator",
+          "step-decrease",
+          "step-increase"
         ],
         "states": [
           "ready",
@@ -16762,7 +16787,10 @@
           "body",
           "row",
           "cell",
-          "footer"
+          "footer",
+          "separator",
+          "step-decrease",
+          "step-increase"
         ],
         "rtl": {
           "mirrors": "layout",
@@ -16806,6 +16834,28 @@
               "2.1.1"
             ],
             "apg": "table"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Widen the column by 8px, or 24px with Shift.",
+            "when": "header resizable",
+            "wcag": [
+              "2.1.1",
+              "2.5.7"
+            ],
+            "apg": "table",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Narrow the column by 8px, or 24px with Shift, never below its minimum width.",
+            "when": "header resizable",
+            "wcag": [
+              "2.1.1",
+              "2.5.7"
+            ],
+            "apg": "table",
+            "rtl": "mirrored"
           }
         ]
       },
@@ -22109,6 +22159,16 @@
       ]
     },
     {
+      "symbol": "UseFocusTrapOptions",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/composables/useFocusTrap/useFocusTrap.ts",
+        "type-only export not listed in public-api.manifest.json#exports.types"
+      ]
+    },
+    {
       "symbol": "UseFocusTrapReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
@@ -24832,6 +24892,16 @@
       "evidence": [
         "packages/core/src/providers/useTheme.ts",
         "composable naming convention (use* prefix)"
+      ]
+    },
+    {
+      "symbol": "useDzUrlPolicy",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "composable",
+      "evidence": [
+        "packages/core/src/composables/provider/useDzUrlPolicy.ts",
+        "packages/core/manifests/public-api.manifest.json#exports.composables"
       ]
     },
     {

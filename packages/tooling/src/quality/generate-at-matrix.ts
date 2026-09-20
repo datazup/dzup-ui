@@ -26,13 +26,21 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+// Relative into contracts' SOURCE rather than the `@dzup-ui/contracts`
+// specifier, for the reason `generate-quality-matrix.ts` states: this runs under
+// `tsx` with no build step, and `requiredAtPairs` is a runtime value, not a
+// type. The package specifier resolves to `dist/`, which need not exist and need
+// not be current.
+import { requiredAtPairs } from '../../../contracts/src/quality-tiers.ts'
 import { parseAnatomySource } from '../ownership/anatomy-source.ts'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 import { compareSymbols } from '../ownership/ownership-manifest.types.ts'
 import {
+  ALL_TASKS,
   AT_MATRIX_SCHEMA_VERSION,
   AT_PAIRS,
   AT_RESULTS,
+  optedOutTasksFor,
   tasksFor,
 } from './at-matrix.ts'
 import { readCommittedMatrix } from './generate-quality-matrix.ts'
@@ -119,9 +127,25 @@ export function renderHeader(row: QualityMatrixRow): string {
     .map(t => `| \`${t.id}\` | ${t.task} | ${t.expect} |`)
     .join('\n')
 
+  const required = new Set(requiredAtPairs(row.tier))
   const pairRows = AT_PAIRS
-    .map(p => `| \`${p.id}\` | ${p.at} + ${p.browser} (${p.platform}) | ${p.purpose} |`)
+    .map(p => `| \`${p.id}\` | ${required.has(p.id) ? '**required**' : 'optional'} `
+      + `| ${p.at} + ${p.browser} (${p.platform}) | ${p.purpose} |`)
     .join('\n')
+
+  const optOuts = optedOutTasksFor(row.component)
+  const optOutSection = optOuts.length === 0
+    ? ''
+    : `### Tasks this component does not owe
+
+The \`${row.pattern}\` pattern implies ${optOuts.length === 1 ? 'a task' : 'tasks'} this component has
+no surface for. ${optOuts.length === 1 ? 'It is' : 'They are'} excluded from the table above and from
+what qualification requires — recorded here rather than dropped silently, because an obligation that
+disappears without a reason is how a matrix stops being read.
+
+${optOuts.map(o => `- \`${o.task}\` — ${o.why}`).join('\n')}
+
+`
 
   return `<!-- AUTO-GENERATED HEADER — do not edit. Written by \`yarn generate:at-matrix\`. -->
 
@@ -143,11 +167,17 @@ known one.
 |---|---|---|
 ${taskRows}
 
-${renderKeyboardCitation(row)}
-## Pairs
+${optOutSection}${renderKeyboardCitation(row)}## Pairs
 
-| id | Pairing | What it exposes |
-|---|---|---|
+A **required** pairing holds this component's evidence state: its \`at-manual\` row
+cannot read \`pass\` until every task above has passed on every required pairing.
+Which ones are required follows the tier, from \`requiredAtPairs()\` in
+\`@dzup-ui/contracts\` — Tier ${row.tier} requires ${required.size} of ${AT_PAIRS.length}.
+An **optional** pairing is still worth running and is still recorded if you run
+it; it simply does not gate qualification.
+
+| id | Tier ${row.tier} | Pairing | What it exposes |
+|---|---|---|---|
 ${pairRows}
 
 ## How to record a run
@@ -158,17 +188,36 @@ device was not available — it is a fact, not a placeholder, and it must not be
 written as \`fail\`. \`sourceCommit\` is the repository HEAD you observed;
 \`validate:at-matrix\` marks a row stale when the component has changed since.
 
+\`task\` is one of the ids in the Tasks table above, or \`${ALL_TASKS}\` for a row
+that covers every task at once. The generated rows below use \`${ALL_TASKS}\`:
+they say "nobody has run this pairing", which is true of every task equally.
+**Leave them in place and append beneath them** — they are the matrix's
+denominator, and a run that replaces one instead of following it destroys the
+record it was supposed to add to.
+
 ${RESULTS_MARKER}
 
 ## Results
 
-| pair | result | versions | tester | date | sourceCommit | notes |
-|---|---|---|---|---|---|---|
-${AT_PAIRS.map(p => `| ${p.id} | unrun | - | - | - | - | not executed |`).join('\n')}
+| pair | task | result | versions | tester | date | sourceCommit | notes |
+|---|---|---|---|---|---|---|---|
+${AT_PAIRS.map(p => `| ${p.id} | ${ALL_TASKS} | unrun | - | - | - | - | not executed |`).join('\n')}
 `
 }
 
-/** Parse the results table below the marker. */
+/**
+ * Parse the results table below the marker.
+ *
+ * Accepts **both** row widths. The eight-column form is the current one, with
+ * `task` in position 2 (TASK-R2-O2); the seven-column form is the original and
+ * is read as a row covering {@link ALL_TASKS}, which is what it always meant.
+ *
+ * The tolerance is not politeness, it is the append-only guarantee. A recorded
+ * run is somebody's screen-reader session and the only copy of it; a parser that
+ * silently skipped the old width would drop those rows out of `index.json`,
+ * which would read as "never executed" — the same falsehood this task exists to
+ * remove, arriving from the other direction.
+ */
 export function parseResults(markdown: string): AtResultRow[] {
   const below = markdown.split(RESULTS_MARKER)[1]
   if (below === undefined)
@@ -180,22 +229,66 @@ export function parseResults(markdown: string): AtResultRow[] {
     if (!trimmed.startsWith('|') || !trimmed.endsWith('|'))
       continue
     const cells = trimmed.slice(1, -1).split('|').map(c => c.trim())
-    if (cells.length !== 7)
+    if (cells.length !== 8 && cells.length !== 7)
       continue
     // Skip the header and its separator.
     if (cells[0] === 'pair' || /^-+$/.test(cells[0] ?? ''))
       continue
+    const wide = cells.length === 8
     rows.push({
       pair: cells[0]!,
-      result: cells[1] as AtResult,
-      versions: cells[2]!,
-      tester: cells[3]!,
-      date: cells[4]!,
-      sourceCommit: cells[5]!,
-      notes: cells[6]!,
+      task: wide ? cells[1]! : ALL_TASKS,
+      result: (wide ? cells[2] : cells[1]) as AtResult,
+      versions: (wide ? cells[3] : cells[2])!,
+      tester: (wide ? cells[4] : cells[3])!,
+      date: (wide ? cells[5] : cells[4])!,
+      sourceCommit: (wide ? cells[6] : cells[5])!,
+      notes: (wide ? cells[7] : cells[6])!,
     })
   }
   return rows
+}
+
+/**
+ * Upgrade a results table that carries **no human record** to the current row
+ * width, and leave every other table exactly as it is.
+ *
+ * The generator never rewrites below {@link RESULTS_MARKER}; that rule is what
+ * makes the scaffold trustworthy, and adding a column does not suspend it. But
+ * the 534 rows in this repository today were all written by the generator and
+ * all read `unrun` — they are the scaffold's own default, not anybody's
+ * evidence — and leaving them at seven columns would mean the first tester to
+ * append an eight-column row sees a table with two shapes in it.
+ *
+ * So the migration is conditional and the condition is the one that matters:
+ * **every row is `unrun`**. One recorded run anywhere in the table and the whole
+ * table is left untouched, to be widened by hand or not at all. A row that
+ * somebody drove is never rewritten by a tool, including this one.
+ */
+export function migrateResultsTable(below: string): string {
+  const rows = parseResults(`${RESULTS_MARKER}${below}`)
+  if (rows.length === 0 || rows.some(r => r.result !== 'unrun'))
+    return below
+  if (!below.includes('| pair | result |'))
+    return below
+
+  return below
+    .replace(
+      '| pair | result | versions | tester | date | sourceCommit | notes |',
+      '| pair | task | result | versions | tester | date | sourceCommit | notes |',
+    )
+    .replace('|---|---|---|---|---|---|---|', '|---|---|---|---|---|---|---|---|')
+    .split('\n')
+    .map((line) => {
+      const trimmed = line.trim()
+      if (!trimmed.startsWith('|') || !trimmed.endsWith('|'))
+        return line
+      const cells = trimmed.slice(1, -1).split('|').map(c => c.trim())
+      if (cells.length !== 7 || cells[1] !== 'unrun')
+        return line
+      return `| ${cells[0]} | ${ALL_TASKS} | ${cells.slice(1).join(' | ')} |`
+    })
+    .join('\n')
 }
 
 /**
@@ -213,7 +306,7 @@ export function renderFile(row: QualityMatrixRow, existing: string | undefined):
     // whole rather than discarding somebody's records to impose a shape.
     return existing
   }
-  return `${header.split(RESULTS_MARKER)[0]!}${RESULTS_MARKER}${below}`
+  return `${header.split(RESULTS_MARKER)[0]!}${RESULTS_MARKER}${migrateResultsTable(below)}`
 }
 
 /** Build the index from the files on disk. */
@@ -231,8 +324,13 @@ export function buildAtIndex(
         tier: row.tier,
         pattern: row.pattern,
         file: `e2e/at-matrix/${row.component}.md`,
-        tasks: tasksFor({ pattern: row.pattern, traits: row.traits, wcag: row.wcag })
-          .map(t => t.id),
+        tasks: tasksFor({
+          pattern: row.pattern,
+          traits: row.traits,
+          wcag: row.wcag,
+          component: row.component,
+        }).map(t => t.id),
+        requiredPairs: requiredAtPairs(row.tier),
         rows: markdown === undefined ? [] : parseResults(markdown),
         componentCommit: lastCommitFor(row.source),
       }

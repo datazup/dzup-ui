@@ -1,6 +1,6 @@
 ---
 title: "Accessibility conformance"
-description: "What dzup-ui has measured against WCAG 2.2, the gap that is still open, and the screen-reader matrix that has not been run."
+description: "What dzup-ui has measured against WCAG 2.2, the state of every criterion it can fail, and the screen-reader matrix that has not been run."
 outline: [2, 3]
 ---
 
@@ -19,19 +19,25 @@ and most of a page is yours. What a library can do is measure the criteria it is
 publish the result per component including the failures, and say plainly which criteria nothing
 has measured. That is what the component pages do.
 
-## The open gap
+## The gap that was open here
 
-A success criterion is measured as **not met**. It is stated before any total, because a summary
-that leads with what passed is how an open defect becomes invisible.
+This section held an open, measured level-AA failure. It is closed, and the record of what it
+was, when it closed and on whose decision is kept below rather than deleted — a defect page
+that erases its own history is worth as little as a page that never had any.
 
-::: danger SC 2.5.7 Dragging Movements (level AA, new in WCAG 2.2) is not met on 3 of 9 drag surfaces
-**SC 2.5.7 AA is met for 6 of 9 drag surfaces. The three resize surfaces are keyboard-operable but require a drag for pointer operation.**
+Closing it changes nothing about the rest of this page. It is a single criterion, on a named set
+of components, re-measured by a local browser lane; the library still makes no WCAG 2.2 AA
+conformance claim, and the screen-reader matrix below is still unrun.
+
+::: tip SC 2.5.7 Dragging Movements (level AA, new in WCAG 2.2) — no surface is open
+**SC 2.5.7 AA is met for 9 of 9 drag surfaces. The three resize surfaces -- DzResizable, DzSplitter and DzTable column resize -- gained a single-pointer stepper path on 2026-09-19 (owner decision D117 option A); the other six already had one. This is a claim about these nine surfaces, re-measured in three engines by e2e/matrix/non-drag.spec.ts, and not a conformance claim about the library or about any page built with it.**
 
 > All functionality that uses a dragging movement for operation can be achieved by a single pointer without dragging, unless dragging is essential or the functionality is determined by the user agent and not modified by the author.
 
-The gap is on `DzResizable`, `DzSplitter`, `DzTable`; the audit below names each
-operation. Every one of them is keyboard-operable, and a keyboard path satisfies SC 2.1.1, not
-this one: the criterion is about pointer input and requires a single pointer without dragging.
+All 9 drag surfaces name a single-pointer path in the audit below, and
+each one is a real control a pointer can reach — not a keyboard path restated, which is what
+satisfies SC 2.1.1 and not this criterion. What that is worth is bounded by how it was
+measured, and the browser record underneath says so.
 
 [Understanding SC 2.5.7](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html)
 :::
@@ -42,36 +48,33 @@ Scope is not a judgement call: every component carrying the `drags` trait was au
 
 | Component | Drag operation | Keyboard (SC 2.1.1) | Single pointer, no drag (SC 2.5.7) | State |
 | --- | --- | --- | --- | --- |
-| [DzResizable](/components/DzResizable#accessibility-and-evidence) | drag the separator to resize panes | Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6. | **none** | **gap** |
-| [DzSplitter](/components/DzSplitter#accessibility-and-evidence) | drag the separator to resize panes (DzSplitterHandle renders the same Reka SplitterResizeHandle) | Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6. | **none** | **gap** |
-| [DzTable](/components/DzTable#accessibility-and-evidence) | drag the column-resize handle | onResizeKey on the focusable handle button: ArrowLeft/ArrowRight step 8px, 24px with Shift. | **none** | **gap** |
 | [DzOrderList](/components/DzOrderList#accessibility-and-evidence) | reorder an item by dragging its grip | Space grabs the row, ArrowUp/ArrowDown move it, Space drops, Escape cancels and restores, Home/End move to the ends; each step announced in a live region. | Four always-visible controls -- move to top / up / down / bottom -- each a single tap. | met |
 | [DzSlider](/components/DzSlider#accessibility-and-evidence) | drag the thumb | Reka SliderImpl: arrows step, PageUp/PageDown, Home/End. | Reka emits slideStart on pointerdown anywhere on the track that is not a thumb, so one tap sets the value. | met |
 | [DzRangeSlider](/components/DzRangeSlider#accessibility-and-evidence) | drag either thumb | Reka SliderImpl: arrows step, PageUp/PageDown, Home/End. | Reka emits slideStart on pointerdown anywhere on the track that is not a thumb, so one tap sets the value. | met |
 | [DzImageComparison](/components/DzImageComparison#accessibility-and-evidence) | drag the divider | role="slider" with tabindex 0: ArrowLeft/Right/Up/Down, Home/End. | handlePointerDown calls updateFromPointer(event) before any move, so a tap anywhere on the image moves the divider there. | met |
 | [DzKnob](/components/DzKnob#accessibility-and-evidence) | rotate by dragging | Arrows step, PageUp/PageDown move one tenth of the range, Home/End. | handlePointerDown calls updateFromPointer(event) on the tap itself. | met |
 | [DzFileUpload](/components/DzFileUpload#accessibility-and-evidence) | drop files onto the zone | The drop zone is role="button" with tabindex 0; Enter and Space open the OS picker. | A plain click does the same. The drop path is an addition to the picker, never the only path. | met |
+| [DzResizable](/components/DzResizable#accessibility-and-evidence) | drag the separator to resize panes | Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6. | A stepper pair on the gutter (`data-part="step-decrease"` / `"step-increase"`, 24 x 24 CSS px each), revealed by hovering the gutter, by focusing the separator, or by one tap on a device with no hover. Each press moves the separator one step -- it dispatches the very `keydown` Reka's own `useWindowSplitterResizeHandlerBehavior` listens for, so the step is `keyboardResizeBy` and Shift is still the full sweep. No prop can switch it off. The pair is a SIBLING of the separator, never a child of it: axe's `nested-interactive` (WCAG 4.1.2) refuses focusable content inside an interactive control and `tabindex="-1"` does not exempt it, which `apps/landing/src/blocks/a11y.spec.ts` caught on the first implementation. | met |
+| [DzSplitter](/components/DzSplitter#accessibility-and-evidence) | drag the separator to resize panes (DzSplitterHandle renders the same Reka SplitterResizeHandle) | Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6. | The same stepper pair as DzResizable: one shared Reka handle, one implementation, and DzSplitter.spec.ts asserts the two render the same control attribute for attribute so the claim cannot hold for only one of them. | met |
+| [DzTable](/components/DzTable#accessibility-and-evidence) | drag the column-resize handle | onResizeKey on the focusable handle button: ArrowLeft/ArrowRight step 8px, 24px with Shift. | A stepper pair overlaying the header cell (`data-part="step-decrease"` / `"step-increase"`, 24 x 24 CSS px each -- the handle's own visible band is 8px and cannot hold them). Each press calls `stepColumn`, which is the same function the Arrow keys call, so the pointer step and the keyboard step are 8px, or 24px with Shift, by construction. | met |
 
 ::: warning DzOrderList — a configuration caveat
 The single-pointer path is the move controls, rendered under `v-if="showControls"`. `showControls` defaults to true, so the component conforms as shipped; a consumer who sets `:show-controls="false"` and keeps the drag handle leaves reorder drag-only for a pointer user, and nothing warns them. The keyboard path survives that configuration; SC 2.5.7 does not.
 :::
 
-### Why it is not fixed here
+### How the surfaces that were open were closed
 
-- **DzResizable** — The affordance is a design decision with no APG precedent -- the Window Splitter pattern specifies keyboard interaction only, and APG has no column-resize pattern at all. Steppers, tap-to-place and preset cycling each change the component's visual language.
-- **DzSplitter** — One implementation closes both DzResizable and DzSplitter.
-- **DzTable** — APG has no pattern for column resizing at all, so there is no precedent to follow.
+- **DzResizable** — Owner decision D117 option A, taken 2026-09-19 and implemented by TASK-R2-O5. Before it, SplitterResizeHandle bound only onFocus/onBlur plus the pointer drag -- no tap, no double-tap, no stepper -- so resizing by a single pointer required a drag. The affordance had no APG precedent (the Window Splitter pattern specifies keyboard interaction only), which is why it was an owner design decision and not an agent's.
+- **DzSplitter** — Owner decision D117 option A, taken 2026-09-19 and implemented by TASK-R2-O5. The same shared Reka handle carried the same absence: focus and blur plus the pointer drag, and nothing else.
+- **DzTable** — Owner decision D117 option A, taken 2026-09-19 and implemented by TASK-R2-O5. This surface was the worst of the three: the handle responded to pointerdown plus pointermove only, and `@click.stop` on it actively discarded the one plain press that might have been a non-drag path. That handler is gone, and DzTable.spec.ts asserts a plain click now reaches the table.
 
-None of them qualifies for the criterion's own exceptions.
+**What is still owed:**
 
-- Dragging is not essential to resizing a pane: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies.
-- Dragging is not essential to resizing a column: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies.
+> Closed. What remains is a standing obligation rather than a task: re-run `e2e/matrix/non-drag.spec.ts` on all three engines whenever a drag surface changes, because that lane is the only thing that keeps this record and the shipped components from disagreeing silently. One conditional verdict also stands -- DzOrderList meets the criterion only while `showControls` is true, and whether that prop should be refused while a drag handle is on is an open question in TASK-R2-O5's decision sheet section 6, not something this record can answer.
 
-**The scoped follow-up, as handed to the owner:**
+Measured by `TASK-N1-O3 (the audit) and TASK-R2-O5 (the browser re-measurement and the affordance that closed the three gaps)`, recorded in `packages/core/docs/wcag-deviations.json` at `2d51eec4` (locally qualified, worktree-dirty -- not release evidence).
 
-> Add a single-pointer, non-drag path for two operations: (a) resize a splitter pane (DzResizable / DzSplitter, one shared Reka handle, so one implementation), and (b) resize a table column (DzTableCell). Each needs an affordance decision -- steppers, tap-to-place, or preset cycling -- and, if it is a rendered control, a data-part, an anatomy entry and a message id. Neither requires a public prop, and neither is a breaking change.
-
-Measured by `TASK-N1-O3`, recorded in `packages/core/docs/wcag-deviations.json` at `51dec93c` (locally qualified, worktree-dirty -- not release evidence).
+**Confirmed in a browser** by `TASK-R2-O5`: `e2e/matrix/non-drag.spec.ts` presses every surface with a single pointer in `chromium 149.0.7827.55`, `firefox 151.0`, `webkit 26.5` and asserts the outcome equals the state recorded above, so the record and the browser cannot disagree silently. Measured `2026-09-19` at `2d51eec4` (locally qualified, worktree-dirty -- not release evidence).
 
 ## The screen-reader matrix has not been run
 
@@ -190,12 +193,12 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/quality-matrix.json` | `3da85132fa579847…` | yes |
-| `packages/core/docs/capability-matrix.json` | `561b7852a04d4f92…` | yes |
-| `packages/core/docs/wcag-deviations.json` | `c3fdab5ea679fbb0…` | yes |
-| `e2e/at-matrix/index.json` | `0abcc92ef6c3332f…` | yes |
+| `packages/core/docs/quality-matrix.json` | `20b9004aa504ec55…` | yes |
+| `packages/core/docs/capability-matrix.json` | `06470abfebefa2b5…` | yes |
+| `packages/core/docs/wcag-deviations.json` | `bde6dc788456481d…` | yes |
+| `e2e/at-matrix/index.json` | `d35ef2dfa049e253…` | yes |
 
-Capability matrix `sourceCommit` `99b963a0` · quality matrix `569d8872`.
+Capability matrix `sourceCommit` `2d51eec4` · quality matrix `2d51eec4`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

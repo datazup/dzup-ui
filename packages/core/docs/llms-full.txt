@@ -757,7 +757,7 @@ One-time password / PIN input using Reka UI PinInput (ADR-07).
 - **v-model:** `v-model` (`string | undefined`)
 - **Anatomy parts (ADR-19):** `control`, `error`, `input`, `root`
 
-**Props** (16, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (17, of which 8 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -773,6 +773,7 @@ One-time password / PIN input using Reka UI PinInput (ADR-07).
 | `mask` | `boolean \| undefined` | no | `false` | Mask input values (like a password field) |
 | `modelValue` | `string \| undefined` | no | `""` | The concatenated one-time-code characters; the default empty string leaves every cell blank. |
 | `name` | `string \| undefined` | no | `undefined` | Form field name |
+| `otp` | `boolean \| undefined` | no | `true` | Whether the cells are a **one-time code** the platform may autofill. Defaults to `true`, which is what the component is named for: each cell renders `autocomplete="one-time-code"`, so iOS, macOS and Android offer the code they just received in an SMS, and focus lands on the first empty cell rather than the cell that was tapped. That autofill is the *mechanism* WCAG 2.2 SC 3.3.8 Accessible Authentication (AA) accepts in place of asking the user to transcribe a code from another device — a cognitive-function test the criterion exists to remove. Set `:otp="false"` for a PIN or passcode the platform must not offer to fill, such as a local unlock code. |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `type` | `"number" \| "text" \| undefined` | no | `"number"` | Input type: number-only or any text |
@@ -810,7 +811,7 @@ Password input with visibility toggle.
 - **v-model:** `v-model` (`string | undefined`)
 - **Anatomy parts (ADR-19):** `control`, `error`, `input`, `prefix`, `root`, `spinner`, `toggle`
 
-**Props** (20, of which 15 inherited from `@dzup-ui/contracts`):
+**Props** (21, of which 15 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -818,6 +819,7 @@ Password input with visibility toggle.
 | `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
+| `autocomplete` | `"current-password" \| "new-password" \| "off" \| (string & {}) \| undefined` | no | `"current-password"` | The `autocomplete` token the field advertises to password managers. Defaults to `current-password`, which is the sign-in step. A registration or change-password step must say `new-password`, or the manager offers the password being replaced instead of generating one. It is a prop rather than a fall-through attribute because `inheritAttrs: false` sends every unrecognised attribute to the wrapper `<div>`: writing `autocomplete="new-password"` on the component used to put the token on an element the browser does not read, silently. A working password manager is the *mechanism* WCAG 2.2 SC 3.3.8 Accessible Authentication (AA) accepts in place of requiring the user to recall the password, so steering it at the right step is a conformance concern and not only a convenience. |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
 | `error` | `string \| undefined` | no | — | Error message to display |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -3580,7 +3582,7 @@ Compound resizable panel root using Reka UI Splitter (ADR-07).
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** B · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
-- **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`
+- **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`, `step-decrease`, `step-increase`
 
 **Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
 
@@ -3705,7 +3707,7 @@ Naming alias for DzResizable.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** B · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
-- **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`
+- **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`, `step-decrease`, `step-increase`
 
 **Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
 
@@ -7565,7 +7567,7 @@ Compound semantic table root component.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
 - **Risk tier:** C · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
-- **Anatomy parts (ADR-19):** `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `title`
+- **Anatomy parts (ADR-19):** `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `separator`, `step-decrease`, `step-increase`, `title`
 
 **Props** (17, of which 5 inherited from `@dzup-ui/contracts`):
 
@@ -8963,7 +8965,7 @@ one root component for every concern an application configures.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/providers`
 - **Risk tier:** B · **Status:** experimental
 
-**Props** (12):
+**Props** (13):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -8979,6 +8981,7 @@ one root component for every concern an application configures.
 | `testIdPrefix` | `string \| undefined` | no | — | Shorthand that both **enables** test ids and namespaces them. Enabling is implied because a host that names a prefix has said what it wants; requiring `:test-ids="{ enabled: true, prefix: 'e2e' }"` alongside would make the common case the verbose one. An explicit `testIds.enabled` still wins, so the shorthand can be overruled without being removed. |
 | `testIds` | `Partial<DzTestIds> \| undefined` | no | — | Test-id policy: whether they render at all, and under which attribute. |
 | `theme` | `DzProviderThemeOptions \| undefined` | no | — | Theme options, or omitted to leave an ancestor's theme in charge. |
+| `urlPolicy` | `DzUrlPolicyOptions \| undefined` | no | — | The organisation-wide URL policy for navigation sinks (TASK-R2-O4, ADR-20 amendment A7). Set once at the root: which schemes may become a live `<a href>`, and an explicit `allow` function for the cases a list cannot express. Partial — a nested provider narrowing `allowedSchemes` keeps the ancestor's `allow`. Omitted, the six navigation components enforce Core's default allowlist (`http`, `https`, `mailto`, `tel`, `sms`, plus relative and fragment URLs). A refused URL is **omitted**, never rewritten: the element renders as a non-link carrying `data-state="url-rejected"`, and development builds warn once per component, prop and scheme. There is deliberately **no `null` arm** and no per-component opt-out. A policy whose absent value is the safe value cannot be switched off by forgetting something, and a `:unsafe-href` prop would re-open the hole one call site at a time for exactly the consumers most likely to reach for it. |
 
 **Slots** (1):
 

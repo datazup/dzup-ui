@@ -281,3 +281,60 @@ describe('dzTree — APG roving tabindex & structural semantics', () => {
     expect(placeholder.attributes('role')).toBe('none')
   })
 })
+
+describe('dzTree — D1: tree-level `disabled` is not presentational only', () => {
+  it('defect D1 -- no row is a tab stop when the tree is disabled', () => {
+    // `<DzTree disabled>` stamped `data-state="disabled"` on the root and
+    // nothing else: every row kept its roving tabindex, its click handler, its
+    // chevron and its selection (N1-O1 defect D1).
+    const wrapper = mountTree({ disabled: true })
+    const rows = wrapper.findAll('[data-dz-tree-row]')
+
+    expect(rows.length).toBeGreaterThan(0)
+    for (const row of rows)
+      expect(row.attributes('tabindex')).toBe('-1')
+  })
+
+  it('defect D1 -- every treeitem reports aria-disabled when the tree is disabled', () => {
+    const wrapper = mountTree({ disabled: true })
+    const items = wrapper.findAll('[role="treeitem"]')
+
+    expect(items.length).toBeGreaterThan(0)
+    for (const item of items) {
+      expect(item.attributes('aria-disabled')).toBe('true')
+      expect(item.attributes('data-disabled')).toBe('')
+    }
+  })
+
+  it('defect D1 -- a row click neither selects nor expands when the tree is disabled', async () => {
+    const wrapper = mountTree({ disabled: true, selectable: true })
+    await wrapper.findAll('[data-dz-tree-row]')[0]!.trigger('click')
+
+    expect(wrapper.emitted('nodeClick')).toBeUndefined()
+    expect(wrapper.emitted('update:selectedKeys')).toBeUndefined()
+  })
+
+  it('defect D1 -- the chevron does not expand when the tree is disabled', async () => {
+    const wrapper = mountTree({ disabled: true })
+    await wrapper.find('[data-dz-tree-toggle]').trigger('click')
+
+    expect(wrapper.emitted('nodeExpand')).toBeUndefined()
+    expect(wrapper.emitted('update:expandedKeys')).toBeUndefined()
+  })
+
+  it('defect D1 -- keyboard navigation is inert when the tree is disabled', async () => {
+    const wrapper = mountTree({ disabled: true, selectable: true })
+    await wrapper.findAll('[data-dz-tree-row]')[0]!.trigger('keydown', { key: 'Enter' })
+
+    expect(wrapper.emitted('nodeClick')).toBeUndefined()
+  })
+
+  it('defect D1 -- an enabled tree still has exactly one tab stop', () => {
+    const wrapper = mountTree()
+    const tabbable = wrapper
+      .findAll('[data-dz-tree-row]')
+      .filter(row => row.attributes('tabindex') === '0')
+
+    expect(tabbable).toHaveLength(1)
+  })
+})

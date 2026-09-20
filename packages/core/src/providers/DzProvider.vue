@@ -38,7 +38,7 @@ import type {
 } from '@dzup-ui/contracts'
 import type { DzProviderDefaults, DzProviderProps, DzProviderSlots } from './DzProvider.types.ts'
 import type { ResolvedTheme, ThemePreference } from './DzThemeProvider.types.ts'
-import { DZ_DIRECTION_KEY, DZ_SANITIZER_KEY } from '@dzup-ui/contracts'
+import { DZ_DIRECTION_KEY, DZ_SANITIZER_KEY, DZ_URL_POLICY_KEY } from '@dzup-ui/contracts'
 import { computed, inject, onMounted, onUnmounted, provide, ref, watch } from 'vue'
 import {
   provideDzDefaults,
@@ -53,6 +53,7 @@ import { directionForLocale, provideDzLocale, useDzLocale } from '../composables
 import { provideDzMessages } from '../composables/provider/useDzMessages.ts'
 import { createDzMotion, provideDzMotion } from '../composables/provider/useDzMotion.ts'
 import { createDzSanitizer, provideDzSanitizer } from '../composables/provider/useDzSanitizer.ts'
+import { createDzUrlPolicy, provideDzUrlPolicy } from '../composables/provider/useDzUrlPolicy.ts'
 import { DZ_PROVIDER_SCOPE_KEY } from './DzProvider.types.ts'
 import { DZ_THEME_KEY } from './DzThemeProvider.types.ts'
 
@@ -184,6 +185,30 @@ const inheritedSanitizer = inject(DZ_SANITIZER_KEY, undefined)
 if (props.sanitizer !== undefined) {
   provideDzSanitizer(
     createDzSanitizer(computed(() => props.sanitizer), inheritedSanitizer),
+  )
+}
+
+// ---------------------------------------------------------------------------
+// URL policy (ADR-20 amendment A7, TASK-R2-O4)
+// ---------------------------------------------------------------------------
+
+/**
+ * Fold this provider's `urlPolicy` over whatever an ancestor installed.
+ *
+ * Same shape as the sanitizer above, and A1 is preserved for the same reason:
+ * an *undefined* prop provides nothing, so a nested provider mounted to change
+ * the locale cannot silently widen an application's scheme allowlist back to
+ * Core's default.
+ *
+ * The asymmetry worth noticing is on the *other* side. Forgetting the sanitizer
+ * gives you escaping; forgetting this gives you the strict allowlist. Both
+ * defaults are the safe ones, which is why neither concern has an "off".
+ */
+const inheritedUrlPolicy = inject(DZ_URL_POLICY_KEY, undefined)
+
+if (props.urlPolicy !== undefined) {
+  provideDzUrlPolicy(
+    createDzUrlPolicy(computed(() => props.urlPolicy), inheritedUrlPolicy),
   )
 }
 

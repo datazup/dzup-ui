@@ -200,7 +200,8 @@ export interface KeyboardBindingJoin {
 export interface CapabilityJoin {
   tier: string
   pattern: string
-  securityBoundary: string
+  /** Every boundary the component crosses, sorted; `['none']` for none. */
+  securityBoundary: string[]
   traits: string[]
   cells: Record<string, number>
   /** Kinds whose cell is `unrun`, by name — never collapsed into a count alone. */

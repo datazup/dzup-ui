@@ -21,14 +21,16 @@
  *    `unrun`.
  * 3. **The AT state is read from the RAW scaffold, never from the `at-manual`
  *    capability cell.** TASK-N1-O4 §6.2 measured that
- *    `generate-capability-matrix.ts` resolves that cell with
- *    `entry.rows.filter(r => r.result !== 'unrun')` and **never inspects the
- *    result value**, so a component whose every AT pair FAILED resolves to
- *    `state: 'pass'`. `CellState` has no `fail` value, so repairing it is a
- *    schema decision five packets read — an owner call, not this packet's. Until
- *    it is closed, this module reads `e2e/at-matrix/index.json` directly and
- *    {@link atManualTripwire} refuses to generate a page whose `at-manual` cell
- *    claims more than the raw rows support.
+ *    `generate-capability-matrix.ts` resolved that cell with
+ *    `entry.rows.filter(r => r.result !== 'unrun')` and **never inspected the
+ *    result value**, so a component whose every AT pair FAILED resolved to
+ *    `state: 'pass'`. **TASK-R2-O2 fixed that at source** — `CellState` gained
+ *    `fail` and `resolveAtManual` now decides the state — but this module still
+ *    reads `e2e/at-matrix/index.json` directly, and deliberately. A summary cell
+ *    is one state for a component that owes up to eight tasks on six pairings;
+ *    the page's job is to show *which* pairing said what, and no summary can be
+ *    unpacked back into that. {@link atManualTripwire} remains as the
+ *    cross-artifact check that the two agree.
  *
  * ## Why it reads the artifacts and not `record.capability`
  *
@@ -44,6 +46,7 @@
  */
 
 import type { AnatomyJoin, ComponentMetaArtifact, ComponentMetaRecord, KeyboardBindingJoin } from '../meta/component-meta.ts'
+import type { BrowserTargetProbe } from './browser-target.ts'
 
 // ---------------------------------------------------------------------------
 // Artifact shapes — read-only views, only the fields this module uses
@@ -64,7 +67,8 @@ export interface QualityRow {
   tier: string
   pattern: string
   patternJustification?: string
-  securityBoundary: string
+  /** Every boundary the component crosses, sorted; `['none']` when it crosses none. */
+  securityBoundary: string[]
   boundaryJustification?: string
   traits: string[]
   wcag: string[]
@@ -102,7 +106,8 @@ export interface CapabilityRow {
   family: string
   tier: string
   pattern: string
-  securityBoundary: string
+  /** Every boundary the component crosses, sorted; `['none']` when it crosses none. */
+  securityBoundary: string[]
   traits: string[]
   anatomy: string
   source: string
@@ -132,6 +137,8 @@ export interface AtPair {
 /** One append-only AT run record. `result` is `unrun` until a human writes otherwise. */
 export interface AtRow {
   pair: string
+  /** The task id this run covers, or `*` for all of them (TASK-R2-O2). */
+  task: string
   result: string
   versions: string
   tester: string
@@ -147,6 +154,8 @@ export interface AtEntry {
   pattern: string
   file: string
   tasks: string[]
+  /** The pairings this component's tier requires (TASK-R2-O2). */
+  requiredPairs: string[]
   rows: AtRow[]
   componentCommit: string
 }
@@ -159,23 +168,46 @@ export interface AtIndex {
   entries: AtEntry[]
 }
 
+/** The counts one sweep of one engine produced. */
+export interface EngineRunSummary {
+  inLane: number
+  runnableTargets: number
+  declaredUnrunTargets: number
+  cellsRun: number
+  passed: number
+  unexpectedFailure: number
+  exitCode: number
+  wallClock: string
+  ranAt: string
+}
+
+/**
+ * A later sweep of the same engine over conditions the lane gained afterwards
+ * (TASK-R2-O5).
+ *
+ * Kept beside the original summary rather than folded into it. Merging them
+ * would produce a single row whose cell count, wall clock and commit belonged to
+ * no run that ever happened — and the commit is the part that matters, because
+ * the two sweeps measured two different trees.
+ */
+export interface EngineAdditionalRun {
+  conditions: string[]
+  measuredAt: string
+  sourceCommit: string
+  worktreeDirty: boolean
+  measuredBy: string
+  summary: EngineRunSummary
+}
+
 /** One engine's record in `e2e/matrix/engine-ratchets.json`. */
 export interface EngineRecord {
   version: string
   conditionsRun: string[]
   notReproducing: unknown[]
   engineOnly: unknown[]
-  summary: {
-    inLane: number
-    runnableTargets: number
-    declaredUnrunTargets: number
-    cellsRun: number
-    passed: number
-    unexpectedFailure: number
-    exitCode: number
-    wallClock: string
-    ranAt: string
-  }
+  summary: EngineRunSummary
+  /** Later sweeps, one per set of conditions added after the original run. */
+  additionalRuns?: EngineAdditionalRun[]
   note?: string
 }
 
@@ -216,6 +248,16 @@ export interface WcagSurface {
   gapReason?: string
   ownerDecision?: string
   notEssential?: string
+  /**
+   * How a surface that used to be a gap stopped being one (TASK-R2-O5).
+   *
+   * A record that only ever says "met" loses the thing a reader most wants to
+   * know about a criterion that was open last month: what changed, when, and on
+   * whose decision. `gapReason` / `ownerDecision` / `notEssential` render only
+   * while a surface is a gap, so flipping a surface would otherwise delete its
+   * history from the page along with the defect.
+   */
+  closedBy?: string
 }
 
 /** `packages/core/docs/wcag-deviations.json`. */
@@ -230,6 +272,21 @@ export interface WcagDeviations {
   openGaps: number
   surfaces: WcagSurface[]
   followUp: string
+  /**
+   * The browser run that confirmed the audit, when one exists (TASK-R2-O5).
+   *
+   * Optional on purpose: the field's absence is printed on the page as "no
+   * browser has been asked", which is the state this record was published in for
+   * its first three weeks.
+   */
+  verifiedInBrowser?: {
+    measuredBy: string
+    lane: string
+    engines: string[]
+    measuredAt: string
+    sourceCommit: string
+    admissibility: string
+  } & Record<string, unknown>
 }
 
 /** One measured security deviation (`packages/core/security/security-deviations.json`). */
@@ -277,6 +334,12 @@ export interface EvidenceSources {
   securityDeviations?: SecurityDeviations
   /** The cascade-layer names, read from the one `@layer` statement in `base.css`. */
   cascadeLayers: string[]
+  /**
+   * What browser floor the repository declares, probed from the tree
+   * (TASK-R2-O5). Never a tier somebody hoped for: `declared: []` is the answer
+   * whenever nothing in the tree says otherwise, and the page prints it as such.
+   */
+  browserTarget: BrowserTargetProbe
   /** AT script files present on disk, by component name. */
   atScripts: Record<string, string>
   /** SHA-256 of each artifact's bytes, keyed by repo-relative path. */
@@ -321,6 +384,18 @@ export function wcagUnderstandingUrl(name: string): string {
  * slugs — linking them would produce a 404 dressed as a citation.
  */
 export const NON_APG_PATTERNS: ReadonlySet<string> = new Set(['custom', 'none'])
+
+/**
+ * One spelling for a boundary set (TASK-R2-O4).
+ *
+ * `'none'` · `'url'` · `'payload + url'`. Kept beside the renderers rather than
+ * imported from `@dzup-ui/contracts` because this module reads the GENERATED
+ * artifact, whose rows are plain JSON — a docs generator that imported the
+ * contract's enum would start deciding what a row means instead of printing it.
+ */
+export function boundaryLabel(boundaries: readonly string[]): string {
+  return boundaries.length === 0 ? 'none' : boundaries.join(' + ')
+}
 
 /** Make one value safe inside a markdown table cell. */
 export function cell(value: string | undefined): string {
@@ -393,17 +468,29 @@ export function isBaseTier(tier: string, ev: EvidenceSources): boolean {
  * Refuse to publish an `at-manual` capability cell that claims more than the raw
  * AT rows support.
  *
+ * **The defect this was built around is now fixed at source (TASK-R2-O2).**
  * TASK-N1-O4 §6.2 proved, in memory and without fabricating a record, that the
- * capability-matrix generator resolves this cell by counting rows whose
- * `result !== 'unrun'` and never reading the value. All six pairs `fail`
- * therefore resolves to `state: 'pass'`. `CellState` has no `fail` value, so the
- * defect cannot be fixed here — but a docs site is where it would first become
- * visible to the public, and this function makes that impossible: if the cell
- * says anything other than `unrun` while a raw row says anything other than
- * `pass`, generation stops with the component named.
+ * capability-matrix generator resolved this cell by counting rows whose
+ * `result !== 'unrun'` and never reading the value, so all six pairings `fail`
+ * resolved to `state: 'pass'`. `CellState` had no `fail` value, so N2-D2 could
+ * not repair it here and instead stopped the *site* publishing the lie while the
+ * matrix* went on telling it. `CellState` now has `fail`, and `resolveAtManual`
+ * in `quality/at-matrix.ts` is the single pure function that decides the state.
  *
- * Today it is silent, because 0 of 534 cells are executed. It exists for the day
- * they are not.
+ * This function is therefore no longer a workaround, and it was **not deleted**,
+ * for the reason it was worth having in the first place: it is the only check
+ * that compares two independently generated artifacts — the capability matrix
+ * and the append-only scaffold — against each other. A resolver bug, a
+ * half-finished regeneration or a hand-edited `index.json` all show up here and
+ * nowhere else. What changed is the shape it refuses:
+ *
+ * - it no longer treats a `fail` cell over failed rows as a contradiction (that
+ *   is now the correct answer, and refusing it would make `validate:docs-pages`
+ *   red on the first honest wave);
+ * - it refuses a cell that reads **better** than its rows — `pass` or `stale`
+ *   over a row that failed, or any state over rows that were never driven;
+ * - it keeps the mirror image, a matrix that has not been regenerated to see a
+ *   recorded run.
  *
  * @returns One message per violation. Empty means the artifacts agree.
  */
@@ -425,13 +512,17 @@ export function atManualTripwire(ev: EvidenceSources): string[] {
     }
     const executed = entry.rows.filter(r => r.result !== 'unrun')
     const nonPass = executed.filter(r => r.result !== 'pass')
-    if (capCell.state !== 'unrun' && nonPass.length > 0) {
+    // A cell that reads better than the rows under it. `fail` and `present` are
+    // the honest answers when something did not pass (`resolveAtManual`), so
+    // only the flattering states are a contradiction now.
+    const flattering = new Set(['pass', 'stale'])
+    if (flattering.has(capCell.state) && nonPass.length > 0) {
       problems.push(
         `${row.component}: the capability matrix publishes at-manual \`${capCell.state}\`, but `
         + `${nonPass.length} of ${entry.rows.length} recorded AT rows are `
         + `${[...new Set(nonPass.map(r => r.result))].sort().map(r => `\`${r}\``).join('/')}. `
-        + 'This is the N1-O4 §6.2 defect (`CellState` has no `fail` value) reaching a published '
-        + 'page. Fix the cell resolution before publishing AT evidence.',
+        + 'A cell may not read better than the runs beneath it. Regenerate the capability '
+        + 'matrix; if it still says this, `resolveAtManual` has regressed (TASK-N1-O4 §6.2).',
       )
     }
     // The second half of the same defect: a cell that claims a state while the
@@ -789,6 +880,8 @@ export function renderDragSection(surface: WcagSurface, ev: EvidenceSources): st
     `- **Keyboard (SC 2.1.1):** ${cell(surface.keyboardAlternative)}`,
     `- **Single pointer, no dragging (SC ${c.id}):** ${cell(surface.singlePointerNoDrag ?? undefined)}`,
   ]
+  if (surface.closedBy !== undefined)
+    lines.push('', `**This was an open gap.** ${cell(surface.closedBy)}`)
   if (surface.caveat !== undefined)
     lines.push('', `**Caveat:** ${cell(surface.caveat)}`)
   lines.push(':::', '')
@@ -878,7 +971,7 @@ export function renderCellsSection(quality: QualityRow, capability: CapabilityRo
     '',
     `Every kind of evidence required of this component — by Tier ${quality.tier}`
     + `${quality.traits.length === 0 ? '' : `, by its traits (${quality.traits.map(t => `\`${t}\``).join(', ')})`}`
-    + `${quality.securityBoundary === 'none' ? '' : `, by its \`${quality.securityBoundary}\` security boundary`}`
+    + `${boundaryLabel(quality.securityBoundary) === 'none' ? '' : `, by its ${quality.securityBoundary.map(b => `\`${b}\``).join(' and ')} security ${quality.securityBoundary.length > 1 ? 'boundaries' : 'boundary'}`}`
     + ' — and what was found. The states are'
     + ' `pass` (a lane ran and passed), `present` (an artifact exists and is bound to the component),'
     + ' `stale` (it exists but predates the component\'s last change), `excepted` (the requirement was'
@@ -1008,7 +1101,7 @@ export function renderEvidence(record: ComponentMetaRecord, ev: EvidenceSources)
       ? `- **APG pattern:** \`${quality.pattern}\` — no WAI-ARIA Authoring Practices pattern describes this component.`
       : `- **APG pattern:** [\`${quality.pattern}\`](${link})`,
     `- **Traits:** ${quality.traits.length === 0 ? 'none declared' : quality.traits.map(t => `\`${t}\``).join(', ')}`,
-    `- **Security boundary:** \`${quality.securityBoundary}\``
+    `- **Security ${quality.securityBoundary.length > 1 ? 'boundaries' : 'boundary'}:** ${quality.securityBoundary.map(b => `\`${b}\``).join(' + ')}`
     + `${quality.boundaryJustification === undefined ? '' : ` — ${cell(quality.boundaryJustification)}`}`,
     `- **Declared anatomy:** \`${capability.anatomy}\``
     + `${capability.anatomy === 'declared' ? '' : ' — the component has not declared its parts, which is not the same claim as having none'}`,

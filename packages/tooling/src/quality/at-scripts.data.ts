@@ -485,13 +485,14 @@ export const AT_SCRIPTS: readonly AtScriptEntry[] = [
         ],
         apg: 'Dialog (Modal) — Escape closes; focus returns to the invoking element.',
       },
-      {
-        task: 'error',
-        notApplicable: 'The scaffold derives an `error` task from the `combobox` pattern. DzCommandPalette has no validation surface at all — no invalid state, no error message, no required semantics — so there is nothing to drive. Write `error task not applicable: no validation surface` in the run row `notes`. Do NOT record `fail`; a task with no surface is not a failed task.',
-        press: [],
-        expect: [],
-        apg: 'Not applicable — see the note.',
-      },
+      // The `error` step that stood here is gone, and so is the obligation it
+      // apologised for. TASK-N1-O4 could only express "this component has no
+      // validation surface" as prose telling the tester to write a note, because
+      // `tasksFor()` had no per-component opt-out; it was the only
+      // not-applicable step in all 126. TASK-R2-O2 added the opt-out, so the
+      // waiver is now declared in `AT_TASK_OPT_OUTS` with its reason, printed in
+      // the generated scaffold header, and excluded from what qualification
+      // requires — machine-readable rather than a note nobody can count.
       {
         task: 'live',
         press: ['With focus in the search field, type `qqqq`. Do not move focus.'],
@@ -1331,8 +1332,8 @@ export const AT_SCRIPTS: readonly AtScriptEntry[] = [
     component: 'DzSidebar',
     story: 'core-navigation-dzsidebar--accessibility',
     setup: [
-      'READ THIS FIRST. The quality matrix declares this component APG `treeview`. The component ships `role="navigation"` with links, which is what APG actually recommends for site navigation — APG says explicitly not to use the menu or tree patterns for a set of page links.',
-      'The steps below are therefore written against the navigation-landmark contract the component declares, NOT against the Tree View pattern. The mismatch is an open owner decision (is the declared pattern wrong, or the component?); it is recorded in the TASK-N1-O4 handoff. Do not file it again.',
+      'This component declares APG `landmarks`: it ships `role="navigation"` with links, which is what APG recommends for site navigation — APG says explicitly not to use the menu or tree patterns for a set of page links. Drive the navigation-landmark contract.',
+      'Historical note, so an older run record still reads correctly: until TASK-R2-O2 the quality matrix declared this component `treeview`, a pattern it has never implemented, and the scaffold therefore asked for `select` and `typeahead` tasks. Those are gone — link activation is now recorded under `activate`, and element navigation under `navigate`. A pre-2026-09-18 row naming `select` or `typeahead` is evidence about those same interactions.',
       'Four entries under a "Workspace" section: Dashboard (current), Sessions, Billing (disabled), Settings.',
     ],
     steps: [
@@ -1348,34 +1349,30 @@ export const AT_SCRIPTS: readonly AtScriptEntry[] = [
       },
       {
         task: 'navigate',
-        press: ['Tab through every entry, then Shift+Tab back.'],
+        press: [
+          'Tab through every entry, then Shift+Tab back.',
+          'Then, in browse mode, use your AT next-link command (NVDA/JAWS: `k`; VoiceOver: rotor → Links).',
+        ],
         expect: [
           'The order is Dashboard, Sessions, Settings.',
           'The disabled "Billing" entry is SKIPPED by Tab.',
           'Exactly one entry is announced as the current page.',
           'Each entry is announced with its visible label.',
+          'Every sidebar entry appears in the links list with its visible label.',
+          'The disabled "Billing" entry is announced as unavailable, or is absent — it is not offered as a working link.',
+          'No entry appears in the list twice.',
         ],
-        apg: 'Landmark Regions and the link contract; `aria-current="page"` on exactly one entry; `aria-disabled` + removal from the tab order.',
+        apg: 'Landmark Regions and the link contract; `aria-current="page"` on exactly one entry; `aria-disabled` + removal from the tab order. Element navigation is how a landmark of links is traversed in browse mode, so it belongs to `navigate` rather than to the `typeahead` obligation the old `treeview` declaration invented (TASK-R2-O2).',
       },
       {
-        task: 'select',
+        task: 'activate',
         press: ['Tab to "Sessions" and press Enter.'],
         expect: [
           'The entry activates exactly once.',
           '"Sessions" is now announced as the current page and "Dashboard" is not.',
           'Still exactly one entry claims the current page.',
         ],
-        apg: 'The `aria-current` contract: exactly one element in a set carries it.',
-      },
-      {
-        task: 'typeahead',
-        press: ['In browse mode, use your AT next-link command (NVDA/JAWS: `k`; VoiceOver: rotor → Links).'],
-        expect: [
-          'Every sidebar entry appears in the links list with its visible label.',
-          'The disabled "Billing" entry is announced as unavailable, or is absent — it is not offered as a working link.',
-          'No entry appears in the list twice.',
-        ],
-        apg: 'The listbox typeahead obligation the scaffold derives from `treeview`, met here through the AT own element-navigation commands, which is the equivalent affordance for a landmark of links.',
+        apg: 'The `aria-current` contract: exactly one element in a set carries it. Recorded as `activate` rather than `select` since TASK-R2-O2 corrected the declared pattern: a link is activated, not selected from a set.',
       },
       {
         task: 'live',

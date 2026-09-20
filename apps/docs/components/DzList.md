@@ -136,7 +136,7 @@ others for no stated reason.
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
@@ -155,7 +155,7 @@ examples for.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `80ce301`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -173,8 +173,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `2d51eec4` for the capability matrix,
+`2d51eec4` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -184,7 +184,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`
 - **Security boundary:** `none`
 - **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `a01965fa`
 
 ### WCAG 2.2 criteria in scope (10)
 
@@ -233,7 +233,7 @@ Every kind of evidence required of this component — by Tier A, by its traits (
 | `unit-spec` | tier A | `present` | `packages/core/src/components/data/DzList.spec.ts` |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/data.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzList.stories.ts` |
-| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/data/DzList.stories.ts` |
 

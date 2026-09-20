@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dzup-ui strict-CSP fixture</title>
+  </head>
+  <body>
+    <!--
+      No inline <style> and no inline <script> anywhere in this document, on
+      purpose: under `script-src 'self'; style-src 'self' 'nonce-…'` either one
+      would be dropped by the browser and the failure would look like a library
+      defect. Everything arrives as a file from the same origin, which is what a
+      consumer's own build produces.
+    -->
+    <!--
+      The control, and it is the reason this lane found what it found.
+
+      This `style` attribute is in the SERVED MARKUP, so the HTML parser applies
+      it — which is the path `style-src-attr` governs, and the path an SSR'd page
+      takes. A Vue component that writes the same declaration from a render
+      applies it through CSSOM (`el.style.setProperty`), which CSP does not
+      govern at all. Without this element the lane cannot tell "the policy is
+      enforced and the library is unaffected" apart from "the policy was never
+      applied", and those are the two hypotheses a green run has to separate.
+    -->
+    <div id="parser-style" style="contain: layout style"></div>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -66,6 +66,17 @@
     },
     "platform": "win32",
     "ciPlatform": "linux",
+    "platformDecision": {
+      "decidedBy": "TASK-R2-O1",
+      "decidedAt": "2026-09-19",
+      "authoritative": "linux",
+      "gatingToday": "win32",
+      "state": "recorded, NOT executed - the change of `platform` to linux is an OWNER action",
+      "rationale": "The authoritative platform is the one the gate runs on, and every job in .github/workflows/ci.yml (13 of 13) is `runs-on: ubuntu-latest`. A baseline is platform-locked by construction: Playwright writes `{arg}-{project}-{platform}.png`, so a win32 image and a linux image are different files and are never compared. A ledger that gates on win32 therefore gates on a platform no runner has, which is precisely why the per-component lane is developer-local evidence and not a CI gate. So: `linux` is the target, and it is recorded here rather than written into `platform`, because writing it would make this ledger claim 58 baselines that do not exist and `yarn validate:visual-baselines` would fail on 58 `missing` records. `platform` and the committed images agree today (both win32) and that agreement is the thing the gate checks; the disagreement that matters is between `platform` and `ciPlatform`, and it is now a decision with a date rather than a sentence in a note.",
+      "ownerAction": "One `yarn visual:accept` pass per snapshot on a linux host (or one CI job that captures and a human who accepts), then `platform` becomes `linux`. 58 baselines at 29 snapshots x 2 themes. No agent may replace a baseline (README section 5 <authority>).",
+      "consumes": "TASK-R2-O6 (visual-regression rollout + CI gate) takes this as its input.",
+      "verifiedOn": "win32, 2026-09-19, at 2d51eec + a 420-path dirty worktree: `yarn test:e2e:visual:pilot` and `yarn validate:visual-baselines` - see docs/program-2026-09-04/reports/TASK-R2-O1-handoff.md."
+    },
     "note": "TASK-N1-O6 pilot. Coverage is declared per FAMILY and joined against e2e/matrix/targets.generated.ts, so a component added to a covered family is covered without editing this file. Components outside these families read `not-covered` in the capability matrix - an explicit state, never `unknown`. PLATFORM: baselines are platform-locked by construction - Playwright writes `{arg}-{project}-{platform}.png`, so a linux baseline and a win32 baseline are different files and are never compared to each other. `platform` is the one this ledger gates on; `ciPlatform` is what .github/workflows/ci.yml runs. They currently DISAGREE: the pilot was captured on win32 and no linux baseline for it exists, so the per-component lane is developer-local evidence and is not yet a CI gate. Promoting it is one accept run per snapshot on a linux host - an owner action, recorded in the N1-O6 handoff."
   },
   "snapshotDirs": [

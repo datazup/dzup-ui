@@ -4,6 +4,13 @@
   "version": "0.1.0-alpha.0",
   "description": "Nuxt module for dzup-ui — registers every component from the generated ownership table as a Nuxt auto-import",
   "license": "MIT",
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 128",
+    "safari >= 16.4",
+    "ios_saf >= 16.4"
+  ],
   "exports": {
     ".": {
       "types": "./dist/module.d.ts",

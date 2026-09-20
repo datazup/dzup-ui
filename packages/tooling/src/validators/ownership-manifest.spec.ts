@@ -313,17 +313,29 @@ describe('the vocabulary report (ADR-19 §3)', () => {
     expect(stepper?.parts).toEqual(['decrement', 'increment'])
   })
 
-  it('no longer reports the table family — its words are vocabulary now', () => {
+  it('no longer reports the table family\'s own words — they are vocabulary now', () => {
     // The report is what made the vocabulary grow: `body`, `row` and `cell`
     // were reported for long enough to be reviewed, and TASK-R5-O1 folded them
     // in on 2026-09-04 along with `clear`, `toggle`, `filename` and `language`.
     // Asserted rather than deleted, so that a name silently falling back OUT of
     // the vocabulary shows up as a failing test rather than as a quiet report.
+    //
+    // Until 2026-09-19 this asserted that DzTable is absent from the report
+    // entirely. It is back in it, and deliberately: TASK-R2-O5 added the SC
+    // 2.5.7 stepper parts, which are recorded in ANATOMY_PART_EXTENSIONS as
+    // reviewed extensions rather than folded into the vocabulary. So the
+    // assertion moved from "DzTable reports nothing" to the two things that
+    // actually matter — the three table words have NOT fallen out, and what is
+    // reported is exactly the reviewed pair and nothing that crept in beside
+    // it.
     const table = validateOwnershipManifest()
       .vocabularyExtensions
       .find(entry => entry.symbol === 'DzTable')
 
-    expect(table).toBeUndefined()
+    expect(table?.parts ?? []).not.toContain('body')
+    expect(table?.parts ?? []).not.toContain('row')
+    expect(table?.parts ?? []).not.toContain('cell')
+    expect([...(table?.parts ?? [])].sort()).toEqual(['step-decrease', 'step-increase'])
   })
 })
 

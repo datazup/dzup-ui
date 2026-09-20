@@ -78,7 +78,7 @@ interface CapabilityRowLite {
   family: string
   tier: string
   pattern: string
-  securityBoundary: string
+  securityBoundary: string[]
   traits: string[]
   anatomy: string
   source: string
@@ -267,7 +267,7 @@ function capabilityJoin(row: CapabilityRowLite | undefined): CapabilityJoin | un
   return {
     tier: row.tier,
     pattern: row.pattern,
-    securityBoundary: row.securityBoundary,
+    securityBoundary: [...row.securityBoundary],
     traits: [...row.traits].sort(),
     cells: ordered,
     unrun: [...unrun].sort(),

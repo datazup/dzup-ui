@@ -87,3 +87,37 @@ describe('dzDropdownMenu — Unit Tests', () => {
     wrapper.unmount()
   })
 })
+
+describe('dzDropdownMenu — D11: aria-controls resolves to a real element', () => {
+  it('defect D11 -- the content keeps the id Reka generated when no `id` prop is passed', async () => {
+    // `:id="id"` handed an explicit `undefined` down to `DropdownMenuContent`,
+    // which overrode Reka's own content id. The trigger then advertised an
+    // `aria-controls` no element in the document carried — axe
+    // `aria-valid-attr-value` (N1-O1 defect D11).
+    const wrapper = mountMenu({ modal: false })
+    await flush()
+
+    const trigger = document.body.querySelector<HTMLElement>('[aria-haspopup="menu"]')
+    trigger?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, button: 0 }))
+    trigger?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await flush()
+    await flush()
+
+    const controls = trigger?.getAttribute('aria-controls')
+    expect(controls).toBeTruthy()
+
+    const target = document.getElementById(controls!)
+    expect(target).not.toBeNull()
+    expect(target?.getAttribute('role')).toBe('menu')
+
+    wrapper.unmount()
+  })
+
+  it('defect D11 -- an explicit `id` still wins', async () => {
+    const wrapper = mountMenu({ defaultOpen: true, modal: false }, { id: 'my-menu' })
+    await flush()
+
+    expect(document.getElementById('my-menu')?.getAttribute('role')).toBe('menu')
+    wrapper.unmount()
+  })
+})

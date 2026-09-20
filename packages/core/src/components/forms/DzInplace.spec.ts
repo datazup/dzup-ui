@@ -179,3 +179,35 @@ describe('dzInplace — identity props', () => {
     expect(wrapper.find('button').attributes('aria-labelledby')).toBeUndefined()
   })
 })
+
+// ── D8: controlled/uncontrolled ──
+
+describe('dzInplace — D8: an external write after a user edit is honoured', () => {
+  it('defect D8 -- a parent that rewrites `v-model:value` after a save is obeyed', async () => {
+    // Bound with the legacy named model only. Before the fix the saved edit
+    // latched into the unbound default model and the parent could never put a
+    // different value back (N1-O1 defect D8).
+    const wrapper = mount(DzInplace, {
+      props: { value: 'Hello', saveOn: 'enter' },
+      slots: {
+        edit: ({ setValue }: { setValue: (v: unknown) => void }) =>
+          h('input', {
+            'data-testid': 'editor',
+            'onInput': (e: Event) => setValue((e.target as HTMLInputElement).value),
+          }),
+      },
+    })
+
+    await wrapper.find('button').trigger('click')
+    await wrapper.find('[data-testid="editor"]').setValue('Changed')
+    await wrapper.find('[data-testid="editor"]').trigger('keydown', { key: 'Enter' })
+    expect(wrapper.emitted('update:value')!.at(-1)).toEqual(['Changed'])
+
+    await wrapper.setProps({ value: 'Changed' })
+    expect(wrapper.text()).toContain('Changed')
+
+    await wrapper.setProps({ value: 'From the server' })
+    expect(wrapper.text()).toContain('From the server')
+    expect(wrapper.text()).not.toContain('Changed')
+  })
+})

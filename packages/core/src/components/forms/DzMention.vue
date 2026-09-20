@@ -264,8 +264,19 @@ const stateRow = computed(() => {
 /** A resolver is pending: the pre-seam loader row. */
 const loaderRow = computed(() => !hostDriven.value && optionsRow.value === 'loading')
 
-/** Whether options are loading while the menu is open (root `data-loading`). */
-const optionsLoading = computed(() => menuOpen.value && optionsRow.value === 'loading')
+/**
+ * Whether the control is in a loading state (root `data-loading`, `aria-busy`).
+ *
+ * N1-O1 defect D3: the public `loading` prop -- inherited from
+ * `BaseBehaviorProps` like every other control's -- was declared, defaulted and
+ * then read by nothing, so `<DzMention loading>` did nothing at all. The host's
+ * answer is now ORed with the component's own: a host that knows it is fetching
+ * can say so before any trigger character has been typed, and the resolver's
+ * own pending state still lights the indicator by itself.
+ */
+const optionsLoading = computed(() =>
+  props.loading === true || (menuOpen.value && optionsRow.value === 'loading'),
+)
 
 /**
  * Ask for options for the active token.

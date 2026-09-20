@@ -309,7 +309,7 @@ export function renderCapabilityMatrixPage(ev: EvidenceSources): string {
       `| [${row.component}](/components/${row.component}#accessibility-and-evidence) `
       + `| ${cell(row.family)} | \`${row.tier}\` `
       + `| ${link === undefined ? `\`${row.pattern}\`` : `[\`${row.pattern}\`](${link})`} `
-      + `| \`${row.securityBoundary}\` | ${row.cells.length} `
+      + `| ${row.securityBoundary.map(b => `\`${b}\``).join(' + ')} | ${row.cells.length} `
       + `| ${unrun.length === 0 ? '—' : `**${unrun.map(k => `\`${k}\``).join(', ')}**`} `
       + `| ${stale.length === 0 ? '—' : stale.map(k => `\`${k}\``).join(', ')} |`,
     )
@@ -443,20 +443,44 @@ export function renderAccessibilityPage(ev: EvidenceSources): string {
     '',
     ...ACCESSIBILITY_STATEMENT.blocks.position!,
     '',
-    ...ACCESSIBILITY_STATEMENT.blocks.open!,
+    // Which of the two halves of the statement is true is read from the record,
+    // never asserted here (TASK-R2-O5): the day a tenth drag surface arrives
+    // without a pointer path, this page goes back to leading with the failure
+    // by itself.
+    ...(gaps.length > 0
+      ? ACCESSIBILITY_STATEMENT.blocks.open!
+      : ACCESSIBILITY_STATEMENT.blocks.closed!),
     '',
-    `::: danger SC ${dev.criterion.id} ${dev.criterion.name} (level ${dev.criterion.level}, new in `
-    + `WCAG ${dev.criterion.since}) is not met on ${gaps.length} of ${dev.surfaces.length} drag surfaces`,
-    `**${cell(dev.conformanceStatement)}**`,
-    '',
-    `> ${cell(dev.criterion.text)}`,
-    '',
-    `The gap is on ${gaps.map(s => `\`${s.component}\``).join(', ')}; the audit below names each`,
-    'operation. Every one of them is keyboard-operable, and a keyboard path satisfies SC 2.1.1, not',
-    'this one: the criterion is about pointer input and requires a single pointer without dragging.',
-    '',
-    `[Understanding SC ${dev.criterion.id}](${dev.criterion.url})`,
-    ':::',
+    ...(gaps.length > 0
+      ? [
+          `::: danger SC ${dev.criterion.id} ${dev.criterion.name} (level ${dev.criterion.level}, new in `
+          + `WCAG ${dev.criterion.since}) is not met on ${gaps.length} of ${dev.surfaces.length} drag surfaces`,
+          `**${cell(dev.conformanceStatement)}**`,
+          '',
+          `> ${cell(dev.criterion.text)}`,
+          '',
+          `The gap is on ${gaps.map(s => `\`${s.component}\``).join(', ')}; the audit below names each`,
+          'operation. Every one of them is keyboard-operable, and a keyboard path satisfies SC 2.1.1, not',
+          'this one: the criterion is about pointer input and requires a single pointer without dragging.',
+          '',
+          `[Understanding SC ${dev.criterion.id}](${dev.criterion.url})`,
+          ':::',
+        ]
+      : [
+          `::: tip SC ${dev.criterion.id} ${dev.criterion.name} (level ${dev.criterion.level}, new in `
+          + `WCAG ${dev.criterion.since}) — no surface is open`,
+          `**${cell(dev.conformanceStatement)}**`,
+          '',
+          `> ${cell(dev.criterion.text)}`,
+          '',
+          `All ${dev.surfaces.length} drag surfaces name a single-pointer path in the audit below, and`,
+          'each one is a real control a pointer can reach — not a keyboard path restated, which is what',
+          'satisfies SC 2.1.1 and not this criterion. What that is worth is bounded by how it was',
+          'measured, and the browser record underneath says so.',
+          '',
+          `[Understanding SC ${dev.criterion.id}](${dev.criterion.url})`,
+          ':::',
+        ]),
     '',
     '### The audit',
     '',
@@ -479,16 +503,35 @@ export function renderAccessibilityPage(ev: EvidenceSources): string {
     )
   }
 
+  if (gaps.length > 0) {
+    lines.push(
+      '### Why it is not fixed here',
+      '',
+      ...gaps.map(s => `- **${s.component}** — ${cell(s.ownerDecision)}`),
+      '',
+      `None of them qualifies for the criterion's own exceptions.`,
+      '',
+      ...[...new Set(gaps.map(s => cell(s.notEssential)))].map(reason => `- ${reason}`),
+      '',
+    )
+  }
+  else if (met.some(s => s.closedBy !== undefined)) {
+    // The counterpart section: a surface that was a gap says how it stopped
+    // being one, so the page keeps the history instead of quietly losing it
+    // with the defect (TASK-R2-O5).
+    lines.push(
+      '### How the surfaces that were open were closed',
+      '',
+      ...met.filter(s => s.closedBy !== undefined)
+        .map(s => `- **${s.component}** — ${cell(s.closedBy)}`),
+      '',
+    )
+  }
+
   lines.push(
-    '### Why it is not fixed here',
-    '',
-    ...gaps.map(s => `- **${s.component}** — ${cell(s.ownerDecision)}`),
-    '',
-    `None of them qualifies for the criterion's own exceptions.`,
-    '',
-    ...[...new Set(gaps.map(s => cell(s.notEssential)))].map(reason => `- ${reason}`),
-    '',
-    '**The scoped follow-up, as handed to the owner:**',
+    gaps.length > 0
+      ? '**The scoped follow-up, as handed to the owner:**'
+      : '**What is still owed:**',
     '',
     `> ${cell(dev.followUp)}`,
     '',
@@ -496,6 +539,24 @@ export function renderAccessibilityPage(ev: EvidenceSources): string {
     + `\`packages/core/docs/wcag-deviations.json\` at \`${shortCommit(dev.recordedAt.sourceCommit ?? '')}\` `
     + `(${cell(dev.recordedAt.admissibility)}).`,
     '',
+    // The audit above was read out of source. Whether a browser agrees is a
+    // different claim and is printed as one (TASK-R2-O5): an audit nothing
+    // re-checks is how a published conformance statement goes quietly stale.
+    ...(dev.verifiedInBrowser === undefined
+      ? [
+          '_No browser has been asked to confirm this audit; every verdict above is a source reading._',
+          '',
+        ]
+      : [
+          `**Confirmed in a browser** by \`${cell(dev.verifiedInBrowser.measuredBy)}\`: `
+          + `\`${cell(dev.verifiedInBrowser.lane)}\` presses every surface with a single pointer in `
+          + `${dev.verifiedInBrowser.engines.map(e => `\`${e}\``).join(', ')} and asserts the outcome `
+          + `equals the state recorded above, so the record and the browser cannot disagree silently. `
+          + `Measured \`${cell(dev.verifiedInBrowser.measuredAt)}\` at `
+          + `\`${shortCommit(dev.verifiedInBrowser.sourceCommit ?? '')}\` `
+          + `(${cell(dev.verifiedInBrowser.admissibility)}).`,
+          '',
+        ]),
     ...ACCESSIBILITY_STATEMENT.blocks.at!,
     '',
     `Measured: **${t.atExecuted} of ${t.atCells} cells**, over ${t.atComponents} components and `
@@ -559,6 +620,89 @@ export function renderAccessibilityPage(ev: EvidenceSources): string {
 // /evidence/browser-support
 // ---------------------------------------------------------------------------
 
+/**
+ * The supported-browser floor section: the authored statement chosen by what the
+ * tree declares, followed by the declaration itself (TASK-R2-O5).
+ *
+ * The choice is made by the probe, not by an author: when
+ * `packages/tooling/src/docs/browser-target.ts` finds a `browserslist` or a build
+ * `target`, the page states the floor and prints it with the file it came from;
+ * when it finds none, the page states that none is declared and prints what it
+ * searched. N2-D2's finding F-2 was measured by hand and then written into
+ * constant prose, which made the page's most consequential sentence the one thing
+ * on it that nothing re-checked.
+ *
+ * `compilerOptions.target` is printed **separately and labelled**, because it is
+ * the level `tsc` emits rather than a browser range, and the packages are built
+ * by Vite. Folding it into the floor would publish a browser commitment the
+ * library has never made.
+ */
+function renderBrowserFloor(ev: EvidenceSources): string[] {
+  const probe = ev.browserTarget
+  const lines: string[] = []
+
+  if (probe.declared.length === 0) {
+    lines.push(...BROWSER_SUPPORT.blocks.baseline!, '')
+  }
+  else {
+    lines.push(
+      ...BROWSER_SUPPORT.blocks.baselineDeclared!,
+      '',
+      '| Kind | Declared in | Value |',
+      '| --- | --- | --- |',
+      ...probe.declared.map(d => `| \`${d.kind}\` | \`${d.where}\` | \`${d.value}\` |`),
+      '',
+      // The sentence that keeps a declaration from being read as a measurement
+      // (TASK-R2-O5, owner decision D118). Both halves are generated: the
+      // engines come from the lane record, the floor from the tree, and neither
+      // is typed here — so the page cannot claim a browser the lane stopped
+      // driving, or a floor the packages stopped declaring.
+      ...(ev.engines === undefined
+        ? [
+            '_No engine-lane record exists in this checkout, so nothing on this page says which of the',
+            'browsers admitted above has actually been driven._',
+            '',
+          ]
+        : [
+            `**What is measured against that floor.** The matrix drives `
+            + `${Object.keys(ev.engines.engines).length} engines — `
+            + `${Object.entries(ev.engines.engines)
+              .map(([name, e]) => `${name} \`${e.version}\``)
+              .join(', ')} — and no others. `
+              + 'Every browser the declarations above admit beyond those engines is supported **by '
+              + 'declaration** and is measured nowhere on this page; in particular a declared Safari or '
+              + 'iOS floor is not a Safari result, for the reason stated above.',
+            '',
+          ]),
+    )
+  }
+
+  lines.push(
+    `::: details What was searched (${probe.scanned.length} files, read while this page was generated)`,
+    'A declaration is a `browserslist` file, a `browserslist` key in a `package.json`, or a build',
+    '`target` in a Vite config — the channels a build actually reads. The scan is a fixed list of',
+    'names in the repository root and in each workspace package, so an absence here is checkable',
+    'rather than asserted.',
+    '',
+    ...probe.scanned.map(path => `- \`${path}\``),
+    ':::',
+  )
+
+  if (probe.syntaxLevels.length > 0) {
+    lines.push(
+      '',
+      `**Not a browser declaration:** ${probe.syntaxLevels.length} TypeScript `
+      + `\`compilerOptions.target\` value${probe.syntaxLevels.length === 1 ? '' : 's'} `
+      + `(${[...new Set(probe.syntaxLevels.map(s => s.value))].map(v => `\`${v}\``).join(', ')}) `
+      + 'set the syntax level `tsc` emits. The published packages are built by Vite, no gate reads '
+      + 'these values, and none of them names a browser. They are listed here so that finding one in '
+      + 'the tree is not mistaken for the floor above.',
+    )
+  }
+
+  return lines
+}
+
 /** `/evidence/browser-support` — the statement, wrapped around the engine lane. */
 export function renderBrowserSupportPage(ev: EvidenceSources): string {
   const engines = ev.engines
@@ -589,11 +733,27 @@ export function renderBrowserSupportPage(ev: EvidenceSources): string {
     lines.push(
       `| Engine | Version | Conditions | Targets | Cells run | Passed | Unexpected failures | Wall clock | Run on |`,
       `| --- | --- | --- | --- | --- | --- | --- | --- | --- |`,
-      ...names.map((name) => {
+      // One row per SWEEP, not per engine: an engine whose lane gained
+      // conditions later was measured twice, against two trees, and a single
+      // averaged row would describe a run that never happened (TASK-R2-O5).
+      ...names.flatMap((name) => {
         const e = engines.engines[name]!
-        return `| \`${name}\` | ${cell(e.version)} | ${e.conditionsRun.length} `
+        const original = e.conditionsRun.length - (e.additionalRuns ?? [])
+          .reduce((n, run) => n + run.conditions.length, 0)
+        const rows = [
+          `| \`${name}\` | ${cell(e.version)} | ${original} `
           + `| ${e.summary.runnableTargets} | ${e.summary.cellsRun} | ${e.summary.passed} `
-          + `| ${e.summary.unexpectedFailure} | ${cell(e.summary.wallClock)} | ${cell(e.summary.ranAt)} |`
+          + `| ${e.summary.unexpectedFailure} | ${cell(e.summary.wallClock)} | ${cell(e.summary.ranAt)} |`,
+        ]
+        for (const run of e.additionalRuns ?? []) {
+          rows.push(
+            `| \`${name}\` (${run.conditions.map(c => `\`${c}\``).join(', ')}) | ${cell(e.version)} `
+            + `| ${run.conditions.length} | ${run.summary.runnableTargets} | ${run.summary.cellsRun} `
+            + `| ${run.summary.passed} | ${run.summary.unexpectedFailure} `
+            + `| ${cell(run.summary.wallClock)} | ${cell(run.summary.ranAt)} |`,
+          )
+        }
+        return rows
       }),
       '',
       `Conditions: ${conditions.map(c => `\`${c}\``).join(', ')}. `
@@ -613,6 +773,21 @@ export function renderBrowserSupportPage(ev: EvidenceSources): string {
       `**Method:** ${cell(engines.method)}`,
       '',
     )
+    const later = names.flatMap(n => engines.engines[n]!.additionalRuns ?? [])
+    if (later.length > 0) {
+      const addedConditions = [...new Set(later.flatMap(r => r.conditions))]
+      const commits = [...new Set(later.map(r => r.sourceCommit.slice(0, 8)))]
+      const dates = [...new Set(later.map(r => r.measuredAt))]
+      lines.push(
+        `**Conditions added after that sweep:** ${addedConditions.map(c => `\`${c}\``).join(', ')}, `
+        + `measured ${dates.map(d => `\`${d}\``).join(', ')} at `
+        + `${commits.map(c => `\`${c}\``).join(', ')} — their own rows above. The earlier rows were `
+        + 'not re-run against that tree and each one still describes the commit it names, which is '
+        + 'why the two are not added together.',
+        '',
+      )
+    }
+
     const declaredUnrun = names
       .map(n => engines.engines[n]!.summary.declaredUnrunTargets)
       .reduce((a, b) => Math.max(a, b), 0)
@@ -634,7 +809,7 @@ export function renderBrowserSupportPage(ev: EvidenceSources): string {
     '',
     ...BROWSER_SUPPORT.blocks.history!,
     '',
-    ...BROWSER_SUPPORT.blocks.baseline!,
+    ...renderBrowserFloor(ev),
     '',
     ...BROWSER_SUPPORT.blocks.notMeasured!,
     '',

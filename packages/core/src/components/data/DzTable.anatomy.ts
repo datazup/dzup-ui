@@ -31,15 +31,44 @@ import type { AnatomyPart, ComponentAnatomy, UiOverrides } from '@dzup-ui/contra
  * decision rather than by accident.
  */
 export const anatomy = {
-  parts: ['root', 'content', 'title', 'header', 'body', 'row', 'cell', 'footer'],
+  parts: [
+    'root',
+    'content',
+    'title',
+    'header',
+    'body',
+    'row',
+    'cell',
+    'footer',
+    'separator',
+    'step-decrease',
+    'step-increase',
+  ],
 
   /**
    * Only the scroll container and the `<table>` are unconditional. A caption
    * needs a slot; header, body, footer, rows and cells are composed by the
    * consumer, and under `virtualScroll` the rows present are a window onto the
    * data rather than all of it.
+   *
+   * `separator` is the column-resize handle on a header cell — it has carried
+   * `role="separator"` since TASK-R2-O5 and now carries the `data-part` to
+   * match. `step-decrease` / `step-increase` are the WCAG 2.2 SC 2.5.7
+   * single-pointer pair that overlays that header cell (owner decision **D117
+   * option A**, 2026-09-19). All three render only on a header cell that sets
+   * `resizable` and a `colId`, which is why none of them is unconditional.
    */
-  optionalParts: ['title', 'header', 'body', 'row', 'cell', 'footer'],
+  optionalParts: [
+    'title',
+    'header',
+    'body',
+    'row',
+    'cell',
+    'footer',
+    'separator',
+    'step-decrease',
+    'step-increase',
+  ],
 
   /**
    * `ready`/`loading` on the root, `selected` and `expanded` on a row.
@@ -115,6 +144,28 @@ export const anatomy = {
       action: 'Add the focused column to the existing sort rather than replacing it.',
       wcag: ['2.1.1'],
       apg: 'table',
+    },
+    // The column-resize handle. It has behaved this way since column resizing
+    // shipped; TASK-R2-O5 declared it, because a keyboard contract nobody wrote
+    // down is one a docs page cannot publish and a reviewer cannot check.
+    // `2.5.7` sits beside `2.1.1` on both rows because the same step is now
+    // reachable by a single pointer press on the stepper pair beside the
+    // handle (owner decision D117 option A, 2026-09-19).
+    {
+      key: 'ArrowRight',
+      when: 'header resizable',
+      action: 'Widen the column by 8px, or 24px with Shift.',
+      wcag: ['2.1.1', '2.5.7'],
+      apg: 'table',
+      rtl: 'mirrored',
+    },
+    {
+      key: 'ArrowLeft',
+      when: 'header resizable',
+      action: 'Narrow the column by 8px, or 24px with Shift, never below its minimum width.',
+      wcag: ['2.1.1', '2.5.7'],
+      apg: 'table',
+      rtl: 'mirrored',
     },
   ],
 

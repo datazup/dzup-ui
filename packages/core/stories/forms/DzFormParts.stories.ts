@@ -123,8 +123,10 @@ export const Required: Story = {
     // The label's data-required marker is present (visual asterisk rendered)
     const label = canvasElement.querySelector('label[data-required]')
     await expect(label).toBeTruthy()
-    // No error message should be visible in the default required state
-    await waitFor(() => expect(canvas.queryByRole('alert')).toBeNull())
+    // No error message should be visible in the default required state. The
+    // message is a polite live region, not `role="alert"` (renderer contract
+    // C4) -- assert on what DzFormMessage actually emits.
+    await waitFor(() => expect(canvasElement.querySelector('[aria-live="polite"]')).toBeNull())
   },
 }
 
@@ -147,10 +149,19 @@ export const WithError: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    // Error message renders immediately (invalid + error props already set)
-    const alert = await waitFor(() => canvas.getByRole('alert'))
-    await expect(alert).toBeVisible()
-    await expect(alert).toHaveTextContent('Email address is required')
+    // Error message renders immediately (invalid + error props already set) as
+    // a POLITE live region, not `role="alert"` -- the component dropped the
+    // contradictory pair in `e986952` (renderer contract C4) and this assertion
+    // never moved with it (N1-O1 story drift, fixed in TASK-R2-O3).
+    const message = await waitFor(() => {
+      const el = canvasElement.querySelector('[aria-live="polite"]')
+      if (!el)
+        throw new Error('no polite live region yet')
+      return el
+    })
+    await expect(message).toBeVisible()
+    await expect(message).toHaveTextContent('Email address is required')
+    await expect(canvas.queryByRole('alert')).toBeNull()
     // Input is associated with label
     const input = canvas.getByLabelText('Email')
     await expect(input).toBeInTheDocument()

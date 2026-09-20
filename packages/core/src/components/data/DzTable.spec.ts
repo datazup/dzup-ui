@@ -610,6 +610,98 @@ describe('dzTableCell — column resizing', () => {
     // jsdom reports 0 width; clamped to the 48px fallback minimum.
     expect(style).toContain('width: 48px')
   })
+
+  /**
+   * WCAG 2.2 SC 2.5.7 Dragging Movements — the single-pointer, non-drag path.
+   *
+   * Owner decision **D117 option A**, taken 2026-09-19. Before it, this handle
+   * was the worst of the three recorded gaps: not merely missing a pointer path
+   * but actively discarding one, because `@click.stop` sat on the handle and
+   * swallowed every plain press. `packages/core/docs/wcag-deviations.json`
+   * recorded it and `e2e/matrix/non-drag.spec.ts` measured it in three engines.
+   *
+   * Unlike the splitter, a table column's arithmetic is this repository's own
+   * and needs no layout, so these tests assert the WIDTH, not the intent.
+   */
+  it('single pointer (SC 2.5.7) — renders a narrow and a widen control over the header cell', () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+
+    expect(wrapper.find('thead [data-part="step-decrease"]').exists()).toBe(true)
+    expect(wrapper.find('thead [data-part="step-increase"]').exists()).toBe(true)
+    // The browser lane finds them by this attribute.
+    expect(wrapper.findAll('[data-dz-resize-step]')).toHaveLength(2)
+  })
+
+  it('single pointer (SC 2.5.7) — one click widens the column by exactly the keyboard step', async () => {
+    const byClick = mountResizable({ resizable: true, colId: 'name' })
+    await byClick.find('[data-dz-resize-step="increase"]').trigger('click')
+
+    const byKey = mountResizable({ resizable: true, colId: 'name' })
+    await byKey.find('[data-dz-resize-handle]').trigger('keydown', { key: 'ArrowRight' })
+
+    // Same step, because both call `stepColumn`. If the two ever diverge, the
+    // published claim that the pointer path and the keyboard path agree is
+    // false, and this is where it shows.
+    expect(byClick.find('tbody td').attributes('style'))
+      .toBe(byKey.find('tbody td').attributes('style'))
+    expect(byClick.find('tbody td').attributes('style')).toContain('width: 8px')
+  })
+
+  it('single pointer (SC 2.5.7) — one click narrows the column, never below the minimum', async () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+    await wrapper.find('[data-dz-resize-step="decrease"]').trigger('click')
+
+    expect(wrapper.find('tbody td').attributes('style')).toContain('width: 48px')
+  })
+
+  it('single pointer (SC 2.5.7) — shift-click takes the larger step, as shift-arrow does', async () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+    await wrapper.find('[data-dz-resize-step="increase"]').trigger('click', { shiftKey: true })
+
+    expect(wrapper.find('tbody td').attributes('style')).toContain('width: 24px')
+  })
+
+  it('single pointer (SC 2.5.7) — a plain click on the handle is no longer discarded', async () => {
+    // `@click.stop` used to sit here. It is gone, and nothing may put it back:
+    // the press that reaches the steppers passes through this element.
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+    let sawClick = false
+    wrapper.element.addEventListener('click', () => {
+      sawClick = true
+    })
+
+    await wrapper.find('[data-dz-resize-handle]').trigger('click')
+
+    expect(sawClick).toBe(true)
+  })
+
+  it('single pointer (SC 2.5.7) — the handle reports its column width as a separator value', async () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+    const handle = wrapper.find('[data-dz-resize-handle]')
+
+    expect(handle.attributes('role')).toBe('separator')
+    expect(handle.attributes('aria-orientation')).toBe('vertical')
+    expect(handle.attributes('aria-valuemin')).toBe('48')
+
+    await wrapper.find('[data-dz-resize-step="increase"]').trigger('click')
+    expect(handle.attributes('aria-valuenow')).toBe('8')
+  })
+
+  it('single pointer (SC 2.5.7) — the steppers rest invisible and at the 24px floor', () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+    const button = wrapper.find('[data-dz-resize-step="decrease"]')
+    const container = button.element.parentElement!
+
+    // The resting rendering of a table header is unchanged: absolutely
+    // positioned and fully transparent until a pointer or a focus arrives.
+    expect(container.className).toContain('absolute')
+    expect(container.className).toContain('opacity-0')
+    expect(button.classes()).toContain('h-6')
+    expect(button.classes()).toContain('w-6')
+    // The handle beside them is already the tab stop and already carries the
+    // Arrow keys; two more tab stops per column would duplicate that path.
+    expect(button.attributes('tabindex')).toBe('-1')
+  })
 })
 
 describe('dzTable — virtual scroll', () => {

@@ -397,11 +397,19 @@ const { testId: dzTestId } = useDzTestIds()
           v-if="model"
           as-child
         >
+          <!--
+            N1-O1 defect D9: the clear control had no `:disabled` binding while
+            its sibling trigger did, so a disabled combobox holding a value
+            still rendered a live, clickable Clear. `tabindex="-1"` kept it out
+            of the tab order, which is why it was never noticed — pointer and AT
+            users could still fire it.
+          -->
           <button
             type="button"
             data-part="clear"
             :class="[styles.clearButton(), ui?.clear]"
             :aria-label="dzMessages.clearSelection"
+            :disabled="resolvedDisabled"
             @click.stop="handleClear"
           >
             <X class="h-3.5 w-3.5" aria-hidden="true" />

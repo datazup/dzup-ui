@@ -104,3 +104,47 @@ describe('dzCascader — renderer contract C1 value', () => {
     expect(wrapper.text()).toContain('Select')
   })
 })
+
+/**
+ * N1-O1 defect **D4** — recorded, ceiling-gated, NOT fixed here.
+ *
+ * The clear affordance is a `role="button"` span rendered INSIDE the
+ * `<button role="combobox">` trigger. That is axe's `nested-interactive` rule
+ * and the HTML "no interactive content in a button" content model. It is not
+ * caught today because `forms` has not opted into `a11yError`, so its axe sweep
+ * is report-only.
+ *
+ * Fixing it means moving the control out of the button, which moves a published
+ * `data-part` and changes the rendered layout — a public change that
+ * `<repo_conventions>` routes through VERSIONING.md. TASK-R2-O3 raises it as
+ * owner decision **D98** and pins the measurement here instead, so the defect is
+ * counted rather than remembered, and so the fix cannot land unnoticed: when the
+ * count reaches 0 this test fails and must be deleted.
+ */
+describe('dzCascader — D4: nested interactive content inside the combobox (recorded defect)', () => {
+  function nestedInteractiveCount(wrapper: ReturnType<typeof mount>): number {
+    const combobox = wrapper.element.querySelector('[role="combobox"]')
+    if (!combobox)
+      return 0
+    return combobox.querySelectorAll('[role="button"], button, a[href], input, select, textarea, [tabindex]').length
+  }
+
+  it('defect D4 -- exactly one nested interactive element remains, and it is the clear control', () => {
+    const wrapper = mount(DzCascader, { props: { options, value: ['cn', 'zj', 'hz'], clearable: true } })
+
+    expect(
+      nestedInteractiveCount(wrapper),
+      'D4 appears to have MOVED. If the count dropped to 0 the defect is fixed — '
+      + 'delete this recorded-defect test and close owner decision D98. If it grew, '
+      + 'a NEW nested interactive element was added inside a role="combobox".',
+    ).toBe(1)
+
+    const nested = wrapper.element.querySelector('[role="combobox"] [role="button"]')
+    expect(nested?.getAttribute('data-part')).toBe('clear')
+  })
+
+  it('defect D4 -- with nothing selected the trigger has no nested interactive content', () => {
+    const wrapper = mount(DzCascader, { props: { options, clearable: true } })
+    expect(nestedInteractiveCount(wrapper)).toBe(0)
+  })
+})

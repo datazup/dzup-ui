@@ -216,9 +216,9 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
-| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
@@ -238,7 +238,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `80ce301`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -256,8 +256,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `2d51eec4` for the capability matrix,
+`2d51eec4` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -267,7 +267,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `a01965fa`
 
 **Why this pattern:** Hierarchical roving focus with expand/collapse, typeahead and tri-state checkboxes over a consumer-supplied tree.
 
@@ -353,21 +353,21 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `unit-spec` | tier A | `present` | `packages/core/src/components/data/DzTree.spec.ts` |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/data.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzTree.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzTree.spec.ts` — The component declares 8 binding(s); the unit spec asserts no key event for `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzTree.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzTree.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzTree.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/data/DzTree.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzTree.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/data/DzTree.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTree.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
+| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**5 unrun:** `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -139,7 +139,6 @@ The scaffold says this component owes 6 task(s):
 
 **Read from:** ARIA live regions — a reorder is a status change, announced once, without a focus move.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -147,4 +146,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 - **E6** — affects `reach`. At the committed commit the list bound `:ariaLabel` instead of `:aria-label`, so an `aria-label` given as a prop only reached the accessibility tree through modern ARIA reflection and was ABSENT from server-rendered markup. This story names the list with `aria-labelledby`, which was always bound correctly, so the reach step should pass; a story that names it with `aria-label` is where this surfaces. Check the commit you are running against before filing.
-

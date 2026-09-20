@@ -21,7 +21,7 @@ function row(over: Partial<CapabilityRow> = {}): CapabilityRow {
     family: 'forms',
     tier: 'D',
     pattern: 'button',
-    securityBoundary: 'file',
+    securityBoundary: ['file'],
     traits: [],
     anatomy: 'declared',
     source: 'packages/core/src/components/forms/DzThing.vue',

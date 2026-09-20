@@ -80,7 +80,7 @@ append-only marker:
 | [`DzCascader`](./DzCascader.at-script.md) | C | `combobox` | 8 | 48 |
 | [`DzColorPicker`](./DzColorPicker.at-script.md) | C | `custom` | 2 | 12 |
 | [`DzCombobox`](./DzCombobox.at-script.md) | C | `combobox` | 8 | 48 |
-| [`DzCommandPalette`](./DzCommandPalette.at-script.md) | C | `combobox` | 8 | 48 |
+| [`DzCommandPalette`](./DzCommandPalette.at-script.md) | C | `combobox` | 7 | 42 |
 | [`DzDataGrid`](./DzDataGrid.at-script.md) | C | `grid` | 4 | 24 |
 | [`DzDataView`](./DzDataView.at-script.md) | C | `custom` | 3 | 18 |
 | [`DzDatePicker`](./DzDatePicker.at-script.md) | C | `combobox` | 7 | 42 |
@@ -91,7 +91,7 @@ append-only marker:
 | [`DzMultiSelect`](./DzMultiSelect.at-script.md) | C | `combobox` | 8 | 48 |
 | [`DzOrderList`](./DzOrderList.at-script.md) | C | `listbox` | 6 | 36 |
 | [`DzPersonaSelector`](./DzPersonaSelector.at-script.md) | C | `listbox` | 5 | 30 |
-| [`DzSidebar`](./DzSidebar.at-script.md) | C | `treeview` | 5 | 30 |
+| [`DzSidebar`](./DzSidebar.at-script.md) | C | `landmarks` | 4 | 24 |
 | [`DzTable`](./DzTable.at-script.md) | C | `table` | 4 | 24 |
 | [`DzTimePicker`](./DzTimePicker.at-script.md) | C | `combobox` | 7 | 42 |
 | [`DzTour`](./DzTour.at-script.md) | C | `dialog` | 4 | 24 |
@@ -99,7 +99,7 @@ append-only marker:
 | [`DzTree`](./DzTree.at-script.md) | C | `treeview` | 5 | 30 |
 | [`DzTreeSelect`](./DzTreeSelect.at-script.md) | C | `combobox` | 8 | 48 |
 
-**22 components · 126 steps · 756 step-runs
+**22 components · 124 steps · 744 step-runs
 across all six pairs.** The matrix itself counts a coarser cell — one per
 `{component, pair}` — so these 22 components are
 **132 of the scaffold's 534 cells**.

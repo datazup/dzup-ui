@@ -112,7 +112,7 @@ function rowView(row: DocCapabilityRow) {
         'span',
         { className: 'dz-cap__meta' },
         `Tier ${row.tier} · ${row.family} · APG ${row.pattern}`
-        + `${row.boundary === 'none' ? '' : ` · boundary ${row.boundary}`}`
+        + `${row.boundary.join(' + ') === 'none' ? '' : ` · boundary ${row.boundary.join(' + ')}`}`
         + ` · anatomy ${row.anatomy}`
         // TASK-N1-O6. The fifth generated input, on the header line rather than
         // as a cell: visual regression is not something a tier makes a

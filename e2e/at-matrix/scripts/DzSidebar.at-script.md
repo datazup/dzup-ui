@@ -3,7 +3,7 @@
 
 # DzSidebar — AT test script
 
-**Tier C · APG pattern `treeview` · source `packages/core/src/components/navigation/DzSidebar.vue`**
+**Tier C · APG pattern `landmarks` · source `packages/core/src/components/navigation/DzSidebar.vue`**
 
 Read [`README.md`](./README.md) first — it carries the AT-by-AT key reference,
 the recording rules, and what to do when a step fails.
@@ -13,8 +13,8 @@ Record the run in [`../DzSidebar.md`](../DzSidebar.md), as a
 
 ## Before you start
 
-- READ THIS FIRST. The quality matrix declares this component APG `treeview`. The component ships `role="navigation"` with links, which is what APG actually recommends for site navigation — APG says explicitly not to use the menu or tree patterns for a set of page links.
-- The steps below are therefore written against the navigation-landmark contract the component declares, NOT against the Tree View pattern. The mismatch is an open owner decision (is the declared pattern wrong, or the component?); it is recorded in the TASK-N1-O4 handoff. Do not file it again.
+- This component declares APG `landmarks`: it ships `role="navigation"` with links, which is what APG recommends for site navigation — APG says explicitly not to use the menu or tree patterns for a set of page links. Drive the navigation-landmark contract.
+- Historical note, so an older run record still reads correctly: until TASK-R2-O2 the quality matrix declared this component `treeview`, a pattern it has never implemented, and the scaffold therefore asked for `select` and `typeahead` tasks. Those are gone — link activation is now recorded under `activate`, and element navigation under `navigate`. A pre-2026-09-18 row naming `select` or `typeahead` is evidence about those same interactions.
 - Four entries under a "Workspace" section: Dashboard (current), Sessions, Billing (disabled), Settings.
 
 ## Pairs this component owes
@@ -33,8 +33,8 @@ is a fact; it is never `fail`.
 
 ## Steps
 
-The scaffold says this component owes 5 task(s):
-`reach`, `navigate`, `select`, `typeahead`, `live`. There is exactly one step per task.
+The scaffold says this component owes 4 task(s):
+`reach`, `navigate`, `activate`, `live`. There is exactly one step per task.
 
 ### Step 1 — task `reach`
 
@@ -59,6 +59,7 @@ The scaffold says this component owes 5 task(s):
 **Do:**
 
 1. Tab through every entry, then Shift+Tab back.
+1. Then, in browse mode, use your AT next-link command (NVDA/JAWS: `k`; VoiceOver: rotor → Links).
 
 **The AT must:**
 
@@ -66,10 +67,13 @@ The scaffold says this component owes 5 task(s):
 - [ ] The disabled "Billing" entry is SKIPPED by Tab.
 - [ ] Exactly one entry is announced as the current page.
 - [ ] Each entry is announced with its visible label.
+- [ ] Every sidebar entry appears in the links list with its visible label.
+- [ ] The disabled "Billing" entry is announced as unavailable, or is absent — it is not offered as a working link.
+- [ ] No entry appears in the list twice.
 
-**Read from:** Landmark Regions and the link contract; `aria-current="page"` on exactly one entry; `aria-disabled` + removal from the tab order.
+**Read from:** Landmark Regions and the link contract; `aria-current="page"` on exactly one entry; `aria-disabled` + removal from the tab order. Element navigation is how a landmark of links is traversed in browse mode, so it belongs to `navigate` rather than to the `typeahead` obligation the old `treeview` declaration invented (TASK-R2-O2).
 
-### Step 3 — task `select`
+### Step 3 — task `activate`
 
 **Open:** [`core-navigation-dzsidebar--accessibility`](http://127.0.0.1:6006/iframe.html?id=core-navigation-dzsidebar--accessibility&viewMode=story)
 
@@ -83,25 +87,9 @@ The scaffold says this component owes 5 task(s):
 - [ ] "Sessions" is now announced as the current page and "Dashboard" is not.
 - [ ] Still exactly one entry claims the current page.
 
-**Read from:** The `aria-current` contract: exactly one element in a set carries it.
+**Read from:** The `aria-current` contract: exactly one element in a set carries it. Recorded as `activate` rather than `select` since TASK-R2-O2 corrected the declared pattern: a link is activated, not selected from a set.
 
-### Step 4 — task `typeahead`
-
-**Open:** [`core-navigation-dzsidebar--accessibility`](http://127.0.0.1:6006/iframe.html?id=core-navigation-dzsidebar--accessibility&viewMode=story)
-
-**Do:**
-
-1. In browse mode, use your AT next-link command (NVDA/JAWS: `k`; VoiceOver: rotor → Links).
-
-**The AT must:**
-
-- [ ] Every sidebar entry appears in the links list with its visible label.
-- [ ] The disabled "Billing" entry is announced as unavailable, or is absent — it is not offered as a working link.
-- [ ] No entry appears in the list twice.
-
-**Read from:** The listbox typeahead obligation the scaffold derives from `treeview`, met here through the AT own element-navigation commands, which is the equivalent affordance for a landmark of links.
-
-### Step 5 — task `live`
+### Step 4 — task `live`
 
 **Open:** [`core-navigation-dzsidebar--collapsed`](http://127.0.0.1:6006/iframe.html?id=core-navigation-dzsidebar--collapsed&viewMode=story)
 
@@ -119,7 +107,6 @@ The scaffold says this component owes 5 task(s):
 
 **Read from:** The `aria-expanded` contract on a disclosure control; and the ARIA rule that a name may not depend on visible text alone.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -127,4 +114,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 None on the register for this component. Anything that fails here is new — file it.
-

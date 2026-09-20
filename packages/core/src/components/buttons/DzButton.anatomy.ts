@@ -31,7 +31,7 @@ export const anatomy = {
    * per-component enums; `loading` and `disabled` are also emitted as
    * presence-only boolean attributes.
    */
-  states: ['idle', 'loading', 'disabled'],
+  states: ['idle', 'loading', 'disabled', 'url-rejected'],
 
   /**
    * Every `--dz-button-*` this component reads, and therefore every one a

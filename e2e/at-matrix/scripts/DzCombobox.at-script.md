@@ -164,7 +164,6 @@ The scaffold says this component owes 8 task(s):
 
 **Read from:** ARIA live regions; and Combobox — a busy or empty popup is a status, not a focus event.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -172,4 +171,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 - **D9** — affects `reach`. The clear button ignores `disabled`. On `core-forms-dzcombobox--disabled` a live "Clear selection" control is still present; touch-exploration pairs (VoiceOver iOS, TalkBack) can reach and press it.
-

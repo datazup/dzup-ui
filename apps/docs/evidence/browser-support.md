@@ -15,24 +15,29 @@ dzup-ui is measured in each major engine, on every rendering condition the matri
 against every interactive component the lane can drive. Those numbers are below and they are
 generated.
 
-What follows them matters as much: the measurement is a local run, the engines are Playwright
-builds rather than the browsers you ship to, and the library declares no supported-browser
-floor at all.
+What follows them matters as much: the measurement is a local run, and the engines are
+Playwright builds rather than the browsers you ship to. What the packages themselves declare
+about supported browsers is stated further down, and it is read out of the repository at the
+moment this page is generated rather than asserted here.
 
 ## The engine lane
 
 Each engine is driven across the same conditions against the same targets, so a cell is a real
 component rendered in a real engine under a real condition — not a feature-detection table.
 The conditions exist because they are where component libraries actually break: forced colours,
-reduced motion, right-to-left, coarse pointers and heavy zoom.
+reduced motion, right-to-left, coarse pointers, heavy zoom, text the reader has enlarged, and the
+spacing overrides a reader may impose on top of what the author wrote.
 
 | Engine | Version | Conditions | Targets | Cells run | Passed | Unexpected failures | Wall clock | Run on |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `chromium` | 149.0.7827.55 (playwright chromium v1228) | 6 | 88 | 1056 | 1056 | 0 | 12.0m | 2026-08-31 |
+| `chromium` (`text-200`, `spacing`) | 149.0.7827.55 (playwright chromium v1228) | 2 | 88 | 352 | 352 | 0 | 18.3m for all six projects in one invocation -- the three engines were not timed separately | 2026-09-18 |
 | `firefox` | 151.0 (playwright firefox v1532) | 6 | 88 | 1056 | 1056 | 0 | 21.2m | 2026-08-31 |
+| `firefox` (`text-200`, `spacing`) | 151.0 (playwright firefox v1532) | 2 | 88 | 352 | 352 | 0 | 18.3m for all six projects in one invocation -- the three engines were not timed separately | 2026-09-18 |
 | `webkit` | 26.5 (playwright webkit v2311) | 6 | 88 | 1056 | 1056 | 0 | 16.0m | 2026-08-31 |
+| `webkit` (`text-200`, `spacing`) | 26.5 (playwright webkit v2311) | 2 | 88 | 352 | 352 | 0 | 18.3m for all six projects in one invocation; matrix-webkit-spacing re-run alone: 2.3m | 2026-09-18 |
 
-Conditions: `default`, `forced-colors`, `reduced-motion`, `rtl`, `touch`, `zoom-400`. Driver: Playwright `1.61.1` on `win32 -- Windows 11 Pro 10.0.26200, node v24.14.1`.
+Conditions: `default`, `forced-colors`, `reduced-motion`, `rtl`, `touch`, `zoom-400`, `text-200`, `spacing`. Driver: Playwright `1.61.1` on `win32 -- Windows 11 Pro 10.0.26200, node v24.14.1`.
 
 **Cross-engine result, measured `2026-08-31`:** 3168 cells across 3 engines x 6 conditions x 88 runnable targets. Zero failures, zero expected failures, zero engine exceptions, zero engine divergences. Worktree-dirty: locally qualified only.
 
@@ -41,6 +46,8 @@ The cross-engine ledger of expected failures holds **0 entries** (`e2e/matrix/kn
 **How far this goes:** locally qualified, worktree-dirty -- NOT admissible as release evidence until an owner commits this tree and re-runs. The exact working-tree contents these numbers were measured against are inventoried by SHA-256 in docs/program-2026-09/reports/N1-O2-firefox-webkit-handoff.md section 2.
 
 **Method:** Every matrix-{engine}-{condition} project was executed against all 88 runnable Tier B-D targets (1 target is `unrun`: DzThemeProvider has no story). Divergences below were then re-measured element-by-element on each engine in isolation; the numbers recorded are those measurements, not the suite's summary.
+
+**Conditions added after that sweep:** `text-200`, `spacing`, measured `2026-09-18` at `2d51eec4` — their own rows above. The earlier rows were not re-run against that tree and each one still describes the commit it names, which is why the two are not added together.
 
 ::: warning 1 target in the lane is declared unrun
 A component with no published story cannot be driven by a story-based lane. It is declared
@@ -80,23 +87,75 @@ was then re-run across every condition. The ledger is now empty. It is a ratchet
 slate: an entry can only be removed with a measured number, and can only be added back with
 another.
 
-## The supported-browser floor is undecided
+## The supported-browser floor
 
-::: warning `[!owner]` — no browser target is declared anywhere in this repository
-There is no `browserslist`, no build `target`, and no declared Baseline tier in any package.
-The build has never been asked to down-level anything for a named browser range, and no
-published document says which browsers are supported.
+The floor below is what this repository declares, read from the files named beside it while
+this page was being generated. It is a commitment the packages carry; it is not a summary of
+the lane above. The lane says which engines were driven under which conditions. The floor says
+which browsers the published build is willing to serve.
 
-Adopting **Baseline Widely Available** — the interoperability tier a feature reaches once it has
-shipped in every major engine and stayed there for the Baseline waiting period — is the natural
-answer, and it is close to what the engine lane already demonstrates in practice. But it is a
-commitment, not a measurement: it would oblige the library to refuse features below the tier and
-to gate that refusal. **This page will not claim a tier the repository does not declare.**
+They answer different questions and neither stands in for the other. Where the declared floor
+admits a browser that no lane drives, that browser is supported **by declaration** and
+unmeasured by this page — which is why it is also named under what is not measured below.
 
-Deciding it, declaring it in the packages, and adding the gate that keeps it true is an owner
-action. Until then, the honest statement of browser support is the measured lane above and
-nothing beyond it.
+The floor is not a preference. It is the lowest range the published CSS can be generated for:
+the styling toolchain this library is built with refuses to emit for anything under it, so a
+declaration below the line would be a promise the build could not keep.
+
+| Kind | Declared in | Value |
+| --- | --- | --- |
+| `browserslist` | `packages/contracts/package.json` | `chrome >= 111, edge >= 111, firefox >= 128, safari >= 16.4, ios_saf >= 16.4` |
+| `browserslist` | `packages/core/package.json` | `chrome >= 111, edge >= 111, firefox >= 128, safari >= 16.4, ios_saf >= 16.4` |
+| `browserslist` | `packages/mcp/package.json` | `chrome >= 111, edge >= 111, firefox >= 128, safari >= 16.4, ios_saf >= 16.4` |
+| `browserslist` | `packages/nuxt/package.json` | `chrome >= 111, edge >= 111, firefox >= 128, safari >= 16.4, ios_saf >= 16.4` |
+| `browserslist` | `packages/testing/package.json` | `chrome >= 111, edge >= 111, firefox >= 128, safari >= 16.4, ios_saf >= 16.4` |
+| `browserslist` | `packages/tokens/package.json` | `chrome >= 111, edge >= 111, firefox >= 128, safari >= 16.4, ios_saf >= 16.4` |
+
+**What is measured against that floor.** The matrix drives 3 engines — chromium `149.0.7827.55 (playwright chromium v1228)`, firefox `151.0 (playwright firefox v1532)`, webkit `26.5 (playwright webkit v2311)` — and no others. Every browser the declarations above admit beyond those engines is supported **by declaration** and is measured nowhere on this page; in particular a declared Safari or iOS floor is not a Safari result, for the reason stated above.
+
+::: details What was searched (34 files, read while this page was generated)
+A declaration is a `browserslist` file, a `browserslist` key in a `package.json`, or a build
+`target` in a Vite config — the channels a build actually reads. The scan is a fixed list of
+names in the repository root and in each workspace package, so an absence here is checkable
+rather than asserted.
+
+- `apps/docs/package.json`
+- `apps/landing/package.json`
+- `apps/landing/tsconfig.json`
+- `apps/landing/vite.config.ts`
+- `apps/sandbox/package.json`
+- `apps/sandbox/tsconfig.json`
+- `apps/sandbox/vite.config.ts`
+- `apps/storybook/package.json`
+- `apps/storybook/tsconfig.json`
+- `apps/storybook/vite.config.ts`
+- `package.json`
+- `packages/codemods/package.json`
+- `packages/codemods/tsconfig.json`
+- `packages/compat/package.json`
+- `packages/compat/tsconfig.json`
+- `packages/compat/vite.config.ts`
+- `packages/contracts/package.json`
+- `packages/contracts/tsconfig.json`
+- `packages/core/package.json`
+- `packages/core/tsconfig.json`
+- `packages/core/vite.config.ts`
+- `packages/mcp/package.json`
+- `packages/mcp/tsconfig.json`
+- `packages/nuxt/package.json`
+- `packages/nuxt/tsconfig.json`
+- `packages/testing/package.json`
+- `packages/testing/tsconfig.json`
+- `packages/tokens/package.json`
+- `packages/tokens/tsconfig.json`
+- `packages/tokens/vite.config.ts`
+- `packages/tooling/package.json`
+- `packages/tooling/tsconfig.json`
+- `tsconfig.base.json`
+- `tsconfig.json`
 :::
+
+**Not a browser declaration:** 3 TypeScript `compilerOptions.target` values (`ESNext`, `ES2022`) set the syntax level `tsc` emits. The published packages are built by Vite, no gate reads these values, and none of them names a browser. They are listed here so that finding one in the tree is not mistaken for the floor above.
 
 ## What is not measured
 
@@ -116,11 +175,11 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `e2e/matrix/engine-ratchets.json` | `cbcb8ba4657f5270…` | yes |
+| `e2e/matrix/engine-ratchets.json` | `43a6f0ee01e1df5e…` | yes |
 | `e2e/matrix/known-failures.json` | `d579c5e0ea41a156…` | yes |
-| `packages/core/docs/capability-matrix.json` | `561b7852a04d4f92…` | yes |
+| `packages/core/docs/capability-matrix.json` | `06470abfebefa2b5…` | yes |
 
-Capability matrix `sourceCommit` `99b963a0` · quality matrix `569d8872`.
+Capability matrix `sourceCommit` `2d51eec4` · quality matrix `2d51eec4`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

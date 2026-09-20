@@ -110,3 +110,79 @@ describe('dzSplitterHandle — Unit Tests', () => {
     expect(handles).toHaveLength(1)
   })
 })
+
+/**
+ * WCAG 2.2 SC 2.5.7 Dragging Movements — the single-pointer, non-drag path.
+ *
+ * Owner decision **D117 option A**, taken 2026-09-19. `DzSplitter` and
+ * `DzResizable` share one Reka handle, so one implementation closed both
+ * surfaces — and these tests exist precisely because "they are the same
+ * component" is an assumption that only stays true while something checks it.
+ * The reasoning behind the capture-phase spy is in `DzResizable.spec.ts`.
+ */
+describe('dzSplitterHandle — SC 2.5.7 single-pointer resize (D117/A)', () => {
+  function spyOnHandleKeys(wrapper: ReturnType<typeof mountSplitter>): KeyboardEvent[] {
+    const seen: KeyboardEvent[] = []
+    wrapper.element.addEventListener('keydown', (event: Event) => {
+      seen.push(event as KeyboardEvent)
+      event.stopPropagation()
+    }, true)
+    return seen
+  }
+
+  it('renders a decrease and an increase control on the gutter', () => {
+    const wrapper = mountSplitter()
+
+    expect(wrapper.find('[data-part="step-decrease"]').exists()).toBe(true)
+    expect(wrapper.find('[data-part="step-increase"]').exists()).toBe(true)
+    expect(wrapper.findAll('[data-dz-resize-step]')).toHaveLength(2)
+  })
+
+  it('keeps the controls OUTSIDE the separator — axe `nested-interactive`', () => {
+    // The alias must not drift structurally from DzResizableHandle: the same
+    // axe rule (WCAG 4.1.2, serious) applies to the same Reka separator.
+    const separator = mountSplitter().find('[data-part="separator"]').element
+
+    expect(separator.querySelector('[data-dz-resize-step]')).toBeNull()
+    expect(separator.nextElementSibling?.querySelectorAll('[data-dz-resize-step]'))
+      .toHaveLength(2)
+  })
+
+  it('a single click, with no pointer movement, drives the resize handler', async () => {
+    const wrapper = mountSplitter()
+    const seen = spyOnHandleKeys(wrapper)
+
+    await wrapper.find('[data-part="step-decrease"]').trigger('click')
+    await wrapper.find('[data-part="step-increase"]').trigger('click')
+
+    expect(seen.map(e => e.key)).toEqual(['ArrowLeft', 'ArrowRight'])
+    for (const event of seen)
+      expect((event.target as HTMLElement).hasAttribute('data-resize-handle')).toBe(true)
+  })
+
+  it('maps to the block axis when the panes stack vertically', async () => {
+    const wrapper = mountSplitter({ direction: 'vertical' })
+    const seen = spyOnHandleKeys(wrapper)
+
+    await wrapper.find('[data-part="step-decrease"]').trigger('click')
+    await wrapper.find('[data-part="step-increase"]').trigger('click')
+
+    expect(seen.map(e => e.key)).toEqual(['ArrowUp', 'ArrowDown'])
+  })
+
+  it('renders no stepper pair when the group is frozen', () => {
+    expect(mountSplitter({ disabled: true }).find('[data-dz-resize-step]').exists()).toBe(false)
+  })
+
+  it('renders the same affordance as DzResizableHandle, attribute for attribute', () => {
+    const splitter = mountSplitter().find('[data-dz-resize-step="decrease"]')
+
+    // The two components are a naming alias, and a conformance claim published
+    // for both must not be able to hold for only one of them.
+    expect(splitter.attributes('tabindex')).toBe('-1')
+    expect(splitter.attributes('type')).toBe('button')
+    expect(splitter.attributes('aria-label')).toBe('Shrink panel')
+    expect(splitter.classes()).toContain('h-6')
+    expect(splitter.classes()).toContain('w-6')
+  })
+})

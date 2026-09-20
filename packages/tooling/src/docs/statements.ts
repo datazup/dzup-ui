@@ -154,9 +154,10 @@ export const BROWSER_SUPPORT: StatementProse = {
       'against every interactive component the lane can drive. Those numbers are below and they are',
       'generated.',
       '',
-      'What follows them matters as much: the measurement is a local run, the engines are Playwright',
-      'builds rather than the browsers you ship to, and the library declares no supported-browser',
-      'floor at all.',
+      'What follows them matters as much: the measurement is a local run, and the engines are',
+      'Playwright builds rather than the browsers you ship to. What the packages themselves declare',
+      'about supported browsers is stated further down, and it is read out of the repository at the',
+      'moment this page is generated rather than asserted here.',
     ],
 
     whatRuns: [
@@ -165,7 +166,8 @@ export const BROWSER_SUPPORT: StatementProse = {
       'Each engine is driven across the same conditions against the same targets, so a cell is a real',
       'component rendered in a real engine under a real condition — not a feature-detection table.',
       'The conditions exist because they are where component libraries actually break: forced colours,',
-      'reduced motion, right-to-left, coarse pointers and heavy zoom.',
+      'reduced motion, right-to-left, coarse pointers, heavy zoom, text the reader has enlarged, and the',
+      'spacing overrides a reader may impose on top of what the author wrote.',
     ],
 
     webkit: [
@@ -224,6 +226,32 @@ export const BROWSER_SUPPORT: StatementProse = {
       ':::',
     ],
 
+    /**
+     * The other half of the same statement, rendered instead of `baseline` the
+     * moment the probe finds a declaration in the tree (TASK-R2-O5).
+     *
+     * It exists so the owner decision is an edit to a `package.json`, not an
+     * edit to this file followed by an edit to a generated page: declare the
+     * floor and the published statement changes with it, and the paragraph can
+     * never claim a tier the repository has stopped declaring.
+     */
+    baselineDeclared: [
+      '## The supported-browser floor',
+      '',
+      'The floor below is what this repository declares, read from the files named beside it while',
+      'this page was being generated. It is a commitment the packages carry; it is not a summary of',
+      'the lane above. The lane says which engines were driven under which conditions. The floor says',
+      'which browsers the published build is willing to serve.',
+      '',
+      'They answer different questions and neither stands in for the other. Where the declared floor',
+      'admits a browser that no lane drives, that browser is supported **by declaration** and',
+      'unmeasured by this page — which is why it is also named under what is not measured below.',
+      '',
+      'The floor is not a preference. It is the lowest range the published CSS can be generated for:',
+      'the styling toolchain this library is built with refuses to emit for anything under it, so a',
+      'declaration below the line would be a promise the build could not keep.',
+    ],
+
     notMeasured: [
       '## What is not measured',
       '',
@@ -253,7 +281,7 @@ export const BROWSER_SUPPORT: StatementProse = {
 export const ACCESSIBILITY_STATEMENT: StatementProse = {
   title: 'Accessibility conformance',
   description:
-    'What dzup-ui has measured against WCAG 2.2, the gap that is still open, and the screen-reader matrix that has not been run.',
+    'What dzup-ui has measured against WCAG 2.2, the state of every criterion it can fail, and the screen-reader matrix that has not been run.',
   blocks: {
     position: [
       'dzup-ui does not claim WCAG 2.2 AA conformance, and this page exists so that you can see exactly',
@@ -270,6 +298,24 @@ export const ACCESSIBILITY_STATEMENT: StatementProse = {
       '',
       'A success criterion is measured as **not met**. It is stated before any total, because a summary',
       'that leads with what passed is how an open defect becomes invisible.',
+    ],
+
+    /**
+     * Rendered instead of `open` when the deviation record has no gap left
+     * (TASK-R2-O5). It is not a badge and must never become one: the page's
+     * position paragraph still refuses a conformance claim, and the
+     * assistive-technology matrix below it is still entirely unrun.
+     */
+    closed: [
+      '## The gap that was open here',
+      '',
+      'This section held an open, measured level-AA failure. It is closed, and the record of what it',
+      'was, when it closed and on whose decision is kept below rather than deleted — a defect page',
+      'that erases its own history is worth as little as a page that never had any.',
+      '',
+      'Closing it changes nothing about the rest of this page. It is a single criterion, on a named set',
+      'of components, re-measured by a local browser lane; the library still makes no WCAG 2.2 AA',
+      'conformance claim, and the screen-reader matrix below is still unrun.',
     ],
 
     at: [

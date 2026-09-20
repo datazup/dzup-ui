@@ -45,7 +45,7 @@ never as asserted.
 :::
 
 
-## Props (12)
+## Props (13)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -61,6 +61,7 @@ never as asserted.
 | `testIdPrefix` | `string \| undefined` | no | — | Shorthand that both **enables** test ids and namespaces them. Enabling is implied because a host that names a prefix has said what it wants; requiring `:test-ids="{ enabled: true, prefix: 'e2e' }"` alongside would make the common case the verbose one. An explicit `testIds.enabled` still wins, so the shorthand can be overruled without being removed. |
 | `testIds` | `Partial<DzTestIds> \| undefined` | no | — | Test-id policy: whether they render at all, and under which attribute. |
 | `theme` | `DzProviderThemeOptions \| undefined` | no | — | Theme options, or omitted to leave an ancestor's theme in charge. |
+| `urlPolicy` | `DzUrlPolicyOptions \| undefined` | no | — | The organisation-wide URL policy for navigation sinks (TASK-R2-O4, ADR-20 amendment A7). Set once at the root: which schemes may become a live `<a href>`, and an explicit `allow` function for the cases a list cannot express. Partial — a nested provider narrowing `allowedSchemes` keeps the ancestor's `allow`. Omitted, the six navigation components enforce Core's default allowlist (`http`, `https`, `mailto`, `tel`, `sms`, plus relative and fragment URLs). A refused URL is **omitted**, never rewritten: the element renders as a non-link carrying `data-state="url-rejected"`, and development builds warn once per component, prop and scheme. There is deliberately **no `null` arm** and no per-component opt-out. A policy whose absent value is the safe value cannot be switched off by forgetting something, and a `:unsafe-href` prop would re-open the hole one call site at a time for exactly the consumers most likely to reach for it. |
 
 ## Slots (1)
 
@@ -169,7 +170,7 @@ component that renders the same way every time is the normal case for this.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `4c9fb7a`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -178,7 +179,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 12 | 12 | 0 declare a default |
+| Props | 13 | 13 | 0 declare a default |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -187,8 +188,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `2d51eec4` for the capability matrix,
+`2d51eec4` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -198,7 +199,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `4c9fb7a1`
+- **Component last changed at:** `a01965fa`
 
 ::: warning Recorded exceptions
 A requirement this component provably cannot meet. The row stays in the matrix and the reason
@@ -284,10 +285,10 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `excepted` | Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence. |
 | `rtl-contract` | tier B | `present` | `packages/core/src/providers/DzProvider.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzProvider.md` — 6 AT/browser pairs, none executed. |
 
-**4 unrun:** `axe`, `controlled-uncontrolled`, `browser-matrix`, `at-manual` · **4 excepted:** `token-contrast`, `keyboard-spec`, `state-stories`, `browser-play`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `axe`, `controlled-uncontrolled`, `at-manual` · **4 excepted:** `token-contrast`, `keyboard-spec`, `state-stories`, `browser-play`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

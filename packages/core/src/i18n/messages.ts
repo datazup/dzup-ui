@@ -145,15 +145,24 @@ declare module '@dzup-ui/contracts' {
       nextPage: string
       lastPage: string
     }
-    DzPasswordInput: { loading: string }
+    DzPasswordInput: { loading: string, showPassword: string, hidePassword: string }
     DzPopconfirm: { confirm: string, cancel: string }
     DzRating: { starTitle: DzMessage<{ count: number }> }
+    /**
+     * The SC 2.5.7 stepper pair on a splitter gutter (TASK-R2-O5, D117/A).
+     * `DzSplitterHandle` reads the same two keys: it renders the same control.
+     */
+    DzResizableHandle: { shrinkPane: string, growPane: string }
     DzScrollProgress: { ariaLabel: string }
     DzSearchInput: { clear: string, loading: string }
     DzSelect: { filterOptions: string, searchPlaceholder: string, noResults: string }
     DzSidebar: { ariaLabel: string }
     DzTabTrigger: { closeTab: string }
-    DzTableCell: { resizeColumn: string }
+    /**
+     * `narrowColumn` / `widenColumn` are the SC 2.5.7 stepper pair on a
+     * resizable header cell (TASK-R2-O5, D117/A).
+     */
+    DzTableCell: { resizeColumn: string, narrowColumn: string, widenColumn: string }
     DzTagsInput: {
       count: DzMessage<{ count: number }>
       countOfMax: DzMessage<{ count: number, max: number }>
@@ -296,9 +305,10 @@ export const enMessages = {
     nextPage: 'Go to next page',
     lastPage: 'Go to last page',
   },
-  DzPasswordInput: { loading: 'Loading' },
+  DzPasswordInput: { loading: 'Loading', showPassword: 'Show password', hidePassword: 'Hide password' },
   DzPopconfirm: { confirm: 'Confirm', cancel: 'Cancel' },
   DzRating: { starTitle: '{count, plural, one {# star} other {# stars}}' },
+  DzResizableHandle: { shrinkPane: 'Shrink panel', growPane: 'Grow panel' },
   DzScrollProgress: { ariaLabel: 'Page scroll progress' },
   DzSearchInput: { clear: 'Clear search', loading: 'Loading' },
   DzSelect: {
@@ -308,7 +318,11 @@ export const enMessages = {
   },
   DzSidebar: { ariaLabel: 'Sidebar navigation' },
   DzTabTrigger: { closeTab: 'Close tab' },
-  DzTableCell: { resizeColumn: 'Resize column' },
+  DzTableCell: {
+    resizeColumn: 'Resize column',
+    narrowColumn: 'Narrow column',
+    widenColumn: 'Widen column',
+  },
   DzTagsInput: {
     count: '{count, plural, one {# tag} other {# tags}}',
     countOfMax: '{count, plural, one {# tag of {max}} other {# tags of {max}}}',

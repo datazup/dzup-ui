@@ -31,14 +31,40 @@ export interface UseFocusTrapReturn {
   isActive: Ref<boolean>
 }
 
+/** Options for {@link useFocusTrap}. */
+export interface UseFocusTrapOptions {
+  /**
+   * Return focus to whatever held it when the trap was activated, on release
+   * (defect D7, WCAG 2.4.3 Focus Order).
+   *
+   * Defaults to `true`: a trap that takes focus and drops it on `<body>` leaves
+   * a keyboard user at the top of the document with no way back to what they
+   * were doing, and that was the shipped behaviour for every consumer that did
+   * not restore focus itself.
+   *
+   * Pass `false` when the caller owns the restore — it knows a better target
+   * than "whatever was focused when `activate()` ran", or it captured the
+   * element earlier, before it moved focus into the trap itself.
+   */
+  restoreFocus?: boolean
+}
+
 /**
  * Returns focus-trap controls for the given container element.
  *
  * @param containerRef - Ref to the container element that will trap focus
+ * @param options - see {@link UseFocusTrapOptions}
  * @returns Controls to activate, deactivate, and check trap state
  */
-export function useFocusTrap(containerRef: Ref<HTMLElement | null>): UseFocusTrapReturn {
+export function useFocusTrap(
+  containerRef: Ref<HTMLElement | null>,
+  options: UseFocusTrapOptions = {},
+): UseFocusTrapReturn {
+  const { restoreFocus = true } = options
   const isActive = ref(false)
+
+  /** What held focus when the trap was activated; restored on release. */
+  let previouslyFocused: HTMLElement | null = null
 
   /** Returns all focusable elements within the container, in document order */
   function getFocusableElements(): HTMLElement[] {
@@ -97,6 +123,9 @@ export function useFocusTrap(containerRef: Ref<HTMLElement | null>): UseFocusTra
       return
 
     isActive.value = true
+    // Remembered before anything is focused, so the restore target is the
+    // element the user left, not the one the trap is about to take.
+    previouslyFocused = (document.activeElement as HTMLElement | null) ?? null
     document.addEventListener('keydown', handleKeyDown)
 
     // Focus the first focusable element in the container
@@ -113,6 +142,28 @@ export function useFocusTrap(containerRef: Ref<HTMLElement | null>): UseFocusTra
 
     isActive.value = false
     document.removeEventListener('keydown', handleKeyDown)
+
+    const target = previouslyFocused
+    previouslyFocused = null
+
+    if (!restoreFocus || !target || typeof target.focus !== 'function')
+      return
+    // A trigger inside a v-if'd panel can be gone by the time the trap closes.
+    if (!target.isConnected)
+      return
+
+    // Restore only while focus is still inside the trap or nowhere. If
+    // something outside deliberately took focus as the trap closed — a toast
+    // action, a router-driven page — pulling it back is worse than not
+    // restoring at all.
+    const active = document.activeElement as HTMLElement | null
+    const stranded = !active
+      || active === document.body
+      || containerRef.value?.contains(active) === true
+    if (!stranded)
+      return
+
+    target.focus()
   }
 
   onBeforeUnmount(() => {

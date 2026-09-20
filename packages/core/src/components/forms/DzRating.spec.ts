@@ -191,3 +191,26 @@ describe('dzRating — Unit Tests', () => {
     expect(() => (wrapper.vm as unknown as { focus: () => void }).focus()).not.toThrow()
   })
 })
+
+// -- D8: controlled/uncontrolled -------------------------------------------
+
+describe('dzRating — D8: an external write after a user edit is honoured', () => {
+  it('defect D8 -- a parent that resets `v-model:value` after the user rated is obeyed', async () => {
+    // The consumer binds ONLY the legacy named model, which is what every
+    // template written before the dual model does. `useDualModel` used to latch
+    // the user's edit into the unbound default model and prefer it forever, so
+    // the reset below silently did nothing (N1-O1 defect D8).
+    const wrapper = mount(DzRating, { props: { value: 1 } })
+
+    await stars(wrapper)[2]!.trigger('click')
+    expect(wrapper.emitted('update:value')?.at(-1)).toEqual([3])
+
+    // The parent echoes the edit, as a real `v-model:value` binding does.
+    await wrapper.setProps({ value: 3 })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('3')
+
+    // The parent now resets the form.
+    await wrapper.setProps({ value: 0 })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('0')
+  })
+})

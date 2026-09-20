@@ -30,7 +30,10 @@ describe('coverage', () => {
   it('binds a content sink for every declarer, including the payload one', async () => {
     const matrix = (await import('../docs/quality-matrix.json', { with: { type: 'json' } })).default
     const declared = matrix.components
-      .filter(c => c.securityBoundary !== 'none' && c.component !== 'DzFileUpload')
+      // `securityBoundary` is a SET since TASK-R2-O4. `!== 'none'` was true for
+      // every row the moment it became an array, which made this gate pass by
+      // matching all 144 — the exact shape of a check that stops checking.
+      .filter(c => c.securityBoundary.some(b => b !== 'none') && c.component !== 'DzFileUpload')
       .map(c => c.component)
       .sort()
     // DzFileUpload has its own corpus beside this one — it is the Tier D

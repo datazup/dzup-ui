@@ -351,3 +351,26 @@ describe('dzCascader — clear', () => {
     expect(onChange).not.toHaveBeenCalled()
   })
 })
+
+// -- D8: controlled/uncontrolled -------------------------------------------
+
+describe('dzCascader — D8: an external write after a user edit is honoured', () => {
+  it('defect D8 -- a parent that clears `v-model:value` after a path was chosen is obeyed', async () => {
+    const wrapper = mountCascader({ value: [] })
+
+    await openPanel(wrapper)
+    await optionByLabel(wrapper, 'China')!.trigger('click')
+    await optionByLabel(wrapper, 'Zhejiang')!.trigger('click')
+    await optionByLabel(wrapper, 'Hangzhou')!.trigger('click')
+    expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toEqual(['cn', 'zj', 'hz'])
+
+    await wrapper.setProps({ value: ['cn', 'zj', 'hz'] })
+    expect(wrapper.text()).toContain('Hangzhou')
+
+    // A form reset. Before the fix the trigger kept showing the chosen path
+    // (N1-O1 defect D8).
+    await wrapper.setProps({ value: [] })
+    expect(wrapper.text()).not.toContain('Hangzhou')
+    expect(wrapper.text()).toContain('Select')
+  })
+})

@@ -27,7 +27,7 @@ export const anatomy = {
    * `active` as the presence-only marker the current section's link already
    * carried before this declaration (`data-active`, ADR-19 §4 boolean form).
    */
-  states: ['ready', 'active'],
+  states: ['ready', 'active', 'url-rejected'],
 
   /** Measured from `DzAnchor.tokens.ts` — the seven properties it reads. */
   componentTokens: [

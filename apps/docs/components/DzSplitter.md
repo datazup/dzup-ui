@@ -19,7 +19,7 @@ Naming alias for DzResizable.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** B · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
-- **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`
+- **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`, `step-decrease`, `step-increase`
 
 ## Intent and selection guidance
 
@@ -191,9 +191,11 @@ takes effect. That is what lets you restyle a wrapper someone else built without
 | `panel` | `[data-part="panel"]` | no — renders zero or more than once |
 | `root` | `[data-part="root"]` | yes |
 | `separator` | `[data-part="separator"]` | no — renders zero or more than once |
+| `step-decrease` | `[data-part="step-decrease"]` | no — renders zero or more than once |
+| `step-increase` | `[data-part="step-increase"]` | no — renders zero or more than once |
 
 ```vue
-<DzSplitter :ui="{ 'indicator': 'ring-2', 'panel': 'ring-2', 'root': 'ring-2', 'separator': 'ring-2' }" />
+<DzSplitter :ui="{ 'indicator': 'ring-2', 'panel': 'ring-2', 'root': 'ring-2', 'separator': 'ring-2', 'step-decrease': 'ring-2', 'step-increase': 'ring-2' }" />
 ```
 
 **States** — the values `data-state` may take, plus the presence-only boolean attributes.
@@ -262,7 +264,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `80ce301`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -280,8 +282,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `2d51eec4` for the capability matrix,
+`2d51eec4` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -291,7 +293,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `drags`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `a01965fa`
 
 **Compound sub-parts are not matrix rows.** `DzSplitterHandle`, `DzSplitterPanel` are documented on this page and carry no evidence row of its own. Everything below describes `DzSplitter`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
 
@@ -324,18 +326,13 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 | [3.2.2](https://www.w3.org/WAI/WCAG22/Understanding/on-input.html) | On Input | A | WCAG 2.0 |
 | [4.1.2](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html) | Name, Role, Value | A | WCAG 2.0 |
 
-::: danger Open WCAG 2.5.7 Dragging Movements (level AA) gap
-**DzSplitter does not meet SC 2.5.7.** The operation — *drag the separator to resize panes (DzSplitterHandle renders the same Reka SplitterResizeHandle)* —
-is keyboard-operable, but the criterion requires a **single pointer without dragging**, and this
-component has no such path.
+::: tip WCAG 2.5.7 Dragging Movements — met
+DzSplitter drags (drag the separator to resize panes (DzSplitterHandle renders the same Reka SplitterResizeHandle)), so SC 2.5.7 applies and was audited.
 
 - **Keyboard (SC 2.1.1):** Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6.
-- **Single pointer, no dragging (SC 2.5.7):** none — The same shared Reka handle, so the same absence: focus and blur plus the pointer drag, and nothing else.
-- **Why it is not excepted:** Dragging is not essential to resizing a pane: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies.
-- **Why it is not fixed:** One implementation closes both DzResizable and DzSplitter.
+- **Single pointer, no dragging (SC 2.5.7):** The same stepper pair as DzResizable: one shared Reka handle, one implementation, and DzSplitter.spec.ts asserts the two render the same control attribute for attribute so the claim cannot hold for only one of them.
 
-[Understanding SC 2.5.7](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html) · measured by `TASK-N1-O3`
-at `51dec93c`.
+**This was an open gap.** Owner decision D117 option A, taken 2026-09-19 and implemented by TASK-R2-O5. The same shared Reka handle carried the same absence: focus and blur plus the pointer drag, and nothing else.
 :::
 
 ### Keyboard interaction
@@ -346,10 +343,10 @@ differ, the difference is the point.
 
 | Key | Action | WCAG | Pattern | RTL |
 | --- | --- | --- | --- | --- |
-| `ArrowRight` | Move the separator towards the inline end. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | swaps with the writing direction |
-| `ArrowLeft` | Move the separator towards the inline start. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | swaps with the writing direction |
-| `ArrowDown` | Move the separator down when the panes stack vertically. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
-| `ArrowUp` | Move the separator up when the panes stack vertically. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
+| `ArrowRight` | Move the separator towards the inline end. | `2.1.1`, `2.5.7` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | swaps with the writing direction |
+| `ArrowLeft` | Move the separator towards the inline start. | `2.1.1`, `2.5.7` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | swaps with the writing direction |
+| `ArrowDown` | Move the separator down when the panes stack vertically. | `2.1.1`, `2.5.7` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
+| `ArrowUp` | Move the separator up when the panes stack vertically. | `2.1.1`, `2.5.7` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
 | `Home` | Move the separator to its minimum position. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
 | `End` | Move the separator to its maximum position. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
 | `Enter` | Collapse the pane, or restore it when already collapsed. | `2.1.1` | [`window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) | — |
@@ -358,7 +355,7 @@ Declared in `packages/core/src/components/layout/DzSplitter.anatomy.ts`.
 
 - **Pattern:** [APG — `window-splitter`](https://www.w3.org/WAI/ARIA/apg/patterns/window-splitter/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 7 binding(s); the unit spec asserts no key event for `Home`, `End`, `Enter`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -392,16 +389,16 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/layout/DzSplitter.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | — |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/layout/DzSplitter.spec.ts` — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/layout/DzSplitter.spec.ts` — The component declares 7 binding(s); the unit spec asserts no key event for `Home`, `End`, `Enter`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/layout/DzSplitter.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/layout/DzSplitter.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/layout/DzSplitter.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSplitter.md` — 6 AT/browser pairs, none executed. |
-| `non-drag-alternative` | trait drags | **`unrun`** | The component drags and its spec asserts no keyboard equivalent (WCAG 2.5.7). |
+| `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/layout/DzSplitter.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 
-**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`, `non-drag-alternative`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

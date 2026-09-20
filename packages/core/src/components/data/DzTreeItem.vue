@@ -45,11 +45,20 @@ const itemId = computed(() => treeContext?.itemId(props.node.key))
 const ariaLevel = computed(() => props.level + 1)
 
 /**
+ * Whether this row is inert — its own `node.disabled`, or the whole tree's
+ * (N1-O1 defect D1: `<DzTree disabled>` was presentational only, because the
+ * prop never reached the injected context).
+ */
+const isDisabled = computed(() =>
+  props.node.disabled === true || treeContext?.disabled.value === true,
+)
+
+/**
  * Roving tabindex (APG): exactly one treeitem in the tree is `0`, the rest are
  * `-1`. Disabled nodes are never the tab stop.
  */
 const rowTabindex = computed(() => {
-  if (props.node.disabled)
+  if (isDisabled.value)
     return -1
   if (!treeContext)
     return 0
@@ -78,7 +87,7 @@ const itemClasses = computed(() =>
 )
 
 function handleClick(node: TreeNode): void {
-  if (node.disabled)
+  if (isDisabled.value)
     return
 
   // Row-click semantics: in a selectable tree the row selects the node (the
@@ -100,14 +109,14 @@ function handleClick(node: TreeNode): void {
  * ArrowRight/ArrowLeft branches of handleKeydown, reaching the same end state.
  */
 function handleToggleExpand(node: TreeNode): void {
-  if (node.disabled)
+  if (isDisabled.value)
     return
 
   treeContext?.toggleExpand(node.key)
 }
 
 function handleKeydown(event: KeyboardEvent, node: TreeNode): void {
-  if (node.disabled)
+  if (isDisabled.value)
     return
 
   // APG's tree pattern is stated on the inline axis, not on physical keys: in
@@ -162,7 +171,7 @@ function handleKeydown(event: KeyboardEvent, node: TreeNode): void {
 
 /** Sync the roving tabindex to whichever node the user focuses. */
 function handleRowFocus(node: TreeNode): void {
-  if (node.disabled)
+  if (isDisabled.value)
     return
   treeContext?.setActiveKey(node.key)
 }
@@ -183,9 +192,9 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-setsize="setSize"
     :aria-expanded="hasChildren ? isExpanded : undefined"
     :aria-selected="treeContext?.selectable.value ? isSelected : undefined"
-    :aria-disabled="node.disabled || undefined"
+    :aria-disabled="isDisabled || undefined"
     :data-state="isExpanded ? 'open' : 'closed'"
-    :data-disabled="node.disabled ? '' : undefined"
+    :data-disabled="isDisabled ? '' : undefined"
   >
     <div
       data-part="item"

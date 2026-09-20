@@ -179,3 +179,61 @@ describe('dzTour -- behavior', () => {
     expect(live?.textContent).toContain('Step 1 of 2')
   })
 })
+
+describe('dzTour -- D7: focus is restored when the tour is dismissed', () => {
+  /** Mount the host CLOSED, with a real opener focused outside the tour. */
+  function mountClosedHost(steps: DzTourStep[]) {
+    const opener = document.createElement('button')
+    opener.id = 'tour-opener'
+    opener.textContent = 'Start tour'
+    document.body.append(opener)
+    opener.focus()
+
+    const wrapper = mount(
+      defineComponent({
+        components: { DzTour },
+        setup() {
+          const open = ref(false)
+          const current = ref(0)
+          return { open, current, steps }
+        },
+        template: `
+          <DzTour v-model:open="open" v-model:current="current" :steps="steps" />
+        `,
+      }),
+      { attachTo: document.body },
+    )
+    return { wrapper, opener }
+  }
+
+  it('defect D7 -- Skip returns focus to the control that opened the tour', async () => {
+    const { wrapper, opener } = mountClosedHost(setupTargets())
+    const vm = wrapper.vm as unknown as { open: boolean }
+
+    vm.open = true
+    await flushPromises()
+    expect(document.body.querySelector('[data-testid="dz-tour-panel"]')?.contains(document.activeElement)).toBe(true)
+
+    clickTestId('dz-tour-skip')
+    await flushPromises()
+
+    // `deactivate()` used to remove the keydown listener and nothing else, so
+    // focus was left on <body> (N1-O1 defect D7, WCAG 2.4.3 Focus Order).
+    expect(vm.open).toBe(false)
+    expect(document.activeElement).toBe(opener)
+  })
+
+  it('defect D7 -- Escape returns focus to the control that opened the tour', async () => {
+    const { wrapper, opener } = mountClosedHost(setupTargets())
+    const vm = wrapper.vm as unknown as { open: boolean }
+
+    vm.open = true
+    await flushPromises()
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await flushPromises()
+
+    expect(vm.open).toBe(false)
+    expect(document.activeElement).toBe(opener)
+  })
+})

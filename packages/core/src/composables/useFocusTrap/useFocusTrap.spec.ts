@@ -199,3 +199,100 @@ describe('useFocusTrap', () => {
     wrapper.unmount()
   })
 })
+
+describe('d7 — focus is restored when the trap is released', () => {
+  /** A trap whose container is mounted, plus an opener outside it. */
+  function createRestoreWrapper(options?: { restoreFocus?: boolean }) {
+    const opener = document.createElement('button')
+    opener.id = 'opener'
+    opener.textContent = 'Open'
+    document.body.append(opener)
+    opener.focus()
+
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const containerRef = ref<HTMLElement | null>(null)
+          const trap = useFocusTrap(containerRef, options)
+          return { containerRef, ...trap }
+        },
+        template: `
+          <div ref="containerRef">
+            <button class="first">First</button>
+            <button class="second">Second</button>
+          </div>
+        `,
+      }),
+      { attachTo: document.body },
+    )
+
+    return { wrapper, opener }
+  }
+
+  it('defect D7 -- deactivate() returns focus to the element that held it before activate()', () => {
+    const { wrapper, opener } = createRestoreWrapper()
+    expect(document.activeElement).toBe(opener)
+
+    wrapper.vm.activate()
+    expect(document.activeElement).not.toBe(opener)
+    expect(wrapper.element.contains(document.activeElement)).toBe(true)
+
+    // Before the fix `deactivate()` only removed the keydown listener, so focus
+    // was left on whatever the trap had taken — or on <body> once the panel
+    // unmounted. Dismissing a DzTour stranded the keyboard user at the top of
+    // the document (N1-O1 defect D7, WCAG 2.4.3).
+    wrapper.vm.deactivate()
+    expect(document.activeElement).toBe(opener)
+
+    wrapper.unmount()
+    opener.remove()
+  })
+
+  it('defect D7 -- unmounting an active trap restores focus too', () => {
+    const { wrapper, opener } = createRestoreWrapper()
+    wrapper.vm.activate()
+    expect(document.activeElement).not.toBe(opener)
+
+    wrapper.unmount()
+    expect(document.activeElement).toBe(opener)
+
+    opener.remove()
+  })
+
+  it('defect D7 -- `restoreFocus: false` leaves the restore to the caller', () => {
+    const { wrapper, opener } = createRestoreWrapper({ restoreFocus: false })
+    wrapper.vm.activate()
+    wrapper.vm.deactivate()
+
+    expect(document.activeElement).not.toBe(opener)
+
+    wrapper.unmount()
+    opener.remove()
+  })
+
+  it('defect D7 -- focus taken deliberately from outside the trap is not stolen back', () => {
+    const { wrapper, opener } = createRestoreWrapper()
+    const elsewhere = document.createElement('button')
+    document.body.append(elsewhere)
+
+    wrapper.vm.activate()
+    elsewhere.focus()
+    wrapper.vm.deactivate()
+
+    expect(document.activeElement).toBe(elsewhere)
+
+    wrapper.unmount()
+    opener.remove()
+    elsewhere.remove()
+  })
+
+  it('defect D7 -- a restore target that has left the document is skipped, not thrown on', () => {
+    const { wrapper, opener } = createRestoreWrapper()
+    wrapper.vm.activate()
+    opener.remove()
+
+    expect(() => wrapper.vm.deactivate()).not.toThrow()
+
+    wrapper.unmount()
+  })
+})

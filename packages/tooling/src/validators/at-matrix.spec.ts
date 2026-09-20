@@ -1,6 +1,7 @@
 import type { AtMatrixIndex } from '../quality/at-matrix.ts'
 import { describe, expect, it } from 'vitest'
-import { AT_PAIRS, tasksFor } from '../quality/at-matrix.ts'
+import { requiredAtPairs } from '../../../contracts/src/quality-tiers.ts'
+import { ALL_TASKS, AT_PAIRS, tasksFor } from '../quality/at-matrix.ts'
 import { parseResults, renderHeader, RESULTS_MARKER } from '../quality/generate-at-matrix.ts'
 import { checkAtMatrix } from './at-matrix.ts'
 
@@ -18,9 +19,11 @@ function index(rows: Partial<AtMatrixIndex['entries'][number]['rows'][number]>[]
         pattern: 'button',
         file: 'e2e/at-matrix/DzThing.md',
         tasks: ['reach'],
+        requiredPairs: requiredAtPairs('B'),
         componentCommit: 'unknown',
         rows: rows.map(r => ({
           pair: PAIR,
+          task: ALL_TASKS,
           result: 'unrun',
           versions: '-',
           tester: '-',
@@ -134,7 +137,7 @@ describe('the generated file, round-tripped', () => {
     family: 'forms',
     tier: 'C' as const,
     pattern: 'combobox' as const,
-    securityBoundary: 'none' as const,
+    securityBoundary: ['none'] as const,
     traits: ['dataset' as const],
     wcag: ['3.3.1'],
     evidence: [],

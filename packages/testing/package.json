@@ -4,6 +4,13 @@
   "version": "0.1.0",
   "description": "DOM test-environment support and anatomy conformance for dzup-ui consumers",
   "license": "MIT",
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 128",
+    "safari >= 16.4",
+    "ios_saf >= 16.4"
+  ],
   "sideEffects": [
     "./dist/vitest.js"
   ],

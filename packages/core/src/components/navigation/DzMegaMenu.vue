@@ -34,6 +34,7 @@ import { ChevronDown } from 'lucide-vue-next'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
+import { useDzUrlGuard } from '../../composables/provider/useDzUrlPolicy.ts'
 import { useClickOutside } from '../../composables/useClickOutside/index.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -95,6 +96,32 @@ function linkKey(link: DzMegaMenuLink, index: number): string {
 /** Whether an item has a panel (column groups) to open. */
 function hasPanel(item: DzMegaMenuItem): boolean {
   return Array.isArray(item.items) && item.items.length > 0
+}
+
+// ---------------------------------------------------------------------------
+// URL policy (ADR-20 §12, TASK-R2-O4)
+// ---------------------------------------------------------------------------
+
+/**
+ * `items[].href` and `groups[].items[].href` are host-supplied URLs bound at
+ * **four** sites in this template — the collapsed stack and the menubar, each
+ * with a top-level trigger and a panel link. TASK-N1-O5 bound only the
+ * top-level site and asserted the other three by inspection (`S11`/`S12`); all
+ * four go through these two helpers now, so there is one policy and not four
+ * chances to forget it.
+ *
+ * Both return the value to bind, or `undefined` for "render the non-link
+ * branch" — which this component already has at every one of the four sites.
+ */
+const guardUrl = useDzUrlGuard('DzMegaMenu')
+
+function safeHref(raw: string | undefined): string | undefined {
+  return guardUrl(raw, 'items[].href').href
+}
+
+/** True only when a value was supplied and refused — never for an unset prop. */
+function urlRejected(raw: string | undefined): boolean {
+  return guardUrl(raw, 'items[].href').rejected
 }
 
 // ---------------------------------------------------------------------------
@@ -214,8 +241,10 @@ function onTriggerClick(index: number, item: DzMegaMenuItem, event: MouseEvent):
   if (props.disabled || item.disabled)
     return
   if (!hasPanel(item)) {
-    // Direct link / leaf — anchors navigate natively; emit for buttons.
-    if (!item.href)
+    // Direct link / leaf — anchors navigate natively; emit for buttons. A
+    // refused URL took the button branch and must not be treated as a link
+    // that will navigate by itself (TASK-R2-O4).
+    if (safeHref(item.href) === undefined)
       event.preventDefault()
     return
   }
@@ -381,8 +410,8 @@ const { testId: dzTestId } = useDzTestIds()
         :key="itemKey(item, index)"
       >
         <a
-          v-if="item.href && !hasPanel(item)"
-          :href="item.href"
+          v-if="safeHref(item.href) && !hasPanel(item)"
+          :href="safeHref(item.href)"
           data-part="trigger"
           :class="cn(styles.trigger(), ui?.trigger)"
           :aria-disabled="item.disabled || undefined"
@@ -397,6 +426,7 @@ const { testId: dzTestId } = useDzTestIds()
           :class="cn(styles.trigger(), ui?.trigger)"
           :disabled="disabled || item.disabled || undefined"
           :aria-expanded="hasPanel(item) ? openIndex === index : undefined"
+          :data-state="urlRejected(item.href) ? 'url-rejected' : undefined"
           :data-open="openIndex === index ? '' : undefined"
           @click="toggleStack(index, item)"
         >
@@ -428,12 +458,13 @@ const { testId: dzTestId } = useDzTestIds()
             <slot name="group" :group="group" :item="item" :index="gIndex">
               <span v-if="group.label" data-part="group-label" :class="cn(styles.columnHeading(), ui?.['group-label'])">{{ group.label }}</span>
               <component
-                :is="link.href ? 'a' : 'button'"
+                :is="safeHref(link.href) ? 'a' : 'button'"
                 v-for="(link, lIndex) in group.items"
                 :key="linkKey(link, lIndex)"
                 data-mega-link
-                :type="link.href ? undefined : 'button'"
-                :href="link.href"
+                :type="safeHref(link.href) ? undefined : 'button'"
+                :href="safeHref(link.href)"
+                :data-state="urlRejected(link.href) ? 'url-rejected' : undefined"
                 data-part="item"
                 :class="cn(styles.link(), ui?.item)"
                 :aria-disabled="link.disabled || undefined"
@@ -468,8 +499,8 @@ const { testId: dzTestId } = useDzTestIds()
         @mouseleave="onWrapperLeave"
       >
         <a
-          v-if="item.href && !hasPanel(item)"
-          :href="item.href"
+          v-if="safeHref(item.href) && !hasPanel(item)"
+          :href="safeHref(item.href)"
           role="menuitem"
           :data-mega-trigger="index"
           data-part="trigger"
@@ -494,6 +525,7 @@ const { testId: dzTestId } = useDzTestIds()
           :disabled="disabled || item.disabled || undefined"
           :aria-haspopup="hasPanel(item) ? 'true' : undefined"
           :aria-expanded="hasPanel(item) ? openIndex === index : undefined"
+          :data-state="urlRejected(item.href) ? 'url-rejected' : undefined"
           :data-open="openIndex === index ? '' : undefined"
           @focus="focusedIndex = index"
           @keydown="onTriggerKeydown($event, index, item)"
@@ -536,14 +568,15 @@ const { testId: dzTestId } = useDzTestIds()
               <slot name="group" :group="group" :item="item" :index="gIndex">
                 <span v-if="group.label" data-part="group-label" :class="cn(styles.columnHeading(), ui?.['group-label'])">{{ group.label }}</span>
                 <component
-                  :is="link.href ? 'a' : 'button'"
+                  :is="safeHref(link.href) ? 'a' : 'button'"
                   v-for="(link, lIndex) in group.items"
                   :key="linkKey(link, lIndex)"
                   data-mega-link
                   role="menuitem"
                   tabindex="-1"
-                  :type="link.href ? undefined : 'button'"
-                  :href="link.href"
+                  :type="safeHref(link.href) ? undefined : 'button'"
+                  :href="safeHref(link.href)"
+                  :data-state="urlRejected(link.href) ? 'url-rejected' : undefined"
                   data-part="item"
                   :class="cn(styles.link(), ui?.item)"
                   :aria-disabled="link.disabled || undefined"

@@ -158,6 +158,7 @@ takes effect. That is what lets you restyle a wrapper someone else built without
 | `disabled` | `[data-state="disabled"]` |
 | `idle` | `[data-state="idle"]` |
 | `loading` | `[data-state="loading"]` |
+| `url-rejected` | `[data-state="url-rejected"]` |
 
 **Component tokens** — the custom properties this component reads, and therefore every one you
 may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
@@ -230,17 +231,17 @@ from a hard-coded value.
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Not a dataset component; no baseline is owed. |
 | **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
 
 | Security lane | State |
 | --- | --- |
-| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. |
-| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `threat-model` | `present` — `packages/core/security/url-boundary.threat-model.md`. Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `malicious-corpus` | `present` — `packages/core/security/url-boundary.malicious-corpus.spec.ts`. Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `csp-fixture` | Not owed at this boundary. |
-| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. |
+| `url-policy` | `present` — `packages/core/security/url-boundary.url-policy.spec.ts`. Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
 artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
@@ -250,8 +251,8 @@ summarised wrongly.
 
 ## States and migration
 
-`DzButton` advertises 3 states:
-`disabled`, `idle`, `loading`. Each is emitted as `data-state` or as a
+`DzButton` advertises 4 states:
+`disabled`, `idle`, `loading`, `url-rejected`. Each is emitted as `data-state` or as a
 presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
 
 **Published examples:** `state-stories` is `pass` — `packages/core/stories/buttons/DzButton.stories.ts`.
@@ -259,7 +260,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `4c9fb7a`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -277,8 +278,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `2d51eec4` for the capability matrix,
+`2d51eec4` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -288,7 +289,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `url` — An `href` prop renders an anchor, so a host-supplied URL becomes a navigation. `javascript:` and `data:` are the sinks a URL policy has to close.
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `4c9fb7a1`
+- **Component last changed at:** `a01965fa`
 
 ### WCAG 2.2 criteria in scope (19)
 
@@ -365,35 +366,22 @@ Every kind of evidence required of this component — by Tier B, by its `url` se
 | `unit-spec` | tier A | `present` | `packages/core/src/components/buttons/DzButton.spec.ts` |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/buttons.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/buttons/DzButton.stories.ts` |
-| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/buttons/DzButton.spec.ts` — The component declares 2 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/buttons/DzButton.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/buttons/DzButton.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/buttons/DzButton.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzButton.md` — 6 AT/browser pairs, none executed. |
-| `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` — Covered by a class-level artifact, not a per-component one. |
-| `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` — Covered by a class-level artifact, not a per-component one. |
-| `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` — Covered by a class-level artifact, not a per-component one. |
+| `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records
 themselves, and the generator refuses to build this page if the summary claims more than those
 records support. [Why](/evidence/accessibility#why-this-site-reads-the-raw-scaffold-and-not-the-summary-cell).
-
-::: danger Measured security deviations
-The hostile-input corpus measured **2 deviation(s)** on this component
-(1 of them high severity), across 9 fixture(s). A deviation is a
-defect the library owes, not a waiver — and the security evidence cells above can read `present`
-while these stand, because a corpus that runs is a different fact from a corpus that passes.
-
-- **`S1`** · sink `navigation` · required `rejected`, measured `passed-through` · severity `high` · **fixing it is a breaking change**
-- **`S2`** · sink `navigation` · required `rejected`, measured `passed-through` · severity `low` · **fixing it is a breaking change**
-
-Recorded by `TASK-N1-O5` in
-`packages/core/security/security-deviations.json`.
-:::
