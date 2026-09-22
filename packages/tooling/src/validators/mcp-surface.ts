@@ -28,15 +28,18 @@
  *   D. evidence       — every tool has a unit spec, a `[malformed]` case, a
  *                       contract clause and an observed data source.
  *   E. packaging      — `files` ships every artifact the manifests reference.
- *   F. ratchets       — catalog visibility and e2e-smoke coverage, downward only.
+ *   F. entry point    — the declared `bin`, invoked the way npm installs it, starts
+ *                       the server and answers `initialize`.
+ *   G. ratchets       — catalog visibility and e2e-smoke coverage, downward only.
  *
  * Usage: tsx packages/tooling/src/validators/mcp-surface.ts
  * Exit 1 on any error. Warnings are printed and do not fail.
  */
 
-import { execFileSync } from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import { execFileSync, spawnSync } from 'node:child_process'
+import { existsSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
@@ -300,7 +303,97 @@ export function checkPackaging(
 }
 
 // ---------------------------------------------------------------------------
-// F. ratchets
+// F. entry point
+// ---------------------------------------------------------------------------
+
+/**
+ * The declared `bin`, invoked the way npm installs it, must start the server
+ * (TASK-N2-A4).
+ *
+ * Clause E checks that `files` ships the bin's TARGET; nothing checked that the
+ * target does anything when reached through the name npm gives it.
+ * `node_modules/.bin/dzup-ui-mcp` — what `npx -y @dzup-ui/mcp` executes, and
+ * what the README configures for Cursor, Claude Code, Windsurf and VS Code — is
+ * a SYMLINK, so `process.argv[1]` ends in `dzup-ui-mcp`. The guard that decided
+ * whether to start stdio tested that name against `index.js`, concluded
+ * "imported, not invoked", and exited 0 in silence; every client reported
+ * `connection closed: calling "initialize": … EOF` while this validator, the
+ * package's specs and the smoke lane all passed. This clause runs the client's
+ * invocation instead of reading the manifest that describes it.
+ *
+ * The symlink is created in a temp directory rather than taken from
+ * `node_modules/.bin`, because a checkout that was never installed is exactly
+ * the case whose packaging still has to be verified. One `initialize` line is
+ * enough: it is answered without touching the registry, so the check stays
+ * offline and deterministic.
+ */
+export function checkBinEntryStarts(pkg: { bin?: Record<string, string> }, r: Report): void {
+  const entry = Object.entries(pkg.bin ?? {})[0]
+  if (entry === undefined) {
+    r.errors.push('package.json declares no `bin`, so no MCP client can start this server.')
+    return
+  }
+  const [name, target] = entry
+  const built = resolve(PKG_DIR, target.replace(/^\.\//, ''))
+  if (!existsSync(built)) {
+    r.notes.push(
+      `bin "${name}" target ${target} is absent — the entry-point check was skipped (run \`yarn build\`).`,
+    )
+    return
+  }
+
+  const dir = mkdtempSync(join(tmpdir(), 'dzup-ui-mcp-bin-'))
+  try {
+    const link = join(dir, name)
+    symlinkSync(built, link)
+    const res = spawnSync(process.execPath, [link], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      input: `${JSON.stringify({
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'initialize',
+        params: {
+          protocolVersion: '2025-06-18',
+          capabilities: {},
+          clientInfo: { name: 'validate-mcp', version: '1.0.0' },
+        },
+      })}\n`,
+      timeout: 20_000,
+      env: { ...process.env, DZUP_UI_REGISTRY_URL: ROOT },
+    })
+
+    const answered = (res.stdout ?? '').split('\n').some((line) => {
+      const trimmed = line.trim()
+      if (!trimmed.startsWith('{'))
+        return false
+      try {
+        const reply = JSON.parse(trimmed) as { result?: { serverInfo?: { name?: string } } }
+        return reply.result?.serverInfo?.name === 'dzup-ui'
+      }
+      catch {
+        return false
+      }
+    })
+
+    if (!answered) {
+      const detail = (res.error?.message || res.stderr?.trim() || `exited ${res.status} with no reply`)
+        .split('\n')
+        .slice(-3)
+        .join(' / ')
+      r.errors.push(
+        `bin "${name}" (${target}) does not answer \`initialize\` when invoked as node_modules/.bin/${name}: ${detail}. `
+        + 'That is the path every documented MCP client uses, so the published package is unusable while this fails.',
+      )
+    }
+  }
+  finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+}
+
+// ---------------------------------------------------------------------------
+// G. ratchets
 // ---------------------------------------------------------------------------
 
 export function checkRatchets(surface: SurfaceLike, ceilings: Ceilings, r: Report): void {
@@ -382,6 +475,7 @@ export function runChecks(): Report {
   )
   checkEvidence(surface, r)
   checkPackaging(pkg, r, read('packages/mcp/README.md'))
+  checkBinEntryStarts(pkg, r)
   checkRatchets(surface, ceilings, r)
 
   return r
@@ -399,10 +493,18 @@ function main(): void {
     process.exit(1)
   }
   const surface = json<SurfaceLike>('packages/mcp/docs/mcp-tool-surface.json')
+  const pkg = json<{ bin?: Record<string, string> }>('packages/mcp/package.json')
+  const bin = Object.entries(pkg.bin ?? {})[0]
+  const builtBin = bin?.[1] === undefined ? undefined : resolve(PKG_DIR, bin[1].replace(/^\.\//, ''))
   console.error(
     `@dzup-ui/mcp surface OK — ${surface.tools.length} tools, all with a contract clause, a unit spec, `
     + `a [malformed] case and an observed data source; version ${surface.version} agrees across `
     + `package.json, server.json (x2), CHANGELOG.md and the artifact.`,
+  )
+  console.error(
+    builtBin !== undefined && existsSync(builtBin)
+      ? '  entry point: the declared `bin` answered `initialize` through a node_modules/.bin symlink'
+      : '  entry point: NOT checked — packages/mcp/dist is absent (run `yarn build`)',
   )
   console.error(
     `  ratchets: ${surface.catalogVisibility.unreachable} public components unreachable · `

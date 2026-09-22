@@ -17,7 +17,7 @@
  */
 
 import type { ToolResult } from './tools.js'
-import { readFileSync } from 'node:fs'
+import { readFileSync, realpathSync } from 'node:fs'
 import { join } from 'node:path'
 import process from 'node:process'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
@@ -397,9 +397,41 @@ async function main(): Promise<void> {
   )
 }
 
+/**
+ * True when this module is the process entry point rather than an import
+ * (TASK-N2-A4).
+ *
+ * Compared by RESOLVED path, not by the file's name. It used to be
+ * `/(?:^|[/\\])index\.(?:js|ts)$/.test(process.argv[1])`, and that test is false
+ * for every invocation npm actually creates: `node_modules/.bin/dzup-ui-mcp` is
+ * a SYMLINK to `dist/index.js`, Node reports the path it was invoked through in
+ * `process.argv[1]`, and the name at the end of that path is `dzup-ui-mcp`. So
+ * `main()` never ran, the process exited 0 in silence, and every documented
+ * client — `npx -y @dzup-ui/mcp`, Cursor, Claude Code, Windsurf — saw the server
+ * as `connection closed: calling "initialize": … EOF`. `realpathSync` sees
+ * through the bin shim; comparing against this module's own directory keeps the
+ * check true for both layouts (`src/index.ts` under tsx, `dist/index.js` once
+ * built) and still false for the test runner and for imports.
+ *
+ * A name-only test cannot be repaired by matching the bin name instead: the bin
+ * is renamed per client (`npx @dzup-ui/mcp` runs it as `dzup-ui-mcp`, a yarn
+ * install as the same, a `packages/mcp/dist/index.js` spawn as neither).
+ */
+export function isDirectInvocation(entry: string | undefined, moduleDir: string): boolean {
+  if (!entry)
+    return false
+  try {
+    const self = realpathSync(entry)
+    const dir = realpathSync(moduleDir)
+    return self === join(dir, 'index.js') || self === join(dir, 'index.ts')
+  }
+  catch {
+    return false
+  }
+}
+
 // Run only when invoked as a binary, not when imported by tests.
-const invokedDirectly = process.argv[1] && /(?:^|[/\\])index\.(?:js|ts)$/.test(process.argv[1])
-if (invokedDirectly) {
+if (isDirectInvocation(process.argv[1], import.meta.dirname)) {
   main().catch((err) => {
     console.error('dzup-ui MCP server failed to start:', err)
     process.exit(1)
