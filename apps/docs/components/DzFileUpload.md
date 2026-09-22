@@ -199,10 +199,10 @@ then the component's own default.**
 
 | Security lane | State |
 | --- | --- |
-| `threat-model` | `present` — `packages/core/security/DzFileUpload.threat-model.md`. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
-| `malicious-corpus` | `present` — `packages/core/security/DzFileUpload.malicious-corpus.spec.ts`. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
-| `csp-fixture` | `present` — `packages/core/security/DzFileUpload.csp-fixture.spec.ts`. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
-| `url-policy` | `present` — `packages/core/security/DzFileUpload.url-policy.spec.ts`. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `threat-model` | `present` — `packages/core/security/DzFileUpload.threat-model.md`. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `malicious-corpus` | `present` — `packages/core/security/DzFileUpload.malicious-corpus.spec.ts`. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `csp-fixture` | `present` — `packages/core/security/DzFileUpload.csp-fixture.spec.ts`. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `url-policy` | `present` — `packages/core/security/DzFileUpload.url-policy.spec.ts`. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
 artifact, not of its source, and is measured by `yarn report:peer-surface` over `dist/` — a
@@ -239,7 +239,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `527dbd15` for the capability matrix,
+artifact records — `589be135` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
@@ -349,16 +349,16 @@ Every kind of evidence required of this component — by Tier D, by its traits (
 | `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/forms/DzFileUpload.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzFileUpload.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzFileUpload.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/2 metric(s) have a derived threshold |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/forms/DzFileUpload.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
-| `threat-model` | tier D | `present` | `packages/core/security/DzFileUpload.threat-model.md` · `packages/core/security/coverage.json` — Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
-| `malicious-corpus` | tier D | `present` | `packages/core/security/DzFileUpload.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
-| `url-policy` | tier D | `present` | `packages/core/security/DzFileUpload.url-policy.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
-| `csp-fixture` | tier D | `present` | `packages/core/security/DzFileUpload.csp-fixture.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `threat-model` | tier D | `present` | `packages/core/security/DzFileUpload.threat-model.md` · `packages/core/security/coverage.json` — Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `malicious-corpus` | tier D | `present` | `packages/core/security/DzFileUpload.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `url-policy` | tier D | `present` | `packages/core/security/DzFileUpload.url-policy.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
+| `csp-fixture` | tier D | `present` | `packages/core/security/DzFileUpload.csp-fixture.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
 **1 unrun:** `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 

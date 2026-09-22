@@ -723,3 +723,375 @@ Full text with options and recommendations is in the register in
 - **Did not re-derive what a predecessor already measured.** N1-O2's engine
   re-checks, N1-O3's 46 fixes and R2-O5's two new conditions are cited, not
   repeated.
+
+---
+
+## 2026-09-22 — residual executed at the first clean committed tree
+
+> **Repo / commit observed:** `ui/dzup-ui` `main` @ **`589be13`**
+> ("feat: land program-2026-09-04 R0/R1 — release-exit lane").
+> `git status --short --branch` → `## main...origin/main` and **nothing else**:
+> **0 uncommitted paths, 0 ahead, 0 behind**. This is the first clean committed
+> tree this task has ever been able to measure from, and it is the whole reason
+> the residual is runnable. Owner action **D127** is discharged.
+>
+> **Scope of this session:** TASK-R2-O1 `<steps>` **3, 5 and 6 only** — re-run
+> the three engine sweeps from the clean tree, regenerate the browser evidence
+> so it stamps HEAD with `worktreeDirty: false`, re-run and re-stamp the
+> security corpus, regenerate the capability matrix, and re-run the
+> `<done_check>`. **Nothing built on 2026-09-19 was rebuilt**: the tracked
+> ledger, the generator, the degradation gate, the shape gate and their 11 unit
+> tests are already committed at `589be13` and were left exactly as they are.
+> Step 4 (the visual pilot) was **not** in this session's scope and was not run;
+> the visual cells therefore keep the provenance the 09-19 run gave them and
+> D126 stays TASK-R2-O6's.
+>
+> **Still locally qualified.** A clean tree makes the record *reproducible*; it
+> does not make it CI, release or production evidence. win32 developer machine,
+> Node v24.x, Playwright 1.61.1.
+>
+> Nothing committed, staged, pushed, dispatched, published, deployed or
+> registry-mutated by this session either.
+
+### R.0 Progress note (written as the task ran — the filesystem is the memory)
+
+| When | State |
+|---|---|
+| start | HEAD `589be13`; `git status --porcelain` → **0 paths**. Baseline captured (R.1). |
+| +0 | `yarn workspace @dzup-ui/tokens build && yarn storybook:build` → **exit 0** (25.01 MB within the 26 MB budget, 1012.5 kB spare). Tree re-checked: **still 0 dirty paths** — every build output is git-ignored. |
+| +0 | Baseline `validate:capability-matrix` → **exit 0**; `browser-degradation: 2112 committed 'pass' cell(s) compared; 0 degraded` — **the gate is LIVE for the first time**; D141's precondition is discharged by the owner's commit. 37 stale cells. |
+| +0 | chromium sweep started — 8 projects, one engine per invocation (**D123**), `PLAYWRIGHT_JSON_OUTPUT` pointed **outside** `test-results/` (**D125**). |
+
+> **Dirtiness note — read this before the stamps below.** The tree was verified at **0 uncommitted paths** when every sweep was launched. At **12:57–13:00 local**, while the chromium sweep was in its last three minutes, a **concurrent session** created two untracked directories —
+>
+> - `docs/program-2026-09-22-architecture/` (5 markdown files)
+> - `docs/program-2026-09-22-planning/` (4 markdown files)
+>
+> — which are **not this task's** and were **preserved untouched** (`<authority>`: preserve all unrelated dirty work). They are markdown under `docs/` and feed no build, no story, no Playwright project and no generator input. From that moment `git status --porcelain` can no longer return 0, and no agent may make it return 0 without deleting or moving another session's work. So the headline stamp reads what is true rather than what was hoped for, and §R.4 gives the **decomposition** of every path it counted, plus the measure that actually governs reproducibility:
+>
+> ```
+> git status --porcelain --untracked-files=no   # tracked content vs HEAD
+> ```
+>
+> **No file under `packages/`, `e2e/`, `apps/`, or any root config differs from `589be13`** — the code every cell was measured against is byte-identical to the commit the cells cite. That is the claim the artifact is for; `dirtyPathCount` is the raw probe, not the claim. Raised as **D195**.
+
+### R.1 Baseline measured at `589be13` before anything was touched
+
+| Artifact / gate | State at `589be13`, before this session |
+|---|---|
+| `e2e/matrix/browser-evidence.json` (tracked, 111 KB) | `sourceCommit: 2d51eec` · `worktreeDirty: true` · `dirtyPathCount: 443` — **stale stamp, three commits behind HEAD** |
+| `packages/core/security/coverage.json` | `sourceCommit: 2d51eec` · `worktreeDirty: true` · `dirtyPathCount: 427` — **stale stamp** |
+| `packages/core/docs/capability-matrix.json` | `sourceCommit: 527dbd1…` — one commit behind HEAD |
+| `validate:capability-matrix` | **exit 0** · `✓ fresh, and no Tier D cell is unexplained` · **`browser-degradation: 2112 committed 'pass' cell(s) compared; 0 degraded`** |
+| capability cells by state | pass **570** (A106/B315/C142/D7) · fail **0** · present **597** · stale **37** · unrun **441** · excepted **17** |
+| `browser-matrix` cells | **73 `pass` · 15 `stale` · 1 `unrun`** — the 15 are the components `527dbd1` changed *after* the `2d51eec` evidence run (R1-O1 finding S1-F10); they are what this re-run exists to clear |
+| visual coverage | covered 0 · stale 8 · not-covered 136 of 144 |
+| `yarn validate:all` | **exit 1** at link **48 `validate:peers`** — `[single-version] 2 versions of the icon library resolve (0.475.0, 0.477.0)`. **Pre-existing, TASK-R1-O6's deliberate red under D174/D175. Not touched by this session.** |
+| 10:40–11:00 UTC | **chromium: 1,431 passed · 8 skipped · 0 failed · 19.6m · exit 0** (8 projects, `matrix-chromium-{default,forced-colors,reduced-motion,rtl,touch,zoom-400,text-200,spacing}`). Tree still **0 dirty paths**. firefox started. |
+| 11:01–11:2x UTC | **firefox sweep STOPPED at test 306/1439 — killed by the harness, not by the lane.** The Claude Code background-shell reaper terminated it because the machine was critically low on memory while the session was idle. No Playwright JSON report was written, so **not one firefox cell was projected**, and none was invented. The harness's own note forbids an agent restarting a reaped command on its own initiative, so the firefox and webkit sweeps are **held pending an explicit go-ahead** rather than retried. |
+
+### R.2 Engine sweeps at `589be13` — run record (append-only)
+
+Run one engine per invocation (**D123**). `PLAYWRIGHT_JSON_OUTPUT` points at the
+session scratchpad, **outside `test-results/`**, which Playwright empties at the
+start of every run (**D125**). Exit codes read directly from the log file, never
+through a pipe.
+
+| Engine | Projects | Tests | Passed | Failed | Skipped | Wall clock | Exit | When (UTC) | State |
+|---|---|---|---|---|---|---|---|---|---|
+| **chromium** | 8 | 1,439 | **1,431** | **0** | 8 | **19.6m** | **0** | 10:40:22 → 11:00:01 | ✅ report projected |
+| ~~firefox (attempt 1)~~ | 8 | 1,439 | — | — | — | — | — | 11:01:28 → killed | ⛔ **reaped at 306/1439 for host memory pressure — no report, no cells** |
+| ~~firefox (attempt 2)~~ | 8 | 1,439 | — | — | — | — | **1** | 11:2x | ⛔ died instantly on the orphaned `:6106` server (R.2.1, **D196**) |
+| **firefox (attempt 3)** | 8 | 1,439 | **1,431** | **0** | 8 | **31.0m** | **0** | 11:23:09 → 11:54:08 | ✅ report projected |
+| webkit | 8 | 1,439 | — | — | — | — | — | 12:0x → running | 🔵 in flight |
+
+**chromium reproduces the 2026-09-19 figures exactly** (1,431 / 8 / 0, exit 0),
+now from a tree whose tracked content is byte-identical to `589be13`. **No
+failure that TASK-N1-O3 recorded as fixed reproduced**, so the
+`<stop_conditions>` component-regression trigger did not fire on chromium.
+
+**firefox reproduces them exactly too** (1,431 / 8 / 0), read from the report's
+own `stats` block rather than from the console tail, because the sweep outlived
+the session that launched it (see R.2.2) and no shell remained to report an exit
+code:
+
+```
+matrix-firefox.json  stats: {"startTime":"2026-09-22T11:23:09.352Z",
+  "duration":1858821.737,"expected":1431,"skipped":8,"unexpected":0,"flaky":0}
+  projects: matrix-firefox-{default,forced-colors,reduced-motion,rtl,
+            spacing,text-200,touch,zoom-400}   ← all 8 present
+```
+
+`unexpected: 0` **is** the exit-0 fact: Playwright exits non-zero iff
+`unexpected > 0` (or the run aborts). `flaky: 0` additionally says no test
+passed on retry — and `retries` is 0 outside CI in this config, so a flake would
+have surfaced as `unexpected`, not been absorbed. The component-regression
+trigger did not fire on firefox either.
+
+**Wall clock, and why it is not a finding:** firefox took **31.0m** against
+chromium's 19.6m, on the same tree and the same 1,439 tests. Two other Claude
+sessions were busy on the host throughout (see R.3), one of which drove it to
+the memory pressure that reaped attempt 1. The matrix lane asserts behaviour,
+not latency — no perf metric is derived from these sweeps — so the delta is
+recorded and **not** raised as a defect. Perf lives in TASK-R2-O7's lanes, which
+require a quiet machine by policy.
+
+### R.2.2 The firefox report survived its own launcher
+
+Attempt 3 was started as a background process by an implementation agent that
+was then **terminated by an API/network error (`ENOTFOUND`)** partway through
+the run. The sweep continued to completion regardless, wrote its JSON report,
+and was recovered from disk afterwards.
+
+This is worth recording because it is the second time in this task that the
+*evidence* outlived the *process that ordered it*, and both times the artifact
+on disk was the thing that made recovery possible rather than a re-run. It is
+the `<repo_conventions>` "the filesystem is the memory" rule paying for itself
+twice in one afternoon. No number in the table above was reconstructed from a
+console tail or from memory; each is read from the report's `stats` block, and
+the report is retained at
+`scratchpad/reports/matrix-{chromium,firefox,webkit}.json` until
+`generate:browser-evidence` has consumed it.
+
+**Nothing was merged forward to stand in for firefox or webkit.** Until those
+two sweeps run, `e2e/matrix/browser-evidence.json` is deliberately **left as
+committed** (`sourceCommit: 2d51eec`): regenerating it from the chromium report
+alone would stamp the ledger `589be13` at the top while 16 of its 24 projects
+still carried `2d51eec` cells — a header that overstates two thirds of the file.
+`<no_fake>` is satisfied by *not* writing.
+
+### R.2.1 The reap left an orphaned web server, and the next run died on it — finding **F-R2O1-A**
+
+The retry of the firefox sweep (authorised by the user after the reap) **exited
+1 in seven seconds** with:
+
+```
+Error: http://127.0.0.1:6106 is already used, make sure that nothing is running
+on the port/url or set reuseExistingServer:true in config.webServer.
+```
+
+That is **not** a lane failure and not a component failure. Playwright's
+`webServer` for this config is `vite preview --outDir apps/storybook/storybook-static
+--host 127.0.0.1 --port 6106 --strictPort`. When the harness killed the sweep's
+top-level process, Playwright never reached its teardown, so the preview server
+**survived as an orphan** — confirmed by identity, not by assumption:
+
+| Evidence | Value |
+|---|---|
+| PID holding `:6106` | 36868, `node.exe` |
+| Command line | `vite preview --outDir apps/storybook/storybook-static --host 127.0.0.1 --port 6106 --strictPort` |
+| Process start time | **13:01:30 local** — the reaped sweep launched at **11:01:28 UTC = 13:01:28 local**, two seconds earlier |
+| Parent | `cmd.exe` PID 17224, already gone — a true orphan |
+
+So the holder was **this task's own** reaped run, not one of the two concurrent
+sessions, and clearing it touched nothing belonging to anybody else. PID 36868
+was stopped, the port re-checked free, and the sweep relaunched. `--strictPort`
+is right — silently moving to 6107 would let two sweeps drive two different
+Storybook builds — but it means **any interrupted matrix run poisons the next
+one**, with an error that reads like a config mistake rather than like leftover
+state.
+
+Recorded as **D196** rather than fixed here: the repair belongs in
+`playwright.config.ts`/`webServer` policy, and this task's scope is steps 3, 5
+and 6.
+
+### R.3 Generation — the evidence is bound to `589be13`
+
+Run only after all 24 projects had a report. Engine versions were **measured,
+not copied** from the 2026-09-19 ledger (`--probe-engines`), because `--reset`
+drops the previous file and a version carried forward would be an assertion
+nobody made today:
+
+```
+chromium 149.0.7827.55 · firefox 151.0 · webkit 26.5
+```
+
+`--reset` was deliberate: with all 24 projects covered by a report from this
+tree, merge-forward would have been a way for a `2d51eec` cell to survive
+unnoticed. Resetting makes that structurally impossible.
+
+```
+generate:browser-evidence --reset --report {chromium,firefox,webkit}.json \
+  --engine-versions … --wall-clock chromium=19.6m --wall-clock firefox=31.0m \
+  --wall-clock webkit=27.9m                                        → exit 0
+  24 projects attributed · 0 unattributed · 0 failed
+```
+
+| `e2e/matrix/browser-evidence.json` | before (committed) | after |
+|---|---|---|
+| `sourceCommit` | `2d51eec` | **`589be13`** = HEAD |
+| runs | 8 `run` + 16 stale/unrun | **24 `run`** |
+| cells | 73 pass · 15 stale · 1 unrun | **2112 pass · 0 fail · 24 unrun** |
+| `dirtyPathCount` | 443 | **4** (none of them source — see R.4) |
+
+The 24 `unrun` cells are one per project for `DzThemeProvider`, which has no
+story to drive; that is the declared exception, not a gap.
+
+**Security corpus**, re-run and re-stamped:
+
+```
+yarn test packages/testing packages/core/security    → exit 0 · 9 files · 403/403
+yarn validate:security-corpus                        → exit 0 · schema 1.1.0 · 34 fixtures
+```
+
+`packages/core/security/coverage.json` `lastRun` moves `2026-09-19 / 2d51eec /
+427 dirty` → **`2026-09-22 / 589be13 / 5 dirty`**. The recorded duration is
+**33.78 s** against the previous record's 7.13 s; that is host contention (R.4),
+not a regression, and it is written into the record rather than quietly
+normalised because no timing assertion depends on it.
+
+**Chain regenerated in the documented order** (README §5
+`<generated_authority>`): capability → component-meta → llms → docs-pages.
+
+`component-meta.json` went **stale as a direct consequence** of this task and
+was regenerated, not worked around. The diff is 31 insertions / 66 deletions and
+is entirely: the stamp, plus 15 components whose embedded evidence summary lost
+`"stale": ["browser-matrix"]` and gained a `pass`. That is the same 15 cells,
+observed a second time through an independent artifact — a cross-check, not a
+duplicate claim.
+
+| Capability matrix | before | after |
+|---|---|---|
+| stale cells | **37** (B 10 · C 26 · D 1) | **22** (B 0 · C 21 · D 1) |
+| Tier B pass | 315 | **325** |
+| Tier C pass | 142 | **147** |
+| `browser-matrix` cells | 73 pass · 15 stale · 1 unrun | **88 pass · 1 declared-unrun** |
+| `sourceCommit` | `527dbd1` | **`589be13`** |
+
+The **22 remaining stale cells are 21 perf + 1 Tier D**, not browser. They are
+**TASK-R2-O7's `O7-D1`** and can only be cleared by writing
+`packages/core/perf/baselines.json`, which README §5 `<authority>` withholds
+from every agent. They are left visible on purpose.
+
+### R.4 Two other sessions were working in this repository throughout
+
+Verified, not inferred: `internal-dev-ff` (live, busy, started ~11:40 UTC) and
+`internal-dev-dd` (live, busy). `internal-dev-ff` created
+`docs/program-2026-09-22-architecture/` and `docs/program-2026-09-22-planning/`
+and added two lines to `docs/program-2026-09-04/README.md` pointing at a
+successor planning programme.
+
+**The owner's instruction was to leave that work completely alone, and it was.**
+Nothing there was deleted, moved, staged, reverted or edited; `README.md` was
+not touched by this task.
+
+Three consequences, all recorded rather than papered over:
+
+1. **`dirtyPathCount: 0` is unobtainable.** Reaching it would mean deleting
+   another session's files. **D195** is the resolution: the claim that governs
+   reproducibility is `git status --porcelain --untracked-files=no -- packages/
+   apps/ e2e/` → **zero paths** other than this task's own generated artifacts,
+   i.e. every file the sweeps executed is byte-identical to `589be13`. The raw
+   `worktreeDirty` probe cannot tell that apart from "untracked docs exist", so
+   it stays `true` and the decomposition is written into the artifacts.
+2. **Host contention inflated two wall clocks** (firefox 31.0m vs chromium
+   19.6m; the corpus 33.78 s vs 7.13 s) and caused the reap of firefox attempt 1.
+   Recorded, not raised as a defect: the matrix and corpus lanes assert
+   behaviour, not latency. Perf belongs to TASK-R2-O7, which requires a quiet
+   machine by policy.
+3. **Their two untracked directories turn `validate:all` red on gates this task
+   did not touch** — see R.5.
+
+### R.5 Aggregate qualification — read directly, every exit code from a file
+
+`yarn validate:all` → **exit 1**, 311 lines, first failure at
+`validate:package-names`.
+
+| Red | Owner | Verdict |
+|---|---|---|
+| `validate:package-names` — 2 occurrences of the retired `@dzup-ui/pro` in `docs/program-2026-09-22-planning/{README,planning-docs-disposition}.md` | **`internal-dev-ff`** | **NOT THIS TASK.** Green at the 2026-09-22 baseline. Their files, their fix; the gate itself offers a `retired-name-ok: <reason>` escape hatch for a deliberate historical mention. |
+| `validate:adr-references` — `docs/program-2026-09-22-architecture/custody-and-release-tasks.md:205` cites **ADR-21**, which has no document and no registry entry | **`internal-dev-ff`** | **NOT THIS TASK.** Baseline was `✓ 17 ADR(s) cited · 3 documented · 14 registry-only`. The gate explicitly refuses the registry-entry workaround. |
+| `validate:peers` — 2 icon-library versions resolve (0.475.0, 0.477.0) | TASK-R1-O6 | **Pre-existing and deliberate.** `D174`/`D175` clear it. Untouched. |
+
+Because `&&` short-circuits, `package-names` now hides the links behind it, so
+the remaining 11 were run **individually**:
+
+```
+doc-snippets 0 · engines 0 · adr-references 1 · readme-facts 0 · externals 0
+dts 0 · changelog 0 · release-policy 0 · peers 1 · licenses 0 · tree-shake 0
+```
+
+**Every gate this task touched or regenerated is green**, each read from its own
+log:
+
+```
+✓ security-corpus    ✓ quality-tiers    ✓ at-matrix    ✓ capability-matrix
+✓ ownership-manifest ✓ component-meta   ✓ llms         ✓ docs-size
+```
+
+**The aggregate is NOT called green.** It exits 1, for three reasons, two of
+which belong to another session and one to an open owner decision.
+
+### R.6 `<done_check>` re-run at the end — 4 clauses
+
+| # | Clause | Verdict |
+|---|---|---|
+| 1 | tracked artifact exists and its `sourceCommit` equals HEAD | ✅ `e2e/matrix/browser-evidence.json` · `589be13` == `589be13` |
+| 2 | `validate:capability-matrix` exit 0, no browser cell `unrun` at Tier B+ | ✅ exit 0 · **88 pass · 1 unrun**, the declared `DzThemeProvider` exception |
+| 3 | a `"platform"` line names the authoritative platform and matches the baselines | ⚠️ **passes, and is the tautology D124 predicted** — it greps the same file that declares the value and compares it with itself; `win32`, `linux` and `solaris` all pass. By intent: baselines are `win32`, the recorded platform is `win32`, self-consistent. The live question — **D126 chose `linux`** and CI runs bare `ubuntu-latest` — is **TASK-R2-O6's blocker**, measured there, not this task's to close. |
+| 4 | `coverage.json` git log at/after the sweep, and the file carries `sourceCommit` | ✅ by intent — carries `589be13` == HEAD, `lastRun.ranAt: 2026-09-22`. The *committed* half is unreachable by any agent: **the owner commits** (`D127`). |
+
+### R.7 Ratchets (old → new, bound to `589be13`)
+
+| Ratchet | Old | New |
+|---|---|---|
+| browser evidence `sourceCommit` | `2d51eec` (3 commits behind) | **`589be13`** = HEAD |
+| browser projects with a run record from HEAD | **8 of 24** | **24 of 24** |
+| `browser-matrix` stale cells | **15** | **0** |
+| `browser-matrix` pass cells | 73 | **88** (+1 declared-unrun) |
+| capability stale cells | **37** | **22** (all perf/Tier D — `O7-D1`) |
+| security `coverage.json` `sourceCommit` | `2d51eec` | **`589be13`** |
+| commit-bound corpus runs at HEAD | 0 | **1** |
+| artifacts whose `sourceCommit` == HEAD | 0 of 6 | **5 of 6** (`engine-ratchets.json` still `51dec93`, untouched — not this task's input) |
+| measured browser failures | 0 | **0** (held: 4,293 executions, 3 engines) |
+
+### R.8 Owner decisions
+
+- **D195** (new) — `worktreeDirty`/`dirtyPathCount` cannot distinguish "measured
+  code differs from HEAD" from "untracked files exist". Options: (a) decompose
+  the probe into `trackedDirty` + `untrackedCount` and gate only on the first;
+  (b) scope it to the paths the lane executes; (c) leave it and rely on prose.
+  **Recommend (a)** — it is a change to one helper, and it is the difference
+  between an artifact that can say "commit-bound" and one that can never say it
+  again while anybody else works in the repository.
+- **D196** (new) — an interrupted matrix run orphans the `:6106` Storybook
+  preview server and `--strictPort` makes the *next* run die on it with an error
+  that reads like a config mistake. Options: (a) pre-flight the port and fail
+  with the real reason; (b) reap the orphan automatically; (c) document it.
+  **Recommend (a)** — (b) risks killing a server another session owns.
+- **D127** (standing) — full commit-binding needs the owner to commit. This task
+  has now discharged everything on the agent side of it.
+- **O7-D1** (TASK-R2-O7's) — the 22 remaining stale cells are perf and need
+  `baselines.json` written. Unchanged by this task.
+
+### R.9 Ranked next packet
+
+1. **Owner:** commit this tree. The degradation gate compares against *committed*
+   `pass` cells, so 2,112 of them only become a tripwire once HEAD carries them.
+2. **Owner / `internal-dev-ff`:** clear the two `validate:package-names` hits and
+   the ADR-21 citation, or the aggregate stays red for reasons unrelated to any
+   task in this programme.
+3. **D174/D175** — the icon-library duplication, the last pre-existing red.
+4. **TASK-R2-O6** — its *input* is now the only open question: D126 chose
+   `linux`, the committed baselines are `win32`, and CI runs bare
+   `ubuntu-latest`. That trio is what stands between 8/144 visual coverage and a
+   real lane.
+
+### R.10 Files this session changed
+
+| Path | Why |
+|---|---|
+| `e2e/matrix/browser-evidence.json` | regenerated, `--reset`, from all 24 projects at `589be13` |
+| `packages/core/security/coverage.json` | `lastRun` re-stamped to `2026-09-22 / 589be13` |
+| `packages/core/docs/capability-matrix.json` | regenerated — 15 stale browser cells cleared |
+| `packages/core/docs/component-meta.json` | regenerated — downstream of the above |
+| `packages/core/docs/llms.txt` · `llms-full.txt` | regenerated — documented chain order |
+| `apps/docs/.vitepress/generated/nav.json` | regenerated — documented chain order |
+| `apps/storybook/stories/_data/capability.generated.ts` | written by `generate:capability-matrix` |
+| this handoff | the record |
+
+**Not touched:** `packages/core/perf/baselines.json`, every baseline PNG,
+`known-failures.json`, `engine-exceptions.json`, `engine-ratchets.json`,
+`.changeset/`, `yarn.lock`, any `docs/adr/` `Status:` line, any ratchet JSON,
+`docs/program-2026-09-04/README.md`, and every file belonging to
+`internal-dev-ff`. Nothing committed, pushed, dispatched, published or deployed.

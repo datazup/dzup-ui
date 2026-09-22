@@ -1,9 +1,9 @@
 {
   "generator": "yarn generate:docs-pages (TASK-N2-D1, evidence layer TASK-N2-D2)",
-  "artifactSha256": "a33b811c2813b172e0322941af592d238563255c903bf756c59d065b194722ce",
+  "artifactSha256": "cf3f78144c7b4c95fc31c174e8de013c826678e1a025755ef5a2bdf1cdf45554",
   "schemaVersion": "1.2.0",
   "extractor": "vue-component-meta@3.3.7",
-  "sourceCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+  "sourceCommit": "589be135654aefaac4b1069519f2fb56bb231172",
   "publicComponents": 144,
   "compoundParts": 65,
   "groups": [
@@ -658,7 +658,7 @@
   ],
   "evidenceSha256": {
     "packages/core/docs/quality-matrix.json": "15fe628024cef1b5e0909572d3b8d26f7becf5d3943dd70df130a9e09f799154",
-    "packages/core/docs/capability-matrix.json": "d67ab95496f5afcd2f322c1b581cff390d0c0ce7e914452fe5d14773ee150315",
+    "packages/core/docs/capability-matrix.json": "610b83672997e41ece772bbd60db84c3fb55454496f17a44424e7f30d9d61416",
     "e2e/at-matrix/index.json": "d35ef2dfa049e253205cfca1b49b4841fe46e40d598c8fc1fdc88242a99b8de4",
     "packages/core/docs/wcag-deviations.json": "bde6dc788456481dd1a28216640d57adbe0c62a482aa45192df3ad78ec014f3c",
     "e2e/matrix/engine-ratchets.json": "43a6f0ee01e1df5eba6e07d4949da99513733775bf37653aa9410e19da99b8f0",

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.1.0",
-  "sourceCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+  "sourceCommit": "589be135654aefaac4b1069519f2fb56bb231172",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -51,18 +51,18 @@
       "excepted": 4
     },
     "B": {
-      "pass": 315,
+      "pass": 325,
       "fail": 0,
       "present": 304,
-      "stale": 10,
+      "stale": 0,
       "unrun": 275,
       "excepted": 13
     },
     "C": {
-      "pass": 142,
+      "pass": 147,
       "fail": 0,
       "present": 106,
-      "stale": 26,
+      "stale": 21,
       "unrun": 100,
       "excepted": 0
     },
@@ -203,7 +203,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -496,14 +496,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -533,7 +533,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -544,7 +544,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -555,7 +555,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -945,7 +945,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -956,7 +956,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -967,7 +967,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -1066,7 +1066,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -1077,7 +1077,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -1088,7 +1088,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -1222,7 +1222,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -1438,14 +1438,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -1683,7 +1683,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -1713,7 +1713,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -1724,7 +1724,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -1735,7 +1735,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -1867,14 +1867,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -1895,7 +1895,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -1906,7 +1906,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -1917,7 +1917,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -2140,7 +2140,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -2396,7 +2396,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -2544,7 +2544,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -2702,7 +2702,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -2898,7 +2898,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3044,7 +3044,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3192,7 +3192,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3492,7 +3492,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3636,7 +3636,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3784,7 +3784,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -3965,14 +3965,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4158,14 +4158,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4356,7 +4356,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4593,7 +4593,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4746,7 +4746,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -4974,7 +4974,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -5165,7 +5165,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -5350,7 +5350,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -5524,7 +5524,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -5863,7 +5863,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -6101,7 +6101,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -6479,7 +6479,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -6631,7 +6631,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -6792,7 +6792,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -6851,7 +6851,7 @@
             "packages/core/security/DzFileUpload.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -6862,7 +6862,7 @@
             "packages/core/security/DzFileUpload.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -6873,7 +6873,7 @@
             "packages/core/security/DzFileUpload.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "csp-fixture",
@@ -6884,7 +6884,7 @@
             "packages/core/security/DzFileUpload.csp-fixture.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -7497,7 +7497,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -7603,7 +7603,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -7614,7 +7614,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -7625,7 +7625,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -7713,7 +7713,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -7724,7 +7724,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -7735,7 +7735,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -7871,7 +7871,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -7902,7 +7902,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -7913,7 +7913,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -7924,7 +7924,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -8060,7 +8060,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -8215,7 +8215,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8364,7 +8364,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8587,7 +8587,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8810,7 +8810,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8966,7 +8966,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -8995,7 +8995,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -9006,7 +9006,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -9017,7 +9017,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -9238,7 +9238,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -9386,7 +9386,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -9609,14 +9609,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -9674,7 +9674,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -9685,7 +9685,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -9696,7 +9696,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -9827,14 +9827,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10019,7 +10019,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10049,7 +10049,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -10060,7 +10060,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -10071,7 +10071,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -10287,7 +10287,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -10477,7 +10477,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -10624,7 +10624,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -10773,7 +10773,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10959,14 +10959,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11191,7 +11191,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11335,7 +11335,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11475,14 +11475,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11631,7 +11631,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -11698,7 +11698,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -11709,7 +11709,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -11720,7 +11720,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -11849,14 +11849,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12014,7 +12014,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12236,14 +12236,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12340,7 +12340,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -12351,7 +12351,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -12362,7 +12362,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -12501,7 +12501,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12650,7 +12650,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12798,7 +12798,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12952,7 +12952,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13176,14 +13176,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13489,7 +13489,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13711,7 +13711,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13857,7 +13857,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -14010,7 +14010,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14179,7 +14179,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14335,7 +14335,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14401,7 +14401,7 @@
             "packages/core/security/url-boundary.threat-model.md",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "malicious-corpus",
@@ -14412,7 +14412,7 @@
             "packages/core/security/url-boundary.malicious-corpus.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         },
         {
           "kind": "url-policy",
@@ -14423,7 +14423,7 @@
             "packages/core/security/url-boundary.url-policy.spec.ts",
             "packages/core/security/coverage.json"
           ],
-          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-19 at 2d51eec (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
+          "note": "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified."
         }
       ],
       "visual": {
@@ -14641,7 +14641,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -14873,7 +14873,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -15121,7 +15121,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15266,14 +15266,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15591,7 +15591,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15731,7 +15731,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15881,7 +15881,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16032,7 +16032,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -16228,7 +16228,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16376,7 +16376,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16524,7 +16524,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -16761,7 +16761,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16899,7 +16899,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "0/24 projects measured green at 2d51eec (worktree dirty). 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "0/24 projects measured green at 589be13 (worktree dirty). 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17047,7 +17047,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -17391,7 +17391,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17535,7 +17535,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17762,7 +17762,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17912,7 +17912,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -18068,7 +18068,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -18261,7 +18261,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -18441,14 +18441,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -18616,14 +18616,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -18772,7 +18772,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 2d51eec (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",

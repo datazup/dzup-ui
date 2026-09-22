@@ -239,7 +239,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `527dbd15` for the capability matrix,
+artifact records — `589be135` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
@@ -329,11 +329,11 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | **`unrun`** | `packages/core/stories/feedback/DzBlockUI.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/feedback/DzBlockUI.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `stale` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 2d51eec (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzBlockUI.md` — 6 AT/browser pairs, none executed. |
 
-**6 unrun:** `axe`, `ssr-sample`, `controlled-uncontrolled`, `browser-play`, `portal-hydration`, `at-manual` · **1 stale:** `browser-matrix` · **1 excepted:** `keyboard-spec`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `ssr-sample`, `controlled-uncontrolled`, `browser-play`, `portal-hydration`, `at-manual` · **1 excepted:** `keyboard-spec`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

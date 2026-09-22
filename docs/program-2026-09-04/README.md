@@ -12,6 +12,8 @@
 > delivered is listed in §3 and **bypassed**; everything else is a
 > **ready-to-run prompt** for a coding agent. Companion Pro program:
 > `ui/dzup-ui-pro/docs/program-2026-09-04/README.md`.
+> Companion planning-ledger programme (2026-09-22, cut from `workspace-docs/repos/ui/docs/planning/`):
+> [`../program-2026-09-22-planning/README.md`](../program-2026-09-22-planning/README.md).
 >
 > Review date: **2026-09-04**. Baseline: `main` @ `99b963a` (clean worktree).
 > **Re-verify §2 at session start and run each task's `<done_check>` before
