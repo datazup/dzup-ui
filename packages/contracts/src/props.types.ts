@@ -60,15 +60,16 @@ export interface BaseValidationProps {
   error?: string
   /** Whether the field is required */
   required?: boolean
-  // ariaInvalid's HOME, as of TASK-R5-O1 (2026-09-04, from N5-02 D1). It sits
-  // beside `invalid`, `error` and `required` because it is the same claim they
-  // make; declaring it on the *labelling* base gives a validity claim to every
-  // component that only wants an accessible name, which nine points of use
-  // already undo with `Omit<BaseAccessibilityProps, 'ariaInvalid'>`.
+  // ariaInvalid's HOME and, since TASK-R0-O2 (2026-09-22), its ONLY home on a
+  // base interface. Added here by TASK-R5-O1 (2026-09-04) and removed from
+  // BaseAccessibilityProps here; both halves answer N5-02 D1. It sits beside
+  // `invalid`, `error` and `required` because it is the same claim they make;
+  // declaring it on the *labelling* base gave a validity claim to every
+  // component that only wanted an accessible name.
   //
-  // BaseAccessibilityProps still declares it, deprecated, so this change is
-  // ADDITIVE and no component's prop surface moves. See that declaration for
-  // what the removal costs and who owns it.
+  // Seven components forward `aria-invalid` without a validation base and now
+  // declare the prop themselves — see the note on BaseAccessibilityProps for
+  // which, and why they did not simply extend this interface.
   //
   // The doc comment below is deliberately byte-identical to the one on
   // BaseAccessibilityProps: `component-meta.json` records prop DESCRIPTIONS, so
@@ -93,31 +94,39 @@ export interface BaseAccessibilityProps {
   ariaLabelledby?: string
   /** ID of element that describes this component */
   ariaDescribedby?: string
-  // DEPRECATED HERE — moved to BaseValidationProps by TASK-R5-O1 (2026-09-04,
-  // from N5-02 D1). Validity is a form-control concern; declaring it on the
-  // labelling base hands it to every component that only wants an accessible
-  // name, which is why nine points of use write
-  // `Omit<BaseAccessibilityProps, 'ariaInvalid'>` to take it back.
+  // `ariaInvalid` USED TO BE DECLARED HERE and is not any more.
   //
-  // It is still declared here so the move is ADDITIVE: a form control extending
-  // BaseFormControlProps inherits it from the validation half with an identical
-  // type and an identical description, and no component's prop surface changes.
+  // It moved to BaseValidationProps in two steps, both from N5-02 D1:
+  //   1. TASK-R5-O1 (2026-09-04) ADDED it to BaseValidationProps and left the
+  //      deprecated declaration here, so that step was additive and no
+  //      component's prop surface moved.
+  //   2. TASK-R0-O2 (2026-09-22) DELETED it here. That is the breaking half —
+  //      a `minor` under VERSIONING.md §1 — and it is what closes D1.
   //
-  // DELETING THIS LINE IS THE BREAKING HALF -- a `minor` under VERSIONING.md s1
-  // -- and it is a separate change because it removes `ariaInvalid` from THIRTY
-  // components that reference it without a validation base (measured on
-  // 99b963a; the list is in
-  // docs/program-2026-09-04/reports/TASK-R5-O1-handoff.md). Six of those
-  // genuinely forward aria-invalid and must gain BaseValidationProps; the rest
-  // declare it and never forward it. It also requires regenerating
-  // component-meta.json (97 references), llms{,-full}.txt and the docs pages,
-  // which TASK-R5-O1 could not do: a concurrent session held those artifacts.
+  // Validity is a form-control concern. Declaring it on the *labelling* base
+  // handed a validity claim to every component that only wanted an accessible
+  // name, which is why six points of use write
+  // `Omit<BaseAccessibilityProps, …'ariaInvalid'…>` to take it back
+  // (DzGrid, DzStack, DzInplace, DzStepper, DzTabs, and DzFloatLabel's
+  // four-key form). Those narrowings are now no-ops and are DELIBERATELY LEFT
+  // IN PLACE: `validate:form-readiness`'s probe spec pins DzGrid's clause as
+  // the fixture that proves `Omit` in an `extends` clause is read at all
+  // (packages/tooling/src/validators/form-readiness.spec.ts, "honours an Omit
+  // in the extends clause"). Deleting them would delete that coverage to buy
+  // tidiness. They may be dropped by whoever next re-homes that fixture.
   //
-  // The `@deprecated` tag is deliberately NOT used, for the same reason the
-  // description is unchanged -- the extractor records it, and a tag here would
-  // have moved a generated artifact this task was told not to regenerate.
-  /** Indicates the component has invalid input */
-  ariaInvalid?: boolean | 'grammar' | 'spelling'
+  // Seven components forward `aria-invalid` without extending a validation
+  // base — DzCard, DzCheckbox, DzCheckboxGroup, DzInputGroup, DzRadio,
+  // DzRadioGroup, DzSwitch. Each now DECLARES `ariaInvalid` on its own props
+  // interface rather than gaining BaseValidationProps, because that base also
+  // carries `invalid`, `error` and `required`, and those seven read none of
+  // them — they resolve invalidity from the enclosing DzFormField. Adding three
+  // props nothing reads would recreate exactly the defect
+  // `.changeset/nine-aria-props-that-did-nothing-are-gone.md` removed.
+  //
+  // Each of those seven declarations repeats the doc comment BYTE-IDENTICALLY
+  // (`Indicates the component has invalid input`) for the reason recorded on
+  // BaseValidationProps: component-meta.json records prop DESCRIPTIONS.
 }
 
 // ---------------------------------------------------------------------------

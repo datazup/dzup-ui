@@ -122,10 +122,60 @@ export function extractCitations(file: string, source: string): AdrCitation[] {
   return citations
 }
 
+/**
+ * The lifecycle words an ADR's `Status:` line may carry.
+ *
+ * `Proposed` is the only one that costs anything: it means code is citing a
+ * decision nobody has signed. Everything else is settled, one way or another.
+ */
+export const ADR_STATUSES = ['Proposed', 'Accepted', 'Rejected', 'Superseded', 'Deprecated'] as const
+export type AdrStatus = typeof ADR_STATUSES[number]
+
+/**
+ * The status an ADR document declares about itself, or `undefined`.
+ *
+ * Read from the document rather than mirrored into the registry on purpose —
+ * see the `$comment` in `adr-registry.json`. The shapes in use today are
+ * `- **Status:** Proposed (TASK-OSS-P2-01, 2026-08-20)` and the same line with
+ * a trailing amendment clause, so the parser takes the first status word after
+ * a `Status` label and ignores the rest of the line.
+ */
+export function readStatus(source: string): AdrStatus | undefined {
+  // Two narrow steps rather than one capturing regex. A single pattern that
+  // matched the label AND captured the rest of the line put `\s*` next to `.*`,
+  // which `regexp/no-super-linear-backtracking` rejects — and rightly, since
+  // this runs over every ADR on every `validate:all`. Here the label pattern is
+  // fully bounded (`[-\s]` and `\*` are disjoint sets), and the status word is
+  // found by scanning a single already-selected line.
+  const line = source
+    .split('\n')
+    .find(text => /^[-\s]{0,4}\*{0,2}Status\*{0,2}\s?:/i.test(text))
+  if (line === undefined)
+    return undefined
+  return ADR_STATUSES.find(status => new RegExp(`\\b${status}\\b`, 'i').test(line))
+}
+
+/**
+ * Whether a citation comes from **code** rather than from prose.
+ *
+ * Code is a non-Markdown file under `packages/` or `apps/`: a source file, a
+ * config, or a generated artifact that a consumer can read. Prose is
+ * everything else — `docs/`, `CLAUDE.md`, a README, a task prompt, a handoff.
+ *
+ * The distinction exists for one meter only, `maxProposedCitedFromCode`. A
+ * programme report discussing ADR-19 costs nothing; `anatomy.types.ts` being
+ * built on ADR-19 while ADR-19 is unsigned is the debt.
+ */
+export function isCodeCitation(file: string): boolean {
+  return /^(?:packages|apps)\//.test(file) && !/\.mdx?$/i.test(file)
+}
+
 export interface AdrDocument {
   id: string
   file: string
   heading: string | undefined
+  /** The document's own `Status:` line, or `undefined` if it declares none. */
+  status: AdrStatus | undefined
 }
 
 /** The ADR documents on disk, one entry per file. */
@@ -145,6 +195,7 @@ export function collectDocuments(dir: string = ADR_DIR): AdrDocument[] {
         // compete for the same whitespace, which is polynomial backtracking on a
         // heading of blanks (regexp/no-super-linear-backtracking).
         heading: /^#[^\S\n]+(\S.*)$/m.exec(source)?.[1],
+        status: readStatus(source),
       }
     })
 }
@@ -174,6 +225,16 @@ export interface RegistryEntry {
   recordedIn: string
 }
 
+/** One row of the `documented` half — an ADR that has a file in `docs/adr/`. */
+export interface DocumentedEntry {
+  /** `ADR-NN`. */
+  id: string
+  /** What the decision is. */
+  title: string
+  /** Repo-relative path of the document. */
+  file: string
+}
+
 export interface AdrRegistry {
   /**
    * Cited ADRs with no document. The list may only shrink; a new entry is a
@@ -182,10 +243,26 @@ export interface AdrRegistry {
   undocumented: RegistryEntry[]
   /** Ratchet. Must equal `undocumented.length`. */
   maxUndocumented: number
+  /**
+   * ADRs that DO have a document. Deliberately carries no `status` — the
+   * document's own `Status:` line is the single source of that fact.
+   */
+  documented: DocumentedEntry[]
+  /**
+   * Ratchet. Must equal the number of distinct `Proposed` ADRs cited from code.
+   * Accepting an ADR lowers it; that is the only thing that does.
+   */
+  maxProposedCitedFromCode: number
 }
 
 export function readRegistry(path: string = REGISTRY_PATH): AdrRegistry {
-  return JSON.parse(readFileSync(resolve(ROOT, path), 'utf8')) as AdrRegistry
+  const raw = JSON.parse(readFileSync(resolve(ROOT, path), 'utf8')) as Partial<AdrRegistry>
+  return {
+    undocumented: raw.undocumented ?? [],
+    maxUndocumented: raw.maxUndocumented ?? 0,
+    documented: raw.documented ?? [],
+    maxProposedCitedFromCode: raw.maxProposedCitedFromCode ?? 0,
+  }
 }
 
 export interface AdrViolation {
@@ -301,6 +378,94 @@ export function checkAdrReferences(input: AdrCheckInput): AdrViolation[] {
     }
   }
 
+  // 7. The `documented` half agrees with the files on disk, in both directions,
+  //    so the registry is the whole index and not only its debt half.
+  //
+  //    `?? []` because this function is exported and callable with a partial
+  //    registry; `readRegistry` already fills both new fields for the real one.
+  const documentedEntries = registry.documented ?? []
+  const listed = new Map(documentedEntries.map(entry => [normaliseAdrId(entry.id), entry]))
+  for (const document of documents) {
+    const entry = listed.get(document.id)
+    if (entry === undefined) {
+      violations.push({
+        rule: 'registry-documented-missing',
+        message: `${document.id} has a document (${document.file}) but no entry in the \`documented\` list of `
+          + `${REGISTRY_PATH}. Add one, so that writing an ADR is a visible edit to the index as well as a new file.`,
+      })
+      continue
+    }
+    if (entry.file !== document.file) {
+      violations.push({
+        rule: 'registry-documented-path',
+        message: `${document.id} is listed in ${REGISTRY_PATH} at "${entry.file}" but its document is at `
+          + `"${document.file}". A reader who follows the registry must land on the file.`,
+      })
+    }
+  }
+  for (const entry of documentedEntries) {
+    const id = normaliseAdrId(entry.id)
+    if (!documented.has(id)) {
+      violations.push({
+        rule: 'registry-documented-stale',
+        message: `${id} is listed in the \`documented\` half of ${REGISTRY_PATH} but has no file in ${ADR_DIR}/. `
+          + 'Remove the entry, or restore the document it points at.',
+      })
+    }
+    if (entry.title.trim() === '' || entry.file.trim() === '') {
+      violations.push({
+        rule: 'registry-documented-entry',
+        message: `${id} in ${REGISTRY_PATH} needs both a title and a file path.`,
+      })
+    }
+  }
+
+  // 8. Every document declares a status the ratchet below can read. A document
+  //    with no readable `Status:` line would silently drop out of the count,
+  //    which is the one way this ratchet could be defeated by accident.
+  for (const document of documents) {
+    if (document.status === undefined) {
+      violations.push({
+        rule: 'document-status',
+        message: `${document.file} declares no readable status. Give it a line like `
+          + '"- **Status:** Proposed (TASK-ID, YYYY-MM-DD)" using one of: '
+          + `${ADR_STATUSES.join(', ')}. The status ratchet counts documents, and a document it `
+          + 'cannot read is a document it cannot count.',
+      })
+    }
+  }
+
+  // 9. The status ratchet: code may not build on more unsigned decisions than
+  //    the declared ceiling, and the ceiling must fall when one is signed.
+  const proposedCitedFromCode = new Set(
+    citations
+      .filter(citation => isCodeCitation(citation.file))
+      .map(citation => citation.id)
+      .filter(id => seen.has(id) && documents.find(d => d.id === id)?.status === 'Proposed'),
+  )
+  const count = proposedCitedFromCode.size
+  const named = [...proposedCitedFromCode].sort().join(', ')
+  const proposedCeiling = registry.maxProposedCitedFromCode ?? 0
+  if (count > proposedCeiling) {
+    violations.push({
+      rule: 'proposed-ceiling',
+      message: `${count} Proposed ADR(s) are cited from code (${named}) but `
+        + `${REGISTRY_PATH} declares maxProposedCitedFromCode: ${proposedCeiling}. `
+        + 'Code may not build on a decision nobody has signed beyond the recorded ceiling. '
+        + 'Get the ADR accepted and flip its Status line, or stop citing it from code — '
+        + 'do not raise the ceiling; it records existing debt, it does not license more.',
+    })
+  }
+  else if (count < proposedCeiling) {
+    violations.push({
+      rule: 'proposed-ratchet',
+      message: `Only ${count} Proposed ADR(s) are cited from code${named === '' ? '' : ` (${named})`} but `
+        + `${REGISTRY_PATH} still declares maxProposedCitedFromCode: ${proposedCeiling}. `
+        + 'Lower it to ' + `${count}` + ' in the same change, so that accepting an ADR moves a number '
+        + 'a reviewer can see.',
+    })
+  }
+
   return violations
 }
 
@@ -313,15 +478,31 @@ export function collectCitations(): AdrCitation[] {
   })
 }
 
-export function validateAdrReferences(): { violations: AdrViolation[], cited: number, documented: number } {
+export interface AdrReferenceResult {
+  violations: AdrViolation[]
+  cited: number
+  documented: number
+  /** Distinct `Proposed` ADRs cited from a non-Markdown file under packages/ or apps/. */
+  proposedCitedFromCode: string[]
+  /** `Accepted` documents over total documents — the C1 figure, measured not asserted. */
+  accepted: number
+}
+
+export function validateAdrReferences(): AdrReferenceResult {
   const citations = collectCitations()
   const documents = collectDocuments()
   const registry = readRegistry()
+  const codeCited = new Set(citations.filter(c => isCodeCitation(c.file)).map(c => c.id))
 
   return {
     violations: checkAdrReferences({ citations, documents, registry }),
     cited: new Set(citations.map(citation => citation.id)).size,
     documented: documents.length,
+    proposedCitedFromCode: documents
+      .filter(document => document.status === 'Proposed' && codeCited.has(document.id))
+      .map(document => document.id)
+      .sort(),
+    accepted: documents.filter(document => document.status === 'Accepted').length,
   }
 }
 
@@ -330,13 +511,19 @@ const isMain = process.argv[1]
   && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))
 
 if (isMain) {
-  const { violations, cited, documented } = validateAdrReferences()
+  const { violations, cited, documented, proposedCitedFromCode, accepted } = validateAdrReferences()
 
   if (violations.length === 0) {
     const registry = readRegistry()
     console.warn(
       `✓ adr-references: ${cited} ADR(s) cited · ${documented} documented · `
       + `${registry.undocumented.length} registry-only (ceiling ${registry.maxUndocumented})`,
+    )
+    console.warn(
+      `  status: ${accepted}/${documented} Accepted · `
+      + `${proposedCitedFromCode.length} Proposed cited from code `
+      + `(ceiling ${registry.maxProposedCitedFromCode})`
+      + `${proposedCitedFromCode.length === 0 ? '' : ` — ${proposedCitedFromCode.join(', ')}`}`,
     )
     process.exit(0)
   }

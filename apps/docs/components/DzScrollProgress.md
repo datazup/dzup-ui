@@ -46,12 +46,11 @@ never as asserted.
 :::
 
 
-## Props (11, of which 4 inherited from `@dzup-ui/contracts`)
+## Props (10, of which 3 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label for the progress indicator. Defaults to `'Page scroll progress'`. |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -168,7 +167,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 11 | 11 | 1 declare a default, of which 6 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 10 | 10 | 1 declare a default, of which 6 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 1 | 1 | 1 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
 | Slots | 1 | 1 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -177,8 +176,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `2d51eec4` for the capability matrix,
-`2d51eec4` for the quality matrix. It is **locally qualified**:
+artifact records — `527dbd15` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

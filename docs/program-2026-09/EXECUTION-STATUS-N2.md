@@ -618,3 +618,17 @@ subject is *publication* rather than construction or evidence. Two N2 findings
 should be carried into it as inputs: **D3-D3** (the docs site is 29.82 MB under
 no size gate — the only static artifact in the repo with none) and **A4-D3**
 (build `validate:registry` before anything is published from `/r/`).
+
+---
+
+## Owner decisions — consolidated elsewhere (appended 2026-09-22, TASK-R0-O1)
+
+The **62** `[!owner]` decisions this lane opened (A1 7 · A2 9 · A3 8 · A4 7 ·
+D1 7 · D2 7 · D3 5 · S1 7 · T1 9 — **66 by a per-handoff recount**, see the
+register §1.1) are consolidated, with their current state and a recommendation,
+in [`../program-2026-09-04/reports/owner-decision-register-2026-09.md`](../program-2026-09-04/reports/owner-decision-register-2026-09.md).
+
+**A4-D1 (publish or freeze) is costed in full** in
+[`../program-2026-09-04/reports/publication-decision-packet-2026-09.md`](../program-2026-09-04/reports/publication-decision-packet-2026-09.md).
+Nothing above is superseded; the register cites this ledger by path rather than
+restating it.

@@ -1,6 +1,6 @@
 # ADR-20 — Provider contract: locale, direction, messages, formats, portals, motion, defaults, nonce, test ids
 
-- **Status:** Proposed (TASK-OSS-P4-01, 2026-08-21; amended by TASK-OSS-P4-02 and P4-03, 2026-08-21 — see *Amendments*)
+- **Status:** Proposed (TASK-OSS-P4-01, 2026-08-21; amended by TASK-OSS-P4-02 and P4-03, 2026-08-21, TASK-R3-O2 2026-09-04, TASK-R2-O4 2026-09-18 and TASK-R0-O2 2026-09-22 — see *Amendments*)
 - **Extends:** ADR-09 (theme context), ADR-08 (compound context by provide/inject)
 - **Depended on by:** TASK-OSS-P4-02 (`DzProvider`), P4-03 (message catalogs),
   P4-04 (portal migration), P4-05 (RTL matrices), and every Pro slice that needs
@@ -232,9 +232,13 @@ ancestor's per-component map.
 ## Amendments (TASK-OSS-P4-02)
 
 Building the writer forced four decisions this ADR had not taken (A1–A4); P4-03
-added a fifth (A5), and TASK-R3-O2 a sixth (A6, 2026-09-04) that adds a concern
-rather than a rule. They are recorded here rather than in a second ADR because
-each one is a rule about the keys and merge semantics §1–§9 define.
+added a fifth (A5), TASK-R3-O2 a sixth (A6, 2026-09-04) and TASK-R2-O4 a seventh
+(A7, 2026-09-18), each adding a concern rather than a rule. **A8 (TASK-R0-O2,
+2026-09-22) is different in kind**: it adds nothing and decides nothing — it
+corrects seven statements of fact this document makes that measurement has since
+contradicted, including the `getTextInfo()` claim in §4 (**D181**). They are all
+recorded here rather than in a second ADR because each is a rule — or a
+correction to a rule — about the keys and merge semantics §1–§9 define.
 
 ### A1. A provider provides only the keys its props set
 
@@ -525,3 +529,165 @@ media-query value, not this contract's. The implementation follows this ADR.
 | Storybook Pseudo-locale toolbar | every story, every family: un-accented text is a string the catalog does not reach |
 | `yarn validate:exports` · `validate:ownership` | the composables are in the generated barrel and the ownership manifest |
 | `yarn validate:adr-references` | this document resolves for every `ADR-20` citation |
+
+---
+
+### A8. Corrections at acceptance review (TASK-R0-O2, 2026-09-22)
+
+Seven corrections, from the acceptance packet
+`docs/program-2026-09/reports/N5-05-adr-20-acceptance-packet.md` §4 and from
+`docs/program-2026-09-04/reports/owner-decision-register-2026-09.md` **D181**.
+Each is a correction of **fact**; none changes a decision. The one decision this
+amendment does not take is the acceptance itself — see A8.7.
+
+#### A8.1 §4 is wrong about `getTextInfo()`, on every Node floor under discussion — the **D181** correction
+
+Decision 4 says `Intl.Locale.prototype.getTextInfo()` is *"Baseline-2023 and
+unavailable across this repository's Node floor (`^20.19.0 || >=22.13.0`,
+ADR-18)"*, and that *"when the floor moves past it, the list becomes a one-line
+delegation."* *Alternatives considered* repeats it: *"Rejected for now —
+unavailable across the supported Node range (ADR-18)."*
+
+**The rejection is right and the reason is wrong, in a way that matters.**
+`getTextInfo()` requires Node **24.0.0**. It is not unlocked by `>=22.13.0`, and
+it is not unlocked by the floor the repository declares today. Measured and
+recorded independently by two reports:
+
+- `docs/program-2026-09/reports/N5-04-peer-hygiene-handoff.md` §3 (**N5-04 D3**):
+  the floor should *"stop coupling the floor to the RTL list — that needs Node
+  ≥ 24.0.0"*.
+- `docs/program-2026-09-04/reports/TASK-R1-O6-handoff.md` §7.3 (**D176**):
+  *"raising to `>=22.13.0` does not unlock `Intl.Locale.prototype.getTextInfo()`
+  — that needs Node 24.0.0 — so ADR-20 §4's 'when the floor moves past it'
+  prediction is wrong and must be corrected in the same amendment."*
+
+**Read §4 and the *Alternatives considered* entry as saying this instead:** the
+checked-in RTL subtag list is kept because `getTextInfo()` requires **Node ≥
+24.0.0**, which is above every floor currently under consideration for ADR-18 —
+the declared `^20.19.0 || >=22.13.0`, and the `>=22.13.0` that two reports
+recommend. `>=24.0.0` was considered as an ADR-18 floor and **rejected**
+(**D176**): Node 22 LTS runs to April 2027 and a library floor excluding it is
+aggressive. So the list is not a stopgap waiting on a floor bump that is about
+to happen — **it is the mechanism for the foreseeable life of this ADR**, and
+§4's "one-line delegation" is a long-dated intention rather than a plan.
+
+The corollary, recorded as ADR-18 amendment **A3**: the Node floor and the RTL
+mechanism are **independent** decisions and must stop being argued as one.
+Nothing in ADR-18's Decision section depends on the RTL list, and no amendment
+to the floor should be justified by it.
+
+*Custody note: D181 records that this correction "has no owner" — TASK-R0-O2's
+scope as written covered acceptance and not this. D181's recommendation (a) was
+to widen TASK-R0-O2 to carry it, on the ground that "accepting an ADR whose §4
+is known wrong makes the acceptance itself unciteable". That is what this
+sub-amendment does. The Node floor itself is **not** decided here; see ADR-18
+amendment A1.*
+
+#### A8.2 The motion policy has consumers now — packet D20-1 is falsified
+
+The packet's most consequential finding was that **`useDzMotion` had zero `.vue`
+consumers**, so a host setting `motion="reduced"` changed nothing anywhere, and
+it recommended amending §7 to say the policy was *"specified and unadopted"*.
+
+**Do not make that amendment.** `TASK-R5-O3` landed the adoption. Measured
+2026-09-22 at `527dbd1` over `packages/core/src/components`: **18 components**
+consume the policy — three through `useDzMotion()` (`DzAnimatedNumber`,
+`DzAnchor`, `DzTour`) and fifteen through `useDzMotionAttribute()`. §7 now
+describes something the catalogue partly does, and the accessibility consequence
+the packet named — that §7 admits `'full'` as an override of a stated preference
+while "the library pays the cost and banks none of the benefit" — no longer
+holds.
+
+#### A8.3 Adoption counts for the Consequences — packet D20-2/3/4, with today's figures
+
+The packet asked for the adoption counts to be written into Consequences,
+because without them *"the Consequences read as a description of a system in
+use"*. They are recorded **here** rather than in Consequences, because the
+numbers the packet measured are not the numbers today and a Consequences bullet
+would simply go stale a third time. Measured 2026-09-22 at `527dbd1`, over
+`packages/core/src/components` unless stated:
+
+| Concern | Packet, 2026-09-03 | **2026-09-22** | Measured by |
+|---|---|---|---|
+| portal target | 18 | **18** | `useDzPortalTarget(` |
+| test ids | **0** | **89** | `useDzTestIds(` |
+| defaults | **1** | **23** | `useDzDefaults(` |
+| direction | **0** | **19** | `useDzDirection(` |
+| motion | **0** | **18** | `useDzMotion(` + `useDzMotionAttribute(` |
+| messages | 40 catalog entries | **44** entries · **45** components read through `useComponentMessages` | `packages/core/src/i18n/messages.ts` |
+| formats | "every `Intl` use" | **3** components call `useDzFormats(`; **0** `new Intl.` outside `i18n/intl-cache.ts` | grep |
+| locale | — | **1** direct `useDzLocale(`; the rest reach locale through formats and messages | grep |
+| nonce | — | **1** (`DzProvider` itself) | grep |
+| sanitizer (A6) | 0 by construction | **0 by construction** — the seam exists for `@dzup-ui-pro` | A6 |
+
+So of the packet's four "over-claimed adoption" divergences, **three are closed**
+(D20-1 motion, D20-2 direction, D20-3 test ids) and **one is substantially
+closed** (D20-4 defaults, 1 → 23). The residual for §6 is tracked as a
+**generated** ratchet with argued exclusions rather than a hand-listed figure —
+owner decision **D33**, taken as option (a) under delegation on 2026-09-17 and
+recorded as **D80** in
+`docs/program-2026-09-04/reports/TASK-R5-O3-handoff.md`.
+
+#### A8.4 Rollout §4 is Done — packet D20-6
+
+Rollout item 4 (*"**P4-04** migrates the 15 portal props to the provider
+default"*) is still written as open while items 2 and 3 are struck through.
+**Read it as struck through and Done.** 18 components consume
+`useDzPortalTarget()` against a 15-component target; resolution is
+`props.portalTo ?? dzPortalTarget.value`, matching §6 step 1 (`DzSelect.vue:84`);
+and the props were **retained**, matching the Consequences line *"The props stay
+— P4-04 decides their deprecation"*.
+
+**The half P4-04 did not do is still not done:** it was chartered to decide the
+deprecation of the 15 `portalTo` props and did not. That remains `[!owner]`
+**D-M**; the packet's recommendation is *keep them permanently, and say so*, on
+the ground that they are §6 step 1's escape hatch.
+
+#### A8.5 §5's formatter migration is complete — packet D20-7
+
+The Consequences bullet reads *"the five independent `Intl` construction sites
+**can be** migrated one at a time to the same cache."* **Read it in the past
+tense.** Measured 2026-09-22: **zero `new Intl.` constructions anywhere in
+`packages/core/src` outside `i18n/intl-cache.ts`**, which holds four. The
+per-frame construction in `DzAnimatedNumber.tween.ts` that the Context table
+called out is gone. A clean win the document under-claims.
+
+#### A8.6 A5's Core-component count — packet D20-8
+
+Amendment A5 says *"Core's ~38 components are contributed by exactly the
+augmentation above."* The figure has been 40 and is now **44** top-level entries
+in `packages/core/src/i18n/messages.ts`. Rather than correct the literal a third
+time: **the count is whatever that file declares**, and this document should
+cite the file rather than transcribe a number out of it. This is the
+hand-typed-facts class N2-S1 §11.3 records five prior sightings of.
+
+#### A8.7 Status — and what is still open
+
+This ADR remains **`Proposed`**. TASK-R0-O2 found **no recorded owner
+acceptance** for ADR-18, ADR-19 or ADR-20 in any ledger, handoff or decision
+register, and will not invent an owner name or a date. Since 2026-09-22 the
+status is measured rather than inert: `yarn validate:adr-references` reads the
+`Status:` line at the top of this file and counts this document in
+`maxProposedCitedFromCode` (`packages/tooling/scripts/adr-registry.json`), which
+is **3** today.
+
+The `[!owner]` decisions acceptance still depends on, after this amendment:
+
+| Id | Question | State after A8 |
+|---|---|---|
+| **N5-05 D-H** | motion: adopt · amend-and-defer · drop §7 | **Overtaken by events** — A8.2. 18 components adopt it; there is nothing left to defer |
+| **N5-05 D-I** | record the adoption counts | **Done** — A8.3, with today's figures rather than the packet's |
+| **N5-05 D-J** | strike Rollout §4 as Done | **Done** — A8.4. Its second half (`D-M`) is still open |
+| **N5-05 D-K** | restate §5's migration as complete | **Done** — A8.5 |
+| **N5-05 D-L** | should `DZ_THEME_KEY` move to contracts, **and** should `useDzTheme` stop throwing? (packet D20-5 + D20-9, Rollout §6) | **Open.** One question, not two — whether theme stops being special. Both halves unchanged in the tree |
+| **N5-05 D-M** | deprecate the 15 `portalTo` props, or keep them permanently? | **Open** — A8.4 |
+| **N5-05 D-N** | batch the three contracts-shape questions | **Partly closed.** Its `ariaInvalid` half (N5-02 **D1**) was completed by TASK-R0-O2 on 2026-09-22; `D-L`'s two halves remain |
+| **N5-05 D-P** | write ADR-09 before answering D-L | **Open.** D-L proposes amending ADR-09, which has no document — it is one of the 14 in `adr-registry.json` |
+| **D6** | `DZ_PROVIDER_DEFAULTS` grew a `sanitizer` key (A6) — accept the growth under a `minor`, or hold it in a second constant | **Open.** Register §3.1 |
+
+**None of these blocks acceptance on a factual contradiction.** The packet's own
+summary holds and is now stronger: ADR-20 has **no clause whose code contradicts
+it** — every divergence was either the document under-claiming what shipped or
+over-claiming adoption, and A8 corrects both directions. What is missing is a
+signature and five genuinely open questions, four of which (`D-L`, `D-M`, `D-P`,
+`D6`) the packet itself marks non-blocking.

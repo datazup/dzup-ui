@@ -2,7 +2,7 @@
 import type { CSSProperties } from 'vue'
 import type { DzTableCellProps, DzTableCellSlots } from './DzTable.types.ts'
 /**
- * DzTableCell — Table cell (<td> or <th>).
+ * DzTableCell — Table cell (`<td>` or `<th>`).
  *
  * Child of DzTable compound component. Inherits context via inject.
  *

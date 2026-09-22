@@ -73,8 +73,35 @@ jobs:
       - name: Install dependencies (default toolchain)
         run: yarn install --immutable
 
+      # TASK-R1-O4. Without this the job could not run a single test.
+      #
+      # `dist/` is gitignored (ADR-12), and the root vitest config resolves four
+      # `@dzup-ui/tokens` subpaths — `./css`, `./css/high-contrast`, `./tailwind`,
+      # `./dtcg` — to built artifacts that have NO source equivalent, so loading
+      # the config on a clean checkout throws before Vitest starts:
+      #
+      #     failed to load config from vitest.config.ts
+      #     Error: createDzupResolution: @dzup-ui/tokens/css points at
+      #     `./dist/tokens.css`, and neither a source equivalent nor the built
+      #     artifact exists.
+      #
+      # That is what the three scheduled runs of 2026-09-07, -09-14 and -09-21
+      # actually did: fail at config load, report zero tests, and — because the
+      # job is `continue-on-error` — leave the workflow green. Only the tokens
+      # workspace is built, not the whole repository: those four specifiers are
+      # the entire dist surface the suite touches (measured, not assumed), and a
+      # full `yarn build` would add ~80s to a weekly advisory lane for nothing.
+      - name: Build the generated token assets the suite resolves
+        run: yarn workspace @dzup-ui/tokens build
+
       # Printed before anything is written, so the log states what the lane was
       # about to pin even when the install below cannot start at all.
+      #
+      # On a `schedule` trigger there are no inputs, so `inputs.version` expands
+      # to the EMPTY STRING rather than being absent. The runner handles that
+      # (`versionFor`, pinned by a spec) — it used to not, and pinned every
+      # `@vue/*` package to `""`, which is how three "successful" scheduled runs
+      # measured Vue 3.5.43. See TASK-R1-O4.
       - name: Show the override this lane applies
         run: node packages/tooling/scripts/vue-next-lane.mjs --plan
         env:
@@ -88,12 +115,33 @@ jobs:
       #
       # Exit codes from the runner:
       #   1  the suite failed      — a result, advisory under an RC
-      #   2  the lane could not run (install/network) — NOT a result
+      #   2  the lane could not run (install/network, or `vue` did not resolve
+      #      to the pinned version) — NOT a result
       #   3  the restore did not verify — the checkout is dirty
       - name: Unit + contract suite under Vue 3.6-RC
+        id: lane
         run: node packages/tooling/scripts/vue-next-lane.mjs
         env:
           DZUP_VUE_NEXT: ${{ inputs.version }}
+
+      # TASK-R1-O4. The green tick is a lie by design, and this is where the
+      # truth goes.
+      #
+      # Every job in this file is `continue-on-error: true`, which is the right
+      # call for an unreleased Vue — see the header. What it also means is that
+      # the Actions list shows `Vue Next (advisory) · success` whether the lane
+      # passed, failed, or never started. All three scheduled runs to date read
+      # `success` while every job in them failed, and nobody looked for three
+      # weeks. `steps.<id>.outcome` is the pre-`continue-on-error` result, so
+      # this records what actually happened somewhere a human sees it without
+      # opening a log.
+      - name: Record the real outcome in the run summary
+        if: always()
+        run: |
+          echo "## Vue 3.6 lane — **${{ steps.lane.outcome }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Advisory: a failure here is information about an unreleased Vue, not a defect claim against this repository." >> "$GITHUB_STEP_SUMMARY"
+          echo "The workflow conclusion is \`success\` regardless — read this line, not the tick." >> "$GITHUB_STEP_SUMMARY"
 
       # `always()`, because the interesting case is the failing one. The runner
       # restores package.json and yarn.lock in a `finally` and verifies the
@@ -133,11 +181,35 @@ jobs:
         run: corepack enable
       - name: Install dependencies
         run: yarn install --immutable
+      # TASK-R1-O4. `--build`, because a CI checkout has no `dist/` (ADR-12) and
+      # none of the published packages declares a `prepack` hook — so `yarn pack`
+      # archived a tarball with no build output in it, the fixtures installed
+      # cleanly, Nuxt built them, and every assertion came back
+      #
+      #     AssertionError: expected '' to contain 'data-testid="core-button"'
+      #
+      # on BOTH majors, identically. Six red fixtures that said nothing whatever
+      # about Nuxt compatibility. `--build` builds exactly the workspaces being
+      # packed and is the flag the script already documents for this case; the
+      # freshness check it wraps then has a fresh dist to approve rather than a
+      # missing one to refuse.
       - name: Pack and stage the fixtures
-        run: node packages/nuxt/scripts/pack-fixtures.mjs
+        run: node packages/nuxt/scripts/pack-fixtures.mjs --build
         env:
           DZUP_FIXTURE_NUXT: ${{ matrix.nuxt }}
       - name: Install each staged fixture
         run: node packages/nuxt/scripts/install-fixtures.mjs
       - name: Build and assert
+        id: fixtures
         run: yarn test:nuxt-fixtures
+      # Same reasoning as the suite job above: `continue-on-error` hides the
+      # result from the Actions list, so the result is written where it can be
+      # read. Unlike the suite, a red row here is NOT about somebody else's
+      # prerelease — both Nuxt majors in this matrix are released — which is
+      # decision N5-03-D6 (should this leg be blocking?), still open.
+      - name: Record the real outcome in the run summary
+        if: always()
+        run: |
+          echo "## Nuxt ${{ matrix.nuxt }} consumer fixtures — **${{ steps.fixtures.outcome }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Both majors in this matrix are RELEASED versions: a failure here is a defect claim against this repository, advisory only because N5-03-D6 has not been decided." >> "$GITHUB_STEP_SUMMARY"

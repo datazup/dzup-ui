@@ -1,0 +1,13 @@
+{"n":1,"name":"typecheck-all","command":"yarn typecheck:all","exit":0,"seconds":67,"log":"01-typecheck-all.txt","startedAt":"2026-09-21T14:15:31Z"}
+{"n":2,"name":"typecheck-tooling","command":"yarn typecheck:tooling","exit":0,"seconds":6,"log":"02-typecheck-tooling.txt","startedAt":"2026-09-21T14:16:38Z"}
+{"n":3,"name":"lint","command":"yarn lint","exit":0,"seconds":78,"log":"03-lint.txt","startedAt":"2026-09-21T14:16:44Z"}
+{"n":4,"name":"test","command":"yarn test","exit":0,"seconds":314,"log":"04-test.txt","startedAt":"2026-09-21T14:18:02Z"}
+{"n":5,"name":"test-contracts","command":"yarn test:contracts","exit":0,"seconds":67,"log":"05-test-contracts.txt","startedAt":"2026-09-21T14:23:16Z"}
+{"n":6,"name":"test-a11y","command":"yarn test:a11y","exit":0,"seconds":13,"log":"06-test-a11y.txt","startedAt":"2026-09-21T14:24:24Z"}
+{"n":7,"name":"build","command":"yarn build","exit":0,"seconds":81,"log":"07-build.txt","startedAt":"2026-09-21T14:24:37Z"}
+{"n":8,"name":"validate-all","command":"yarn validate:all","exit":0,"seconds":552,"log":"08-validate-all.txt","startedAt":"2026-09-21T14:25:58Z"}
+{"n":9,"name":"dist-artifacts","command":"bash scripts/release-checks/dist-artifacts.sh","exit":0,"seconds":0,"log":"09-dist-artifacts.txt","startedAt":"2026-09-21T14:35:10Z"}
+{"n":10,"name":"esm-only","command":"bash scripts/release-checks/esm-only.sh","exit":0,"seconds":0,"log":"10-esm-only.txt","startedAt":"2026-09-21T14:35:10Z"}
+{"n":11,"name":"published-imports","command":"yarn validate:published-imports --built","exit":0,"seconds":17,"log":"11-published-imports.txt","startedAt":"2026-09-21T14:35:11Z"}
+{"n":12,"name":"api-diff","command":"yarn release:api-diff --out docs/qa/release/2026-09-21-527dbd1","exit":0,"seconds":16,"log":"12-api-diff.txt","startedAt":"2026-09-21T14:35:28Z"}
+{"n":13,"name":"evidence","command":"yarn release:evidence --out docs/qa/release/2026-09-21-527dbd1","exit":0,"seconds":13,"log":"13-evidence.txt","startedAt":"2026-09-21T14:35:44Z"}

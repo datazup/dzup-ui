@@ -82,6 +82,25 @@ export function resolutionsFor(config, version) {
   return out
 }
 
+/**
+ * The version this run pins: `DZUP_VUE_NEXT` when it names one, otherwise the
+ * channel version in `vue-next-lane.json`.
+ *
+ * Separated from the CLI and exported because of a real defect (TASK-R1-O4).
+ * This used to read `process.env.DZUP_VUE_NEXT ?? config.resolutions.vue`, and
+ * the workflow passes `DZUP_VUE_NEXT: ${{ inputs.version }}` — which on a
+ * `schedule` trigger is the **empty string**, not undefined. `??` does not fall
+ * through on `''`, so every scheduled run pinned every `@vue/*` package to `""`,
+ * yarn resolved the default range, and the lane ran the suite against Vue
+ * 3.5.43 while the workflow reported success. Three consecutive weekly runs
+ * (2026-09-07, -09-14, -09-21) are evidence about a version this lane exists to
+ * avoid testing.
+ */
+export function versionFor(config, envValue) {
+  const requested = typeof envValue === 'string' ? envValue.trim() : ''
+  return requested === '' ? config.resolutions.vue : requested
+}
+
 /** The root manifest with the lane's resolutions merged over its own. */
 export function applyResolutions(manifestJson, resolutions) {
   const parsed = JSON.parse(manifestJson)
@@ -104,7 +123,7 @@ if (isMain) {
   const passthrough = separator === -1 ? [] : argv.slice(separator + 1)
 
   const config = readConfig()
-  const version = process.env.DZUP_VUE_NEXT ?? config.resolutions.vue
+  const version = versionFor(config, process.env.DZUP_VUE_NEXT)
   const resolutions = resolutionsFor(config, version)
 
   // Two commands, and the difference between them is not convenience — they
@@ -180,24 +199,42 @@ if (isMain) {
       readFileSync(join(ROOT, 'node_modules/vue/package.json'), 'utf8'),
     ).version
     console.warn(`\n· vue resolved to ${installed}`)
-    if (installed !== version) {
-      console.warn(
-        `  ! that is not ${version}. Something else in the tree pinned it; the result below\n`
-        + `    is evidence about ${installed} and must be reported as such.`,
-      )
-    }
 
-    try {
-      run(`yarn ${command}`)
-      console.warn(`\n✓ vue-next lane PASSED under vue ${installed} (advisory).`)
-    }
-    catch {
+    // Exit 2 (DID NOT RUN), not a warning and not a result (TASK-R1-O4).
+    //
+    // This used to warn "that is not <version>" and run the suite anyway. It is
+    // the single most misleading thing a version-pinning lane can do: the run
+    // goes green, the workflow reports success, and the recorded evidence is
+    // about the very version the lane was built to move away from. It happened
+    // on every scheduled run between 2026-09-07 and 2026-09-21 because the
+    // empty `DZUP_VUE_NEXT` bug above pinned `""`.
+    //
+    // "We never executed this" and "this passed" are not interchangeable, and
+    // the exit code is the only place that distinction survives into a CI
+    // summary.
+    if (installed !== version) {
       console.error(
-        `\n✗ vue-next lane FAILED under vue ${installed}. ADVISORY — this does not block a\n`
-        + '  merge. Triage each failure as library defect / RC behaviour change / test-env\n'
-        + '  issue before changing any library code.',
+        `\n✗ the lane could NOT RUN: vue resolved to ${installed}, not ${version}.\n`
+        + '  Something else in the tree pinned it — a transitive constraint, a stale\n'
+        + '  lockfile, or an override this lane did not apply. Running the suite now would\n'
+        + `  produce evidence about ${installed}, which is exactly what the default lane\n`
+        + '  already measures. Record this run as wired-but-unrun.',
       )
-      exitCode = 1
+      exitCode = 2
+    }
+    else {
+      try {
+        run(`yarn ${command}`)
+        console.warn(`\n✓ vue-next lane PASSED under vue ${installed} (advisory).`)
+      }
+      catch {
+        console.error(
+          `\n✗ vue-next lane FAILED under vue ${installed}. ADVISORY — this does not block a\n`
+          + '  merge. Triage each failure as library defect / RC behaviour change / test-env\n'
+          + '  issue before changing any library code.',
+        )
+        exitCode = 1
+      }
     }
   }
   catch (error) {

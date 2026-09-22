@@ -60,3 +60,11 @@ Thumbs.db
 # Local agent worktrees
 .worktrees/
 .claude/worktrees/
+
+# validate:tree-shake scratch — `tree-shake-check.ts` writes `entry.ts` and
+# `vite.config.ts` from scratch on every run and rm -rf's the directory when it
+# finishes. Both files were tracked until TASK-R1-O1: a validator that
+# overwrites and then deletes committed files leaves the worktree dirty (or
+# short two files) whenever the cleanup wins the race, which is precisely the
+# flakiness that kept this gate out of `validate:all`.
+.tree-shake-test/

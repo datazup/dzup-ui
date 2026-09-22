@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzCalendar
 
 full-surface month/week calendar for date selection and
@@ -48,12 +52,11 @@ never as asserted.
 :::
 
 
-## Props (18, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (17, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents all interaction |
@@ -259,7 +262,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 18 | 18 | 8 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 17 | 17 | 8 declare a default, of which 8 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 3 | 3 | 1 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 1 | 1 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -268,8 +271,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `2d51eec4` for the capability matrix,
-`2d51eec4` for the quality matrix. It is **locally qualified**:
+artifact records — `527dbd15` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

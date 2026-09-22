@@ -21,7 +21,14 @@ import {
 } from '../meta/component-meta.ts'
 import { COMPONENT_META_PATH } from '../meta/generate-component-meta.ts'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
-import { checkComponentMeta, measure, readCeilings, readPublicSymbols } from './component-meta.ts'
+import {
+  bareHtmlInDescription,
+  checkComponentMeta,
+  measure,
+  membersWithBareHtml,
+  readCeilings,
+  readPublicSymbols,
+} from './component-meta.ts'
 
 // ── Fabricated inputs ────────────────────────────────────────────────────────
 
@@ -38,6 +45,10 @@ function record(over: Partial<ComponentMetaRecord> = {}): ComponentMetaRecord {
     componentCommit: 'aaaa',
     componentType: 'class',
     anatomy: { state: 'absent', parts: [] },
+    // Required on the record since TASK-R5-O3. `generate:component-meta`
+    // always emits an array, so a fixture that omits it is not a record
+    // the generator could ever have produced.
+    providerHooks: [],
     props: [],
     globalPropCount: 12,
     events: [],
@@ -112,6 +123,7 @@ const EXACT_CEILINGS: Record<string, number> = {
   exposedWithoutDescription: 0,
   publicComponentsWithoutExample: 1,
   componentsWithoutStaticTemplate: 1,
+  descriptionsWithBareHtml: 0,
 }
 
 /**
@@ -251,6 +263,51 @@ describe('ratchets', () => {
       COPY_LINE,
     )
     expect(errors(v).join('\n')).toContain('`publicComponentsWithoutExample` fell to 1 (ceiling 5)')
+  })
+
+  // ── TASK-R1-O5: bare HTML in a description ────────────────────────────────
+  describe('descriptionsWithBareHtml', () => {
+    it('counts a tag written bare and names the member', () => {
+      const v = checkComponentMeta(
+        artifact([record({ description: 'Renders as <span> when absent.' })]),
+        new Set(['DzButton']),
+        EXACT_CEILINGS,
+        COPY_LINE,
+      )
+      const joined = errors(v).join('\n')
+      expect(joined).toContain('1 description(s) carry a bare HTML tag')
+      expect(joined).toContain('DzButton <span>')
+      expect(joined).toContain('`descriptionsWithBareHtml` is 1, above the ceiling of 0')
+    })
+
+    it('leaves a tag inside backticks alone — it is already correct markdown', () => {
+      const v = checkComponentMeta(
+        artifact([record({ description: 'Renders as `<span>` when absent.' })]),
+        new Set(['DzButton']),
+        EXACT_CEILINGS,
+        COPY_LINE,
+      )
+      expect(errors(v)).toEqual([])
+    })
+
+    it('finds one on a prop, not only on the component', () => {
+      expect(bareHtmlInDescription('Whether the list is ordered (renders <ol> instead of <ul>)'))
+        .toBe('<ol>')
+      expect(membersWithBareHtml(artifact([record({
+        props: [{
+          name: 'ordered',
+          type: 'boolean',
+          description: 'renders <ol> instead',
+          descriptionSource: 'vue-component-meta',
+          required: false,
+          default: null,
+        }],
+      })] as ComponentMetaRecord[]))).toEqual([{ member: 'DzButton.props.ordered', tag: '<ol>' }])
+    })
+
+    it('ignores a fenced block — a usage snippet is not prose', () => {
+      expect(bareHtmlInDescription('see:\n```vue\n<DzButton />\n```\n')).toBeNull()
+    })
   })
 
   it('fails when a measured number has no declared ceiling at all', () => {

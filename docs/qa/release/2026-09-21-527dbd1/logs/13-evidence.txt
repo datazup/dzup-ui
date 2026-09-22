@@ -1,0 +1,13 @@
+packing the published packages… 6 tarball(s)
+  @dzup-ui/contracts@0.1.0: 50 file(s) · 0 dep(s) · advisories NOT RUN (the package declares no runtime dependencies — there is nothing to query, which is not the same as a clean audit)
+  @dzup-ui/core@0.2.0: 1461 file(s) · 15 dep(s) · 0 advisory row(s)
+  @dzup-ui/mcp@0.2.0: 17 file(s) · 94 dep(s) · 20 advisory row(s)
+  @dzup-ui/nuxt@0.1.0-alpha.0: 7 file(s) · 33 dep(s) · 0 advisory row(s)
+  @dzup-ui/testing@0.1.0: 34 file(s) · 0 dep(s) · advisories NOT RUN (the package declares no runtime dependencies — there is nothing to query, which is not the same as a clean audit)
+  @dzup-ui/tokens@0.2.0: 17 file(s) · 0 dep(s) · advisories NOT RUN (the package declares no runtime dependencies — there is nothing to query, which is not the same as a clean audit)
+
+  6 tarball(s) · 143 distinct dependencies · 0 blocked · 0 unknown · 0 excepted
+  advisories: mixed
+  local protocols left in packed manifests: 0
+  written → docs/qa/release/2026-09-21-527dbd1/{sbom.cdx.json,sbom/,hashes.json,provenance.json,supply-chain.{json,md}}
+  ADMISSIBLE: false — worktree dirty: 221 path(s) differ from 527dbd1

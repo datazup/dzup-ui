@@ -32,12 +32,7 @@ test.describe('Storybook root', () => {
 
     // Storybook 7/8 renders a sidebar nav with role="navigation" or data attributes.
     // The sidebar contains the component tree — we look for the nav landmark.
-    const sidebar = page.locator('[data-layout="sidebar"], nav[aria-label*="story"], .sidebar-container').first()
-
-    // Fallback: Storybook wraps sidebar in a nav or aside element
-    const storybookSidebar = page.locator('#storybook-sidebar, .css-sidebar, [class*="sidebar"]').first()
-
-    // At minimum, the page should contain at least one navigation structure
+    // At minimum, the page should contain at least one navigation structure.
     await expect(page.locator('nav').first()).toBeVisible({ timeout: 15_000 })
   })
 
@@ -183,23 +178,23 @@ test.describe('No console errors on key stories', () => {
     test(`no console errors on ${storyId}`, async ({ page }) => {
       const consoleErrors: string[] = []
 
-      page.on('console', msg => {
+      page.on('console', (msg) => {
         if (msg.type() === 'error') {
           consoleErrors.push(msg.text())
         }
       })
 
-      const frame = await loadStoryCanvas(page, storyId)
+      await loadStoryCanvas(page, storyId)
 
       // Filter out known non-critical browser warnings that are not Vue/component errors
       const actionableErrors = consoleErrors.filter(
         msg =>
-          !msg.includes('favicon') &&
-          !msg.includes('net::ERR') &&
-          !msg.includes('ResizeObserver') &&
+          !msg.includes('favicon')
+          && !msg.includes('net::ERR')
+          && !msg.includes('ResizeObserver')
           // Storybook HMR websocket disconnects in CI are not component errors
-          !msg.includes('WebSocket') &&
-          !msg.includes('[HMR]'),
+          && !msg.includes('WebSocket')
+          && !msg.includes('[HMR]'),
       )
 
       expect(actionableErrors).toHaveLength(0)

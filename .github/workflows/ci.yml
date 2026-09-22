@@ -5,6 +5,13 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # TASK-R1-O4. Hand-runnable at any ref. Without this, `gh workflow run CI`
+  # fails with "workflow does not have workflow_dispatch trigger" and the only
+  # way to re-ask a question of CI is to push a commit — which is how three
+  # blocking jobs stayed red for weeks with nobody able to re-check a fix
+  # cheaply. Dispatch changes nothing about what runs: the same graph, at the
+  # ref you name.
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -102,50 +109,17 @@ jobs:
   # The floor, exercised (ADR-18, TASK-OSS-P2-01)
   # ──────────────────────────────────────────────
 
+  # TASK-R1-O4 moved the steps of this job into
+  # `.github/workflows/validate-min-runtime.yml` and calls them from here.
+  #
+  # Nothing about the blocking graph changed — the same steps run on the same
+  # trigger with the same name. What changed is that the floor became
+  # answerable ON DEMAND: a reusable workflow can carry `workflow_dispatch`, a
+  # job cannot, and ci.yml's ~15-minute graph is too expensive to re-run to
+  # re-check one claim. 1.0 criterion C10 is a claim about a runtime, and a
+  # claim nobody can cheaply re-check is a claim nobody re-checks.
   validate-min-runtime:
-    # A contributor who satisfies `engines` must be able to run every mandatory
-    # gate. Before this job that was a claim: every other job requested
-    # `node-version: 20`, which resolves to the newest 20.x, so the declared
-    # floor was never the one anything ran on. The floor said `>=20.0.0` while
-    # vite@7 and jsdom@29 both require `^20.19.0` — `yarn build` and `yarn test`
-    # could not start on a version the repository advertised.
-    #
-    # `.nvmrc` holds the floor and this job reads it, so there is one number.
-    name: Validators at the minimum runtime
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-      - name: Enable Corepack
-        run: corepack enable
-      - name: Report the runtime under test
-        run: node -v
-      # No cache restore, on purpose: this job answers "does a clean checkout
-      # work at the floor?", and a warm cache from a newer-Node job could hide
-      # an install-time engine rejection.
-      - name: Install dependencies (clean)
-        run: yarn install --immutable
-      # The declarations agree, and every gate dependency accepts the floor.
-      - name: Engine declarations
-        run: yarn validate:engines
-      # Each generator must START. A startup error — ERR_UNKNOWN_FILE_EXTENSION,
-      # SyntaxError, Unsupported engine — is the failure this job exists to
-      # catch, and it is indistinguishable from "there is no gate".
-      - name: Generators
-        run: |
-          yarn generate:exports:core
-          yarn generate:ownership:core
-      # Every validator named in `validate:all`, run individually so the report
-      # says which one failed rather than which chain did.
-      - name: Validators
-        run: yarn validate:all
-      # The two gates whose own dependencies (vite, jsdom) set the floor.
-      - name: Build and test at the floor
-        run: |
-          yarn build
-          yarn test
+    uses: ./.github/workflows/validate-min-runtime.yml
 
   validate:
     name: Validate (boundaries + tokens)
@@ -323,6 +297,16 @@ jobs:
       # than a skip. The `validate` job runs the same script pre-build (source checks).
       - name: Verify every export target exists in dist
         run: yarn validate:exports --built
+      # TASK-R1-O2. Every check above reads the built files without ever loading
+      # one, which is how @dzup-ui/contracts shipped unloadable ESM for a whole
+      # cycle with all of them green. This packs the six published packages with
+      # `yarn pack`, extracts the tarballs into a scratch consumer and `import()`s
+      # every exports subpath under plain Node, plus a consumer-flavoured
+      # `tsc --noEmit` over every `types` condition. `--built` because this job
+      # has just run `yarn build`: here a stale or missing dist is an error, not
+      # the warning it is in the pre-build `validate:all` lane.
+      - name: Import every published entry from its tarball
+        run: yarn validate:published-imports --built
       - name: Validate type declarations
         run: yarn validate:dts
       - name: Bundle budget check

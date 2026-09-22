@@ -22,11 +22,11 @@ import type {
   OwnershipManifest,
   OwnershipStatus,
 } from './ownership-manifest.types.ts'
-import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { headCommit } from '../quality/git.ts'
 import { readAnatomyFor } from './anatomy-source.ts'
 import {
   buildOwnershipMap,
@@ -213,15 +213,6 @@ function collectStories(storiesDir: string): Map<string, { path: string, status?
     out.set(symbol, { path: rel(file), status })
   }
   return out
-}
-
-function gitHead(): string {
-  try {
-    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim()
-  }
-  catch {
-    return 'unknown'
-  }
 }
 
 /**
@@ -508,7 +499,7 @@ export function buildOwnershipManifest(): { manifest: OwnershipManifest, warning
     manifest: {
       schemaVersion: OWNERSHIP_SCHEMA_VERSION,
       tier: 'core',
-      sourceCommit: gitHead(),
+      sourceCommit: headCommit(),
       generatedFrom: [
         'packages/compat/src/adapters/*.vue',
         'packages/compat/src/index.ts',

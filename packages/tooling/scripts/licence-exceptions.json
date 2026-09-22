@@ -1,0 +1,13 @@
+{
+  "$comment": "Owned licence exceptions for the release supply-chain report (TASK-R1-O3). Data, not code: the allow/block sets live in packages/tooling/src/license-audit.ts and are shared by `yarn validate:licenses` and `yarn release:evidence`, so there is exactly ONE licence policy in this repository. This file is the escape hatch from it, and every entry must name an owner — an exception with no owner is indistinguishable from an oversight, which is the failure mode `release-policy.json#$withheld` records for ignored packages.",
+
+  "$rules": [
+    "Every entry needs `package`, `licence`, `owner`, `reason`. `expires` may be null only when the exception is structural (a licence that will never change), and the reason must say why.",
+    "An exception applies to a package NAME, not to a version range: a dependency that changes its licence between versions is a new decision, not a covered one.",
+    "The list may only SHRINK. Adding an entry is an owner's act; an agent proposes it in a handoff and stops.",
+    "An exception does not make `validate:licenses` pass. That gate has its own allow/block sets and is not read from here — a blocked licence is still a red gate, and this file only records that someone has looked at it and why the release proceeded."
+  ],
+
+  "exceptions": [],
+  "$exceptions": "EMPTY at 527dbd1, and that is the measured state rather than a placeholder: the first `release:evidence` run over all six published tarballs found 0 blocked licences in the bundled dependency closure. The unknown rows it did find are optional peers nobody installed in this workspace, whose licence was therefore never read — a different fact from an unacceptable licence, and one an exception would wrongly paper over. See docs/qa/release/<bundle>/supply-chain.md."
+}

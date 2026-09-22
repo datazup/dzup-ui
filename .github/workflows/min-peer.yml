@@ -1,0 +1,137 @@
+# The MINIMUM declared peer versions, exercised (TASK-R1-O4).
+#
+# WHAT IT ANSWERS
+# ---------------
+# `@dzup-ui/core` publishes `peerDependencies: { vue: "^3.5.0", reka-ui: "^2.0.0" }`.
+# That is a promise to every consumer: bring any Vue from 3.5.0 up and any Reka
+# from 2.0.0 up, and this library works. Nothing has ever checked it. The root
+# manifest depends on `vue@^3.5.13`, so 3.5.0–3.5.12 have never been installed
+# here; the tree resolves `reka-ui@2.9.x`, so 2.0.0 has never been installed
+# here either. Every lane in the repository measures the NEWEST version the
+# lockfile admits, which is the one a consumer is least likely to be on.
+#
+# The 08-11 validation/release document's package matrix names this row
+# explicitly, and N5-04 recorded it as R-058c: "only current versions are
+# exercised".
+#
+# NOT ADVISORY
+# ------------
+# The Vue 3.6 lane next door is `continue-on-error` because a red run there is a
+# fact about somebody else's prerelease. This is the opposite: 3.5.0 and 2.0.0
+# are released versions that this repository's own package.json files tell
+# consumers to expect. A red run here says a published peer range is false, and
+# the fix is either code or a narrowed range with a changeset — narrowing is
+# `minor` under packages/contracts/VERSIONING.md, which is the breaking position
+# for a 0.x package.
+#
+# It is nonetheless NOT yet wired into ci.yml. It has never run; adding an
+# unrun lane to the blocking graph would gate every merge on an unknown. The
+# `workflow_call` trigger is here so that promoting it after its first green
+# dispatch is one line in ci.yml:
+#
+#     min-peer:
+#       uses: ./.github/workflows/min-peer.yml
+#
+# WHY A SEPARATE INSTALL AND NOT A MATRIX ENTRY
+# ---------------------------------------------
+# Pinning a floor means a second full resolution of a ~4 MB lockfile. A matrix
+# entry inside an existing job would share that job's install and silently get
+# the newest versions anyway — which is precisely the failure mode this lane
+# exists to detect. The runner pins, installs, ASSERTS the version on disk is
+# the floor, runs, and restores both package.json and yarn.lock.
+#
+# NO SCHEDULE, on purpose. The declared floor only moves when somebody edits a
+# `peerDependencies` range, which is a reviewed act; a weekly run would burn
+# minutes to re-answer a question whose inputs did not change. Dispatch it after
+# a peer-range edit and before a release.
+name: Min peer (declared floor)
+
+on:
+  # The same input is declared on both triggers on purpose. The `inputs` context
+  # of a reusable workflow contains only what `workflow_call` declares, so an
+  # expression referring to a dispatch-only input would silently read empty when
+  # ci.yml calls this file — a difference in behaviour between the two entry
+  # points that nothing would report.
+  workflow_call:
+    inputs:
+      commands:
+        description: 'Override the lane commands, e.g. `vitest run packages/core` (default: the commands in min-peer-lane.json)'
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      commands:
+        description: 'Override the lane commands, e.g. `vitest run packages/core` (default: the commands in min-peer-lane.json)'
+        required: false
+        type: string
+
+concurrency:
+  # `github.workflow` is part of the key because a reusable workflow inherits
+  # the CALLER's name, so a direct dispatch and a future ci.yml call would
+  # otherwise share a group and cancel each other on the same ref.
+  group: min-peer-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  min-peer:
+    name: Declared peer floor (vue + reka-ui)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # The declared Node floor, not a floating major — the same reasoning
+          # as validate-min-runtime.yml. A lane that exercises the lowest peer
+          # on the highest runtime has changed two variables and measured
+          # neither.
+          node-version-file: .nvmrc
+      - name: Enable Corepack
+        run: corepack enable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+      - name: Install dependencies (default toolchain)
+        run: yarn install --immutable
+
+      # `dist/` is gitignored (ADR-12) and the root vitest config resolves four
+      # `@dzup-ui/tokens` subpaths to built artifacts with no source equivalent,
+      # so without this the suite cannot load its own config. Only the tokens
+      # workspace is built: those four specifiers are the entire dist surface
+      # the suite touches.
+      - name: Build the generated token assets the suite resolves
+        run: yarn workspace @dzup-ui/tokens build
+
+      # Printed before anything is written, so the log states which floors were
+      # derived and from which declarations — even if the install below cannot
+      # start at all.
+      - name: Show the floors this lane derived
+        run: node packages/tooling/scripts/min-peer-lane.mjs --plan
+
+      # Exit codes from the runner:
+      #   1  a command failed at the floor — a defect claim against this repo
+      #   2  the lane could not run (install failed, or the floor did not land
+      #      on disk) — NOT a result, and never recorded as one
+      #   3  the restore did not verify — the checkout is dirty
+      - name: Typecheck and suite at the declared floor
+        id: lane
+        run: node packages/tooling/scripts/min-peer-lane.mjs ${{ inputs.commands && format('-- {0}', inputs.commands) || '' }}
+
+      # The runner restores package.json and yarn.lock in a `finally` and
+      # verifies its own restore. This is the independent second opinion — the
+      # step that would catch a runner bug rather than trusting the runner's
+      # report of its own cleanup.
+      - name: Prove the default toolchain was restored
+        if: always()
+        run: git diff --exit-code -- package.json yarn.lock
+
+      - name: Record the outcome in the run summary
+        if: always()
+        run: |
+          echo "## Declared peer floor — **${{ steps.lane.outcome }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "The floors are derived from \`peerDependencies\` at run time, not written down here." >> "$GITHUB_STEP_SUMMARY"
+          echo "A failure is a defect claim against THIS repository: a published peer range admits a version the library does not work on." >> "$GITHUB_STEP_SUMMARY"

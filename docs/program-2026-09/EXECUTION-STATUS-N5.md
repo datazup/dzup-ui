@@ -453,3 +453,28 @@ Nuxt majors **may have been obtained against a stale artifact**. Nobody can curr
 tell. That is a one-line fix and it is nobody's assigned task — and *"nobody can tell"*
 is precisely the property this program exists to eliminate. **It is filed here rather
 than resolved, because resolving it silently is the failure mode it describes.**
+
+---
+
+## Owner decisions — consolidated elsewhere (appended 2026-09-22, TASK-R0-O1)
+
+The **38** `[!owner]` decisions this lane opened (N5-01 7 · N5-02 6 · N5-03 6 ·
+N5-04 4 · N5-05 15) are consolidated, with their current state and a
+recommendation, in
+[`../program-2026-09-04/reports/owner-decision-register-2026-09.md`](../program-2026-09-04/reports/owner-decision-register-2026-09.md).
+
+Three of them are the release gate and are costed in full in
+[`../program-2026-09-04/reports/publication-decision-packet-2026-09.md`](../program-2026-09-04/reports/publication-decision-packet-2026-09.md):
+
+- **N5-01 D1** — proven, not predicted. `TASK-R1-O1` ran `changeset version` in
+  a throwaway worktree of `527dbd1`: **the first release turns `validate:all`
+  red for five reasons, not one.** D1 understates the problem by four.
+- **N5-01 D2** — the withheld packages' cost is now measured twice over:
+  `VERSIONING.md` §3 mandates a `warnDeprecated` and a codemod that live in
+  `@dzup-ui/compat` / `@dzup-ui/codemods` and can never be installed.
+- **N5-01 D3** — the changeset count is **36**, not the 16 audited here. The 20
+  that landed since were audited for the first time by TASK-R0-O1 and carry
+  **2 further over-declarations and 1 candidate under-declaration**.
+
+Nothing above is superseded; the register cites this ledger by path rather than
+restating it.

@@ -44,7 +44,7 @@ export interface LicenseAuditResult {
 /**
  * Licenses that are compatible with both MIT and commercial distribution.
  */
-const ALLOWED_LICENSES = new Set([
+export const ALLOWED_LICENSES = new Set([
   'MIT',
   'ISC',
   'BSD-2-Clause',
@@ -65,7 +65,7 @@ const ALLOWED_LICENSES = new Set([
 /**
  * Licenses that are definitely incompatible with commercial distribution.
  */
-const BLOCKED_LICENSES = new Set([
+export const BLOCKED_LICENSES = new Set([
   'GPL-2.0',
   'GPL-2.0-only',
   'GPL-2.0-or-later',
@@ -86,7 +86,17 @@ const BLOCKED_LICENSES = new Set([
   'CPOL-1.02',
 ])
 
-function classifyLicense(license: string): { allowed: boolean, reason?: string } {
+/**
+ * The repository's one licence policy.
+ *
+ * Exported since TASK-R1-O3 so that `release:evidence` classifies a tarball's
+ * dependency closure with the **same** allow/block sets `validate:licenses`
+ * gates on. A supply-chain report that applied a second, private policy would
+ * be able to call a dependency acceptable that the gate rejects — two answers
+ * to one question, which is the defect this repository keeps finding in its own
+ * generated artifacts.
+ */
+export function classifyLicense(license: string): { allowed: boolean, reason?: string } {
   const normalized = license.trim()
 
   if (ALLOWED_LICENSES.has(normalized)) {

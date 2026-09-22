@@ -11,22 +11,26 @@
  */
 
 import type { ComponentMetaArtifact, ComponentMetaRecord } from '../meta/component-meta.ts'
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { existsSync, readFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { renderComponentSection } from '../llms/render-llms.ts'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 import {
   buildNav,
+  componentImportLine,
   compoundPartsOf,
   escapeForVue,
   escapeVueText,
-  isAllowedComponentLine,
+  PAGE_COMPONENT_IMPORT_PATH,
   publicComponents,
   renderComponentPage,
   renderComponentsIndex,
   renderFidelity,
+  SCRIPT_CLOSE,
+  SCRIPT_OPEN,
   splitSection,
+  unescapedMarkupLines,
   yamlString,
 } from './docs-pages.ts'
 
@@ -145,6 +149,79 @@ describe('escapeForVue', () => {
     ])
     expect(out.at(-1)).toBe('| `href` | URL. Renders as &lt;span> when absent. |')
     expect(out).toContain('<DzBreadcrumb />')
+  })
+
+  // ── TASK-R1-O5, D3-F8: the page-local import channel ──────────────────────
+  describe('the generator\'s own <script setup> block', () => {
+    const block = [SCRIPT_OPEN, componentImportLine('DzPlayground'), SCRIPT_CLOSE]
+
+    it('passes through unescaped', () => {
+      expect(escapeForVue([...block, 'and <span> after'])).toEqual([
+        ...block,
+        'and &lt;span> after',
+      ])
+    })
+
+    it('escapes a script block that is not the generator\'s', () => {
+      // A description that happens to contain `<script setup>` must not become
+      // executable page code. The block is validated as a WHOLE before its
+      // first line passes, so an unrecognised body closes the channel.
+      const out = escapeForVue([SCRIPT_OPEN, 'globalThis.x = 1', SCRIPT_CLOSE])
+      expect(out[0]).toBe('&lt;script setup>')
+      expect(out[1]).toBe('globalThis.x = 1')
+    })
+
+    it('escapes an unterminated script block instead of swallowing the page', () => {
+      const out = escapeForVue([SCRIPT_OPEN, componentImportLine('DzPlayground'), 'after <span>'])
+      expect(out[0]).toBe('&lt;script setup>')
+      expect(out.at(-1)).toBe('after &lt;span>')
+    })
+
+    it('escapes an empty block — it would import nothing', () => {
+      expect(escapeForVue([SCRIPT_OPEN, SCRIPT_CLOSE])[0]).toBe('&lt;script setup>')
+    })
+  })
+})
+
+describe('the page-local chrome import (D3-F8)', () => {
+  const artifact = JSON.parse(
+    readFileSync(join(ROOT, 'packages/core/docs/component-meta.json'), 'utf8'),
+  ) as ComponentMetaArtifact
+
+  it('emits an import only on a page that carries the playground tag', () => {
+    const withTag = publicComponents(artifact).find(
+      c => c.stories?.runnable?.template !== undefined,
+    )!
+    const withoutTag = publicComponents(artifact).find(
+      c => c.stories?.runnable?.template === undefined,
+    )!
+
+    const seeded = renderComponentPage({ record: withTag, artifact })
+    expect(seeded).toContain(componentImportLine('DzPlayground'))
+    expect(seeded.indexOf(SCRIPT_OPEN)).toBeLessThan(seeded.indexOf(`# ${withTag.name}`))
+
+    // A page that only carries a refusal sentence imports nothing and pays
+    // nothing — that is the whole point of moving the registration.
+    expect(renderComponentPage({ record: withoutTag, artifact }))
+      .not
+      .toContain(componentImportLine('DzPlayground'))
+  })
+
+  it('imports by a path that resolves from apps/docs/components/', () => {
+    const target = resolve(
+      ROOT,
+      'apps/docs/components',
+      `${PAGE_COMPONENT_IMPORT_PATH}/DzPlayground.vue`,
+    )
+    expect(existsSync(target)).toBe(true)
+  })
+
+  it('is not ALSO registered globally — one channel, not two', () => {
+    // Two registrations would put the chrome back in the shared `theme` chunk
+    // and the page-local import would be dead weight, which is the shape D3-F8
+    // is about: a cost nobody can see.
+    const themeEntry = readFileSync(resolve(ROOT, 'apps/docs/.vitepress/theme/index.ts'), 'utf8')
+    expect(themeEntry).not.toMatch(/app\.component\(\s*'DzPlayground'/)
   })
 })
 
@@ -329,28 +406,17 @@ describe('the real catalog', () => {
   it('renders every page without leaving markup that VitePress would compile', () => {
     // Outside fenced blocks and inline code, a `<` is a Vue element start. This
     // is the whole-catalog form of the DzBreadcrumb regression above.
+    // The rule lives in `unescapedMarkupLines`, not here. Stating it a second
+    // time is D3-F6: the escaper gained a channel and only one copy learned
+    // about it — twice, now (the component tag, then the `<script setup>`
+    // import block TASK-R1-O5 added).
     for (const record of publicComponents(artifact)) {
-      const page = renderComponentPage({ record, artifact })
-      const body = page.split('\n')
-      let inFence = false
-      body.forEach((line, i) => {
-        if (/^\s*[`~]{3,}/.test(line)) {
-          inFence = !inFence
-          return
-        }
-        // The one tag a generated page may open is a REGISTERED component, so
-        // VitePress compiling it is the intent (TASK-N2-D3). Asked of the
-        // escaper's own predicate rather than a second copy of the allowlist.
-        if (inFence || line.startsWith('<!--') || line.startsWith('     ')
-          || isAllowedComponentLine(line)) {
-          return
-        }
-        const outsideCode = line.split('`').filter((_, idx) => idx % 2 === 0).join('')
-        expect(
-          outsideCode.includes('<'),
-          `${record.name}.md line ${i + 1} carries unescaped markup: ${line}`,
-        ).toBe(false)
-      })
+      const offenders = unescapedMarkupLines(renderComponentPage({ record, artifact }))
+      expect(
+        offenders,
+        `${record.name}.md carries unescaped markup: ${
+          offenders.map(o => `line ${o.line}: ${o.text}`).join(' · ')}`,
+      ).toEqual([])
     }
   })
 })

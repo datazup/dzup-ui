@@ -32,13 +32,13 @@ import type {
   MetaInput,
 } from './component-meta.ts'
 import type { ExtractTarget } from './extract-component-meta.ts'
-import { execFileSync } from 'node:child_process'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { readAnatomyFor } from '../ownership/anatomy-source.ts'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
+import { headCommit } from '../quality/git.ts'
 import {
   COMPONENT_META_SCHEMA_VERSION,
   serializeComponentMeta,
@@ -90,25 +90,6 @@ function readJson<T>(path: string): T | null {
   if (!existsSync(path))
     return null
   return JSON.parse(readFileSync(path, 'utf8')) as T
-}
-
-/**
- * The commit this artifact was generated at.
- *
- * Constraint **B1** records that existing generators stamp their landing
- * commit's *parent* by construction. That is a property of when a generator is
- * run relative to the commit that lands it, not of the command — `git rev-parse
- * HEAD` is correct for the checkout it runs in, which is what provenance means.
- * The field is excluded from the freshness comparison (`stripProvenance`), so
- * nothing gates on it either way.
- */
-function headCommit(): string {
-  try {
-    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim()
-  }
-  catch {
-    return 'unknown'
-  }
 }
 
 /**

@@ -473,3 +473,113 @@ not generalise.
 | `validate:tokens` · `validate:tokens:dtcg` | exists · TASK-N2-T1 | no raw color literals; every value references `var(--dz-*)`; the DTCG projection round-trips against `tokens.css` |
 | override e2e (`e2e/components/styling-overrides.spec.ts`) | P3-03 | computed styles change through `ui` — including into a portaled listbox and a dialog backdrop — with no `!important` in the fixture. Playwright; not part of `validate:all` |
 | layer-order e2e (`e2e/styling/layer-order.spec.ts`) | **TASK-R5-O1** | on the **packed tarballs**, in chromium/firefox/webkit: all six layers registered in order in both published stylesheets; unlayered consumer CSS wins in both import orders; `@layer dz-overrides` beats `dz-components`; and the one order that does not hold. No `!important` in the fixture. Playwright; `yarn test:e2e:layer-order` |
+
+---
+
+## Amendments
+
+### A1 — The Consequences numbers are re-measured at `527dbd1`, and every one of them has moved *(TASK-R0-O2, 2026-09-22)*
+
+The Consequences section above was re-measured on 2026-09-04 by TASK-R5-O1
+against `99b963a`. **TASK-R5-O2 then ran the rollout to completion in three
+further sessions**, so those figures are stale again. They are corrected here
+rather than rewritten in place, so the record of how fast the contract moved
+survives.
+
+| Quantity | Consequences says (2026-09-04) | Measured 2026-09-22 at `527dbd1` | How |
+|---|---|---|---|
+| `.anatomy.ts` files | 32 | **104** | `find packages/core/src -name '*.anatomy.ts'` |
+| Static `data-part` emissions | 118 | **622** | `yarn validate:anatomy-parts` |
+| Components emitting one | 37 | **142** | same run |
+| Distinct part names | 36 | **47** | same run |
+| Public components with **no** anatomy (`maxWithoutAnatomy`) | 113 | **41** | `packages/tooling/src/ownership/unclassified-ceiling.json` |
+| Components declaring `ui` | 26 public + 1 compound part | **88 public + 12 compound parts** | `packages/core/docs/component-meta.json` |
+| Undeclared emissions | 3 / ceiling 3 | **0 / ceiling 0** | `yarn validate:anatomy-parts` |
+
+**The sentence in Consequences that says "113 of 144 public components have
+still not declared an anatomy" is superseded.** The figure is **41**, and all 41
+are **Tier A**: `maxWithoutAnatomy` records that **Tier B+ coverage is 89/89** —
+every Tier B, C and D component in the catalogue declares an anatomy. Three
+complete families became eleven. Evidence:
+`docs/program-2026-09-04/reports/TASK-R5-O2-handoff.md`.
+
+### A2 — §3's three `held` part names are no longer held *(TASK-R0-O2, 2026-09-22)*
+
+Decision 3's amendment note says the three `options-*` names are **held** for
+the `DzOptionsState` decision, and the *Alternatives*/ratchet text says
+`maxUndeclaredEmissions: 3` and the held names both wait on it.
+
+**That decision has been taken.** The owner took **D15** (N2-S1 **S1-D4** /
+packet **D19-10**) as option **(d)**: every one of the eight hosts declares
+`options-state`, `options-message` and `options-retry` itself, which is the rule
+`validate:anatomy-parts` already implemented for an unmanifested internal — so
+no schema change and no new mechanism were needed.
+
+Consequently, today:
+
+- `maxUndeclaredEmissions` is **0**, not 3.
+- `maxHeldPartNames` is **0**, not 3. The three names are `reviewed`
+  extensions in `ANATOMY_PART_EXTENSIONS` with all eight declaring components
+  recorded as owners.
+- `maxUndeclaredStates` is **0**; `maxStatesWithoutAnatomy` is **17**, all of
+  them emitted by Tier A components.
+- `maxUnreviewedPartNames` has been **0** since the vocabulary review.
+
+The §3 rule itself — *an unexported internal's parts are governed only when
+**every** host declares them* — is unchanged and is what made option (d)
+work. Only the "waiting" language is stale.
+
+### A3 — Every divergence the acceptance packet raised is now closed. Acceptance is not *(TASK-R0-O2, 2026-09-22)*
+
+`docs/program-2026-09/reports/N5-05-adr-19-acceptance-packet.md` §4 lists
+**13 divergences — 8 amend-ADR, 4 fix-code, 1 open question.** Re-checked
+against the tree at `527dbd1`:
+
+- **The 8 amend-ADR items were applied into this document by TASK-R5-O1** on
+  2026-09-04 — D19-3 (the false Consequences bullet), D19-4 (§6's "major"),
+  D19-5 (the hook retarget to `validate:anatomy-parts`), D19-6 (§4's recipe
+  attributes marked *declared public and unenforced*), D19-8 (three `!important`
+  rules with the `-webkit-autofill` carve-out), D19-9 (the DTCG prerequisite
+  marked **DISCHARGED**), D19-11 (the vocabulary grown deliberately, 7 folded in
+  and 7 recorded as extensions) and D19-12 (a compound part may carry `ui`
+  without its parent).
+- **The 4 fix-code items landed**, three by TASK-R5-O1 and the fourth by the
+  same packet: D19-1 the `DataState` widening; D19-2 all six cascade layers, in
+  `base.css` and in the statement `tokens.css` carries; D19-7 the
+  `dz-overrides` evidence, as `e2e/styling/layer-order.spec.ts` against the
+  **packed tarballs** in three engines; D19-10's rule, then its disposition via
+  D15.
+- **The open question (D19-13 / `data-scope`, `[!owner]` D-A) is still open**,
+  and is not a divergence: ADR-19 never claimed to solve it. The packet's own
+  recommendation stands — defer, and build it with the recipe-attribute emitter
+  as one generated `useAnatomy()` packet.
+
+`!important` in library CSS was re-measured for this amendment and is unchanged
+from D19-8's finding: **3 rules / 6 declarations** in
+`packages/core/src/styles/base.css` — `.dz-field-input-reset` (2),
+`.dz-native-input:-webkit-autofill` (3, the permanent carve-out) and
+`.dz-tab-close-btn:hover` (1).
+
+**So the code preconditions for accepting ADR-19 are met and the signature is
+not.** See A4.
+
+### A4 — Status *(TASK-R0-O2, 2026-09-22)*
+
+This ADR remains **`Proposed`**. TASK-R0-O2 searched every ledger, handoff and
+decision register in `docs/program-2026-08/`, `docs/program-2026-09/` and
+`docs/program-2026-09-04/` and found **no recorded owner acceptance** of
+ADR-18, ADR-19 or ADR-20, and no owner name or date it could honestly write.
+Inventing either would make the acceptance itself uncitable, so the status line
+is unchanged.
+
+Since 2026-09-22 that status is measured rather than inert:
+`yarn validate:adr-references` reads the `Status:` line at the top of this file
+and counts this document in `maxProposedCitedFromCode`
+(`packages/tooling/scripts/adr-registry.json`), which is **3** today. Both N5-05
+packets concluded that accepting an ADR "moves the ceiling by exactly 0 — not
+at all, under any condition"; that is no longer true. Acceptance is now one act
+with one measurable consequence: flip the line above, and lower
+`maxProposedCitedFromCode` in the same change.
+
+The remaining `[!owner]` decisions this document's acceptance depends on are
+tabulated in `docs/program-2026-09-04/reports/TASK-R0-O2-handoff.md`.

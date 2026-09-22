@@ -831,7 +831,7 @@ function download(text: string, filename: string, mime: string): void {
      the visitor's edits — and the transition smooths preset jumps and slider
      drags alike (registered properties interpolate on computed-value change). */
   --thv2-accent: var(--dz-primary, #0766ee);
-  --thv2-accent-2: var(--dz-secondary, #0766ee);
+  --thv2-accent-2: var(--dz-secondary, #7260bd);
   transition:
     --thv2-accent 400ms var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
     --thv2-accent-2 400ms var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
@@ -1280,7 +1280,7 @@ function download(text: string, filename: string, mime: string): void {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  border: 2px solid var(--dz-success, #007146);
+  border: 2px solid var(--dz-success, #1c882d);
   pointer-events: none;
   animation: thv2-won-glow 900ms var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
 }

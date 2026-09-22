@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzStepperItem
 
 A single step within DzStepper.
@@ -50,7 +54,7 @@ never as asserted.
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
-| `clickable` | `boolean \| undefined` | no | `undefined` | Per-item override for clickability. Falls back to the parent &lt;code>DzStepper.clickable&lt;/code>. Only completed/active steps respond regardless of this flag — upcoming steps never navigate. |
+| `clickable` | `boolean \| undefined` | no | `undefined` | Per-item override for clickability. Falls back to the parent `DzStepper.clickable`. Only completed/active steps respond regardless of this flag — upcoming steps never navigate. |
 | `description` | `string \| undefined` | no | — | Step description |
 | `optional` | `boolean \| undefined` | no | `false` | Whether this step is optional |
 | `title` | `string \| undefined` | no | — | Step title |
@@ -198,8 +202,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `2d51eec4` for the capability matrix,
-`2d51eec4` for the quality matrix. It is **locally qualified**:
+artifact records — `527dbd15` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

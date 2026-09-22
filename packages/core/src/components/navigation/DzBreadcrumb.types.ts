@@ -53,7 +53,7 @@ export interface DzBreadcrumbSlots {
 
 /** Props for the DzBreadcrumbItem component */
 export interface DzBreadcrumbItemProps {
-  /** URL for the breadcrumb link. Renders as <span> when absent. */
+  /** URL for the breadcrumb link. Renders as `<span>` when absent. */
   href?: string
   /** Whether this item represents the current page */
   current?: boolean

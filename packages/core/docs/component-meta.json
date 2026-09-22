@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+  "sourceCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -276,10 +276,10 @@
     "publicComponents": 144,
     "compoundParts": 65,
     "unclassifiable": 0,
-    "props": 1821,
-    "propsWithDescription": 1821,
+    "props": 1755,
+    "propsWithDescription": 1755,
     "propsWithDeclaredDefault": 685,
-    "propsWithLiteralUndefinedDefault": 565,
+    "propsWithLiteralUndefinedDefault": 548,
     "events": 366,
     "eventsWithDescription": 366,
     "eventsFromExtractor": 0,
@@ -429,15 +429,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -700,8 +691,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 5,
         "events": 3,
         "eventsWithDescription": 3,
@@ -945,15 +936,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -1087,8 +1069,8 @@
         }
       },
       "extraction": {
-        "props": 8,
-        "propsWithDescription": 8,
+        "props": 7,
+        "propsWithDescription": 7,
         "propsWithDeclaredDefault": 0,
         "events": 1,
         "eventsWithDescription": 1,
@@ -1145,15 +1127,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -1390,8 +1363,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 3,
         "events": 1,
         "eventsWithDescription": 1,
@@ -1417,7 +1390,7 @@
       ],
       "source": "packages/core/src/components/navigation/DzAnchor.vue",
       "typesSource": "packages/core/src/components/navigation/DzAnchor.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -1477,8 +1450,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 6,
+          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -1489,7 +1463,9 @@
           "keyboard-spec",
           "ssr-sample"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -1515,15 +1491,6 @@
           "required": false,
           "default": "undefined",
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -1689,8 +1656,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 3,
         "events": 3,
         "eventsWithDescription": 3,
@@ -1754,15 +1721,6 @@
           "required": false,
           "default": "undefined",
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -1976,8 +1934,8 @@
         }
       },
       "extraction": {
-        "props": 14,
-        "propsWithDescription": 14,
+        "props": 13,
+        "propsWithDescription": 13,
         "propsWithDeclaredDefault": 4,
         "events": 2,
         "eventsWithDescription": 2,
@@ -2697,15 +2655,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -2901,8 +2850,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 1,
         "events": 1,
         "eventsWithDescription": 1,
@@ -3216,15 +3165,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -3392,8 +3332,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 2,
         "events": 1,
         "eventsWithDescription": 1,
@@ -3837,7 +3777,7 @@
       ],
       "source": "packages/core/src/components/feedback/DzBlockUI.vue",
       "typesSource": "packages/core/src/components/feedback/DzBlockUI.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -3888,8 +3828,9 @@
         ],
         "cells": {
           "excepted": 1,
-          "pass": 4,
+          "pass": 3,
           "present": 3,
+          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -3900,7 +3841,9 @@
           "portal-hydration",
           "ssr-sample"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -3909,15 +3852,6 @@
           "required": false,
           "default": "undefined",
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -4090,8 +4024,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 4,
         "events": 3,
         "eventsWithDescription": 3,
@@ -4204,15 +4138,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -4253,7 +4178,7 @@
           "type": "DzBreadcrumbUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides for the two nodes DzBreadcrumb renders itself\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\n`ui.list` reaches the `<ol>`, which has no call site at all.",
+          "description": "Per-part class overrides for the two nodes DzBreadcrumb renders itself\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\n`ui.list` reaches the `<ol>`, which has no call site at all.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzBreadcrumb.types.ts"
         }
@@ -4373,8 +4298,8 @@
         }
       },
       "extraction": {
-        "props": 7,
-        "propsWithDescription": 7,
+        "props": 6,
+        "propsWithDescription": 6,
         "propsWithDeclaredDefault": 1,
         "events": 0,
         "eventsWithDescription": 0,
@@ -4430,7 +4355,7 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "URL for the breadcrumb link. Renders as <span> when absent.",
+          "description": "URL for the breadcrumb link. Renders as `<span>` when absent.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzBreadcrumb.types.ts"
         },
@@ -4439,7 +4364,7 @@
           "type": "DzBreadcrumbItemUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides for the crumb (ADR-19 §5). `class` at the call\r\nsite lands on the inner link, so `ui.item` is the only way to reach the\r\n`<li>` wrapper.",
+          "description": "Per-part class overrides for the crumb (ADR-19 §5). `class` at the call\nsite lands on the inner link, so `ui.item` is the only way to reach the\n`<li>` wrapper.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzBreadcrumb.types.ts"
         }
@@ -4547,7 +4472,7 @@
       ],
       "source": "packages/core/src/components/buttons/DzButton.vue",
       "typesSource": "packages/core/src/components/buttons/DzButton.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -4645,8 +4570,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 8,
+          "stale": 1,
           "unrun": 3
         },
         "unrun": [
@@ -4654,7 +4580,9 @@
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -4663,15 +4591,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -5007,8 +4926,8 @@
         }
       },
       "extraction": {
-        "props": 16,
-        "propsWithDescription": 16,
+        "props": 15,
+        "propsWithDescription": 15,
         "propsWithDeclaredDefault": 4,
         "events": 3,
         "eventsWithDescription": 3,
@@ -5522,15 +5441,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -5812,8 +5722,8 @@
         }
       },
       "extraction": {
-        "props": 18,
-        "propsWithDescription": 18,
+        "props": 17,
+        "propsWithDescription": 17,
         "propsWithDeclaredDefault": 8,
         "events": 3,
         "eventsWithDescription": 3,
@@ -6131,7 +6041,7 @@
           "default": null,
           "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
+          "declaredIn": "packages/core/src/components/cards/DzCard.types.ts"
         },
         {
           "name": "ariaLabel",
@@ -6701,15 +6611,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -6962,8 +6863,8 @@
         }
       },
       "extraction": {
-        "props": 13,
-        "propsWithDescription": 13,
+        "props": 12,
+        "propsWithDescription": 12,
         "propsWithDeclaredDefault": 7,
         "events": 2,
         "eventsWithDescription": 2,
@@ -8012,7 +7913,7 @@
           "default": "undefined",
           "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
+          "declaredIn": "packages/core/src/components/forms/DzCheckbox.types.ts"
         },
         {
           "name": "ariaLabel",
@@ -8365,7 +8266,7 @@
           "default": "undefined",
           "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
+          "declaredIn": "packages/core/src/components/forms/DzCheckboxGroup.types.ts"
         },
         {
           "name": "ariaLabel",
@@ -8674,15 +8575,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -8926,8 +8818,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 2,
         "events": 3,
         "eventsWithDescription": 3,
@@ -9538,15 +9430,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -9708,8 +9591,8 @@
         }
       },
       "extraction": {
-        "props": 7,
-        "propsWithDescription": 7,
+        "props": 6,
+        "propsWithDescription": 6,
         "propsWithDeclaredDefault": 2,
         "events": 1,
         "eventsWithDescription": 1,
@@ -9809,15 +9692,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -9980,8 +9854,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 3,
         "events": 1,
         "eventsWithDescription": 1,
@@ -10492,7 +10366,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCombobox.vue",
       "typesSource": "packages/core/src/components/forms/DzCombobox.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -10631,9 +10505,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 7,
-          "stale": 1,
+          "stale": 2,
           "unrun": 3
         },
         "unrun": [
@@ -10642,6 +10516,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -11251,7 +11126,7 @@
       ],
       "source": "packages/core/src/components/overlays/DzCommandPalette.vue",
       "typesSource": "packages/core/src/components/overlays/DzCommandPalette.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -11363,9 +11238,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 3,
-          "stale": 1,
+          "stale": 2,
           "unrun": 7
         },
         "unrun": [
@@ -11378,6 +11253,7 @@
           "ssr-sample"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -11388,15 +11264,6 @@
           "required": false,
           "default": "undefined",
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -11661,8 +11528,8 @@
         }
       },
       "extraction": {
-        "props": 14,
-        "propsWithDescription": 14,
+        "props": 13,
+        "propsWithDescription": 13,
         "propsWithDeclaredDefault": 7,
         "events": 3,
         "eventsWithDescription": 3,
@@ -12117,15 +11984,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -12313,8 +12171,8 @@
         }
       },
       "extraction": {
-        "props": 9,
-        "propsWithDescription": 9,
+        "props": 8,
+        "propsWithDescription": 8,
         "propsWithDeclaredDefault": 4,
         "events": 0,
         "eventsWithDescription": 0,
@@ -12663,15 +12521,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -12777,8 +12626,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 5,
         "events": 2,
         "eventsWithDescription": 2,
@@ -13366,15 +13215,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -13581,8 +13421,8 @@
         }
       },
       "extraction": {
-        "props": 13,
-        "propsWithDescription": 13,
+        "props": 12,
+        "propsWithDescription": 12,
         "propsWithDeclaredDefault": 5,
         "events": 2,
         "eventsWithDescription": 2,
@@ -13787,15 +13627,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -14217,8 +14048,8 @@
         }
       },
       "extraction": {
-        "props": 21,
-        "propsWithDescription": 21,
+        "props": 20,
+        "propsWithDescription": 20,
         "propsWithDeclaredDefault": 11,
         "events": 8,
         "eventsWithDescription": 8,
@@ -14542,15 +14373,6 @@
           "required": false,
           "default": "undefined",
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -14940,8 +14762,8 @@
         }
       },
       "extraction": {
-        "props": 24,
-        "propsWithDescription": 24,
+        "props": 23,
+        "propsWithDescription": 23,
         "propsWithDeclaredDefault": 16,
         "events": 6,
         "eventsWithDescription": 6,
@@ -16102,15 +15924,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -16261,8 +16074,8 @@
         }
       },
       "extraction": {
-        "props": 9,
-        "propsWithDescription": 9,
+        "props": 8,
+        "propsWithDescription": 8,
         "propsWithDeclaredDefault": 4,
         "events": 2,
         "eventsWithDescription": 2,
@@ -16324,15 +16137,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -16522,8 +16326,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 4,
         "events": 0,
         "eventsWithDescription": 0,
@@ -17012,15 +16816,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -17186,8 +16981,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 4,
         "events": 5,
         "eventsWithDescription": 5,
@@ -17448,15 +17243,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -17586,8 +17372,8 @@
         }
       },
       "extraction": {
-        "props": 7,
-        "propsWithDescription": 7,
+        "props": 6,
+        "propsWithDescription": 6,
         "propsWithDeclaredDefault": 2,
         "events": 0,
         "eventsWithDescription": 0,
@@ -17953,15 +17739,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -18067,8 +17844,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 5,
         "events": 2,
         "eventsWithDescription": 2,
@@ -18905,15 +18682,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -19156,8 +18924,8 @@
         }
       },
       "extraction": {
-        "props": 14,
-        "propsWithDescription": 14,
+        "props": 13,
+        "propsWithDescription": 13,
         "propsWithDeclaredDefault": 4,
         "events": 3,
         "eventsWithDescription": 3,
@@ -19901,15 +19669,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -20114,8 +19873,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 5,
         "events": 0,
         "eventsWithDescription": 0,
@@ -21848,15 +21607,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -22084,8 +21834,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 2,
         "events": 2,
         "eventsWithDescription": 2,
@@ -22547,15 +22297,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -22778,8 +22519,8 @@
         }
       },
       "extraction": {
-        "props": 16,
-        "propsWithDescription": 16,
+        "props": 15,
+        "propsWithDescription": 15,
         "propsWithDeclaredDefault": 4,
         "events": 2,
         "eventsWithDescription": 2,
@@ -22883,15 +22624,6 @@
           "required": false,
           "default": "undefined",
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -23112,8 +22844,8 @@
         }
       },
       "extraction": {
-        "props": 13,
-        "propsWithDescription": 13,
+        "props": 12,
+        "propsWithDescription": 12,
         "propsWithDeclaredDefault": 7,
         "events": 2,
         "eventsWithDescription": 2,
@@ -24081,7 +23813,7 @@
           "default": null,
           "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
+          "declaredIn": "packages/core/src/components/inputs/DzInputGroup.types.ts"
         },
         {
           "name": "ariaLabel",
@@ -25688,15 +25420,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -25925,8 +25648,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 4,
         "events": 2,
         "eventsWithDescription": 2,
@@ -25989,15 +25712,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -26047,7 +25761,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "false",
-          "description": "Whether the list is ordered (renders <ol> instead of <ul>)",
+          "description": "Whether the list is ordered (renders `<ol>` instead of `<ul>`)",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzList.types.ts"
         },
@@ -26265,8 +25979,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 3,
         "events": 2,
         "eventsWithDescription": 2,
@@ -27021,15 +26735,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -27079,7 +26784,7 @@
           "type": "Partial<Record<\"root\" | \"item-label\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzListItem.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\na key outside the declared parts is a type error, not a class that lands\r\nnowhere.",
+          "description": "Per-part class overrides, keyed by the names in `DzListItem.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\na key outside the declared parts is a type error, not a class that lands\nnowhere.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzList.types.ts"
         }
@@ -27190,8 +26895,8 @@
         }
       },
       "extraction": {
-        "props": 9,
-        "propsWithDescription": 9,
+        "props": 8,
+        "propsWithDescription": 8,
         "propsWithDeclaredDefault": 2,
         "events": 1,
         "eventsWithDescription": 1,
@@ -27250,15 +26955,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -27408,8 +27104,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 5,
         "events": 0,
         "eventsWithDescription": 0,
@@ -27435,7 +27131,7 @@
       ],
       "source": "packages/core/src/components/navigation/DzMegaMenu.vue",
       "typesSource": "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -27583,9 +27279,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 6,
-          "stale": 1,
+          "stale": 2,
           "unrun": 6
         },
         "unrun": [
@@ -27597,6 +27293,7 @@
           "ssr-sample"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -27607,15 +27304,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -27849,8 +27537,8 @@
         }
       },
       "extraction": {
-        "props": 13,
-        "propsWithDescription": 13,
+        "props": 12,
+        "propsWithDescription": 12,
         "propsWithDeclaredDefault": 5,
         "events": 3,
         "eventsWithDescription": 3,
@@ -27876,7 +27564,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMention.vue",
       "typesSource": "packages/core/src/components/forms/DzMention.types.ts",
-      "componentCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -28000,9 +27688,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 4,
-          "stale": 1,
+          "stale": 2,
           "unrun": 5
         },
         "unrun": [
@@ -28013,6 +27701,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -28662,15 +28351,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -28720,7 +28400,7 @@
           "type": "DzMenuUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the `<nav>` this component renders\r\n(ADR-19 §5). Items and separators are sub-components the consumer writes,\r\nwhere `class` at the call site already lands.",
+          "description": "Per-part class override for the `<nav>` this component renders\n(ADR-19 §5). Items and separators are sub-components the consumer writes,\nwhere `class` at the call site already lands.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzMenu.types.ts"
         }
@@ -28839,8 +28519,8 @@
         }
       },
       "extraction": {
-        "props": 8,
-        "propsWithDescription": 8,
+        "props": 7,
+        "propsWithDescription": 7,
         "propsWithDeclaredDefault": 2,
         "events": 0,
         "eventsWithDescription": 0,
@@ -28905,7 +28585,7 @@
           "type": "string | undefined",
           "required": false,
           "default": null,
-          "description": "URL to navigate to (renders as <a>)",
+          "description": "URL to navigate to (renders as `<a>`)",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzMenu.types.ts"
         },
@@ -28914,7 +28594,7 @@
           "type": "DzMenuItemUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the item's label wrapper (ADR-19 §5). The\r\nitem's own element takes `class` at the call site; the `<span>` that holds\r\nthe text — and that disappears when the surrounding sidebar collapses — is\r\nthe node nothing else can reach.",
+          "description": "Per-part class override for the item's label wrapper (ADR-19 §5). The\nitem's own element takes `class` at the call site; the `<span>` that holds\nthe text — and that disappears when the surrounding sidebar collapses — is\nthe node nothing else can reach.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzMenu.types.ts"
         }
@@ -29055,15 +28735,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -29252,8 +28923,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 3,
         "events": 0,
         "eventsWithDescription": 0,
@@ -29987,15 +29658,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -30231,8 +29893,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 3,
         "events": 2,
         "eventsWithDescription": 2,
@@ -30942,15 +30604,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -31254,8 +30907,8 @@
         }
       },
       "extraction": {
-        "props": 20,
-        "propsWithDescription": 20,
+        "props": 19,
+        "propsWithDescription": 19,
         "propsWithDeclaredDefault": 8,
         "events": 5,
         "eventsWithDescription": 5,
@@ -31281,7 +30934,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzOtpInput.vue",
       "typesSource": "packages/core/src/components/inputs/DzOtpInput.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -31351,8 +31004,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 4,
+          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -31361,7 +31015,9 @@
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -31963,15 +31619,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -32253,8 +31900,8 @@
         }
       },
       "extraction": {
-        "props": 13,
-        "propsWithDescription": 13,
+        "props": 12,
+        "propsWithDescription": 12,
         "propsWithDeclaredDefault": 6,
         "events": 4,
         "eventsWithDescription": 4,
@@ -32375,15 +32022,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -32588,8 +32226,8 @@
         }
       },
       "extraction": {
-        "props": 13,
-        "propsWithDescription": 13,
+        "props": 12,
+        "propsWithDescription": 12,
         "propsWithDeclaredDefault": 6,
         "events": 2,
         "eventsWithDescription": 2,
@@ -32615,7 +32253,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzPasswordInput.vue",
       "typesSource": "packages/core/src/components/inputs/DzPasswordInput.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -32684,8 +32322,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 4,
+          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -32694,7 +32333,9 @@
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -33496,7 +33137,7 @@
       ],
       "source": "packages/core/src/components/overlays/DzPopconfirm.vue",
       "typesSource": "packages/core/src/components/overlays/DzPopconfirm.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -33587,8 +33228,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 3,
+          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -33599,7 +33241,9 @@
           "portal-hydration",
           "ssr-sample"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -33608,15 +33252,6 @@
           "required": false,
           "default": "undefined",
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -33878,8 +33513,8 @@
         }
       },
       "extraction": {
-        "props": 16,
-        "propsWithDescription": 16,
+        "props": 15,
+        "propsWithDescription": 15,
         "propsWithDeclaredDefault": 4,
         "events": 3,
         "eventsWithDescription": 3,
@@ -34412,15 +34047,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -34616,8 +34242,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 3,
         "events": 0,
         "eventsWithDescription": 0,
@@ -34643,7 +34269,7 @@
       ],
       "source": "packages/core/src/providers/DzProvider.vue",
       "typesSource": "packages/core/src/providers/DzProvider.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -34673,8 +34299,9 @@
         "traits": [],
         "cells": {
           "excepted": 4,
-          "pass": 2,
+          "pass": 1,
           "present": 4,
+          "stale": 1,
           "unrun": 3
         },
         "unrun": [
@@ -34682,7 +34309,9 @@
           "axe",
           "controlled-uncontrolled"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -34961,15 +34590,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -35169,8 +34789,8 @@
         }
       },
       "extraction": {
-        "props": 13,
-        "propsWithDescription": 13,
+        "props": 12,
+        "propsWithDescription": 12,
         "propsWithDeclaredDefault": 6,
         "events": 1,
         "eventsWithDescription": 1,
@@ -35278,7 +34898,7 @@
           "default": "undefined",
           "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
+          "declaredIn": "packages/core/src/components/forms/DzRadio.types.ts"
         },
         {
           "name": "ariaLabel",
@@ -35568,7 +35188,7 @@
           "default": "undefined",
           "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
+          "declaredIn": "packages/core/src/components/forms/DzRadioGroup.types.ts"
         },
         {
           "name": "ariaLabel",
@@ -36869,15 +36489,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -37032,8 +36643,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 3,
         "events": 0,
         "eventsWithDescription": 0,
@@ -37059,7 +36670,7 @@
       ],
       "source": "packages/core/src/components/layout/DzResizable.vue",
       "typesSource": "packages/core/src/components/layout/DzResizable.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -37172,8 +36783,9 @@
           "drags"
         ],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 4,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -37183,7 +36795,9 @@
           "keyboard-spec",
           "ssr-sample"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -37192,15 +36806,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -37424,8 +37029,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 4,
         "events": 1,
         "eventsWithDescription": 1,
@@ -38068,15 +37673,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -38239,8 +37835,8 @@
         }
       },
       "extraction": {
-        "props": 8,
-        "propsWithDescription": 8,
+        "props": 7,
+        "propsWithDescription": 7,
         "propsWithDeclaredDefault": 2,
         "events": 0,
         "eventsWithDescription": 0,
@@ -38302,15 +37898,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -38471,8 +38058,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 1,
         "events": 1,
         "eventsWithDescription": 1,
@@ -39122,15 +38709,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -39348,8 +38926,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 3,
         "events": 2,
         "eventsWithDescription": 2,
@@ -40353,15 +39931,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -40475,8 +40044,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 4,
         "events": 3,
         "eventsWithDescription": 3,
@@ -40807,15 +40376,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -41066,8 +40626,8 @@
         }
       },
       "extraction": {
-        "props": 16,
-        "propsWithDescription": 16,
+        "props": 15,
+        "propsWithDescription": 15,
         "propsWithDeclaredDefault": 5,
         "events": 2,
         "eventsWithDescription": 2,
@@ -41219,15 +40779,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -41268,7 +40819,7 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Native link href (renders as <a>)",
+          "description": "Native link href (renders as `<a>`)",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzSidebar.types.ts"
         },
@@ -41286,7 +40837,7 @@
           "type": "string | object | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Router link destination (renders as <RouterLink>)",
+          "description": "Router link destination (renders as `<RouterLink>`)",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzSidebar.types.ts"
         },
@@ -41339,8 +40890,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 2,
         "events": 1,
         "eventsWithDescription": 1,
@@ -42427,15 +41978,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -42717,8 +42259,8 @@
         }
       },
       "extraction": {
-        "props": 19,
-        "propsWithDescription": 19,
+        "props": 18,
+        "propsWithDescription": 18,
         "propsWithDeclaredDefault": 7,
         "events": 4,
         "eventsWithDescription": 4,
@@ -43046,15 +42588,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -43267,8 +42800,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 2,
         "events": 0,
         "eventsWithDescription": 0,
@@ -43423,7 +42956,7 @@
       ],
       "source": "packages/core/src/components/layout/DzSplitter.vue",
       "typesSource": "packages/core/src/components/layout/DzSplitter.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -43536,8 +43069,9 @@
           "drags"
         ],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 4,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -43547,7 +43081,9 @@
           "keyboard-spec",
           "ssr-sample"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -43556,15 +43092,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -43741,8 +43268,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 10,
+        "props": 9,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 4,
         "events": 1,
         "eventsWithDescription": 1,
@@ -44531,7 +44058,7 @@
           "type": "((from: number, to: number) => boolean | Promise<boolean>) | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Guard run before the active step changes. Return `false` to block it.\r\n\r\nA wizard cannot advance past a step whose fields are invalid, and the\r\nstepper is the only thing that knows a change is being attempted. It is a\r\n**boolean guard and nothing more**: the stepper is not told what validation\r\nis, only whether the host permits this move. Anything richer would put form\r\nsemantics into a navigation primitive, which is the stop condition on this\r\npacket.\r\n\r\nAsync because validation usually is. While it is pending the stepper stays\r\nwhere it is.\r\n\r\n`revealItem()` bypasses the guard on purpose: it is how a form takes the\r\nuser *to* an error, and a guard that blocked it would trap them on a step\r\nwhose problems are somewhere else.",
+          "description": "Guard run before the active step changes. Return `false` to block it.\n\nA wizard cannot advance past a step whose fields are invalid, and the\nstepper is the only thing that knows a change is being attempted. It is a\n**boolean guard and nothing more**: the stepper is not told what validation\nis, only whether the host permits this move. Anything richer would put form\nsemantics into a navigation primitive, which is the stop condition on this\npacket.\n\nAsync because validation usually is. While it is pending the stepper stays\nwhere it is.\n\n`revealItem()` bypasses the guard on purpose: it is how a form takes the\nuser *to* an error, and a guard that blocked it would trap them on a step\nwhose problems are somewhere else.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         },
@@ -44540,7 +44067,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "false",
-          "description": "Allow completed/active steps to be clicked to navigate back to them.\r\nUpcoming steps remain non-interactive regardless. Defaults to `false`.",
+          "description": "Allow completed/active steps to be clicked to navigate back to them.\nUpcoming steps remain non-interactive regardless. Defaults to `false`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         },
@@ -44558,7 +44085,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "false",
-          "description": "Only allow moving to an adjacent step, or back to a completed one.\r\n\r\nOff by default. A linear wizard is a policy about the flow, not about the\r\ncomponent, so a stepper used as a progress indicator is unaffected.",
+          "description": "Only allow moving to an adjacent step, or back to a completed one.\n\nOff by default. A linear wizard is a policy about the flow, not about the\ncomponent, so a stepper used as a progress indicator is unaffected.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         },
@@ -44584,7 +44111,7 @@
           "type": "Partial<Record<\"root\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the `role=\"group\"` wrapper (ADR-19 §5).\r\n`DzStepperItem` is a public component with an anatomy of its own, so the\r\nstep's inner nodes are addressed through its `ui`, not through this one.",
+          "description": "Per-part class override for the `role=\"group\"` wrapper (ADR-19 §5).\n`DzStepperItem` is a public component with an anatomy of its own, so the\nstep's inner nodes are addressed through its `ui`, not through this one.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         }
@@ -44595,7 +44122,7 @@
           "name": "blocked",
           "type": "[from: number, to: number, reason: \"linear\" | \"guard\"]",
           "signature": "(event: \"blocked\", from: number, to: number, reason: \"linear\" | \"guard\"): void",
-          "description": "A step change was refused — by `beforeChange`, or by `linear`.\r\n\r\nEmitted so a host can say *why* nothing happened. A wizard whose Next\r\nbutton silently does nothing is indistinguishable from a broken one.",
+          "description": "A step change was refused — by `beforeChange`, or by `linear`.\n\nEmitted so a host can say *why* nothing happened. A wizard whose Next\nbutton silently does nothing is indistinguishable from a broken one.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
@@ -44611,7 +44138,7 @@
           "name": "navigate",
           "type": "[step: number]",
           "signature": "(event: \"navigate\", step: number): void",
-          "description": "A clickable step was activated. Fired after v-model is updated; consumers\r\ncan use this for analytics or to trigger side effects.",
+          "description": "A clickable step was activated. Fired after v-model is updated; consumers\ncan use this for analytics or to trigger side effects.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
@@ -44864,7 +44391,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Per-item override for clickability. Falls back to the parent\r\n<code>DzStepper.clickable</code>. Only completed/active steps respond\r\nregardless of this flag — upcoming steps never navigate.",
+          "description": "Per-item override for clickability. Falls back to the parent\n`DzStepper.clickable`. Only completed/active steps respond\nregardless of this flag — upcoming steps never navigate.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         },
@@ -44900,7 +44427,7 @@
           "type": "DzStepperItemUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides for the step's inner nodes (ADR-19 §5). `class`\r\nat the call site already lands on the step itself; the numbered circle,\r\nthe title and the description are rendered from props.",
+          "description": "Per-part class overrides for the step's inner nodes (ADR-19 §5). `class`\nat the call site already lands on the step itself; the numbered circle,\nthe title and the description are rendered from props.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         }
@@ -45130,7 +44657,7 @@
           "default": "undefined",
           "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
+          "declaredIn": "packages/core/src/components/forms/DzSwitch.types.ts"
         },
         {
           "name": "ariaLabel",
@@ -45586,15 +45113,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -45935,8 +45453,8 @@
         }
       },
       "extraction": {
-        "props": 17,
-        "propsWithDescription": 17,
+        "props": 16,
+        "propsWithDescription": 16,
         "propsWithDeclaredDefault": 10,
         "events": 2,
         "eventsWithDescription": 2,
@@ -45953,7 +45471,7 @@
       "name": "DzTableBody",
       "kind": "compound-part",
       "parentComponent": "DzTable",
-      "description": "Table body section (<tbody>).",
+      "description": "Table body section (`<tbody>`).",
       "descriptionSource": "sfc-header",
       "family": "data",
       "subpaths": [
@@ -46020,7 +45538,7 @@
       "name": "DzTableCell",
       "kind": "compound-part",
       "parentComponent": "DzTable",
-      "description": "Table cell (<td> or <th>).",
+      "description": "Table cell (`<td>` or `<th>`).",
       "descriptionSource": "sfc-header",
       "family": "data",
       "subpaths": [
@@ -46071,7 +45589,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "false",
-          "description": "Whether this cell is a header cell (<th> vs <td>)",
+          "description": "Whether this cell is a header cell (`<th>` vs `<td>`)",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzTable.types.ts"
         },
@@ -46155,7 +45673,7 @@
       "name": "DzTableFooter",
       "kind": "compound-part",
       "parentComponent": "DzTable",
-      "description": "Table footer section (<tfoot>).",
+      "description": "Table footer section (`<tfoot>`).",
       "descriptionSource": "sfc-header",
       "family": "data",
       "subpaths": [
@@ -46205,7 +45723,7 @@
       "name": "DzTableHeader",
       "kind": "compound-part",
       "parentComponent": "DzTable",
-      "description": "Table header section (<thead>).",
+      "description": "Table header section (`<thead>`).",
       "descriptionSource": "sfc-header",
       "family": "data",
       "subpaths": [
@@ -46255,7 +45773,7 @@
       "name": "DzTableRow",
       "kind": "compound-part",
       "parentComponent": "DzTable",
-      "description": "Table row (<tr>).",
+      "description": "Table row (`<tr>`).",
       "descriptionSource": "sfc-header",
       "family": "data",
       "subpaths": [
@@ -47026,15 +46544,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -47278,8 +46787,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 2,
         "events": 3,
         "eventsWithDescription": 3,
@@ -48735,15 +48244,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -48922,8 +48422,8 @@
         }
       },
       "extraction": {
-        "props": 8,
-        "propsWithDescription": 8,
+        "props": 7,
+        "propsWithDescription": 7,
         "propsWithDeclaredDefault": 1,
         "events": 0,
         "eventsWithDescription": 0,
@@ -48982,15 +48482,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -49123,8 +48614,8 @@
         }
       },
       "extraction": {
-        "props": 7,
-        "propsWithDescription": 7,
+        "props": 6,
+        "propsWithDescription": 6,
         "propsWithDeclaredDefault": 1,
         "events": 0,
         "eventsWithDescription": 0,
@@ -49921,15 +49412,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -50131,8 +49613,8 @@
         }
       },
       "extraction": {
-        "props": 9,
-        "propsWithDescription": 9,
+        "props": 8,
+        "propsWithDescription": 8,
         "propsWithDeclaredDefault": 0,
         "events": 2,
         "eventsWithDescription": 2,
@@ -50371,15 +49853,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -50643,8 +50116,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 10,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 2,
         "events": 4,
         "eventsWithDescription": 4,
@@ -50974,15 +50447,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -51168,8 +50632,8 @@
         }
       },
       "extraction": {
-        "props": 13,
-        "propsWithDescription": 13,
+        "props": 12,
+        "propsWithDescription": 12,
         "propsWithDeclaredDefault": 6,
         "events": 0,
         "eventsWithDescription": 0,
@@ -51741,15 +51205,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -51978,8 +51433,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 12,
+        "props": 11,
+        "propsWithDescription": 11,
         "propsWithDeclaredDefault": 4,
         "events": 5,
         "eventsWithDescription": 5,
@@ -52568,7 +52023,7 @@
       ],
       "source": "packages/core/src/components/data/DzTree.vue",
       "typesSource": "packages/core/src/components/data/DzTree.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -52676,9 +52131,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 6,
-          "stale": 1,
+          "stale": 2,
           "unrun": 3
         },
         "unrun": [
@@ -52687,6 +52142,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -52706,15 +52162,6 @@
           "required": false,
           "default": null,
           "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
@@ -53037,8 +52484,8 @@
         }
       },
       "extraction": {
-        "props": 16,
-        "propsWithDescription": 16,
+        "props": 15,
+        "propsWithDescription": 15,
         "propsWithDeclaredDefault": 8,
         "events": 6,
         "eventsWithDescription": 6,
@@ -53063,7 +52510,7 @@
         "./data"
       ],
       "source": "packages/core/src/components/data/DzTreeItem.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -53178,8 +52625,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 2,
+          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -53190,7 +52638,9 @@
           "ssr-sample",
           "unit-spec"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -54244,15 +53694,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -54458,8 +53899,8 @@
         }
       },
       "extraction": {
-        "props": 17,
-        "propsWithDescription": 17,
+        "props": 16,
+        "propsWithDescription": 16,
         "propsWithDeclaredDefault": 8,
         "events": 0,
         "eventsWithDescription": 0,

@@ -33,12 +33,11 @@ Primary button component.
 - **Taxonomy:** variant: `solid` `outline` `ghost` `text` `link` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `root`, `spinner`
 
-**Props** (16, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (15, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| Component \| undefined` | no | `undefined` | Element or component to render as (polymorphic root). Overrides the default `<button>` element. |
@@ -171,12 +170,11 @@ Floating action button.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `icon`, `root`, `spinner`
 
-**Props** (14, of which 4 inherited from `@dzup-ui/contracts`):
+**Props** (13, of which 3 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label — REQUIRED. A FAB shows only an icon, so an accessible name must be supplied. |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state — prevents interaction |
@@ -271,12 +269,11 @@ a DzFab that fans out a set of secondary actions.
 - **v-model:** `v-model:open` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `item`, `list`, `root`
 
-**Props** (19, of which 4 inherited from `@dzup-ui/contracts`):
+**Props** (18, of which 3 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label for the trigger — REQUIRED, the trigger is icon-only. (Inherited as optional from BaseAccessibilityProps; redeclared required.) |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `closeIcon` | `Component \| undefined` | no | `undefined` | Trigger icon shown while open (default: an x/close glyph) |
@@ -343,12 +340,11 @@ Compound split button with primary action + dropdown.
 - **Taxonomy:** variant: `solid` `outline` `ghost` `text` `link` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `action`, `root`, `trigger`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
@@ -387,12 +383,11 @@ Toggleable button with pressed state.
 - **v-model:** `v-model` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `root`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
@@ -564,7 +559,7 @@ Compound wrapper for input + addons.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `content`, `prefix`, `root`, `suffix`
 
-**Props** (8, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (8, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -1081,7 +1076,7 @@ Checkbox component using Reka UI (ADR-07).
 - **v-model:** `v-model` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `control`, `indicator`, `label`, `root`
 
-**Props** (13, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (13, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -1131,7 +1126,7 @@ Groups DzCheckbox components with a shared string[] model.
 - **v-model:** `v-model` (`string[] | undefined`)
 - **Anatomy parts (ADR-19):** `root`
 
-**Props** (9, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -2045,7 +2040,7 @@ Radio option using Reka UI (ADR-07).
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `control`, `indicator`, `label`, `root`
 
-**Props** (9, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -2086,7 +2081,7 @@ Radio group using Reka UI RadioGroupRoot (ADR-07).
 - **v-model:** `v-model` (`string | undefined`)
 - **Anatomy parts (ADR-19):** `root`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -2408,7 +2403,7 @@ Toggle switch using Reka UI (ADR-07).
 - **v-model:** `v-model` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `control`, `indicator`, `label`, `root`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -2791,7 +2786,7 @@ A surface container component.
 - **Taxonomy:** variant: `elevated` `outlined` `flat`
 - **Anatomy parts (ADR-19):** `action`, `body`, `footer`, `header`, `root`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -2998,12 +2993,11 @@ Pins its slotted content to the viewport once it would scroll past
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** A · **Status:** experimental
 
-**Props** (8, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (7, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -3146,12 +3140,11 @@ Animated expand/collapse container.
 - **v-model:** `v-model` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `root`
 
-**Props** (7, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (6, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `duration` | `number \| undefined` | no | `200` | Animation duration in milliseconds |
@@ -3199,12 +3192,11 @@ Centered content container.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** A · **Status:** stable
 
-**Props** (9, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (8, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
@@ -3237,12 +3229,11 @@ viewport-triggered lazy renderer.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** A · **Status:** experimental
 
-**Props** (9, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (8, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as. Defaults to `'div'`. |
@@ -3298,12 +3289,11 @@ Visual separator component.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** A · **Status:** stable
 
-**Props** (7, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (6, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `decorative` | `boolean \| undefined` | no | `false` | When true, the divider is purely decorative (role="none") |
@@ -3330,13 +3320,12 @@ Flexbox layout component.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** A · **Status:** stable
 
-**Props** (12, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `align` | `FlexAlign \| undefined` | no | `undefined` | Align items along the cross axis |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
@@ -3433,12 +3422,11 @@ responsive masonry / cascading-column layout.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Risk tier:** A · **Status:** experimental
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as. |
@@ -3528,12 +3516,11 @@ titled container with optional header actions and collapse.
 - **v-model:** `v-model:collapsed` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `action`, `content`, `header`, `indicator`, `root`, `title`, `trigger`
 
-**Props** (13, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (12, of which 7 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render the root as |
@@ -3584,12 +3571,11 @@ Compound resizable panel root using Reka UI Splitter (ADR-07).
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`, `step-decrease`, `step-increase`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `direction` | `ResizableDirection \| undefined` | no | `"horizontal"` | Layout direction of the panels |
@@ -3640,12 +3626,11 @@ Custom scrollbar area using Reka UI (ADR-07).
 - **Risk tier:** B · **Status:** stable
 - **Anatomy parts (ADR-19):** `root`, `viewport`
 
-**Props** (8, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (7, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -3709,12 +3694,11 @@ Naming alias for DzResizable.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `indicator`, `panel`, `root`, `separator`, `step-decrease`, `step-increase`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `direction` | `ResizableDirection \| undefined` | no | `"horizontal"` | Layout direction of the panels |
@@ -3805,12 +3789,11 @@ horizontal action bar with start/center/end regions.
 - **Taxonomy:** variant: `flat` `outlined` `elevated` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `group`, `root`
 
-**Props** (13, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (12, of which 7 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
@@ -4020,14 +4003,13 @@ Scrollspy section navigation (in-page table of contents).
 - **v-model:** `v-model:active` (`string | undefined`)
 - **Anatomy parts (ADR-19):** `item`, `list`, `root`
 
-**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 3 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `active` | `string \| undefined` | no | `""` | Active link href (e.g. `#section`). Controllable via `v-model:active`. |
 | `affix` | `boolean \| undefined` | no | `false` | Stick the nav to the top of the viewport while scrolling. |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label for the `<nav>` landmark. |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -4070,12 +4052,11 @@ Scroll-to-top button.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `icon`, `root`
 
-**Props** (12, of which 4 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 3 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label for the button. Defaults to `'Back to top'`. The button is icon-only, so an accessible name is always rendered. |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `duration` | `number \| undefined` | no | `400` | Smooth-scroll duration in milliseconds. `0` (or `prefers-reduced-motion`) jumps instantly. Defaults to `400`. |
@@ -4120,12 +4101,11 @@ Accessible breadcrumb navigation wrapper.
 - **Risk tier:** B · **Status:** stable
 - **Anatomy parts (ADR-19):** `item`, `item-label`, `list`, `root`, `separator`
 
-**Props** (7, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (6, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -4162,12 +4142,11 @@ light / dark / system theme switch.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `root`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -4210,12 +4189,11 @@ horizontal (or vertical) navigation menubar whose top-level
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `group`, `group-label`, `indicator`, `item`, `list`, `panel`, `root`, `trigger`
 
-**Props** (13, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (12, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `breakpoint` | `number \| undefined` | no | `768` | Viewport width (px) at or below which the menu collapses into a stacked accordion. Uses matchMedia; ignored when `collapsed` is set explicitly. |
@@ -4264,12 +4242,11 @@ Vertical navigation menu.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `item`, `item-label`, `root`, `separator`
 
-**Props** (8, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (7, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `collapsed` | `boolean \| undefined` | no | `false` | Collapse the menu to icon-only mode |
@@ -4316,12 +4293,11 @@ Page navigation using Reka UI Pagination primitives (ADR-07).
 - **v-model:** `v-model` (`number | undefined`)
 - **Anatomy parts (ADR-19):** `action`, `item`, `list`, `root`, `separator`
 
-**Props** (13, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (12, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
@@ -4369,12 +4345,11 @@ Segmented control (tab-like toggle).
 - **v-model:** `v-model` (`string | undefined`)
 - **Anatomy parts (ADR-19):** `item`, `root`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents all interaction |
@@ -4413,13 +4388,12 @@ Collapsible navigation sidebar root component.
 - **v-model:** `v-model:collapsed` (`boolean | undefined`), `v-model:mobileOpen` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `body`, `footer`, `group`, `group-label`, `header`, `icon`, `item`, `item-label`, `overlay`, `root`, `suffix`
 
-**Props** (16, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (15, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `activeStyle` | `"filled" \| "rail" \| undefined` | no | `"filled"` | Visual treatment for active items. - `filled` (default): solid `--dz-sidebar-item-active-bg` background, `--dz-sidebar-item-active-text` foreground. Matches modern dark-sidebar UX. - `rail`: 3px left border accent, dimmer background. Legacy / minimalist look. |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `collapsed` | `boolean \| undefined` | no | `false` | Whether the sidebar is collapsed to icon-only mode |
@@ -4546,7 +4520,7 @@ A single step within DzStepper.
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
-| `clickable` | `boolean \| undefined` | no | `undefined` | Per-item override for clickability. Falls back to the parent <code>DzStepper.clickable</code>. Only completed/active steps respond regardless of this flag — upcoming steps never navigate. |
+| `clickable` | `boolean \| undefined` | no | `undefined` | Per-item override for clickability. Falls back to the parent `DzStepper.clickable`. Only completed/active steps respond regardless of this flag — upcoming steps never navigate. |
 | `description` | `string \| undefined` | no | — | Step description |
 | `optional` | `boolean \| undefined` | no | `false` | Whether this step is optional |
 | `title` | `string \| undefined` | no | — | Step title |
@@ -4662,7 +4636,7 @@ Individual breadcrumb entry.
 | --- | --- | --- | --- | --- |
 | `current` | `boolean \| undefined` | no | `false` | Whether this item represents the current page |
 | `disabled` | `boolean \| undefined` | no | `false` | Whether this item is disabled |
-| `href` | `string \| undefined` | no | `undefined` | URL for the breadcrumb link. Renders as <span> when absent. |
+| `href` | `string \| undefined` | no | `undefined` | URL for the breadcrumb link. Renders as `<span>` when absent. |
 | `ui` | `DzBreadcrumbItemUi \| undefined` | no | — | Per-part class overrides for the crumb (ADR-19 §5). `class` at the call site lands on the inner link, so `ui.item` is the only way to reach the `<li>` wrapper. |
 
 **Slots** (1):
@@ -4714,7 +4688,7 @@ A single item within DzMenu.
 | `active` | `boolean \| undefined` | no | `false` | Whether this item is currently active/selected |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `disabled` | `boolean \| undefined` | no | `false` | Whether this item is disabled |
-| `href` | `string \| undefined` | no | — | URL to navigate to (renders as <a>) |
+| `href` | `string \| undefined` | no | — | URL to navigate to (renders as `<a>`) |
 | `ui` | `DzMenuItemUi \| undefined` | no | — | Per-part class override for the item's label wrapper (ADR-19 §5). The item's own element takes `class` at the call site; the `<span>` that holds the text — and that disappears when the surrounding sidebar collapses — is the node nothing else can reach. |
 
 **Events** (1):
@@ -4792,20 +4766,19 @@ Individual navigation item within a sidebar.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Compound part of:** `DzSidebar`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `active` | `boolean \| undefined` | no | `false` | Whether this item is currently active |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `as` | `string \| object \| undefined` | no | `undefined` | Element or component to render as |
 | `disabled` | `boolean \| undefined` | no | `false` | Whether this item is disabled |
-| `href` | `string \| undefined` | no | `undefined` | Native link href (renders as <a>) |
+| `href` | `string \| undefined` | no | `undefined` | Native link href (renders as `<a>`) |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
-| `to` | `string \| object \| undefined` | no | `undefined` | Router link destination (renders as <RouterLink>) |
+| `to` | `string \| object \| undefined` | no | `undefined` | Router link destination (renders as `<RouterLink>`) |
 | `ui` | `DzSidebarItemUi \| undefined` | no | — | Per-part class overrides for the item's inner nodes (ADR-19 §5). `class` at the call site lands on the item; the icon wrapper, the label and the badge wrapper are the nodes a collapse animation has to reach. |
 
 **Events** (1):
@@ -4942,12 +4915,11 @@ A combined command palette with search, items, and groups.
 - **v-model:** `v-model:open` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `content`, `control`, `empty`, `group`, `group-label`, `icon`, `input`, `item`, `item-label`, `list`, `overlay`, `suffix`
 
-**Props** (14, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (13, of which 7 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `enableGlobalShortcut` | `boolean \| undefined` | no | `true` | Whether to bind Ctrl+K / Cmd+K globally |
@@ -5222,12 +5194,11 @@ An inline confirmation popover anchored to its trigger.
 - **v-model:** `v-model:open` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `action`, `body`, `description`, `header`, `icon`, `panel`, `title`, `trigger`
 
-**Props** (16, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (15, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `cancelText` | `string \| undefined` | no | `undefined` | Label for the cancel action button. Defaults to `Cancel`. |
@@ -5423,12 +5394,11 @@ Step-by-step product walkthrough that spotlights target elements
 - **v-model:** `v-model:current` (`number | undefined`), `v-model:open` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `action`, `description`, `footer`, `header`, `item-indicator`, `list`, `overlay`, `panel`, `title`
 
-**Props** (12, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `current` | `number \| undefined` | no | `0` | Zero-based index of the step currently shown; defaults to the first step. |
@@ -5494,13 +5464,12 @@ Content panel for DzContextMenu.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/overlays`
 - **Compound part of:** `DzContextMenu`
 
-**Props** (11, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 7 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `align` | `ContextMenuAlign \| undefined` | no | `"start"` | Alignment relative to the pointer |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -5625,12 +5594,11 @@ Content panel for DzDialog compound.
 - **Compound part of:** `DzDialog`
 - **Anatomy parts (ADR-19):** `content`, `footer`, `header`, `overlay`, `viewport`
 
-**Props** (12, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 7 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -5744,13 +5712,12 @@ Content panel for DzDropdownMenu.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/overlays`
 - **Compound part of:** `DzDropdownMenu`
 
-**Props** (11, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 7 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `align` | `DropdownAlign \| undefined` | no | `"start"` | Alignment relative to the trigger |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -5928,12 +5895,11 @@ Content panel for DzSheet compound.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/overlays`
 - **Compound part of:** `DzSheet`
 
-**Props** (10, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 7 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -6075,12 +6041,11 @@ Contextual alert messages for user feedback.
 - **Risk tier:** A · **Status:** stable
 - **Taxonomy:** variant: `filled` `outline` `subtle` `ghost` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `closable` | `boolean \| undefined` | no | `false` | Whether the alert can be dismissed |
@@ -6199,12 +6164,11 @@ Content-loading mask.
 - **v-model:** `v-model:blocked` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `content`, `description`, `overlay`, `root`
 
-**Props** (12, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `blocked` | `boolean \| undefined` | no | `false` | Whether the blocking overlay covers the content; `false` leaves it interactive. |
@@ -6342,12 +6306,11 @@ Segmented proportional meter with legend.
 - **Risk tier:** A · **Status:** beta
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -6382,12 +6345,11 @@ Persistent notification message with optional auto-dismiss.
 - **Taxonomy:** tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `action`, `close`, `content`, `description`, `icon`, `root`, `title`
 
-**Props** (12, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `closable` | `boolean \| undefined` | no | `false` | Whether the notification can be dismissed |
@@ -6429,12 +6391,11 @@ Visual indicator of task completion.
 - **Risk tier:** A · **Status:** stable
 - **Taxonomy:** variant: `bar` `circular` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -6525,12 +6486,11 @@ Scroll-position progress indicator.
 - **Risk tier:** A · **Status:** experimental
 - **Taxonomy:** variant: `bar` `circular` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
-**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 3 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label for the progress indicator. Defaults to `'Page scroll progress'`. |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -6628,12 +6588,11 @@ Individual toast notification using Reka UI (ADR-07).
 - **Risk tier:** B · **Status:** stable
 - **Anatomy parts (ADR-19):** `action`, `close`, `description`, `indicator`, `root`, `title`
 
-**Props** (9, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (8, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `defaultOpen` | `boolean \| undefined` | no | — | Whether the toast should be open on initial render |
@@ -6825,12 +6784,11 @@ Compound accordion root using Reka UI (ADR-07).
 - **v-model:** `v-model` (`string | string[] | undefined`)
 - **Anatomy parts (ADR-19):** `content`, `indicator`, `item`, `root`, `trigger`
 
-**Props** (12, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `collapsible` | `boolean \| undefined` | no | — | Whether all items can be collapsed simultaneously (single mode only; defaults to `true`) |
@@ -6889,12 +6847,11 @@ a figure that counts from its previous value to the next.
 - **Risk tier:** A · **Status:** experimental
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
-**Props** (14, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (13, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `duration` | `number \| undefined` | no | `1000` | Animation duration in milliseconds (`0` snaps with no animation) |
@@ -6957,12 +6914,11 @@ full-surface month/week calendar for date selection and
 - **v-model:** `v-model:focusedDate` (`string | undefined`), `v-model:value` (`DzCalendarModelValue | undefined`)
 - **Anatomy parts (ADR-19):** `action`, `cell`, `content`, `group`, `header`, `item`, `root`, `row`, `title`
 
-**Props** (18, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (17, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents all interaction |
@@ -7015,12 +6971,11 @@ Closable chip component with tone/variant styling.
 - **Taxonomy:** variant: `solid` `outline` `subtle` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `close`, `root`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `closable` | `boolean \| undefined` | no | `false` | Whether the chip can be dismissed/closed |
@@ -7096,12 +7051,11 @@ live countdown / elapsed timer.
 - **Risk tier:** A · **Status:** experimental
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
-**Props** (13, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (12, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `autoStart` | `boolean \| undefined` | no | `true` | Start ticking automatically on mount (default `true`) |
@@ -7156,12 +7110,11 @@ Compound data grid root component.
 - **v-model:** `v-model:filters` (`DzDataGridFilter[] | undefined`), `v-model:selectedRows` (`T[] | undefined`), `v-model:sortModel` (`SortModel[] | undefined`)
 - **Anatomy parts (ADR-19):** `body`, `cell`, `content`, `empty`, `footer`, `header`, `indicator`, `loader`, `panel`, `root`, `row`
 
-**Props** (21, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (20, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `columns` | `ColumnDef<T>[]` | yes | — | Column definitions |
@@ -7223,12 +7176,11 @@ list/grid switchable collection renderer.
 - **v-model:** `v-model:first` (`number | undefined`), `v-model:layout` (`DataViewLayout | undefined`), `v-model:sortField` (`string | undefined`), `v-model:sortOrder` (`DataViewSortOrder | undefined`)
 - **Anatomy parts (ADR-19):** `control`, `footer`, `header`, `item`, `list`, `root`
 
-**Props** (24, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (23, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `cols` | `GridCols \| ResponsiveCols \| undefined` | no | `{ sm: 1, md: 2, lg: 3 }` | Grid columns (fixed count or responsive object) for the grid layout |
@@ -7300,12 +7252,11 @@ read-only label/value detail grid.
 - **Risk tier:** A · **Status:** beta
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `bordered` | `boolean \| undefined` | no | `false` | Render label/value cells with borders (default false) |
@@ -7337,12 +7288,11 @@ viewport-sentinel "load more" wrapper.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `content`, `error`, `hint`, `loader`, `root`
 
-**Props** (13, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (12, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `direction` | `InfiniteScrollDirection \| undefined` | no | `"down"` | Paging direction — `'down'` for feeds, `'up'` for reverse/chat lists |
@@ -7406,18 +7356,17 @@ Compound list root component.
 - **Risk tier:** A · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `interactive` | `boolean \| undefined` | no | `false` | Whether list items are interactive (clickable) |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state |
-| `ordered` | `boolean \| undefined` | no | `false` | Whether the list is ordered (renders <ol> instead of <ul>) |
+| `ordered` | `boolean \| undefined` | no | `false` | Whether the list is ordered (renders `<ol>` instead of `<ul>`) |
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
 | `variant` | `ListVariant \| undefined` | no | `undefined` | Visual style variant |
@@ -7459,13 +7408,12 @@ Child item within a DzList compound component.
 - **Taxonomy:** tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `item-label`, `root`
 
-**Props** (9, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (8, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `active` | `boolean \| undefined` | no | `false` | Whether this item is currently active/selected |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state |
@@ -7504,12 +7452,11 @@ reorderable list with drag, control-button, and keyboard reorder.
 - **v-model:** `v-model:value` (`T[] | undefined`)
 - **Anatomy parts (ADR-19):** `control`, `empty`, `group`, `item`, `item-label`, `list`, `root`
 
-**Props** (20, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (19, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `controlsPosition` | `OrderListControlsPosition \| undefined` | no | `"start"` | Which side the control button column sits on |
@@ -7569,12 +7516,11 @@ Compound semantic table root component.
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 - **Anatomy parts (ADR-19):** `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `separator`, `step-decrease`, `step-increase`, `title`
 
-**Props** (17, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (16, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `captionVisible` | `boolean \| undefined` | no | `false` | Make the `caption` slot visibly rendered instead of screen-reader-only. Default `false` preserves the original `sr-only` behaviour. |
@@ -7648,12 +7594,11 @@ Categorization tag component with tone/variant styling.
 - **Taxonomy:** variant: `solid` `outline` `subtle` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **Anatomy parts (ADR-19):** `close`, `root`
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `closable` | `boolean \| undefined` | no | `false` | Whether the tag can be dismissed/closed |
@@ -7694,12 +7639,11 @@ Compound timeline root component.
 - **Risk tier:** A · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 
-**Props** (8, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (7, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -7743,12 +7687,11 @@ Child item within a DzTimeline compound component.
 - **Risk tier:** A · **Status:** stable
 - **Taxonomy:** tone: `neutral` `primary` `success` `warning` `danger` `info`
 
-**Props** (7, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (6, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -7783,13 +7726,12 @@ Hierarchical tree view with expand/collapse, selection, and checkboxes.
 - **v-model:** `v-model:activeKey` (`string | undefined`), `v-model:expandedKeys` (`string[] | undefined`), `v-model:selectedKeys` (`string[] | undefined`)
 - **Anatomy parts (ADR-19):** `empty`, `root`
 
-**Props** (16, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (15, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `activeKey` | `string \| undefined` | no | `undefined` | Key of the active treeitem — the one holding the roving `tabindex="0"` and referenced by a composing combobox's `aria-activedescendant` (v-model). |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `checkable` | `boolean \| undefined` | no | `false` | Whether checkboxes are shown |
@@ -8033,7 +7975,7 @@ A compound sub-part of `DzDescriptions`; see that component's usage snippet.
 
 ### DzTableBody
 
-Table body section (<tbody>).
+Table body section (`<tbody>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableBody } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -8058,7 +8000,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableCell
 
-Table cell (<td> or <th>).
+Table cell (`<td>` or `<th>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableCell } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -8071,7 +8013,7 @@ Table cell (<td> or <th>).
 | `align` | `"right" \| "left" \| "center" \| undefined` | no | `"left"` | Text alignment |
 | `colId` | `string \| undefined` | no | `undefined` | Stable column id. Required to participate in column resizing: a `resizable` header cell writes its width under this id, and body cells sharing the id adopt that width. |
 | `colspan` | `number \| undefined` | no | `undefined` | Column span |
-| `header` | `boolean \| undefined` | no | `false` | Whether this cell is a header cell (<th> vs <td>) |
+| `header` | `boolean \| undefined` | no | `false` | Whether this cell is a header cell (`<th>` vs `<td>`) |
 | `pin` | `TablePin \| undefined` | no | `undefined` | Pin this cell's column to the `left` or `right` edge of the scroll container so it stays visible while other columns scroll horizontally. Apply the same `pin` value to every cell in the column (header + body) for a coherent column. |
 | `pinBoundary` | `boolean \| undefined` | no | `false` | Mark this pinned cell as the boundary column (the last pinned-left or first pinned-right column) so it renders an edge shadow separating pinned from scrolling content. Ignored when `pin` is unset. |
 | `pinOffset` | `number \| undefined` | no | `0` | Cumulative offset (px) from the pinned edge, for stacking multiple pinned columns. The first pinned column uses `0`; each subsequent pinned column uses the summed width of the pinned columns before it. Ignored when `pin` is unset. |
@@ -8090,7 +8032,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableFooter
 
-Table footer section (<tfoot>).
+Table footer section (`<tfoot>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableFooter } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -8108,7 +8050,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableHeader
 
-Table header section (<thead>).
+Table header section (`<thead>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableHeader } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -8126,7 +8068,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableRow
 
-Table row (<tr>).
+Table row (`<tr>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableRow } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -8162,13 +8104,12 @@ User avatar component with image and fallback support.
 - **Risk tier:** A · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
 
-**Props** (10, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (9, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `alt` | `string \| undefined` | no | — | Alt text for the avatar image |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `fallback` | `string \| undefined` | no | — | Fallback text (typically initials) when image is not available |
@@ -8242,12 +8183,11 @@ Image/content carousel with autoplay and navigation.
 - **v-model:** `v-model` (`number | undefined`)
 - **Anatomy parts (ADR-19):** `action`, `content`, `item`, `item-indicator`, `list`, `root`, `viewport`
 
-**Props** (13, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (12, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `autoplay` | `boolean \| undefined` | no | `false` | Whether to auto-advance slides |
@@ -8357,13 +8297,12 @@ Enhanced image component with loading and error states.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/media`
 - **Risk tier:** A · **Status:** stable
 
-**Props** (11, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (10, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `alt` | `string` | yes | — | Alt text for the image (required for accessibility) |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `aspectRatio` | `string \| undefined` | no | — | Aspect ratio (e.g., '16/9', '1/1') |
@@ -8403,7 +8342,7 @@ draggable before/after image reveal slider (ADR-16 defineModel).
 - **v-model:** `v-model:position` (`number | undefined`)
 - **Anatomy parts (ADR-19):** `control`, `label`, `panel`, `root`, `separator`
 
-**Props** (16, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (15, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -8411,7 +8350,6 @@ draggable before/after image reveal slider (ADR-16 defineModel).
 | `afterLabel` | `string \| undefined` | no | — | Optional caption chip rendered over the after image. |
 | `afterSrc` | `string \| undefined` | no | — | Convenience source for the revealed ("after") image. Ignored if the `after` slot is used. |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `beforeAlt` | `string \| undefined` | no | — | Alt text for the base image (required for accessibility when `beforeSrc` is used). |
@@ -8461,12 +8399,11 @@ Fullscreen image viewer overlay.
 - **v-model:** `v-model` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `action`, `close`, `content`, `description`, `label`, `overlay`
 
-**Props** (12, of which 8 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 7 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -8514,12 +8451,11 @@ Token-styled QR code renderer.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/media`
 - **Risk tier:** A · **Status:** experimental
 
-**Props** (13, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (12, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `background` | `string \| undefined` | no | `"var(--dz-background)"` | Background color. Defaults to the `--dz-background` token. |
@@ -8559,12 +8495,11 @@ tiled content watermark overlay.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/media`
 - **Risk tier:** A · **Status:** experimental
 
-**Props** (17, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (16, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `color` | `string \| undefined` | no | `"var(--dz-watermark-color)"` | Mark color. Token-based by default (`var(--dz-watermark-color)`); the overlay's low opacity comes from `--dz-watermark-opacity` so the mark stays subtle without obscuring content. |
@@ -8835,12 +8770,11 @@ self-updating relative timestamp.
 - **Risk tier:** A · **Status:** experimental
 - **Anatomy parts (ADR-19):** `root`
 
-**Props** (12, of which 5 inherited from `@dzup-ui/contracts`):
+**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |

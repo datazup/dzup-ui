@@ -14,7 +14,7 @@ import { describe, expect, it } from 'vitest'
 import { checkVendorSublayers, vendorSelectorsIn } from './vendor-sublayers.ts'
 
 /** Write `css` into a throwaway root and check it against `entries`. */
-function check(css: string, entries: Parameters<typeof checkVendorSublayers>[0]['entries']) {
+function check(css: string, entries: NonNullable<Parameters<typeof checkVendorSublayers>[0]>['entries']) {
   const root = mkdtempSync(join(tmpdir(), 'dzup-vendor-'))
   writeFileSync(join(root, 'sheet.css'), css, 'utf8')
   return checkVendorSublayers({ entries }, ['sheet.css'], root)

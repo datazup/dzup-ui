@@ -1,0 +1,10 @@
+{
+  "$comment": "Data for validate:published-imports (TASK-R1-O2). Code reads this; changing what the gate tolerates is an edit HERE, with a reason a reviewer can argue with, not a change to published-imports.ts.",
+  "sideEffectOnly": [
+    {
+      "entry": "@dzup-ui/testing#./vitest",
+      "reason": "A vitest setup module by design: `import '@dzup-ui/testing/vitest'` in a setupFiles array calls installDzupUiDomTestEnvironment() for its effect and is meant to export nothing. Without this entry the gate reports it as a barrel that exports nothing — which IS the defect for every other subpath, and is why the rule is an allowlist rather than a relaxation: a family index that silently stopped re-exporting must still fail."
+    }
+  ],
+  "$sideEffectOnly": "Subpaths whose module legitimately has zero exports. Spelled `<package>#<subpath>`. Every other subpath that loads but exports nothing is a failure: `export * from './missing.ts'` in a barrel resolves to an empty namespace rather than throwing, so 'it imported' is not the same as 'it works'."
+}

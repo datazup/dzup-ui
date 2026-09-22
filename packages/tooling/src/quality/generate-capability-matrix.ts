@@ -35,7 +35,7 @@ import { CAPABILITY_SCHEMA_VERSION, CELL_STATES, emptyTally } from './capability
 import { renderCapabilityData } from './emit-capability-data.ts'
 import { AT_MATRIX_INDEX } from './generate-at-matrix.ts'
 import { readCommittedMatrix } from './generate-quality-matrix.ts'
-import { evidenceIsCurrent, lastCommitFor } from './git.ts'
+import { evidenceIsCurrent, headCommit, lastCommitFor } from './git.ts'
 
 export const CAPABILITY_MATRIX_PATH = resolve(ROOT, 'packages/core/docs/capability-matrix.json')
 
@@ -970,7 +970,10 @@ export function buildCapabilityMatrix(
 
   return {
     schemaVersion: CAPABILITY_SCHEMA_VERSION,
-    sourceCommit: quality.sourceCommit,
+    // Not `quality.sourceCommit`. That was a copy of a copy — the capability
+    // matrix inherited the oldest hash in the chain and every "N commits
+    // behind" statement derived from it over-stated drift (N0-05 D1).
+    sourceCommit: headCommit(),
     generatedFrom: [
       'packages/core/docs/quality-matrix.json',
       'packages/core/manifests/component-ownership.manifest.json',

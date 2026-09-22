@@ -1,0 +1,57 @@
+{
+  "$comment": "The published subpath contract, as data (TASK-R1-O2). validate:exports proves every DECLARED target resolves; it never noticed a subpath being DELETED, because a package with fewer exports still has zero broken ones. This file closes that: the set of subpaths a published package offers is a promise, and under packages/contracts/VERSIONING.md (0.x) removing one is a breaking change — a `minor` bump and a changeset, never a silent edit. Adding one is equally deliberate: a new subpath must be listed here, which is where its reason for existing gets written down. Only the six packages in release-policy.json `published` are governed; withheld and private packages are free to move.",
+  "$howToChange": "Removing a subpath: delete it here, write the changeset (`minor` under 0.x), and say in the changeset which import path stops working. Adding one: append it with a reason, and add a `patch` changeset. Never edit this file to make a red gate green without doing one of those two things.",
+  "packages": {
+    "@dzup-ui/contracts": {
+      "$reason": "Types-first, one entry. A subpath here would fragment the contract the two tiers share.",
+      "subpaths": ["."]
+    },
+    "@dzup-ui/core": {
+      "$reason": "The root barrel plus the seams a host reaches without pulling the component barrel, plus the eleven family subpaths a bundler-less consumer imports from directly.",
+      "subpaths": [
+        ".",
+        "./resolver",
+        "./ownership",
+        "./providers",
+        "./i18n",
+        "./i18n/locales/en.json",
+        "./styles",
+        "./buttons",
+        "./cards",
+        "./data",
+        "./feedback",
+        "./forms",
+        "./inputs",
+        "./layout",
+        "./media",
+        "./navigation",
+        "./overlays",
+        "./typography"
+      ],
+      "notes": {
+        "./i18n": "TASK-R5-O4 / N5-04 D4. The localisation surface — `useDzMessageFormat` and the message-group types. Three import paths failed with ERR_PACKAGE_PATH_NOT_EXPORTED before it existed, which blocked every locale pack and made ADR-20's i18n promises unverifiable. It is snapshotted here because the defect it fixes is invisible from inside the repository: source imports keep working after the exports entry is gone.",
+        "./i18n/locales/en.json": "The English catalog ships as JSON data, not as a named export — what a translator and a translation-management tool edit, and what keeps a second language out of every bundle. A locale pack's import path is part of the contract exactly as the composable's is.",
+        "./styles": "ADR-15 / the five-layer contract: `import '@dzup-ui/core/styles'` is the documented way to load the built CSS. It was declared for months while the build emitted no CSS at all (the defect that produced export-map.ts)."
+      }
+    },
+    "@dzup-ui/mcp": {
+      "$reason": "A public package governed through mcp-tool-surface.json. `./registry` is the client an embedder reuses without starting the server.",
+      "subpaths": [".", "./registry"]
+    },
+    "@dzup-ui/nuxt": {
+      "$reason": "A Nuxt module: one entry, resolved by `modules: ['@dzup-ui/nuxt']`.",
+      "subpaths": ["."]
+    },
+    "@dzup-ui/testing": {
+      "$reason": "The consumer-facing test kit. `./vitest` is a setup module imported for its effect (see published-imports-policy.json); `./security-corpus` is the shared attack corpus TASK-R3-O4 formalises across the two repositories.",
+      "subpaths": [".", "./vitest", "./security-corpus"]
+    },
+    "@dzup-ui/tokens": {
+      "$reason": "The token ABI: the JS scales, the two stylesheets, the DTCG document (ADR-19's interchange format) and the Tailwind theme.",
+      "subpaths": [".", "./css", "./css/high-contrast", "./dtcg", "./tailwind", "./utils"],
+      "notes": {
+        "./dtcg": "ADR-19's interchange promise. A design tool reads this path; nothing inside the repository does, so only a snapshot notices it disappearing."
+      }
+    }
+  }
+}

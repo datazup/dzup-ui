@@ -151,7 +151,7 @@ function attribution(): Attribution {
 function record(
   ledger: VisualLedger,
   file: string,
-  fields: Omit<VisualBaselineRecord, 'sha256' | 'replaces' | 'acceptedBy' | 'acceptedAt'
+  fields: Omit<VisualBaselineRecord, 'file' | 'sha256' | 'replaces' | 'acceptedBy' | 'acceptedAt'
   | 'reason' | 'sourceCommit' | 'worktreeDirty'>,
   who: Attribution,
 ): { entry: VisualBaselineRecord, previous: string | null } {

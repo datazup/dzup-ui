@@ -48,12 +48,11 @@ never as asserted.
 :::
 
 
-## Props (24, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (23, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `cols` | `GridCols \| ResponsiveCols \| undefined` | no | `{ sm: 1, md: 2, lg: 3 }` | Grid columns (fixed count or responsive object) for the grid layout |
@@ -293,7 +292,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 24 | 24 | 16 declare a default, of which 7 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 23 | 23 | 16 declare a default, of which 6 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 6 | 6 | 2 recovered from the `Dz*Emits` interface · 4 synthesised by `defineModel` |
 | Slots | 6 | 6 | 2 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -302,8 +301,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `2d51eec4` for the capability matrix,
-`2d51eec4` for the quality matrix. It is **locally qualified**:
+artifact records — `527dbd15` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

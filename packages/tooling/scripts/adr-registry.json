@@ -1,15 +1,55 @@
 {
   "$comment": [
-    "Cited ADRs that have no document in docs/adr/ (TASK-OSS-P3-01, ADR-19).",
+    "The repository's ADR index, in two halves, plus two ratchets.",
+    "",
+    "`undocumented` — cited ADRs that have no document in docs/adr/ (TASK-OSS-P3-01, ADR-19).",
     "This is a DEBT LEDGER, not a permission list. `validate:adr-references` fails on any",
     "ADR number cited anywhere in the repository that is neither documented nor listed here,",
     "so the set can only shrink. Writing one of these ADRs means deleting its entry and",
     "lowering maxUndocumented in the same change.",
     "Titles are transcribed from wherever the decision is currently recorded — usually the",
     "table in CLAUDE.md, otherwise the source comment that cites it. They are summaries of",
-    "what the code does, NOT approved decision records; that is the whole point of the debt."
+    "what the code does, NOT approved decision records; that is the whole point of the debt.",
+    "",
+    "`documented` — added by TASK-R0-O2 (2026-09-22). One entry per document in docs/adr/,",
+    "so the registry is the whole index rather than only its debt half, and so a new ADR",
+    "document is a deliberate, reviewable edit here as well as a new file.",
+    "",
+    "STATUS IS NOT RECORDED HERE, DELIBERATELY. The validator reads each document's own",
+    "`Status:` line. Mirroring it into this file would create a second place for the same",
+    "fact to be wrong, which is the hand-typed-facts defect class this programme has now",
+    "recorded six times (P2-02 READMEs, T1-K4, A1-F3, A2-F-3, A2's version literals,",
+    "D20-8's stale component count). Flipping an ADR's own Status line is therefore the",
+    "single act that moves `maxProposedCitedFromCode`.",
+    "",
+    "`maxProposedCitedFromCode` — the number of DISTINCT ADRs that (a) have a document,",
+    "(b) whose document says `Proposed`, and (c) are cited from code (a non-Markdown file",
+    "under packages/ or apps/). Code building on an unsigned decision is a real debt and",
+    "this is the only figure in the repository that measures it. Seeded at 3 on 2026-09-22",
+    "— ADR-18, ADR-19 and ADR-20, none of which has an owner's signature. Like",
+    "maxUndocumented it must EQUAL the measured count, so accepting an ADR fails the gate",
+    "until the ceiling is lowered in the same change. That is the point: before TASK-R0-O2",
+    "the gate was status-blind and acceptance moved nothing measurable at all."
   ],
   "maxUndocumented": 14,
+  "maxProposedCitedFromCode": 3,
+  "documented": [
+    {
+      "id": "ADR-18",
+      "title": "Runtime floor and validator runner",
+      "file": "docs/adr/ADR-18-runtime-floor-and-validator-runner.md"
+    },
+    {
+      "id": "ADR-19",
+      "title": "Public styling contract: cascade layers, parts, states and typed `ui` overrides",
+      "file": "docs/adr/ADR-19-public-styling-contract.md"
+    },
+    {
+      "id": "ADR-20",
+      "title": "Provider contract: locale, direction, messages, formats, portals, motion, defaults, nonce, test ids",
+      "file": "docs/adr/ADR-20-provider-contract.md"
+    }
+  ],
   "undocumented": [
     {
       "id": "ADR-01",
@@ -63,8 +103,8 @@
     },
     {
       "id": "ADR-13",
-      "title": "Calendar and date-picker date math delegated to @internationalized/date via the useCalendar composable. NOTE: dzup-ui-pro numbers a different decision ADR-13 (neutral models) — the two tiers share a number space and do not coordinate it, which is itself worth a decision",
-      "recordedIn": "packages/core/src/composables/useCalendar.ts; DzDatePicker/DzCalendar headers"
+      "title": "Calendar and date-picker date math delegated to @internationalized/date via the useCalendar composable. NUMBER COLLISION, resolved by cross-reference 2026-09-22 (TASK-R0-O2): dzup-ui-pro numbers a DIFFERENT, unrelated decision ADR-13 — \"Composite component dependencies require exact source/target admission\", Accepted 2026-08-10, at ui/dzup-ui-pro/docs/adr/ADR-13-composite-component-dependencies.md (commit 7f1c678). The two tiers share one ADR number space and do not coordinate it. Resolution taken: NEITHER document is renamed. An OSS `ADR-13` always means THIS decision; a Pro `ADR-13` always means that one; a cross-tier citation must be written `dzup-ui ADR-13` or `dzup-ui-pro ADR-13`. Renumbering was rejected: Pro's ADR-13 is Accepted and cited from Pro source, OSS's is cited from 10 sites here, and a renumber breaks every existing citation to buy tidiness (same reasoning as D179's rejection of renumbering the D-id space). The standing question — whether the two tiers should share or split the number space going forward — is the owner's and is recorded as TASK-R0-O2 D187",
+      "recordedIn": "packages/core/src/composables/useCalendar.ts; DzDatePicker/DzCalendar/DzDateRangePicker headers; CLAUDE.md § Key ADRs"
     },
     {
       "id": "ADR-15",

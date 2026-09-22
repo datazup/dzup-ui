@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DzTableRowProps, DzTableRowSlots } from './DzTable.types.ts'
 /**
- * DzTableRow — Table row (<tr>).
+ * DzTableRow — Table row (`<tr>`).
  *
  * Child of DzTable compound component. Inherits context via inject.
  *

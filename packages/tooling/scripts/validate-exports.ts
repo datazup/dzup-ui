@@ -18,6 +18,16 @@
  * `./styles` for months while the build emitted no CSS at all, and this script
  * happily reported "0 errors" the whole time.
  *
+ * For the SIX PUBLISHED packages: validates the set of subpaths itself against
+ * `scripts/required-export-subpaths.json` (TASK-R1-O2). Everything above checks
+ * that declared targets resolve — which a package with *fewer* exports passes
+ * perfectly. Deleting `"./i18n"` from `@dzup-ui/core` breaks three documented
+ * import paths and every locale pack, and until this snapshot existed no gate
+ * in the repository would have said a word: inside the repo, source imports keep
+ * working after the exports entry is gone. Under VERSIONING.md (0.x) removing a
+ * subpath is a breaking change, so it must be a deliberate edit to that file
+ * plus a changeset, not a silent one to a package.json.
+ *
  * Usage:
  *   tsx packages/tooling/scripts/validate-exports.ts [--built]
  *
@@ -72,6 +82,11 @@ interface PackageJson {
   exports?: Record<string, unknown>
   main?: string
   module?: string
+}
+
+/** scripts/required-export-subpaths.json — the published subpath contract, as data. */
+interface RequiredSubpathsSnapshot {
+  packages: Record<string, { subpaths: string[] }>
 }
 
 // --- Constants ---
@@ -343,6 +358,85 @@ function validateExportMaps(requireBuilt: boolean): ValidationError[] {
   return errors
 }
 
+// --- Published subpath contract (TASK-R1-O2) ---
+
+/**
+ * Compares each published package's declared subpaths against the snapshot.
+ *
+ * Both directions are errors, and deliberately so:
+ *   - **missing** — a promised import path is gone. Under VERSIONING.md (0.x)
+ *     that is a breaking change: `minor`, with a changeset saying which path
+ *     stops working. Nothing else in the repository notices, because source
+ *     imports keep resolving through `tsconfig.base.json`'s `paths`.
+ *   - **unlisted** — a new subpath shipped with no recorded reason for
+ *     existing. A snapshot that quietly absorbs additions stops being a
+ *     contract within two releases; the fix is one line plus a reason.
+ */
+function validateRequiredSubpaths(): ValidationError[] {
+  const snapshotPath = resolve(ROOT, 'packages/tooling/scripts/required-export-subpaths.json')
+  if (!existsSync(snapshotPath)) {
+    return [{
+      package: 'required-export-subpaths.json',
+      category: 'snapshot',
+      entry: '(file)',
+      filePath: relative(ROOT, snapshotPath),
+      message: 'the published subpath snapshot is missing — restore it or the exports contract is ungated',
+    }]
+  }
+
+  const snapshot = JSON.parse(readFileSync(snapshotPath, 'utf-8')) as RequiredSubpathsSnapshot
+  const errors: ValidationError[] = []
+  const declaredByName = new Map(
+    discoverPackages().map(({ name, pkgJson }) => [name, Object.keys((pkgJson.exports ?? {}) as Record<string, unknown>)] as const),
+  )
+
+  for (const [name, { subpaths }] of Object.entries(snapshot.packages)) {
+    const declared = declaredByName.get(name)
+    if (declared === undefined) {
+      errors.push({
+        package: name,
+        category: 'subpath-contract',
+        entry: '(package)',
+        filePath: relative(ROOT, snapshotPath),
+        message: `the snapshot governs ${name}, but no non-private packages/*/package.json declares that name`,
+      })
+      continue
+    }
+
+    for (const subpath of subpaths) {
+      if (!declared.includes(subpath)) {
+        errors.push({
+          package: name,
+          category: 'subpath-contract',
+          entry: subpath,
+          filePath: `packages/*/package.json`,
+          message: `"${subpath}" is in the published subpath contract but NOT in the exports map — `
+            + `a promised import path was removed. Under packages/contracts/VERSIONING.md (0.x) that is a `
+            + `breaking change: restore it, or delete it from required-export-subpaths.json with a \`minor\` changeset naming the path that stops working.`,
+        })
+      }
+    }
+
+    for (const subpath of declared) {
+      if (!subpaths.includes(subpath)) {
+        errors.push({
+          package: name,
+          category: 'subpath-contract',
+          entry: subpath,
+          filePath: relative(ROOT, snapshotPath),
+          message: `"${subpath}" is exported but not listed in required-export-subpaths.json — `
+            + `add it with a reason (and a \`patch\` changeset). A snapshot that absorbs additions silently stops being a contract.`,
+        })
+      }
+    }
+
+    const status = errors.some(e => e.package === name) ? 'FAIL' : 'PASS'
+    console.warn(`  ${status}  ${name}: ${subpaths.length} contracted subpaths`)
+  }
+
+  return errors
+}
+
 // --- Main ---
 
 function main(): void {
@@ -406,6 +500,11 @@ function main(): void {
   // Export-map targets — every package, every target, including non-JS ones.
   console.warn(`\nValidating export-map targets${requireBuilt ? ' (--built: dist required)' : ''}`)
   allErrors.push(...validateExportMaps(requireBuilt))
+
+  // The subpath SET itself — what a package promises, not just whether the
+  // promises it still makes resolve.
+  console.warn(`\nValidating the published subpath contract (scripts/required-export-subpaths.json)`)
+  allErrors.push(...validateRequiredSubpaths())
 
   console.warn(`\n${'='.repeat(60)}`)
   console.warn(`Total: ${totalEntries} entries, ${totalExports} declared exports (manifest packages)`)

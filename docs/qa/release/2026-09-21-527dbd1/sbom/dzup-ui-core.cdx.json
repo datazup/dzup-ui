@@ -1,0 +1,619 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-21T14:35:45.884Z",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "@dzup-ui/tooling release:evidence",
+          "version": "0.0.1"
+        }
+      ]
+    },
+    "component": {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40dzup-ui/core@0.2.0",
+      "name": "@dzup-ui/core",
+      "version": "0.2.0",
+      "purl": "pkg:npm/%40dzup-ui/core@0.2.0",
+      "description": "Core foundational components for dzup-ui",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "191cdecdfb76d5738cd72d6debc650fa3a3a85c26c50416cf3a5399b454394e0"
+        },
+        {
+          "alg": "SHA-512",
+          "content": "+zEow5ZfrRfVM8OupmFiA+aw6Hvtr/VUSmJaODmeRGtKlRQS8/fILTzY9qRydGvIVGf9bis/0SN9j2KI3FHrFg=="
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:tarball",
+          "value": "dzup-ui-core-0.2.0.tgz"
+        },
+        {
+          "name": "dzup:bytes",
+          "value": "741860"
+        },
+        {
+          "name": "dzup:sourceCommit",
+          "value": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+        },
+        {
+          "name": "dzup:sourceWorktreeDirty",
+          "value": "true"
+        },
+        {
+          "name": "dzup:admissible",
+          "value": "false"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40dzup-ui/contracts@0.1.0",
+      "name": "@dzup-ui/contracts",
+      "version": "0.1.0",
+      "purl": "pkg:npm/%40dzup-ui/contracts@0.1.0",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40dzup-ui/tokens@0.2.0",
+      "name": "@dzup-ui/tokens",
+      "version": "0.2.0",
+      "purl": "pkg:npm/%40dzup-ui/tokens@0.2.0",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40floating-ui/core@1.7.5",
+      "name": "@floating-ui/core",
+      "version": "1.7.5",
+      "purl": "pkg:npm/%40floating-ui/core@1.7.5",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "3"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40floating-ui/dom@1.7.6",
+      "name": "@floating-ui/dom",
+      "version": "1.7.6",
+      "purl": "pkg:npm/%40floating-ui/dom@1.7.6",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "2"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40floating-ui/utils@0.2.11",
+      "name": "@floating-ui/utils",
+      "version": "0.2.11",
+      "purl": "pkg:npm/%40floating-ui/utils@0.2.11",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "2"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40floating-ui/vue@1.1.11",
+      "name": "@floating-ui/vue",
+      "version": "1.1.11",
+      "purl": "pkg:npm/%40floating-ui/vue@1.1.11",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40internationalized/date@3.12.0",
+      "name": "@internationalized/date",
+      "version": "3.12.0",
+      "purl": "pkg:npm/%40internationalized/date@3.12.0",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40swc/helpers@0.5.20",
+      "name": "@swc/helpers",
+      "version": "0.5.20",
+      "purl": "pkg:npm/%40swc/helpers@0.5.20",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "2"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/clsx@2.1.1",
+      "name": "clsx",
+      "version": "2.1.1",
+      "purl": "pkg:npm/clsx@2.1.1",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/lucide-vue-next@0.475.0",
+      "name": "lucide-vue-next",
+      "version": "0.475.0",
+      "purl": "pkg:npm/lucide-vue-next@0.475.0",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/qrcode-generator@2.0.4",
+      "name": "qrcode-generator",
+      "version": "2.0.4",
+      "purl": "pkg:npm/qrcode-generator@2.0.4",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/tailwind-merge@3.6.0",
+      "name": "tailwind-merge",
+      "version": "3.6.0",
+      "purl": "pkg:npm/tailwind-merge@3.6.0",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/tailwind-variants@0.3.1",
+      "name": "tailwind-variants",
+      "version": "0.3.1",
+      "purl": "pkg:npm/tailwind-variants@0.3.1",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "1"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/tslib@2.8.1",
+      "name": "tslib",
+      "version": "2.8.1",
+      "purl": "pkg:npm/tslib@2.8.1",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "0BSD"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "3"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/vue-demi@0.14.10",
+      "name": "vue-demi",
+      "version": "0.14.10",
+      "purl": "pkg:npm/vue-demi@0.14.10",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "bundled-dependency"
+        },
+        {
+          "name": "dzup:depth",
+          "value": "2"
+        },
+        {
+          "name": "dzup:resolved",
+          "value": "true"
+        },
+        {
+          "name": "dzup:shipsLicenceText",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/reka-ui@2.9.2",
+      "name": "reka-ui",
+      "version": "2.9.2",
+      "purl": "pkg:npm/reka-ui@2.9.2",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "required-peer"
+        },
+        {
+          "name": "dzup:declaredRange",
+          "value": "^2.0.0"
+        },
+        {
+          "name": "dzup:versionIsObserved",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/vue@3.5.31",
+      "name": "vue",
+      "version": "3.5.31",
+      "purl": "pkg:npm/vue@3.5.31",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:relationship",
+          "value": "required-peer"
+        },
+        {
+          "name": "dzup:declaredRange",
+          "value": "^3.5.0"
+        },
+        {
+          "name": "dzup:versionIsObserved",
+          "value": "true"
+        }
+      ]
+    }
+  ]
+}

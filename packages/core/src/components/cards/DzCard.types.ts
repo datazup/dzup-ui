@@ -24,6 +24,12 @@ export type DzCardPadding = 'none' | 'sm' | 'md' | 'lg'
  * uniform across the Cards family (matching DzImageCard / DzStatCard).
  */
 export interface DzCardProps extends BaseAccessibilityProps {
+  // Declared locally since TASK-R0-O2 (2026-09-22): `ariaInvalid` left
+  // BaseAccessibilityProps for BaseValidationProps (N5-02 D1), and DzCard
+  // forwards the attribute without being a form control, so it keeps the one
+  // prop rather than inheriting `invalid`/`error`/`required` it never reads.
+  /** Indicates the component has invalid input */
+  ariaInvalid?: boolean | 'grammar' | 'spelling'
   /** Visual style variant */
   variant?: DzCardVariant
   /** Internal padding */

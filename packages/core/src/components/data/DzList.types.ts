@@ -50,7 +50,7 @@ export interface DzListProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Semantic color tone */
   tone?: CanonicalTone
-  /** Whether the list is ordered (renders <ol> instead of <ul>) */
+  /** Whether the list is ordered (renders `<ol>` instead of `<ul>`) */
   ordered?: boolean
   /** Whether list items are interactive (clickable) */
   interactive?: boolean

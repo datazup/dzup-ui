@@ -1,6 +1,59 @@
+import type { RiskTier } from '@dzup-ui/contracts'
+import type { TriageItem, TriageSummary } from '../quality/story-dod-triage.ts'
 import { describe, expect, it } from 'vitest'
 import { componentOf, TIER_REQUIRED_CHECKS, triage } from '../quality/story-dod-triage.ts'
 import { checkCeiling, countOpen, readCeiling } from './story-dod-tiers.ts'
+
+/**
+ * A triage summary built by hand (TASK-R1-O1).
+ *
+ * `countOpen`'s unit tests used to call `triage()` and pick the first required
+ * item out of the live repository. That worked only while the repository had
+ * one. TASK-N1-O1 closed the last story-DoD gap, the ratchet reached **0**, and
+ * `summary.items.find(i => i.required)!` became `undefined!` — so the suite
+ * failed with `Cannot read properties of undefined` as the *reward* for
+ * finishing the work it was measuring. A unit test for a pure function must not
+ * be able to be broken by an unrelated component gaining a story.
+ *
+ * The live repository still gets asserted, in `the committed ceiling` below,
+ * where reading it is the point.
+ */
+function item(
+  component: string,
+  check: string,
+  tier: RiskTier | null,
+  required: boolean,
+): TriageItem {
+  return {
+    file: `packages/core/stories/buttons/${component}.stories.ts`,
+    check,
+    level: 'report',
+    message: `${component} owes ${check}`,
+    component,
+    tier,
+    required,
+  }
+}
+
+/** Four required items across three checks, plus two advisory ones. */
+function fixtureSummary(): TriageSummary {
+  const items: TriageItem[] = [
+    item('DzButton', 'states', 'B', true),
+    item('DzInput', 'states', 'C', true),
+    item('DzSelect', 'accessibility', 'C', true),
+    item('DzTable', 'real-world', 'D', true),
+    item('DzBadge', 'gallery', 'A', false),
+    item('DzDialogParts', 'states', null, false),
+  ]
+  const required = items.filter(i => i.required).length
+  return {
+    items,
+    byCheck: {},
+    requiredTotal: required,
+    advisoryTotal: items.length - required,
+    unmatched: ['DzDialogParts'],
+  }
+}
 
 describe('componentOf', () => {
   it('reads the component out of a story path, on either separator', () => {
@@ -30,7 +83,10 @@ describe('the join', () => {
 
   it('marks a required item only when the component is at or above the tier', () => {
     for (const item of summary.items) {
-      const from = TIER_REQUIRED_CHECKS[item.check]
+      // `?? null` rather than `=== null`: under `noUncheckedIndexedAccess` a
+      // string index also yields `undefined`, which the null check alone left
+      // in the type and made `rank[from]` an error.
+      const from = TIER_REQUIRED_CHECKS[item.check] ?? null
       if (from === null || item.tier === null) {
         expect(item.required, `${item.component}/${item.check}`).toBe(false)
         continue
@@ -92,18 +148,67 @@ describe('the ceiling', () => {
 })
 
 describe('countOpen', () => {
-  const summary = triage()
+  const summary = fixtureSummary()
+  const total = (counts: Record<string, number>): number =>
+    Object.values(counts).reduce((a, b) => a + b, 0)
 
   it('counts only required items', () => {
-    const counts = countOpen(summary, {})
-    const total = Object.values(counts).reduce((a, b) => a + b, 0)
-    expect(total).toBe(summary.requiredTotal)
+    expect(total(countOpen(summary, {}))).toBe(summary.requiredTotal)
+    expect(total(countOpen(summary, {}))).toBe(4)
+  })
+
+  it('reports per check, not as one number', () => {
+    expect(countOpen(summary, {})).toMatchObject({
+      'states': 2,
+      'accessibility': 1,
+      'real-world': 1,
+    })
+  })
+
+  it('seeds every tier-required check, so a check at zero is still reported', () => {
+    // A check missing from the record and a check at 0 are different claims,
+    // and the ceiling file has to be able to tell them apart.
+    const counts = countOpen({ ...summary, items: [], requiredTotal: 0 }, {})
+    expect(counts).toMatchObject({ 'states': 0, 'accessibility': 0, 'real-world': 0 })
+    expect(counts.gallery).toBeUndefined()
   })
 
   it('subtracts a waiver', () => {
-    const first = summary.items.find(i => i.required)!
-    const counts = countOpen(summary, { [`${first.component}:${first.check}`]: 'a reason' })
-    expect(Object.values(counts).reduce((a, b) => a + b, 0)).toBe(summary.requiredTotal - 1)
+    expect(total(countOpen(summary, { 'DzButton:states': 'a reason' })))
+      .toBe(summary.requiredTotal - 1)
+  })
+
+  it('subtracts only the waived component, not every item on that check', () => {
+    const counts = countOpen(summary, { 'DzButton:states': 'a reason' })
+    expect(counts.states).toBe(1)
+  })
+
+  it('ignores a waiver that matches nothing', () => {
+    expect(total(countOpen(summary, { 'DzGone:states': 'retired' })))
+      .toBe(summary.requiredTotal)
+  })
+
+  it('never counts an advisory item, waived or not', () => {
+    expect(total(countOpen(summary, { 'DzBadge:gallery': 'irrelevant' })))
+      .toBe(summary.requiredTotal)
+  })
+
+  it('returns zeroes rather than throwing when nothing is open', () => {
+    // The state the repository is actually in. The old spec crashed here.
+    const empty = countOpen({ ...summary, items: [], requiredTotal: 0 }, {})
+    expect(total(empty)).toBe(0)
+  })
+})
+
+describe('countOpen over the live repository', () => {
+  it('agrees with the triage summary it was given', () => {
+    // An invariant, not a fixture: whatever the repository holds today, the
+    // per-check counts must add up to the required total. This is vacuously
+    // true at 0 open items, which is why the behaviour above is driven by a
+    // fixture instead.
+    const summary = triage()
+    const counts = countOpen(summary, {})
+    expect(Object.values(counts).reduce((a, b) => a + b, 0)).toBe(summary.requiredTotal)
   })
 })
 

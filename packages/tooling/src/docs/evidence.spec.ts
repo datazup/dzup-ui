@@ -26,7 +26,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 import { buildTargetIn, classifyBrowserTargetSources, probeBrowserTarget } from './browser-target.ts'
-import { isAllowedComponentLine, renderComponentPage } from './docs-pages.ts'
+import { renderComponentPage, unescapedMarkupLines } from './docs-pages.ts'
 import {
   renderAccessibilityPage,
   renderAtMatrixPage,
@@ -117,10 +117,15 @@ function makeSources(overrides: Partial<EvidenceSources> = {}): EvidenceSources 
       pattern: 'button',
       file: 'e2e/at-matrix/DzThing.md',
       tasks: ['reach'],
+      // What `requiredAtPairs('B')` returns, which is what
+      // `generate:at-matrix` stamps on a Tier B entry.
+      requiredPairs: ['nvda-firefox'],
       componentCommit: 'cafebabe11223344',
+      // `task: '*'` is ALL_TASKS -- the value `generate:at-matrix` writes into a
+      // scaffolded row, which is the only value a row may carry while unrun.
       rows: [
-        { pair: 'nvda-firefox', result: 'unrun', versions: '-', tester: '-', date: '-', sourceCommit: '-', notes: 'not executed' },
-        { pair: 'jaws-chrome', result: 'unrun', versions: '-', tester: '-', date: '-', sourceCommit: '-', notes: 'not executed' },
+        { pair: 'nvda-firefox', task: '*', result: 'unrun', versions: '-', tester: '-', date: '-', sourceCommit: '-', notes: 'not executed' },
+        { pair: 'jaws-chrome', task: '*', result: 'unrun', versions: '-', tester: '-', date: '-', sourceCommit: '-', notes: 'not executed' },
       ],
     }],
   }
@@ -160,6 +165,7 @@ function withAtRows(results: readonly string[]): EvidenceSources {
   const ev = makeSources()
   ev.atMatrix.entries[0]!.rows = results.map((result, i) => ({
     pair: i === 0 ? 'nvda-firefox' : 'jaws-chrome',
+    task: '*',
     result,
     versions: result === 'unrun' ? '-' : 'NVDA 2026.1 / Firefox 151',
     tester: result === 'unrun' ? '-' : 'A. Tester',
@@ -621,26 +627,17 @@ describe('the real catalogue', () => {
       ['evidence/browser-support.md', renderBrowserSupportPage(ev)] as const,
       ['evidence/styling-posture.md', renderStylingPosturePage(ev, artifact)] as const,
     ]
+    // One rule, one implementation — `unescapedMarkupLines` in docs-pages.ts.
+    // This assertion used to carry its own copy, which is why it went red
+    // against a correct page the first time the escaper gained a channel
+    // (D3-F6) and again when the page-local import block landed (TASK-R1-O5).
     for (const [name, page] of pages) {
-      let inFence = false
-      page.split('\n').forEach((line, i) => {
-        if (/^\s*[`~]{3,}/.test(line)) {
-          inFence = !inFence
-          return
-        }
-        // The one tag a generated page may open is a REGISTERED component, so
-        // VitePress compiling it is the intent (TASK-N2-D3). Asked of the
-        // escaper's own predicate rather than a second copy of the allowlist.
-        if (inFence || line.startsWith('<!--') || line.startsWith('     ')
-          || isAllowedComponentLine(line)) {
-          return
-        }
-        const outsideCode = line.split('`').filter((_, idx) => idx % 2 === 0).join('')
-        expect(
-          outsideCode.includes('<'),
-          `${name} line ${i + 1} carries unescaped markup: ${line}`,
-        ).toBe(false)
-      })
+      const offenders = unescapedMarkupLines(page)
+      expect(
+        offenders,
+        `${name} carries unescaped markup: ${
+          offenders.map(o => `line ${o.line}: ${o.text}`).join(' · ')}`,
+      ).toEqual([])
     }
   })
 

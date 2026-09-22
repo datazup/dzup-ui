@@ -54,6 +54,10 @@ function makeRecord(overrides: Partial<ComponentMetaRecord> = {}): ComponentMeta
     componentCommit: 'abc1234',
     componentType: 'class',
     anatomy: { state: 'absent', parts: [] },
+    // Required on the record since TASK-R5-O3. `generate:component-meta`
+    // always emits an array, so a fixture that omits it is not a record
+    // the generator could ever have produced.
+    providerHooks: [],
     props: [],
     globalPropCount: 12,
     events: [],

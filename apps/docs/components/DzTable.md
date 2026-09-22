@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzTable
 
 Compound semantic table root component.
@@ -48,12 +52,11 @@ never as asserted.
 :::
 
 
-## Props (17, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (16, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `captionVisible` | `boolean \| undefined` | no | `false` | Make the `caption` slot visibly rendered instead of screen-reader-only. Default `false` preserves the original `sr-only` behaviour. |
@@ -129,7 +132,7 @@ Editable, running the **Variant Gallery** story from `packages/core/stories/data
 
 ### DzTableBody
 
-Table body section (&lt;tbody>).
+Table body section (`<tbody>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableBody } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -154,7 +157,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableCell
 
-Table cell (&lt;td> or &lt;th>).
+Table cell (`<td>` or `<th>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableCell } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -167,7 +170,7 @@ Table cell (&lt;td> or &lt;th>).
 | `align` | `"right" \| "left" \| "center" \| undefined` | no | `"left"` | Text alignment |
 | `colId` | `string \| undefined` | no | `undefined` | Stable column id. Required to participate in column resizing: a `resizable` header cell writes its width under this id, and body cells sharing the id adopt that width. |
 | `colspan` | `number \| undefined` | no | `undefined` | Column span |
-| `header` | `boolean \| undefined` | no | `false` | Whether this cell is a header cell (&lt;th> vs &lt;td>) |
+| `header` | `boolean \| undefined` | no | `false` | Whether this cell is a header cell (`<th>` vs `<td>`) |
 | `pin` | `TablePin \| undefined` | no | `undefined` | Pin this cell's column to the `left` or `right` edge of the scroll container so it stays visible while other columns scroll horizontally. Apply the same `pin` value to every cell in the column (header + body) for a coherent column. |
 | `pinBoundary` | `boolean \| undefined` | no | `false` | Mark this pinned cell as the boundary column (the last pinned-left or first pinned-right column) so it renders an edge shadow separating pinned from scrolling content. Ignored when `pin` is unset. |
 | `pinOffset` | `number \| undefined` | no | `0` | Cumulative offset (px) from the pinned edge, for stacking multiple pinned columns. The first pinned column uses `0`; each subsequent pinned column uses the summed width of the pinned columns before it. Ignored when `pin` is unset. |
@@ -186,7 +189,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableFooter
 
-Table footer section (&lt;tfoot>).
+Table footer section (`<tfoot>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableFooter } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -204,7 +207,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableHeader
 
-Table header section (&lt;thead>).
+Table header section (`<thead>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableHeader } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -222,7 +225,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableRow
 
-Table row (&lt;tr>).
+Table row (`<tr>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableRow } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -367,7 +370,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 17 | 17 | 10 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 16 | 16 | 10 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 2 | 2 | 2 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
 | Slots | 2 | 2 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -376,8 +379,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `2d51eec4` for the capability matrix,
-`2d51eec4` for the quality matrix. It is **locally qualified**:
+artifact records — `527dbd15` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

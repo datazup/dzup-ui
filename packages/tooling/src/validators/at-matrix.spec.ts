@@ -7,7 +7,10 @@ import { checkAtMatrix } from './at-matrix.ts'
 
 const PAIR = AT_PAIRS[0]!.id
 
-function index(rows: Partial<AtMatrixIndex['entries'][number]['rows'][number]>[] = []): AtMatrixIndex {
+function index(
+  rows: Partial<AtMatrixIndex['entries'][number]['rows'][number]>[] = [],
+  componentCommit = 'unknown',
+): AtMatrixIndex {
   return {
     schemaVersion: '1.0.0',
     generatedFrom: [],
@@ -20,7 +23,7 @@ function index(rows: Partial<AtMatrixIndex['entries'][number]['rows'][number]>[]
         file: 'e2e/at-matrix/DzThing.md',
         tasks: ['reach'],
         requiredPairs: requiredAtPairs('B'),
-        componentCommit: 'unknown',
+        componentCommit,
         rows: rows.map(r => ({
           pair: PAIR,
           task: ALL_TASKS,
@@ -102,14 +105,15 @@ describe('substance', () => {
 
 describe('staleness', () => {
   it('reports, rather than fails, a result taken before a change', () => {
+    // The entry is readonly, so the commit that post-dates the run is built
+    // into the index rather than written over it afterwards.
     const i = index([{
       result: 'pass',
       versions: 'NVDA 2025.3',
       tester: 'e.isic',
       date: '2026-08-24',
       sourceCommit: '0000000000000000000000000000000000000000',
-    }])
-    i.entries[0]!.componentCommit = '1111111111111111111111111111111111111111'
+    }], '1111111111111111111111111111111111111111')
 
     const v = checkAtMatrix(i, ['DzThing'], ['DzThing'])
     const stale = v.find(x => x.rule === 'stale')

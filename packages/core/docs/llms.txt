@@ -70,7 +70,7 @@ These hold for every component below, so they are stated once here:
   - v-model: `v-model`
   - parts (ADR-19): `clear`, `control`, `error`, `input`, `prefix`, `root`, `spinner`, `suffix`
 - **DzInputGroup** — Compound wrapper for input + addons.
-  - props: `disabled`, `size`, `ui`
+  - props: `ariaInvalid`, `disabled`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - parts (ADR-19): `content`, `prefix`, `root`, `suffix`
 - **DzInputMask** — format-masked text input.
@@ -112,12 +112,12 @@ These hold for every component below, so they are stated once here:
   - v-model: `v-model`, `v-model:value`
   - parts (ADR-19): `clear`, `content`, `empty`, `error`, `group`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `label`, `list`, `options-message`, `options-retry`, `options-state`, `panel`, `root`, `trigger`
 - **DzCheckbox** — Checkbox component using Reka UI (ADR-07).
-  - props: `disabled`, `indeterminate`, `name`, `required`, `size`, `ui`, `value`
+  - props: `ariaInvalid`, `disabled`, `indeterminate`, `name`, `required`, `size`, `ui`, `value`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
   - parts (ADR-19): `control`, `indicator`, `label`, `root`
 - **DzCheckboxGroup** — Groups DzCheckbox components with a shared string[] model.
-  - props: `disabled`, `orientation`, `size`
+  - props: `ariaInvalid`, `disabled`, `orientation`, `size`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
   - parts (ADR-19): `root`
@@ -183,11 +183,11 @@ These hold for every component below, so they are stated once here:
   - v-model: `v-model`
   - parts (ADR-19): `clear`, `content`, `control`, `empty`, `error`, `icon`, `input`, `item`, `item-indicator`, `item-label`, `options-message`, `options-retry`, `options-state`, `root`, `trigger`, `viewport`
 - **DzRadio** — Radio option using Reka UI (ADR-07).
-  - props: `disabled`, `size`, `ui`, `value`
+  - props: `ariaInvalid`, `disabled`, `size`, `ui`, `value`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - parts (ADR-19): `control`, `indicator`, `label`, `root`
 - **DzRadioGroup** — Radio group using Reka UI RadioGroupRoot (ADR-07).
-  - props: `disabled`, `name`, `orientation`, `required`, `size`
+  - props: `ariaInvalid`, `disabled`, `name`, `orientation`, `required`, `size`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
   - parts (ADR-19): `root`
@@ -212,7 +212,7 @@ These hold for every component below, so they are stated once here:
   - v-model: `v-model`
   - parts (ADR-19): `control`, `error`, `indicator`, `label`, `root`
 - **DzSwitch** — Toggle switch using Reka UI (ADR-07).
-  - props: `disabled`, `name`, `required`, `size`, `ui`
+  - props: `ariaInvalid`, `disabled`, `name`, `required`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - v-model: `v-model`
   - parts (ADR-19): `control`, `indicator`, `label`, `root`
@@ -246,7 +246,7 @@ These hold for every component below, so they are stated once here:
 ## Cards
 
 - **DzCard** — A surface container component.
-  - props: `clickable`, `hoverable`, `padding`, `ui`, `variant`
+  - props: `ariaInvalid`, `clickable`, `hoverable`, `padding`, `ui`, `variant`
   - variant: `elevated` `outlined` `flat`
   - parts (ADR-19): `action`, `body`, `footer`, `header`, `root`
 - **DzImageCard** — Card component with a prominent image.
@@ -304,7 +304,7 @@ These hold for every component below, so they are stated once here:
 - **DzSpacer** — Flexible space filler.
   - props: `size`
 - **DzSplitter** — Naming alias for DzResizable.
-  - props: `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `direction`, `disabled`, `id`, `keyboardResizeBy`, `size`, `ui`
+  - props: `ariaDescribedby`, `ariaLabel`, `ariaLabelledby`, `direction`, `disabled`, `id`, `keyboardResizeBy`, `size`, `ui`
   - size: `icon` `xs` `sm` `md` `lg` `xl`
   - parts (ADR-19): `indicator`, `panel`, `root`, `separator`, `step-decrease`, `step-increase`
 - **DzStack** — Simplified vertical/horizontal stack layout.
@@ -397,7 +397,7 @@ These hold for every component below, so they are stated once here:
   - part of `DzSidebar`
 - **DzSidebarItem** — Individual navigation item within a sidebar.
   - part of `DzSidebar`
-  - props: `active`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `as`, `disabled`, `href`, `id`, `to`, `ui`
+  - props: `active`, `ariaDescribedby`, `ariaLabel`, `ariaLabelledby`, `as`, `disabled`, `href`, `id`, `to`, `ui`
 - **DzSidebarSection** — Groups sidebar items with an optional title.
   - part of `DzSidebar`
   - props: `collapsible`, `defaultOpen`, `title`, `ui`
@@ -456,7 +456,7 @@ These hold for every component below, so they are stated once here:
   - parts (ADR-19): `action`, `description`, `footer`, `header`, `item-indicator`, `list`, `overlay`, `panel`, `title`
 - **DzContextMenuContent** — Content panel for DzContextMenu.
   - part of `DzContextMenu`
-  - props: `align`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `id`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`
+  - props: `align`, `ariaDescribedby`, `ariaLabel`, `ariaLabelledby`, `id`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`
 - **DzContextMenuItem** — A single item within DzContextMenuContent.
   - part of `DzContextMenu`
   - props: `disabled`, `ui`
@@ -469,7 +469,7 @@ These hold for every component below, so they are stated once here:
   - props: `asChild`
 - **DzDialogContent** — Content panel for DzDialog compound.
   - part of `DzDialog`
-  - props: `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `id`, `overlayClass`, `portalDefer`, `portalDisabled`, `portalTo`, `scrollable`, `size`, `ui`
+  - props: `ariaDescribedby`, `ariaLabel`, `ariaLabelledby`, `id`, `overlayClass`, `portalDefer`, `portalDisabled`, `portalTo`, `scrollable`, `size`, `ui`
   - parts (ADR-19): `content`, `footer`, `header`, `overlay`, `viewport`
 - **DzDialogDescription** — Description element for DzDialog compound.
   - part of `DzDialog`
@@ -481,7 +481,7 @@ These hold for every component below, so they are stated once here:
   - part of `DzDialog`
 - **DzDropdownMenuContent** — Content panel for DzDropdownMenu.
   - part of `DzDropdownMenu`
-  - props: `align`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `id`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`
+  - props: `align`, `ariaDescribedby`, `ariaLabel`, `ariaLabelledby`, `id`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `sideOffset`
 - **DzDropdownMenuItem** — A single item within DzDropdownMenuContent.
   - part of `DzDropdownMenu`
   - props: `disabled`, `ui`
@@ -498,7 +498,7 @@ These hold for every component below, so they are stated once here:
   - part of `DzSheet`
 - **DzSheetContent** — Content panel for DzSheet compound.
   - part of `DzSheet`
-  - props: `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `id`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `size`
+  - props: `ariaDescribedby`, `ariaLabel`, `ariaLabelledby`, `id`, `portalDefer`, `portalDisabled`, `portalTo`, `side`, `size`
 - **DzSheetDescription** — Description for DzSheet.
   - part of `DzSheet`
 - **DzSheetTitle** — Title for DzSheet.
@@ -618,7 +618,7 @@ These hold for every component below, so they are stated once here:
   - props: `interactive`, `loading`, `ordered`, `size`, `tone`, `variant`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **DzListItem** — Child item within a DzList compound component.
-  - props: `active`, `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `disabled`, `id`, `tone`, `ui`
+  - props: `active`, `ariaDescribedby`, `ariaLabel`, `ariaLabelledby`, `disabled`, `id`, `tone`, `ui`
   - tone: `neutral` `primary` `success` `warning` `danger` `info`
   - parts (ADR-19): `item-label`, `root`
 - **DzOrderList** — reorderable list with drag, control-button, and keyboard reorder.
@@ -638,7 +638,7 @@ These hold for every component below, so they are stated once here:
   - props: `orientation`, `size`, `tone`
   - size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **DzTimelineItem** — Child item within a DzTimeline compound component.
-  - props: `ariaDescribedby`, `ariaInvalid`, `ariaLabel`, `ariaLabelledby`, `id`, `status`, `tone`
+  - props: `ariaDescribedby`, `ariaLabel`, `ariaLabelledby`, `id`, `status`, `tone`
   - tone: `neutral` `primary` `success` `warning` `danger` `info`
 - **DzTree** — Hierarchical tree view with expand/collapse, selection, and checkboxes.
   - props: `activeKey`, `checkable`, `disabled`, `draggable`, `expandedKeys`, `items`, `loading`, `selectable`, `selectedKeys`, `size`, `ui`
@@ -668,17 +668,17 @@ These hold for every component below, so they are stated once here:
 - **DzDescriptionsItem** — a single label/value pair within DzDescriptions.
   - part of `DzDescriptions`
   - props: `label`, `span`
-- **DzTableBody** — Table body section (<tbody>).
+- **DzTableBody** — Table body section (`<tbody>`).
   - part of `DzTable`
   - props: `skeletonRows`
-- **DzTableCell** — Table cell (<td> or <th>).
+- **DzTableCell** — Table cell (`<td>` or `<th>`).
   - part of `DzTable`
   - props: `align`, `colId`, `colspan`, `header`, `pin`, `pinBoundary`, `pinOffset`, `resizable`, `rowspan`
-- **DzTableFooter** — Table footer section (<tfoot>).
+- **DzTableFooter** — Table footer section (`<tfoot>`).
   - part of `DzTable`
-- **DzTableHeader** — Table header section (<thead>).
+- **DzTableHeader** — Table header section (`<thead>`).
   - part of `DzTable`
-- **DzTableRow** — Table row (<tr>).
+- **DzTableRow** — Table row (`<tr>`).
   - part of `DzTable`
   - props: `expandable`, `rowId`, `selected`
 

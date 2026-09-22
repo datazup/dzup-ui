@@ -36,6 +36,13 @@ import { isRegression, MEASURABLE_CV, describe as summarize } from './perf/stati
 // ---------------------------------------------------------------------------
 
 interface GridRow {
+  /**
+   * DzDataGrid's `data` prop is `Record<string, unknown>[]` -- a row is an
+   * open bag the column accessors index into. Declaring that here is what
+   * makes a `GridRow[]` assignable to the prop; an interface without it is
+   * not, however many of the named fields it carries.
+   */
+  [column: string]: unknown
   id: number
   name: string
   email: string

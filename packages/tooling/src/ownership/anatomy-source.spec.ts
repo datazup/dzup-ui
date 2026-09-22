@@ -345,7 +345,7 @@ describe('keyboard contract', () => {
       `  keyboard: [{ key: 'Home', action: 'Move to the list\\'s first item.' }],`,
     )
     expect(result.problems).toEqual([])
-    expect((result.anatomy?.keyboard as { action: string }[])[0].action)
+    expect((result.anatomy?.keyboard as { action: string }[])[0]?.action)
       .toBe('Move to the list\'s first item.')
   })
 
@@ -353,7 +353,7 @@ describe('keyboard contract', () => {
     const result = parse(
       `  keyboard: [{ key: 'Escape', action: 'Close the dialog, returning focus to the trigger.' }],`,
     )
-    expect((result.anatomy?.keyboard as { action: string }[])[0].action)
+    expect((result.anatomy?.keyboard as { action: string }[])[0]?.action)
       .toBe('Close the dialog, returning focus to the trigger.')
   })
 

@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzSidebar
 
 Collapsible navigation sidebar root component.
@@ -48,13 +52,12 @@ never as asserted.
 :::
 
 
-## Props (16, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (15, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `activeStyle` | `"filled" \| "rail" \| undefined` | no | `"filled"` | Visual treatment for active items. - `filled` (default): solid `--dz-sidebar-item-active-bg` background, `--dz-sidebar-item-active-text` foreground. Matches modern dark-sidebar UX. - `rail`: 3px left border accent, dimmer background. Legacy / minimalist look. |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `collapsed` | `boolean \| undefined` | no | `false` | Whether the sidebar is collapsed to icon-only mode |
@@ -163,20 +166,19 @@ Individual navigation item within a sidebar.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/navigation`
 - **Compound part of:** `DzSidebar`
 
-#### Props (11, of which 5 inherited from `@dzup-ui/contracts`)
+#### Props (10, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `active` | `boolean \| undefined` | no | `false` | Whether this item is currently active |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `as` | `string \| object \| undefined` | no | `undefined` | Element or component to render as |
 | `disabled` | `boolean \| undefined` | no | `false` | Whether this item is disabled |
-| `href` | `string \| undefined` | no | `undefined` | Native link href (renders as &lt;a>) |
+| `href` | `string \| undefined` | no | `undefined` | Native link href (renders as `<a>`) |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
-| `to` | `string \| object \| undefined` | no | `undefined` | Router link destination (renders as &lt;RouterLink>) |
+| `to` | `string \| object \| undefined` | no | `undefined` | Router link destination (renders as `<RouterLink>`) |
 | `ui` | `DzSidebarItemUi \| undefined` | no | — | Per-part class overrides for the item's inner nodes (ADR-19 §5). `class` at the call site lands on the item; the icon wrapper, the label and the badge wrapper are the nodes a collapse animation has to reach. |
 
 #### Events (1)
@@ -407,7 +409,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 16 | 16 | 5 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 15 | 15 | 5 declare a default, of which 8 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 2 | 2 | 2 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 1 | 1 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -416,8 +418,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `2d51eec4` for the capability matrix,
-`2d51eec4` for the quality matrix. It is **locally qualified**:
+artifact records — `527dbd15` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

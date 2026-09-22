@@ -350,8 +350,8 @@ function objectString(object: string, key: string): string | undefined {
 
 /** A `key: ['a','b']` field of one object literal. */
 function objectStringArray(object: string, key: string): string[] | undefined {
-  const match = new RegExp(`(?:^|[{,\\s])${key}\\s*:\\s*(\\[[^\\]]*\\])`).exec(object)
-  return match === null ? undefined : stringsIn(match[1])
+  const literal = new RegExp(`(?:^|[{,\\s])${key}\\s*:\\s*(\\[[^\\]]*\\])`).exec(object)?.[1]
+  return literal === undefined ? undefined : stringsIn(literal)
 }
 
 /**

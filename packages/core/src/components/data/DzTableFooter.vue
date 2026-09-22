@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DzTableFooterSlots } from './DzTable.types.ts'
 /**
- * DzTableFooter — Table footer section (<tfoot>).
+ * DzTableFooter — Table footer section (`<tfoot>`).
  *
  * Child of DzTable compound component. Inherits context via inject.
  * Use for summary/aggregate rows.

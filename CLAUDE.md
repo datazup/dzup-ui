@@ -192,6 +192,7 @@ export interface DzButtonSlots {
 | ADR-04 | Token-only styling (no raw colors)                 |
 | ADR-07 | Reka UI for headless primitives                    |
 | ADR-12 | Generated `dist/` is published, never committed (corrected 2026-09-04) |
+| ADR-13 | Calendar/date-picker date math delegated to `@internationalized/date` via `useCalendar` — **see the number-collision note below** |
 | ADR-15 | FOUC prevention                                    |
 | ADR-16 | `defineModel` for v-model                          |
 | ADR-17 | Token source of truth and component token ownership |
@@ -204,6 +205,32 @@ export interface DzButtonSlots {
 > listed as debt in `packages/tooling/scripts/adr-registry.json`, and
 > `yarn validate:adr-references` fails on any *new* ADR number cited without
 > one. Writing one of them means deleting its entry and lowering the ceiling.
+>
+> All three documented ADRs are still **`Proposed`**. Since TASK-R0-O2
+> (2026-09-22) that costs something measurable:
+> `validate:adr-references` reads each document's own `Status:` line and
+> ratchets `maxProposedCitedFromCode` — the number of distinct `Proposed` ADRs
+> cited from code. It is **3** today. Accepting one is an owner act (flip the
+> `Status:` line) and the ceiling must be lowered in the same change.
+
+### ADR-13 is two different decisions — a number collision, not a mistake
+
+*Recorded 2026-09-22 (TASK-R0-O2). Neither document is renamed.*
+
+| Tier | ADR-13 means | Where |
+|---|---|---|
+| **dzup-ui** (this repo) | Calendar and date-picker date math is delegated to `@internationalized/date` through the `useCalendar` composable | No document. Recorded in `adr-registry.json` and in the `DzCalendar` / `DzDatePicker` / `DzDateRangePicker` headers |
+| **dzup-ui-pro** | Composite component dependencies require exact source/target admission — **Accepted 2026-08-10** | `ui/dzup-ui-pro/docs/adr/ADR-13-composite-component-dependencies.md` |
+
+The two tiers share one ADR number space and have never coordinated it. **The
+resolution is naming, not renumbering:** inside this repository a bare `ADR-13`
+always means the date-math decision; any citation that crosses tiers must be
+written `dzup-ui ADR-13` or `dzup-ui-pro ADR-13`. Renumbering either side was
+rejected — Pro's is Accepted and cited from Pro source, this one is cited from
+10 sites here, and a renumber breaks every existing citation to buy tidiness.
+
+Whether the two tiers should share or split the number space from here is an
+open owner decision (**TASK-R0-O2 D187**).
 
 ## Tooling
 

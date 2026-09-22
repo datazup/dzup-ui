@@ -58,6 +58,7 @@ import {
 } from '../ownership/generate-ownership-manifest.ts'
 import { compareSymbols } from '../ownership/ownership-manifest.types.ts'
 import { COMPONENT_TIERS } from './component-tiers.ts'
+import { headCommit } from './git.ts'
 
 export const QUALITY_MATRIX_PATH = resolve(ROOT, 'packages/core/docs/quality-matrix.json')
 
@@ -190,7 +191,10 @@ export function buildQualityMatrix(
 
   const matrix: QualityMatrix = {
     schemaVersion: QUALITY_MATRIX_SCHEMA_VERSION,
-    sourceCommit: manifest.sourceCommit,
+    // Not `manifest.sourceCommit`. Copying the upstream artifact's stamp made
+    // this matrix claim the commit the *manifest* was generated at, however
+    // long ago that was (N0-05 D1). Provenance is per artifact.
+    sourceCommit: headCommit(),
     generatedFrom: [
       'packages/core/manifests/component-ownership.manifest.json',
       'packages/contracts/src/quality-tiers.ts',

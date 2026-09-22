@@ -29,9 +29,47 @@
 
 ---
 
+## Status as marked — re-verified 2026-09-22 at `527dbd1` + 304 uncommitted paths
+
+> The eight boxes below were left `[ ]` after execution; this pass **re-ran every
+> `<done_check>` against the tree** rather than reading the ledger, and marked
+> them from the result. Baseline is `527dbd1`, **not** the `99b963a` this file's
+> preamble names — four commits landed after it (`a01965f`, `569d887`, `2d51eec`,
+> `527dbd1`), so **every count in the `_Gap:_` blocks below is stale by
+> construction** and must be re-measured before it is quoted. All work is
+> uncommitted; the owner commits.
+
+| Task | Mark | `<done_check>` re-run at `527dbd1` | What remains |
+|---|---|---|---|
+| R1-O1 | `[x]` | **7 of 7** — manifest `sourceCommit` == HEAD · `validate:capability-matrix` 0 · **`yarn test` exit 0** (552 files, 10,504 passed, 0 errors, 0 rAF) · tooling `tsc` 0 · `eslint e2e/` 0 and in the root `lint` target · 0 tracked build leftovers · both validators chained | — |
+| R1-O2 | `[x]` | **Pass** — `validate:published-imports` exit 0 over **6 packages / 31 entries / 62 export leaves**; `./i18n` + `./i18n/locales/en.json` exported, `DzMessageCatalog` reachable from a packed tarball; `@dzup-ui/contracts` imports clean; pack path refuses a stale `dist` | — |
+| R1-O3 | `[x]` | **4 of 4** — `src/release/{api-diff,api-surface,evidence,report}.ts`, 7 `release:*` scripts, `docs/qa/release/2026-09-21-527dbd1/` with CycloneDX SBOM, hashes, provenance and all **8** report sections | bundle is a point-in-time record and is now stale (**D173**, deliberately not regenerated) |
+| R1-O4 | `[!]` | Engineering done — 3 workflows dispatchable (`nuxt-majors` is a **job inside `vue-next.yml`**, not a file: check 1 is unsatisfiable as written), `min-peer.yml` added, dispatch request written. **Recording table is empty** | **owner dispatches**; evidence pages stay untouched until run ids exist |
+| R1-O5 | `[!]` | Gates green — `validate:registry` 0, `validate:docs-size` 0 (docs dist + storybook under byte ceilings, in `validate:all`), `descriptionsWithBareHtml` **12 → 0**, prose-less components **3 → 0**, all 15 playground seeds carry typed `SeedRefusal`s | **owner deploy** (D165–D169); domain still NXDOMAIN |
+| R1-O6 | `[!]` | Gate built and **firing red on a real defect** — `validate:icon-duplicates` reports 2 lucide versions (`0.475.0` from landing+sandbox, `0.477.0` from core); memo covers all four items; `apps/sandbox` still present | **owner** D174–D178. This is the single `✗` in `validate:all` |
+| R0-O1 | `[!]` | Register (**368** rows) + publication packet exist, three costed options | **A4-D1 `open`** — the file's own rule says leave `[!]` |
+| R0-O2 | `[!]` | Registry has 18/19/20, `validate:adr-references` is status-aware and exits 0 (ceiling 3), `ariaInvalid` moved to `BaseValidationProps` with a changeset, ADR-13 collision resolved by cross-reference (no OSS document exists, so check 4's `→ 1` is unsatisfiable as written) | **owner signature** — all three ADRs still `Status: Proposed` |
+
+**Aggregate at `527dbd1`:** `yarn validate:all` is a **50-link** chain (not the 37
+the preamble states) and exits **1 at link 48 only** — `validate:peers` →
+`validate:icon-duplicates`, red *by design* pending R1-O6's owner decision.
+Links 49–50 (`validate:licenses`, `validate:tree-shake`) never start under `&&`;
+run alone both exit 0. Independent adversarial pass and its fixes:
+[`./reports/release-exit-verification-2026-09-22.md`](./reports/release-exit-verification-2026-09-22.md).
+
+**Four `<done_check>` clauses are wrong as written** and were judged on substance,
+with the reason recorded above: R1-O4 check 1 (`nuxt-majors` is a job), R0-O2
+check 4 (`ls docs/adr/ | grep -c 'ADR-13'` → 1, but OSS has no ADR-13 document),
+R1-O2 check 4 (globs `validators/exports*`; the snapshot is
+`scripts/required-export-subpaths.json`), R1-O5 check 3 (attributes two content
+counts to `validate:docs-pages`, which reports neither — they are ratchets in
+`validate:component-meta`).
+
+---
+
 ## 🔴 The tree and what consumers install
 
-### [ ] TASK-R1-O1 — A truthfully green committed tree 🔴
+### [x] TASK-R1-O1 — A truthfully green committed tree 🔴
 
 _Gap: `yarn validate:all` on `main` @ `99b963a` exits 1 at link 16 of 37
 (`validate:capability-matrix`: 12 stale cells — 7 button-family `visual`,
@@ -112,7 +150,7 @@ aggregate gate reported green over a stale artifact for three packets
 
 ---
 
-### [ ] TASK-R1-O2 — Consumer-truth gates: Node `import()` of every published entry, pack freshness, the i18n catalog export 🔴
+### [x] TASK-R1-O2 — Consumer-truth gates: Node `import()` of every published entry, pack freshness, the i18n catalog export 🔴
 
 _Gap: three things a consumer would hit are gated nowhere at `99b963a`.
 (1) No validator imports every `exports` target of every public package under
@@ -191,7 +229,7 @@ unreferenced (N5-04 D4) — which blocks every locale pack. Sources:
 
 ## 🟠 Release evidence and its execution
 
-### [ ] TASK-R1-O3 — Release evidence parity with Pro: API diff, SBOM, hashes, rehearsal, the 8-section report 🟠
+### [x] TASK-R1-O3 — Release evidence parity with Pro: API diff, SBOM, hashes, rehearsal, the 8-section report 🟠
 
 _Gap: the 08-11 validation matrix (doc 08 §Package, §Report) requires per
 release an API diff, an SBOM with a vulnerability and licence report, tarball
@@ -267,7 +305,7 @@ no API diff, no SBOM, no hash record, no report has ever been produced
 
 ---
 
-### [ ] TASK-R1-O4 — CI dispatch of the never-run lanes and a minimum-peer lane 🟠 `[!owner dispatches]`
+### [!] TASK-R1-O4 — CI dispatch of the never-run lanes and a minimum-peer lane 🟠 `[!owner dispatches]`
 
 _Gap: three CI workflows exist and have never run: `validate-min-runtime`
 (the ADR-18 Node floor `^20.19.0 || >=22.13.0` — "a floor nothing has run on
@@ -334,7 +372,7 @@ requires a *minimum* Vue/Reka peer lane; only *current* versions are exercised
 
 ---
 
-### [ ] TASK-R1-O5 — Docs-site publication readiness: size gate, registry gate, content defects, deployment packet 🟠 `[!owner deploy]`
+### [!] TASK-R1-O5 — Docs-site publication readiness: size gate, registry gate, content defects, deployment packet 🟠 `[!owner deploy]`
 
 _Gap: the VitePress site (`apps/docs`, 144 component pages + evidence pages,
 `validate:docs-pages` green) is built, not live: the domain does not resolve
@@ -411,7 +449,7 @@ Sources: `../program-2026-09/reports/N2-D1-docs-site-handoff.md`,
 
 ## 🟢 Hygiene and owner packets
 
-### [ ] TASK-R1-O6 — Peer and dependency hygiene execution 🟢 `[!owner]`
+### [!] TASK-R1-O6 — Peer and dependency hygiene execution 🟢 `[!owner]`
 
 _Gap: `lucide-vue-next@0.477` is deprecated upstream in favour of `@lucide/vue`
 1.0, two versions are installed and no gate notices (N5-04); `reka-ui` is a
@@ -480,7 +518,7 @@ and is report-only. Sources: `../program-2026-09/reports/N5-04-peer-hygiene-hand
 
 ## 🔴 / 🟠 Owner packets
 
-### [ ] TASK-R0-O1 — Publication decision packet and the consolidated owner-decision register 🔴 `[!owner]`
+### [!] TASK-R0-O1 — Publication decision packet and the consolidated owner-decision register 🔴 `[!owner]`
 
 _Gap: the N1/N2/N5 ledgers hold ~125 open `[!owner]` items scattered across
 three status files and 28 handoffs; nothing consolidates them, so the two that
@@ -552,7 +590,7 @@ C11/C12/C15 cannot move until someone decides. Sources: CAND-30,
 
 ---
 
-### [ ] TASK-R0-O2 — ADR-18 / ADR-19 / ADR-20 acceptance execution 🟠 `[!owner]`
+### [!] TASK-R0-O2 — ADR-18 / ADR-19 / ADR-20 acceptance execution 🟠 `[!owner]`
 
 _Gap: all three load-bearing ADRs carry `Status: Proposed` at `99b963a` while
 32 anatomy files, 27 `ui` props and 10 provider composables are built on

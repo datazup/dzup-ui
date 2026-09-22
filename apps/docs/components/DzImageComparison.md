@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzImageComparison
 
 draggable before/after image reveal slider (ADR-16 defineModel).
@@ -47,7 +51,7 @@ never as asserted.
 :::
 
 
-## Props (16, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (15, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
@@ -55,7 +59,6 @@ never as asserted.
 | `afterLabel` | `string \| undefined` | no | — | Optional caption chip rendered over the after image. |
 | `afterSrc` | `string \| undefined` | no | — | Convenience source for the revealed ("after") image. Ignored if the `after` slot is used. |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `beforeAlt` | `string \| undefined` | no | — | Alt text for the base image (required for accessibility when `beforeSrc` is used). |
@@ -236,7 +239,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 16 | 16 | 4 declare a default |
+| Props | 15 | 15 | 4 declare a default |
 | Events | 2 | 2 | 1 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 3 | 3 | 1 carry slot props |
 | Exposed on `ref` | 1 | 1 | no description exists in source for any exposed member, catalog-wide |
@@ -245,8 +248,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `2d51eec4` for the capability matrix,
-`2d51eec4` for the quality matrix. It is **locally qualified**:
+artifact records — `527dbd15` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

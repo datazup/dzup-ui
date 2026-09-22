@@ -992,6 +992,27 @@ written); and there is one shipping defect worth fixing before publication
 
 ## 11. Owner decisions `[!owner]`
 
+> **Appended 2026-09-22 (TASK-R0-O1).** **A4-D1 is now costed in full** —
+> three options (publish 0.x now · freeze and stop advertising install commands ·
+> private registry first), each priced in docs, `llms.txt`, MCP and registry,
+> each with its first implementation packet and its risk — in
+> [`../../program-2026-09-04/reports/publication-decision-packet-2026-09.md`](../../program-2026-09-04/reports/publication-decision-packet-2026-09.md).
+> **A4-D1 remains `open`; nothing below has been decided.**
+>
+> Measured at `527dbd1` for that packet: **88 of 88 registry items declare
+> `@dzup-ui/tokens`, 87 declare `@dzup-ui/core`, and 40 declare deprecated
+> `lucide-vue-next`** — every one `E404` today. **282** `/r/**` files are tracked
+> and all present. **A4-D2 was re-measured as `D166`** (TASK-R1-O5): `dzup-ui.com`
+> is still NXDOMAIN, and `SITE_ORIGIN` is baked into 3 registry indexes,
+> 87 markdown mirrors, both `llms*.txt`, `sitemap.xml`, every canonical link and
+> **63 tracked files** — free to change today, expensive after A4-D1.
+> **A4-D3 is done:** `validate:registry` exists and is a link in `validate:all`
+> (50 links at `527dbd1`).
+>
+> All seven A4 decisions appear in
+> [`../../program-2026-09-04/reports/owner-decision-register-2026-09.md`](../../program-2026-09-04/reports/owner-decision-register-2026-09.md) §2,
+> which cites this section by path and does not restate it.
+
 | # | Decision | Recommendation |
 |---|---|---|
 | **A4-D1** | **Publish or freeze.** `@dzup-ui/core`, `tokens`, `contracts` on npm — yes or no? Everything else in this study is downstream of it. | **Publish**, gated behind `TASK-N5-01`'s 0.x policy. |

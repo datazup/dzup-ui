@@ -137,7 +137,7 @@ export interface DzStepperItemProps {
   optional?: boolean
   /**
    * Per-item override for clickability. Falls back to the parent
-   * <code>DzStepper.clickable</code>. Only completed/active steps respond
+   * `DzStepper.clickable`. Only completed/active steps respond
    * regardless of this flag — upcoming steps never navigate.
    */
   clickable?: boolean

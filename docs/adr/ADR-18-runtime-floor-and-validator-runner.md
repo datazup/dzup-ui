@@ -103,3 +103,87 @@ against. Recorded here rather than decided unilaterally.
 - `yarn validate:engines` — the declarations agree with each other and with
   every dependency's own `engines`
 - CI job `validate-min-runtime` — every gate starts and completes at the floor
+
+---
+
+## Amendments
+
+### A1 — Decision 1 (the floor itself) is under revision. Three reports have answered it differently and none is binding. *(TASK-R0-O2, 2026-09-22)*
+
+**This amendment does not change the floor.** It records that the floor is an
+**open owner decision**, so that a reader of this ADR stops treating
+`^20.19.0 || >=22.13.0` as settled. Three reports have recommended three
+different answers, and the two most recent were written on the same day with
+the later one explicitly differing from the earlier:
+
+| Recommended | Source (cite by this path — `D<n>` ids are not unique across reports) | Reason given |
+|---|---|---|
+| **`>=22.13.0`**, and stop coupling the floor to the RTL list | `docs/program-2026-09/reports/N5-04-peer-hygiene-handoff.md` §3 (**N5-04 D3**, 2026-09-03) | This ADR already calls that floor "defensible today"; Node 20 left maintenance in April 2026 |
+| **Keep `^20.19.0 \|\| >=22.13.0`** and fix the one offending import | `docs/program-2026-09-04/reports/TASK-R1-O4-handoff.md` §9 (**D160**, 2026-09-21) | One import in one spec; `^20.19.0` is what every consumer's `engines` check reads |
+| **`>=22.13.0`**, with D160's fix as a legitimate interim | `docs/program-2026-09-04/reports/TASK-R1-O6-handoff.md` §9 and §7.3 (**D176**, 2026-09-21) | **Explicitly differs from D160**, in its own §7.3. Also **rejects `>=24.0.0`** — Node 22 LTS runs to April 2027 and a library floor excluding it is aggressive |
+
+Consolidated as one contradiction in
+`docs/program-2026-09-04/reports/owner-decision-register-2026-09.md` §7. It is
+**not resolved here**: TASK-R0-O2 is the ADR steward, not the owner of the
+support policy, and Decision 1 keeps its current text until an owner answers.
+
+### A2 — The declared floor is measurably false on its `20.x` branch *(TASK-R0-O2, 2026-09-22, from TASK-R1-O4)*
+
+The Context section above says *"the floor is a claim CI never tests"*, and
+predicts the class of break. The break has now been **measured**, and this ADR
+should stop implying the floor is merely unverified:
+
+`packages/tooling/src/token-checks/landing-token-fallbacks.spec.ts:49` imports
+`globSync` from `node:fs`. `fs.globSync` is `@since v22.0.0`
+(`node_modules/@types/node/fs.d.ts:4442`). On any Node in the floor's `^20.19.0`
+branch, `yarn test` fails with `TypeError: globSync is not a function`.
+Evidence: `docs/program-2026-09-04/reports/TASK-R1-O4-handoff.md` §9 (**D160**).
+
+Two consequences the same report records, and both bear on A1:
+
+- **There has never been a green run on the 20.x floor.** Fixing one import
+  restores the *claim* without the *evidence* (`TASK-R1-O6-handoff.md` §7.3).
+- **One `@since v22` API reached the tree unnoticed because nothing runs on the
+  floor.** A sweep is owed whichever way A1 goes. That is 1.0 criterion **C10**
+  — "a floor nothing has run on is not a floor" — and it is currently **not
+  met**.
+
+### A3 — The floor must stop being coupled to the RTL language list *(TASK-R0-O2, 2026-09-22, from N5-04 D3 and D176)*
+
+ADR-20 §4 justifies its checked-in RTL subtag list by saying
+`Intl.Locale.prototype.getTextInfo()` is *"unavailable across this repository's
+Node floor (`^20.19.0 || >=22.13.0`, ADR-18)"*, and that *"when the floor moves
+past it, the list becomes a one-line delegation."*
+
+**That prediction is wrong, on every floor under discussion in A1.**
+`getTextInfo()` requires Node **24.0.0**; raising the floor to `>=22.13.0` does
+not unlock it. ADR-20 §4 and its *Alternatives considered* entry are corrected
+by ADR-20's own amendment **A1** in the same change as this one.
+
+The consequence for *this* ADR is the part N5-04 D3 asked for: **the Node floor
+and the RTL mechanism are independent decisions and must stop being argued as
+one.** Nothing in this ADR's Decision section depends on the RTL list, and no
+future amendment to Decision 1 should be justified by it.
+
+### A4 — Nuxt ≥ 4.4.6 has already dropped Node 20 *(TASK-R0-O2, 2026-09-22, from N5-03 D4)*
+
+The Nuxt fixture matrix is **pinned at 4.4.5** precisely because 4.4.6 and later
+drop Node 20, which the floor's `^20.19.0` branch still claims. So the floor is
+now holding a dependency back rather than only describing the runtime.
+`N5-03 D4` (`docs/program-2026-09/reports/N5-03-toolchain-currency-handoff.md`
+§10) recommends holding at 4.4.5 *until a Nuxt security fix lands above it* —
+and that recommendation is explicitly downstream of A1. If the floor moves to
+`>=22.13.0`, the pin can be lifted; if it does not, the pin becomes a security
+exposure with a date on it.
+
+### A5 — Status *(TASK-R0-O2, 2026-09-22)*
+
+This ADR remains **`Proposed`**. TASK-R0-O2 found **no recorded owner
+acceptance** for ADR-18, ADR-19 or ADR-20 in any ledger, decision register or
+handoff, and does not invent one. Since 2026-09-22 that status is measured:
+`yarn validate:adr-references` reads the `Status:` line above and counts this
+document in `maxProposedCitedFromCode` (**3** today). Acceptance means an owner
+flipping that line and lowering the ceiling in the same change.
+
+Its unmet precondition is **A1** — a floor decision. See the precondition table
+in `docs/program-2026-09-04/reports/TASK-R0-O2-handoff.md`.

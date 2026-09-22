@@ -4,6 +4,13 @@ description: Build a dzup-ui theme by moving the ThemeRecipe axes, share it as a
 outline: [2, 3]
 ---
 
+<script setup>
+// TASK-R1-O5 (D3-F8): imported here rather than registered globally in
+// .vitepress/theme/index.ts, so the builder's code is charged to this page's
+// chunk instead of to the shared `theme` chunk every page on the site preloads.
+import DzThemeBuilder from '../.vitepress/theme/components/DzThemeBuilder.vue'
+</script>
+
 # Theme builder
 
 Every control below moves one axis of **`ThemeRecipeV1`**, the public,
