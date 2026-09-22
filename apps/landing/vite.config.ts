@@ -30,10 +30,10 @@ export default defineConfig(() => {
     },
     optimizeDeps: dzup.optimizeDeps,
     server: {
-      port: 3001,
-      // Fail loudly when 3001 is taken instead of drifting to the next free port.
+      port: 5299,
+      // Fail loudly when 5299 is taken instead of drifting to the next free port.
       // Without this Vite serves on 3002+ while `open` and any bookmarked tab still
-      // point at 3001 — which then shows a stale server (or nothing) and reads as
+      // point at 5299 — which then shows a stale server (or nothing) and reads as
       // "the app doesn't render". Override the port with `vite --port <n>`.
       strictPort: true,
       open: !remoteDevelopment.enabled,
