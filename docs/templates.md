@@ -1270,15 +1270,54 @@ Confirm these before/around building; the AI-native items are deliberately **out
 3. **In-preview customiser depth.** E5 ships primary-colour presets + RTL. A full theme generator that *exports* copy-paste CSS variables (tweakcn / PrimeVue Theme Designer style) is a bigger, separate feature — defer.
 4. **AI-native distribution (high strategic value, separate project).** A Vue-native **shadcn-style registry + `npx … add` CLI**, an **"Open in v0"** deep-link, an **MCP server** exposing templates to coding agents, and **`llms.txt` + per-page Markdown**. Vue's AI-distribution rails are still underserved — a real chance to leapfrog — but this is its own initiative, not a landing-app task. (E4 ships the cheap slice: "Copy for LLM".)
 5. **Nav entry.** Consider promoting "Templates" to a top-level nav link now that the gallery is rich (landing.md §13 / TopNav), instead of only the `#ecosystem` scroll.
-6. **Pro templates.** The paid tier is specified in [§9](#9-pro-templates-paid-tier); it depends on the free foundation and is skipped by `/run-tasks` until `-Tier pro`.
+6. **Pro templates.** Superseded 2026-09-22: see [§9](#9-pro-templates-paid-tier). The paid tier now lives in the private `ui/dzup-templates` repository, not in this gallery; `/run-tasks` keeps parsing and skipping this section, and no task under it is executable.
 
 ---
 
 ## 9. Pro templates (paid tier)
 
-> The full Pro investigation, catalogue (12 templates across analytics / productivity / collaboration / editors / builder / automation) and the T11–T14 task backlog are specified in [`docs/templates-old.md` §10](./templates-old.md). That spec stands unchanged: Pro templates are an **additive** extension built from `@dzup-ui-pro/pro`, surfaced in the **same** gallery with a **"Pro"** badge and pro-Storybook deep-links, gated behind the Phase-1 funnel (`PRO_LIVE=false`). They reuse every enhancement in this doc (search, tags, code tabs, customiser, thumbnails) for free once those land.
+> **Superseded 2026-09-22 by the `dzup-templates` programme.** Pro templates are
+> no longer planned as rows in this gallery. Two measured facts closed that
+> option. First, `apps/landing` is built and deployed from this public MIT
+> repository, and `apps/landing/src/claims.spec.ts` fails the build when any
+> landing runtime file imports `@dzup-ui-pro/*`, so Pro source cannot live here.
+> Second, the `PRO_LIVE=false` Phase-1 funnel this section described (a "Pro"
+> badge, locked source, a "join the waitlist" CTA) is implemented nowhere in
+> `apps/landing/src`, and `claims.spec.ts` forbids the "coming soon" and
+> "waitlist" phrasing that funnel needs. The supporting claim that "the repo root
+> declares one Yarn workspace spanning both `dzup-ui/*` and `dzup-ui-pro/*`" was
+> also wrong for this repository: its `workspaces` are `packages/*` and `apps/*`.
+> The spanning workspace is the internal engineering workspace root, which is not
+> what this repository is built from.
 >
-> **Execution note:** Pro tasks live under this `## … Pro … (paid tier)` heading so `/run-tasks` parses them as the Pro tier and **skips them by default** (`-Tier free`). Run them only with `-Tier pro|all`, and only after the free foundation + `@dzup-ui-pro/pro` are ready. When picking the Pro work up, port T11–T14 from templates-old.md §10 here (or run that file directly) and apply this doc's §5 quality bar and the experience features (E1–E6) to the Pro rows as well.
+> **Where the paid tier lives now.** Commercial templates live in the private
+> `ui/dzup-templates` repository: both those composed only of `@dzup-ui/core`
+> (tier H) and those composed of `@dzup-ui-pro/pro` (tier P). That repository
+> carries its own showroom, which previews each template at a chromeless route
+> and offers no template source; publishing it at a public hostname is packet
+> DT2 and needs the operator's deploy and DNS. A template's tier follows where
+> its source lives, not which package it imports: a composition of free
+> components can still be a paid product, which is the model Tailwind Plus and
+> PrimeBlocks use.
+>
+> **What this repository keeps.** Tier F only: free templates in
+> `apps/landing/src/templates/`, published through
+> `apps/landing/public/r/templates/<slug>.json` and surfaced to agents by
+> `@dzup-ui/mcp`. Commercial rows may appear in this gallery **only** as
+> generated metadata, following the `pro-showcase.snapshot.json` pattern in
+> `apps/landing/src/data.ts`, never as source and never as a registry item, and
+> the free build must stay green when that snapshot is absent.
+>
+> Authoritative documents: `workspace-docs/repos/dzup-templates/docs/`, holding
+> the programme README, the tier model and repository boundary architecture, the
+> delivery plan (packets DT0 to DT6) and the packet admissions under
+> `docs/planning/admissions/`. The historical Pro investigation and the T11 to
+> T14 task backlog remain in [`docs/templates-old.md` §10](./templates-old.md) as
+> evidence of the superseded approach; do not execute them.
+>
+> **Execution note:** this section keeps its `(paid tier)` heading so
+> `/run-tasks` continues to parse and skip it. No task block under it is
+> executable.
 
 ---
 
@@ -1300,15 +1339,19 @@ Confirmed exports (from `packages/core/src/components/*/index.ts`). Templates mu
 
 ---
 
-## Appendix B — Pro `@dzup-ui-pro/pro` components (for §9 Pro templates only)
+## Appendix B — Pro `@dzup-ui-pro/pro` components (tier P templates in `ui/dzup-templates`)
 
-Confirmed exports (from `dzup-ui-pro/packages/pro/src/components/*/index.ts`) — **41 components across 8 families**. Pro story ids follow `pro-<family>-<dzcomponent>`. Reachable from `apps/landing` because the repo root declares one Yarn workspace spanning both `dzup-ui/*` and `dzup-ui-pro/*`. Import via the package name `@dzup-ui-pro/pro`, never a relative path into the sibling package.
+Confirmed family membership at `ui/dzup-ui-pro` `0810875f`, measured 2026-09-23 from that repository's generated README table (`yarn design:generate`, rendered from `packages/pro/src/components/`). Pro story ids follow `pro-<family>-<dzcomponent>`. The counts below are a pinned snapshot, **not** a maintained claim: the generator owns them, and this gallery reads them through `pro-showcase.snapshot.json` as `PRO_FACTS.published`, so this appendix must never be edited by hand to chase them.
 
-- **builders:** DzDashboardBuilder, DzDashboardWidget, DzFormBuilder, DzFormBuilderField, DzFormBuilderSection, DzSchemaForm, DzReportBand, DzReportBuilder, DzReportElement
-- **business:** DzWorkspaceShell, DzAuditLog, DzNotificationCenter, DzFileManager, DzRibbon
-- **communication:** DzAiAssistant, DzAiCodeBlock, DzAiMarkdown, DzToolCallCard, DzChat, DzChatMessage, DzCommentItem, DzComments, DzReactionPicker
-- **data-pro:** DzDataGridPro, DzDataLineage, DzFilterBuilder, DzPivotTable, DzQueryBuilder, DzQuickFilter, DzVirtualTable
-- **editors:** DzCodeEditor, DzJsonEditor, DzMarkdownEditor, DzRichTextEditor, DzPdfViewer, DzSpreadsheet, DzDiffViewer, DzSignaturePad, DzImageEditor, DzNotebook, DzNotebookCell
-- **planning:** DzCalendar(+DayView/WeekView/MonthView), DzGantt, DzGanttTaskRow, DzKanban, DzKanbanCard, DzKanbanColumn, DzMindMap, DzScheduler, DzCronEditor
-- **visualization:** DzChart, DzChartDataTable, DzDiagramEditor, DzHeatMap, DzTreeMap, DzOrgChart, DzSparkline, DzGauge, DzScorecard, DzGeoMap, DzWhiteboard, DzSankeyDiagram, DzNetworkGraph, DzFunnelChart, DzStockChart, DzSchemaDesigner, DzBarcode
-- **workflow:** DzWorkflowDesigner, DzWorkflowEdge, DzWorkflowNode, DzWorkflowToolbar, DzApprovalFlow
+**These components are not reachable from `apps/landing`.** This repository's `workspaces` are `packages/*` and `apps/*`, and `apps/landing/src/claims.spec.ts` fails on any `@dzup-ui-pro/*` import from landing runtime code. Tier P templates live in `ui/dzup-templates` and import the package name `@dzup-ui-pro/pro`, never a relative path into the sibling package, resolving it from the private registry in CI and release builds and from a `portal:` entry for local co-development.
+
+At the pin above: **78 components across 8 families**.
+
+- **builders (9):** DzDashboardBuilder, DzDashboardWidget, DzFormBuilder, DzFormBuilderField, DzFormBuilderSection, DzReportBand, DzReportBuilder, DzReportElement, DzSchemaForm
+- **business (6):** DzAuditLog, DzFileManager, DzFileManagerTree, DzNotificationCenter, DzRibbon, DzWorkspaceShell
+- **communication (10):** DzAiAssistant, DzAiCodeBlock, DzAiMarkdown, DzChat, DzChatMessage, DzCommentItem, DzComments, DzEmojiPicker, DzReactionPicker, DzToolCallCard
+- **data-pro (7):** DzDataGridPro, DzDataLineage, DzFilterBuilder, DzPivotTable, DzQueryBuilder, DzQuickFilter, DzVirtualTable
+- **editors (13):** DzCodeEditor, DzDiffViewer, DzImageEditor, DzJsonEditor, DzMarkdownEditor, DzMarkdownRenderer, DzMermaidDiagram, DzNotebook, DzNotebookCell, DzPdfViewer, DzRichTextEditor, DzSignaturePad, DzSpreadsheet
+- **planning (11):** DzCalendarDayView, DzCalendarMonthView, DzCalendarWeekView, DzCronEditor, DzGantt, DzGanttTaskRow, DzKanban, DzKanbanCard, DzKanbanColumn, DzMindMap, DzScheduler
+- **visualization (17):** DzBarcode, DzChart, DzChartDataTable, DzDiagramEditor, DzFunnelChart, DzGauge, DzGeoMap, DzHeatMap, DzNetworkGraph, DzOrgChart, DzSankeyDiagram, DzSchemaDesigner, DzScorecard, DzSparkline, DzStockChart, DzTreeMap, DzWhiteboard
+- **workflow (5):** DzApprovalFlow, DzWorkflowDesigner, DzWorkflowEdge, DzWorkflowNode, DzWorkflowToolbar
