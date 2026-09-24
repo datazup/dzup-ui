@@ -87,10 +87,10 @@ export const CAPABILITY_TOTALS = {
     "excepted": 13
   },
   "C": {
-    "pass": 147,
+    "pass": 145,
     "fail": 0,
     "present": 106,
-    "stale": 21,
+    "stale": 23,
     "unrun": 100,
     "excepted": 0
   },
@@ -105,7 +105,7 @@ export const CAPABILITY_TOTALS = {
 } as const
 
 /** Repository HEAD the evidence was collected at. */
-export const CAPABILITY_SOURCE_COMMIT = "589be135654aefaac4b1069519f2fb56bb231172"
+export const CAPABILITY_SOURCE_COMMIT = "312ab47c9d6219e089440345f89f1236d73a6139"
 
 export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
   {
@@ -813,7 +813,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzCombobox.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzCombobox.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
-    { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
+    { kind: "browser-matrix", state: "stale", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 589be13 (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
     { kind: "portal-hydration", state: "present", origin: "trait teleports", artifacts: ["packages/core/tests/ssr/form-controls-ssr.spec.ts"] },
     { kind: "data-scenarios", state: "present", origin: "trait dataset", artifacts: ["packages/core/stories/forms/DzCombobox.stories.ts"] },
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCombobox.stories.ts"] },
@@ -1938,7 +1938,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzMultiSelect.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzMultiSelect.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
-    { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
+    { kind: "browser-matrix", state: "stale", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 589be13 (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
     { kind: "portal-hydration", state: "present", origin: "trait teleports", artifacts: ["packages/core/tests/ssr/form-controls-ssr.spec.ts"] },
     { kind: "data-scenarios", state: "unrun", origin: "trait dataset", artifacts: ["packages/core/stories/forms/DzMultiSelect.stories.ts"] },
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMultiSelect.stories.ts"] },

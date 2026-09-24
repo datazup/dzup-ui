@@ -73,3 +73,32 @@ before this packet either.
   and every job that was green on `9513f89` stays green.
 
 Evidence: `/data/storage/datazup-runtime/ninel/evidence/dzup-ui-ci-green-r4-20260924/`.
+
+## Epoch 2: capability-matrix freshness (base `312ab47`)
+
+CI run `36025715330` on `312ab47` passed 12 of 13 jobs. The two changes above
+worked: Landing E2E is green against the new Linux baselines. validate-min-runtime
+still failed, at link 22 of `validate:all`, not link 38:
+
+    ✗ [freshness] packages/core/docs/capability-matrix.json is stale.
+
+Run `36021797408` on `9513f89` failed at the same link. R3's report named
+docs-size as that job's red without re-reading its log; that was wrong. The cause
+is R3 itself. `c02da02` changed `DzCombobox.vue` and `DzMultiSelect.vue` after
+their browser-matrix evidence was recorded (`589be13`). A fresh generation
+correctly moves those two `browser-matrix` cells from `pass` to `stale` (totals
+pass 147 → 145, stale 21 → 23), and the committed matrix was never regenerated.
+docs-size (link 38) was never reached on `9513f89`, so the docs-size change above
+is still required.
+
+Change: `yarn generate:capability-matrix` at `312ab47`, committed as is. It
+touches `packages/core/docs/capability-matrix.json` and its Storybook projection
+`apps/storybook/stories/_data/capability.generated.ts`. `stale` is the truthful
+state: re-measuring the browser matrix would be the way back to `pass`, and that
+is not in scope.
+
+Added allowed path: `apps/storybook/stories/_data/capability.generated.ts`.
+
+Added acceptance: the whole `validate:all` chain passes locally the way the
+min-runtime job runs it (clean dist, `yarn build`, then `CI=1
+DOCS_SIZE_ALLOW_MISSING_DIST=1 yarn validate:all`), followed by `yarn test`.
