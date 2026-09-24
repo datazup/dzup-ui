@@ -47,6 +47,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # validate:all includes validate:capability-matrix, which stamps each
+          # component with the commit that last touched it (`git log -1 -- <file>`).
+          # A depth-1 clone answers HEAD for every file, so the committed matrix
+          # can never match.
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc

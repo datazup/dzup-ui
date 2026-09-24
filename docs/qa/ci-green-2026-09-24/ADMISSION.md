@@ -146,7 +146,8 @@ the declared `./forms` subpath.
 | --- | --- |
 | Bounded edits in the paths above, local deterministic gates | yes |
 | Candidate commit, local integration onto `main`, push `refs/heads/main` | yes, operator 2026-09-24 |
-| Workflow file edits, tags, version bump, npm publish, production | no |
+| Workflow file edits | R2 only: `fetch-depth: 0` on the `validate-min-runtime` checkout |
+| Tags, version bump, npm publish, production | no |
 
 ## Deferred
 
@@ -157,3 +158,34 @@ the declared `./forms` subpath.
   effect. It is now committed, so the copy it writes is identical.
 - Declaring `@dzup-ui/{tokens,contracts,core}` as `workspace:` devDependencies
   of `@dzup-ui/tooling`. That would change `yarn.lock`, a shared output.
+
+## R2 — layers exposed by the first green run on GitHub (2026-09-24)
+
+At `3147432`, GitHub CI passed Typecheck, Lint and Validate for the first time
+since 2026-08-09. Jobs that had never been reached then failed.
+
+Fixed here, in admitted paths:
+
+- **Unit Tests (Node 20.19.0):** `landing-token-fallbacks.spec.ts` used
+  `fs.globSync`, which Node 20 does not have. The local gates ran on Node 24,
+  which hid it. The spec now uses `readdirSync(dir, { recursive: true })`,
+  available since Node 20.1. Its 9 tests pass.
+- **validate-min-runtime → Validators:** `capability-matrix.json` is "stale" on
+  a depth-1 clone. `lastCommitFor()` runs `git log -1 -- <file>`, which answers
+  HEAD for every file in a shallow clone. Measured on
+  `packages/core/src/components/buttons/DzButton.vue`: a depth-1 clone gives
+  `3147432` (HEAD), while full history gives `527dbd1`. The job's checkout now
+  uses `fetch-depth: 0`, as `release.yml` and `chromatic.yml` already do.
+- **Storybook Build:** `GettingStarted.mdx` linked `guides-ssr--docs`. The page
+  is titled `Guides/SSR & Nuxt`, so its id is `guides-ssr-nuxt--docs`.
+
+Not fixed. These are browser behaviour or visual-baseline questions that need
+their own investigation (and, for the baselines, the open TASK-R2-O6 platform
+decision):
+
+- Playwright `e2e/components/anatomy-parts.spec.ts`: 2 failures (DzSpeedDial
+  parts, nested anatomy scope).
+- Storybook play tests: 2 failures (`asyncOptionsHost.ts:170`,
+  `data-options-state`).
+- Landing E2E: `block-detail.spec.ts` (horizontal overflow at mobile width),
+  and the `visual.spec.ts` hero snapshots, light and dark.
