@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CommandGroup, CommandItem } from '@dzup-ui/core'
 import type { Component } from 'vue'
+import type { CommercialTemplate } from '../templates/commercial.ts'
 import type { TemplateCategory, TemplateMeta } from '../templates/registry.ts'
 import {
   DzBadge,
@@ -23,6 +24,7 @@ import { useTheme } from '../composables/useTheme.ts'
 import { ICONS } from '../icons.ts'
 import { DzCountUp, DzOdometer, useReducedMotion, vMagnetic, vReveal, vTilt } from '../motion/index.ts'
 import { resolveTemplateAccent } from '../templates/accent.ts'
+import { COMMERCIAL_TEMPLATES, commercialTierLabel } from '../templates/commercial.ts'
 import { isNew, TEMPLATE_CATEGORIES, TEMPLATE_TAGS, TEMPLATES } from '../templates/registry.ts'
 import { darkThumb, templateThumb } from '../templates/thumbs.ts'
 
@@ -300,6 +302,27 @@ const visibleTemplates = computed<TemplateMeta[]>(() => {
  */
 function tileStyle(template: TemplateMeta): Record<string, string> {
   const palette = resolveTemplateAccent(template)
+  return {
+    '--tile-accent-light': `var(--dz-colors-${palette}-600)`,
+    '--tile-accent-dark': `var(--dz-colors-${palette}-400)`,
+    '--tile-accent-wash': `var(--dz-colors-${palette}-500)`,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Commercial templates (DT4): metadata only, linking out to the showroom
+// ---------------------------------------------------------------------------
+
+/**
+ * Commercial rows from the optional generated snapshot (`templates/commercial.ts`).
+ * They sit in their own section, outside the free filter pipeline and outside
+ * `TEMPLATES`, so they never become registry items and never skew the free
+ * counts. An absent snapshot hides the section.
+ */
+const commercialTemplates = COMMERCIAL_TEMPLATES
+
+function commercialTileStyle(t: CommercialTemplate): Record<string, string> {
+  const palette = categoryAccents.get(t.category as TemplateCategory) ?? 'primary'
   return {
     '--tile-accent-light': `var(--dz-colors-${palette}-600)`,
     '--tile-accent-dark': `var(--dz-colors-${palette}-400)`,
@@ -650,6 +673,90 @@ const atmosphereAccent = computed(() => {
           </div>
         </template>
       </DzEmpty>
+
+      <!-- Commercial templates (DT4): listed from a generated metadata snapshot,
+           previewed in the dzup-templates showroom. No commercial code ships in
+           this app; each card links out. -->
+      <section
+        v-if="commercialTemplates.length"
+        class="commercial"
+        aria-labelledby="commercial-templates-title"
+      >
+        <div class="commercial-head">
+          <h2 id="commercial-templates-title" class="commercial-title">
+            Commercial templates
+          </h2>
+          <DzText size="sm" tone="muted">
+            Built from the same components and previewed live in the dzup-templates
+            showroom. Source is delivered to licence holders.
+          </DzText>
+        </div>
+        <ul class="gallery-grid" role="list" aria-label="Commercial templates">
+          <li
+            v-for="(template, i) in commercialTemplates"
+            :key="template.slug"
+            v-reveal="i * 45"
+            class="lp-card lp-card--hover tile"
+            :style="commercialTileStyle(template)"
+          >
+            <div class="tile-head">
+              <DzText weight="semibold" as="span">
+                {{ template.name }}
+              </DzText>
+              <div class="tile-badges">
+                <DzBadge variant="solid" tone="warning" size="sm">
+                  {{ commercialTierLabel(template) }}
+                </DzBadge>
+              </div>
+            </div>
+
+            <span class="tile-category">{{ categoryLabels.get(template.category as TemplateCategory) ?? template.category }}</span>
+
+            <div class="tile-preview" aria-hidden="true">
+              <div class="tile-shot">
+                <img
+                  class="tile-thumb"
+                  :class="{ 'is-active': resolved !== 'dark' }"
+                  :src="template.thumbnail.light"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  width="1600"
+                  height="1000"
+                >
+                <img
+                  class="tile-thumb tile-thumb--overlay"
+                  :class="{ 'is-active': resolved === 'dark' }"
+                  :src="template.thumbnail.dark"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  width="1600"
+                  height="1000"
+                >
+              </div>
+            </div>
+
+            <DzText size="xs" tone="muted" class="tile-stack" truncate>
+              {{ template.stack.join(' · ') }}
+            </DzText>
+
+            <a
+              class="tile-link"
+              :href="template.detailUrl"
+              target="_blank"
+              rel="noopener"
+            >
+              <span>Preview in showroom</span>
+              <ArrowUpRight :size="14" aria-hidden="true" />
+              <span
+                class="tile-link-cover"
+                :aria-label="`Preview the ${template.name} commercial template in the showroom (opens in a new tab)`"
+              />
+            </a>
+          </li>
+        </ul>
+      </section>
 
       <!-- ⌘K command palette: full-catalogue search, grouped by category. Selecting
          an entry jumps to its detail route. The global shortcut is owned by the
@@ -1275,6 +1382,28 @@ const atmosphereAccent = computed(() => {
   outline: 2px solid var(--tile-accent);
   outline-offset: -2px;
   border-radius: var(--dz-radius-xl, 0.875rem);
+}
+
+/* Commercial templates (DT4): its own block below the free gallery. */
+.commercial {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--lp-hairline);
+}
+
+.commercial-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.commercial-title {
+  margin: 0;
+  font-size: var(--dz-text-xl, 1.25rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--dz-foreground);
 }
 
 /* Command-palette item: icon · name + category · badges. */

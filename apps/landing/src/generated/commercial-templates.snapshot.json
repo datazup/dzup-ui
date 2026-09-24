@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "showroomUrl": "https://dzup-templates-showroom.staging.dziphost.com",
+  "templates": [
+    {
+      "slug": "ops-incident-console",
+      "name": "Ops Incident Console",
+      "blurb": "Incident response console: a severity queue, SLA burn-down per incident and a live update timeline.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "app-shell",
+        "sidebar",
+        "data-table",
+        "timeline",
+        "tabs"
+      ],
+      "stack": [
+        "DzAppShell",
+        "DzSidebar",
+        "DzSidebarHeader",
+        "DzSidebarSection",
+        "DzSidebarItem",
+        "DzSidebarFooter",
+        "DzAvatar",
+        "DzHeading",
+        "DzText",
+        "DzBadge",
+        "DzButton",
+        "DzSegmented",
+        "DzSearchInput",
+        "DzStatCard",
+        "DzCard",
+        "DzCardHeader",
+        "DzTable",
+        "DzTableHeader",
+        "DzTableBody",
+        "DzTableRow",
+        "DzTableCell",
+        "DzProgress",
+        "DzTabs",
+        "DzTabList",
+        "DzTabTrigger",
+        "DzTabContent",
+        "DzTimeline",
+        "DzTimelineItem",
+        "DzEmpty",
+        "DzDivider"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-22",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/ops-incident-console",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/ops-incident-console",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/ops-incident-console-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/ops-incident-console-dark.webp"
+      }
+    }
+  ]
+}
