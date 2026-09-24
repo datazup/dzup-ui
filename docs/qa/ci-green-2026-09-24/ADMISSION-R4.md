@@ -122,3 +122,19 @@ Fencing note: the generator wrote this file before the lease covered it. The
 amend was refused with `LEASE_BINDING_DRIFT`, because the epoch-2 commit had
 moved the head. The lease was then rebound and amended (generation 4) before
 this commit. Nothing else was written outside the lease.
+
+### Epoch 2, finding 3: the generated docs pages
+
+The next local run stopped at `validate:docs-pages`: 152 pages were stale. Every
+component page prints the capability matrix's `sourceCommit` and digest, so any
+regeneration of the matrix touches all of them. Beyond those stamps, the diff is
+the same `DzCombobox` / `DzMultiSelect` `browser-matrix` `pass` → `stale` move,
+carried into the evidence pages and totals. Change: `yarn generate:docs-pages`,
+committed as is.
+
+Added allowed path: `apps/docs/**`. This is a subtree claim, because the
+generator owns every file it rewrites there. It was claimed (lease generation 6)
+before the generator ran.
+
+Observation for the owner (deferred): stamping the matrix `sourceCommit` into
+all 152 pages means a routine matrix refresh rewrites the whole docs corpus.
