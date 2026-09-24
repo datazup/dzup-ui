@@ -66,3 +66,25 @@ Not in this packet. Each one is recorded for its owner:
 5. `typecheck:all`, `lint`, and the landing and core unit suites stay green.
 6. On GitHub, the Playwright, Storybook Tests, Landing E2E (except the O6
    snapshots) and Landing Perf jobs pass.
+
+## Epoch 2 — the `/blocks` regression that `16f1121` introduced
+
+CI run `36016715115` on `16f1121` turned Playwright and Storybook Tests green.
+`/blocks/hero-split` passed its mobile LCP budget, and Landing E2E failed only
+on the two O6 snapshots. But `/blocks` mobile LCP rose to 4370–4970ms (FCP
+3392–3616ms). The cause: `sourceLoader.ts` used the same `?raw` module ids as
+`sources.ts`'s eager glob, which `BlockCard` still imports on `/blocks`, so
+Rollup split every source into its own chunk. BlocksIndexPage then imported all
+87 statically, and each was under `preload-route-chunk`'s 60 kB cap, so every
+one was preloaded in competition with the entry chunk.
+
+Fix, in a new worktree at `16f1121`: the lazy glob uses `?raw&lazy`, which gives
+it module ids of its own, and `vite.config.ts` puts the eager sources in one
+`block-sources` chunk. That restores the layout `/blocks` had before R3 (one
+chunk over the preload cap). Without the second part, Rollup inlines the sources
+into the always-preloaded BlocksIndexPage facade.
+
+Additional allowed path: `apps/landing/vite.config.ts`.
+
+Measured locally, Lighthouse 13 mobile, 3 runs: `/blocks` LCP 3003/3003/3004ms
+and `/blocks/hero-split` 3534/3605/3607ms.

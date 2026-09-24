@@ -25,8 +25,18 @@
 import type { ComputedRef, MaybeRefOrGetter } from 'vue'
 import { computed, shallowReactive, toValue, watchEffect } from 'vue'
 
+/*
+ * `&lazy` is inert to Vite, which still serves the file raw. It exists only to
+ * give these modules ids of their own. With a bare `?raw`, Rollup would
+ * resolve them to the same modules as `sources.ts`'s eager glob, split every one
+ * into its own chunk, and make `BlockCard` on `/blocks` import all 87 of them
+ * statically. `preload-route-chunk` then preloads each of them, since each is
+ * under its size cap, and they compete with the entry chunk; /blocks mobile LCP
+ * measured 4.4–5.0 s. Keeping the ids apart leaves `sources.ts` as one chunk that
+ * the plugin skips, exactly as before.
+ */
 const loaders = import.meta.glob<string>('./*/*.vue', {
-  query: '?raw',
+  query: '?raw&lazy',
   import: 'default',
 })
 

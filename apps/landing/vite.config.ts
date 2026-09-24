@@ -48,6 +48,16 @@ export default defineConfig(() => {
       rollupOptions: {
         output: {
           manualChunks(id: string): string | undefined {
+            // The eager `?raw` glob in `src/blocks/sources.ts` (all 87 block
+            // sources, ~490 kB raw) gets a chunk of its own. Left to Rollup, it
+            // merges into BlocksIndexPage, the route's facade chunk, which
+            // `preload-route-chunk` always preloads, so it would compete with the
+            // entry chunk on first paint. As its own chunk it is over the plugin's
+            // size cap, so it is not preloaded; that is the layout /blocks passed
+            // its Lighthouse budget with before R3. `sourceLoader.ts`'s
+            // `?raw&lazy` ids do not match, so they stay one chunk per block.
+            if (/[/\\]src[/\\]blocks[/\\]sources\.ts$/.test(id) || /[/\\]src[/\\]blocks[/\\][^/\\]+[/\\][^/\\]+\.vue\?raw$/.test(id))
+              return 'block-sources'
             // Hoist only the two libraries used on virtually every route — the Vue
             // runtime and the Lucide icon set — into long-cached vendor chunks. Both
             // are always needed, so pulling them out shrinks the entry chunk and lets
