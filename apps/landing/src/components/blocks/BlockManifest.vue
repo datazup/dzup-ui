@@ -4,7 +4,7 @@ import { DzCodeBlock, DzCopyButton, DzText } from '@dzup-ui/core'
 import { computed } from 'vue'
 import { installCommands, REGISTRY_ENABLED, registryAddCommands } from '../../blocks/config.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
-import { getBlockSource } from '../../blocks/sources.ts'
+import { useBlockSource } from '../../blocks/sourceLoader.ts'
 import { buildImportLine } from '../../composables/useBlockCodeView.ts'
 import PmCommandTabs from './PmCommandTabs.vue'
 
@@ -25,7 +25,7 @@ import PmCommandTabs from './PmCommandTabs.vue'
  *     (also per-PM) only once Task G1 has shipped (gated by `REGISTRY_ENABLED`),
  *     so it never renders a dead command before the registry exists.
  *   • Copy code — the block's SFC source verbatim (DzCopyButton over
- *     `getBlockSource(block.path)`).
+ *     `useBlockSource`, fetched only while the action is shown).
  *
  * Each command is a DzCodeBlock with `copyable`, which copies the EXACT text via
  * DzCopyButton. Chrome is dogfooded from @dzup-ui/core; the only CSS is layout +
@@ -53,6 +53,9 @@ const emit = defineEmits<{
   /** Request the index filter to all blocks using this `Dz*` component (Task E4). */
   selectComponent: [name: string]
 }>()
+
+/** The block's source, fetched only when this manifest shows the copy action. */
+const blockSource = useBlockSource(() => (props.showSourceCopy ? props.block.path : null))
 
 /** How many catalog blocks use `name` (memoized reverse index, Task E1). */
 function usageCount(name: string): number {
@@ -134,7 +137,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
         Or copy the source
       </DzText>
       <DzCopyButton
-        :value="getBlockSource(block.path)"
+        :value="blockSource"
         label="Copy code"
         copied-label="Copied!"
         variant="outline"

@@ -37,7 +37,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { REGISTRY_ENABLED, v0OpenUrl } from '../../blocks/config.ts'
 import { blockMarkdown, blockPrompt, LLMS_TXT } from '../../blocks/llmsText.ts'
 import { blocksUsingComponent, CATEGORIES } from '../../blocks/registry.ts'
-import { getBlockSource } from '../../blocks/sources.ts'
+import { useBlockSource } from '../../blocks/sourceLoader.ts'
 import { useBlockCodeView } from '../../composables/useBlockCodeView.ts'
 import { useBlockTheme } from '../../composables/useBlockTheme.ts'
 import { useTheme } from '../../composables/useTheme.ts'
@@ -435,6 +435,13 @@ function openInV0(): void {
 }
 
 /**
+ * This block's `?raw` source, fetched on demand (`blocks/sourceLoader.ts`) so the
+ * catalogue's source text is never on the preview's render path. It reads `''`
+ * for the moment before it lands; nothing that uses it is on first paint.
+ */
+const blockSource = useBlockSource(() => props.block.path)
+
+/**
  * "Copy as markdown" payload (docs/blocks.md §1.3, §3.2 #10, Task G3). Built from
  * the SAME `blockMarkdown` shaper the build runs to emit `public/r/<id>.md`
  * (scripts/build-registry.ts), over the SAME `block` + `CATEGORIES` inputs — so
@@ -442,7 +449,7 @@ function openInV0(): void {
  * never drift. The single source of that markdown lives in `blocks/llmsText.ts`.
  */
 const markdownPayload = computed(() =>
-  blockMarkdown(props.block, CATEGORIES, b => getBlockSource(b.path)),
+  blockMarkdown(props.block, CATEGORIES, () => blockSource.value),
 )
 
 /**
@@ -487,7 +494,7 @@ function announceCopied(what: string): void {
  * button copies whatever `codeView.code` currently resolves to.
  */
 const codeView = useBlockCodeView(
-  () => getBlockSource(props.block.path),
+  () => blockSource.value,
   () => props.block.components,
 )
 const { code: shownCode, language: codeLanguage } = codeView

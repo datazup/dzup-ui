@@ -23,7 +23,7 @@ import { ArrowLeft, ArrowRight, Zap } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { BLOCKS, CATEGORIES, getBlock } from '../blocks/registry.ts'
-import { getBlockSource } from '../blocks/sources.ts'
+import { loadBlockSource, useBlockSource } from '../blocks/sourceLoader.ts'
 import BlockManifest from '../components/blocks/BlockManifest.vue'
 import BlockPreview from '../components/blocks/BlockPreview.vue'
 import Section from '../components/Section.vue'
@@ -89,15 +89,24 @@ function showBlocksUsing(name: string): void {
  * Vite + Vue 3 + @dzup-ui/core starter, so a visitor goes from "I like this" to
  * "it runs in my editor" in one click.
  */
+const blockSource = useBlockSource(() => block.value?.path ?? null)
+
 function openStackblitz(): void {
   const b = block.value
   if (!b)
     return
-  openInStackblitz({
+  const open = (source: string): void => openInStackblitz({
     title: `${b.title} — dzup-ui block`,
     description: b.description,
-    files: { 'src/App.vue': getBlockSource(b.path) },
+    files: { 'src/App.vue': source },
   })
+  // The preview has already fetched the source by the time anyone can click.
+  // Opening synchronously keeps the `_blank` form post inside the click's user
+  // activation, which a popup blocker would otherwise refuse after an await.
+  if (blockSource.value !== '')
+    open(blockSource.value)
+  else
+    void loadBlockSource(b.path).then(open)
 }
 </script>
 

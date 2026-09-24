@@ -1549,6 +1549,16 @@ export const PENDING: PendingChange[] = [
       "@dzup-ui/core"
     ],
     "level": "patch",
+    "summary": "**Pressing Retry in `DzCombobox` or `DzMultiSelect` no longer closes the list.** The button disappears as soon as the reload starts, so a mouse press used to drop focus to the page and close the popover. The list the user had just asked to reload vanished. The error row now keeps focus in the input, as `DzMention` already did (async-options contract C9.4), and the list stays open through loading → ready.",
+    "body": "**Pressing Retry in `DzCombobox` or `DzMultiSelect` no longer closes the list.** The button disappears as soon as the reload starts, so a mouse press used to drop focus to the page and close the popover. The list the user had just asked to reload vanished. The error row now keeps focus in the input, as `DzMention` already did (async-options contract C9.4), and the list stays open through loading → ready.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
     "summary": "**`DzCommandPalette`: search the whole `label`, not just what the row happens to render.**",
     "body": "**`DzCommandPalette`: search the whole `label`, not just what the row happens to render.**\n\nThe palette documented `label` as its search key and filtered `props.items` on it — but Reka's\n`ComboboxItem` also registers each row's *rendered text* (`textValue || textContent`) with\n`ComboboxRoot` and hides any row its own filter scores zero. That second filter sat downstream\nof, and invisible to, the first, so it silently won.\n\nThe effect only shows up in the pattern `label` exists for: a consumer that puts a full search\nhaystack in `label` (ids, tags, keywords) and renders a shorter caption through the `#item`\nslot. Those rows were then filtered by the caption. On this repo's own site that made every\nblock unfindable by its id, its tags, or the `Dz*` components it is built from — all three\nindexed and weighted — while the visible title still matched, and nothing in the DOM showed why.\n\n`ComboboxRoot` now gets `ignore-filter`, leaving this component's filter the only one. Matching\nis unchanged in kind: it uses the same `Intl.Collator`-backed comparison Reka's filter used, so\nit stays case- and accent-insensitive (`resume` still finds `Résumé`).\n\nAlso removes a `:filter-function` binding that had quietly stopped doing anything — it is not a\n`ComboboxRoot` prop in Reka 2.x, so it fell through to `$attrs` and onto the listbox element.\n\nNo API change: same props, same emits, same slots. Rows that were being filtered out despite a\nmatching `label` now appear, which is the documented behaviour.",
     "breaking": false,

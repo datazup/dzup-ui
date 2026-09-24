@@ -42,9 +42,14 @@ Not in this packet. Each one is recorded for its owner:
   `.changeset/combobox-retry-keeps-the-list-open.md`
 - `apps/landing/src/pages/BlockDetailPage.vue`,
   `apps/landing/src/components/blocks/BlockPreview.vue`
-- `apps/landing/src/blocks/sources.ts`, and the lazy per-block source loader
-  and its consumers on the block-detail route. The lease is amended with their
-  exact paths before they are edited.
+- `apps/landing/src/blocks/sources.ts`, `apps/landing/src/blocks/sourceLoader.ts`,
+  `apps/landing/src/blocks/sourceLoader.spec.ts`,
+  `apps/landing/src/components/blocks/BlockManifest.vue` — the lazy per-block
+  source loader and the detail route's consumers.
+- `apps/landing/src/shellDirection.spec.ts` — its `DELIBERATE` list pins
+  `BlockPreview.vue` declarations by line number, and those lines moved.
+- `apps/landing/src/generated/releases.ts` — regenerated from the new changeset.
+  CI's "Landing generated artifacts unchanged" step requires it.
 
 ## Acceptance
 
