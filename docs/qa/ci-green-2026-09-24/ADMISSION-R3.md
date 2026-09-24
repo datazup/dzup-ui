@@ -88,3 +88,16 @@ Additional allowed path: `apps/landing/vite.config.ts`.
 
 Measured locally, Lighthouse 13 mobile, 3 runs: `/blocks` LCP 3003/3003/3004ms
 and `/blocks/hero-split` 3534/3605/3607ms.
+
+## Epoch 3 — the Lighthouse artifact name
+
+CI run `36019588245` on `7057f01` passed every mobile Lighthouse assertion. The
+two failing assertions of the earlier runs are gone; only the advisory FCP and
+performance-score warnings remain. The step still failed: the desktop and mobile
+`treosh/lighthouse-ci-action` steps both upload with the default
+`artifactName`, so the second upload was refused with `409 Conflict`. No earlier
+run reached the mobile upload with its assertions passing. The mobile step now
+uploads as `lighthouse-results-mobile`, and its name states the 4s ceiling it
+enforces.
+
+Additional allowed path: `.github/workflows/ci.yml`.

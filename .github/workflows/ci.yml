@@ -693,11 +693,16 @@ jobs:
           configPath: ./apps/landing/lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
-      - name: Lighthouse CI — mobile (LCP < 2.5s, CLS < 0.1, a11y >= 0.9)
+      # The mobile LCP ceiling is 4s, not 2.5s: lighthouserc.mobile.json explains why.
+      - name: Lighthouse CI — mobile (LCP < 4s, CLS < 0.1, a11y >= 0.9)
         uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: ./apps/landing/lighthouserc.mobile.json
           uploadArtifacts: true
+          # Both runs upload an artifact, and the action's default name is shared, so
+          # the second upload fails with 409 Conflict even when every assertion
+          # passes. It first showed on 7057f01, the first run where mobile passed.
+          artifactName: lighthouse-results-mobile
           temporaryPublicStorage: true
       # Publish the perf badge + Lighthouse results as a downloadable artifact so
       # the score is inspectable from the run even when an assertion fails.
