@@ -58,6 +58,10 @@ red layer the earlier failures had hidden:
 - `apps/landing/src/generated/releases.ts`,
   `apps/landing/public/r/component-meta.json` — the CI step "Landing generated
   artifacts unchanged".
+- `apps/landing/src/test-support/autoAnimateTimers.ts`,
+  `apps/landing/src/pages.interactions.spec.ts`,
+  `apps/landing/src/pages.a11y.spec.ts` — a load-dependent `yarn test` failure
+  (below).
 
 ## Change
 
@@ -96,6 +100,16 @@ red layer the earlier failures had hidden:
     regenerated.
 - **Landing `releases.ts`:** regenerated. Its pending list was stale against
   `.changeset/*`.
+- **auto-animate timer flake:** the confirmation run at `3ff9604` passed all
+  10,531 tests but exited 1 with 28 unhandled
+  `ReferenceError: requestAnimationFrame is not defined`. All of them came from
+  `pages.interactions.spec.ts`, which mounts `/animations` through the router.
+  - auto-animate's poll intervals outlive the file's jsdom environment. The
+    earlier run of the same code had 0 errors.
+  - `AnimationsPage.v2.spec.ts` already documented and guarded this (D155),
+    but only for itself.
+  - The guard now lives in `src/test-support/autoAnimateTimers.ts`. Both
+    router-sweep specs that visit `/animations` call it.
 
 ## Acceptance
 

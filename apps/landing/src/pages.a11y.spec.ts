@@ -41,9 +41,14 @@ import { BLOCKS } from './blocks/registry.ts'
 import { AXE_WCAG_TAGS, blockingViolations, PAGE_GATED_RULES, reportViolation } from './lib/axeGates.ts'
 import router from './router.ts'
 import { TEMPLATES } from './templates/registry.ts'
+import { guardAutoAnimateTimers } from './test-support/autoAnimateTimers.ts'
 
 // Same jsdom polyfills the block suite needs (matchMedia for the theme toggle
 // and reduced-motion checks, IntersectionObserver for lazy-mount/scroll-reveal).
+
+// The /animations route mounts v-auto-animate; see the helper.
+guardAutoAnimateTimers()
+
 beforeAll(() => {
   if (typeof window.matchMedia !== 'function') {
     window.matchMedia = ((query: string) => ({

@@ -47,6 +47,10 @@ import App from './App.vue'
 import { BLOCKS } from './blocks/registry.ts'
 import router from './router.ts'
 import { TEMPLATES } from './templates/registry.ts'
+import { guardAutoAnimateTimers } from './test-support/autoAnimateTimers.ts'
+
+// The /animations route mounts v-auto-animate; see the helper.
+guardAutoAnimateTimers()
 
 /**
  * The same polyfills `pages.a11y.spec.ts` installs — including an
