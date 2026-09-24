@@ -1560,7 +1560,7 @@ __metadata:
     "@formkit/auto-animate": "npm:^0.8.2"
     "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-vue": "npm:^5.2.0"
-    lucide-vue-next: "npm:^0.475.0"
+    lucide-vue-next: "npm:^0.477.0"
     playwright: "npm:^1.61.0"
     sharp: "npm:^0.33.5"
     tailwindcss: "npm:^4.0.0"
@@ -1612,7 +1612,7 @@ __metadata:
     "@dzup-ui/tokens": "workspace:*"
     "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-vue": "npm:^5.2.0"
-    lucide-vue-next: "npm:^0.475.0"
+    lucide-vue-next: "npm:^0.477.0"
     tailwindcss: "npm:^4.0.0"
     typescript: "npm:^5.7.0"
     vite: "npm:^6.1.0"
@@ -12990,15 +12990,6 @@ __metadata:
   version: 8.0.5
   resolution: "lru-cache@npm:8.0.5"
   checksum: 10c0/cd95a9c38497611c5a6453de39a881f6eb5865851a2a01b5f14104ff3fee515362a7b1e7de28606028f423802910ba05bdb8ae1aa7b0d54eae70c92f0cec10b2
-  languageName: node
-  linkType: hard
-
-"lucide-vue-next@npm:^0.475.0":
-  version: 0.475.0
-  resolution: "lucide-vue-next@npm:0.475.0"
-  peerDependencies:
-    vue: ">=3.0.1"
-  checksum: 10c0/cf3038b67872e782ed41c9480203f26d557caa39b3082cb1ba3315f0102222e603370ac15401834bd586480b395e6efbe09edf48a8b84b22807dbae359abe94c
   languageName: node
   linkType: hard
 

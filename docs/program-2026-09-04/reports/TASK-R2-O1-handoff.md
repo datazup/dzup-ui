@@ -1000,7 +1000,7 @@ Three consequences, all recorded rather than papered over:
 | Red | Owner | Verdict |
 |---|---|---|
 | `validate:package-names` — 2 occurrences of the retired `@dzup-ui/pro` in `docs/program-2026-09-22-planning/{README,planning-docs-disposition}.md` | **`internal-dev-ff`** | **NOT THIS TASK.** Green at the 2026-09-22 baseline. Their files, their fix; the gate itself offers a `retired-name-ok: <reason>` escape hatch for a deliberate historical mention. |
-| `validate:adr-references` — `docs/program-2026-09-22-architecture/custody-and-release-tasks.md:205` cites **ADR-21**, which has no document and no registry entry | **`internal-dev-ff`** | **NOT THIS TASK.** Baseline was `✓ 17 ADR(s) cited · 3 documented · 14 registry-only`. The gate explicitly refuses the registry-entry workaround. |
+| `validate:adr-references` — `docs/program-2026-09-22-architecture/custody-and-release-tasks.md:205` cites **ADR-21**, which has no document and no registry entry | **`internal-dev-ff`** | **NOT THIS TASK.** Baseline was `✓ 17 ADR(s) cited · 3 documented · 14 registry-only`. The gate explicitly refuses the registry-entry workaround. | <!-- adr-example-ok: discusses the unwritten number, not a citation -->
 | `validate:peers` — 2 icon-library versions resolve (0.475.0, 0.477.0) | TASK-R1-O6 | **Pre-existing and deliberate.** `D174`/`D175` clear it. Untouched. |
 
 Because `&&` short-circuits, `package-names` now hides the links behind it, so
@@ -1069,7 +1069,7 @@ which belong to another session and one to an open owner decision.
 1. **Owner:** commit this tree. The degradation gate compares against *committed*
    `pass` cells, so 2,112 of them only become a tripwire once HEAD carries them.
 2. **Owner / `internal-dev-ff`:** clear the two `validate:package-names` hits and
-   the ADR-21 citation, or the aggregate stays red for reasons unrelated to any
+   the ADR-21 citation, or the aggregate stays red for reasons unrelated to any <!-- adr-example-ok: discusses the unwritten number, not a citation -->
    task in this programme.
 3. **D174/D175** — the icon-library duplication, the last pre-existing red.
 4. **TASK-R2-O6** — its *input* is now the only open question: D126 chose

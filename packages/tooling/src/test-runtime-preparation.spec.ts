@@ -14,7 +14,7 @@ const rootPackage = JSON.parse(
 describe('aggregate test runtime preparation', () => {
   it('centralizes every ignored artifact consumed by root test entrypoints', () => {
     expect(rootPackage.scripts?.['test:prepare']).toBe(
-      'yarn tokens:generate && yarn workspace @dzup-ui/landing build:counts',
+      'yarn tokens:generate && yarn generate:tokens:dtcg && yarn workspace @dzup-ui/landing build:counts',
     )
   })
 
