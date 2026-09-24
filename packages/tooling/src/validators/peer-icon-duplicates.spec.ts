@@ -9,10 +9,10 @@
  * over a stale artifact for three packets (S1-F10).
  *
  * The second block asserts the state of the real repository. It is written to
- * describe reality rather than to demand a particular outcome, because the
- * duplication is an open owner decision (TASK-R1-O6 item 1, D174): when the
- * decision lands, `versions.length` becomes 1 and the assertion below is the
- * one line that has to change.
+ * describe reality rather than to demand a particular outcome. The version
+ * duplication closed on 2026-09-24 (landing and sandbox moved to core's
+ * ^0.477.0); the swap away from the deprecated `lucide-vue-next` is still the
+ * open owner decision (TASK-R1-O6 item 1, D174) and is not asserted here.
  */
 
 import { describe, expect, it } from 'vitest'
@@ -217,21 +217,13 @@ describe('the real repository', () => {
     expect(collectDeclarations(manifests).undeclaredFamily).toEqual([])
   })
 
-  it('records the duplication that is open as TASK-R1-O6 item 1 (D174)', () => {
+  it('resolves exactly one version of the icon library', () => {
     const report = checkRepository()
-    // When D174 is taken this becomes 1 and the gate goes green. Until then the
-    // fact is asserted rather than tolerated, so nobody can quietly re-introduce
-    // a second version under cover of the first.
-    expect(report.versions).toEqual(['0.475.0', '0.477.0'])
+    // The single-version clause is green. A second version reintroduced by any
+    // declarer fails here, not only in the gate.
+    expect(report.versions).toEqual(['0.477.0'])
     expect(report.idents).toEqual(['lucide-vue-next'])
-    expect(report.violations.filter(v => v.level === 'error').map(v => v.rule)).toEqual(['single-version'])
-  })
-
-  it('names every declarer in the diagnostic a human reads', () => {
-    const report = checkRepository()
-    const message = report.violations.find(v => v.rule === 'single-version')?.message ?? ''
-    expect(message).toContain('packages/core/package.json')
-    expect(message).toContain('apps/landing/package.json')
+    expect(report.violations.filter(v => v.level === 'error').map(v => v.rule)).toEqual([])
   })
 
   it('sees the playground template, which is shipped to consumers and is not a workspace', () => {

@@ -362,6 +362,15 @@ describe('reachability', () => {
 
 // ── Provenance stripping ─────────────────────────────────────────────────────
 
+describe('serializeComponentMeta', () => {
+  it('writes the same bytes whichever newline the extracting host used', () => {
+    const lf = serializeComponentMeta({ components: [{ name: 'DzX', description: 'one\ntwo' }] } as unknown as ComponentMetaArtifact)
+    const crlf = serializeComponentMeta({ components: [{ name: 'DzX', description: 'one\r\ntwo' }] } as unknown as ComponentMetaArtifact)
+    expect(crlf).toBe(lf)
+    expect(crlf).not.toContain('\\r')
+  })
+})
+
 describe('stripProvenance', () => {
   it('neutralises sourceCommit so an unrelated commit cannot fail the freshness gate', () => {
     const a = serializeComponentMeta(artifact())

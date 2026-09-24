@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "589be135654aefaac4b1069519f2fb56bb231172",
+  "sourceCommit": "8b46ab4c8f7d872375e608c3461e7c3835685280",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -6093,7 +6093,7 @@
           "type": "DzCardUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzCard.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\n`ui.root` addresses the surface by name, and a typo is a type error.\r\n\r\n`header`, `body` and `footer` are separate components at the call site and\r\nalready take `class`, so they are not keys here.",
+          "description": "Per-part class overrides, keyed by the names in `DzCard.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\n`ui.root` addresses the surface by name, and a typo is a type error.\n\n`header`, `body` and `footer` are separate components at the call site and\nalready take `class`, so they are not keys here.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzCard.types.ts"
         },
@@ -6437,7 +6437,7 @@
           "type": "DzCardHeaderUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the actions region (ADR-19 §5). The header's\r\nown element takes `class` at the call site; its inner actions wrapper is\r\nthe one node in the card family nothing else can reach.",
+          "description": "Per-part class override for the actions region (ADR-19 §5). The header's\nown element takes `class` at the call site; its inner actions wrapper is\nthe one node in the card family nothing else can reach.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzCard.types.ts"
         }
@@ -7991,7 +7991,7 @@
           "type": "Partial<Record<\"root\" | \"indicator\" | \"control\" | \"label\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzCheckbox.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\na key outside the declared parts is a type error, not a class that lands\r\nnowhere.",
+          "description": "Per-part class overrides, keyed by the names in `DzCheckbox.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\na key outside the declared parts is a type error, not a class that lands\nnowhere.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzCheckbox.types.ts"
         },
@@ -8633,7 +8633,7 @@
           "type": "Partial<Record<\"root\" | \"close\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzChip.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\na key outside the declared parts is a type error, not a class that lands\r\nnowhere.",
+          "description": "Per-part class overrides, keyed by the names in `DzChip.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\na key outside the declared parts is a type error, not a class that lands\nnowhere.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzChip.types.ts"
         },
@@ -15095,7 +15095,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"title\" | \"error\" | \"header\" | \"group\" | \"row\" | \"cell\" | \"control\" | \"panel\" | \"input\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing target — the segment field,\r\ndeclared here as `control` — and the calendar parts render inside a popper\r\nwhere `class` never reached them.",
+          "description": "Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the segment field,\ndeclared here as `control` — and the calendar parts render inside a popper\nwhere `class` never reached them.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzDatePicker.types.ts"
         },
@@ -15649,7 +15649,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"title\" | \"error\" | \"separator\" | \"header\" | \"group\" | \"row\" | \"cell\" | \"control\" | \"panel\" | \"input\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in\r\n`DzDateRangePicker.anatomy.ts` (ADR-19 §5). `ui.input` reaches the segments\r\non **both** ends of the range.",
+          "description": "Per-part class overrides, keyed by the names in\n`DzDateRangePicker.anatomy.ts` (ADR-19 §5). `ui.input` reaches the segments\non **both** ends of the range.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzDateRangePicker.types.ts"
         },
@@ -19922,7 +19922,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Explicit filled state. When provided, it overrides automatic detection —\r\nuseful for non-native controls (e.g. a combobox button) whose value cannot\r\nbe read from a native `input`/`select`/`textarea` element.",
+          "description": "Explicit filled state. When provided, it overrides automatic detection —\nuseful for non-native controls (e.g. a combobox button) whose value cannot\nbe read from a native `input`/`select`/`textarea` element.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzFloatLabel.types.ts"
         },
@@ -20721,7 +20721,7 @@
           "type": "GridSpan | ResponsiveSpan | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Columns this item occupies, fixed or per breakpoint. Omitted means one\r\ncolumn, the CSS default. A numeric span outside 1–12 is clamped into that\r\nrange; a span wider than the grid's own column count creates implicit\r\ncolumns, exactly as the CSS it compiles to would — clamp to your grid.",
+          "description": "Columns this item occupies, fixed or per breakpoint. Omitted means one\ncolumn, the CSS default. A numeric span outside 1–12 is clamped into that\nrange; a span wider than the grid's own column count creates implicit\ncolumns, exactly as the CSS it compiles to would — clamp to your grid.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
         }
@@ -21942,7 +21942,7 @@
           "type": "\"lazy\" | \"eager\" | undefined",
           "required": false,
           "default": "\"lazy\"",
-          "description": "Native image loading strategy. Defaults to `'lazy'`; set to `'eager'`\r\nfor above-the-fold / LCP images.",
+          "description": "Native image loading strategy. Defaults to `'lazy'`; set to `'eager'`\nfor above-the-fold / LCP images.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzImageCard.types.ts"
         },
@@ -21960,7 +21960,7 @@
           "type": "Partial<Record<\"root\" | \"footer\" | \"overlay\" | \"header\" | \"body\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzImageCard.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing target (the root surface); `ui`\r\naddresses the other parts by name, and a typo is a type error.",
+          "description": "Per-part class overrides, keyed by the names in `DzImageCard.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target (the root surface); `ui`\naddresses the other parts by name, and a typo is a type error.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzImageCard.types.ts"
         },
@@ -23034,7 +23034,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"trigger\" | \"content\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzInplace.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\nthe built-in `DzInput` editor is its own anatomy boundary and is reached\r\nthrough the `#edit` slot, not through this map.",
+          "description": "Per-part class overrides, keyed by the names in `DzInplace.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\nthe built-in `DzInput` editor is its own anatomy boundary and is reached\nthrough the `#edit` slot, not through this map.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzInplace.types.ts"
         },
@@ -29730,7 +29730,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"content\" | \"action\" | \"title\" | \"close\" | \"description\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in\r\n`DzNotification.anatomy.ts` (ADR-19 §5). `class` keeps its existing target\r\n(the surface); `ui` addresses the other parts by name, and a typo is a\r\ntype error.",
+          "description": "Per-part class overrides, keyed by the names in\n`DzNotification.anatomy.ts` (ADR-19 §5). `class` keeps its existing target\n(the surface); `ui` addresses the other parts by name, and a typo is a\ntype error.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/feedback/DzNotification.types.ts"
         }
@@ -30622,7 +30622,7 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Property name used to derive a stable key from each item (e.g. `'id'`).\r\nFalls back to the item's index when omitted — note that index-based keys do\r\nnot survive reordering, so provide `dataKey` when using `selectable`.",
+          "description": "Property name used to derive a stable key from each item (e.g. `'id'`).\nFalls back to the item's index when omitted — note that index-based keys do\nnot survive reordering, so provide `dataKey` when using `selectable`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzOrderList.types.ts"
         },
@@ -30649,7 +30649,7 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Label for each row's drag handle, rendered as the handle's `title`.\r\n\r\nThe handle is a **pointer-only** affordance and stays `aria-hidden=\"true\"`:\r\nits function is already reachable from the keyboard through the Move\r\ncontrols and the row's own space-to-grab, and giving it an accessible name\r\nwould fold that name into every row's accessible name under `selectable`\r\n(where each row is `role=\"option\"`, a name-from-content role). So this is a\r\ntooltip for the audience the handle actually serves, not an ARIA label —\r\nwhich is what the prop had always claimed to be and never was.",
+          "description": "Label for each row's drag handle, rendered as the handle's `title`.\n\nThe handle is a **pointer-only** affordance and stays `aria-hidden=\"true\"`:\nits function is already reachable from the keyboard through the Move\ncontrols and the row's own space-to-grab, and giving it an accessible name\nwould fold that name into every row's accessible name under `selectable`\n(where each row is `role=\"option\"`, a name-from-content role). So this is a\ntooltip for the audience the handle actually serves, not an ARIA label —\nwhich is what the prop had always claimed to be and never was.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzOrderList.types.ts"
         },
@@ -30730,7 +30730,7 @@
           "type": "Partial<Record<\"root\" | \"item\" | \"list\" | \"item-label\" | \"group\" | \"empty\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzOrderList.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing target on the wrapper; the\r\ntoolbar, the list, the rows, the drag handle and the placeholder are all\r\nrendered by this component.",
+          "description": "Per-part class overrides, keyed by the names in `DzOrderList.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target on the wrapper; the\ntoolbar, the list, the rows, the drag handle and the placeholder are all\nrendered by this component.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzOrderList.types.ts"
         },
@@ -31696,7 +31696,7 @@
           "type": "Partial<Record<\"root\" | \"item\" | \"action\" | \"list\" | \"separator\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzPagination.anatomy.ts`\r\n(ADR-19 §5). Every node but the `<nav>` is generated from `total` and\r\n`pageSize`, so `ui` is the only route to the list, the page buttons, the\r\nedge controls and the ellipsis.",
+          "description": "Per-part class overrides, keyed by the names in `DzPagination.anatomy.ts`\n(ADR-19 §5). Every node but the `<nav>` is generated from `total` and\n`pageSize`, so `ui` is the only route to the list, the page buttons, the\nedge controls and the ellipsis.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzPagination.types.ts"
         }
@@ -34925,7 +34925,7 @@
           "type": "Partial<Record<\"root\" | \"indicator\" | \"control\" | \"label\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzRadio.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
+          "description": "Per-part class overrides, keyed by the names in `DzRadio.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzRadio.types.ts"
         },
@@ -38747,7 +38747,7 @@
           "type": "Partial<Record<\"root\" | \"item\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzSegmented.anatomy.ts`\r\n(ADR-19 §5). `class` lands on the track, so `ui.item` is the only way to\r\nreach a segment without a descendant selector.",
+          "description": "Per-part class overrides, keyed by the names in `DzSegmented.anatomy.ts`\n(ADR-19 §5). `class` lands on the track, so `ui.item` is the only way to\nreach a segment without a descendant selector.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzSegmented.types.ts"
         }
@@ -43514,7 +43514,7 @@
           "type": "StackDirection | undefined",
           "required": false,
           "default": "\"vertical\"",
-          "description": "Stack direction. `vertical` (default) and `column` stack along the block\r\naxis; `horizontal` and `row` lay out along the inline axis, which follows\r\n`dir`.",
+          "description": "Stack direction. `vertical` (default) and `column` stack along the block\naxis; `horizontal` and `row` lay out along the inline axis, which follows\n`dir`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/layout/DzStack.types.ts"
         },
@@ -43778,7 +43778,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"title\" | \"description\" | \"header\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzStatCard.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing target (the root surface); `ui`\r\naddresses the other parts by name, and a typo is a type error.",
+          "description": "Per-part class overrides, keyed by the names in `DzStatCard.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target (the root surface); `ui`\naddresses the other parts by name, and a typo is a type error.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzStatCard.types.ts"
         },
@@ -44141,7 +44141,7 @@
         {
           "name": "revealItem",
           "type": "(id: number) => Promise<void>",
-          "description": "Activate the step at `id`, emitting `change` when it was not already\r\nactive, and resolve once its panel has rendered and `revealed` has\r\nfired. Deliberately bypasses `beforeChange`.",
+          "description": "Activate the step at `id`, emitting `change` when it was not already\nactive, and resolve once its panel has rendered and `revealed` has\nfired. Deliberately bypasses `beforeChange`.",
           "descriptionSource": "vue-component-meta"
         }
       ],
@@ -44704,7 +44704,7 @@
           "type": "Partial<Record<\"root\" | \"indicator\" | \"control\" | \"label\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzSwitch.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
+          "description": "Per-part class overrides, keyed by the names in `DzSwitch.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzSwitch.types.ts"
         }
@@ -46125,7 +46125,7 @@
           "type": "DzTabsUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the tabs root (ADR-19 §5). The list, the\r\ntriggers and the panels are sub-components the consumer writes, where\r\n`class` at the call site already lands.",
+          "description": "Per-part class override for the tabs root (ADR-19 §5). The list, the\ntriggers and the panels are sub-components the consumer writes, where\n`class` at the call site already lands.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzTabs.types.ts"
         },
@@ -46187,7 +46187,7 @@
         {
           "name": "revealItem",
           "type": "(id: string) => Promise<void>",
-          "description": "Activate the tab whose value is `id` and resolve once its panel has\r\nrendered and `revealed` has fired.",
+          "description": "Activate the tab whose value is `id` and resolve once its panel has\nrendered and `revealed` has fired.",
           "descriptionSource": "vue-component-meta"
         }
       ],
@@ -46360,7 +46360,7 @@
           "type": "DzTabTriggerUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the dismiss button (ADR-19 §5). The trigger's\r\nown element takes `class` at the call site; the button rendered under\r\n`closable` has no call site of its own.",
+          "description": "Per-part class override for the dismiss button (ADR-19 §5). The trigger's\nown element takes `class` at the call site; the button rendered under\n`closable` has no call site of its own.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzTabs.types.ts"
         },
@@ -46580,7 +46580,7 @@
           "type": "Partial<Record<\"root\" | \"close\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzTag.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\na key outside the declared parts is a type error, not a class that lands\r\nnowhere.",
+          "description": "Per-part class overrides, keyed by the names in `DzTag.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\na key outside the declared parts is a type error, not a class that lands\nnowhere.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzTag.types.ts"
         },
