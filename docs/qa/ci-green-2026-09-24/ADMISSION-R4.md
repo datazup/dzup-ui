@@ -102,3 +102,23 @@ Added allowed path: `apps/storybook/stories/_data/capability.generated.ts`.
 Added acceptance: the whole `validate:all` chain passes locally the way the
 min-runtime job runs it (clean dist, `yarn build`, then `CI=1
 DOCS_SIZE_ALLOW_MISSING_DIST=1 yarn validate:all`), followed by `yarn test`.
+
+### Epoch 2, finding 2: component-meta.json
+
+The first local run of that full sequence passed capability-matrix and
+stopped two links later:
+
+    ✗ [freshness] packages/core/docs/component-meta.json is STALE
+
+`yarn test` failed `packages/tooling/src/docs/evidence.spec.ts`, "agrees with
+the capability join in component-meta.json", for the same reason. The file
+embeds each component's capability summary, so the same two components moved
+from `pass` 7 / `stale` 1 to 6 / 2. Change: `yarn generate:component-meta`,
+committed as is.
+
+Added allowed path: `packages/core/docs/component-meta.json`.
+
+Fencing note: the generator wrote this file before the lease covered it. The
+amend was refused with `LEASE_BINDING_DRIFT`, because the epoch-2 commit had
+moved the head. The lease was then rebound and amended (generation 4) before
+this commit. Nothing else was written outside the lease.
