@@ -1,9 +1,9 @@
 {
   "generator": "yarn generate:docs-pages (TASK-N2-D1, evidence layer TASK-N2-D2)",
-  "artifactSha256": "cf3f78144c7b4c95fc31c174e8de013c826678e1a025755ef5a2bdf1cdf45554",
+  "artifactSha256": "7f2e119ddfd8030515431df3fcf165508e4f045e506050b31a9a9c1e6a67649d",
   "schemaVersion": "1.2.0",
   "extractor": "vue-component-meta@3.3.7",
-  "sourceCommit": "589be135654aefaac4b1069519f2fb56bb231172",
+  "sourceCommit": "8b46ab4c8f7d872375e608c3461e7c3835685280",
   "publicComponents": 144,
   "compoundParts": 65,
   "groups": [
