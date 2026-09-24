@@ -62,6 +62,10 @@ red layer the earlier failures had hidden:
   `apps/landing/src/pages.interactions.spec.ts`,
   `apps/landing/src/pages.a11y.spec.ts` — a load-dependent `yarn test` failure
   (below).
+- `packages/tooling/src/validators/registry.spec.ts` — once the `/r/` copy was
+  committed, the clause "publishes only known item types" rejected it.
+  `validate:registry` itself exempts it through `NON_ITEM_PAYLOADS`. The spec
+  now honours the same list.
 
 ## Change
 
