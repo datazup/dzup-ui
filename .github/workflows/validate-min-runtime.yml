@@ -122,8 +122,17 @@ jobs:
         run: yarn build
       # Every validator named in `validate:all`, run as the chain so the report
       # says which link failed rather than which script did.
+      #
+      # `validate:docs-size` (link 38) fails closed under `CI` when the docs site
+      # or Storybook has not been built, and this job builds neither — so every
+      # run failed there, blaming the floor for a missing artifact (TASK-R4).
+      # The budget is a property of the built artifact, not of the Node version,
+      # so it is enforced where the artifact is built (the `storybook` job in
+      # ci.yml) and this job opts that one link out.
       - name: Validators
         run: yarn validate:all
+        env:
+          DOCS_SIZE_ALLOW_MISSING_DIST: '1'
       # The gate whose own dependencies (vite, jsdom) set the floor in the first
       # place: both require `^20.19.0`, which is why `engines` says so.
       - name: Test at the floor

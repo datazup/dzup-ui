@@ -80,6 +80,7 @@
  *   tsx packages/tooling/src/validators/docs-size.ts --all
  *   tsx packages/tooling/src/validators/docs-size.ts --require-dist
  *   tsx packages/tooling/src/validators/docs-size.ts --allow-missing-dist   # opt out under CI
+ *   DOCS_SIZE_ALLOW_MISSING_DIST=1 yarn validate:all                       # the same, through the chain
  *
  * Exit code 1 if a budget is over, a ceiling is stale, or the dist is absent
  * while `--require-dist` was passed or `CI` is set.
@@ -332,15 +333,22 @@ export function checkDocsSize(
  * machine deciding a merge is not a gate), and `--allow-missing-dist` is the
  * explicit opt-out for a CI job that runs the chain before any build.
  *
+ * `DOCS_SIZE_ALLOW_MISSING_DIST=1` is the same opt-out for a job that runs the
+ * whole `validate:all` chain, where no flag can reach this one link. The
+ * min-runtime job (`.github/workflows/validate-min-runtime.yml`) is that job: it
+ * asks whether every validator STARTS at the Node floor and builds neither
+ * artifact. The budget is enforced where the artifact is built instead — the
+ * `storybook` job in `ci.yml`, and `apps/docs`'s own build (TASK-R4, 2026-09-24).
+ *
  * The `CI` arm matters because both budgeted artifacts are gitignored and
  * nothing in `validate:all` builds them, so a clean checkout is precisely the
  * tree where the old default reported green over an unmeasured budget (S6).
  */
 export function shouldRequireDist(
   argv: readonly string[],
-  env: { CI?: string | undefined } = process.env,
+  env: { CI?: string | undefined, DOCS_SIZE_ALLOW_MISSING_DIST?: string | undefined } = process.env,
 ): boolean {
-  if (argv.includes('--allow-missing-dist'))
+  if (argv.includes('--allow-missing-dist') || env.DOCS_SIZE_ALLOW_MISSING_DIST === '1')
     return false
   if (argv.includes('--require-dist'))
     return true

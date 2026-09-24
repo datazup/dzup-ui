@@ -377,6 +377,15 @@ jobs:
           git diff --exit-code apps/storybook/stories/_data/playgroundSnippets.generated.ts
       - name: Build Storybook
         run: yarn storybook:build
+      # The storybook-static byte ceiling in docs-size-ceilings.json, enforced on
+      # the build it governs (TASK-R4). It used to run only inside `validate:all`
+      # in the min-runtime job, which builds no Storybook, so under `CI` it could
+      # only fail on the missing artifact and never measured anything. Runs before
+      # the metric step below writes size-badge.json into storybook-static.
+      # `--allow-missing-dist` because this job does not build the VitePress docs
+      # site: that budget stays enforced by `apps/docs`'s own `build` script.
+      - name: Storybook size budget (enforced)
+        run: yarn validate:docs-size --allow-missing-dist
       # `storybook:build` runs build:llms; these files are consumed by machines,
       # so validate the generated structure (balanced fences, non-ragged tables,
       # single H1) rather than trusting the generator.
