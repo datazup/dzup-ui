@@ -47,7 +47,10 @@ const ALLOWED_DEPS: Record<PackageName, readonly PackageName[]> = {
   core: ['tokens', 'contracts'],
   compat: ['tokens', 'contracts', 'core'],
   codemods: ['tokens', 'contracts', 'core', 'compat'],
-  tooling: [],
+  // Private, never published: the generators and validators here exist to read
+  // the component packages (ownership, capability and quality matrices, perf
+  // tier fixtures, published-import checks).
+  tooling: ['tokens', 'contracts', 'core'],
 }
 
 /** Regex to match @dzup-ui/ imports, including deep imports */
@@ -58,6 +61,34 @@ const PACKAGE_NAME_RE = /^@dzup-ui\/([\w-]+)/
 
 /** Deep import pattern: @dzup-ui/pkg/anything-beyond-root */
 const DEEP_IMPORT_RE = /^@dzup-ui\/[\w-]+\/.+/
+
+const exportKeysCache = new Map<string, ReadonlySet<string>>()
+
+/**
+ * Subpaths a package publishes through its `exports` map (`./forms` etc.).
+ * Importing one of them is the public API, not a deep import.
+ */
+function exportKeys(pkg: string): ReadonlySet<string> {
+  let keys = exportKeysCache.get(pkg)
+  if (keys === undefined) {
+    try {
+      const manifest = JSON.parse(readFileSync(join(PACKAGES_DIR, pkg, 'package.json'), 'utf-8')) as { exports?: unknown }
+      keys = new Set(typeof manifest.exports === 'object' && manifest.exports !== null ? Object.keys(manifest.exports) : [])
+    }
+    catch {
+      keys = new Set()
+    }
+    exportKeysCache.set(pkg, keys)
+  }
+  return keys
+}
+
+function isDeepImport(importPath: string, importedPkg: string): boolean {
+  if (!DEEP_IMPORT_RE.test(importPath))
+    return false
+  const subpath = `.${importPath.slice(`@dzup-ui/${importedPkg}`.length)}`
+  return !exportKeys(importedPkg).has(subpath)
+}
 
 // --- File scanning ---
 
@@ -76,8 +107,8 @@ function collectFiles(dir: string, extensions: string[]): string[] {
     for (const entry of entries) {
       const fullPath = join(currentDir, entry)
 
-      // Skip node_modules, dist, .git
-      if (entry === 'node_modules' || entry === 'dist' || entry === '.git') {
+      // Skip node_modules, dist, .git and fixture inputs (not shipped code)
+      if (entry === 'node_modules' || entry === 'dist' || entry === '.git' || entry === '__fixtures__') {
         continue
       }
 
@@ -196,8 +227,8 @@ function validateFile(filePath: string): Violation[] {
         })
       }
 
-      // Check: no deep imports into OTHER packages
-      if (DEEP_IMPORT_RE.test(importPath)) {
+      // Check: no deep imports into OTHER packages beyond their exports map
+      if (isDeepImport(importPath, importedPkg)) {
         violations.push({
           file: relative(ROOT, filePath),
           line: i + 1,
