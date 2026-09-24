@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "8b46ab4c8f7d872375e608c3461e7c3835685280",
+  "sourceCommit": "80088e714f30c6c5537c551ca31767c8971c61ae",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -10357,7 +10357,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCombobox.vue",
       "typesSource": "packages/core/src/components/forms/DzCombobox.types.ts",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "c02da0278702d95dc064f361287c234ec113caed",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -10496,9 +10496,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 7,
-          "stale": 1,
+          "stale": 2,
           "unrun": 3
         },
         "unrun": [
@@ -10507,6 +10507,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -28937,7 +28938,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzMultiSelect.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "c02da0278702d95dc064f361287c234ec113caed",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -29074,9 +29075,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 6,
-          "stale": 1,
+          "stale": 2,
           "unrun": 4
         },
         "unrun": [
@@ -29086,6 +29087,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },

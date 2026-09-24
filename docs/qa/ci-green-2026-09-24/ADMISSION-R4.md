@@ -138,3 +138,22 @@ before the generator ran.
 
 Observation for the owner (deferred): stamping the matrix `sourceCommit` into
 all 152 pages means a routine matrix refresh rewrites the whole docs corpus.
+
+## Epoch 3: the landing's copy of component-meta (base `de10642`)
+
+CI run `36028409780` on `de10642` passed 12 of 13 jobs, including
+validate-min-runtime. The one red was `Validate (boundaries + tokens)`, step
+"Landing generated artifacts unchanged": `build:registry` republishes
+`packages/core/docs/component-meta.json` byte for byte as
+`apps/landing/public/r/component-meta.json`, and the committed copy still had the
+pre-epoch-2 values. A local `validate:all` does not run the landing builders, so
+epoch 2's local mirror could not see this.
+
+Change: `yarn tokens:generate`, then the seven landing builders the step runs;
+committed as is. The only file that changed was that copy, now identical to the
+core file. A search at HEAD for the superseded stamps found no other generated
+copy.
+
+Added allowed paths: `apps/landing/public/**`, `apps/landing/src/generated/**`,
+`apps/landing/index.html`. These are the step's own output set. They were
+claimed before the builders ran.
