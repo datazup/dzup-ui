@@ -1363,6 +1363,14 @@ onBeforeUnmount(() => {
     justify-content: flex-start;
   }
 
+  /* The base rule keeps a group on one line; on a phone that pushed the
+     direction toggle past the preview's clipped edge, where nobody could reach
+     it. Wrapping lets the `flex-basis` rules below lay the group out as
+     intended: viewport on its own row, theme and direction sharing the next. */
+  .bp-control-group {
+    flex-wrap: wrap;
+  }
+
   .bp-viewport {
     flex: 1 1 100%;
   }

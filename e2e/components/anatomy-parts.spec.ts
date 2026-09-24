@@ -67,7 +67,8 @@ const ROWS: Row[] = [
   { component: 'DzCopyButton', story: 'core-buttons-dzcopybutton--default', requiredParts: ['root'] },
   { component: 'DzFab', story: 'core-buttons-dzfab--default', requiredParts: ['root', 'icon'], multiple: true },
   { component: 'DzIconButton', story: 'core-buttons-dziconbutton--default', requiredParts: ['root'], multiple: true },
-  { component: 'DzSpeedDial', story: 'core-buttons-dzspeeddial--fab', requiredParts: ['root', 'list'], multiple: true },
+  // Not `--fab`: that export is "DzFab (standalone)" and renders no DzSpeedDial at all.
+  { component: 'DzSpeedDial', story: 'core-buttons-dzspeeddial--linear-up', requiredParts: ['root', 'list', 'item'] },
   { component: 'DzSplitButton', story: 'core-buttons-dzsplitbutton--default', requiredParts: ['root', 'action', 'trigger'], multiple: true },
   { component: 'DzToggleButton', story: 'core-buttons-dztogglebutton--default', requiredParts: ['root'], multiple: true },
 
@@ -121,7 +122,9 @@ test.describe('parts do not leak across component boundaries', () => {
    * says a new component starts here.
    */
   test('a nested component root marks a new anatomy scope', async ({ page }) => {
-    const frame = await loadStoryCanvas(page, 'core-buttons-dzspeeddial--fab')
+    // `--linear-up` renders one DzSpeedDial; `--fab` is the standalone DzFab story
+    // and has no speed dial to be the outer scope.
+    const frame = await loadStoryCanvas(page, 'core-buttons-dzspeeddial--linear-up')
 
     // DzSpeedDial's own root, then the DzFab trigger's root inside it.
     const outer = frame.locator('[data-part="root"]').first()

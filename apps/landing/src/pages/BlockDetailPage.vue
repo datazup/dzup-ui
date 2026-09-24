@@ -412,5 +412,17 @@ function openStackblitz(): void {
   .bd-pager-name {
     display: none;
   }
+
+  /* Prev and next share the first row; "Browse all blocks" takes the second.
+     Three unwrapped items only fit 358px while the fallback font is narrow —
+     with a wider one the next link ran ~9px past the viewport. */
+  .bd-pager {
+    flex-wrap: wrap;
+  }
+
+  .bd-pager > :nth-child(2) {
+    order: 1;
+    flex-basis: 100%;
+  }
 }
 </style>
