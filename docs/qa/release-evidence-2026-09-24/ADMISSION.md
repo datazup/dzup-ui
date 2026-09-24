@@ -66,3 +66,42 @@ production: **not granted**. PR #3 remains the operator's decision.
 - Recording an admissible API-surface baseline
   (`release:api-surface:record`). It belongs to the commit that is actually
   published.
+
+## Outcome (2026-09-24, same session)
+
+Bundle: [`../release/2026-09-24-0a47569/`](../release/2026-09-24-0a47569/),
+cut from `0a47569` (this admission's commit) with `git status --porcelain`
+empty. **Admissible: true.** All 15 rehearsal gates exit 0 (logs in the
+bundle). Content digest `2269125b…aef6b` over 3,647 files.
+
+What the bundle says, for the PR #3 decision:
+
+1. **API diff.** `@dzup-ui/contracts` has fidelity `none` (no published
+   version, no admissible snapshot), so the `ariaInvalid` removal is not
+   classified: `grep -c ariaInvalid api-diff.json` is 0. It is declared by the
+   changeset `aria-invalid-is-a-validation-prop-and-only-validation-props-carry-it.md`
+   (contracts `minor`). Since nothing has been published, no consumer can be
+   broken by it; acceptance item 2 is met as a recorded finding.
+2. **Stop condition `unexplained-api-diff` (core).** `generate:exports` would
+   drop five composable barrel lines (`useAffix`, `useCalendar`,
+   `useInfiniteScroll`, `useScrollSpy`, `useScrollToTop`) and add two
+   (`useCountdown`, `useIntersection`). The publish itself does not run the
+   generator. The barrel and the manifest disagree, and which one is right is
+   the owner decision TASK-R0-O1 still holds.
+3. **Vulnerabilities: 8 high, 11 moderate, 1 low, all reached via
+   `@dzup-ui/mcp`.** They are keyed to this repository's lockfile: `fast-uri`
+   3.1.0 through `ajv`, `ip-address` 10.1.0/10.2.0 through `socks` and
+   `express-rate-limit`, and `hono` / `@hono/node-server`. The declared ranges
+   admit patched versions, so a fresh consumer install may resolve past them.
+   The lockfile refresh is its own packet.
+4. **No OSS rollback policy** (report section 8). The `npm deprecate` path is
+   stated only in the generated report.
+5. **Nuxt fixtures are staged, not built.** Gate 13 packs four tarballs and
+   stages six fixtures outside the repository ("ready"). `core-pro` is
+   `unrun`. No fixture app is installed or built by this gate.
+6. **Report text defect.** Report section 8's "Ranked next work" is fixed text
+   in `packages/tooling/src/release/report.ts`. It still reads "every artifact
+   here is stamped `admissible: false`" and "nothing in section 3 has ever run
+   on CI". Both are false for this bundle. Not fixed here.
+7. **Changesets.** The bundle counts 40 pending; PR #3's body lists 41. That is
+   not reconciled here.

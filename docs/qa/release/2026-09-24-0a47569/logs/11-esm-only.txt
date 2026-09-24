@@ -1,0 +1,1 @@
+ESM-only output verified across 6 published dist directories.
