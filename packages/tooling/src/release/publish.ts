@@ -39,6 +39,7 @@
 import { spawnSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import process from 'node:process'
 import { ROOT } from './binding.ts'
 import { publishedPackages } from './pack.ts'
 
@@ -130,10 +131,10 @@ function main(): void {
   assertPublishable(candidates)
   const order = publishOrder(candidates)
 
-  console.log(`release:publish${args.dryRun ? ' (dry run)' : ''}: ${order.join(' → ')}`)
+  console.warn(`release:publish${args.dryRun ? ' (dry run)' : ''}: ${order.join(' → ')}`)
   for (const name of order) {
     const argv = publishCommand(name, args)
-    console.log(`\n$ yarn ${argv.join(' ')}`)
+    console.warn(`\n$ yarn ${argv.join(' ')}`)
     const result = spawnSync('yarn', argv, { cwd: ROOT, stdio: 'inherit' })
     if (result.status !== 0) {
       console.error(`release:publish: ${name} failed (exit ${result.status ?? result.signal}); stopping. Packages before it are published; re-running skips them.`)

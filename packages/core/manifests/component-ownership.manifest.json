@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+  "sourceCommit": "873984dba251ed61576fcb58e45e92328fd93759",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -62,8 +62,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzAnchor.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzAnchor.variants.ts"
       ]
     },
     {
@@ -102,8 +101,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzAppShell.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzAppShell.variants.ts"
       ]
     },
     {
@@ -112,8 +110,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts"
       ]
     },
     {
@@ -122,8 +119,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts"
       ]
     },
     {
@@ -188,8 +184,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzBackTop.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzBackTop.variants.ts"
       ]
     },
     {
@@ -215,8 +210,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzBlockUI.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzBlockUI.variants.ts"
       ]
     },
     {
@@ -304,8 +298,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.types.ts"
       ]
     },
     {
@@ -318,8 +311,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.types.ts"
       ]
     },
     {
@@ -332,8 +324,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.types.ts"
       ]
     },
     {
@@ -346,8 +337,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.variants.ts"
       ]
     },
     {
@@ -435,8 +425,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.variants.ts"
       ]
     },
     {
@@ -475,8 +464,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCodeBlock.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCodeBlock.variants.ts"
       ]
     },
     {
@@ -515,8 +503,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzColorModeToggle.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzColorModeToggle.variants.ts"
       ]
     },
     {
@@ -607,8 +594,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzConfirmDialog.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzConfirmDialog.variants.ts"
       ]
     },
     {
@@ -686,8 +672,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/GovernanceBadge.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/GovernanceBadge.types.ts"
       ]
     },
     {
@@ -700,8 +685,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzCopyButton.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzCopyButton.variants.ts"
       ]
     },
     {
@@ -1084,8 +1068,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -1098,8 +1081,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -1112,8 +1094,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -1126,8 +1107,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -1140,8 +1120,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.variants.ts"
       ]
     },
     {
@@ -1206,8 +1185,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -1220,8 +1198,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -1234,8 +1211,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -1248,8 +1224,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -1262,8 +1237,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.variants.ts"
       ]
     },
     {
@@ -1703,8 +1677,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzAffix.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzAffix.types.ts"
       ]
     },
     {
@@ -1717,8 +1690,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzAffix.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzAffix.types.ts"
       ]
     },
     {
@@ -1731,8 +1703,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzAffix.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzAffix.types.ts"
       ]
     },
     {
@@ -1867,8 +1838,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzAnchor.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzAnchor.types.ts"
       ]
     },
     {
@@ -1881,8 +1851,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzAnchor.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzAnchor.types.ts"
       ]
     },
     {
@@ -1895,8 +1864,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzAnchor.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzAnchor.types.ts"
       ]
     },
     {
@@ -1909,8 +1877,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzAnchor.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzAnchor.types.ts"
       ]
     },
     {
@@ -1923,8 +1890,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzAnchor.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzAnchor.types.ts"
       ]
     },
     {
@@ -2034,8 +2000,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzAppShell.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzAppShell.types.ts"
       ]
     },
     {
@@ -2048,8 +2013,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzAppShell.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzAppShell.types.ts"
       ]
     },
     {
@@ -2120,8 +2084,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzAsyncBoundary.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzAsyncBoundary.types.ts"
       ]
     },
     {
@@ -2134,8 +2097,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzAsyncBoundary.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzAsyncBoundary.types.ts"
       ]
     },
     {
@@ -2148,8 +2110,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzAsyncBoundary.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzAsyncBoundary.types.ts"
       ]
     },
     {
@@ -2333,8 +2294,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzBackTop.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzBackTop.types.ts"
       ]
     },
     {
@@ -2347,8 +2307,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzBackTop.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzBackTop.types.ts"
       ]
     },
     {
@@ -2361,8 +2320,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzBackTop.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzBackTop.types.ts"
       ]
     },
     {
@@ -2463,8 +2421,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzBlockUI.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzBlockUI.types.ts"
       ]
     },
     {
@@ -2477,8 +2434,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzBlockUI.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzBlockUI.types.ts"
       ]
     },
     {
@@ -2491,8 +2447,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzBlockUI.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzBlockUI.types.ts"
       ]
     },
     {
@@ -2505,8 +2460,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzBlockUI.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzBlockUI.types.ts"
       ]
     },
     {
@@ -3164,8 +3118,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.types.ts"
       ]
     },
     {
@@ -3178,8 +3131,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.types.ts"
       ]
     },
     {
@@ -3192,8 +3144,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.types.ts"
       ]
     },
     {
@@ -3206,8 +3157,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.types.ts"
       ]
     },
     {
@@ -3220,8 +3170,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCalendar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCalendar.types.ts"
       ]
     },
     {
@@ -4005,8 +3954,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.types.ts"
       ]
     },
     {
@@ -4019,8 +3967,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.types.ts"
       ]
     },
     {
@@ -4033,8 +3980,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.types.ts"
       ]
     },
     {
@@ -4047,8 +3993,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.types.ts"
       ]
     },
     {
@@ -4061,8 +4006,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.types.ts"
       ]
     },
     {
@@ -4075,8 +4019,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.types.ts"
       ]
     },
     {
@@ -4089,8 +4032,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.types.ts"
       ]
     },
     {
@@ -4103,8 +4045,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCascader.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCascader.types.ts"
       ]
     },
     {
@@ -4532,8 +4473,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCodeBlock.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCodeBlock.types.ts"
       ]
     },
     {
@@ -4546,8 +4486,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzCodeBlock.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzCodeBlock.types.ts"
       ]
     },
     {
@@ -4716,8 +4655,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzColorModeToggle.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzColorModeToggle.types.ts"
       ]
     },
     {
@@ -4730,8 +4668,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzColorModeToggle.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzColorModeToggle.types.ts"
       ]
     },
     {
@@ -4744,8 +4681,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzColorModeToggle.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzColorModeToggle.types.ts"
       ]
     },
     {
@@ -4758,8 +4694,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzColorModeToggle.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzColorModeToggle.types.ts"
       ]
     },
     {
@@ -4772,8 +4707,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzColorModeToggle.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzColorModeToggle.types.ts"
       ]
     },
     {
@@ -5080,8 +5014,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCombobox.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCombobox.types.ts"
       ]
     },
     {
@@ -5107,8 +5040,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzCombobox.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzCombobox.types.ts"
       ]
     },
     {
@@ -5477,8 +5409,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzConfirmDialog.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzConfirmDialog.types.ts"
       ]
     },
     {
@@ -5491,8 +5422,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzConfirmDialog.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzConfirmDialog.types.ts"
       ]
     },
     {
@@ -5505,8 +5435,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzConfirmDialog.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzConfirmDialog.types.ts"
       ]
     },
     {
@@ -5945,8 +5874,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzCopyButton.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzCopyButton.types.ts"
       ]
     },
     {
@@ -5959,8 +5887,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzCopyButton.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzCopyButton.types.ts"
       ]
     },
     {
@@ -5973,8 +5900,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzCopyButton.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzCopyButton.types.ts"
       ]
     },
     {
@@ -6329,8 +6255,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataGrid.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataGrid.types.ts"
       ]
     },
     {
@@ -6554,8 +6479,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -6568,8 +6492,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -6582,8 +6505,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -6596,8 +6518,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -6610,8 +6531,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataView.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataView.types.ts"
       ]
     },
     {
@@ -7110,8 +7030,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -7141,8 +7060,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -7155,8 +7073,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -7169,8 +7086,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -7183,8 +7099,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDescriptions.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDescriptions.types.ts"
       ]
     },
     {
@@ -7270,8 +7185,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzDialog.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzDialog.types.ts"
       ]
     },
     {
@@ -8049,8 +7963,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzErrorBoundary.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzErrorBoundary.types.ts"
       ]
     },
     {
@@ -8063,8 +7976,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzErrorBoundary.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzErrorBoundary.types.ts"
       ]
     },
     {
@@ -8145,8 +8057,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzFab.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzFab.types.ts"
       ]
     },
     {
@@ -8159,8 +8070,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzFab.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzFab.types.ts"
       ]
     },
     {
@@ -8173,8 +8083,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzFab.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzFab.types.ts"
       ]
     },
     {
@@ -8187,8 +8096,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzFab.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzFab.types.ts"
       ]
     },
     {
@@ -8201,8 +8109,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzFab.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzFab.types.ts"
       ]
     },
     {
@@ -8266,8 +8173,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzFieldArray.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzFieldArray.types.ts"
       ]
     },
     {
@@ -8280,8 +8186,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzFieldArray.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzFieldArray.types.ts"
       ]
     },
     {
@@ -8294,8 +8199,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzFieldArray.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzFieldArray.types.ts"
       ]
     },
     {
@@ -8308,8 +8212,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzFieldArray.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzFieldArray.types.ts"
       ]
     },
     {
@@ -8472,8 +8375,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzFloatLabel.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzFloatLabel.types.ts"
       ]
     },
     {
@@ -8486,8 +8388,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzFloatLabel.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzFloatLabel.types.ts"
       ]
     },
     {
@@ -8500,8 +8401,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzFloatLabel.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzFloatLabel.types.ts"
       ]
     },
     {
@@ -9081,8 +8981,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzImageComparison.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzImageComparison.types.ts"
       ]
     },
     {
@@ -9095,8 +8994,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzImageComparison.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzImageComparison.types.ts"
       ]
     },
     {
@@ -9109,8 +9007,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzImageComparison.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzImageComparison.types.ts"
       ]
     },
     {
@@ -9218,8 +9115,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzInfiniteScroll.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzInfiniteScroll.types.ts"
       ]
     },
     {
@@ -9232,8 +9128,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzInfiniteScroll.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzInfiniteScroll.types.ts"
       ]
     },
     {
@@ -9246,8 +9141,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzInfiniteScroll.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzInfiniteScroll.types.ts"
       ]
     },
     {
@@ -9260,8 +9154,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzInfiniteScroll.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzInfiniteScroll.types.ts"
       ]
     },
     {
@@ -9274,8 +9167,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzInfiniteScroll.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzInfiniteScroll.types.ts"
       ]
     },
     {
@@ -9358,8 +9250,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzInplace.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzInplace.types.ts"
       ]
     },
     {
@@ -9372,8 +9263,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzInplace.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzInplace.types.ts"
       ]
     },
     {
@@ -9386,8 +9276,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzInplace.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzInplace.types.ts"
       ]
     },
     {
@@ -9400,8 +9289,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzInplace.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzInplace.types.ts"
       ]
     },
     {
@@ -9414,8 +9302,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzInplace.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzInplace.types.ts"
       ]
     },
     {
@@ -9428,8 +9315,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzInplace.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzInplace.types.ts"
       ]
     },
     {
@@ -9676,8 +9562,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/inputs/DzInputMask.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/inputs/DzInputMask.types.ts"
       ]
     },
     {
@@ -9690,8 +9575,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/inputs/DzInputMask.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/inputs/DzInputMask.types.ts"
       ]
     },
     {
@@ -9704,8 +9588,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/inputs/DzInputMask.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/inputs/DzInputMask.types.ts"
       ]
     },
     {
@@ -9939,8 +9822,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzKnob.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzKnob.types.ts"
       ]
     },
     {
@@ -9953,8 +9835,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzKnob.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzKnob.types.ts"
       ]
     },
     {
@@ -9967,8 +9848,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzKnob.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzKnob.types.ts"
       ]
     },
     {
@@ -10503,8 +10383,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzMasonry.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzMasonry.types.ts"
       ]
     },
     {
@@ -10517,8 +10396,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzMasonry.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzMasonry.types.ts"
       ]
     },
     {
@@ -10676,8 +10554,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10690,8 +10567,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10704,8 +10580,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10718,8 +10593,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10732,8 +10606,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10746,8 +10619,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10760,8 +10632,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10774,8 +10645,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10788,8 +10658,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10802,8 +10671,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.types.ts"
       ]
     },
     {
@@ -10937,8 +10805,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzMention.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzMention.types.ts"
       ]
     },
     {
@@ -10951,8 +10818,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzMention.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzMention.types.ts"
       ]
     },
     {
@@ -10965,8 +10831,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzMention.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzMention.types.ts"
       ]
     },
     {
@@ -10979,8 +10844,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzMention.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzMention.types.ts"
       ]
     },
     {
@@ -10993,8 +10857,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzMention.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzMention.types.ts"
       ]
     },
     {
@@ -11007,8 +10870,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzMention.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzMention.types.ts"
       ]
     },
     {
@@ -11224,8 +11086,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/provider/useDzMessages.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/provider/useDzMessages.ts"
       ]
     },
     {
@@ -11254,8 +11115,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzMeterGroup.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzMeterGroup.types.ts"
       ]
     },
     {
@@ -11268,8 +11128,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzMeterGroup.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzMeterGroup.types.ts"
       ]
     },
     {
@@ -11282,8 +11141,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzMeterGroup.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzMeterGroup.types.ts"
       ]
     },
     {
@@ -11296,8 +11154,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzMeterGroup.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzMeterGroup.types.ts"
       ]
     },
     {
@@ -11310,8 +11167,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzMeterGroup.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzMeterGroup.types.ts"
       ]
     },
     {
@@ -11324,8 +11180,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzMeterGroup.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzMeterGroup.types.ts"
       ]
     },
     {
@@ -11876,8 +11731,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -11890,8 +11744,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -11904,8 +11757,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -11918,8 +11770,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -12058,8 +11909,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzPageHero.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzPageHero.types.ts"
       ]
     },
     {
@@ -12072,8 +11922,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzPageHero.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzPageHero.types.ts"
       ]
     },
     {
@@ -12273,8 +12122,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzPanel.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzPanel.types.ts"
       ]
     },
     {
@@ -12287,8 +12135,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzPanel.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzPanel.types.ts"
       ]
     },
     {
@@ -12301,8 +12148,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzPanel.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzPanel.types.ts"
       ]
     },
     {
@@ -12560,8 +12406,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzPersonaSelector.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzPersonaSelector.types.ts"
       ]
     },
     {
@@ -12574,8 +12419,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzPersonaSelector.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzPersonaSelector.types.ts"
       ]
     },
     {
@@ -12588,8 +12432,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzPersonaSelector.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzPersonaSelector.types.ts"
       ]
     },
     {
@@ -12690,8 +12533,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzPopconfirm.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzPopconfirm.types.ts"
       ]
     },
     {
@@ -12704,8 +12546,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzPopconfirm.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzPopconfirm.types.ts"
       ]
     },
     {
@@ -12718,8 +12559,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzPopconfirm.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzPopconfirm.types.ts"
       ]
     },
     {
@@ -13047,8 +12887,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzQRCode.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzQRCode.types.ts"
       ]
     },
     {
@@ -13061,8 +12900,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzQRCode.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzQRCode.types.ts"
       ]
     },
     {
@@ -13075,8 +12913,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzQRCode.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzQRCode.types.ts"
       ]
     },
     {
@@ -13089,8 +12926,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzQRCode.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzQRCode.types.ts"
       ]
     },
     {
@@ -13103,8 +12939,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzQRCode.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzQRCode.types.ts"
       ]
     },
     {
@@ -13588,8 +13423,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzRating.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzRating.types.ts"
       ]
     },
     {
@@ -13602,8 +13436,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzRating.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzRating.types.ts"
       ]
     },
     {
@@ -13616,8 +13449,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzRating.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzRating.types.ts"
       ]
     },
     {
@@ -14050,8 +13882,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzRunStatusBadge.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzRunStatusBadge.types.ts"
       ]
     },
     {
@@ -14064,8 +13895,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzRunStatusBadge.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzRunStatusBadge.types.ts"
       ]
     },
     {
@@ -14153,8 +13983,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzScrollProgress.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzScrollProgress.types.ts"
       ]
     },
     {
@@ -14167,8 +13996,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzScrollProgress.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzScrollProgress.types.ts"
       ]
     },
     {
@@ -14181,8 +14009,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzScrollProgress.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzScrollProgress.types.ts"
       ]
     },
     {
@@ -15041,8 +14868,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15055,8 +14881,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15086,8 +14911,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15100,8 +14924,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15131,8 +14954,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15145,8 +14967,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15176,8 +14997,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15190,8 +15010,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15204,8 +15023,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15218,8 +15036,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15249,8 +15066,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15263,8 +15079,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15277,8 +15092,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.types.ts"
       ]
     },
     {
@@ -15606,8 +15420,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzSpeedDial.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzSpeedDial.types.ts"
       ]
     },
     {
@@ -15620,8 +15433,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzSpeedDial.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzSpeedDial.types.ts"
       ]
     },
     {
@@ -15634,8 +15446,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzSpeedDial.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzSpeedDial.types.ts"
       ]
     },
     {
@@ -15648,8 +15459,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzSpeedDial.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzSpeedDial.types.ts"
       ]
     },
     {
@@ -15662,8 +15472,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzSpeedDial.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzSpeedDial.types.ts"
       ]
     },
     {
@@ -16447,8 +16256,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzStepper.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzStepper.types.ts"
       ]
     },
     {
@@ -16974,8 +16782,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzTable.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzTable.types.ts"
       ]
     },
     {
@@ -17005,8 +16812,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzTable.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzTable.types.ts"
       ]
     },
     {
@@ -17019,8 +16825,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzTable.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzTable.types.ts"
       ]
     },
     {
@@ -17520,8 +17325,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTagsInput.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTagsInput.types.ts"
       ]
     },
     {
@@ -17534,8 +17338,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTagsInput.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTagsInput.types.ts"
       ]
     },
     {
@@ -17548,8 +17351,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTagsInput.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTagsInput.types.ts"
       ]
     },
     {
@@ -17562,8 +17364,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTagsInput.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTagsInput.types.ts"
       ]
     },
     {
@@ -17720,8 +17521,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/providers/DzThemeProvider.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/providers/DzThemeProvider.types.ts"
       ]
     },
     {
@@ -17759,8 +17559,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/providers/DzThemeProvider.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/providers/DzThemeProvider.types.ts"
       ]
     },
     {
@@ -18352,8 +18151,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzTokenProgressBar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzTokenProgressBar.types.ts"
       ]
     },
     {
@@ -18366,8 +18164,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzTokenProgressBar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzTokenProgressBar.types.ts"
       ]
     },
     {
@@ -18380,8 +18177,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzTokenProgressBar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzTokenProgressBar.types.ts"
       ]
     },
     {
@@ -18484,8 +18280,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzToolbar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzToolbar.types.ts"
       ]
     },
     {
@@ -18498,8 +18293,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzToolbar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzToolbar.types.ts"
       ]
     },
     {
@@ -18771,8 +18565,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzTour.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzTour.types.ts"
       ]
     },
     {
@@ -18785,8 +18578,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzTour.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzTour.types.ts"
       ]
     },
     {
@@ -18799,8 +18591,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzTour.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzTour.types.ts"
       ]
     },
     {
@@ -18813,8 +18604,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzTour.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzTour.types.ts"
       ]
     },
     {
@@ -18827,8 +18617,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzTour.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzTour.types.ts"
       ]
     },
     {
@@ -19460,8 +19249,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTreeSelect.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTreeSelect.types.ts"
       ]
     },
     {
@@ -19474,8 +19262,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTreeSelect.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTreeSelect.types.ts"
       ]
     },
     {
@@ -19488,8 +19275,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTreeSelect.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTreeSelect.types.ts"
       ]
     },
     {
@@ -19586,8 +19372,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzWatermark.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzWatermark.types.ts"
       ]
     },
     {
@@ -19600,8 +19385,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzWatermark.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzWatermark.types.ts"
       ]
     },
     {
@@ -19653,8 +19437,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzFab.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzFab.variants.ts"
       ]
     },
     {
@@ -19693,8 +19476,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataGrid.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataGrid.types.ts"
       ]
     },
     {
@@ -19707,8 +19489,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzDataGrid.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzDataGrid.types.ts"
       ]
     },
     {
@@ -19773,8 +19554,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzFloatLabel.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzFloatLabel.variants.ts"
       ]
     },
     {
@@ -19783,8 +19563,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useFloating/useFloating.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useFloating/useFloating.ts"
       ]
     },
     {
@@ -19827,8 +19606,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/GovernanceBadge.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/GovernanceBadge.types.ts"
       ]
     },
     {
@@ -19841,8 +19619,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/GovernanceBadge.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/GovernanceBadge.types.ts"
       ]
     },
     {
@@ -19855,8 +19632,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/GovernanceBadge.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/GovernanceBadge.variants.ts"
       ]
     },
     {
@@ -20012,8 +19788,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzImageComparison.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzImageComparison.types.ts"
       ]
     },
     {
@@ -20026,8 +19801,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzImageComparison.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzImageComparison.variants.ts"
       ]
     },
     {
@@ -20067,8 +19841,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzInfiniteScroll.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzInfiniteScroll.variants.ts"
       ]
     },
     {
@@ -20081,8 +19854,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzInplace.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzInplace.variants.ts"
       ]
     },
     {
@@ -20147,8 +19919,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzKnob.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzKnob.variants.ts"
       ]
     },
     {
@@ -20239,8 +20010,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/inputs/DzInputMask.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/inputs/DzInputMask.variants.ts"
       ]
     },
     {
@@ -20253,8 +20023,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/inputs/DzInputMask.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/inputs/DzInputMask.variants.ts"
       ]
     },
     {
@@ -20267,8 +20036,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzMasonry.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzMasonry.types.ts"
       ]
     },
     {
@@ -20281,8 +20049,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzMasonry.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzMasonry.types.ts"
       ]
     },
     {
@@ -20295,8 +20062,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzMasonry.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzMasonry.variants.ts"
       ]
     },
     {
@@ -20309,8 +20075,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzMegaMenu.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzMegaMenu.variants.ts"
       ]
     },
     {
@@ -20323,8 +20088,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzMention.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzMention.variants.ts"
       ]
     },
     {
@@ -20350,8 +20114,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzMeterGroup.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzMeterGroup.variants.ts"
       ]
     },
     {
@@ -20364,8 +20127,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzMeterGroup.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzMeterGroup.variants.ts"
       ]
     },
     {
@@ -20417,8 +20179,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -20431,8 +20192,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -20445,8 +20205,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -20459,8 +20218,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -20473,8 +20231,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.types.ts"
       ]
     },
     {
@@ -20487,8 +20244,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzOrderList.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzOrderList.variants.ts"
       ]
     },
     {
@@ -20553,8 +20309,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzPageHero.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzPageHero.variants.ts"
       ]
     },
     {
@@ -20593,8 +20348,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "@dzup-ui/contracts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "@dzup-ui/contracts"
       ]
     },
     {
@@ -20607,8 +20361,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzPanel.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzPanel.variants.ts"
       ]
     },
     {
@@ -20621,8 +20374,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzPersonaSelector.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzPersonaSelector.types.ts"
       ]
     },
     {
@@ -20635,8 +20387,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzPopconfirm.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzPopconfirm.types.ts"
       ]
     },
     {
@@ -20649,8 +20400,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzPopconfirm.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzPopconfirm.variants.ts"
       ]
     },
     {
@@ -20741,8 +20491,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzQRCode.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzQRCode.variants.ts"
       ]
     },
     {
@@ -20781,8 +20530,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzRating.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzRating.variants.ts"
       ]
     },
     {
@@ -20886,8 +20634,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/providers/DzThemeProvider.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/providers/DzThemeProvider.types.ts"
       ]
     },
     {
@@ -20913,8 +20660,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzMasonry.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzMasonry.types.ts"
       ]
     },
     {
@@ -20962,8 +20708,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useRevealAndFocus/useRevealAndFocus.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useRevealAndFocus/useRevealAndFocus.ts"
       ]
     },
     {
@@ -21002,8 +20747,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzScrollProgress.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzScrollProgress.variants.ts"
       ]
     },
     {
@@ -21016,8 +20760,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/DzScrollProgress.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/DzScrollProgress.variants.ts"
       ]
     },
     {
@@ -21069,8 +20812,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzSheet.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzSheet.types.ts"
       ]
     },
     {
@@ -21109,8 +20851,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/navigation/DzSidebar.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/navigation/DzSidebar.variants.ts"
       ]
     },
     {
@@ -21201,8 +20942,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/buttons/DzSpeedDial.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/buttons/DzSpeedDial.variants.ts"
       ]
     },
     {
@@ -21355,8 +21095,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useTabs/useTabs.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useTabs/useTabs.ts"
       ]
     },
     {
@@ -21382,8 +21121,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzTable.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzTable.types.ts"
       ]
     },
     {
@@ -21448,8 +21186,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTagsInput.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTagsInput.variants.ts"
       ]
     },
     {
@@ -21478,8 +21215,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/TeamMemberBadge.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/TeamMemberBadge.types.ts"
       ]
     },
     {
@@ -21492,8 +21228,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/TeamMemberBadge.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/TeamMemberBadge.types.ts"
       ]
     },
     {
@@ -21506,8 +21241,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/TeamMemberBadge.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/TeamMemberBadge.variants.ts"
       ]
     },
     {
@@ -21520,8 +21254,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/feedback/TeamMemberBadge.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/feedback/TeamMemberBadge.types.ts"
       ]
     },
     {
@@ -21612,8 +21345,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/providers/DzThemeProvider.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/providers/DzThemeProvider.types.ts"
       ]
     },
     {
@@ -21626,8 +21358,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/providers/theme-script.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/providers/theme-script.ts"
       ]
     },
     {
@@ -21714,8 +21445,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzToolbar.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzToolbar.types.ts"
       ]
     },
     {
@@ -21728,8 +21458,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "@dzup-ui/contracts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "@dzup-ui/contracts"
       ]
     },
     {
@@ -21742,8 +21471,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/layout/DzToolbar.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/layout/DzToolbar.variants.ts"
       ]
     },
     {
@@ -21795,8 +21523,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzTour.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzTour.types.ts"
       ]
     },
     {
@@ -21809,8 +21536,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzTour.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzTour.types.ts"
       ]
     },
     {
@@ -21823,8 +21549,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/overlays/DzTour.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/overlays/DzTour.variants.ts"
       ]
     },
     {
@@ -21889,8 +21614,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTreeSelect.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTreeSelect.types.ts"
       ]
     },
     {
@@ -21903,8 +21627,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTreeSelect.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTreeSelect.types.ts"
       ]
     },
     {
@@ -21917,8 +21640,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/forms/DzTreeSelect.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/forms/DzTreeSelect.variants.ts"
       ]
     },
     {
@@ -21960,8 +21682,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts"
       ]
     },
     {
@@ -21970,8 +21691,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts"
       ]
     },
     {
@@ -22000,8 +21720,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useClickOutside/useClickOutside.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useClickOutside/useClickOutside.ts"
       ]
     },
     {
@@ -22028,8 +21747,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDataGridHeader/useDataGridHeader.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDataGridHeader/useDataGridHeader.ts"
       ]
     },
     {
@@ -22038,8 +21756,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDataGridHeader/useDataGridHeader.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDataGridHeader/useDataGridHeader.ts"
       ]
     },
     {
@@ -22057,8 +21774,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDataGrid/useDataGridPagination.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDataGrid/useDataGridPagination.ts"
       ]
     },
     {
@@ -22067,8 +21783,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDataGrid/useDataGridPagination.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDataGrid/useDataGridPagination.ts"
       ]
     },
     {
@@ -22086,8 +21801,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDataGrid/useDataGridSort.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDataGrid/useDataGridSort.ts"
       ]
     },
     {
@@ -22096,8 +21810,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDataGrid/useDataGridSort.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDataGrid/useDataGridSort.ts"
       ]
     },
     {
@@ -22124,8 +21837,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDialog/useDialog.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDialog/useDialog.ts"
       ]
     },
     {
@@ -22134,8 +21846,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDialog/useDialog.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDialog/useDialog.ts"
       ]
     },
     {
@@ -22144,8 +21855,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useFloating/useFloating.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useFloating/useFloating.ts"
       ]
     },
     {
@@ -22154,8 +21864,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useFloating/useFloating.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useFloating/useFloating.ts"
       ]
     },
     {
@@ -22164,8 +21873,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useFocusTrap/useFocusTrap.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useFocusTrap/useFocusTrap.ts"
       ]
     },
     {
@@ -22174,8 +21882,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useFocusTrap/useFocusTrap.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useFocusTrap/useFocusTrap.ts"
       ]
     },
     {
@@ -22253,8 +21960,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useSelect/useSelectKeyboard.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useSelect/useSelectKeyboard.ts"
       ]
     },
     {
@@ -22263,8 +21969,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useSelect/useSelectKeyboard.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useSelect/useSelectKeyboard.ts"
       ]
     },
     {
@@ -22273,8 +21978,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useSelect/useSelect.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useSelect/useSelect.ts"
       ]
     },
     {
@@ -22283,8 +21987,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useSelect/useSelect.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useSelect/useSelect.ts"
       ]
     },
     {
@@ -22311,8 +22014,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useTabs/useTabs.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useTabs/useTabs.ts"
       ]
     },
     {
@@ -22321,8 +22023,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useTabs/useTabs.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useTabs/useTabs.ts"
       ]
     },
     {
@@ -22335,8 +22036,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/providers/useTheme.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/providers/useTheme.ts"
       ]
     },
     {
@@ -22354,8 +22054,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useTransfer/useTransfer.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useTransfer/useTransfer.ts"
       ]
     },
     {
@@ -22364,8 +22063,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useTransfer/useTransfer.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useTransfer/useTransfer.ts"
       ]
     },
     {
@@ -22378,8 +22076,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/data/DzTable.types.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/data/DzTable.types.ts"
       ]
     },
     {
@@ -22418,8 +22115,7 @@
       ],
       "kind": "type",
       "evidence": [
-        "packages/core/src/components/media/DzWatermark.variants.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/components/media/DzWatermark.variants.ts"
       ]
     },
     {

@@ -109,10 +109,12 @@ describe('buildOwnershipManifest', () => {
       expect(entry.evidence.at(-1)).toMatch(/maintainer decision|could not be read|no story|disagree|ambiguous/i)
   })
 
-  it('reports public-api manifest drift instead of resolving it', () => {
-    // The public-api manifest's per-family `exports` arrays are stale; the
-    // generator must say so and change nothing.
-    expect(warnings.some(w => w.includes('public-api manifest lists it in no section'))).toBe(true)
+  it('finds no public-api manifest drift on the committed tree', () => {
+    // The per-family `exports` arrays used to be stale, and the generator
+    // reported it rather than resolving it. DZUP-UI-PUBLISH-PATH-20260925-R1
+    // documented every root export, so a warning here is new drift: fix the
+    // manifest, not this test.
+    expect(warnings.filter(w => w.includes('public-api manifest lists it in no section'))).toEqual([])
   })
 
   it('serializes as 2-space JSON with a trailing newline', () => {
