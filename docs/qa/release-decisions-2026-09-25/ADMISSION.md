@@ -54,6 +54,17 @@ rollback document that does not exist.
 - `packages/core/src/index.ts` (comments only)
 - `docs/release/rollback.md` (new)
 - `packages/tooling/src/release/report.ts` (rollback + ranked-next-work text)
+- `packages/tooling/src/release/api-diff.ts` — **amendment 1** (below)
+
+### Amendment 1 (same epoch, before landing)
+
+The first full `yarn test` on `179ab2b` failed one spec,
+`release.spec.ts > barrelDrift`: it requires `clean` to equal "no export line
+dropped or added". The code computed byte identity instead. After decision 2 no
+line is dropped or added, but the generator strips the barrel's comments and
+emits an order `perfectionist/sort-exports` rejects, so byte identity cannot be
+reached. `api-diff.ts` now computes `clean` as the spec defines it: export-line
+set equality. The spec is unchanged.
 
 ## Acceptance
 

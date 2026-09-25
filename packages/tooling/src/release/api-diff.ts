@@ -516,7 +516,13 @@ export function reconcileWithManifest(surface: PackageSurface, manifest: Record<
 export interface BarrelDrift {
   package: string
   packageDir: string
-  /** True when `yarn generate:exports` would leave `src/index.ts` byte-identical. */
+  /**
+   * True when `yarn generate:exports` would neither drop nor add an `export`
+   * line. Comments and line order are not API: the hand-kept barrel carries
+   * comments the generator strips, and the generator's key order is one the
+   * `perfectionist/sort-exports` lint rule rejects, so byte identity is
+   * unreachable and was never the release question.
+   */
   clean: boolean
   /** `export` lines the current barrel has and a regenerated one would not. */
   wouldDrop: string[]
@@ -550,7 +556,7 @@ export function barrelDrift(packageDir: string): BarrelDrift {
   return {
     package: rendered.package,
     packageDir,
-    clean: current === rendered.output,
+    clean: [...now].every(line => next.has(line)) && [...next].every(line => now.has(line)),
     wouldDrop: [...now].filter(line => !next.has(line)).sort(),
     wouldAdd: [...next].filter(line => !now.has(line)).sort(),
   }
@@ -715,7 +721,7 @@ export function renderMarkdown(report: DiffReport): string {
     lines.push(`### \`${drift.package}\` (\`${drift.packageDir}/src/index.ts\`) — ${drift.clean ? '**clean**' : '**drifted**'}`)
     lines.push('')
     if (drift.clean) {
-      lines.push('`yarn generate:exports` would leave the barrel byte-identical.')
+      lines.push('`yarn generate:exports` would neither drop nor add an export line (comments and order are not compared).')
     }
     else {
       lines.push(`- **would DROP ${drift.wouldDrop.length} line(s)** — every symbol behind them leaves the public surface (breaking, VERSIONING.md §2.1, requires \`minor\`):`)

@@ -396,7 +396,7 @@ export function renderReport(input: ReportInputs): string {
     L.push('`major` bump *is* the 1.0 release.')
     L.push('')
     for (const drift of apiDiff.barrelDrift ?? []) {
-      L.push(`**\`generate:exports\` drift on \`${drift.package}\`** — ${drift.clean ? 'none: a regenerated barrel would be byte-identical.' : `running the generator would rewrite \`${drift.packageDir}/src/index.ts\`:`}`)
+      L.push(`**\`generate:exports\` drift on \`${drift.package}\`** — ${drift.clean ? 'none: a regenerated barrel would neither drop nor add an export line.' : `running the generator would rewrite \`${drift.packageDir}/src/index.ts\`:`}`)
       L.push('')
       if (drift.clean)
         continue
