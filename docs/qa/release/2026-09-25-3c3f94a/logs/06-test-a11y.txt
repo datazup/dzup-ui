@@ -1,0 +1,389 @@
+
+ RUN  v3.2.6 /data/storage/datazup-runtime/ninel/worktrees/dzup-ui/dzup-ui-release-decisions-20260925
+
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzAvatar > has no a11y violations with alt text 75ms
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzAvatar > has no a11y violations with initials fallback 13ms
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzAvatar > img has alt attribute 2ms
+stderr | packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations with variant="elevated"
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzIcon > has no a11y violations (decorative icon)
+[Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } 
+  at <DzIcon icon= { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations with variant="outlined"
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzIcon > decorative icon has aria-hidden
+[Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } 
+  at <DzIcon icon= { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzIcon > has no a11y violations with aria-label (meaningful icon)
+[Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } 
+  at <DzIcon icon= { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } ariaLabel="Settings" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations with variant="flat"
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzAvatarGroup > has no a11y violations with multiple avatars 18ms
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzImage > has no a11y violations with required alt text 11ms
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzImage > image element has alt attribute 2ms
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzIcon > has no a11y violations (decorative icon) 8ms
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzIcon > decorative icon has aria-hidden 2ms
+ ✓ packages/core/tests/a11y/media.a11y.spec.ts > media family — Accessibility > dzIcon > has no a11y violations with aria-label (meaningful icon) 8ms
+stderr | packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations with header and footer slots
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations with variant="elevated" 80ms
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations with variant="outlined" 10ms
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations with variant="flat" 10ms
+stderr | packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzStatCard > has no a11y violations with label and value
+[Vue warn]: Missing required prop: "title" 
+  at <DzStatCard label="Total Revenue" value="$12,345" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzHeading > has no a11y violations with level=1 74ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzHeading > has no a11y violations with level=2 11ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzHeading > has no a11y violations with level=3 10ms
+stderr | packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzStatCard > has no a11y violations with trend indicator
+[Vue warn]: Missing required prop: "title" 
+  at <DzStatCard label="Monthly Users" value="1,234" trend="up"  ... > 
+  at <VTUROOT>
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > has no a11y violations with variant="solid" 76ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > has no a11y violations with variant="outline" 11ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > has no a11y violations with variant="ghost" 8ms
+stderr | packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzImageCard > has no a11y violations with alt text
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzAlert > has no a11y violations with default tone 74ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzAlert > uses role="alert" for danger tone 3ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzAlert > uses role="alert" for warning tone 2ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzAlert > uses aria-live="polite" for non-urgent tones 2ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzAlert > uses aria-live="polite" for success tone 2ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzAlert > close button has accessible label 4ms
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations with header and footer slots 13ms
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has role="button" and tabindex when clickable 3ms
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzCard > has no a11y violations when clickable with aria-label 9ms
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzStatCard > has no a11y violations with label and value 9ms
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzStatCard > has no a11y violations with trend indicator 12ms
+ ✓ packages/core/tests/a11y/cards.a11y.spec.ts > cards family — Accessibility > dzImageCard > has no a11y violations with alt text 17ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzHeading > has no a11y violations with level=4 10ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzHeading > has no a11y violations with level=5 10ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzHeading > has no a11y violations with level=6 10ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzHeading > renders correct semantic element for each level 10ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzText > has no a11y violations with paragraph text 8ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzText > has no a11y violations when rendered as span 7ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzText > has no a11y violations with muted tone 8ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzCode > has no a11y violations with inline code 11ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzCode > renders as <code> element 2ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzBlockquote > has no a11y violations with blockquote content 7ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzBlockquote > renders as <blockquote> element 1ms
+ ✓ packages/core/tests/a11y/typography.a11y.spec.ts > typography family — Accessibility > dzCaption > has no a11y violations with caption text 6ms
+stderr | packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzSpinner > has no a11y violations
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > has no a11y violations with aria-label
+[Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } 
+  at <DzIconButton icon= { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } ariaLabel="Add item" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > has accessible name from aria-label
+[Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } 
+  at <DzIconButton icon= { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } ariaLabel="Delete item" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzAlert > has no a11y violations when closable 20ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzAlert > has no a11y violations with title 10ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzProgress > has no a11y violations with bar variant 9ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzProgress > has role="progressbar" with correct ARIA value attributes 2ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzProgress > has default aria-label "Progress" 2ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzProgress > supports custom aria-label 1ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzProgress > omits aria-valuenow when indeterminate 1ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzProgress > has no a11y violations with circular variant 10ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzProgress > has no a11y violations when indeterminate 13ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzSpinner > has no a11y violations 10ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzSpinner > has role="status" 1ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzSpinner > has default aria-label "Loading" 1ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzSpinner > supports custom label 1ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzSpinner > has visually hidden text for screen readers 2ms
+ ✓ packages/core/tests/a11y/feedback.a11y.spec.ts > feedback family — Accessibility > dzSpinner > hides decorative SVG from assistive technology 1ms
+stderr | packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > hides the icon from assistive technology
+[Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } 
+  at <DzIconButton icon= { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } ariaLabel="Edit" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > has no a11y violations when disabled
+[Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } 
+  at <DzIconButton icon= { name: [32m'StubIcon'[39m, render: [36m[Function: render][39m } ariaLabel="Disabled action" disabled=true  ... > 
+  at <VTUROOT>
+
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > has no a11y violations with variant="text" 8ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > has no a11y violations with variant="link" 11ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > has no a11y violations when disabled 9ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > has no a11y violations when loading 11ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > has no a11y violations with aria-label 8ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > sets aria-disabled when disabled 6ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > sets aria-busy when loading 3ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > renders with type="button" by default (prevents accidental form submit) 3ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzButton > renders as <a> with role="button" when href is provided 15ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > has no a11y violations with aria-label 10ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > has accessible name from aria-label 4ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > hides the icon from assistive technology 2ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > has no a11y violations when disabled 7ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzIconButton > has no a11y violations when loading 7ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzSplitButton > has no a11y violations when idle 11ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzSplitButton > has no a11y violations when loading 11ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzSplitButton > has no a11y violations when disabled 10ms
+ ✓ packages/core/tests/a11y/buttons.a11y.spec.ts > buttons family — Accessibility > dzSplitButton > keeps both parts named while loading (button-name) 7ms
+stderr | packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzGrid > has no a11y violations with grid layout
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzDivider > has no a11y violations with horizontal orientation 73ms
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzDivider > has no a11y violations with vertical orientation 10ms
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzDivider > has role="separator" by default 2ms
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzDivider > has role="none" when decorative 1ms
+stderr | packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzFlex > has no a11y violations with flex layout
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzStack > has no a11y violations with stack layout
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzContainer > has no a11y violations with content
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzScrollArea > has no a11y violations with scrollable content
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > has no a11y violations with aria-label
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzGrid > has no a11y violations with grid layout 18ms
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzFlex > has no a11y violations with flex layout 9ms
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzStack > has no a11y violations with stack layout 8ms
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzContainer > has no a11y violations with content 9ms
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzCollapse > has no a11y violations when expanded 11ms
+ ✓ packages/core/tests/a11y/layout.a11y.spec.ts > layout family — Accessibility > dzScrollArea > has no a11y violations with scrollable content 23ms
+stderr | packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > has no a11y violations with associated label element
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzFileUpload > has no a11y violations with aria-label
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzSlider > has no a11y violations with aria-label 85ms
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzSlider > has no a11y violations when disabled 12ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > has no a11y violations with aria-label 78ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > has no a11y violations with associated label element 18ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > sets aria-invalid when invalid 2ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > sets aria-required when required 2ms
+stderr | packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzTextarea > has no a11y violations with aria-label
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+
+stderr | packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzCombobox > has no a11y violations with aria-label
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+
+stderr | packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDialog > has no a11y violations with trigger (closed state)
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzMultiSelect > has no a11y violations with aria-label
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+
+stderr | packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzFormField > has no a11y violations with label and input
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > associates error message via aria-describedby 2ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > has no a11y violations when disabled 8ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzInput > clear button has accessible label 3ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzTextarea > has no a11y violations with aria-label 9ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzTextarea > sets aria-invalid and aria-required correctly 2ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzTextarea > associates error message via aria-describedby 1ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzCheckbox > has no a11y violations with label text 18ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzCheckbox > has no a11y violations with slot label 14ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzCheckbox > has no a11y violations when disabled 8ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzRadio > has no a11y violations within a RadioGroup 23ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzSwitch > has no a11y violations with aria-label 10ms
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzFileUpload > has no a11y violations with aria-label 22ms
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzFileUpload > has no a11y violations when disabled 11ms
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzCombobox > has no a11y violations with aria-label 33ms
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzCombobox > has no a11y violations when disabled 15ms
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzMultiSelect > has no a11y violations with aria-label 14ms
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzMultiSelect > has no a11y violations when disabled 12ms
+ ✓ packages/core/tests/a11y/forms.a11y.spec.ts > forms family — Accessibility > dzFormField > has no a11y violations with label and input 14ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDialog > has no a11y violations with trigger (closed state) 85ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzTabs > has no a11y violations with tab list and panels 108ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzTabs > tab list has role="tablist" 9ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzTabs > tab triggers have role="tab" 9ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzTabs > active tab has aria-selected="true" 9ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzTabs > tab panels have role="tabpanel" 7ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzTabs > disabled tab trigger has data-disabled 10ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzTabs > has no a11y violations with vertical orientation 25ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzTabs > closable tab has close button with accessible label 7ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzMenu > has no a11y violations with aria-label 13ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzMenu > renders a nav element with role="navigation" 2ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzMenu > has accessible label on the nav element 1ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzMenu > active item has aria-current="page" 2ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzMenu > disabled item has disabled attribute 2ms
+stderr | packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzSheet > has no a11y violations with trigger (closed state)
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzSwitch > has no a11y violations with slot label 9ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzSwitch > has no a11y violations when disabled 8ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzSelect > has no a11y violations with aria-label 34ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzSelect > trigger has accessible name 10ms
+ ✓ packages/core/tests/a11y/inputs.a11y.spec.ts > inputs family — Accessibility > dzSelect > has no a11y violations when disabled 21ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzAccordion > has no a11y violations with single type 107ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzAccordion > has no a11y violations with multiple type 23ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTable > has no a11y violations with basic table structure 31ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzList > has no a11y violations with list items 14ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzChip > has no a11y violations with default chip 12ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzChip > has no a11y violations with closable chip 11ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzChip > has no a11y violations when disabled 8ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDialog > has no a11y violations in open state 51ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDialog > renders dialog content with role="dialog" 13ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDialog > has no a11y violations with modal dialog 26ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDialog > close button has accessible label 10ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzSheet > has no a11y violations with trigger (closed state) 11ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzSheet > has no a11y violations in open state 20ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzSheet > renders as dialog when open 8ms
+stderr | packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzPopover > has no a11y violations with trigger (closed state)
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTag > has no a11y violations with tone="neutral" 7ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTag > has no a11y violations with tone="primary" 6ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTag > has no a11y violations with tone="success" 6ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTag > has no a11y violations with tone="warning" 7ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTag > has no a11y violations with tone="danger" 7ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTag > has no a11y violations with tone="info" 7ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTag > has no a11y violations with closable tag 8ms
+ ✓ packages/core/tests/a11y/data.a11y.spec.ts > data family — Accessibility > dzTimeline > has no a11y violations with timeline items 12ms
+stderr | packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzPopover > has no a11y violations when open
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzTooltip > has no a11y violations with trigger (closed state)
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzMenu > has no a11y violations with link items 12ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzMenu > has no a11y violations when collapsed 8ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzBreadcrumb > has no a11y violations 14ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzBreadcrumb > renders a nav landmark with aria-label 2ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzBreadcrumb > renders an ordered list for semantic structure 2ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzBreadcrumb > current page has aria-current="page" 2ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzBreadcrumb > separator is hidden from assistive technology 1ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzBreadcrumb > supports custom aria-label on nav 1ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > has no a11y violations 20ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > renders a nav element with aria-label 4ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > supports custom aria-label 4ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > previous button has accessible label 4ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > next button has accessible label 2ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > current page has aria-current="page" 2ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > has no a11y violations with showEdges 19ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > first/last buttons have accessible labels when showEdges 4ms
+stderr | packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > has no a11y violations
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzTooltip > has no a11y violations when open
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+stderr | packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > has no a11y violations with vertical orientation
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzPagination > has no a11y violations when disabled 10ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > has no a11y violations 14ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > renders with role="group" 2ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > has default aria-label "Progress steps" 1ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > supports custom aria-label 1ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > active step has aria-current="step" 3ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > completed step indicator has aria-hidden on check SVG 4ms
+ ✓ packages/core/tests/a11y/navigation.a11y.spec.ts > navigation family — Accessibility > dzStepper > has no a11y violations with vertical orientation 10ms
+stderr | packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDropdownMenu > has no a11y violations with trigger (closed state)
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzSheet > close button has screen reader text 9ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzPopover > has no a11y violations with trigger (closed state) 14ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzPopover > has no a11y violations when open 29ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzPopover > trigger has aria-expanded attribute 3ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzTooltip > has no a11y violations with trigger (closed state) 9ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzTooltip > has no a11y violations when open 27ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzTooltip > tooltip content has role="tooltip" when visible 8ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDropdownMenu > has no a11y violations with trigger (closed state) 9ms
+stderr | packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzContextMenu > has no a11y violations with trigger area
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDropdownMenu > has no a11y violations when open 25ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDropdownMenu > trigger has aria-haspopup attribute 3ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDropdownMenu > menu items have role="menuitem" when open 9ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzDropdownMenu > disabled menu item has data-disabled attribute 8ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzContextMenu > has no a11y violations with trigger area 8ms
+ ✓ packages/core/tests/a11y/overlays.a11y.spec.ts > overlays family — Accessibility > dzContextMenu > trigger area has data-state attribute 3ms
+
+ Test Files  11 passed (11)
+      Tests  188 passed (188)
+   Start at  08:42:46
+   Duration  1.85s (transform 2.30s, setup 833ms, collect 7.66s, tests 2.57s, environment 3.14s, prepare 545ms)
+

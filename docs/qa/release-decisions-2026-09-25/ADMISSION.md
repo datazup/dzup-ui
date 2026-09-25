@@ -66,6 +66,14 @@ emits an order `perfectionist/sort-exports` rejects, so byte identity cannot be
 reached. `api-diff.ts` now computes `clean` as the spec defines it: export-line
 set equality. The spec is unchanged.
 
+### Amendment 2 (after landing 3c3f94a)
+
+The release-bundle recut is part of this packet, as the operator's approval
+said ("then recut the report"). Allowed path:
+`docs/qa/release/2026-09-25-3c3f94a/`. It is produced by `bash scripts/release-rehearsal.sh --skip-install`
+on the landed commit `3c3f94a` and committed on top of it. The bundle names the
+commit it measured, not the commit that carries it.
+
 ## Acceptance
 
 1. `yarn typecheck:all`, `yarn lint`, `yarn test` exit 0 on the candidate.

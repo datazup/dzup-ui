@@ -1,0 +1,1419 @@
+{
+  "provenance": {
+    "sourceCommit": "3c3f94a836f9a1fbbbc8da16a10e9e4fcd40c477",
+    "branch": "chore/release-decisions-20260925",
+    "worktreeDirty": false,
+    "dirtyCount": 0,
+    "admissible": true,
+    "inadmissibleReason": null,
+    "generatedAt": "2026-09-25T06:44:38.841Z",
+    "generator": "release:evidence"
+  },
+  "toolchain": {
+    "node": "v24.20.0",
+    "yarn": "4.16.0",
+    "os": "linux x64"
+  },
+  "packages": [
+    {
+      "package": "@dzup-ui/contracts",
+      "version": "0.1.0",
+      "artifact": {
+        "file": "dzup-ui-contracts-0.1.0.tgz",
+        "bytes": 63231,
+        "sha256": "57cae4de32a72875f02aa8d032bef4b0dbfe5c002cb74c1e2b354625b5f99767",
+        "sha512": "iIP6FuLGKA30g1HP3kUbE3RmYHaMpMjKZk96JMB5a5n60hpl5SZZ5D3UuPTIFgnqj924LTVpav6YTELkKyQS1w=="
+      },
+      "entries": 50,
+      "closureSize": 0,
+      "unresolvedProtocols": [],
+      "peers": [
+        {
+          "name": "vue",
+          "range": "^3.5.0",
+          "optional": false,
+          "observedVersion": "3.5.31",
+          "installed": true,
+          "licence": "MIT"
+        }
+      ],
+      "licences": [
+        {
+          "package": "vue",
+          "version": "3.5.31",
+          "licence": "MIT",
+          "shipsLicenceText": false,
+          "relationship": "required-peer",
+          "verdict": "allowed"
+        }
+      ],
+      "advisories": {
+        "source": "https://registry.npmjs.org/-/npm/v1/security/advisories/bulk",
+        "advisories": {},
+        "packagesQueried": 0,
+        "queriedAt": null,
+        "status": "not-run",
+        "reason": "the package declares no runtime dependencies — there is nothing to query, which is not the same as a clean audit"
+      },
+      "advisoryRows": []
+    },
+    {
+      "package": "@dzup-ui/core",
+      "version": "0.2.0",
+      "artifact": {
+        "file": "dzup-ui-core-0.2.0.tgz",
+        "bytes": 740945,
+        "sha256": "217a51a52dde641ab0e454fca66ef6ab69984bb55ae713cb756fe78a538d0a6e",
+        "sha512": "z9l+RgPOp5AX9iQmHBLoXjj0LH+k5pQANkS6By/TAcPWwzFu737Qul5Wg6+9qQ+JllEF8jd+E2Ibx5VyvAOpjw=="
+      },
+      "entries": 1461,
+      "closureSize": 15,
+      "unresolvedProtocols": [],
+      "peers": [
+        {
+          "name": "reka-ui",
+          "range": "^2.0.0",
+          "optional": false,
+          "observedVersion": "2.9.2",
+          "installed": true,
+          "licence": "MIT"
+        },
+        {
+          "name": "vue",
+          "range": "^3.5.0",
+          "optional": false,
+          "observedVersion": "3.5.31",
+          "installed": true,
+          "licence": "MIT"
+        }
+      ],
+      "licences": [
+        {
+          "package": "@dzup-ui/contracts",
+          "version": "0.1.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "first-party"
+        },
+        {
+          "package": "@dzup-ui/tokens",
+          "version": "0.2.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "first-party"
+        },
+        {
+          "package": "@floating-ui/core",
+          "version": "1.7.5",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "@floating-ui/dom",
+          "version": "1.7.6",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "@floating-ui/utils",
+          "version": "0.2.11",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "@floating-ui/vue",
+          "version": "1.1.11",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "@internationalized/date",
+          "version": "3.12.0",
+          "licence": "Apache-2.0",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "@swc/helpers",
+          "version": "0.5.20",
+          "licence": "Apache-2.0",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "clsx",
+          "version": "2.1.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "lucide-vue-next",
+          "version": "0.477.0",
+          "licence": "ISC",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "qrcode-generator",
+          "version": "2.0.4",
+          "licence": "MIT",
+          "shipsLicenceText": false,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "tailwind-merge",
+          "version": "3.6.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "tailwind-variants",
+          "version": "0.3.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "tslib",
+          "version": "2.8.1",
+          "licence": "0BSD",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "vue-demi",
+          "version": "0.14.10",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "reka-ui",
+          "version": "2.9.2",
+          "licence": "MIT",
+          "shipsLicenceText": false,
+          "relationship": "required-peer",
+          "verdict": "allowed"
+        },
+        {
+          "package": "vue",
+          "version": "3.5.31",
+          "licence": "MIT",
+          "shipsLicenceText": false,
+          "relationship": "required-peer",
+          "verdict": "allowed"
+        }
+      ],
+      "advisories": {
+        "source": "https://registry.npmjs.org/-/npm/v1/security/advisories/bulk",
+        "advisories": {},
+        "packagesQueried": 15,
+        "queriedAt": "2026-09-25T06:44:38.226Z",
+        "status": "ok"
+      },
+      "advisoryRows": []
+    },
+    {
+      "package": "@dzup-ui/mcp",
+      "version": "0.2.0",
+      "artifact": {
+        "file": "dzup-ui-mcp-0.2.0.tgz",
+        "bytes": 37028,
+        "sha256": "1ebfcd0418344c2e099ddf243bf6e9456a9654f5e0cde2dde08bc84aacc7b6ec",
+        "sha512": "kZ8dzX443sdUAjKB2Hxmf1ckLicak3DyxGWQRm/0AuPQBnieqggJRcTFg0mMRcx4gURdRKlN4J0UAm0sLK7s2w=="
+      },
+      "entries": 17,
+      "closureSize": 94,
+      "unresolvedProtocols": [],
+      "peers": [],
+      "licences": [
+        {
+          "package": "@hono/node-server",
+          "version": "1.19.17",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "@modelcontextprotocol/sdk",
+          "version": "1.29.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "accepts",
+          "version": "2.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ajv",
+          "version": "8.20.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ajv-formats",
+          "version": "3.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "async-function",
+          "version": "1.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "async-generator-function",
+          "version": "1.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "body-parser",
+          "version": "2.3.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "bytes",
+          "version": "3.1.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "call-bind-apply-helpers",
+          "version": "1.0.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "call-bound",
+          "version": "1.0.4",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "content-disposition",
+          "version": "1.1.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "content-type",
+          "version": "1.0.5",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "cookie",
+          "version": "0.7.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "cookie-signature",
+          "version": "1.2.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "cors",
+          "version": "2.8.6",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "cross-spawn",
+          "version": "7.0.6",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "debug",
+          "version": "4.4.3",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "depd",
+          "version": "2.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "dunder-proto",
+          "version": "1.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ee-first",
+          "version": "1.1.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "encodeurl",
+          "version": "2.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "es-define-property",
+          "version": "1.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "es-errors",
+          "version": "1.3.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "es-object-atoms",
+          "version": "1.1.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "escape-html",
+          "version": "1.0.3",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "etag",
+          "version": "1.8.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "eventsource",
+          "version": "3.0.7",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "eventsource-parser",
+          "version": "3.1.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "express",
+          "version": "5.2.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "express-rate-limit",
+          "version": "8.5.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "fast-deep-equal",
+          "version": "3.1.3",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "fast-uri",
+          "version": "3.1.8",
+          "licence": "BSD-3-Clause",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "finalhandler",
+          "version": "2.1.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "forwarded",
+          "version": "0.2.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "fresh",
+          "version": "2.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "function-bind",
+          "version": "1.1.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "generator-function",
+          "version": "2.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "get-intrinsic",
+          "version": "1.3.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "get-proto",
+          "version": "1.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "gopd",
+          "version": "1.2.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "has-symbols",
+          "version": "1.1.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "hasown",
+          "version": "2.0.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "hono",
+          "version": "4.13.9",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "http-errors",
+          "version": "2.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "iconv-lite",
+          "version": "0.7.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "inherits",
+          "version": "2.0.4",
+          "licence": "ISC",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ip-address",
+          "version": "10.7.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ipaddr.js",
+          "version": "1.9.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "is-promise",
+          "version": "4.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "isexe",
+          "version": "2.0.0",
+          "licence": "ISC",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "jose",
+          "version": "6.2.3",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "json-schema-traverse",
+          "version": "1.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "json-schema-typed",
+          "version": "8.0.2",
+          "licence": "BSD-2-Clause",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "math-intrinsics",
+          "version": "1.1.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "media-typer",
+          "version": "1.1.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "merge-descriptors",
+          "version": "2.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "mime-db",
+          "version": "1.54.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "mime-types",
+          "version": "3.0.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ms",
+          "version": "2.1.3",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "negotiator",
+          "version": "1.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "object-assign",
+          "version": "4.1.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "object-inspect",
+          "version": "1.13.4",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "on-finished",
+          "version": "2.4.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "once",
+          "version": "1.4.0",
+          "licence": "ISC",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "parseurl",
+          "version": "1.3.3",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "path-key",
+          "version": "3.1.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "path-to-regexp",
+          "version": "8.4.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "pkce-challenge",
+          "version": "5.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "proxy-addr",
+          "version": "2.0.7",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "qs",
+          "version": "6.16.0",
+          "licence": "BSD-3-Clause",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "range-parser",
+          "version": "1.3.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "raw-body",
+          "version": "3.0.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "require-from-string",
+          "version": "2.0.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "router",
+          "version": "2.2.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "safer-buffer",
+          "version": "2.1.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "send",
+          "version": "1.2.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "serve-static",
+          "version": "2.2.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "setprototypeof",
+          "version": "1.2.0",
+          "licence": "ISC",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "shebang-command",
+          "version": "2.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "shebang-regex",
+          "version": "3.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "side-channel",
+          "version": "1.1.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "side-channel-list",
+          "version": "1.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "side-channel-map",
+          "version": "1.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "side-channel-weakmap",
+          "version": "1.0.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "statuses",
+          "version": "2.0.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "toidentifier",
+          "version": "1.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "type-is",
+          "version": "2.1.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "unpipe",
+          "version": "1.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "vary",
+          "version": "1.1.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "which",
+          "version": "2.0.2",
+          "licence": "ISC",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "wrappy",
+          "version": "1.0.2",
+          "licence": "ISC",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "zod",
+          "version": "3.25.76",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "zod-to-json-schema",
+          "version": "3.25.2",
+          "licence": "ISC",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        }
+      ],
+      "advisories": {
+        "source": "https://registry.npmjs.org/-/npm/v1/security/advisories/bulk",
+        "advisories": {},
+        "packagesQueried": 94,
+        "queriedAt": "2026-09-25T06:44:38.527Z",
+        "status": "ok"
+      },
+      "advisoryRows": []
+    },
+    {
+      "package": "@dzup-ui/nuxt",
+      "version": "0.1.0-alpha.0",
+      "artifact": {
+        "file": "dzup-ui-nuxt-0.1.0-alpha.0.tgz",
+        "bytes": 8585,
+        "sha256": "ddaaf61719a1cd53e2adc4711c5b905f2474230499f4a1ed0a2ae187ad7e9a85",
+        "sha512": "57Jho/vbwk5rvIXBJdh5ksA7Rz9OG6cWVuGLk17ANoeBDARTY2J6CfHlG2mOOOSgk8Io6ghMpKjMvWLcDq5H4g=="
+      },
+      "entries": 7,
+      "closureSize": 33,
+      "unresolvedProtocols": [],
+      "peers": [
+        {
+          "name": "@dzup-ui/core",
+          "range": ">=0.1.0-alpha.0",
+          "optional": false,
+          "observedVersion": "0.2.0",
+          "installed": true,
+          "licence": "MIT"
+        },
+        {
+          "name": "@dzup-ui/tokens",
+          "range": ">=0.1.0-alpha.0",
+          "optional": false,
+          "observedVersion": "0.2.0",
+          "installed": true,
+          "licence": "MIT"
+        },
+        {
+          "name": "nuxt",
+          "range": ">=3.0.0",
+          "optional": false,
+          "observedVersion": "4.4.5",
+          "installed": true,
+          "licence": "MIT"
+        }
+      ],
+      "licences": [
+        {
+          "package": "@nuxt/kit",
+          "version": "4.5.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "acorn",
+          "version": "8.16.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "c12",
+          "version": "3.3.4",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "chokidar",
+          "version": "5.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "citty",
+          "version": "0.1.6",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "confbox",
+          "version": "0.2.4",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "consola",
+          "version": "3.4.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "defu",
+          "version": "6.1.7",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "destr",
+          "version": "2.0.5",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "dotenv",
+          "version": "17.4.0",
+          "licence": "BSD-2-Clause",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "errx",
+          "version": "0.1.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "exsolve",
+          "version": "1.1.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "fdir",
+          "version": "6.5.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "giget",
+          "version": "3.2.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ignore",
+          "version": "7.0.8",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "jiti",
+          "version": "2.7.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "klona",
+          "version": "2.0.6",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "knitwork",
+          "version": "1.3.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "mlly",
+          "version": "1.8.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "nostics",
+          "version": "1.2.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ohash",
+          "version": "2.0.11",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "pathe",
+          "version": "2.0.3",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "perfect-debounce",
+          "version": "2.1.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "picomatch",
+          "version": "4.0.4",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "pkg-types",
+          "version": "2.3.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "rc9",
+          "version": "3.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "readdirp",
+          "version": "5.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "scule",
+          "version": "1.3.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "tinyglobby",
+          "version": "0.2.17",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "ufo",
+          "version": "1.6.4",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "unctx",
+          "version": "3.0.1",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "untyped",
+          "version": "2.0.0",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "verkit",
+          "version": "0.3.2",
+          "licence": "MIT",
+          "shipsLicenceText": true,
+          "relationship": "bundled-dependency",
+          "verdict": "allowed"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "version": "0.2.0",
+          "licence": "MIT",
+          "shipsLicenceText": false,
+          "relationship": "required-peer",
+          "verdict": "first-party"
+        },
+        {
+          "package": "@dzup-ui/tokens",
+          "version": "0.2.0",
+          "licence": "MIT",
+          "shipsLicenceText": false,
+          "relationship": "required-peer",
+          "verdict": "first-party"
+        },
+        {
+          "package": "nuxt",
+          "version": "4.4.5",
+          "licence": "MIT",
+          "shipsLicenceText": false,
+          "relationship": "required-peer",
+          "verdict": "allowed"
+        }
+      ],
+      "advisories": {
+        "source": "https://registry.npmjs.org/-/npm/v1/security/advisories/bulk",
+        "advisories": {},
+        "packagesQueried": 33,
+        "queriedAt": "2026-09-25T06:44:38.838Z",
+        "status": "ok"
+      },
+      "advisoryRows": []
+    },
+    {
+      "package": "@dzup-ui/testing",
+      "version": "0.1.0",
+      "artifact": {
+        "file": "dzup-ui-testing-0.1.0.tgz",
+        "bytes": 58389,
+        "sha256": "b03144b88b77e502b00e62332affc4fdb6222013035a516778125e3e18aa2303",
+        "sha512": "2I7sVvesZnuCPH61OD2Op+msxvYOqq2iISVxwXWt+QNtDP45kiGHCqbJQLOQDggvJ0q9wzn6Fz01E6cqWL8cFg=="
+      },
+      "entries": 34,
+      "closureSize": 0,
+      "unresolvedProtocols": [],
+      "peers": [],
+      "licences": [],
+      "advisories": {
+        "source": "https://registry.npmjs.org/-/npm/v1/security/advisories/bulk",
+        "advisories": {},
+        "packagesQueried": 0,
+        "queriedAt": null,
+        "status": "not-run",
+        "reason": "the package declares no runtime dependencies — there is nothing to query, which is not the same as a clean audit"
+      },
+      "advisoryRows": []
+    },
+    {
+      "package": "@dzup-ui/tokens",
+      "version": "0.2.0",
+      "artifact": {
+        "file": "dzup-ui-tokens-0.2.0.tgz",
+        "bytes": 53620,
+        "sha256": "fd056a74632175f36b0c7e80d89b1e7084c6c5a6753e606e9823beee7805fe2f",
+        "sha512": "5s4RbLzSQv4VVfWDoTeS1NRDQtb0k7nhNBsxmj6eQg4+gCPdWaGEGbdpQhPy5sM9XUwOGLJZjXjRawxc1Vjg8g=="
+      },
+      "entries": 17,
+      "closureSize": 0,
+      "unresolvedProtocols": [],
+      "peers": [],
+      "licences": [],
+      "advisories": {
+        "source": "https://registry.npmjs.org/-/npm/v1/security/advisories/bulk",
+        "advisories": {},
+        "packagesQueried": 0,
+        "queriedAt": null,
+        "status": "not-run",
+        "reason": "the package declares no runtime dependencies — there is nothing to query, which is not the same as a clean audit"
+      },
+      "advisoryRows": []
+    }
+  ],
+  "withheld": [
+    {
+      "name": "@dzup-ui/compat",
+      "reason": "Public and publishable (0.1.0-alpha.0, `publishConfig.access: public`, included in ci.yml's pack smoke test) but on the changesets `ignore` list, so no changeset can ever release it. VERSIONING.md 5 treats compat as migration tooling with no stable API of its own, which is a reason to withhold it, not a reason it cannot be released. Owner decision N5-01-D2."
+    },
+    {
+      "name": "@dzup-ui/codemods",
+      "reason": "Same as compat. The cost is measurable: .changeset/pro-package-is-named-dzup-ui-pro-pro.md describes a behaviour change to `@dzup-ui/codemods`' `rename-imports` in its body and cannot name it in its frontmatter, because a changeset naming an ignored package alongside a published one is refused outright (the SK-1 failure). The change ships with no changelog entry. Owner decision N5-01-D2."
+    }
+  ],
+  "totals": {
+    "tarballs": 6,
+    "distinctDependencies": 143,
+    "blocked": 0,
+    "unknown": 0,
+    "excepted": 0,
+    "advisoriesTotal": 0,
+    "advisoryStatus": "mixed",
+    "unresolvedProtocols": 0
+  }
+}
