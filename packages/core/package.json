@@ -4,6 +4,11 @@
   "version": "0.2.0",
   "description": "Core foundational components for dzup-ui",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datazup/dzup-ui.git",
+    "directory": "packages/core"
+  },
   "browserslist": [
     "chrome >= 111",
     "edge >= 111",

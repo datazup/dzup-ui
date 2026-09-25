@@ -37,14 +37,9 @@
   ],
   "$private": "package.json carries `private: true`. npm can never see these. `.changeset/config.json` sets `privatePackages: { version: false }` so they cannot enter a release plan at all; before TASK-N5-01 it did not, and `@dzup-ui/landing` was in the standing plan for a patch bump it can never publish.",
 
-  "changelogCoverageExempt": [
-    {
-      "name": "@dzup-ui/mcp",
-      "reason": "packages/tooling/scripts/validate-changelog.ts hand-lists 7 packages and `@dzup-ui/mcp` is not among them, so its CHANGELOG.md has never been checked. It cannot simply be added: mcp's changelog is in the format Changesets emits (`## 0.2.0`, no date) and validate:changelog requires an ISO date on every version heading, while packages/tooling/src/validators/mcp-surface.ts requires the OPPOSITE -- its `latestChangelogVersion` regex is anchored so a heading with a date parses as null. The two gates enforce mutually exclusive formats and mcp is the package that proves it. Resolving this is owner decision N5-01-D1 (changelog system of record)."
-    }
-  ],
+  "changelogCoverageExempt": [],
   "$changelogCoverageExempt": "Published packages that validate:changelog does not cover, each with the reason it is not simply added. The list may only shrink.",
 
-  "changelogFormatCollisionCeiling": 1,
-  "$changelogFormatCollisionCeiling": "How many PUBLISHED packages carry a newest CHANGELOG heading that `validate:changelog` would reject (a `## x.y.z` with no ISO date -- exactly what `changeset version` writes). Today: 1 (@dzup-ui/mcp). This is a RATCHET on a known, unresolved defect, not a pass: the first real `changeset version` run rewrites every bumped package's changelog into that shape and turns this number into the count of packages the release just bumped. The ceiling exists so the defect cannot spread quietly before N5-01-D1 is decided; it is not evidence the release path is safe."
+  "changelogFormatCollisionCeiling": 0,
+  "$changelogFormatCollisionCeiling": "How many PUBLISHED packages carry a newest CHANGELOG heading that `validate:changelog` would reject. It was 1 (@dzup-ui/mcp) while that gate demanded an ISO date that `changeset version` never writes. Owner decision N5-01-D1 (2026-09-25; docs/qa/release-decisions-2026-09-25/ADMISSION.md) made the gate follow the tool -- a date is optional, and one that is written must be ISO -- so the ceiling is 0 and @dzup-ui/mcp's coverage exemption is gone."
 }

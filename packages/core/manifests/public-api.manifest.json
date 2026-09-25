@@ -238,6 +238,25 @@
           "useDzSanitizer"
         ]
       },
+      "useAffix": {
+        "path": "./src/composables/useAffix/index.ts",
+        "exports": [
+          "useAffix",
+          "UseAffixOptions",
+          "UseAffixReturn"
+        ]
+      },
+      "useCalendar": {
+        "path": "./src/composables/useCalendar/index.ts",
+        "exports": [
+          "useCalendar",
+          "CalendarDay",
+          "CalendarView",
+          "UseCalendarOptions",
+          "UseCalendarReturn",
+          "WeekdayIndex"
+        ]
+      },
       "useClickOutside": {
         "path": "./src/composables/useClickOutside/index.ts",
         "exports": [
@@ -248,14 +267,6 @@
         "path": "./src/composables/useCollapse/index.ts",
         "exports": [
           "useCollapse"
-        ]
-      },
-      "useCountdown": {
-        "path": "./src/composables/useCountdown/index.ts",
-        "exports": [
-          "useCountdown",
-          "formatRemaining",
-          "toRemainingParts"
         ]
       },
       "useDataGrid": {
@@ -308,12 +319,29 @@
           "DZ_FORM_FIELD_KEY"
         ]
       },
-      "useIntersection": {
-        "path": "./src/composables/useIntersection/index.ts",
+      "useInfiniteScroll": {
+        "path": "./src/composables/useInfiniteScroll/index.ts",
         "exports": [
-          "useIntersection",
-          "UseIntersectionOptions",
-          "UseIntersectionReturn"
+          "useInfiniteScroll",
+          "InfiniteScrollDirection",
+          "UseInfiniteScrollOptions",
+          "UseInfiniteScrollReturn"
+        ]
+      },
+      "useScrollSpy": {
+        "path": "./src/composables/useScrollSpy/index.ts",
+        "exports": [
+          "useScrollSpy",
+          "UseScrollSpyOptions",
+          "UseScrollSpyReturn"
+        ]
+      },
+      "useScrollToTop": {
+        "path": "./src/composables/useScrollToTop/index.ts",
+        "exports": [
+          "useScrollToTop",
+          "UseScrollToTopOptions",
+          "UseScrollToTopReturn"
         ]
       },
       "useSelect": {

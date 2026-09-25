@@ -4,6 +4,11 @@
   "version": "0.1.0",
   "description": "Canonical public API contracts for dzup-ui components",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datazup/dzup-ui.git",
+    "directory": "packages/contracts"
+  },
   "browserslist": [
     "chrome >= 111",
     "edge >= 111",

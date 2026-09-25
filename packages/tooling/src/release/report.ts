@@ -49,6 +49,9 @@ import { bundleId, contentDigest, gitState, provenanceOf, ROOT } from './binding
 import { licenceExceptions } from './evidence.ts'
 import { releasePolicy } from './pack.ts'
 
+/** Owner decision 2026-09-25; section 8 quotes it only when the file exists. */
+const ROLLBACK_POLICY = 'docs/release/rollback.md'
+
 export const EVIDENCE_DIR = resolve(ROOT, 'docs/qa/release')
 
 /** One gate the rehearsal ran, as `results.jsonl` records it. */
@@ -498,13 +501,17 @@ export function renderReport(input: ReportInputs): string {
   L.push('')
   L.push('### Rollback')
   L.push('')
-  L.push('**There is no rollback policy document in this repository.** Pro has')
-  L.push('`docs/release/rollback-and-support.md`; OSS has nothing equivalent, and nothing')
-  L.push('has ever been published, so there is also nothing to roll back *from*. The')
-  L.push('mechanism that would be used — `npm deprecate` plus a superseding patch, since')
-  L.push('unpublish is only available for 72 h — is stated here and nowhere else, which is')
-  L.push('itself the gap. Writing that policy is a prerequisite of the first publication')
-  L.push('and is routed to **TASK-R0-O1**.')
+  const rollbackPolicy = existsSync(resolve(ROOT, ROLLBACK_POLICY))
+  if (rollbackPolicy) {
+    L.push(`Policy: [\`${ROLLBACK_POLICY}\`](../../../release/rollback.md) — fix forward with`)
+    L.push('`npm deprecate` plus a superseding patch, move `latest` back with `npm dist-tag`')
+    L.push('if needed, unpublish only for a leaked secret inside npm\'s 72 h window. The')
+    L.push('`@dzup-ui` npm-scope owner acts.')
+  }
+  else {
+    L.push(`**There is no rollback policy document** (\`${ROLLBACK_POLICY}\` is absent).`)
+    L.push('Writing one is a prerequisite of the first publication (TASK-R0-O1).')
+  }
   L.push('')
   L.push('### Changesets standing in the plan')
   L.push('')
@@ -522,16 +529,24 @@ export function renderReport(input: ReportInputs): string {
   L.push('')
   L.push('### Ranked next work')
   L.push('')
-  L.push('1. **Commit the tree and re-run this bundle.** Every artifact here is stamped')
-  L.push('   `admissible: false`; one clean commit turns the whole bundle into evidence and')
-  L.push('   lets `release:api-surface:record` write the first real baseline.')
-  L.push('2. **TASK-R0-O1** — the publish-or-freeze packet. The `generate:exports` drift in')
-  L.push('   section 5 and the changeset table above are its two missing inputs.')
-  L.push('3. **TASK-R1-O4** — CI dispatch. Nothing in section 3 has ever run on CI, and')
-  L.push('   section 7 has no provenance because no workflow has ever published.')
-  L.push('4. **A rollback and support policy** for OSS, as section 8 requires.')
-  L.push('5. **TASK-R2-O2** — the AT matrix: section 4 records the executed count, and it is')
-  L.push('   the lane with the least evidence per unit of claim.')
+  // Each item is conditional on the fact it rests on, so a recut on a later
+  // commit cannot repeat advice the repository has already acted on.
+  const next: string[] = []
+  if (!binding.admissible) {
+    next.push('**Commit the tree and re-run this bundle.** Every artifact here is stamped\n'
+      + '   `admissible: false`; one clean commit turns the whole bundle into evidence and\n'
+      + '   lets `release:api-surface:record` write the first real baseline.')
+  }
+  if (stops.some(stop => stop.code !== 'dirty-source')) {
+    next.push('**Clear the stop conditions above** before publishing (TASK-R0-O1).')
+  }
+  if (!rollbackPolicy)
+    next.push(`**A rollback policy** at \`${ROLLBACK_POLICY}\`, as section 8 requires.`)
+  next.push('**TASK-R0-O1** — the publish-or-freeze decision: the operator merges the release\n'
+    + '   PR, or holds it. Nothing in this bundle publishes.')
+  next.push('**TASK-R2-O2** — the AT matrix: section 4 records the executed count, and it is\n'
+    + '   the lane with the least evidence per unit of claim.')
+  next.forEach((item, i) => L.push(`${i + 1}. ${item}`))
   L.push('')
   L.push('---')
   L.push('')

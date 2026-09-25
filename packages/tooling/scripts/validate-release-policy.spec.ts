@@ -52,11 +52,14 @@ describe('isZeroVersion', () => {
 })
 
 describe('changelogHeadingWouldPass', () => {
-  it('rejects the heading `changeset version` actually writes', () => {
-    // This is the finding, not a hypothetical: packages/mcp/CHANGELOG.md is in
-    // this shape today and passes CI only because validate:changelog does not
-    // list the package.
-    expect(changelogHeadingWouldPass('# @dzup-ui/mcp\n\n## 0.2.0\n')).toBe(false)
+  it('accepts the heading `changeset version` actually writes (N5-01-D1)', () => {
+    // Before the decision this was the collision: the gate demanded a date the
+    // release tool never writes.
+    expect(changelogHeadingWouldPass('# @dzup-ui/mcp\n\n## 0.2.0\n')).toBe(true)
+  })
+
+  it('rejects a date that is written but is not ISO', () => {
+    expect(changelogHeadingWouldPass('# @dzup-ui/core\n\n## 0.2.0 (10/08/2026)\n')).toBe(false)
   })
 
   it('accepts the hand-dated heading the other seven packages carry', () => {
@@ -73,8 +76,8 @@ describe('changelogCoveredPackages', () => {
     const source = readFileSync(resolve(ROOT, 'packages/tooling/scripts/validate-changelog.ts'), 'utf8')
     const covered = changelogCoveredPackages(source)
     expect(covered).toContain('@dzup-ui/core')
-    // The omission the exemption ledger records.
-    expect(covered).not.toContain('@dzup-ui/mcp')
+    // Coverable since N5-01-D1; its exemption is gone.
+    expect(covered).toContain('@dzup-ui/mcp')
   })
 })
 

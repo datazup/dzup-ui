@@ -45,23 +45,21 @@ export * from './components/typography/index.ts'
 
 // Provider composables (TASK-OSS-P4-01, ADR-20).
 //
-// Added BY HAND, not by `yarn generate:exports`. That generator rewrites this
-// whole barrel from public-api.manifest.json, and the two have drifted: a
-// regeneration today would DROP useAffix, useCalendar, useInfiniteScroll,
-// useScrollSpy and useScrollToTop from the public API and ADD useCountdown and
-// useIntersection to it. That drift is a recorded owner decision (TASK-OSS-P0-01
-// finding 2) and resolving it is an API change, not a side effect of adding a
-// composable. The manifest carries the `provider` entry too, so whenever the
-// drift IS resolved, a regeneration keeps this line.
+// This barrel is maintained BY HAND and carries comments `yarn generate:exports`
+// would strip. Its export lines match public-api.manifest.json: the owner
+// decision of 2026-09-25 (docs/qa/release-decisions-2026-09-25/ADMISSION.md)
+// kept useAffix, useCalendar, useInfiniteScroll, useScrollSpy and useScrollToTop
+// public and left useCountdown and useIntersection internal, and moved the
+// manifest to match. `yarn release:api-diff` reports any line a regeneration
+// would drop or add. Keep the two in step: a composable added here needs a
+// manifest entry, and the reverse.
 export * from './composables/provider/index.ts'
 
 export * from './composables/useAffix/index.ts'
-// Added by hand for the same reason as the block above: this barrel is NOT
-// regenerated (see the warning). `useDualModel` merges a control's default and
-// named v-model so a renderer can bind either (TASK-FORM-OSS-02);
-// `useAsyncOptions` is the one async-options seam all seven selection controls
-// share (TASK-FORM-OSS-03). Both also carry an entry in public-api.manifest.json,
-// so a regeneration keeps them on the day the recorded drift is resolved.
+// `useDualModel` merges a control's default and named v-model so a renderer can
+// bind either (TASK-FORM-OSS-02); `useAsyncOptions` is the one async-options
+// seam all seven selection controls share (TASK-FORM-OSS-03). Both carry an
+// entry in public-api.manifest.json, as the block above requires.
 export * from './composables/useAsyncOptions/index.ts'
 export * from './composables/useCalendar/index.ts'
 export * from './composables/useClickOutside/index.ts'
@@ -85,13 +83,13 @@ export * from './composables/useTabs/index.ts'
 export * from './composables/useToast/index.ts'
 export * from './composables/useTransfer/index.ts'
 
-// i18n (TASK-R5-O4). Added by hand for the reason the block above gives. Two
+// i18n (TASK-R5-O4). Two
 // jobs: `useDzMessageFormat` joins the provider readers, and re-exporting this
 // module makes `dist/index.d.ts` reference `i18n/messages.d.ts` — the file that
 // augments `DzMessageCatalog`. Before, nothing reachable from the root
 // declarations did, so a consumer's TypeScript saw an empty catalog (N5-04 F9).
 // The same module is the `./i18n` subpath; the manifest carries an `i18n`
-// composables entry so a regeneration keeps this line.
+// composables entry for it.
 export * from './i18n/index.ts'
 
 // ── Providers ──

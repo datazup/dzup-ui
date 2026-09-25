@@ -4,6 +4,11 @@
   "version": "0.2.0",
   "description": "Design tokens for the dzup-ui component library",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datazup/dzup-ui.git",
+    "directory": "packages/tokens"
+  },
   "browserslist": [
     "chrome >= 111",
     "edge >= 111",
