@@ -53,9 +53,11 @@ jobs:
       - name: Run tests
         run: yarn test
 
+      # Same entry point as release.yml, for the same reasons: `changeset publish`
+      # ships `workspace:*` ranges and the withheld packages
+      # (DZUP-UI-PUBLISH-PATH-20260925-R1).
       - name: Publish prerelease
         run: |
-          yarn changeset publish --tag ${{ inputs.tag }}
+          yarn release:publish --provenance --tag ${{ inputs.tag }}
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

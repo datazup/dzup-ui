@@ -14,7 +14,7 @@
     "@dzup-ui/testing",
     "@dzup-ui/tokens"
   ],
-  "$published": "Public (package.json has no `private: true`) AND absent from the changesets `ignore` array. These are the packages a `changeset version` run can bump and `changeset publish` can push. Every one of them must be 0.x for VERSIONING.md to apply.",
+  "$published": "Public (package.json has no `private: true`) AND absent from the changesets `ignore` array. These are the packages a `changeset version` run can bump and the only ones `yarn release:publish` uploads. (`changeset publish` is not the publish step: it reads `private` but never `ignore`, so it would also upload the withheld packages below, and under Yarn it ships `workspace:*` ranges — DZUP-UI-PUBLISH-PATH-20260925-R1.) Every one of them must be 0.x for VERSIONING.md to apply.",
 
   "withheld": [
     {

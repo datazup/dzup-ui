@@ -78,25 +78,17 @@ jobs:
       # DEFECT 1, fixed here (TASK-R1-O4).
       #
       # `generate:exports:core` REWRITES packages/core/src/index.ts from
-      # public-api.manifest.json, and the two have drifted: a regeneration drops
-      # five composables, adds two, and emits the export lines in an order
-      # `perfectionist/sort-exports` rejects. So the step above handed the step
-      # below a file the repository never committed, and `yarn validate:all`
-      # then failed at its `lint` link with
-      #
-      #     47:1  error  Expected "./composables/provider/index.ts" to come
-      #                  before "./i18n/index.ts"  perfectionist/sort-exports
-      #
-      # — on the run of 2026-09-20 and, structurally, on every run before it.
-      # That failure was read as "the floor is red". It is not: it is the
-      # generator drift (TASK-R1-O3 decision D158) measured inside a job that
-      # then blamed Node 20.19.0 for it.
+      # public-api.manifest.json. The rewrite drops the barrel's comments and
+      # emits the export lines in an order `perfectionist/sort-exports` rejects,
+      # so without the restore below `yarn validate:all` fails at its `lint` link
+      # and blames Node 20.19.0 for a file the repository never committed. That
+      # is how the runs up to 2026-09-20 went red.
       #
       # Restoring the tree keeps this step's actual question — do the generators
-      # START at the floor? — and stops it from answering a different one. The
-      # drift itself is gated elsewhere: `validate:ownership` and
-      # `validate:exports` compare the committed artifacts against a fresh
-      # generation and are links 28 and 30 of `validate:all`, below.
+      # START at the floor? — and stops it from answering a different one.
+      # Whether the manifest and the barrel agree on the export lines is a
+      # release question, answered by `release:api-diff` (barrel drift, clean
+      # since 3c3f94a), not by this job.
       - name: Restore the tree the generators rewrote
         run: |
           git checkout -- .

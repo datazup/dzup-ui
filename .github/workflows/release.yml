@@ -47,6 +47,21 @@ jobs:
       - name: Run tests
         run: yarn test
 
+      # DZUP-UI-PUBLISH-PATH-20260925-R1. The version commit is never checked by
+      # CI: changesets/action opens the release PR with GITHUB_TOKEN, and PRs
+      # opened that way trigger no workflows. So the push that merges it lands
+      # here unvalidated, one step from `changeset publish`. These are the gates
+      # a version commit can break (headings, the mcp server.json version, the
+      # release policy, engine declarations), plus a dry run of the exact
+      # publish command, which packs every published package without uploading.
+      - name: Release gates
+        run: |
+          yarn validate:changelog
+          yarn validate:release-policy
+          yarn validate:mcp
+          yarn validate:engines
+          yarn release:publish --dry-run
+
       - name: Create Release Pull Request or Publish
         id: changesets
         uses: changesets/action@v1
@@ -59,3 +74,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # `yarn npm publish` (release:publish) reads its token from here, not
+          # from setup-node's .npmrc.
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
