@@ -62,9 +62,9 @@ The layers, in the order the library declares them: `dz-reset`, `dz-tokens`, `dz
 
 ## What this statement does not claim
 
-- **The contract is specified but not accepted.** ADR-19 is still *Proposed*; accepting it is an
-  owner decision. Its mechanisms are shipped and load-bearing today, which is a weaker thing
-  than a ratified contract and is stated here rather than glossed.
+- **An accepted contract is not a finished rollout.** The owner has accepted ADR-19. That fixes
+  which mechanisms are the contract. It does not mean every component has adopted them; the next
+  point says where that stands.
 - **Declaring an anatomy is a rollout, not a fact about every component.** A component page shows
   its parts when it has declared them and says nothing when it has not. *Has not declared parts*
   is not *has no parts*, and this site does not collapse them.

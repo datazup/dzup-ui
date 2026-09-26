@@ -206,12 +206,12 @@ export interface DzButtonSlots {
 > `yarn validate:adr-references` fails on any *new* ADR number cited without
 > one. Writing one of them means deleting its entry and lowering the ceiling.
 >
-> All three documented ADRs are still **`Proposed`**. Since TASK-R0-O2
-> (2026-09-22) that costs something measurable:
+> All three documented ADRs are **`Accepted`**, by the owner on 2026-09-26.
 > `validate:adr-references` reads each document's own `Status:` line and
-> ratchets `maxProposedCitedFromCode` — the number of distinct `Proposed` ADRs
-> cited from code. It is **3** today. Accepting one is an owner act (flip the
-> `Status:` line) and the ceiling must be lowered in the same change.
+> ratchets `maxProposedCitedFromCode`, the number of distinct `Proposed` ADRs
+> cited from code. It is **0**, so code may not build on a new `Proposed` ADR
+> until the owner accepts it. Accepting one is an owner act: flip the
+> `Status:` line and lower the ceiling in the same change.
 
 ### ADR-13 is two different decisions — a number collision, not a mistake
 

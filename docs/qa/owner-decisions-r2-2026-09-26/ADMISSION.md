@@ -27,6 +27,14 @@ matched `Proposed` before `Accepted`. The function's own comment says it "takes
 the first status word". It now does, by position, and a spec case pins that.
 The two files are added to the allowed paths.
 
+**Amendment A2 (after `028d733` landed).** Three current-facing texts still said
+the ADRs were Proposed: the repo `CLAUDE.md` (ceiling "3 today"), the docs guide
+`apps/docs/guide/styling-contract.md`, and the generated
+`apps/docs/evidence/styling-posture.md`, whose authored source is
+`packages/tooling/src/docs/statements.ts`. These are updated and the page is
+regenerated with `yarn generate:docs-pages`. Dated programme reports under
+`docs/program-*` are historical records and are left alone.
+
 ## Part 2 — Lighthouse: 5 runs per URL instead of 3
 
 The mobile `/templates` LCP gate is flaky, not regressed. Identical code measured:
@@ -58,6 +66,8 @@ accepted that. The ceiling itself is unchanged and may still only move down.
 - `apps/landing/src/lighthouserc.spec.ts`
 - `.github/workflows/ci.yml` (comment only)
 - `docs/qa/owner-decisions-r2-2026-09-26/**`
+- A2: `CLAUDE.md`, `apps/docs/guide/styling-contract.md`,
+  `packages/tooling/src/docs/statements.ts`, `apps/docs/evidence/**`
 
 ## Acceptance
 
