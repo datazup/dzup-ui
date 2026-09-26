@@ -17,7 +17,6 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import jscodeshift from 'jscodeshift'
 import { describe, expect, it } from 'vitest'
-import { extractScriptFromVue, replaceScriptInVue } from '../../utils/vue-sfc.js'
 import transformer, {
   ALIASED_GLYPHS,
   CLASS_RENAMES,
@@ -31,20 +30,16 @@ import transformer, {
 
 const FIXTURES = resolve(dirname(fileURLToPath(import.meta.url)), '../__fixtures__/swap-icon-library')
 
-/** Applies the transform the way `CodemodRunner` does, SFC extraction included. */
+/**
+ * Applies the transform the way `CodemodRunner` does: the whole file, `.vue`
+ * included. The runner offers an SFC to the transform whole first, so the
+ * transform must handle `<script>` blocks itself. This helper used to extract
+ * the script before calling the transform, which hid that the real runner
+ * failed to parse every SFC in `packages/core/src` (DZUP-UI-ICON-SWAP-20260926-R1).
+ */
 function applyTransform(path: string, source: string): string | null {
   const j = jscodeshift.withParser('tsx')
   const api = { jscodeshift: j, j, report: () => {}, stats: () => {} }
-
-  if (path.endsWith('.vue')) {
-    const extracted = extractScriptFromVue(source)
-    if (extracted === null)
-      return null
-    const out = transformer({ path, source: extracted.script }, api as never, {})
-    if (out === null || out === extracted.script)
-      return null
-    return replaceScriptInVue(source, out, extracted)
-  }
   return transformer({ path, source }, api as never, {})
 }
 
@@ -76,6 +71,7 @@ describe('swap-icon-library fixtures', () => {
       '05-idempotent',
       '06-unrelated',
       '07-sfc',
+      '08-sfc-two-scripts',
     ])
   })
 

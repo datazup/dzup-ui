@@ -52,6 +52,7 @@
  */
 
 import type { API, FileInfo, Options } from 'jscodeshift'
+import { isVueFile } from '../utils/vue-sfc.js'
 
 /** The deprecated package, and its renamed continuation. */
 export const OLD_PACKAGE = 'lucide-vue-next'
@@ -172,8 +173,36 @@ export default function transformer(
   api: API,
   _options: Options,
 ): string | null {
+  if (isVueFile(file.path))
+    return transformVueFile(file.source, api)
+  return transformScript(file.source, api)
+}
+
+/**
+ * Every `<script>` block of an SFC, rewritten in place.
+ *
+ * `CodemodRunner` hands a `.vue` file to the transform whole, so the transform
+ * must find the scripts itself: parsed whole, the template is a syntax error.
+ * A component can import icons from both a plain `<script>` and a
+ * `<script setup>`, so each block is rewritten, not just the first.
+ */
+const SCRIPT_BLOCK = /(<script(?:\s[^>]*)?>)([\s\S]*?)(<\/script>)/g
+
+function transformVueFile(source: string, api: API): string | null {
+  let changed = false
+  const next = source.replace(SCRIPT_BLOCK, (block, open: string, body: string, close: string) => {
+    const rewritten = transformScript(body, api)
+    if (rewritten === null)
+      return block
+    changed = true
+    return `${open}${rewritten}${close}`
+  })
+  return changed ? next : null
+}
+
+function transformScript(source: string, api: API): string | null {
   const j = api.jscodeshift
-  const root = j(file.source)
+  const root = j(source)
   let hasChanges = false
 
   const rewriteSource = (node: { value?: unknown }): void => {
