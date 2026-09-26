@@ -1,4 +1,5 @@
 import type { Decorator } from '@storybook/vue3'
+import type { ThemePreference } from '../../../packages/core/src/providers/DzThemeProvider.types.ts'
 import {
   applyStorybookThemeRecipe,
   createStorybookThemeRecipeFoucCache,
@@ -8,14 +9,16 @@ import {
   STORYBOOK_THEME_RECIPE_GLOBAL_TYPES,
   STORYBOOK_THEME_RECIPE_INITIAL_GLOBALS,
   STORYBOOK_THEME_RECIPE_STORAGE_KEY,
+  themeRecipeFromStorybookGlobals,
   themeRecipeToStorybookGlobals,
 } from '@dzup-ui/tokens'
 import addonA11y from '@storybook/addon-a11y'
 import addonDocs from '@storybook/addon-docs'
 import { definePreview } from '@storybook/vue3-vite'
-import { onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount, provide, ref } from 'vue'
 import { pseudoMessages } from '../../../packages/core/src/i18n/pseudo.ts'
 import DzProvider from '../../../packages/core/src/providers/DzProvider.vue'
+import { DZ_THEME_KEY } from '../../../packages/core/src/providers/DzThemeProvider.types.ts'
 import { RESPONSIVE_VIEWPORTS } from '../../../packages/core/stories/_shared/options.ts'
 import { AutodocsPage } from '../stories/_blocks/AutodocsPage.ts'
 
@@ -142,6 +145,52 @@ const withThemeRecipe: Decorator = (story, context) => ({
     return { direction }
   },
   template: '<div :dir="direction"><story /></div>',
+})
+
+/**
+ * Hand the toolbar's theme to every `DzProvider` below, so none of them owns it.
+ *
+ * A `DzProvider` with no `theme` prop and no theme context above it OWNS the
+ * theme: it resolves `'system'` from the OS and writes `data-theme` on <html>
+ * after the story mounts. `withPseudoLocale` and `withDirection` both mount one,
+ * and both sit OUTSIDE `withThemeRecipe`, so the toolbar's Dark was overwritten
+ * with the OS preference on every story. The pinned visual container measured
+ * it: `data-theme-mode="dark"` beside `data-theme="light"`, 12 of 34 screen
+ * snapshots (TASK-R2-O6, 2026-09-26).
+ *
+ * Providing `DZ_THEME_KEY` here, outermost, makes every nested provider leave the
+ * theme alone. `useTheme()` inside a story (DzColorModeToggle) still works: it
+ * re-applies the recipe with the chosen mode, through the same runtime.
+ */
+const withThemeContext: Decorator = (story, context) => ({
+  components: { story },
+  setup() {
+    const media = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-color-scheme: dark)')
+      : undefined
+    const theme = ref<ThemePreference>(themeRecipeFromStorybookGlobals(context.globals).mode)
+    const systemPrefersDark = ref(media?.matches ?? false)
+    const resolvedTheme = computed(() => theme.value === 'system'
+      ? (systemPrefersDark.value ? 'dark' : 'light')
+      : theme.value)
+    const setTheme = (value: ThemePreference) => {
+      theme.value = value
+      if (typeof document !== 'undefined')
+        applyStorybookThemeRecipe(document.documentElement, { ...context.globals, theme: value }, systemPrefersDark.value)
+    }
+    const handleSystemChange = (event: MediaQueryListEvent) => {
+      systemPrefersDark.value = event.matches
+    }
+    media?.addEventListener('change', handleSystemChange)
+    onBeforeUnmount(() => media?.removeEventListener('change', handleSystemChange))
+    provide(DZ_THEME_KEY, {
+      theme,
+      resolvedTheme,
+      setTheme,
+      toggleTheme: () => setTheme(resolvedTheme.value === 'dark' ? 'light' : 'dark'),
+    })
+  },
+  template: '<story />',
 })
 
 export default definePreview({
@@ -363,5 +412,7 @@ export default definePreview({
     withThemeRecipe,
     withPseudoLocale,
     withDirection,
+    // Last = outermost: it must sit above both DzProvider decorators.
+    withThemeContext,
   ],
 })
