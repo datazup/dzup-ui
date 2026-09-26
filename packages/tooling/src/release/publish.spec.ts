@@ -72,7 +72,8 @@ describe('the live inventory', () => {
   it('is the policy published list — the withheld packages are never candidates', () => {
     const names = publishedPackages().map(p => p.name)
     expect(names).not.toContain('@dzup-ui/compat')
-    expect(names).not.toContain('@dzup-ui/codemods')
+    // N5-01-D2 (2026-09-26): codemods is released, compat stays withheld.
+    expect(names).toContain('@dzup-ui/codemods')
     expect(names).toContain('@dzup-ui/core')
   })
 })

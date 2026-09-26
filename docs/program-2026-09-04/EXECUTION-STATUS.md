@@ -208,6 +208,12 @@
 > here or in `TASK-R5-O1-handoff.md`. Rows `D98` and `D99` below open with
 > `**D4 --` and `**D10 --`, which are the **defects**, not these rows. See
 > register §7.1 and owner decision **D179**.
+>
+> **Appended 2026-09-26 (DZUP-UI-OWNER-DECISIONS-20260926-R1).** The owner took
+> **N5-01 D2**, **D160**, **D174**–**D177**, **D180**–**D182** and **D186**. The
+> register carries the options taken; this table does not restate them. See
+> [`./reports/owner-decision-register-2026-09.md`](./reports/owner-decision-register-2026-09.md)
+> and [`../qa/owner-decisions-2026-09-26/ADMISSION.md`](../qa/owner-decisions-2026-09-26/ADMISSION.md).
 
 | # | Decision | Raised by | Options / recommendation | State |
 |---|---|---|---|---|

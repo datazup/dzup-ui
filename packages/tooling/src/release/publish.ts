@@ -13,9 +13,8 @@
  *    the tarballs the release bundle already hashes and import-checks.
  * 2. **It publishes every non-`private` package the registry lacks** and never
  *    reads the changesets `ignore` array (`publishPackages` filters on
- *    `private` only). `@dzup-ui/compat` and `@dzup-ui/codemods` are public,
- *    ignored, and withheld by owner decision N5-01-D2 — `changeset publish`
- *    would have shipped both as `latest`.
+ *    `private` only). `@dzup-ui/compat` is public, ignored, and withheld by
+ *    owner decision N5-01-D2 — `changeset publish` would ship it as `latest`.
  *
  * So this publishes exactly `release-policy.json`'s `published` list — the
  * inventory every other release tool already reads through

@@ -744,9 +744,11 @@ describe('release inventory', () => {
   it('drives the release tools from release-policy.json', () => {
     const policy = releasePolicy()
     expect(policy.published).toContain('@dzup-ui/core')
-    // compat and codemods are public and publishable but on the changesets
-    // ignore list: withheld, with a reason, not forgotten.
-    expect(policy.withheld.map(w => w.name)).toEqual(['@dzup-ui/compat', '@dzup-ui/codemods'])
+    // compat is public and publishable but on the changesets ignore list:
+    // withheld, with a reason, not forgotten. Its sibling codemods is released
+    // (N5-01-D2, 2026-09-26).
+    expect(policy.withheld.map(w => w.name)).toEqual(['@dzup-ui/compat'])
+    expect(policy.published).toContain('@dzup-ui/codemods')
     for (const entry of policy.withheld)
       expect(entry.reason.length).toBeGreaterThan(20)
   })

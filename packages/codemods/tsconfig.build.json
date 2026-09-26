@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  // The specs live beside the transforms in src/transforms/__tests__ and are
+  // type-checked by tsconfig.json; they are not part of the published package.
+  "exclude": ["node_modules", "dist", "src/**/__fixtures__/**", "src/**/__tests__/**"]
+}

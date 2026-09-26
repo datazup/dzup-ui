@@ -7,6 +7,7 @@
   "$allowMajor": "Under the 0.x policy a `major` bump IS the 1.0 release (0.2.0 -> 1.0.0), so a routine changeset must never declare one. Flipping this to true is part of the deliberate 1.0 act, alongside the exit criteria in docs/program-2026-09/reports/1-0-exit-criteria-2026-09.md. Do not flip it to unblock a changeset.",
 
   "published": [
+    "@dzup-ui/codemods",
     "@dzup-ui/contracts",
     "@dzup-ui/core",
     "@dzup-ui/mcp",
@@ -19,11 +20,7 @@
   "withheld": [
     {
       "name": "@dzup-ui/compat",
-      "reason": "Public and publishable (0.1.0-alpha.0, `publishConfig.access: public`, included in ci.yml's pack smoke test) but on the changesets `ignore` list, so no changeset can ever release it. VERSIONING.md 5 treats compat as migration tooling with no stable API of its own, which is a reason to withhold it, not a reason it cannot be released. Owner decision N5-01-D2."
-    },
-    {
-      "name": "@dzup-ui/codemods",
-      "reason": "Same as compat. The cost is measurable: .changeset/pro-package-is-named-dzup-ui-pro-pro.md describes a behaviour change to `@dzup-ui/codemods`' `rename-imports` in its body and cannot name it in its frontmatter, because a changeset naming an ignored package alongside a published one is refused outright (the SK-1 failure). The change ships with no changelog entry. Owner decision N5-01-D2."
+      "reason": "Public and publishable (0.1.0-alpha.0, `publishConfig.access: public`, included in ci.yml's pack smoke test) but on the changesets `ignore` list, so no changeset can ever release it. VERSIONING.md 5 treats compat as migration tooling with no stable API of its own, which is a reason to withhold it, not a reason it cannot be released. Owner decision N5-01-D2, taken 2026-09-26: compat stays withheld; its sibling @dzup-ui/codemods is released (DZUP-UI-OWNER-DECISIONS-20260926-R1), and VERSIONING.md 3 no longer asks a prop removal to ship a compat warning."
     }
   ],
   "$withheld": "Public packages deliberately kept out of the release plan. Each carries a reason, because 'ignored' with no reason is indistinguishable from 'forgotten' — which is what `apps/docs` was.",
