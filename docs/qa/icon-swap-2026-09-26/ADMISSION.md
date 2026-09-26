@@ -133,3 +133,16 @@ Added paths: `apps/landing/src/brand-icons.ts`,
 `packages/core/docs/capability-matrix.json`,
 `apps/storybook/stories/_data/capability.generated.ts`,
 `apps/docs/components/**`, `apps/docs/evidence/**`, codemod fixture 09.
+
+### Amendment 2 (new epoch, after landing 3ee3d5f)
+
+CI run 36243206504 on `cc13194` (the first CI run to cover this packet; the one
+on `3ee3d5f` was cancelled by the next push) failed one step: Validate, "Landing
+generated artifacts unchanged". `build:registry` copies
+`packages/core/docs/component-meta.json` to `apps/landing/public/r/component-meta.json`,
+and this packet regenerated the metadata after its last landing generator run.
+All seven landing generators were re-run at `cc13194`; only that copy changed.
+The job's later steps, skipped after the failure, were run locally and pass:
+`validate:changelog`, `validate:peers`, `validate:licenses`, `check:links`.
+Added path: `apps/landing/public/r/component-meta.json`. Worktree
+`dzup-ui-landing-regen-20260926`, branch `chore/landing-regen-20260926`.
