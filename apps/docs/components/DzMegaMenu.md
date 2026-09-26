@@ -237,7 +237,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `c021d6ef` for the capability matrix,
+artifact records — `6cbc6f17` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
@@ -343,7 +343,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `stale` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
@@ -353,7 +353,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **2 stale:** `browser-matrix`, `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

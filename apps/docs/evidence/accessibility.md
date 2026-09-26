@@ -194,11 +194,11 @@ SHA-256 of the exact bytes these pages were rendered from:
 | Artifact | sha256 | Present |
 | --- | --- | --- |
 | `packages/core/docs/quality-matrix.json` | `15fe628024cef1b5…` | yes |
-| `packages/core/docs/capability-matrix.json` | `631fff15687537d4…` | yes |
+| `packages/core/docs/capability-matrix.json` | `fe930d9b50a2a175…` | yes |
 | `packages/core/docs/wcag-deviations.json` | `bde6dc788456481d…` | yes |
 | `e2e/at-matrix/index.json` | `d35ef2dfa049e253…` | yes |
 
-Capability matrix `sourceCommit` `c021d6ef` · quality matrix `527dbd15`.
+Capability matrix `sourceCommit` `6cbc6f17` · quality matrix `527dbd15`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

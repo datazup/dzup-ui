@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "e7a7838fef2f08b8694454e40b948488308e3767",
+  "sourceCommit": "316c24ecbe68b819978fc94f4fbb7a1705bf3652",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -5405,9 +5405,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 3,
-          "stale": 2,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -5418,7 +5418,6 @@
           "ssr-sample"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -7259,9 +7258,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 5,
-          "stale": 2,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -7272,7 +7271,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -7878,9 +7876,8 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 4,
+          "pass": 5,
           "present": 5,
-          "stale": 1,
           "unrun": 3
         },
         "unrun": [
@@ -7888,9 +7885,7 @@
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": [
-          "browser-matrix"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -10501,9 +10496,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 7,
-          "stale": 2,
+          "stale": 1,
           "unrun": 3
         },
         "unrun": [
@@ -10512,7 +10507,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -14938,9 +14932,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 5,
-          "stale": 2,
+          "stale": 1,
           "unrun": 3
         },
         "unrun": [
@@ -14949,7 +14943,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -15492,9 +15485,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 4,
-          "stale": 2,
+          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -15504,7 +15497,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -26141,9 +26133,8 @@
           "dataset"
         ],
         "cells": {
-          "pass": 4,
+          "pass": 5,
           "present": 4,
-          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -26153,9 +26144,7 @@
           "data-scenarios",
           "keyboard-spec"
         ],
-        "stale": [
-          "browser-matrix"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -27279,9 +27268,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 6,
-          "stale": 2,
+          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -27293,7 +27282,6 @@
           "ssr-sample"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -29086,9 +29074,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 6,
-          "stale": 2,
+          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -29098,7 +29086,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -30577,9 +30564,9 @@
           "drags"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 5,
-          "stale": 2,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -30590,7 +30577,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -31595,9 +31581,8 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 4,
+          "pass": 5,
           "present": 5,
-          "stale": 1,
           "unrun": 3
         },
         "unrun": [
@@ -31605,9 +31590,7 @@
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": [
-          "browser-matrix"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -36016,9 +35999,8 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 4,
+          "pass": 5,
           "present": 4,
-          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -36027,9 +36009,7 @@
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": [
-          "browser-matrix"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -39097,9 +39077,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 4,
+          "pass": 5,
           "present": 6,
-          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -39108,9 +39087,7 @@
           "data-scenarios",
           "keyboard-spec"
         ],
-        "stale": [
-          "browser-matrix"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -41947,9 +41924,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 4,
+          "pass": 5,
           "present": 3,
-          "stale": 1,
           "unrun": 7
         },
         "unrun": [
@@ -41961,9 +41937,7 @@
           "portal-hydration",
           "ssr-sample"
         ],
-        "stale": [
-          "browser-matrix"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -48773,9 +48747,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 5,
-          "stale": 2,
+          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -48785,7 +48759,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -49384,9 +49357,8 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 4,
+          "pass": 5,
           "present": 3,
-          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -49396,9 +49368,7 @@
           "keyboard-spec",
           "ssr-sample"
         ],
-        "stale": [
-          "browser-matrix"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -51601,9 +51571,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 4,
-          "stale": 2,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -51614,7 +51584,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -52951,9 +52920,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 5,
-          "stale": 2,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -52964,7 +52933,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
