@@ -117,7 +117,8 @@ const { testId: dzTestId } = useDzTestIds()
           </svg>
           {{ trendValue }}
         </span>
-        <span v-if="description"> {{ description }}</span>
+        <!-- The separator is an expression: template compilation condenses a literal leading space away. -->
+        <span v-if="description">{{ trendValue ? ' ' : '' }}{{ description }}</span>
       </slot>
     </div>
   </div>
