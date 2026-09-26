@@ -37,7 +37,7 @@
 | Remote CI state unknown (08-25 §7, 08-10 oss-coverage) | `TASK-R1-O4` | `[!]` owner dispatch |
 | Landing RTL routes (APP-1 finding) | `TASK-R5-O4` (D62) | `[x]` |
 | OSS 321 lint findings (ThemeRecipe ledger "separately tracked debt") | `TASK-R1-O1` | `[x]` |
-| Visual-baseline rollout (Packet 6 OSS half) | `TASK-R2-O6` | `[~]` capture half blocked |
+| Visual-baseline rollout (Packet 6 OSS half) | `TASK-R2-O6` | `[~]` unblocked 2026-09-26: the lane runs in the pinned container (O6-D2 b) with linux baselines. The gate flip and waves 0–4 remain (`docs/qa/visual-lane-container-2026-09-26/`) |
 
 ## Owner decisions raised by this program
 
