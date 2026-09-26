@@ -96,3 +96,40 @@ Baseline image paths are added by amendment when CI names them.
 | Baseline re-recording from CI output | yes (D174 (a) includes the re-baseline) |
 | Cleanup of this packet's worktree and branch | yes |
 | Publish, tag, secrets, PR #3 merge, production | **no** |
+
+### Amendment 1 (same epoch, before landing)
+
+1. **Five brand icons do not exist in `@lucide/vue` 1.x.** `Github`,
+   `Linkedin`, `Twitter`, `Youtube` and `Figma` are Lucide brand marks.
+   `lucide-vue-next` still carried them; `@lucide/vue` dropped them. The contract
+   measured core's 18 glyphs and never looked at the landing. After the swap, 13
+   landing files imported an `undefined` component, and `render.spec.ts` failed
+   on the sign-in, sign-up and SaaS landing templates. The marks are recreated
+   with `@lucide/vue`'s own `createLucideIcon`, using the drawings copied from
+   `lucide-vue-next@0.477.0` (ISC), so they render as before and take the same
+   props:
+   - site pages import them from `apps/landing/src/brand-icons.ts` (new);
+   - the seven blocks and templates the registry ships to consumers define the
+     mark inline, because a copied file cannot import a sibling module.
+
+   A probe over all 225 source files that import `@lucide/vue` now finds no name
+   the package does not export.
+2. **The spec for `validate:icon-duplicates` pinned the old state.**
+   `peer-icon-duplicates.spec.ts` "the real repository" expected `0.477.0` and
+   `lucide-vue-next`. It now expects one `1.x` version of `@lucide/vue`, and that
+   the old name is gone from the registry items.
+3. **Generated evidence follows.** The swap touched 22 core components, so the
+   capability matrix marks their recorded evidence cells stale (24 → 40 of the
+   catalogue). The matrix, its Storybook copy, `component-meta.json` and every
+   generated `apps/docs` page are regenerated. Refreshing the evidence is
+   TASK-R2-O1, the next packet. This packet's commits are not squashed, because
+   the matrix records per-file commit hashes.
+4. **Installed version.** The lockfile resolved `@lucide/vue@1.48.0`. All 18
+   glyphs core uses render the class and `aria-hidden` the contract recorded for
+   1.47.0.
+
+Added paths: `apps/landing/src/brand-icons.ts`,
+`packages/tooling/src/validators/peer-icon-duplicates.spec.ts`,
+`packages/core/docs/capability-matrix.json`,
+`apps/storybook/stories/_data/capability.generated.ts`,
+`apps/docs/components/**`, `apps/docs/evidence/**`, codemod fixture 09.
