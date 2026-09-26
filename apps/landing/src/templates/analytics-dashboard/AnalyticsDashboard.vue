@@ -32,7 +32,7 @@ import {
   DzTableRow,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, Plus } from 'lucide-vue-next'
+import { Boxes, Plus } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import {
   CHANNELS,

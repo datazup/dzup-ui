@@ -27,7 +27,7 @@ import {
   DzStepperItem,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight, Boxes, PartyPopper } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, Boxes, PartyPopper } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import {
   ROLE_OPTIONS,

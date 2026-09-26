@@ -33,7 +33,7 @@ import {
   Underline,
   WrapText,
   X,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, nextTick, ref, watch } from 'vue'
 
 // ---------------------------------------------------------------------------

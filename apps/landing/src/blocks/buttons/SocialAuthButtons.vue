@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzDivider, DzText } from '@dzup-ui/core'
-import { Apple, Github, Mail } from 'lucide-vue-next'
+import { Apple, Github, Mail } from '@lucide/vue'
 
 /**
  * Social sign-in buttons — a stacked column of full-width provider buttons

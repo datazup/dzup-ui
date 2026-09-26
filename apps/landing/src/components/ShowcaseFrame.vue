@@ -18,7 +18,7 @@ import {
   DzTableRow,
   DzText,
 } from '@dzup-ui/core'
-import { Activity, DollarSign, Search, TrendingUp, Users } from 'lucide-vue-next'
+import { Activity, DollarSign, Search, TrendingUp, Users } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 // The live browser-window dashboard, composed entirely from @dzup-ui/core

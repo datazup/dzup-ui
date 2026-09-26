@@ -10,7 +10,7 @@
  * reflows cleanly 390px → up.
  */
 import { DzAlert, DzButton, DzCard, DzFormField, DzFormLabel, DzHeading, DzInput, DzResult, DzText } from '@dzup-ui/core'
-import { ArrowLeft, Boxes, KeyRound, MailCheck } from 'lucide-vue-next'
+import { ArrowLeft, Boxes, KeyRound, MailCheck } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 const email = ref('ava@northwind.io')

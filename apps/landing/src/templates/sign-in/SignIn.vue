@@ -20,7 +20,7 @@ import {
   DzPasswordInput,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, Github, ShieldCheck } from 'lucide-vue-next'
+import { Boxes, Github, ShieldCheck } from '@lucide/vue'
 import { ref } from 'vue'
 
 const email = ref('ava@northwind.io')

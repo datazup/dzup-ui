@@ -45,7 +45,7 @@ import {
   Search,
   Send,
   Video,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, nextTick, reactive, ref } from 'vue'
 import {
   APP_NAV,

@@ -7,7 +7,7 @@ import {
   DzHeading,
   DzText,
 } from '@dzup-ui/core'
-import { Check } from 'lucide-vue-next'
+import { Check } from '@lucide/vue'
 
 /**
  * PricingThree — three-tier pricing (Free / Pro / Enterprise) in a
@@ -16,7 +16,7 @@ import { Check } from 'lucide-vue-next'
  * The Pro tier is highlighted with an `outlined` card variant and a
  * DzBadge "Most popular" chip so it stands out without a raw color.
  * Feature rows use the lucide Check icon — no DzIcon wrapper required
- * because lucide-vue-next components accept a `size` / `stroke-width`
+ * because @lucide/vue components accept a `size` / `stroke-width`
  * prop directly and carry no extra runtime overhead.
  *
  * Heading level: section title at :level="4" (BlockPreview uses H3),

@@ -72,6 +72,7 @@ describe('swap-icon-library fixtures', () => {
       '06-unrelated',
       '07-sfc',
       '08-sfc-two-scripts',
+      '09-sfc-generic',
     ])
   })
 

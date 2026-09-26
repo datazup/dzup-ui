@@ -32,7 +32,7 @@ import {
   SlidersHorizontal,
   Sparkles,
   Wand2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { REGISTRY_ENABLED, v0OpenUrl } from '../../blocks/config.ts'
 import { blockMarkdown, blockPrompt, LLMS_TXT } from '../../blocks/llmsText.ts'

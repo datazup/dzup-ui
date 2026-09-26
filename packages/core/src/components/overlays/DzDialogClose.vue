@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DzDialogCloseProps, DzDialogCloseSlots } from './DzDialog.types.ts'
-import { X } from 'lucide-vue-next'
+import { X } from '@lucide/vue'
 import { DialogClose } from 'reka-ui'
 /**
  * DzDialogClose -- Close button for DzDialog compound.

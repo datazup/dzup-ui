@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Underline } from 'lucide-vue-next'
+import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Underline } from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzButton, DzButtonGroup, DzIconButton } from '../../src/components/buttons'
 import { a11yError, darkModeDecorator } from '../_shared'

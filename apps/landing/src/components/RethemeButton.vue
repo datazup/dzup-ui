@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Moon, Sun } from 'lucide-vue-next'
+import { Moon, Sun } from '@lucide/vue'
 import { computed } from 'vue'
 import { useThemeTransition } from '../composables/useThemeTransition.ts'
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzCodeBlock, DzHeading, DzText } from '@dzup-ui/core'
-import { ExternalLink, FileText, Package, Terminal } from 'lucide-vue-next'
+import { ExternalLink, FileText, Package, Terminal } from '@lucide/vue'
 import { computed } from 'vue'
 import {
   llmsTxtUrl,

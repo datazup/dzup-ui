@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzHeading, DzSearchInput, DzSwitch, DzText, DzVisuallyHidden } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight, SearchX, Sparkles } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, SearchX, Sparkles } from '@lucide/vue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import AnimationsFinale from '../components/animations/AnimationsFinale.vue'
 import AnimationsHeroField from '../components/animations/AnimationsHeroField.vue'

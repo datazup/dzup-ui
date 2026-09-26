@@ -23,7 +23,7 @@ import {
   DzListItem,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowRight, Download, Mail, Megaphone } from 'lucide-vue-next'
+import { ArrowRight, Download, Mail, Megaphone } from '@lucide/vue'
 import { ICONS } from '../../icons.ts'
 import { MEDIA_LOGOS, NEWS, PINNED, PRESS_KITS } from './data.ts'
 

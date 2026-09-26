@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { AlignCenter, AlignLeft, AlignRight, LayoutGrid, List, Table2 } from 'lucide-vue-next'
+import { AlignCenter, AlignLeft, AlignRight, LayoutGrid, List, Table2 } from '@lucide/vue'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzSegmented } from '../../src/components/navigation'
 import { darkModeDecorator } from '../_shared'

@@ -18,7 +18,7 @@ collections of images.
 | **DzAvatar** | A single user/entity avatar — image, initials fallback, or icon slot. | [DzAvatar](?path=/docs/core-media-dzavatar--docs) |
 | **DzAvatarGroup** | A stacked row of avatars with a `+N` overflow indicator. | [DzAvatarGroup](?path=/docs/core-media-dzavatargroup--docs) |
 | **DzImage** | An `<img>` with a loading placeholder, error/fallback handling, lazy loading, `object-fit`, and aspect ratio. | [DzImage](?path=/docs/core-media-dzimage--docs) |
-| **DzIcon** | A sized, accessible wrapper around a `lucide-vue-next` (or any Vue) icon component. | [DzIcon](?path=/docs/core-media-dzicon--docs) |
+| **DzIcon** | A sized, accessible wrapper around a `@lucide/vue` (or any Vue) icon component. | [DzIcon](?path=/docs/core-media-dzicon--docs) |
 | **DzCarousel** | A slideshow for cycling through slides, with autoplay, looping, and dot/arrow navigation. | [DzCarousel](?path=/docs/core-media-dzcarousel--docs) |
 | **DzLightbox** | A fullscreen, focus-trapped image viewer with keyboard navigation and captions. | [DzLightbox](?path=/docs/core-media-dzlightbox--docs) |
 
@@ -33,14 +33,14 @@ collections of images.
 - **A UI glyph →** `DzIcon`. It standardizes sizing via tokens and gets the accessibility right (decorative vs. meaningful).
 - **Browsing a set of images/slides inline →** `DzCarousel`. **Browsing them fullscreen →** `DzLightbox` (often triggered from a thumbnail grid or a carousel slide).
 
-## DzIcon usage with lucide-vue-next
+## DzIcon usage with @lucide/vue
 
 `DzIcon` takes an icon **component** via the `icon` prop and renders it at a canonical
 size with a token-driven stroke width:
 
 ```ts
 import { DzIcon } from '@dzup-ui/core'
-import { Search } from 'lucide-vue-next'
+import { Search } from '@lucide/vue'
 ```
 
 ```vue
@@ -54,17 +54,17 @@ import { Search } from 'lucide-vue-next'
 Provide `ariaLabel` **only** when the icon is the sole carrier of meaning. When it sits
 next to a text label, leave it decorative so screen readers don't announce it twice.
 
-### Icon gallery (`lucide-vue-next`)
+### Icon gallery (`@lucide/vue`)
 
 The gallery below is the live `DzIcon` **Icon Gallery** story — it renders real
-`lucide-vue-next` components through `DzIcon`, so it stays in sync with the icon set the
+`@lucide/vue` components through `DzIcon`, so it stays in sync with the icon set the
 library actually ships. (Storybook's React `<IconGallery>` doc block can't host Vue icon
 components, so we surface the set through this Vue story instead.)
 
 <Canvas of={DzIconStories.IconGallery} />
 
 Browse the full set at [lucide.dev/icons](https://lucide.dev/icons/) and import any glyph
-by name: `import { Search, Bell, Home } from 'lucide-vue-next'`.
+by name: `import { Search, Bell, Home } from '@lucide/vue'`.
 
 ## Avatar fallback strategy
 

@@ -11,7 +11,7 @@ A dismissible feed of persistent DzNotifications inside an outlined panel — to
 import type { CanonicalTone } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 import { DzBadge, DzButton, DzCard, DzHeading, DzNotification, DzText } from '@dzup-ui/core'
-import { BellOff, GitPullRequestArrow, MessageSquare, TriangleAlert, UserPlus } from 'lucide-vue-next'
+import { BellOff, GitPullRequestArrow, MessageSquare, TriangleAlert, UserPlus } from '@lucide/vue'
 /**
  * Notification center — a dismissible feed of persistent DzNotifications.
  *

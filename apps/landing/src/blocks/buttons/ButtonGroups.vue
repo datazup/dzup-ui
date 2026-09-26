@@ -7,7 +7,7 @@ import {
   Files,
   LayoutGrid,
   LayoutList,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

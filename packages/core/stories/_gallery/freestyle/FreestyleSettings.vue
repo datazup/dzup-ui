@@ -3,7 +3,7 @@
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 
-import { Trash2 } from 'lucide-vue-next'
+import { Trash2 } from '@lucide/vue'
 import { ref } from 'vue'
 
 const fullName = ref('Jane Doe')

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzBadge, DzButton, DzText } from '@dzup-ui/core'
-import { RefreshCw } from 'lucide-vue-next'
+import { RefreshCw } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { DzFlip } from '../../motion/index.ts'
 

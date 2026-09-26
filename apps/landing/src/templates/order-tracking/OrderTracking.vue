@@ -29,7 +29,7 @@ import {
   DzTimeline,
   DzTimelineItem,
 } from '@dzup-ui/core'
-import { LifeBuoy, MapPin, Package, Receipt, Truck } from 'lucide-vue-next'
+import { LifeBuoy, MapPin, Package, Receipt, Truck } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import {
   ACTIVE_STAGE,

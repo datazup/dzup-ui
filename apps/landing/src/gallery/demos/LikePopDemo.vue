@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzText, DzToggleButton } from '@dzup-ui/core'
-import { Heart } from 'lucide-vue-next'
+import { Heart } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { DzBurst } from '../../motion/index.ts'
 

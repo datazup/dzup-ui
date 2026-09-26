@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { Copy, Image, Link, Pencil, Plus, Share2, Sparkles, Trash2 } from 'lucide-vue-next'
+import { Copy, Image, Link, Pencil, Plus, Share2, Sparkles, Trash2 } from '@lucide/vue'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzFab, DzSpeedDial } from '../../src/components/buttons'

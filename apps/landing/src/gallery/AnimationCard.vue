@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CatalogEntry, CatalogType } from './catalog.ts'
 import { DzBadge, DzButton, DzText } from '@dzup-ui/core'
-import { Check, Code2, Copy, Link2, RotateCcw, Zap } from 'lucide-vue-next'
+import { Check, Code2, Copy, Link2, RotateCcw, Zap } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { useInView, useReducedMotion, vTilt } from '../motion/index.ts'
 import { categoryAccentStyle } from './catalog.ts'

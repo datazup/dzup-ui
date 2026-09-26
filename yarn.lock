@@ -1521,9 +1521,9 @@ __metadata:
     "@dzup-ui/tokens": "workspace:*"
     "@floating-ui/vue": "npm:^1.1.0"
     "@internationalized/date": "npm:^3.5.0"
+    "@lucide/vue": "npm:^1.47.0"
     "@vitejs/plugin-vue": "npm:^6"
     clsx: "npm:^2.1.1"
-    lucide-vue-next: "npm:^0.477.0"
     qrcode-generator: "npm:^2.0.4"
     reka-ui: "npm:^2.0.0"
     tailwind-merge: "npm:^3.5.0"
@@ -1558,9 +1558,9 @@ __metadata:
     "@dzup-ui/core": "workspace:*"
     "@dzup-ui/tokens": "workspace:*"
     "@formkit/auto-animate": "npm:^0.8.2"
+    "@lucide/vue": "npm:^1.47.0"
     "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-vue": "npm:^5.2.0"
-    lucide-vue-next: "npm:^0.477.0"
     playwright: "npm:^1.61.0"
     sharp: "npm:^0.33.5"
     tailwindcss: "npm:^4.0.0"
@@ -1610,9 +1610,9 @@ __metadata:
   dependencies:
     "@dzup-ui/core": "workspace:*"
     "@dzup-ui/tokens": "workspace:*"
+    "@lucide/vue": "npm:^1.47.0"
     "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-vue": "npm:^5.2.0"
-    lucide-vue-next: "npm:^0.477.0"
     tailwindcss: "npm:^4.0.0"
     typescript: "npm:^5.7.0"
     vite: "npm:^6.1.0"
@@ -3275,6 +3275,15 @@ __metadata:
   version: 1.1.1
   resolution: "@kwsites/promise-deferred@npm:1.1.1"
   checksum: 10c0/ef1ad3f1f50991e3bed352b175986d8b4bc684521698514a2ed63c1d1fc9848843da4f2bc2df961c9b148c94e1c34bf33f0da8a90ba2234e452481f2cc9937b1
+  languageName: node
+  linkType: hard
+
+"@lucide/vue@npm:^1.47.0":
+  version: 1.48.0
+  resolution: "@lucide/vue@npm:1.48.0"
+  peerDependencies:
+    vue: ">=3.0.1"
+  checksum: 10c0/a17664b211d85802bf45e0581a2ed2a32813f7bbf34378ec33c8aee26e09b11a324e7d37f9de1b502fae2c3630a2e7c0527f94f72c5e54b1b3d557fcd81e2f48
   languageName: node
   linkType: hard
 
@@ -12983,15 +12992,6 @@ __metadata:
   version: 8.0.5
   resolution: "lru-cache@npm:8.0.5"
   checksum: 10c0/cd95a9c38497611c5a6453de39a881f6eb5865851a2a01b5f14104ff3fee515362a7b1e7de28606028f423802910ba05bdb8ae1aa7b0d54eae70c92f0cec10b2
-  languageName: node
-  linkType: hard
-
-"lucide-vue-next@npm:^0.477.0":
-  version: 0.477.0
-  resolution: "lucide-vue-next@npm:0.477.0"
-  peerDependencies:
-    vue: ">=3.0.1"
-  checksum: 10c0/edb86caa2fb97a1c76a2052a30da8b73b56f7c82e5564f1221f18469b6071ffec13b869b79d8918750b6d9d7a39e0caedf71a281dc18c1db8650a97a6f8b840d
   languageName: node
   linkType: hard
 

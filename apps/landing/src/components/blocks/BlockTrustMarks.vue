@@ -2,7 +2,7 @@
 import type { Component } from 'vue'
 import type { CertificationId } from '../../blocks/certifications.ts'
 import { DzBadge } from '@dzup-ui/core'
-import { Languages, MonitorSmartphone, ShieldCheck, SunMoon } from 'lucide-vue-next'
+import { Languages, MonitorSmartphone, ShieldCheck, SunMoon } from '@lucide/vue'
 import { CERTIFICATIONS, isCertified } from '../../blocks/certifications.ts'
 
 /**

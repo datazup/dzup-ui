@@ -3,7 +3,7 @@
 // A/B comparison target against the raw-Tailwind freestyle reference.
 
 import type { CanonicalTone } from '@dzup-ui/contracts'
-import { MoreHorizontal, Plus, TrendingDown, TrendingUp } from 'lucide-vue-next'
+import { MoreHorizontal, Plus, TrendingDown, TrendingUp } from '@lucide/vue'
 import { computed } from 'vue'
 import { DzButton, DzIconButton } from '../../../src/components/buttons'
 import { DzCard, DzCardBody } from '../../../src/components/cards'

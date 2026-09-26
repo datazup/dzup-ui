@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzText } from '@dzup-ui/core'
-import { ArrowUpRight } from 'lucide-vue-next'
+import { ArrowUpRight } from '@lucide/vue'
 import { FACTS, LINKS } from '../config.ts'
 import { FAMILIES } from '../data.ts'
 import FamilyPreview from './FamilyPreview.vue'

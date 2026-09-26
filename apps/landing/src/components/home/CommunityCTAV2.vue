@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowRight, Github, MessageCircle } from 'lucide-vue-next'
+import { ArrowRight, Github, MessageCircle } from '@lucide/vue'
 import { LINKS } from '../../config.ts'
 import { DzParticles, vMagnetic } from '../../motion/index.ts'
 </script>

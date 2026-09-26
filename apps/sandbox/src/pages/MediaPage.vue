@@ -31,7 +31,7 @@ import {
   Search,
   Star,
   User,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, ref } from 'vue'
 import DemoCode from '../components/DemoCode.vue'
 import SandboxControl from '../components/SandboxControl.vue'
@@ -437,7 +437,7 @@ const carouselFrameStyle = computed(() =>
         Icon wrapper enforcing the canonical size scale and accessibility semantics. Decorative
         by default (<code>aria-hidden="true"</code>); pass <code>aria-label</code> to expose the
         icon to assistive tech as <code>role="img"</code>. Sandbox uses
-        <code>lucide-vue-next</code>, matching the documented integration.
+        <code>@lucide/vue</code>, matching the documented integration.
       </p>
 
       <div class="control-row">

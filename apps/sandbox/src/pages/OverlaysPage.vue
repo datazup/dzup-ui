@@ -57,7 +57,7 @@ import {
   Settings,
   Trash2,
   User,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 // ── Dialog ──────────────────────────────────────────────

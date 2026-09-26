@@ -13,7 +13,7 @@ import type { Component } from 'vue'
  * reflows cleanly 390px → up.
  */
 import { DzButton, DzCard, DzDivider, DzResult, DzText } from '@dzup-ui/core'
-import { Activity, Boxes, LifeBuoy, RefreshCw, RotateCw } from 'lucide-vue-next'
+import { Activity, Boxes, LifeBuoy, RefreshCw, RotateCw } from '@lucide/vue'
 import { ref } from 'vue'
 
 interface NextStep {

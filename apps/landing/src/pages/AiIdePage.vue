@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzCodeBlock, DzHeading, DzText } from '@dzup-ui/core'
-import { BookOpen, Boxes, Github, LayoutTemplate, Palette, Sparkles, Terminal } from 'lucide-vue-next'
+import { BookOpen, Boxes, Github, LayoutTemplate, Palette, Sparkles, Terminal } from '@lucide/vue'
 import {
   DZUP_MCP_PACKAGE,
   dzupMcpClaudeCliCommand,

@@ -7,7 +7,7 @@ import {
   DzDialogTitle,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowUpRight, Users, X } from 'lucide-vue-next'
+import { ArrowUpRight, Users, X } from '@lucide/vue'
 import { DzMorph, useReducedMotion } from '../../motion/index.ts'
 
 /**

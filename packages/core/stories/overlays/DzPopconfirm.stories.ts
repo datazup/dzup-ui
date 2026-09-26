@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { AlertTriangle, Trash2 } from 'lucide-vue-next'
+import { AlertTriangle, Trash2 } from '@lucide/vue'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton, DzIconButton } from '../../src/components/buttons'
 import { DzPopconfirm } from '../../src/components/overlays'

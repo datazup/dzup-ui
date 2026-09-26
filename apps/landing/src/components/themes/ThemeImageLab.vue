@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import { DzBadge, DzText } from '@dzup-ui/core'
-import { Upload } from 'lucide-vue-next'
+import { Upload } from '@lucide/vue'
 import { onBeforeUnmount, ref } from 'vue'
 import { useThemeDesigner } from '../../composables/useThemeDesigner.ts'
 import { useReducedMotion } from '../../motion/index.ts'

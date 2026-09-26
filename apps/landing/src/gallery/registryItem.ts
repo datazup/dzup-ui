@@ -140,7 +140,7 @@ export const ANIMATION_DEPENDENCIES = ['@dzup-ui/core', '@dzup-ui/tokens'] as co
  * project. Mirrors the Blocks `OPTIONAL_DEPENDENCIES`. `vue` is a peer every Vue
  * project already has, so it is intentionally omitted.
  */
-export const OPTIONAL_DEPENDENCIES = ['lucide-vue-next', '@formkit/auto-animate'] as const
+export const OPTIONAL_DEPENDENCIES = ['@lucide/vue', '@formkit/auto-animate'] as const
 
 /**
  * Per-variant file extension. The variant matrix maps to real file kinds so a

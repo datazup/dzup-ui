@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { Copy, Globe, Mail } from 'lucide-vue-next'
+import { Copy, Globe, Mail } from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzInput, DzInputGroup } from '../../src/components/inputs'

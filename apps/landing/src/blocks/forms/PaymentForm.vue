@@ -13,7 +13,7 @@ import {
   DzSelect,
   DzText,
 } from '@dzup-ui/core'
-import { CreditCard, Lock, Tag } from 'lucide-vue-next'
+import { CreditCard, Lock, Tag } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**

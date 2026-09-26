@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzText } from '@dzup-ui/core'
-import { Bell } from 'lucide-vue-next'
+import { Bell } from '@lucide/vue'
 import { ref } from 'vue'
 import { DzPresence, useReducedMotion } from '../../motion/index.ts'
 

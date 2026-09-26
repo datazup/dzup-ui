@@ -38,7 +38,7 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import { FolderGit2, Plus } from 'lucide-vue-next'
+import { FolderGit2, Plus } from '@lucide/vue'
 import { ref } from 'vue'
 
 const open = ref(false)

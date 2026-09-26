@@ -174,7 +174,7 @@ Buttons · Cards · Data · Feedback · Forms · Inputs · Layout · Media · Na
 | Styling | Tailwind CSS 4 with `@theme` directive |
 | Variants | tailwind-variants (tv) for type-safe component styling |
 | Primitives | Reka UI 2.x for headless interactive components |
-| Icons | lucide-vue-next |
+| Icons | @lucide/vue |
 | Dates | @internationalized/date |
 | Positioning | @floating-ui/vue |
 | Testing | Vitest + Playwright |

@@ -184,13 +184,18 @@ export default function transformer(
  * `CodemodRunner` hands a `.vue` file to the transform whole, so the transform
  * must find the scripts itself: parsed whole, the template is a syntax error.
  * A component can import icons from both a plain `<script>` and a
- * `<script setup>`, so each block is rewritten, not just the first.
+ * `<script setup>`, so each block is rewritten, not just the first. An
+ * attribute value may contain `>` (`generic="T extends Record<string, unknown>"`),
+ * so quoted values are matched whole. A block that does not name the old
+ * package is left unparsed.
  */
-const SCRIPT_BLOCK = /(<script(?:\s[^>]*)?>)([\s\S]*?)(<\/script>)/g
+const SCRIPT_BLOCK = /(<script(?:\s+[^\s"'=>]+(?:="[^"]*"|='[^']*')?)*\s*>)([\s\S]*?)(<\/script>)/g
 
 function transformVueFile(source: string, api: API): string | null {
   let changed = false
   const next = source.replace(SCRIPT_BLOCK, (block, open: string, body: string, close: string) => {
+    if (!body.includes(OLD_PACKAGE))
+      return block
     const rewritten = transformScript(body, api)
     if (rewritten === null)
       return block

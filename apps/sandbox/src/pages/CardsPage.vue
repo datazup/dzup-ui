@@ -8,7 +8,7 @@ import {
   DzImageCard,
   DzStatCard,
 } from '@dzup-ui/core'
-import { Activity, DollarSign, TrendingDown, Users } from 'lucide-vue-next'
+import { Activity, DollarSign, TrendingDown, Users } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 const clickCount = ref(0)

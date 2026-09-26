@@ -9,7 +9,7 @@ import {
   DzInput,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, Mail, MailCheck } from 'lucide-vue-next'
+import { ArrowLeft, Mail, MailCheck } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**

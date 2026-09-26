@@ -24,7 +24,7 @@ import {
   DzSearchInput,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight, BookText, Info, TriangleAlert } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, BookText, Info, TriangleAlert } from '@lucide/vue'
 import { ref } from 'vue'
 import { INSTALL_CODE, OVERRIDE_CODE, SIDEBAR, TOC } from './data.ts'
 

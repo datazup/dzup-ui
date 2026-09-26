@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
 import { SHADE_STEPS } from '@dzup-ui/tokens'
-import { AlertCircle, ArrowRight, Check, Download, Link2 } from 'lucide-vue-next'
+import { AlertCircle, ArrowRight, Check, Download, Link2 } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { DESIGNER_INTENTS } from '../../composables/useThemeDesigner.ts'
 import { LINKS } from '../../config.ts'

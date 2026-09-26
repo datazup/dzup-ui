@@ -25,7 +25,7 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, Share2 } from 'lucide-vue-next'
+import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, Share2 } from '@lucide/vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { buildCover, buildFigure, RELATED, SAMPLE_CODE, TOC } from './data.ts'
 

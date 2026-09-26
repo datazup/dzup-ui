@@ -25,7 +25,7 @@ import {
   DzImage,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowRight, Boxes, Check, Github, Star } from 'lucide-vue-next'
+import { ArrowRight, Boxes, Check, Github, Star } from '@lucide/vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { buildHeroShot, FAQS, FEATURES, LOGOS, NAV_LINKS, TESTIMONIALS } from './data.ts'
 

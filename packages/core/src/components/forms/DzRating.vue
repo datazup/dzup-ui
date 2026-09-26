@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DzRatingEmits, DzRatingProps, DzRatingSlots } from './DzRating.types.ts'
-import { Star } from 'lucide-vue-next'
+import { Star } from '@lucide/vue'
 /**
  * DzRating -- star/icon rating input (ADR-16 defineModel).
  *

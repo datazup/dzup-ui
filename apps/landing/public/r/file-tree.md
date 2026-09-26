@@ -10,7 +10,7 @@ A hierarchical DzTree with per-node lucide icons, expand/collapse and selection 
 <script setup lang="ts">
 import type { TreeNode } from '@dzup-ui/core'
 import { DzBadge, DzCard, DzHeading, DzText, DzTree } from '@dzup-ui/core'
-import { FileCode2, FileJson, FileText, Folder, Image } from 'lucide-vue-next'
+import { FileCode2, FileJson, FileText, Folder, Image } from '@lucide/vue'
 /**
  * File explorer — a hierarchical DzTree with per-node icons + selection.
  *

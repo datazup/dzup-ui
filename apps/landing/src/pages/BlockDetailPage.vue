@@ -19,7 +19,7 @@
  * guaranteed here; we still guard defensively for type-safety.
  */
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight, Zap } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, Zap } from '@lucide/vue'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { BLOCKS, CATEGORIES, getBlock } from '../blocks/registry.ts'

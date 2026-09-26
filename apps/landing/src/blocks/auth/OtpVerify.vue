@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzHeading, DzOtpInput, DzText } from '@dzup-ui/core'
-import { CheckCircle2, ShieldCheck } from 'lucide-vue-next'
+import { CheckCircle2, ShieldCheck } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 /**

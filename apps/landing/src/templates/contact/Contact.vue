@@ -34,7 +34,7 @@ import {
   MessageSquare,
   Phone,
   Send,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, reactive, ref } from 'vue'
 import { DETAILS, OFFICE_HOURS, PROMISES, TOPICS } from './data.ts'
 

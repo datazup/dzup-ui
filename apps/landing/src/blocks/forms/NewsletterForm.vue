@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzCheckbox, DzHeading, DzInput, DzText } from '@dzup-ui/core'
-import { CheckCircle2, Mail, Sparkles } from 'lucide-vue-next'
+import { CheckCircle2, Mail, Sparkles } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "80088e714f30c6c5537c551ca31767c8971c61ae",
+  "sourceCommit": "897cd71fb81a47540137eebafc74cc84d95ca44e",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -21060,7 +21060,7 @@
           "type": "Component",
           "required": true,
           "default": null,
-          "description": "Icon component to render (e.g. from lucide-vue-next)",
+          "description": "Icon component to render (e.g. from",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/media/DzIcon.types.ts"
         },
@@ -21304,7 +21304,7 @@
           "type": "Component",
           "required": true,
           "default": null,
-          "description": "Icon component to render (from lucide-vue-next or similar)",
+          "description": "Icon component to render (from",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/buttons/DzIconButton.types.ts"
         },
@@ -33285,7 +33285,7 @@
           "type": "Component | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Optional leading icon component (e.g. from lucide-vue-next).",
+          "description": "Optional leading icon component (e.g. from",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/overlays/DzPopconfirm.types.ts"
         },

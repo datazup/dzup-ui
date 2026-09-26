@@ -1076,7 +1076,7 @@ import { DzBorderBeam } from '../motion'
     components: ['DzIconButton', 'DzAvatar'],
     code: `<script setup lang="ts">
 import { DzIconButton } from '@dzup-ui/core'
-import { Compass, Settings, Sparkles, Users } from 'lucide-vue-next'
+import { Compass, Settings, Sparkles, Users } from '@lucide/vue'
 import { DzDock, useReducedMotion } from '../motion'
 
 const reduced = useReducedMotion()
@@ -1553,7 +1553,7 @@ function submit() {
     code: `<script setup lang="ts">
 import { ref } from 'vue'
 import { DzToggleButton } from '@dzup-ui/core'
-import { Heart } from 'lucide-vue-next'
+import { Heart } from '@lucide/vue'
 import { DzBurst } from '../motion'
 
 const liked = ref(false)

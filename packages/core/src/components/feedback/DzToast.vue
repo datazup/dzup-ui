@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DzToastEmits, DzToastProps, DzToastSlots } from './DzToast.types.ts'
-import { X } from 'lucide-vue-next'
+import { X } from '@lucide/vue'
 import {
   ToastAction,
   ToastClose,

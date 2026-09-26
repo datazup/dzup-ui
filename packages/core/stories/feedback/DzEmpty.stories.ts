@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { FileX, FolderOpen, Inbox, Search } from 'lucide-vue-next'
+import { FileX, FolderOpen, Inbox, Search } from '@lucide/vue'
 import { expect, within } from 'storybook/test'
 import { DzEmpty } from '../../src/components/feedback'
 import { darkModeDecorator } from '../_shared'

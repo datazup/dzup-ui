@@ -13,7 +13,7 @@ import {
   LifeBuoy,
   Settings,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 interface NavItem {
   label: string

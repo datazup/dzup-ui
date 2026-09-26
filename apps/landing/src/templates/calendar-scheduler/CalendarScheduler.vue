@@ -36,7 +36,7 @@ import {
   DzSidebarSection,
   DzText,
 } from '@dzup-ui/core'
-import { CalendarRange, Clock, MapPin, Pencil, Plus, Trash2 } from 'lucide-vue-next'
+import { CalendarRange, Clock, MapPin, Pencil, Plus, Trash2 } from '@lucide/vue'
 import { computed, reactive, ref } from 'vue'
 import {
   APP_NAV,

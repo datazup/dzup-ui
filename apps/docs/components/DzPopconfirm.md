@@ -62,7 +62,7 @@ never as asserted.
 | `cancelText` | `string \| undefined` | no | `undefined` | Label for the cancel action button. Defaults to `Cancel`. |
 | `confirmText` | `string \| undefined` | no | `undefined` | Label for the confirm action button. Defaults to `Confirm`. |
 | `description` | `string \| undefined` | no | `undefined` | Optional supporting description rendered below the title. |
-| `icon` | `Component \| undefined` | no | `undefined` | Optional leading icon component (e.g. from lucide-vue-next). |
+| `icon` | `Component \| undefined` | no | `undefined` | Optional leading icon component (e.g. from |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `loading` | `boolean \| undefined` | no | `false` | Whether the confirm action is in progress. While truthy the popover stays open, the confirm button shows a spinner, and the cancel button is disabled. Drive this from an async `@confirm` handler to keep the popover open until the work settles. |
 | `open` | `boolean \| undefined` | no | `false` | Whether the confirmation bubble is open; `false` keeps it closed. |

@@ -3,7 +3,7 @@
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 
-import { Inbox, Plus, RefreshCw } from 'lucide-vue-next'
+import { Inbox, Plus, RefreshCw } from '@lucide/vue'
 
 // Deterministic placeholder rows for the loading skeleton list.
 const skeletonRows = [0, 1, 2, 3, 4]

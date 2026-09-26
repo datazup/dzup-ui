@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzDropdownMenu, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuTrigger } from '@dzup-ui/core'
-import { ChevronDown, Github, Menu, Star, X } from 'lucide-vue-next'
+import { ChevronDown, Github, Menu, Star, X } from '@lucide/vue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useLiveStats } from '../composables/useLiveStats.ts'

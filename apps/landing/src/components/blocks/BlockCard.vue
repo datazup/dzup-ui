@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BlockDef } from '../../blocks/registry.ts'
 import { DzCopyButton, DzText } from '@dzup-ui/core'
-import { ArrowDown, ArrowUpRight } from 'lucide-vue-next'
+import { ArrowDown, ArrowUpRight } from '@lucide/vue'
 import { computed } from 'vue'
 import { REGISTRY_ENABLED, registryAddCommands } from '../../blocks/config.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'

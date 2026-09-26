@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { Check, Sparkles } from 'lucide-vue-next'
+import { Check, Sparkles } from '@lucide/vue'
 import { FACTS, LINKS } from '../config.ts'
 import { PRO_COMPONENTS, PRO_FACTS } from '../data.ts'
 import Section from './Section.vue'

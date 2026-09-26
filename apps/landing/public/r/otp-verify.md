@@ -9,7 +9,7 @@ A one-time-code card: a 6-digit DzOtpInput, a Verify button that enables once th
 ```vue
 <script setup lang="ts">
 import { DzButton, DzHeading, DzOtpInput, DzText } from '@dzup-ui/core'
-import { CheckCircle2, ShieldCheck } from 'lucide-vue-next'
+import { CheckCircle2, ShieldCheck } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 /**

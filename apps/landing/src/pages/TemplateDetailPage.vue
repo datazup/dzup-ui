@@ -29,7 +29,7 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight, ExternalLink, Github, Moon, RotateCcw, Sun, Zap } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, ExternalLink, Github, Moon, RotateCcw, Sun, Zap } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import Section from '../components/Section.vue'
 import { useTheme } from '../composables/useTheme.ts'

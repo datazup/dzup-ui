@@ -7,7 +7,7 @@
  * the page — no raw colour lives in this file.
  */
 import type { Component } from 'vue'
-import { Boxes, GitBranch, Sparkles, Workflow, Zap } from 'lucide-vue-next'
+import { Boxes, GitBranch, Sparkles, Workflow, Zap } from '@lucide/vue'
 
 /** Resolved token palette the SVG mocks are painted from. */
 export interface ShotPalette {

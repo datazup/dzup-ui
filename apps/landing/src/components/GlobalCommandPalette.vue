@@ -18,7 +18,7 @@ import type { SearchDoc, SearchKind } from '../composables/useGlobalSearch.ts'
  * kinds. Built only from @dzup-ui/core + `--dz-*` tokens.
  */
 import { DzCommandPalette } from '@dzup-ui/core'
-import { Blocks, Box, LayoutTemplate } from 'lucide-vue-next'
+import { Blocks, Box, LayoutTemplate } from '@lucide/vue'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGlobalSearch } from '../composables/useGlobalSearch.ts'

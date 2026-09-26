@@ -70,7 +70,7 @@ export const FAMILIES: Family[] = FAMILY_COUNTS.map((family) => {
 })
 
 export interface Feature {
-  /** lucide-vue-next icon name (resolved in the component). */
+  /** @lucide/vue icon name (resolved in the component). */
   icon: string
   title: string
   body: string

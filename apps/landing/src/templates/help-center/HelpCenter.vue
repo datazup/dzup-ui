@@ -27,7 +27,7 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowRight, LifeBuoy, MessageCircle, Search } from 'lucide-vue-next'
+import { ArrowRight, LifeBuoy, MessageCircle, Search } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { ICONS } from '../../icons.ts'
 import { CATEGORIES, FAQS, POPULAR_SEARCHES } from './data.ts'

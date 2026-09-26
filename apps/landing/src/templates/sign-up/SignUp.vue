@@ -22,7 +22,7 @@ import {
   DzProgress,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, Check, Github } from 'lucide-vue-next'
+import { Boxes, Check, Github } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { PERKS, scorePassword, SOCIAL_PROOF, STRENGTH_LEVELS } from './data.ts'
 

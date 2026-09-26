@@ -32,7 +32,7 @@ import {
   DzNumberInput,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, Leaf, Lock, Plus, RotateCcw, ShoppingBag, Tag, Trash2, Truck } from 'lucide-vue-next'
+import { ArrowLeft, Leaf, Lock, Plus, RotateCcw, ShoppingBag, Tag, Trash2, Truck } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   buildThumb,

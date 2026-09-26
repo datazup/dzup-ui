@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUpRight } from 'lucide-vue-next'
+import { ArrowUpRight } from '@lucide/vue'
 import { useTheme } from '../../composables/useTheme.ts'
 import { DzMarquee } from '../../motion/index.ts'
 import { TEMPLATES } from '../../templates/registry.ts'

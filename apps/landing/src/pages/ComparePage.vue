@@ -8,7 +8,7 @@
  * (emphasised) column. Copy is factual — no superlatives, no ranking.
  */
 import { DzButton, DzCard, DzHeading, DzTable, DzTableBody, DzTableCell, DzTableHeader, DzTableRow, DzText } from '@dzup-ui/core'
-import { ArrowRight, ExternalLink } from 'lucide-vue-next'
+import { ArrowRight, ExternalLink } from '@lucide/vue'
 import Section from '../components/Section.vue'
 import { LINKS } from '../config.ts'
 import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'

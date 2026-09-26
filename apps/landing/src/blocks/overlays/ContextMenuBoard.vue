@@ -32,7 +32,7 @@ import {
   Sheet,
   Star,
   Trash2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 interface Tile { name: string, icon: typeof FileText, kind: string }

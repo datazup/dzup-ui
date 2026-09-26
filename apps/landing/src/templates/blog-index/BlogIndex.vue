@@ -21,7 +21,7 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowUpRight, BookOpen, Rss } from 'lucide-vue-next'
+import { ArrowUpRight, BookOpen, Rss } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { buildCover, CATEGORIES, FEATURED, POSTS } from './data.ts'
 

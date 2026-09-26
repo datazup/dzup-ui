@@ -24,7 +24,7 @@ import {
   DzTimeline,
   DzTimelineItem,
 } from '@dzup-ui/core'
-import { GitMerge, Rss } from 'lucide-vue-next'
+import { GitMerge, Rss } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { CHANGE_TONE, FILTERS, RELEASES } from './data.ts'
 

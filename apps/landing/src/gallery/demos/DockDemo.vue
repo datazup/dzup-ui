@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzIconButton } from '@dzup-ui/core'
-import { Activity, Bell, Compass, LayoutDashboard, Settings, Sparkles, Users } from 'lucide-vue-next'
+import { Activity, Bell, Compass, LayoutDashboard, Settings, Sparkles, Users } from '@lucide/vue'
 import { DzDock, useReducedMotion } from '../../motion/index.ts'
 
 /**

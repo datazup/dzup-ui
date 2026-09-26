@@ -14,7 +14,7 @@ import type { Component } from 'vue'
  * reflows cleanly 390px → up.
  */
 import { DzBadge, DzButton, DzCard, DzCountdown, DzDivider, DzHeading, DzInput, DzText } from '@dzup-ui/core'
-import { ArrowRight, Boxes, CheckCircle2, Github, Linkedin, Rocket, Twitter } from 'lucide-vue-next'
+import { ArrowRight, Boxes, CheckCircle2, Github, Linkedin, Rocket, Twitter } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

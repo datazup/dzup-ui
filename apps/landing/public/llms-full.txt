@@ -320,7 +320,7 @@ import {
   DzSheetTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { Menu, X, Zap } from 'lucide-vue-next'
+import { Menu, X, Zap } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**
@@ -625,7 +625,7 @@ import {
   Lock,
   Sparkles,
   Zap,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 /**
  * Feature grid — six feature cards, each with an icon, title, and short blurb.
@@ -813,7 +813,7 @@ A horizontal band of four key metrics with icon, trend indicator, and an animate
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { DzAnimatedNumber, DzStatCard } from '@dzup-ui/core'
-import { DollarSign, TrendingUp, Users, Zap } from 'lucide-vue-next'
+import { DollarSign, TrendingUp, Users, Zap } from '@lucide/vue'
 
 /**
  * Stats band — a horizontal strip of four key product metrics.
@@ -970,7 +970,7 @@ import {
   DzHeading,
   DzText,
 } from '@dzup-ui/core'
-import { Check } from 'lucide-vue-next'
+import { Check } from '@lucide/vue'
 
 /**
  * PricingThree — three-tier pricing (Free / Pro / Enterprise) in a
@@ -979,7 +979,7 @@ import { Check } from 'lucide-vue-next'
  * The Pro tier is highlighted with an `outlined` card variant and a
  * DzBadge "Most popular" chip so it stands out without a raw color.
  * Feature rows use the lucide Check icon — no DzIcon wrapper required
- * because lucide-vue-next components accept a `size` / `stroke-width`
+ * because @lucide/vue components accept a `size` / `stroke-width`
  * prop directly and carry no extra runtime overhead.
  *
  * Heading level: section title at :level="4" (BlockPreview uses H3),
@@ -1871,7 +1871,7 @@ Brand blurb, four link columns, social icon buttons, and a theme toggle; collaps
 ```vue
 <script setup lang="ts">
 import { DzColorModeToggle, DzDivider, DzIconButton, DzText } from '@dzup-ui/core'
-import { Github, Linkedin, Twitter, Youtube } from 'lucide-vue-next'
+import { Github, Linkedin, Twitter, Youtube } from '@lucide/vue'
 
 /**
  * Multi-column footer — brand blurb, four link columns, social icon buttons,
@@ -2198,7 +2198,7 @@ import {
   LayoutDashboard,
   Settings,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 const sidebarCollapsed = ref(false)
@@ -2445,7 +2445,7 @@ import {
   DzButton,
   DzHeading,
 } from '@dzup-ui/core'
-import { Download, Plus, Share2 } from 'lucide-vue-next'
+import { Download, Plus, Share2 } from '@lucide/vue'
 </script>
 
 <template>
@@ -2575,7 +2575,7 @@ Four KPI cards with up/down/neutral trend deltas in a responsive 4→2→1 colum
  * Self-contained: static sample data, no props, no router.
  */
 import { DzStatCard } from '@dzup-ui/core'
-import { Activity, DollarSign, ShoppingCart, Users } from 'lucide-vue-next'
+import { Activity, DollarSign, ShoppingCart, Users } from '@lucide/vue'
 
 const stats = [
   {
@@ -2944,7 +2944,7 @@ Styled icon illustration, heading, supporting copy and a primary call-to-action 
  * so no DzHeading is composed here — DzEmpty owns the heading level.
  */
 import { DzButton, DzEmpty } from '@dzup-ui/core'
-import { FolderOpen, Plus } from 'lucide-vue-next'
+import { FolderOpen, Plus } from '@lucide/vue'
 </script>
 
 <template>
@@ -3342,7 +3342,7 @@ import {
   DzPanel,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowDownRight, ArrowUpRight, Sparkles } from 'lucide-vue-next'
+import { ArrowDownRight, ArrowUpRight, Sparkles } from '@lucide/vue'
 
 interface Metric {
   label: string
@@ -3656,7 +3656,7 @@ import {
   DzText,
   DzToolbar,
 } from '@dzup-ui/core'
-import { Circle, FileCode, FileText, Folder, Play, Save } from 'lucide-vue-next'
+import { Circle, FileCode, FileText, Folder, Play, Save } from '@lucide/vue'
 
 interface TreeRow {
   label: string
@@ -4510,7 +4510,7 @@ import {
   Square,
   Type,
   Undo2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 interface Tool {
   icon: Component
@@ -4878,7 +4878,7 @@ import {
   DzStack,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, Gauge, Layers, ShieldCheck } from 'lucide-vue-next'
+import { Boxes, Gauge, Layers, ShieldCheck } from '@lucide/vue'
 
 const nav: string[] = ['Product', 'Pricing', 'Docs']
 
@@ -5259,7 +5259,7 @@ import {
   DzSwitch,
   DzText,
 } from '@dzup-ui/core'
-import { ChevronDown } from 'lucide-vue-next'
+import { ChevronDown } from '@lucide/vue'
 /**
  * Collapsible sections — a settings page of expandable panels built on DzPanel
  * and DzCollapse.
@@ -7179,7 +7179,7 @@ A hierarchical DzTree with per-node lucide icons, expand/collapse and selection 
 <script setup lang="ts">
 import type { TreeNode } from '@dzup-ui/core'
 import { DzBadge, DzCard, DzHeading, DzText, DzTree } from '@dzup-ui/core'
-import { FileCode2, FileJson, FileText, Folder, Image } from 'lucide-vue-next'
+import { FileCode2, FileJson, FileText, Folder, Image } from '@lucide/vue'
 /**
  * File explorer — a hierarchical DzTree with per-node icons + selection.
  *
@@ -7972,7 +7972,7 @@ A column of inline DzAlerts spanning the variant taxonomy and tones — info, su
 ```vue
 <script setup lang="ts">
 import { DzAlert, DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { CheckCircle2, Info, ShieldAlert, TriangleAlert } from 'lucide-vue-next'
+import { CheckCircle2, Info, ShieldAlert, TriangleAlert } from '@lucide/vue'
 /**
  * Alert stack — inline DzAlert messages across tones and variants.
  *
@@ -8094,7 +8094,7 @@ A dismissible feed of persistent DzNotifications inside an outlined panel — to
 import type { CanonicalTone } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 import { DzBadge, DzButton, DzCard, DzHeading, DzNotification, DzText } from '@dzup-ui/core'
-import { BellOff, GitPullRequestArrow, MessageSquare, TriangleAlert, UserPlus } from 'lucide-vue-next'
+import { BellOff, GitPullRequestArrow, MessageSquare, TriangleAlert, UserPlus } from '@lucide/vue'
 /**
  * Notification center — a dismissible feed of persistent DzNotifications.
  *
@@ -8910,7 +8910,7 @@ import {
   Settings,
   UserPlus,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 const open = ref(false)
@@ -9104,7 +9104,7 @@ import {
   Settings,
   User,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 const lastAction = ref('')
@@ -9384,7 +9384,7 @@ import {
   Sheet,
   Star,
   Trash2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 interface Tile { name: string, icon: typeof FileText, kind: string }
@@ -9612,7 +9612,7 @@ import {
   DzSwitch,
   DzText,
 } from '@dzup-ui/core'
-import { ChevronDown, MapPin, SlidersHorizontal } from 'lucide-vue-next'
+import { ChevronDown, MapPin, SlidersHorizontal } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 const following = ref(false)
@@ -9922,7 +9922,7 @@ import {
   Redo2,
   Underline,
   Undo2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { reactive } from 'vue'
 
 interface Tip {
@@ -10113,7 +10113,7 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import { FolderGit2, Plus } from 'lucide-vue-next'
+import { FolderGit2, Plus } from '@lucide/vue'
 import { ref } from 'vue'
 
 const open = ref(false)
@@ -10348,7 +10348,7 @@ import {
   DzPopconfirm,
   DzText,
 } from '@dzup-ui/core'
-import { RotateCcw, Trash2 } from 'lucide-vue-next'
+import { RotateCcw, Trash2 } from '@lucide/vue'
 import { ref } from 'vue'
 
 const status = ref('')
@@ -10617,7 +10617,7 @@ import {
   DzSheetTitle,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowRight, X } from 'lucide-vue-next'
+import { ArrowRight, X } from '@lucide/vue'
 import { ref } from 'vue'
 
 interface Order {
@@ -10955,7 +10955,7 @@ import {
   DzText,
   DzTour,
 } from '@dzup-ui/core'
-import { Bell, Plus, Search, Sparkles } from 'lucide-vue-next'
+import { Bell, Plus, Search, Sparkles } from '@lucide/vue'
 import { ref } from 'vue'
 
 const open = ref(false)
@@ -11177,7 +11177,7 @@ A labelled specimen sheet of every DzButton variant, tone and size, plus icon an
 ```vue
 <script setup lang="ts">
 import { DzButton, DzText } from '@dzup-ui/core'
-import { ArrowRight, Download, Trash2 } from 'lucide-vue-next'
+import { ArrowRight, Download, Trash2 } from '@lucide/vue'
 
 /**
  * Button gallery — a labelled specimen sheet of the whole DzButton surface:
@@ -11369,7 +11369,7 @@ import {
   Redo2,
   Underline,
   Undo2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 /**
@@ -11579,7 +11579,7 @@ import {
   Files,
   LayoutGrid,
   LayoutList,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 /**
@@ -11725,7 +11725,7 @@ A stacked column of full-width provider buttons (Google, GitHub, Apple), a label
 ```vue
 <script setup lang="ts">
 import { DzButton, DzDivider, DzText } from '@dzup-ui/core'
-import { Apple, Github, Mail } from 'lucide-vue-next'
+import { Apple, Github, Mail } from '@lucide/vue'
 
 /**
  * Social sign-in buttons — a stacked column of full-width provider buttons
@@ -11870,7 +11870,7 @@ import {
   Share2,
   Sparkles,
   Trash2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 /**
@@ -12016,7 +12016,7 @@ import {
   DzPasswordInput,
   DzText,
 } from '@dzup-ui/core'
-import { Github } from 'lucide-vue-next'
+import { Github } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**
@@ -12453,7 +12453,7 @@ import {
   DzPasswordInput,
   DzText,
 } from '@dzup-ui/core'
-import { Globe, ShieldCheck, Zap } from 'lucide-vue-next'
+import { Globe, ShieldCheck, Zap } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**
@@ -13006,7 +13006,7 @@ A one-time-code card: a 6-digit DzOtpInput, a Verify button that enables once th
 ```vue
 <script setup lang="ts">
 import { DzButton, DzHeading, DzOtpInput, DzText } from '@dzup-ui/core'
-import { CheckCircle2, ShieldCheck } from 'lucide-vue-next'
+import { CheckCircle2, ShieldCheck } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 /**
@@ -13225,7 +13225,7 @@ import {
   DzInput,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, Mail, MailCheck } from 'lucide-vue-next'
+import { ArrowLeft, Mail, MailCheck } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**
@@ -13423,7 +13423,7 @@ A focused subscribe card — an email DzInput with a mail-icon prefix and inline
 ```vue
 <script setup lang="ts">
 import { DzButton, DzCheckbox, DzHeading, DzInput, DzText } from '@dzup-ui/core'
-import { CheckCircle2, Mail, Sparkles } from 'lucide-vue-next'
+import { CheckCircle2, Mail, Sparkles } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**
@@ -13869,7 +13869,7 @@ import {
   DzSelect,
   DzText,
 } from '@dzup-ui/core'
-import { CreditCard, Lock, Tag } from 'lucide-vue-next'
+import { CreditCard, Lock, Tag } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**
@@ -14804,7 +14804,7 @@ import {
   DzText,
   DzTimePicker,
 } from '@dzup-ui/core'
-import { CalendarCheck, Users } from 'lucide-vue-next'
+import { CalendarCheck, Users } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**
@@ -14973,7 +14973,7 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import { SignalHigh, SignalLow, SignalMedium } from 'lucide-vue-next'
+import { SignalHigh, SignalLow, SignalMedium } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**
@@ -15605,7 +15605,7 @@ import {
   DzNumberInput,
   DzText,
 } from '@dzup-ui/core'
-import { Plus, Trash2 } from 'lucide-vue-next'
+import { Plus, Trash2 } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**

@@ -5,7 +5,7 @@
  * re-themes via `currentColor`-free, token-agnostic neutral tones.
  */
 import type { Component } from 'vue'
-import { BarChart3, ShieldCheck, Workflow, Zap } from 'lucide-vue-next'
+import { BarChart3, ShieldCheck, Workflow, Zap } from '@lucide/vue'
 
 export interface Feature {
   icon: Component

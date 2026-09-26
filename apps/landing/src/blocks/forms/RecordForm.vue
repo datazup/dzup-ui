@@ -13,7 +13,7 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import { SignalHigh, SignalLow, SignalMedium } from 'lucide-vue-next'
+import { SignalHigh, SignalLow, SignalMedium } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

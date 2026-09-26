@@ -5,7 +5,7 @@
  * lorem ipsum (§5 "realistic content").
  */
 import type { Component } from 'vue'
-import { CalendarDays, CheckSquare, Inbox, Settings, Users } from 'lucide-vue-next'
+import { CalendarDays, CheckSquare, Inbox, Settings, Users } from '@lucide/vue'
 
 /** A sidebar navigation entry for the app rail. */
 export interface NavItem {

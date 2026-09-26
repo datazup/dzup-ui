@@ -36,7 +36,7 @@ import {
   DzStepperItem,
   DzText,
 } from '@dzup-ui/core'
-import { Leaf, Lock, RotateCcw, ShoppingBag, Tag, Trash2, Truck } from 'lucide-vue-next'
+import { Leaf, Lock, RotateCcw, ShoppingBag, Tag, Trash2, Truck } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import {
   COUNTRIES,

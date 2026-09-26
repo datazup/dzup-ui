@@ -36,7 +36,7 @@ import {
   Square,
   Type,
   Undo2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 interface Tool {
   icon: Component

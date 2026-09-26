@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzInput, DzText } from '@dzup-ui/core'
-import { AlertCircle, ArrowRight } from 'lucide-vue-next'
+import { AlertCircle, ArrowRight } from '@lucide/vue'
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useReducedMotion } from '../../motion/index.ts'
 

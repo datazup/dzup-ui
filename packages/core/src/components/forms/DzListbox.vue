@@ -7,7 +7,7 @@ import type {
   DzListboxSlots,
   DzListboxValue,
 } from './DzListbox.types.ts'
-import { Check } from 'lucide-vue-next'
+import { Check } from '@lucide/vue'
 import {
   ListboxContent,
   ListboxFilter,

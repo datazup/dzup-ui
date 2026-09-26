@@ -32,7 +32,7 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes } from 'lucide-vue-next'
+import { Boxes } from '@lucide/vue'
 import { computed, reactive, ref } from 'vue'
 import {
   COLUMNS,

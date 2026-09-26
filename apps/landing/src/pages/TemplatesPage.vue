@@ -15,7 +15,7 @@ import {
   DzText,
   DzVisuallyHidden,
 } from '@dzup-ui/core'
-import { ArrowUpRight, Command, LayoutTemplate, X } from 'lucide-vue-next'
+import { ArrowUpRight, Command, LayoutTemplate, X } from '@lucide/vue'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Section from '../components/Section.vue'

@@ -57,7 +57,7 @@ never as asserted.
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label -- REQUIRED since there is no visible text |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
-| `icon` | `Component` | yes | — | Icon component to render (from lucide-vue-next or similar) |
+| `icon` | `Component` | yes | — | Icon component to render (from |
 | `id` | `string \| undefined` | no | — | Unique element ID |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows spinner and sets aria-busy |
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |

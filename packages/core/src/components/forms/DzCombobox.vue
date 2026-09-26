@@ -6,7 +6,7 @@ import type {
   DzComboboxResolvedItem,
   DzComboboxSlots,
 } from './DzCombobox.types.ts'
-import { Check, ChevronDown, X } from 'lucide-vue-next'
+import { Check, ChevronDown, X } from '@lucide/vue'
 import {
   ComboboxAnchor,
   ComboboxCancel,

@@ -35,7 +35,7 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, MoreHorizontal, UserPlus } from 'lucide-vue-next'
+import { Boxes, MoreHorizontal, UserPlus } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import {
   CONTACT_TABS,

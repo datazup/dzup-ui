@@ -54,7 +54,7 @@ never as asserted.
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label. When provided, the icon is treated as meaningful (not decorative). |
-| `icon` | `Component` | yes | — | Icon component to render (e.g. from lucide-vue-next) |
+| `icon` | `Component` | yes | — | Icon component to render (e.g. from |
 | `id` | `string \| undefined` | no | — | Accessible identifier |
 | `size` | `IconSize \| undefined` | no | `"md"` | Icon size |
 | `strokeWidth` | `number \| undefined` | no | — | SVG stroke width override |

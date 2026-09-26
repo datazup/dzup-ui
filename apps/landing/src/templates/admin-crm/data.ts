@@ -14,7 +14,7 @@ import {
   ListChecks,
   PieChart,
   Settings,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 /** A sidebar navigation entry. */
 export interface NavItem {

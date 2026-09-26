@@ -50,7 +50,7 @@ import {
   DzSidebarSection,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, Download, MoreHorizontal, Plus, Trash2, X } from 'lucide-vue-next'
+import { Boxes, Download, MoreHorizontal, Plus, Trash2, X } from '@lucide/vue'
 import { computed, reactive, ref, watch } from 'vue'
 import {
 

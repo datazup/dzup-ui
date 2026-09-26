@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzColorModeToggle, DzDivider, DzIconButton, DzText } from '@dzup-ui/core'
-import { Github, Linkedin, Twitter, Youtube } from 'lucide-vue-next'
+import { Github, Linkedin, Twitter, Youtube } from '@lucide/vue'
 
 /**
  * Multi-column footer — brand blurb, four link columns, social icon buttons,

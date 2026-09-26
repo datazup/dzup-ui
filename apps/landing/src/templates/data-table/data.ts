@@ -7,7 +7,7 @@
 import type { CanonicalTone } from '@dzup-ui/contracts'
 import type { DzSelectItem } from '@dzup-ui/core'
 import type { Component } from 'vue'
-import { Building2, CreditCard, LayoutGrid, LifeBuoy, Receipt, Users } from 'lucide-vue-next'
+import { Building2, CreditCard, LayoutGrid, LifeBuoy, Receipt, Users } from '@lucide/vue'
 
 export type CustomerPlan = 'Free' | 'Starter' | 'Pro' | 'Enterprise'
 export type CustomerStatus = 'Active' | 'Trial' | 'Past due' | 'Churned'

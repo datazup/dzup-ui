@@ -3,7 +3,7 @@ import type { DzIconProps } from './DzIcon.types.ts'
 /**
  * DzIcon — Icon wrapper component with consistent sizing and accessibility.
  *
- * Renders any Vue component icon (e.g. from lucide-vue-next) with standardized
+ * Renders any Vue component icon (e.g. from @lucide/vue) with standardized
  * size tokens. Decorative by default (aria-hidden="true"); provide `ariaLabel`
  * to make it meaningful.
  *

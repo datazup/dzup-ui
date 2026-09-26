@@ -1,7 +1,7 @@
 /**
  * DzIcon — Type definitions for the icon component.
  *
- * Wraps icon components (e.g. from lucide-vue-next) with consistent sizing
+ * Wraps icon components (e.g. from @lucide/vue) with consistent sizing
  * and accessibility attributes.
  */
 import type { Component } from 'vue'
@@ -10,7 +10,7 @@ import type { Component } from 'vue'
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 export interface DzIconProps {
-  /** Icon component to render (e.g. from lucide-vue-next) */
+  /** Icon component to render (e.g. from @lucide/vue) */
   icon: Component
   /** Icon size */
   size?: IconSize

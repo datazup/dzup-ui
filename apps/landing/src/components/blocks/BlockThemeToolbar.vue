@@ -2,7 +2,7 @@
 import type { SegmentedItem } from '@dzup-ui/core'
 import type { Density } from '../../composables/useBlockTheme.ts'
 import { DzButton, DzColorPicker, DzSegmented, DzSlider, DzText } from '@dzup-ui/core'
-import { Palette, RotateCcw, TriangleAlert } from 'lucide-vue-next'
+import { Palette, RotateCcw, TriangleAlert } from '@lucide/vue'
 import { computed } from 'vue'
 import { RADIUS_MAX, RADIUS_MIN, RADIUS_STEP, useBlockTheme } from '../../composables/useBlockTheme.ts'
 

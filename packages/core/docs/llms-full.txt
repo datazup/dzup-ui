@@ -226,7 +226,7 @@ Icon-only button component.
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label -- REQUIRED since there is no visible text |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
-| `icon` | `Component` | yes | — | Icon component to render (from lucide-vue-next or similar) |
+| `icon` | `Component` | yes | — | Icon component to render (from |
 | `id` | `string \| undefined` | no | — | Unique element ID |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows spinner and sets aria-busy |
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
@@ -5204,7 +5204,7 @@ An inline confirmation popover anchored to its trigger.
 | `cancelText` | `string \| undefined` | no | `undefined` | Label for the cancel action button. Defaults to `Cancel`. |
 | `confirmText` | `string \| undefined` | no | `undefined` | Label for the confirm action button. Defaults to `Confirm`. |
 | `description` | `string \| undefined` | no | `undefined` | Optional supporting description rendered below the title. |
-| `icon` | `Component \| undefined` | no | `undefined` | Optional leading icon component (e.g. from lucide-vue-next). |
+| `icon` | `Component \| undefined` | no | `undefined` | Optional leading icon component (e.g. from |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `loading` | `boolean \| undefined` | no | `false` | Whether the confirm action is in progress. While truthy the popover stays open, the confirm button shows a spinner, and the cancel button is disabled. Drive this from an async `@confirm` handler to keep the popover open until the work settles. |
 | `open` | `boolean \| undefined` | no | `false` | Whether the confirmation bubble is open; `false` keeps it closed. |
@@ -8278,7 +8278,7 @@ Icon wrapper component with consistent sizing and accessibility.
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label. When provided, the icon is treated as meaningful (not decorative). |
-| `icon` | `Component` | yes | — | Icon component to render (e.g. from lucide-vue-next) |
+| `icon` | `Component` | yes | — | Icon component to render (e.g. from |
 | `id` | `string \| undefined` | no | — | Accessible identifier |
 | `size` | `IconSize \| undefined` | no | `"md"` | Icon size |
 | `strokeWidth` | `number \| undefined` | no | — | SVG stroke width override |

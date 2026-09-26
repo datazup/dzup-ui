@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzBadge, DzText } from '@dzup-ui/core'
-import { ArrowRight, Layers } from 'lucide-vue-next'
+import { ArrowRight, Layers } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ECOSYSTEM } from '../../data.ts'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzAlert, DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { CheckCircle2, Info, ShieldAlert, TriangleAlert } from 'lucide-vue-next'
+import { CheckCircle2, Info, ShieldAlert, TriangleAlert } from '@lucide/vue'
 /**
  * Alert stack — inline DzAlert messages across tones and variants.
  *

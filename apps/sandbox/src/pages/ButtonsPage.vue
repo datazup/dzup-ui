@@ -33,7 +33,7 @@ import {
   Star,
   Trash2,
   Underline,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 

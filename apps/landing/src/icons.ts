@@ -58,7 +58,7 @@ import {
   Users,
   Wind,
   Wrench,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 export const ICONS: Record<string, Component> = {
   Accessibility,

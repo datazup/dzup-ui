@@ -18,7 +18,7 @@ import {
   DzTableRow,
   DzText,
 } from '@dzup-ui/core'
-import { Search } from 'lucide-vue-next'
+import { Search } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

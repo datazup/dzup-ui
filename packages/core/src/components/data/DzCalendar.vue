@@ -9,7 +9,7 @@ import type {
   DzCalendarSlots,
 } from './DzCalendar.types.ts'
 import { getLocalTimeZone } from '@internationalized/date'
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight } from '@lucide/vue'
 /**
  * DzCalendar — full-surface month/week calendar for date selection and
  * day-cell content (events, counts, badges).

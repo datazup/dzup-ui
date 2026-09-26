@@ -30,7 +30,7 @@ import {
   Leaf,
   Shapes,
   Sparkles,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { FAQS, MILESTONES, STATS, TEAM, VALUES, WIDER_TEAM } from './data.ts'
 
 /** Local map from a value's Lucide key to its component (data stays import-free). */

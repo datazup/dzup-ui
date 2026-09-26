@@ -20,7 +20,7 @@ import {
   DzPasswordInput,
   DzText,
 } from '@dzup-ui/core'
-import { Github } from 'lucide-vue-next'
+import { Github } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

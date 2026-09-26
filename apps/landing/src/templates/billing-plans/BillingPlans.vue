@@ -24,7 +24,7 @@ import {
   DzTableRow,
   DzText,
 } from '@dzup-ui/core'
-import { Check, Clock, Download } from 'lucide-vue-next'
+import { Check, Clock, Download } from '@lucide/vue'
 import { ref } from 'vue'
 import {
   INVOICE_TONE,

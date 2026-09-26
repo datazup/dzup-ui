@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DzPaginationEmits, DzPaginationProps, DzPaginationSlots } from './DzPagination.types.ts'
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal } from '@lucide/vue'
 import {
   PaginationEllipsis,
   PaginationFirst,

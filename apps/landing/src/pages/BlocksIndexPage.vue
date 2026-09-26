@@ -2,7 +2,7 @@
 import type { BlockDef, CategoryMeta } from '../blocks/registry.ts'
 import type { BlockNavTarget } from '../components/blocks/BlockCommandPalette.vue'
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { BLOCKS, blocksByCategory, CATEGORIES } from '../blocks/registry.ts'
 import BlockAiCallout from '../components/blocks/BlockAiCallout.vue'

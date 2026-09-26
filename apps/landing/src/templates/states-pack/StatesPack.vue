@@ -28,7 +28,7 @@ import {
   SearchX,
   SlidersHorizontal,
   Sparkles,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 </script>
 
 <template>

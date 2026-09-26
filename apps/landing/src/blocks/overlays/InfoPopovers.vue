@@ -23,7 +23,7 @@ import {
   DzSwitch,
   DzText,
 } from '@dzup-ui/core'
-import { ChevronDown, MapPin, SlidersHorizontal } from 'lucide-vue-next'
+import { ChevronDown, MapPin, SlidersHorizontal } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 const following = ref(false)

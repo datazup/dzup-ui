@@ -6,7 +6,7 @@ import type {
   DzDateRangePickerProps,
   DzDateRangePickerSlots,
 } from './DzDateRangePicker.types.ts'
-import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { CalendarIcon, ChevronLeft, ChevronRight } from '@lucide/vue'
 import {
   DateRangePickerAnchor,
   DateRangePickerCalendar,

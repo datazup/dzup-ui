@@ -10,7 +10,7 @@ A horizontal band of four key metrics with icon, trend indicator, and an animate
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { DzAnimatedNumber, DzStatCard } from '@dzup-ui/core'
-import { DollarSign, TrendingUp, Users, Zap } from 'lucide-vue-next'
+import { DollarSign, TrendingUp, Users, Zap } from '@lucide/vue'
 
 /**
  * Stats band — a horizontal strip of four key product metrics.

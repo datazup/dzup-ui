@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzBadge, DzButton, DzCard, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowLeft, BookOpen, Boxes, Sparkles } from 'lucide-vue-next'
+import { ArrowLeft, BookOpen, Boxes, Sparkles } from '@lucide/vue'
 import { PRO_FACTS, PRO_FAMILIES } from '../data.ts'
 </script>
 
