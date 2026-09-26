@@ -1,6 +1,6 @@
 # ADR-19 — Public styling contract: layers, parts, states, and typed overrides
 
-- **Status:** Proposed (TASK-OSS-P3-01, 2026-08-20)
+- **Status:** Accepted (owner, 2026-09-26; proposed by TASK-OSS-P3-01, 2026-08-20)
 - **Extends:** ADR-04 (token-only styling), ADR-17 (token source of truth)
 - **Depended on by:** TASK-OSS-P3-02 (anatomy metadata), P3-03 (five pilots),
   P3-04 (styling cookbook), and every Pro styling slice

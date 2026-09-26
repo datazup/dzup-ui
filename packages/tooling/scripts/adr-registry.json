@@ -29,10 +29,14 @@
     "— ADR-18, ADR-19 and ADR-20, none of which has an owner's signature. Like",
     "maxUndocumented it must EQUAL the measured count, so accepting an ADR fails the gate",
     "until the ceiling is lowered in the same change. That is the point: before TASK-R0-O2",
-    "the gate was status-blind and acceptance moved nothing measurable at all."
+    "the gate was status-blind and acceptance moved nothing measurable at all.",
+    "",
+    "2026-09-26: the owner accepted ADR-18, ADR-19 and ADR-20 (packet",
+    "DZUP-UI-ADR-ACCEPT-LHCI-RUNS-20260926-R1), so the ceiling is 0. Any new Proposed ADR",
+    "cited from code now fails the gate until it is accepted."
   ],
   "maxUndocumented": 14,
-  "maxProposedCitedFromCode": 3,
+  "maxProposedCitedFromCode": 0,
   "documented": [
     {
       "id": "ADR-18",

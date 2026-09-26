@@ -20,6 +20,13 @@ Applies `docs/qa/adr-prep-2026-09-26/ACCEPTANCE.md` as written:
 
 Criterion C1 moves from 0/3 to 3/3.
 
+**Amendment A1 (same day, before the ADR commit).** The prescribed wording
+failed the gate: `yarn validate:adr-references` still counted 3 Proposed.
+`readStatus` checked `ADR_STATUSES` in declaration order, so `proposed by …`
+matched `Proposed` before `Accepted`. The function's own comment says it "takes
+the first status word". It now does, by position, and a spec case pins that.
+The two files are added to the allowed paths.
+
 ## Part 2 — Lighthouse: 5 runs per URL instead of 3
 
 The mobile `/templates` LCP gate is flaky, not regressed. Identical code measured:
@@ -45,6 +52,7 @@ accepted that. The ceiling itself is unchanged and may still only move down.
 - `docs/adr/ADR-19-public-styling-contract.md`
 - `docs/adr/ADR-20-provider-contract.md`
 - `packages/tooling/scripts/adr-registry.json`
+- `packages/tooling/scripts/validate-adr-references.ts`, `validate-adr-references.spec.ts` (A1)
 - `apps/landing/lighthouserc.json`
 - `apps/landing/lighthouserc.mobile.json`
 - `apps/landing/src/lighthouserc.spec.ts`

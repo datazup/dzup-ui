@@ -1,6 +1,6 @@
 # ADR-20 — Provider contract: locale, direction, messages, formats, portals, motion, defaults, nonce, test ids
 
-- **Status:** Proposed (TASK-OSS-P4-01, 2026-08-21; amended by TASK-OSS-P4-02 and P4-03, 2026-08-21, TASK-R3-O2 2026-09-04, TASK-R2-O4 2026-09-18 and TASK-R0-O2 2026-09-22 — see *Amendments*)
+- **Status:** Accepted (owner, 2026-09-26; proposed by TASK-OSS-P4-01, 2026-08-21; amended by TASK-OSS-P4-02 and P4-03, 2026-08-21, TASK-R3-O2 2026-09-04, TASK-R2-O4 2026-09-18 and TASK-R0-O2 2026-09-22 — see *Amendments*)
 - **Extends:** ADR-09 (theme context), ADR-08 (compound context by provide/inject)
 - **Depended on by:** TASK-OSS-P4-02 (`DzProvider`), P4-03 (message catalogs),
   P4-04 (portal migration), P4-05 (RTL matrices), and every Pro slice that needs

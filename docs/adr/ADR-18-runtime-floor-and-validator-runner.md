@@ -1,6 +1,6 @@
 # ADR-18 — Runtime floor and validator runner
 
-- **Status:** Proposed (TASK-OSS-P2-01, 2026-08-20)
+- **Status:** Accepted (owner, 2026-09-26; proposed by TASK-OSS-P2-01, 2026-08-20)
 - **Supersedes:** the `engines.node: ">=20.0.0"` declaration in the root
   `package.json` and the matching claim in `CONTRIBUTING.md`
 
