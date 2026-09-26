@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "package": "@dzup-ui/mcp",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "serverName": "dzup-ui",
-  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "sourceCommit": "843ffad7f4a6e03112c28c894d5c51965e4514ae",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
     "packages/core/manifests/public-api.manifest.json",
