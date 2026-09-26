@@ -691,3 +691,19 @@ it** — every divergence was either the document under-claiming what shipped or
 over-claiming adoption, and A8 corrects both directions. What is missing is a
 signature and five genuinely open questions, four of which (`D-L`, `D-M`, `D-P`,
 `D6`) the packet itself marks non-blocking.
+
+### A9. D181 decided; the Node floor is settled *(DZUP-UI-ADR-PREP-20260926-R1, 2026-09-26)*
+
+The owner took **D181** option (a) on 2026-09-26: the §4 correction is carried
+by this ADR's acceptance review. **A8.1 is that correction**, so D181 is
+discharged and no separate amendment packet is owed.
+
+The owner also decided the Node floor, **D176**: it stays
+`^20.19.0 || >=22.13.0` (ADR-18 amendment A6). A8.1's reading is unchanged by
+that. `getTextInfo()` needs Node 24.0.0, which is above the kept floor, so the
+checked-in RTL list stays the mechanism.
+
+**Status.** The open questions in A8.7 (`D-L`, `D-M`, `D-P`, `D6`) are unchanged,
+and A8.7 already records that none of them blocks acceptance. This ADR remains
+`Proposed` until the owner accepts it; `docs/qa/adr-prep-2026-09-26/ACCEPTANCE.md`
+lists the exact edit.

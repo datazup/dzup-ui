@@ -187,3 +187,42 @@ flipping that line and lowering the ceiling in the same change.
 
 Its unmet precondition is **A1** — a floor decision. See the precondition table
 in `docs/program-2026-09-04/reports/TASK-R0-O2-handoff.md`.
+
+### A6 — The floor is decided, and it has now been run *(DZUP-UI-ADR-PREP-20260926-R1, 2026-09-26)*
+
+**A1 is closed.** The owner decided the floor on 2026-09-26 (owner decision
+**D176**, taken as **D160**'s answer; recorded in
+`docs/qa/owner-decisions-2026-09-26/ADMISSION.md` and the owner-decision
+register): **keep `^20.19.0 || >=22.13.0`.** Decision 1 stands as written. The
+two `>=22.13.0` recommendations in A1's table are declined, not pending.
+
+**A2 is discharged.** The `globSync` break is fixed, and the floor has a green
+run. On CI run 36240779455 (commit `788f5ba`, 2026-09-26), the job
+*validate-min-runtime / Validators at the minimum runtime* ran on Node
+`20.19.0`, read from `.nvmrc`, from a clean install:
+
+- engine declarations;
+- both generators;
+- the build;
+- `yarn validate:all`;
+- `yarn test`, with 556 files and 10,633 tests passed.
+
+The *Unit Tests (Node 20.19.0)* job in the same run also passed. Decision 3 is
+now evidence rather than a claim, and criterion **C10**'s "a floor nothing has
+run on" no longer describes this repository. The sweep A2 asked for is the job
+itself: it runs on every push, so a new `@since v22` API fails there.
+
+**A3 stands.** The RTL list is kept for a reason independent of this floor.
+ADR-20 A8.1 records it.
+
+**A4, restated for the decided floor.** Keeping the `^20.19.0` branch keeps the
+Nuxt fixture matrix pinned at 4.4.5, because 4.4.6 and later drop Node 20. N5-03
+D4's condition applies unchanged: hold at 4.4.5 until a Nuxt security fix lands
+above it, and then either lift the pin by amending Decision 1 or record the
+exposure. Node 20 reached end of life in April 2026, which this ADR's *For the
+owner* section already says. The owner kept the branch knowing that.
+
+**Status.** This ADR has no unmet precondition. It remains `Proposed` until the
+owner accepts it. Acceptance is the owner flipping the `Status:` line and
+lowering `maxProposedCitedFromCode` in the same change.
+`docs/qa/adr-prep-2026-09-26/ACCEPTANCE.md` lists the exact edit.
