@@ -51,6 +51,17 @@ describe('lighthouse configs', () => {
     expect(mobile.ci.collect.url).toEqual(desktop.ci.collect.url)
   })
 
+  /**
+   * Five runs each (owner, 2026-09-26). The LCP ceiling is asserted on the best run,
+   * and mobile /templates straddled 4000ms on identical code at three runs. See
+   * `//runs` in lighthouserc.mobile.json. Fewer runs brings the flake back, and
+   * unequal counts make the two form factors incomparable.
+   */
+  it('take the same five runs per URL', () => {
+    expect(desktop.ci.collect.numberOfRuns).toBe(5)
+    expect(mobile.ci.collect.numberOfRuns).toBe(desktop.ci.collect.numberOfRuns)
+  })
+
   it('assert identical thresholds everywhere except the recorded LCP exception', () => {
     const { 'largest-contentful-paint': _desktopLcp, ...desktopRest } = desktop.ci.assert.assertions
     const { 'largest-contentful-paint': _mobileLcp, ...mobileRest } = mobile.ci.assert.assertions
