@@ -249,7 +249,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `c02da02`.
+last changed at `63c1325`.
 
 ## Extraction fidelity
 
@@ -267,7 +267,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `312ab47c` for the capability matrix,
+artifact records — `c021d6ef` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
@@ -278,7 +278,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `c02da027`
+- **Component last changed at:** `63c1325d`
 
 **Why this pattern:** A combobox whose value is a set, with per-item removal that has to keep focus inside a control that is shrinking under it.
 
