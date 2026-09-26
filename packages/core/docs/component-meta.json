@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "316c24ecbe68b819978fc94f4fbb7a1705bf3652",
+  "sourceCommit": "7f340779d933919470b4469d316dd8f6fb8a7ecd",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",

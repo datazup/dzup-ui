@@ -64,7 +64,7 @@ export const CAPABILITY_INPUTS: Readonly<Record<string, {
   "at-matrix": { available: true, path: "e2e/at-matrix/index.json" },
   "perf-baselines": { available: true, path: "packages/core/perf/baselines.json" },
   "browser-matrix": { available: true, path: "e2e/matrix/browser-evidence.json", note: "24/24 projects (chromium, firefox, webkit × 8 conditions) projected over 89 Tier B–D components: 2112 pass, 0 fail, 24 unrun. Every run was measured on a clean worktree at its stated commit; still a developer machine, not CI." },
-  "visual-baselines": { available: true, path: "e2e/visual/visual-baselines.json", note: "Per-component baselines for families [buttons]: 8 component(s), light + dark, chromium/win32, ltr. 4 stress fixture(s) also carry baselines over these families; a fixture is not a component and changes no row's `visual` state. Every component outside those families reads `not-covered`, never `unknown`. Baselines are platform-locked and CI runs linux, so this lane is developer-local evidence until one accept pass is made there." },
+  "visual-baselines": { available: true, path: "e2e/visual/visual-baselines.json", note: "Per-component baselines for families [buttons]: 9 component(s), light + dark, chromium/linux, ltr. 4 stress fixture(s) also carry baselines over these families; a fixture is not a component and changes no row's `visual` state. Every component outside those families reads `not-covered`, never `unknown`. The gating platform matches CI." },
   "browser-engine-ratchets": { available: true, path: "e2e/matrix/engine-ratchets.json", note: "Engine coverage of the 8-condition sweep: chromium 8/8, firefox 8/8, webkit 8/8." },
 }
 
@@ -105,7 +105,7 @@ export const CAPABILITY_TOTALS = {
 } as const
 
 /** Repository HEAD the evidence was collected at. */
-export const CAPABILITY_SOURCE_COMMIT = "6cbc6f17e40450f4aa628aac2613f69338bb546d"
+export const CAPABILITY_SOURCE_COMMIT = "7f340779d933919470b4469d316dd8f6fb8a7ecd"
 
 export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
   {
@@ -116,7 +116,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzAccordion.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzAccordion.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzAccordion.spec.ts"] },
@@ -141,7 +141,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzAffix.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzAffix.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzAffix.spec.ts"] },
@@ -159,7 +159,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzAlert.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzAlert.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzAlert.spec.ts"] },
@@ -177,7 +177,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzAnchor.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzAnchor.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzAnchor.spec.ts"] },
@@ -206,7 +206,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/data/DzAnimatedNumber.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzAnimatedNumber.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzAnimatedNumber.spec.ts"] },
@@ -224,7 +224,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzAppShell.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzAppShell.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzAppShell.spec.ts"] },
@@ -242,7 +242,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzAspectRatio.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzAspectRatio.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzAspectRatio.spec.ts"] },
@@ -260,7 +260,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzAsyncBoundary.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzAsyncBoundary.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzAsyncBoundary.spec.ts"] },
@@ -278,7 +278,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "absent",
     source: "packages/core/src/components/media/DzAvatar.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzAvatar.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzAvatar.spec.ts"] },
@@ -299,7 +299,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "absent",
     source: "packages/core/src/components/media/DzAvatarGroup.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzAvatarGroup.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzAvatarGroup.spec.ts"] },
@@ -321,7 +321,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzBackTop.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzBackTop.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzBackTop.spec.ts"] },
@@ -346,7 +346,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzBadge.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzBadge.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzBadge.spec.ts"] },
@@ -364,7 +364,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/feedback/DzBlockUI.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzBlockUI.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzBlockUI.spec.ts"] },
@@ -390,7 +390,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/typography/DzBlockquote.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzBlockquote.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzBlockquote.spec.ts"] },
@@ -408,7 +408,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzBreadcrumb.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzBreadcrumb.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzBreadcrumb.spec.ts"] },
@@ -437,7 +437,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/buttons/DzButton.vue",
-    visual: { state: "stale", baselines: 2, themes: ["dark", "light"], note: "2/2 baseline(s) were captured before the component's last change (527dbd15) — a pass about different code." },
+    visual: { state: "covered", baselines: 2, themes: ["dark", "light"], note: "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzButton.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzButton.spec.ts"] },
@@ -465,7 +465,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/buttons/DzButtonGroup.vue",
-    visual: { state: "stale", baselines: 2, themes: ["dark", "light"], note: "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code." },
+    visual: { state: "covered", baselines: 2, themes: ["dark", "light"], note: "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzButtonGroup.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzButtonGroup.spec.ts"] },
@@ -483,7 +483,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzCalendar.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCalendar.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCalendar.spec.ts"] },
@@ -511,7 +511,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/typography/DzCaption.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzCaption.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzCaption.spec.ts"] },
@@ -529,7 +529,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/cards/DzCard.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/cards/DzCard.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/cards/DzCard.spec.ts"] },
@@ -554,7 +554,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/media/DzCarousel.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzCarousel.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzCarousel.spec.ts"] },
@@ -580,7 +580,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzCascader.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCascader.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCascader.spec.ts"] },
@@ -610,7 +610,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzCheckbox.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCheckbox.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCheckbox.spec.ts"] },
@@ -635,7 +635,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzCheckboxGroup.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCheckboxGroup.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCheckboxGroup.spec.ts"] },
@@ -660,7 +660,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzChip.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzChip.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzChip.spec.ts"] },
@@ -685,7 +685,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/typography/DzCode.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzCode.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzCode.spec.ts"] },
@@ -703,7 +703,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzCodeBlock.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCodeBlock.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCodeBlock.spec.ts"] },
@@ -721,7 +721,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/layout/DzCollapse.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzCollapse.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzCollapse.spec.ts"] },
@@ -746,7 +746,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzColorModeToggle.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzColorModeToggle.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzColorModeToggle.spec.ts"] },
@@ -771,7 +771,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzColorPicker.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzColorPicker.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzColorPicker.spec.ts"] },
@@ -800,7 +800,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzCombobox.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCombobox.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCombobox.spec.ts"] },
@@ -830,7 +830,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzCommandPalette.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzCommandPalette.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzCommandPalette.spec.ts"] },
@@ -860,7 +860,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzConfirmDialog.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzConfirmDialog.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzConfirmDialog.spec.ts"] },
@@ -886,7 +886,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzContainer.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzContainer.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzContainer.spec.ts"] },
@@ -904,7 +904,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzContextMenu.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzContextMenu.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzContextMenu.spec.ts"] },
@@ -930,7 +930,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/buttons/DzCopyButton.vue",
-    visual: { state: "stale", baselines: 2, themes: ["dark", "light"], note: "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code." },
+    visual: { state: "covered", baselines: 2, themes: ["dark", "light"], note: "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzCopyButton.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzCopyButton.spec.ts"] },
@@ -955,7 +955,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/data/DzCountdown.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCountdown.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCountdown.spec.ts"] },
@@ -973,7 +973,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzDataGrid.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzDataGrid.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzDataGrid.spec.ts"] },
@@ -1003,7 +1003,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzDataView.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzDataView.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzDataView.spec.ts"] },
@@ -1032,7 +1032,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzDatePicker.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDatePicker.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDatePicker.spec.ts"] },
@@ -1060,7 +1060,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzDateRangePicker.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDateRangePicker.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDateRangePicker.spec.ts"] },
@@ -1088,7 +1088,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzDeferredContent.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzDeferredContent.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzDeferredContent.spec.ts"] },
@@ -1106,7 +1106,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/data/DzDescriptions.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzDescriptions.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzDescriptions.spec.ts"] },
@@ -1125,7 +1125,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzDialog.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzDialog.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzDialog.spec.ts"] },
@@ -1151,7 +1151,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzDivider.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzDivider.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzDivider.spec.ts"] },
@@ -1169,7 +1169,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzDropdownMenu.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzDropdownMenu.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzDropdownMenu.spec.ts"] },
@@ -1195,7 +1195,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/media/DzEmoji.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzEmoji.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzEmoji.spec.ts"] },
@@ -1213,7 +1213,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzEmpty.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzEmpty.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzEmpty.spec.ts"] },
@@ -1231,7 +1231,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzErrorBoundary.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzErrorBoundary.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzErrorBoundary.spec.ts"] },
@@ -1249,7 +1249,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/buttons/DzFab.vue",
-    visual: { state: "stale", baselines: 2, themes: ["dark", "light"], note: "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code." },
+    visual: { state: "covered", baselines: 2, themes: ["dark", "light"], note: "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzFab.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzFab.spec.ts"] },
@@ -1274,7 +1274,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzFieldArray.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFieldArray.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFieldArray.spec.ts"] },
@@ -1300,7 +1300,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["file"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzFileUpload.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFileUpload.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFileUpload.spec.ts"] },
@@ -1333,7 +1333,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzFlex.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzFlex.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzFlex.spec.ts"] },
@@ -1351,7 +1351,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/forms/DzFloatLabel.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFloatLabel.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFloatLabel.spec.ts"] },
@@ -1369,7 +1369,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/forms/DzFormField.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFormField.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFormField.spec.ts"] },
@@ -1387,7 +1387,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzGrid.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzGrid.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzGrid.spec.ts"] },
@@ -1405,7 +1405,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/typography/DzHeading.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzHeading.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzHeading.spec.ts"] },
@@ -1423,7 +1423,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/media/DzIcon.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzIcon.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzIcon.spec.ts"] },
@@ -1441,7 +1441,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/buttons/DzIconButton.vue",
-    visual: { state: "stale", baselines: 2, themes: ["dark", "light"], note: "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code." },
+    visual: { state: "covered", baselines: 2, themes: ["dark", "light"], note: "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzIconButton.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzIconButton.spec.ts"] },
@@ -1466,7 +1466,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "absent",
     source: "packages/core/src/components/media/DzImage.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzImage.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzImage.spec.ts"] },
@@ -1487,7 +1487,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/cards/DzImageCard.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/cards/DzImageCard.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/cards/DzImageCard.spec.ts"] },
@@ -1508,7 +1508,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/media/DzImageComparison.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzImageComparison.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzImageComparison.spec.ts"] },
@@ -1537,7 +1537,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzInfiniteScroll.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzInfiniteScroll.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzInfiniteScroll.spec.ts"] },
@@ -1563,7 +1563,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzInplace.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzInplace.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzInplace.spec.ts"] },
@@ -1588,7 +1588,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/inputs/DzInput.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzInput.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzInput.spec.ts"] },
@@ -1613,7 +1613,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/inputs/DzInputGroup.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzInputGroup.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzInputGroup.spec.ts"] },
@@ -1631,7 +1631,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/inputs/DzInputMask.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzInputMask.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzInputMask.spec.ts"] },
@@ -1656,7 +1656,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/typography/DzKbd.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzKbd.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzKbd.spec.ts"] },
@@ -1674,7 +1674,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzKnob.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzKnob.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzKnob.spec.ts"] },
@@ -1700,7 +1700,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/media/DzLightbox.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzLightbox.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzLightbox.spec.ts"] },
@@ -1729,7 +1729,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/data/DzList.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzList.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzList.spec.ts"] },
@@ -1748,7 +1748,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzListItem.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzListItem.contract.spec.ts"] },
     { kind: "unit-spec", state: "unrun", origin: "tier A" },
@@ -1773,7 +1773,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzListbox.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzListbox.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzListbox.spec.ts"] },
@@ -1799,7 +1799,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzMasonry.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzMasonry.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzMasonry.spec.ts"] },
@@ -1817,7 +1817,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzMegaMenu.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzMegaMenu.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzMegaMenu.spec.ts"] },
@@ -1849,7 +1849,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzMention.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzMention.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzMention.spec.ts"] },
@@ -1878,7 +1878,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzMenu.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzMenu.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzMenu.spec.ts"] },
@@ -1907,7 +1907,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzMeterGroup.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzMeterGroup.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzMeterGroup.spec.ts"] },
@@ -1925,7 +1925,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzMultiSelect.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzMultiSelect.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzMultiSelect.spec.ts"] },
@@ -1955,7 +1955,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/feedback/DzNotification.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzNotification.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzNotification.spec.ts"] },
@@ -1980,7 +1980,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/inputs/DzNumberInput.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzNumberInput.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzNumberInput.spec.ts"] },
@@ -2005,7 +2005,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzOrderList.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzOrderList.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzOrderList.spec.ts"] },
@@ -2035,7 +2035,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/inputs/DzOtpInput.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzOtpInput.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzOtpInput.spec.ts"] },
@@ -2060,7 +2060,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzPageHero.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzPageHero.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzPageHero.spec.ts"] },
@@ -2078,7 +2078,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzPagination.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzPagination.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzPagination.spec.ts"] },
@@ -2103,7 +2103,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/layout/DzPanel.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzPanel.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzPanel.spec.ts"] },
@@ -2128,7 +2128,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/inputs/DzPasswordInput.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzPasswordInput.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzPasswordInput.spec.ts"] },
@@ -2153,7 +2153,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzPersonaSelector.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzPersonaSelector.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzPersonaSelector.spec.ts"] },
@@ -2186,7 +2186,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzPopconfirm.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzPopconfirm.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzPopconfirm.spec.ts"] },
@@ -2212,7 +2212,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzPopover.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzPopover.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzPopover.spec.ts"] },
@@ -2238,7 +2238,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzProgress.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzProgress.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzProgress.spec.ts"] },
@@ -2256,7 +2256,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/providers/DzProvider.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/providers/DzProvider.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/providers/DzProvider.spec.ts"] },
@@ -2281,7 +2281,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url", "payload"],
     anatomy: "absent",
     source: "packages/core/src/components/media/DzQRCode.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzQRCode.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzQRCode.spec.ts"] },
@@ -2302,7 +2302,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzRadio.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzRadio.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzRadio.spec.ts"] },
@@ -2327,7 +2327,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzRadioGroup.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzRadioGroup.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzRadioGroup.spec.ts"] },
@@ -2352,7 +2352,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzRangeSlider.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzRangeSlider.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzRangeSlider.spec.ts"] },
@@ -2378,7 +2378,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzRating.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzRating.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzRating.spec.ts"] },
@@ -2403,7 +2403,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/typography/DzRelativeTime.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzRelativeTime.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzRelativeTime.spec.ts"] },
@@ -2422,7 +2422,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/layout/DzResizable.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzResizable.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzResizable.spec.ts"] },
@@ -2448,7 +2448,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzResult.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzResult.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzResult.spec.ts"] },
@@ -2466,7 +2466,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzRunStatusBadge.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzRunStatusBadge.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzRunStatusBadge.spec.ts"] },
@@ -2484,7 +2484,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/layout/DzScrollArea.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzScrollArea.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzScrollArea.spec.ts"] },
@@ -2509,7 +2509,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzScrollProgress.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzScrollProgress.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzScrollProgress.spec.ts"] },
@@ -2527,7 +2527,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/inputs/DzSearchInput.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzSearchInput.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzSearchInput.spec.ts"] },
@@ -2552,7 +2552,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzSegmented.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzSegmented.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzSegmented.spec.ts"] },
@@ -2577,7 +2577,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzSelect.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzSelect.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzSelect.spec.ts"] },
@@ -2604,7 +2604,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzSheet.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzSheet.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzSheet.spec.ts"] },
@@ -2630,7 +2630,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["url"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzSidebar.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzSidebar.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzSidebar.spec.ts"] },
@@ -2663,7 +2663,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzSkeleton.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzSkeleton.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzSkeleton.spec.ts"] },
@@ -2681,7 +2681,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzSlider.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzSlider.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzSlider.spec.ts"] },
@@ -2707,7 +2707,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzSpacer.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzSpacer.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzSpacer.spec.ts"] },
@@ -2725,7 +2725,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/buttons/DzSpeedDial.vue",
-    visual: { state: "stale", baselines: 2, themes: ["dark", "light"], note: "2/2 baseline(s) were captured before the component's last change (63c1325d) — a pass about different code." },
+    visual: { state: "covered", baselines: 2, themes: ["dark", "light"], note: "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzSpeedDial.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzSpeedDial.spec.ts"] },
@@ -2752,7 +2752,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/feedback/DzSpinner.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzSpinner.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzSpinner.spec.ts"] },
@@ -2770,7 +2770,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/buttons/DzSplitButton.vue",
-    visual: { state: "stale", baselines: 2, themes: ["dark", "light"], note: "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code." },
+    visual: { state: "covered", baselines: 2, themes: ["dark", "light"], note: "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzSplitButton.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzSplitButton.spec.ts"] },
@@ -2795,7 +2795,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/layout/DzSplitter.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzSplitter.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzSplitter.spec.ts"] },
@@ -2821,7 +2821,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/layout/DzStack.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzStack.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzStack.spec.ts"] },
@@ -2839,7 +2839,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/cards/DzStatCard.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/cards/DzStatCard.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/cards/DzStatCard.spec.ts"] },
@@ -2857,7 +2857,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzStepper.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzStepper.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzStepper.spec.ts"] },
@@ -2882,7 +2882,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzStepperItem.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "unrun", origin: "tier A" },
     { kind: "unit-spec", state: "unrun", origin: "tier A" },
@@ -2907,7 +2907,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzSwitch.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzSwitch.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzSwitch.spec.ts"] },
@@ -2932,7 +2932,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzTable.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTable.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTable.spec.ts"] },
@@ -2962,7 +2962,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/navigation/DzTabs.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzTabs.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzTabs.spec.ts"] },
@@ -2987,7 +2987,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzTag.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTag.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTag.spec.ts"] },
@@ -3012,7 +3012,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzTagsInput.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTagsInput.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTagsInput.spec.ts"] },
@@ -3038,7 +3038,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/typography/DzText.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzText.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzText.spec.ts"] },
@@ -3056,7 +3056,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/inputs/DzTextarea.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzTextarea.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/inputs/DzTextarea.spec.ts"] },
@@ -3081,7 +3081,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/providers/DzThemeProvider.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/providers/DzThemeProvider.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/providers/DzThemeProvider.spec.ts"] },
@@ -3106,7 +3106,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzTimePicker.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTimePicker.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTimePicker.spec.ts"] },
@@ -3135,7 +3135,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/data/DzTimeline.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTimeline.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTimeline.spec.ts"] },
@@ -3154,7 +3154,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/data/DzTimelineItem.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "unrun", origin: "tier A" },
     { kind: "unit-spec", state: "unrun", origin: "tier A" },
@@ -3172,7 +3172,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/feedback/DzToast.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzToast.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzToast.spec.ts"] },
@@ -3197,7 +3197,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/buttons/DzToggleButton.vue",
-    visual: { state: "stale", baselines: 2, themes: ["dark", "light"], note: "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code." },
+    visual: { state: "covered", baselines: 2, themes: ["dark", "light"], note: "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzToggleButton.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/buttons/DzToggleButton.spec.ts"] },
@@ -3222,7 +3222,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/DzTokenProgressBar.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzTokenProgressBar.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/DzTokenProgressBar.spec.ts"] },
@@ -3240,7 +3240,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/layout/DzToolbar.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzToolbar.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/layout/DzToolbar.spec.ts"] },
@@ -3265,7 +3265,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzTooltip.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzTooltip.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzTooltip.spec.ts"] },
@@ -3291,7 +3291,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/overlays/DzTour.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzTour.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzTour.spec.ts"] },
@@ -3321,7 +3321,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzTransfer.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTransfer.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTransfer.spec.ts"] },
@@ -3350,7 +3350,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzTree.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTree.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTree.spec.ts"] },
@@ -3379,7 +3379,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/data/DzTreeItem.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzTreeItem.contract.spec.ts"] },
     { kind: "unit-spec", state: "unrun", origin: "tier A" },
@@ -3404,7 +3404,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/forms/DzTreeSelect.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTreeSelect.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTreeSelect.spec.ts"] },
@@ -3434,7 +3434,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "declared",
     source: "packages/core/src/components/typography/DzVisuallyHidden.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzVisuallyHidden.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/typography/DzVisuallyHidden.spec.ts"] },
@@ -3452,7 +3452,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/media/DzWatermark.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzWatermark.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/media/DzWatermark.spec.ts"] },
@@ -3470,7 +3470,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/GovernanceBadge.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/GovernanceBadge.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/GovernanceBadge.spec.ts"] },
@@ -3488,7 +3488,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     boundary: ["none"],
     anatomy: "absent",
     source: "packages/core/src/components/feedback/TeamMemberBadge.vue",
-    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
+    visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
     { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/TeamMemberBadge.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/feedback/TeamMemberBadge.spec.ts"] },

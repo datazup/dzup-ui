@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.1.0",
-  "sourceCommit": "6cbc6f17e40450f4aa628aac2613f69338bb546d",
+  "sourceCommit": "7f340779d933919470b4469d316dd8f6fb8a7ecd",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -33,7 +33,7 @@
     "visual-baselines": {
       "available": true,
       "path": "e2e/visual/visual-baselines.json",
-      "note": "Per-component baselines for families [buttons]: 8 component(s), light + dark, chromium/win32, ltr. 4 stress fixture(s) also carry baselines over these families; a fixture is not a component and changes no row's `visual` state. Every component outside those families reads `not-covered`, never `unknown`. Baselines are platform-locked and CI runs linux, so this lane is developer-local evidence until one accept pass is made there."
+      "note": "Per-component baselines for families [buttons]: 9 component(s), light + dark, chromium/linux, ltr. 4 stress fixture(s) also carry baselines over these families; a fixture is not a component and changes no row's `visual` state. Every component outside those families reads `not-covered`, never `unknown`. The gating platform matches CI."
     },
     "browser-engine-ratchets": {
       "available": true,
@@ -223,7 +223,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -298,7 +298,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -377,7 +377,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -565,7 +565,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -640,7 +640,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -715,7 +715,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -792,7 +792,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -865,7 +865,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -977,7 +977,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1098,7 +1098,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1242,7 +1242,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1319,7 +1319,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1473,7 +1473,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1552,7 +1552,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1745,7 +1745,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1921,7 +1921,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -1930,10 +1930,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (527dbd15) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -2004,7 +2004,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -2013,10 +2013,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButtonGroup-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButtonGroup-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButtonGroup-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButtonGroup-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -2188,7 +2188,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2267,7 +2267,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2416,7 +2416,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2573,7 +2573,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2768,7 +2768,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2918,7 +2918,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3064,7 +3064,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3212,7 +3212,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3291,7 +3291,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3366,7 +3366,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3512,7 +3512,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3656,7 +3656,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3841,7 +3841,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4038,7 +4038,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4230,7 +4230,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4384,7 +4384,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4463,7 +4463,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4622,7 +4622,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4760,7 +4760,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -4769,10 +4769,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -4847,7 +4847,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5039,7 +5039,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5222,7 +5222,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5398,7 +5398,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5572,7 +5572,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5647,7 +5647,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5733,7 +5733,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5892,7 +5892,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5971,7 +5971,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6130,7 +6130,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6205,7 +6205,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6282,7 +6282,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6355,7 +6355,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6493,7 +6493,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -6502,10 +6502,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzFab-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzFab-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzFab-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzFab-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -6660,7 +6660,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6894,7 +6894,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6973,7 +6973,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7050,7 +7050,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7130,7 +7130,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7210,7 +7210,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7289,7 +7289,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7368,7 +7368,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7511,7 +7511,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -7520,10 +7520,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzIconButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzIconButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzIconButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzIconButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -7635,7 +7635,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7745,7 +7745,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7934,7 +7934,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8089,7 +8089,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8235,7 +8235,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8384,7 +8384,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8461,7 +8461,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8607,7 +8607,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8682,7 +8682,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8840,7 +8840,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9027,7 +9027,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9118,7 +9118,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9258,7 +9258,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9415,7 +9415,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9490,7 +9490,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9706,7 +9706,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9891,7 +9891,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10081,7 +10081,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10156,7 +10156,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10353,7 +10353,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10497,7 +10497,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10644,7 +10644,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10840,7 +10840,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10986,7 +10986,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11061,7 +11061,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11211,7 +11211,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11355,7 +11355,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11502,7 +11502,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11730,7 +11730,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11884,7 +11884,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12043,7 +12043,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12123,7 +12123,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12263,7 +12263,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12372,7 +12372,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12521,7 +12521,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12670,7 +12670,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12826,7 +12826,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12972,7 +12972,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13057,7 +13057,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13213,7 +13213,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13288,7 +13288,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13363,7 +13363,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13509,7 +13509,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13584,7 +13584,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13731,7 +13731,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13877,7 +13877,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14049,7 +14049,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14208,7 +14208,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14433,7 +14433,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14510,7 +14510,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14669,7 +14669,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14746,7 +14746,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14904,7 +14904,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -14913,10 +14913,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSpeedDial-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSpeedDial-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSpeedDial-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSpeedDial-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (63c1325d) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -14995,7 +14995,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15135,7 +15135,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -15144,10 +15144,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSplitButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSplitButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSplitButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSplitButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -15303,7 +15303,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15383,7 +15383,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15462,7 +15462,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15611,7 +15611,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15751,7 +15751,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15901,7 +15901,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16099,7 +16099,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16248,7 +16248,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16396,7 +16396,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16553,7 +16553,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16632,7 +16632,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16781,7 +16781,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16919,7 +16919,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17104,7 +17104,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17194,7 +17194,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17267,7 +17267,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17411,7 +17411,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17549,7 +17549,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -17558,10 +17558,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzToggleButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzToggleButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzToggleButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzToggleButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -17636,7 +17636,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17782,7 +17782,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17941,7 +17941,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18133,7 +18133,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18318,7 +18318,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18505,7 +18505,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18643,7 +18643,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18838,7 +18838,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18910,7 +18910,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18985,7 +18985,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -19060,7 +19060,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -19135,7 +19135,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     }
   ]

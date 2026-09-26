@@ -36,7 +36,7 @@ So the inputs are published with it.
 The inputs that carry a recorded caveat:
 
 - **`browser-matrix`** — 24/24 projects (chromium, firefox, webkit × 8 conditions) projected over 89 Tier B–D components: 2112 pass, 0 fail, 24 unrun. Every run was measured on a clean worktree at its stated commit; still a developer machine, not CI.
-- **`visual-baselines`** — Per-component baselines for families [buttons]: 8 component(s), light + dark, chromium/win32, ltr. 4 stress fixture(s) also carry baselines over these families; a fixture is not a component and changes no row's `visual` state. Every component outside those families reads `not-covered`, never `unknown`. Baselines are platform-locked and CI runs linux, so this lane is developer-local evidence until one accept pass is made there.
+- **`visual-baselines`** — Per-component baselines for families [buttons]: 9 component(s), light + dark, chromium/linux, ltr. 4 stress fixture(s) also carry baselines over these families; a fixture is not a component and changes no row's `visual` state. Every component outside those families reads `not-covered`, never `unknown`. The gating platform matches CI.
 - **`browser-engine-ratchets`** — Engine coverage of the 8-condition sweep: chromium 8/8, firefox 8/8, webkit 8/8.
 
 ## By risk tier
@@ -308,10 +308,10 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/capability-matrix.json` | `fe930d9b50a2a175…` | yes |
+| `packages/core/docs/capability-matrix.json` | `e0b9aa1e5e03e020…` | yes |
 | `packages/core/docs/quality-matrix.json` | `15fe628024cef1b5…` | yes |
 
-Capability matrix `sourceCommit` `6cbc6f17` · quality matrix `527dbd15`.
+Capability matrix `sourceCommit` `7f340779` · quality matrix `527dbd15`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production
