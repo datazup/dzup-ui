@@ -28,7 +28,6 @@
   "private": [
     "@dzup-ui/docs",
     "@dzup-ui/landing",
-    "@dzup-ui/sandbox",
     "@dzup-ui/storybook",
     "@dzup-ui/tooling"
   ],

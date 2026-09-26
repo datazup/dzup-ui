@@ -113,7 +113,7 @@ declaration below the line would be a promise the build could not keep.
 
 **What is measured against that floor.** The matrix drives 3 engines — chromium `149.0.7827.55 (playwright chromium v1228)`, firefox `151.0 (playwright firefox v1532)`, webkit `26.5 (playwright webkit v2311)` — and no others. Every browser the declarations above admit beyond those engines is supported **by declaration** and is measured nowhere on this page; in particular a declared Safari or iOS floor is not a Safari result, for the reason stated above.
 
-::: details What was searched (34 files, read while this page was generated)
+::: details What was searched (31 files, read while this page was generated)
 A declaration is a `browserslist` file, a `browserslist` key in a `package.json`, or a build
 `target` in a Vite config — the channels a build actually reads. The scan is a fixed list of
 names in the repository root and in each workspace package, so an absence here is checkable
@@ -123,9 +123,6 @@ rather than asserted.
 - `apps/landing/package.json`
 - `apps/landing/tsconfig.json`
 - `apps/landing/vite.config.ts`
-- `apps/sandbox/package.json`
-- `apps/sandbox/tsconfig.json`
-- `apps/sandbox/vite.config.ts`
 - `apps/storybook/package.json`
 - `apps/storybook/tsconfig.json`
 - `apps/storybook/vite.config.ts`
