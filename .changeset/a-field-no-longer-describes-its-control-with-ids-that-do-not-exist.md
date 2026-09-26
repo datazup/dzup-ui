@@ -1,5 +1,5 @@
 ---
-"@dzup-ui/core": minor
+"@dzup-ui/core": patch
 ---
 
 **`aria-describedby` names only the sub-parts a field actually renders, `DzFormMessage` stops interrupting the user, `DzFileUpload` and `DzColorPicker` get an id a label can point at, `DzFieldArray` gives each row ids of its own, and the last five controls take `v-model`.**

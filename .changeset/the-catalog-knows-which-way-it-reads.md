@@ -1,7 +1,7 @@
 ---
-"@dzup-ui/contracts": minor
+"@dzup-ui/contracts": patch
 "@dzup-ui/core": patch
-"@dzup-ui/testing": minor
+"@dzup-ui/testing": patch
 ---
 
 **Components lay out, navigate and point the right way in a right-to-left document — and say so in a form something can check.**

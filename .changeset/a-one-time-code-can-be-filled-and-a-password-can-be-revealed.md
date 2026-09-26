@@ -1,5 +1,5 @@
 ---
-"@dzup-ui/core": minor
+"@dzup-ui/core": patch
 ---
 
 **The two credential inputs stop failing WCAG 2.2 SC 3.3.8 Accessible Authentication.**

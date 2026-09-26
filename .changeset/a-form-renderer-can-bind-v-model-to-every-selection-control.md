@@ -1,5 +1,5 @@
 ---
-"@dzup-ui/core": minor
+"@dzup-ui/core": patch
 ---
 
 **`DzCascader` and `DzTreeSelect` now take `v-model` as well as `v-model:value`, thirteen selection controls reflect the states their types promise, `DzRadio` and `DzRadioGroup` read the field context they were ignoring, and `DzSelect` stops rendering an empty field on the server.**

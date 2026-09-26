@@ -1,5 +1,5 @@
 ---
-"@dzup-ui/core": minor
+"@dzup-ui/core": patch
 ---
 
 **Every text input now reflects `readonly` in the DOM, `DzOtpInput` finally does something with `required`, `DzInputGroup` honours the three ARIA props it was ignoring, `DzInputMask` can hold the unmasked value, and `DzNumberInput` stops announcing `0` for a field the user cleared.**

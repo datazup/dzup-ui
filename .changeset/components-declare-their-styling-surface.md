@@ -1,7 +1,7 @@
 ---
-"@dzup-ui/contracts": minor
-"@dzup-ui/testing": minor
-"@dzup-ui/core": minor
+"@dzup-ui/contracts": patch
+"@dzup-ui/testing": patch
+"@dzup-ui/core": patch
 ---
 
 **Components can now declare what a consumer may address, and five of them do: parts, states, and a typed per-part `ui` override.**

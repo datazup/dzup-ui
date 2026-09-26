@@ -1,6 +1,6 @@
 ---
 "@dzup-ui/nuxt": patch
-"@dzup-ui/core": minor
+"@dzup-ui/core": patch
 ---
 
 **`@dzup-ui/nuxt` pushed a stylesheet path the tokens package does not export, so every consumer install failed.**

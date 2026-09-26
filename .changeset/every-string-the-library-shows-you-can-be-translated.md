@@ -1,6 +1,6 @@
 ---
-"@dzup-ui/contracts": minor
-"@dzup-ui/core": minor
+"@dzup-ui/contracts": patch
+"@dzup-ui/core": patch
 ---
 
 **Every user-visible string the library renders is now translatable from one place.**

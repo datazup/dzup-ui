@@ -1,5 +1,5 @@
 ---
-"@dzup-ui/core": minor
+"@dzup-ui/core": patch
 ---
 
 **`DzTabs`, `DzAccordion` and `DzStepper` can reveal a hidden panel and say when it is rendered, `DzStepper` can refuse a step change, and `useRevealAndFocus` reports whether focus actually landed.**
