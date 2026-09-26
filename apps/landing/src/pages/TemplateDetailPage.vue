@@ -29,8 +29,9 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight, ExternalLink, Github, Moon, RotateCcw, Sun, Zap } from '@lucide/vue'
+import { ArrowLeft, ArrowRight, ExternalLink, Moon, RotateCcw, Sun, Zap } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { Github } from '../brand-icons.ts'
 import Section from '../components/Section.vue'
 import { useTheme } from '../composables/useTheme.ts'
 import { componentDocs, LINKS } from '../config.ts'

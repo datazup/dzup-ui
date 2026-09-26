@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzCodeBlock, DzHeading, DzText } from '@dzup-ui/core'
-import { BookOpen, Boxes, Github, LayoutTemplate, Palette, Sparkles, Terminal } from '@lucide/vue'
+import { BookOpen, Boxes, LayoutTemplate, Palette, Sparkles, Terminal } from '@lucide/vue'
 import {
   DZUP_MCP_PACKAGE,
   dzupMcpClaudeCliCommand,
@@ -8,6 +8,7 @@ import {
   dzupMcpVscodeConfig,
 } from '../blocks/config.ts'
 import { BLOCKS } from '../blocks/registry.ts'
+import { Github } from '../brand-icons.ts'
 import { FACTS, LINKS } from '../config.ts'
 import { packagesPublished } from '../lib/publishState.ts'
 import { TEMPLATES } from '../templates/registry.ts'

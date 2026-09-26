@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { DzButton, DzDropdownMenu, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuTrigger } from '@dzup-ui/core'
-import { ChevronDown, Github, Menu, Star, X } from '@lucide/vue'
+import { ChevronDown, Menu, Star, X } from '@lucide/vue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import { Github } from '../brand-icons.ts'
 import { useLiveStats } from '../composables/useLiveStats.ts'
 import { LINKS } from '../config.ts'
 import { isGroup, NAV, navLeaves } from '../nav.ts'

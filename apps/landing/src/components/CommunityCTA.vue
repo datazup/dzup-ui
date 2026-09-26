@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowRight, Github, MessageCircle } from '@lucide/vue'
+import { ArrowRight, MessageCircle } from '@lucide/vue'
+import { Github } from '../brand-icons.ts'
 import { LINKS } from '../config.ts'
 </script>
 

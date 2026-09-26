@@ -17,7 +17,6 @@ import {
   Compass,
   Contact,
   CreditCard,
-  Figma,
   FileSearch,
   FolderKanban,
   FolderTree,
@@ -59,6 +58,7 @@ import {
   Wind,
   Wrench,
 } from '@lucide/vue'
+import { Figma } from './brand-icons.ts'
 
 export const ICONS: Record<string, Component> = {
   Accessibility,

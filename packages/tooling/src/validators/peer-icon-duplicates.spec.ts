@@ -221,8 +221,10 @@ describe('the real repository', () => {
     const report = checkRepository()
     // The single-version clause is green. A second version reintroduced by any
     // declarer fails here, not only in the gate.
-    expect(report.versions).toEqual(['0.477.0'])
-    expect(report.idents).toEqual(['lucide-vue-next'])
+    // D174 (2026-09-26) swapped to `@lucide/vue`; the old name must be gone.
+    expect(report.versions).toHaveLength(1)
+    expect(report.versions[0]).toMatch(/^1\./)
+    expect(report.idents).toEqual(['@lucide/vue'])
     expect(report.violations.filter(v => v.level === 'error').map(v => v.rule)).toEqual([])
   })
 
@@ -230,7 +232,7 @@ describe('the real repository', () => {
     expect(SHIPPED_MANIFESTS).toEqual(['apps/landing/playground-template/package.json'])
     const shipped = collectShippedDeclarations()
     expect(shipped).toHaveLength(1)
-    expect(shipped[0]?.ident).toBe('lucide-vue-next')
+    expect(shipped[0]?.ident).toBe('@lucide/vue')
     // It is NOT among the workspace manifests, which is the whole point.
     expect(workspaceManifests().some(m => m.replace(/\\/g, '/').includes('playground-template'))).toBe(false)
   })
@@ -240,6 +242,7 @@ describe('the real repository', () => {
     // Build output: absent on a fresh clone, and an absence must not fabricate a finding.
     if (counts.size === 0)
       return
-    expect(counts.get('lucide-vue-next')).toBeGreaterThan(0)
+    expect(counts.get('@lucide/vue')).toBeGreaterThan(0)
+    expect(counts.has('lucide-vue-next')).toBe(false)
   })
 })
