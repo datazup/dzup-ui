@@ -1,6 +1,6 @@
 ---
-"@dzup-ui/contracts": minor
-"@dzup-ui/core": minor
+"@dzup-ui/contracts": patch
+"@dzup-ui/core": patch
 ---
 
 **`DzProvider`: one component configures theme, locale, direction, messages, formats, portals, motion, component defaults, CSP nonce and test ids.**

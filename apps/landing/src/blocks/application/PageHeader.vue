@@ -16,7 +16,7 @@ import {
   DzButton,
   DzHeading,
 } from '@dzup-ui/core'
-import { Download, Plus, Share2 } from 'lucide-vue-next'
+import { Download, Plus, Share2 } from '@lucide/vue'
 </script>
 
 <template>

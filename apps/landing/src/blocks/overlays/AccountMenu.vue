@@ -32,7 +32,7 @@ import {
   Settings,
   User,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 const lastAction = ref('')

@@ -177,7 +177,6 @@ The scaffold says this component owes 8 task(s):
 
 **Read from:** ARIA live regions: a status change is announced without moving focus, once.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -186,4 +185,3 @@ defect. If a step failed for any other reason, it **is** new — file it.
 
 - **D4** — affects `reach`. The "Clear selection" affordance is rendered as `role="button"` INSIDE the `role="combobox"` button. Expect the reach step to announce two controls, or the clear control to be unreachable, depending on the pair.
 - **D8** — affects `select`. `useDualModel` ignores external writes to `v-model:value` after the first user edit. A step that resets the value from outside the component may not take.
-

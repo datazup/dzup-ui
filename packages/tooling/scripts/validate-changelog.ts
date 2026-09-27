@@ -5,7 +5,13 @@
  * basic format:
  *   1. Has a top-level heading (# Changelog or # @dzup-ui/*)
  *   2. Has at least one version entry (## [x.y.z] or ## x.y.z)
- *   3. Version entries have date in ISO format (YYYY-MM-DD)
+ *   3. A date on a version entry, when present, is ISO (YYYY-MM-DD)
+ *
+ * A date is OPTIONAL. `changeset version` writes `## x.y.z` with no date, and
+ * the gate follows the tool that writes the file (owner decision N5-01-D1,
+ * 2026-09-25): npm and the release tag already record when a version shipped.
+ * Before that decision this check demanded a date, so the first real release
+ * PR would have turned it red for every package it bumped.
  *
  * Pre-release packages without a CHANGELOG.md get a WARN (not FAIL).
  *
@@ -43,6 +49,7 @@ const PUBLISHABLE_PACKAGES: Array<{ name: string, dir: string }> = [
   { name: '@dzup-ui/compat', dir: resolve(ROOT, 'packages/compat') },
   { name: '@dzup-ui/codemods', dir: resolve(ROOT, 'packages/codemods') },
   { name: '@dzup-ui/nuxt', dir: resolve(ROOT, 'packages/nuxt') },
+  { name: '@dzup-ui/mcp', dir: resolve(ROOT, 'packages/mcp') },
 ]
 
 // --- Validation ---
@@ -71,11 +78,14 @@ function validateChangelogFormat(content: string, packageName: string): string[]
     issues.push(`No version entries found (expected "## [x.y.z]" or "## x.y.z" in ${packageName})`)
   }
   else {
-    // Check 3: Each version entry should have an ISO date (YYYY-MM-DD)
+    // Check 3: a date is optional (N5-01-D1), but one that is written is ISO.
+    // `## 0.2.0 (2026-08-10)` and `## 0.3.0` pass; `## 0.2.0 (10/08/2026)` does not.
     const isoDateRegex = /\d{4}-\d{2}-\d{2}/
+    const anyDateRegex = /\d{1,4}[/.-]\d{1,2}[/.-]\d{1,4}/
     for (const versionLine of versionLines) {
-      if (!isoDateRegex.test(versionLine)) {
-        issues.push(`Version entry missing ISO date (YYYY-MM-DD): "${versionLine.trim()}"`)
+      const rest = versionLine.replace(/^##\s+\[?\d+\.\d+\.\d[^\s\]]*\]?/, '')
+      if (anyDateRegex.test(rest) && !isoDateRegex.test(rest)) {
+        issues.push(`Version entry date is not ISO (YYYY-MM-DD): "${versionLine.trim()}"`)
       }
     }
   }

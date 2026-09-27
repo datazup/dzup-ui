@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzTable
 
 Compound semantic table root component.
@@ -19,7 +23,7 @@ Compound semantic table root component.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
 - **Risk tier:** C · **Status:** stable
 - **Taxonomy:** size: `icon` `xs` `sm` `md` `lg` `xl`
-- **Anatomy parts (ADR-19):** `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `title`
+- **Anatomy parts (ADR-19):** `body`, `cell`, `content`, `footer`, `header`, `root`, `row`, `separator`, `step-decrease`, `step-increase`, `title`
 
 ## Intent and selection guidance
 
@@ -48,12 +52,11 @@ never as asserted.
 :::
 
 
-## Props (17, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (16, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `captionVisible` | `boolean \| undefined` | no | `false` | Make the `caption` slot visibly rendered instead of screen-reader-only. Default `false` preserves the original `sr-only` behaviour. |
@@ -129,7 +132,7 @@ Editable, running the **Variant Gallery** story from `packages/core/stories/data
 
 ### DzTableBody
 
-Table body section (&lt;tbody>).
+Table body section (`<tbody>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableBody } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -154,7 +157,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableCell
 
-Table cell (&lt;td> or &lt;th>).
+Table cell (`<td>` or `<th>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableCell } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -167,7 +170,7 @@ Table cell (&lt;td> or &lt;th>).
 | `align` | `"right" \| "left" \| "center" \| undefined` | no | `"left"` | Text alignment |
 | `colId` | `string \| undefined` | no | `undefined` | Stable column id. Required to participate in column resizing: a `resizable` header cell writes its width under this id, and body cells sharing the id adopt that width. |
 | `colspan` | `number \| undefined` | no | `undefined` | Column span |
-| `header` | `boolean \| undefined` | no | `false` | Whether this cell is a header cell (&lt;th> vs &lt;td>) |
+| `header` | `boolean \| undefined` | no | `false` | Whether this cell is a header cell (`<th>` vs `<td>`) |
 | `pin` | `TablePin \| undefined` | no | `undefined` | Pin this cell's column to the `left` or `right` edge of the scroll container so it stays visible while other columns scroll horizontally. Apply the same `pin` value to every cell in the column (header + body) for a coherent column. |
 | `pinBoundary` | `boolean \| undefined` | no | `false` | Mark this pinned cell as the boundary column (the last pinned-left or first pinned-right column) so it renders an edge shadow separating pinned from scrolling content. Ignored when `pin` is unset. |
 | `pinOffset` | `number \| undefined` | no | `0` | Cumulative offset (px) from the pinned edge, for stacking multiple pinned columns. The first pinned column uses `0`; each subsequent pinned column uses the summed width of the pinned columns before it. Ignored when `pin` is unset. |
@@ -186,7 +189,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableFooter
 
-Table footer section (&lt;tfoot>).
+Table footer section (`<tfoot>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableFooter } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -204,7 +207,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableHeader
 
-Table header section (&lt;thead>).
+Table header section (`<thead>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableHeader } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -222,7 +225,7 @@ A compound sub-part of `DzTable`; see that component's usage snippet.
 
 ### DzTableRow
 
-Table row (&lt;tr>).
+Table row (`<tr>`).
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzTableRow } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
@@ -283,10 +286,13 @@ takes effect. That is what lets you restyle a wrapper someone else built without
 | `header` | `[data-part="header"]` | no — renders zero or more than once |
 | `root` | `[data-part="root"]` | yes |
 | `row` | `[data-part="row"]` | no — renders zero or more than once |
+| `separator` | `[data-part="separator"]` | no — renders zero or more than once |
+| `step-decrease` | `[data-part="step-decrease"]` | no — renders zero or more than once |
+| `step-increase` | `[data-part="step-increase"]` | no — renders zero or more than once |
 | `title` | `[data-part="title"]` | no — renders zero or more than once |
 
 ```vue
-<DzTable :ui="{ 'body': 'ring-2', 'cell': 'ring-2', 'content': 'ring-2', 'footer': 'ring-2', 'header': 'ring-2', 'root': 'ring-2', 'row': 'ring-2', 'title': 'ring-2' }" />
+<DzTable :ui="{ 'body': 'ring-2', 'cell': 'ring-2', 'content': 'ring-2', 'footer': 'ring-2', 'header': 'ring-2', 'root': 'ring-2', 'row': 'ring-2', 'separator': 'ring-2', 'step-decrease': 'ring-2', 'step-increase': 'ring-2', 'title': 'ring-2' }" />
 ```
 
 **States** — the values `data-state` may take, plus the presence-only boolean attributes.
@@ -335,7 +341,7 @@ then the component's own default.**
 | --- | --- |
 | **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
-| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/4 metric(s) have a derived threshold |
+| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/4 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
@@ -355,7 +361,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `4c9fb7a`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -364,7 +370,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 17 | 17 | 10 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 16 | 16 | 10 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 2 | 2 | 2 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
 | Slots | 2 | 2 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -373,8 +379,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `7f340779` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -384,7 +390,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`, `drags`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `4c9fb7a1`
+- **Component last changed at:** `a01965fa`
 
 **Why this pattern:** Several primitives share one sort and selection state, and column resize is a drag interaction; at realistic row counts correctness and speed stop being separable.
 
@@ -421,38 +427,35 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 | [4.1.2](https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html) | Name, Role, Value | A | WCAG 2.0 |
 | [4.1.3](https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html) | Status Messages | AA | WCAG 2.1 |
 
-::: danger Open WCAG 2.5.7 Dragging Movements (level AA) gap
-**DzTable does not meet SC 2.5.7.** The operation — *drag the column-resize handle* —
-is keyboard-operable, but the criterion requires a **single pointer without dragging**, and this
-component has no such path.
+::: tip WCAG 2.5.7 Dragging Movements — met
+DzTable drags (drag the column-resize handle), so SC 2.5.7 applies and was audited.
 
 - **Keyboard (SC 2.1.1):** onResizeKey on the focusable handle button: ArrowLeft/ArrowRight step 8px, 24px with Shift.
-- **Single pointer, no dragging (SC 2.5.7):** none — The handle responds to pointerdown plus pointermove only.
-- **Why it is not excepted:** Dragging is not essential to resizing a column: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies.
-- **Why it is not fixed:** APG has no pattern for column resizing at all, so there is no precedent to follow.
+- **Single pointer, no dragging (SC 2.5.7):** A stepper pair overlaying the header cell (`data-part="step-decrease"` / `"step-increase"`, 24 x 24 CSS px each -- the handle's own visible band is 8px and cannot hold them). Each press calls `stepColumn`, which is the same function the Arrow keys call, so the pointer step and the keyboard step are 8px, or 24px with Shift, by construction.
 
-[Understanding SC 2.5.7](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html) · measured by `TASK-N1-O3`
-at `51dec93c`.
+**This was an open gap.** Owner decision D117 option A, taken 2026-09-19 and implemented by TASK-R2-O5. This surface was the worst of the three: the handle responded to pointerdown plus pointermove only, and `@click.stop` on it actively discarded the one plain press that might have been a non-drag path. That handler is gone, and DzTable.spec.ts asserts a plain click now reaches the table.
 :::
 
 ### Keyboard interaction
 
-**4 declared bindings.** Rendered from the
+**6 declared bindings.** Rendered from the
 component's own keyboard contract, not from the APG pattern it is held to — where the two
 differ, the difference is the point.
 
-| Key | Where | Action | WCAG | Pattern |
-| --- | --- | --- | --- | --- |
-| `Tab` | — | Move to the next interactive cell or header control; the table itself is not a tab stop. | `2.1.2` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) |
-| `Enter` | `header sortable` | Cycle the focused column sort. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) |
-| `Space` | `header sortable` | Cycle the focused column sort. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) |
-| `Shift` + `Enter` | `header sortable` | Add the focused column to the existing sort rather than replacing it. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) |
+| Key | Where | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- | --- |
+| `Tab` | — | Move to the next interactive cell or header control; the table itself is not a tab stop. | `2.1.2` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | — |
+| `Enter` | `header sortable` | Cycle the focused column sort. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | — |
+| `Space` | `header sortable` | Cycle the focused column sort. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | — |
+| `Shift` + `Enter` | `header sortable` | Add the focused column to the existing sort rather than replacing it. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | — |
+| `ArrowRight` | `header resizable` | Widen the column by 8px, or 24px with Shift. | `2.1.1`, `2.5.7` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | swaps with the writing direction |
+| `ArrowLeft` | `header resizable` | Narrow the column by 8px, or 24px with Shift, never below its minimum width. | `2.1.1`, `2.5.7` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | swaps with the writing direction |
 
 Declared in `packages/core/src/components/data/DzTable.anatomy.ts`.
 
 - **Pattern:** [APG — `table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 4 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 6 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -486,20 +489,20 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzTable.spec.ts` — The component declares 4 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzTable.spec.ts` — The component declares 6 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzTable.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | **`unrun`** | No Playwright report at test-results/matrix-report.json. Run `yarn test:e2e:matrix` with PLAYWRIGHT_JSON_OUTPUT set. |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/data/DzTable.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTable.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/4 metric(s) have a derived threshold |
+| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/4 metric(s) have a derived threshold |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/data/DzTable.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 
-**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `browser-matrix`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

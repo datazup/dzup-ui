@@ -15,18 +15,28 @@ const staticStorybookCommand = process.env.STORYBOOK_E2E_PREBUILT === '1'
     ].join(' && ')
 
 /**
- * The five conditions the browser matrix runs every Tier B–D component
- * through, on top of the default (TASK-OSS-P5-03).
+ * The seven conditions the browser matrix runs every Tier B–D component
+ * through, on top of the default (TASK-OSS-P5-03, widened by TASK-R2-O5).
  *
- * Each is emulation the engine performs, not a class the story sets: a suite
+ * Most are emulation the engine performs, not a class the story sets: a suite
  * that flipped a `data-` attribute would prove the CSS reacts to that attribute
  * and nothing about what the engine does with the media feature. `rtl` is the
- * exception and has to be — direction is a document property the Storybook
+ * first exception and has to be — direction is a document property the Storybook
  * `direction` global already owns, so the condition is passed as a story global
  * rather than as a context option.
  *
- * Every one of these was measured against chromium, firefox and webkit at
- * Playwright 1.61.1 before being added. All three accept all five, including
+ * `text-200` and `spacing` are the second and third exceptions, and for the same
+ * kind of reason: **no engine exposes either as a context option**. A user's
+ * larger default font size and the WCAG 1.4.12 author-override stylesheet are
+ * both *user stylesheets*, and Playwright has no user-stylesheet channel. They
+ * are therefore injected as a real stylesheet by `applyConditionStyles`
+ * (`e2e/matrix/fixtures.ts`) and each cell asserts that the mechanism engaged
+ * before it asserts anything about the component — because a condition that
+ * silently failed to apply is a lane that passes 88 components for nothing.
+ * See `e2e/matrix/conditions.spec.ts` for what each one measures.
+ *
+ * Every one of the first six was measured against chromium, firefox and webkit
+ * at Playwright 1.61.1 before being added. All three accept all six, including
  * `forcedColors` on WebKit and `isMobile` on Firefox, which older guidance says
  * are unsupported. `e2e/matrix/engine-exceptions.json` records what an engine
  * genuinely cannot do; it is deliberately empty rather than pre-loaded with
@@ -39,6 +49,8 @@ export const MATRIX_CONDITIONS = [
   'rtl',
   'touch',
   'zoom-400',
+  'text-200',
+  'spacing',
 ] as const
 
 export type MatrixCondition = typeof MATRIX_CONDITIONS[number]
@@ -65,21 +77,41 @@ function conditionUse(condition: MatrixCondition): Record<string, unknown> {
       // Reflow is written in exactly those terms, so this emulates the width
       // rather than a zoom factor no engine exposes to a test.
       return { viewport: { width: 320, height: 800 } }
+    case 'text-200':
+      // WCAG 1.4.4 Resize Text is NOT zoom: the user raises the browser's
+      // default font size, the root em doubles, and the layout keeps its CSS
+      // pixel width. So the viewport stays the engine's desktop default and the
+      // mechanism is a stylesheet (see applyConditionStyles). zoom-400 above is
+      // the other axis — same criterion family, different mechanism, and a lane
+      // that ran one of them has not run the other.
+      return {}
+    case 'spacing':
     case 'rtl':
     case 'default':
       return {}
   }
 }
 
+/**
+ * Matrix specs that belong to exactly ONE condition.
+ *
+ * The ADR-20 §7 motion-policy contract is a property of `reduced-motion`
+ * (TASK-R5-O3); the SC 2.5.7 single-pointer audit is a property of the default
+ * rendering and nothing about it changes under forced colours or a coarse
+ * pointer (TASK-R2-O5). Ignoring the file in the other projects, rather than
+ * skipping inside it, keeps the other projects from reporting hundreds of
+ * "skipped" cells that were never meant to run there.
+ */
+const CONDITION_ONLY_SPECS: { readonly file: RegExp, readonly condition: MatrixCondition }[] = [
+  { file: /motion-policy\.spec\.ts$/, condition: 'reduced-motion' },
+  { file: /non-drag\.spec\.ts$/, condition: 'default' },
+]
+
 const matrixProjects: Project[] = Object.entries(ENGINES).flatMap(([engine, device]) =>
   MATRIX_CONDITIONS.map(condition => ({
     name: `matrix-${engine}-${condition}`,
     testDir: './e2e/matrix',
-    // The ADR-20 §7 motion-policy contract is a property of ONE condition
-    // (TASK-R5-O3). Ignoring the file elsewhere, rather than skipping inside
-    // it, keeps fifteen projects from reporting ~200 "skipped" cells that were
-    // never meant to run there.
-    testIgnore: condition === 'reduced-motion' ? undefined : /motion-policy\.spec\.ts$/,
+    testIgnore: CONDITION_ONLY_SPECS.filter(s => s.condition !== condition).map(s => s.file),
     metadata: { engine, condition, lane: 'matrix' },
     use: { ...device, ...conditionUse(condition) },
   })),

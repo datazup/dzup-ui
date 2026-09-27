@@ -60,7 +60,7 @@ export const anatomy = {
    * precisely why they needed writing down: a value a static gate cannot read
    * out of the template has nowhere else to be recorded.
    */
-  states: ['collapsed', 'expanded', 'active', 'inactive'],
+  states: ['collapsed', 'expanded', 'active', 'inactive', 'url-rejected'],
 
   /** The `--dz-sidebar-*` surface, measured from `DzSidebar.tokens.ts`. */
   componentTokens: [

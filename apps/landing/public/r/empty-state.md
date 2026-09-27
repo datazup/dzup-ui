@@ -19,7 +19,7 @@ Styled icon illustration, heading, supporting copy and a primary call-to-action 
  * so no DzHeading is composed here — DzEmpty owns the heading level.
  */
 import { DzButton, DzEmpty } from '@dzup-ui/core'
-import { FolderOpen, Plus } from 'lucide-vue-next'
+import { FolderOpen, Plus } from '@lucide/vue'
 </script>
 
 <template>

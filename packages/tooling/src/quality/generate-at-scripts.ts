@@ -227,7 +227,7 @@ ${pairRows}
 The scaffold says this component owes ${meta.tasks.length} task(s):
 ${meta.tasks.map(t => `\`${t}\``).join(', ')}. There is exactly one step per task.
 
-${steps}
+${steps.trimEnd()}
 
 ## Known open defects — read this AFTER you have recorded your result
 
@@ -235,7 +235,7 @@ These are already on the register. If a step failed for one of these reasons,
 say so in the row's \`notes\` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
-${defects}
+${defects.trimEnd()}
 `
 }
 

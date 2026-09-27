@@ -38,7 +38,7 @@
 
 import type { ComponentMetaRecord } from '../meta/component-meta.ts'
 import type { CapabilityRow, EvidenceSources } from './evidence.ts'
-import { capabilityRowFor, cell } from './evidence.ts'
+import { boundaryLabel, capabilityRowFor, cell } from './evidence.ts'
 
 /** A `data-part` / `data-state` selector, shown so a reader can copy it. */
 function attributeSelector(attribute: string, value: string): string {
@@ -510,13 +510,14 @@ export function renderOperational(record: ComponentMetaRecord, ev?: EvidenceSour
     `| **Performance baseline** | ${dataset
       ? cellSentence(row, 'perf-baseline', 'Declared `dataset`, but no `perf-baseline` cell exists for it.')
       : cellSentence(row, 'perf-baseline', 'Not a dataset component; no baseline is owed.')} |`,
-    `| **Security boundary** | \`${row.securityBoundary}\`${row.securityBoundary === 'none'
+    `| **Security ${row.securityBoundary.length > 1 ? 'boundaries' : 'boundary'}** | `
+    + `${row.securityBoundary.map(b => `\`${b}\``).join(' + ')}${boundaryLabel(row.securityBoundary) === 'none'
       ? ' — no host-supplied HTML, file, URL or payload reaches a sink.'
       : ' — a hostile input can reach a sink here, and the cells below are what has been measured.'} |`,
     '',
   )
 
-  if (row.securityBoundary !== 'none') {
+  if (boundaryLabel(row.securityBoundary) !== 'none') {
     lines.push(
       '| Security lane | State |',
       '| --- | --- |',

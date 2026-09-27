@@ -84,8 +84,18 @@ describe('the repository', () => {
   it('has the min-runtime preflight job wired to .nvmrc', () => {
     const workflow = readFileSync(resolve(ROOT, '.github/workflows/ci.yml'), 'utf8')
     expect(workflow).toContain('validate-min-runtime:')
+
+    // The job was extracted to a reusable workflow so the floor could be
+    // answered on demand (a `workflow_call` file can carry `workflow_dispatch`,
+    // a job cannot). Follow ci.yml's own `uses:` rather than naming the file
+    // here, so a second move fails on the reference and not on this string.
+    const [, called] = workflow.match(/validate-min-runtime:[ \t]*\r?\n[ \t]*uses:[ \t]*\.\/(\S+)/) ?? []
+    const definition = called
+      ? readFileSync(resolve(ROOT, called), 'utf8')
+      : workflow
+
     // One number, in one place: a hard-coded version here would be the fourth
     // copy of the floor and the first to drift.
-    expect(workflow).toContain('node-version-file: .nvmrc')
+    expect(definition).toContain('node-version-file: .nvmrc')
   })
 })

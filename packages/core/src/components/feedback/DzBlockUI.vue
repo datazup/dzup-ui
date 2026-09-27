@@ -71,7 +71,10 @@ let previouslyFocused: HTMLElement | null = null
 
 // Focus trap keeps keyboard focus within the overlay in full-screen mode, where
 // the rest of the page (not just the slotted content) must be unreachable.
-const { activate, deactivate } = useFocusTrap(overlayRef)
+// `restoreFocus: false` — this component captures `previouslyFocused` BEFORE it
+// moves focus into the overlay, so its own target is the right one; the trap's
+// would be the overlay itself (defect D7's fix is opt-out here, not absent).
+const { activate, deactivate } = useFocusTrap(overlayRef, { restoreFocus: false })
 
 const rootClasses = computed(() =>
   cn(styles.root(), attrs.class as string | undefined, props.ui?.root),

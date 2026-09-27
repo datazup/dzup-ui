@@ -103,7 +103,6 @@ The scaffold says this component owes 4 task(s):
 
 **Read from:** ARIA `aria-busy`; and the rule that content removed from view is removed from the accessibility tree.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -111,4 +110,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 - **G5** — affects `non-drag`. Column resize is keyboard-operable but has NO single-pointer, non-drag alternative. WCAG 2.5.7 is not met for this operation and it is a recorded open owner decision, not a new finding. The non-drag step is expected to fail its third expectation on the touch pairs.
-

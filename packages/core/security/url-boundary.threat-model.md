@@ -47,31 +47,42 @@ The source is never the application's own code in the interesting case. It is a
 CMS row, a navigation tree from an API, a user profile, or — increasingly — a
 model response rendered into a menu. Every one of those is untrusted.
 
-**Finding U1 (high). There is no URL policy anywhere in `packages/core/src`.**
-No scheme check, no allowlist, no normalization; the value is bound straight to
-the attribute at every one of the six components' sinks. Measured, not
-inferred: all nine `url-scheme` fixtures reach the rendered `href` verbatim on
-all six components — 54 measurements, recorded in `security-deviations.json` as
-S1–S12 with severity.
+**Finding U1 (high) — CLOSED by TASK-R2-O4 on 2026-09-18.**
 
-**Why it is not fixed here.** Refusing `javascript:` is a **breaking change**.
-`javascript:void(0)` is a widespread legacy idiom in exactly the item-list props
-these components take; today it renders and works, and after a policy it would
-not. That is a public-behaviour change, which this task's stop condition routes
-to a defect report rather than a silent fix, and which the release lane
-(TASK-N5-02, alongside the ARIA-prop gaps) is the place to make legal.
+*What was measured (TASK-N1-O5, `51dec93`).* There was no URL policy anywhere in
+`packages/core/src`: no scheme check, no allowlist, no normalization; the value
+was bound straight to the attribute at every one of the six components' sinks.
+All nine `url-scheme` fixtures reached the rendered `href` verbatim on all six
+components — **54 measurements**, recorded in `security-deviations.json` as
+S1–S12 with severity. It was reported rather than fixed because refusing
+`javascript:` is a **breaking change** (`javascript:void(0)` is a widespread
+legacy idiom in exactly these item-list props), and a public-behaviour change is
+the release lane's to make legal, not a fixture packet's.
 
-**What a fix should look like, so the decision is a decision and not a design
-exercise.** An allowlist, not a denylist — `http`, `https`, `mailto`, `tel`,
-`sms`, relative and fragment URLs — applied after WHATWG normalization
-(`effectiveScheme` in `boundary-suites.ts` is exactly that function and already
-handles the mixed-case, leading-control and embedded-tab evasions the corpus
-carries). Rejection should render the anchor with **no `href`** rather than a
-different one: silently rewriting a URL to `#` produces a control that looks
-operable and is not, which is a worse failure than refusing to draw a link. An
-opt-out prop would re-open the hole for the consumers most likely to need it,
-so the escape hatch belongs at the provider (ADR-20), once, with a name that
-says what it costs.
+*What shipped.* `packages/core/src/security/url-policy.ts` — an **allowlist**
+(`http`, `https`, `mailto`, `tel`, `sms`, plus relative, query and fragment
+URLs), applied **after WHATWG normalization**, installed through
+`DZ_URL_POLICY_KEY` and read by `useDzUrlPolicy()`. The escape hatch is
+`DzProvider`'s `urlPolicy` prop and nothing else: an opt-out prop would re-open
+the hole for exactly the consumers most likely to reach for it. ADR-20
+amendment A7 is the contract.
+
+*Rejection is omission.* Each of the six keeps the non-link branch it already
+had — `DzButton`, `DzMenuItem` and `DzSidebarItem` render their `<button>` and
+still emit `click`; `DzBreadcrumbItem` renders its `<span role="link">`;
+`DzAnchor` renders the same `<a>` with no `href`, which by definition is not a
+link. Every one carries `data-state="url-rejected"`. Rewriting to `#` was
+rejected for the reason it always is: it produces a control that looks operable
+and is not.
+
+*Where `DzMegaMenu` stood apart.* N1-O5 bound only the top-level `href` and
+asserted the other three sites by inspection. All four now route through two
+helpers in the component, so there is one policy and not four chances to forget
+it.
+
+*Ratchet.* Deviations **54 → 0**, ceiling **54 → 0**; the register is empty and
+the corpus fixtures that measured the gap are the regression suite, asserting
+the required outcome with nothing to fall back on.
 
 ### 2b. Subresource sinks — seven components (plus `DzQRCode`'s `icon`)
 
@@ -118,14 +129,16 @@ a documentation obligation on the host — *do not encode untrusted content* —
 recorded so the corpus is never read as a claim that the QR content was made
 safe.
 
-**Finding U3 (medium). `DzQRCode` has an undeclared URL sink.** The `icon` prop
-is a host-supplied URL rendered as `<img src>` over the code — word for word the
-property `DzImage`'s boundary justification uses. `SecurityBoundary` holds
-**one value per component**, so declaring `payload` means the `url-policy` row
-is never asked for. The sink is bound and asserted here regardless (it measures
-`inert`, like the other seven), but the matrix cannot express it. Making
-`securityBoundary` a set is an owner decision; until then, this paragraph is
-the record.
+**Finding U3 (medium) — CLOSED by TASK-R2-O4.** The `icon` prop is a
+host-supplied URL rendered as `<img src>` over the code — word for word the
+property `DzImage`'s boundary justification uses. `SecurityBoundary` held **one
+value per component**, so declaring `payload` meant the `url-policy` row was
+never asked for: the sink was bound and asserted here regardless (it measures
+`inert`, like the other seven) while the matrix could not express it.
+`ComponentQuality.securityBoundary` is a **set** now, `DzQRCode` declares
+`['url', 'payload']`, and the evidence it owes is the union of what both
+boundaries ask for — which is the only reading under which declaring a second
+boundary is not a way to owe less.
 
 ## 3. Sources, sinks and trust
 
@@ -141,7 +154,9 @@ the record.
 
 Measured, in `packages/core/security/`:
 
-- **54/54** navigation-sink URL cases: all `passed-through` (Finding U1).
+- **54/54** navigation-sink URL cases: all `passed-through` at `51dec93`
+  (Finding U1); all **`rejected`** at `2d51eec` after TASK-R2-O4, with the
+  deviation register empty.
 - **72/72** subresource-sink URL cases across eight bindings: all `inert`.
 - **151/151** hostile-content cases (markup injection, degenerate input, CSS
   injection on `DzQRCode`'s `color`): all `escaped`, asserted against the DOM.
@@ -149,8 +164,12 @@ Measured, in `packages/core/security/`:
 
 Not measured, and owed:
 
-- **A browser.** Every assertion above is jsdom. `inert` for a subresource is a
+- **A browser, for the subresource half.** `inert` for a subresource is a
   statement about how engines treat `<img src>`, and it is cited, not executed.
+  The *navigation* half is no longer jsdom-only: `e2e/csp/csp.spec.ts` asserts in
+  chromium, firefox and webkit that a `javascript:` URL supplied to `DzButton`
+  renders a `<button>` with no `href` and that no attribute in the document
+  carries the scheme (TASK-R2-O4).
 - **SSR.** These specs render client-side. E6 in the ledger records a live
   defect that only SSR emits, so an SSR pass over the same corpus is a real gap.
 - **`DzMegaMenu`'s panel links.** The suite binds the top-level `href`; the
@@ -159,11 +178,15 @@ Not measured, and owed:
 
 ## 5. What would change this document
 
-- Any component gaining a scheme check — that closes U1 and this file has to say
-  which schemes and where the escape hatch is.
+- ~~Any component gaining a scheme check~~ — **happened** (TASK-R2-O4). The
+  schemes and the escape hatch are named in §2a and in ADR-20 A7.
+- The allowlist changing, or a host's `allow` function becoming the common case
+  rather than the exception — the first is a `minor` under VERSIONING.md, the
+  second is evidence the default list is wrong.
 - Any component rendering a URL through `<object>`, `<embed>`, `<iframe>` or a
   CSS `url()` — §2b's `inert` reasoning is scoped to `<img>` and does not
   transfer.
 - `createObjectURL` appearing anywhere in `packages/core/src`.
-- `securityBoundary` becoming a set — U3 stops being a footnote and becomes a
-  row.
+- ~~`securityBoundary` becoming a set~~ — **happened** (TASK-R2-O4). U3 is a
+  row: `DzQRCode` declares `['url', 'payload']` and owes `url-policy`, which
+  `boundary-bindings.ts` had been asserting all along.

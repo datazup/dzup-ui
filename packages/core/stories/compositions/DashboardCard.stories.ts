@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { Activity, DollarSign, Package, TrendingUp, Users } from 'lucide-vue-next'
+import { Activity, DollarSign, Package, TrendingUp, Users } from '@lucide/vue'
 import { expect, within } from 'storybook/test'
 import { DzCard, DzCardBody, DzCardHeader, DzStatCard } from '../../src/components/cards'
 import { DzGrid } from '../../src/components/layout'

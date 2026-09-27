@@ -284,6 +284,7 @@ describe('the real repository', () => {
         "@dzup-ui/testing/vitest",
         "@dzup-ui/tokens",
         "@dzup-ui/tokens/css",
+        "@dzup-ui/tokens/css/high-contrast",
         "@dzup-ui/tokens/dtcg",
         "@dzup-ui/tokens/tailwind",
         "@dzup-ui/tokens/utils",

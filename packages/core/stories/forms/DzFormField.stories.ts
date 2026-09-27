@@ -170,10 +170,16 @@ export const InvalidWithError: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
 
-    // The invalid state surfaces the error via DzFormMessage as a live alert.
-    const alert = canvas.getByRole('alert')
-    await expect(alert).toHaveTextContent('Country selection is required.')
-    await expect(alert).toHaveAttribute('aria-live', 'polite')
+    // The invalid state surfaces the error via DzFormMessage as a POLITE live
+    // region -- NOT `role="alert"` (N1-O1 story drift, fixed in TASK-R2-O3).
+    // `alert` implies `aria-live="assertive"` and takes precedence, so a
+    // standing field error would interrupt whatever the user was being told;
+    // renderer contract C4 says polite, and DzFormMessage stopped emitting both
+    // in `e986952`. This assertion never moved with it.
+    const message = canvasElement.querySelector('[aria-live="polite"]')
+    await expect(message).toBeTruthy()
+    await expect(message).toHaveTextContent('Country selection is required.')
+    await expect(canvas.queryByRole('alert')).toBeNull()
 
     // The label reflects the invalid state for styling/AT hooks.
     const label = canvasElement.querySelector('label[data-invalid]')

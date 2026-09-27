@@ -118,7 +118,10 @@ useClickOutside(
   { enabled: open },
 )
 
-const { activate, deactivate } = useFocusTrap(floatingRef)
+// `restoreFocus: false` — `focusTrigger()` below owns the restore, and it fires
+// only on a real open→closed transition. The trap's own restore (defect D7)
+// would also run on unmount, which is not this component's contract.
+const { activate, deactivate } = useFocusTrap(floatingRef, { restoreFocus: false })
 
 // ── Open / close controls ──────────────────────────────────────────────────────
 

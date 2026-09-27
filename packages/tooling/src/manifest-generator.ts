@@ -87,12 +87,35 @@ function toRelativeImport(manifestPath: string): string {
 
 // --- Main ---
 
-function generate(packageDir: string): void {
+export interface BarrelRender {
+  manifestPath: string
+  indexPath: string
+  package: string
+  output: string
+  counts: { components: number, composables: number, utilities: number }
+}
+
+/**
+ * Render the barrel a package's manifest describes, **without writing it**.
+ *
+ * Split out of `generate()` by TASK-R1-O3 so that `release:api-diff` can answer
+ * "what would `yarn generate:exports` change?" by rendering and comparing,
+ * instead of running the generator over the working tree and restoring the file
+ * afterwards. A release tool that mutates the tree it is measuring is the
+ * problem, not the measurement.
+ *
+ * Note what the renderer actually emits, because it decides what the drift
+ * question means: components, composables and providers are emitted as
+ * `export * from '<family index>'` — the manifest's per-entry `exports` arrays
+ * are **documentation of intent, not the emitted names**. Only `utilities` is
+ * enumerated by name. So a symbol missing from the manifest's name lists is a
+ * stale *document*; a missing **path** is what changes the barrel.
+ */
+export function renderBarrel(packageDir: string): BarrelRender {
   const manifestPath = resolve(packageDir, 'manifests/public-api.manifest.json')
 
   if (!existsSync(manifestPath)) {
-    console.error(`Manifest not found: ${manifestPath}`)
-    process.exit(1)
+    throw new Error(`Manifest not found: ${manifestPath}`)
   }
 
   const raw = readFileSync(manifestPath, 'utf-8')
@@ -164,34 +187,60 @@ function generate(packageDir: string): void {
   const body = sections.length > 0 ? sections.join('\n\n') : 'export {}'
   const output = `${HEADER}\n${styleImport}${body}\n`
 
-  const indexPath = resolve(packageDir, 'src/index.ts')
-  const indexDir = dirname(indexPath)
+  return {
+    manifestPath,
+    indexPath: resolve(packageDir, 'src/index.ts'),
+    package: manifest.package,
+    output,
+    counts: { components: componentCount, composables: composableCount, utilities: utilityCount },
+  }
+}
 
+function generate(packageDir: string): void {
+  let rendered: BarrelRender
+  try {
+    rendered = renderBarrel(packageDir)
+  }
+  catch (error) {
+    console.error(error instanceof Error ? error.message : String(error))
+    process.exit(1)
+  }
+
+  const indexDir = dirname(rendered.indexPath)
   if (!existsSync(indexDir)) {
     console.error(`Source directory not found: ${indexDir}`)
     process.exit(1)
   }
 
-  writeFileSync(indexPath, output, 'utf-8')
+  writeFileSync(rendered.indexPath, rendered.output, 'utf-8')
 
-  const relManifest = relative(process.cwd(), manifestPath)
-  const relIndex = relative(process.cwd(), indexPath)
-  const totalExports = componentCount + composableCount + utilityCount
-  console.warn(`Generated ${relIndex} from ${relManifest} (${manifest.package})`)
+  const relManifest = relative(process.cwd(), rendered.manifestPath)
+  const relIndex = relative(process.cwd(), rendered.indexPath)
+  const { components, composables, utilities } = rendered.counts
+  console.warn(`Generated ${relIndex} from ${relManifest} (${rendered.package})`)
   console.warn(
-    `  ${componentCount} components, `
-    + `${composableCount} composables, `
-    + `${utilityCount} utilities `
-    + `(${totalExports} total exports)`,
+    `  ${components} components, `
+    + `${composables} composables, `
+    + `${utilities} utilities `
+    + `(${components + composables + utilities} total exports)`,
   )
 }
 
-// CLI entry
-const packageDir = process.argv[2]
-if (!packageDir) {
-  console.error('Usage: tsx packages/tooling/src/manifest-generator.ts <package-dir>')
-  console.error('Example: tsx packages/tooling/src/manifest-generator.ts packages/core')
-  process.exit(1)
-}
+// CLI entry.
+//
+// Guarded since TASK-R1-O3: `renderBarrel` is now imported by
+// `src/release/api-diff.ts`, and an unguarded CLI block runs — and exits 1 with
+// a usage message — on `import`, not only on `tsx <this file>`. Same pattern as
+// the release modules and the validators.
+const invokedDirectly = process.argv[1] !== undefined
+  && /manifest-generator\.(?:ts|js|mjs)$/.test(process.argv[1].replaceAll('\\', '/'))
 
-generate(packageDir)
+if (invokedDirectly) {
+  const packageDir = process.argv[2]
+  if (!packageDir) {
+    console.error('Usage: tsx packages/tooling/src/manifest-generator.ts <package-dir>')
+    console.error('Example: tsx packages/tooling/src/manifest-generator.ts packages/core')
+    process.exit(1)
+  }
+  generate(packageDir)
+}

@@ -157,9 +157,9 @@ const RAMP_SHADES = [300, 400, 500, 600, 700] as const
   display: block;
   width: 56%;
   aspect-ratio: 1;
-  border: 2px solid var(--dz-colors-primary-400, #4b93f3);
+  border: 2px solid var(--dz-colors-primary-400, #5195ff);
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: color-mix(in oklch, var(--dz-colors-primary-400, #4b93f3) 14%, transparent);
+  background: color-mix(in oklch, var(--dz-colors-primary-400, #5195ff) 14%, transparent);
 }
 
 .thv2-shadow-card {
@@ -176,8 +176,8 @@ const RAMP_SHADES = [300, 400, 500, 600, 700] as const
   aspect-ratio: 1 / 3;
   background: linear-gradient(
     to bottom,
-    var(--dz-colors-secondary-400, #8a79d6),
-    var(--dz-colors-secondary-600, #5b4a9e)
+    var(--dz-colors-secondary-400, #978bda),
+    var(--dz-colors-secondary-600, #5c4a9e)
   );
   border-color: color-mix(in oklch, var(--dz-secondary, #7260bd) 45%, var(--lp-hairline, #d5d7d9));
 }

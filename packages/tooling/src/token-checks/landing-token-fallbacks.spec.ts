@@ -46,7 +46,7 @@
  * exception the task calls out.
  */
 
-import { globSync, readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
@@ -107,8 +107,12 @@ interface Site {
 }
 
 function collect(includeCopyPaste: boolean): Site[] {
-  const files = globSync(`${LANDING_SRC}/**/*.{vue,ts,css}`, { cwd: REPO_ROOT })
-    .map(f => f.replace(/\\/g, '/'))
+  // Not `fs.globSync`: it does not exist on Node 20, and 20.19 is the declared
+  // engine floor that CI's first unit-test job runs.
+  const files = readdirSync(`${REPO_ROOT}/${LANDING_SRC}`, { recursive: true, encoding: 'utf8' })
+    .map(f => `${LANDING_SRC}/${f.replace(/\\/g, '/')}`)
+    .filter(f => /\.(?:vue|ts|css)$/.test(f))
+    .sort()
     .filter(f => !f.endsWith('.spec.ts'))
     .filter((f) => {
       const isCopyPaste

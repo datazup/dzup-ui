@@ -20,7 +20,7 @@ import {
   DzNumberInput,
   DzText,
 } from '@dzup-ui/core'
-import { Plus, Trash2 } from 'lucide-vue-next'
+import { Plus, Trash2 } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**

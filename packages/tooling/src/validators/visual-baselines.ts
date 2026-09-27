@@ -86,8 +86,30 @@ export interface VisualLedger {
     themes: string[]
     direction: string
     viewport: { width: number, height: number }
+    /** The platform this ledger GATES on — the one the committed images are for. */
     platform: string
+    /** The platform CI runs on. `platform !== ciPlatform` is reported, not failed. */
     ciPlatform: string
+    /**
+     * The recorded answer to "which platform is authoritative" (TASK-R2-O1).
+     *
+     * Separate from `platform` on purpose: `platform` is what there are images
+     * for and what the digest gate compares against, and writing the
+     * authoritative answer into it would make the ledger claim baselines that do
+     * not exist. This field is the decision with a date and an owner action on
+     * it; TASK-R2-O6 consumes it.
+     */
+    platformDecision?: {
+      decidedBy: string
+      decidedAt: string
+      authoritative: string
+      gatingToday: string
+      state: string
+      rationale: string
+      ownerAction: string
+      consumes?: string
+      verifiedOn?: string
+    }
     note: string
   }
   snapshotDirs: string[]

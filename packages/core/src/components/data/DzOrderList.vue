@@ -12,7 +12,7 @@ import {
   ChevronsUp,
   ChevronUp,
   GripVertical,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 /**
  * DzOrderList — reorderable list with drag, control-button, and keyboard reorder.
  *

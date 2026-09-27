@@ -17,6 +17,15 @@
  * `--max-mb <n>` to promote it to an enforced budget once a baseline is trusted;
  * it then exits 1 when the total on-disk size exceeds <n> MB.
  *
+ * THE CEILING IS RECORDED ELSEWHERE (TASK-R1-O5). `--max-mb` is the *call*; the
+ * number, its seed measurement and the reason for it live in
+ * `packages/tooling/src/validators/docs-size-ceilings.json` under
+ * `storybookStatic`, beside the docs site's. `yarn validate:docs-size` measures
+ * the same directory inside `validate:all` and fails when this flag and that
+ * file disagree — one number, two consumers, the drift asserted rather than
+ * hoped for. `--gallery-max-mb` is a separate budget for the `DZUP_GALLERY=1`
+ * visual-fixture build and is not covered by that ratchet.
+ *
  * Units match the landing size check (`apps/landing/scripts/check-bundle-budget.ts`)
  * and the library budget: gzip is level 9.
  *
@@ -135,12 +144,31 @@ function main() {
   console.log(`\n${'='.repeat(56)}`)
 
   if (maxMb !== undefined && !Number.isNaN(maxMb)) {
-    const over = totalBytes > maxMb * MB
+    // Exact bytes, and the overage, beside the human figure — TASK-R1-O5.
+    // On 2026-09-21 this line printed `Storybook build 25.00 MB EXCEEDS budget
+    // 25 MB` and failed CI (TASK-R1-O4's handoff, `storybook` job). Every word
+    // of it was true: the build was 26,232,563 B against a 26,214,400 B budget,
+    // over by 18,163 B — which two decimal places on 25 MB cannot show. A gate
+    // whose failure message reads as its own bug is a gate somebody switches
+    // off, so the number that decided the exit code is now the number printed.
+    const budgetBytes = Math.round(maxMb * MB)
+    const over = totalBytes > budgetBytes
+    const exact = `${totalBytes.toLocaleString('en-US')} B vs ${budgetBytes.toLocaleString('en-US')} B`
     console.log(
       over
-        ? `Storybook build ${formatBytes(totalBytes)} EXCEEDS budget ${maxMb} MB.`
-        : `Storybook build ${formatBytes(totalBytes)} within budget ${maxMb} MB.`,
+        ? `Storybook build ${formatBytes(totalBytes)} EXCEEDS budget ${maxMb} MB `
+        + `by ${formatBytes(totalBytes - budgetBytes)} — ${exact}.`
+        : `Storybook build ${formatBytes(totalBytes)} within budget ${maxMb} MB, `
+          + `${formatBytes(budgetBytes - totalBytes)} spare — ${exact}.`,
     )
+    if (over) {
+      console.log(
+        '\nThe ceiling is recorded ONCE, in '
+        + 'packages/tooling/src/validators/docs-size-ceilings.json (`storybookStatic`), and '
+        + '`yarn validate:docs-size` fails when this `--max-mb` and that file disagree. Raising '
+        + 'one means raising both, deliberately, with the reason written down.',
+      )
+    }
     process.exit(over ? 1 : 0)
     return
   }

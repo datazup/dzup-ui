@@ -28,7 +28,7 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, CheckCheck, Inbox as InboxIcon } from 'lucide-vue-next'
+import { Boxes, CheckCheck, Inbox as InboxIcon } from '@lucide/vue'
 import { computed, reactive, ref } from 'vue'
 import {
   INBOX_TABS,

@@ -31,7 +31,7 @@ import {
   DzMultiSelect,
   DzText,
 } from '@dzup-ui/core'
-import { MoreHorizontal, UserPlus } from 'lucide-vue-next'
+import { MoreHorizontal, UserPlus } from '@lucide/vue'
 import { ref } from 'vue'
 import {
 

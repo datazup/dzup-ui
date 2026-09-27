@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DzTableRowProps, DzTableRowSlots } from './DzTable.types.ts'
 /**
- * DzTableRow — Table row (<tr>).
+ * DzTableRow — Table row (`<tr>`).
  *
  * Child of DzTable compound component. Inherits context via inject.
  *
@@ -11,7 +11,7 @@ import type { DzTableRowProps, DzTableRowSlots } from './DzTable.types.ts'
  * DzTableContext (`expandedRows`) and toggled via `toggleExpand`; DzTable emits
  * `row-expand`/`row-collapse` accordingly.
  */
-import { ChevronRight } from 'lucide-vue-next'
+import { ChevronRight } from '@lucide/vue'
 import { computed, inject, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import DzIcon from '../media/DzIcon.vue'

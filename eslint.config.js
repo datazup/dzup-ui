@@ -85,6 +85,16 @@ export default antfu({
     // does not exist -- because that is what the scanner must survive. Linting
     // them into tidiness would delete the cases under test.
     'packages/tooling/src/ownership/__fixtures__/**',
+
+    // Codemod input/output fixtures (TASK-R1-O6). Same class as the line above,
+    // one step stronger: an `.output.*` fixture is a RECORDING of what the
+    // transform prints, and `recast` prints a trailing semicolon on the one
+    // statement it re-emits. Autofixing that away would make the fixture assert
+    // output the codemod does not produce, and the test would then fail --
+    // linting would not tidy the fixture, it would falsify it. Import order is
+    // the same story: an `.input.*` file exists to reproduce real source, and
+    // real source is not always sorted.
+    'packages/codemods/src/transforms/__fixtures__/**',
   ],
 }, {
   // Node CLI + build scripts: stdout is their user interface, not a debugging

@@ -17,6 +17,7 @@ import type { DzSidebarItemEmits, DzSidebarItemProps, DzSidebarItemSlots } from 
  * ```
  */
 import { computed, inject, resolveComponent, useAttrs } from 'vue'
+import { useDzUrlGuard } from '../../composables/provider/useDzUrlPolicy.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import { sidebarVariants } from './DzSidebar.variants.ts'
@@ -47,12 +48,24 @@ const sidebarContext = inject(DZ_SIDEBAR_KEY, null)
 const isCollapsed = computed(() => sidebarContext?.collapsed.value ?? false)
 const activeStyle = computed(() => sidebarContext?.activeStyle.value ?? 'filled')
 
+/**
+ * The URL policy (ADR-20 §12, TASK-R2-O4).
+ *
+ * `DzSidebar` declares the `url` boundary and has no sink of its own — this
+ * sub-part copies `props.href` into the rendered attribute map (finding U4). A
+ * refused URL renders the `<button>` this component already falls back to, so
+ * the row keeps its icon, label, badge and click handler and loses only the
+ * navigation.
+ */
+const guardUrl = useDzUrlGuard('DzSidebarItem')
+const urlDecision = computed(() => guardUrl(props.href))
+
 /** Determine which HTML element or component to render */
 const computedTag = computed(() => {
   if (props.as)
     return props.as
   if (props.href)
-    return 'a'
+    return urlDecision.value.rejected ? 'button' : 'a'
   if (props.to) {
     try {
       return resolveComponent('RouterLink')
@@ -80,13 +93,15 @@ const itemClasses = computed(() =>
   ),
 )
 
-const dataState = computed(() => (props.active ? 'active' : 'inactive'))
+const dataState = computed(() =>
+  urlDecision.value.rejected ? 'url-rejected' : props.active ? 'active' : 'inactive',
+)
 
 /** Build link-specific attributes */
 const linkAttrs = computed(() => {
   const result: Record<string, unknown> = {}
-  if (props.href)
-    result.href = props.href
+  if (urlDecision.value.href !== undefined)
+    result.href = urlDecision.value.href
   if (props.to)
     result.to = props.to
   return result

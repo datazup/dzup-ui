@@ -17,7 +17,9 @@
         "reduced-motion",
         "rtl",
         "touch",
-        "zoom-400"
+        "zoom-400",
+        "text-200",
+        "spacing"
       ],
       "conditionsRunNote": "TASK-N1-O3 executed all six chromium projects in one invocation on 2026-08-31 -- the first surviving six-condition chromium run since the 2026-08-24 one that N1-O2 section 1e showed had been overwritten. It was deliberately NOT written to test-results/matrix-report.json: that file is the only copy of the 2026-08-25 record and protecting it outranked replacing it. Hardening the record is still owner decision D1 in the N1-O2 handoff.",
       "notReproducing": [],
@@ -46,7 +48,35 @@
           ],
           "note": "left untouched by TASK-N1-O3; MD5 verified unchanged at task end"
         }
-      }
+      },
+      "additionalRuns": [
+        {
+          "conditions": [
+            "text-200",
+            "spacing"
+          ],
+          "measuredAt": "2026-09-18",
+          "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+          "worktreeDirty": true,
+          "measuredBy": "TASK-R2-O5",
+          "summary": {
+            "inLane": 89,
+            "runnableTargets": 88,
+            "declaredUnrunTargets": 1,
+            "cellsRun": 352,
+            "passed": 352,
+            "expectedFailure": 0,
+            "unexpectedPass": 0,
+            "unexpectedFailure": 0,
+            "skipped": 2,
+            "exitCode": 1,
+            "wallClock": "18.3m for all six projects in one invocation -- the three engines were not timed separately",
+            "ranAt": "2026-09-18",
+            "report": "not persisted -- PLAYWRIGHT_JSON_OUTPUT deliberately left unset so the 2026-08-25 chromium record at test-results/matrix-report.json is not overwritten (N1-O2 decision D1)"
+          },
+          "note": "SC 1.4.4 Resize Text and SC 1.4.12 Text Spacing, the two WCAG 2.2 AA criteria the six-condition sweep could not measure. Every one of the 352 cells passed. `exitCode` is 1 for a reason that is NOT a test result and is recorded rather than rounded off: the single six-project invocation ended with `Error: worker-5 process did not exit within 300000ms after stop, force-killed it` -- a teardown fault after the last cell had already reported. Re-running the implicated project alone (matrix-webkit-spacing) gave 176 passed / 1 skipped / exit 0 in 2.3m, so the fault is the multi-project teardown and not the condition. `skipped` is the declared-unrun target (DzThemeProvider has no story) counted once per condition."
+        }
+      ]
     },
     "firefox": {
       "version": "151.0 (playwright firefox v1532)",
@@ -56,7 +86,9 @@
         "reduced-motion",
         "rtl",
         "touch",
-        "zoom-400"
+        "zoom-400",
+        "text-200",
+        "spacing"
       ],
       "notReproducing": [],
       "engineOnly": [],
@@ -74,7 +106,35 @@
         "wallClock": "21.2m",
         "ranAt": "2026-08-31"
       },
-      "note": "TASK-N1-O2: all 46 cross-engine ledger entries reproduced on firefox with the same verdicts and, to within text-metric rounding, the same numbers. TASK-N1-O3: after the fixes, the full six-condition sweep is 1056/1056 with an empty ledger. Zero firefox-specific failures at either point."
+      "note": "TASK-N1-O2: all 46 cross-engine ledger entries reproduced on firefox with the same verdicts and, to within text-metric rounding, the same numbers. TASK-N1-O3: after the fixes, the full six-condition sweep is 1056/1056 with an empty ledger. Zero firefox-specific failures at either point.",
+      "additionalRuns": [
+        {
+          "conditions": [
+            "text-200",
+            "spacing"
+          ],
+          "measuredAt": "2026-09-18",
+          "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+          "worktreeDirty": true,
+          "measuredBy": "TASK-R2-O5",
+          "summary": {
+            "inLane": 89,
+            "runnableTargets": 88,
+            "declaredUnrunTargets": 1,
+            "cellsRun": 352,
+            "passed": 352,
+            "expectedFailure": 0,
+            "unexpectedPass": 0,
+            "unexpectedFailure": 0,
+            "skipped": 2,
+            "exitCode": 1,
+            "wallClock": "18.3m for all six projects in one invocation -- the three engines were not timed separately",
+            "ranAt": "2026-09-18",
+            "report": "not persisted -- PLAYWRIGHT_JSON_OUTPUT deliberately left unset so the 2026-08-25 chromium record at test-results/matrix-report.json is not overwritten (N1-O2 decision D1)"
+          },
+          "note": "SC 1.4.4 Resize Text and SC 1.4.12 Text Spacing, the two WCAG 2.2 AA criteria the six-condition sweep could not measure. Every one of the 352 cells passed. `exitCode` is 1 for a reason that is NOT a test result and is recorded rather than rounded off: the single six-project invocation ended with `Error: worker-5 process did not exit within 300000ms after stop, force-killed it` -- a teardown fault after the last cell had already reported. Re-running the implicated project alone (matrix-webkit-spacing) gave 176 passed / 1 skipped / exit 0 in 2.3m, so the fault is the multi-project teardown and not the condition. `skipped` is the declared-unrun target (DzThemeProvider has no story) counted once per condition."
+        }
+      ]
     },
     "webkit": {
       "version": "26.5 (playwright webkit v2311)",
@@ -84,7 +144,9 @@
         "reduced-motion",
         "rtl",
         "touch",
-        "zoom-400"
+        "zoom-400",
+        "text-200",
+        "spacing"
       ],
       "notReproducing": [],
       "engineOnly": [],
@@ -120,6 +182,34 @@
           "closureReason": "The cross-engine ledger entry this record withdrew no longer exists: known-failures.json is empty. The DzLightbox divergence was NOT a timing artefact, which is the correction this task owes N1-O2 finding E4 and owner decision D3. The three \"transient\" controls were DzLightbox`s own close and nav buttons rendering with NO class attribute, because the template bound `styles.closeButton` (the tv() slot function) instead of `styles.closeButton()`. Vue`s normalizeClass has no case for a function, so it emitted the empty string and the buttons were sized by the bare SVG inside them: 16x16 and 20x20 against the 32x32 and 40x40 the variants declare. WebKit \"passed\" only because it had already unmounted the teleported overlay by the time the assertion ran, so it measured nothing. All ten of the component`s slot bindings are fixed.",
           "measuredWhenOpen": "close button 32x32, nav buttons 40x40 after the fix; chromium matrix-chromium-touch cell passes."
         }
+      ],
+      "additionalRuns": [
+        {
+          "conditions": [
+            "text-200",
+            "spacing"
+          ],
+          "measuredAt": "2026-09-18",
+          "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+          "worktreeDirty": true,
+          "measuredBy": "TASK-R2-O5",
+          "summary": {
+            "inLane": 89,
+            "runnableTargets": 88,
+            "declaredUnrunTargets": 1,
+            "cellsRun": 352,
+            "passed": 352,
+            "expectedFailure": 0,
+            "unexpectedPass": 0,
+            "unexpectedFailure": 0,
+            "skipped": 2,
+            "exitCode": 1,
+            "wallClock": "18.3m for all six projects in one invocation; matrix-webkit-spacing re-run alone: 2.3m",
+            "ranAt": "2026-09-18",
+            "report": "not persisted -- PLAYWRIGHT_JSON_OUTPUT deliberately left unset so the 2026-08-25 chromium record at test-results/matrix-report.json is not overwritten (N1-O2 decision D1)"
+          },
+          "note": "SC 1.4.4 Resize Text and SC 1.4.12 Text Spacing, the two WCAG 2.2 AA criteria the six-condition sweep could not measure. Every one of the 352 cells passed. `exitCode` is 1 for a reason that is NOT a test result and is recorded rather than rounded off: the single six-project invocation ended with `Error: worker-5 process did not exit within 300000ms after stop, force-killed it` -- a teardown fault after the last cell had already reported. Re-running the implicated project alone (matrix-webkit-spacing) gave 176 passed / 1 skipped / exit 0 in 2.3m, so the fault is the multi-project teardown and not the condition. `skipped` is the declared-unrun target (DzThemeProvider has no story) counted once per condition."
+        }
       ]
     }
   },
@@ -146,5 +236,15 @@
       "failed": 0
     },
     "note": "3168 cells across 3 engines x 6 conditions x 88 runnable targets. Zero failures, zero expected failures, zero engine exceptions, zero engine divergences. Worktree-dirty: locally qualified only."
+  },
+  "conditionsAdded": {
+    "conditions": [
+      "text-200",
+      "spacing"
+    ],
+    "measuredBy": "TASK-R2-O5",
+    "measuredAt": "2026-09-18",
+    "sourceCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+    "note": "The lane went from six conditions to eight, so it is 24 projects rather than 18. The 2026-08-31 six-condition numbers above were NOT re-run against this tree and are left exactly as measured; the two sweeps are reported as separate rows on /evidence/browser-support for that reason. Neither criterion is emulation an engine exposes -- both are user stylesheets, injected by e2e/matrix/fixtures.ts, and every cell asserts the sheet took effect before it measures the component."
   }
 }

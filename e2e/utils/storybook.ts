@@ -12,7 +12,8 @@ export async function loadStoryCanvas(
   options: LoadStoryCanvasOptions = {},
 ): Promise<Page> {
   const params = new URLSearchParams({ id: storyId, viewMode: 'story' })
-  if (globals) params.set('globals', globals)
+  if (globals)
+    params.set('globals', globals)
 
   await page.goto(`/iframe.html?${params.toString()}`, {
     waitUntil: 'domcontentloaded',

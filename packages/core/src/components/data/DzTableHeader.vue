@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DzTableHeaderSlots } from './DzTable.types.ts'
 /**
- * DzTableHeader — Table header section (<thead>).
+ * DzTableHeader — Table header section (`<thead>`).
  *
  * Child of DzTable compound component. Inherits context via inject.
  */

@@ -167,7 +167,6 @@ The scaffold says this component owes 8 task(s):
 
 **Read from:** ARIA live regions.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -177,4 +176,3 @@ defect. If a step failed for any other reason, it **is** new — file it.
 - **D10** — affects `open`. The component runs two focus mechanisms at once: it advertises `aria-activedescendant` from the trigger while the popover moves real DOM focus onto the tree row. The fourth expectation of the `open` step is expected to FAIL — the AT will report a focus move to a tree row. This is a known open defect.
 - **D4** — affects `reach`. On `core-forms-dztreeselect--multiple-chips`, each chip remove control is `role="button"` rendered INSIDE the `role="combobox"` button. The reach step on that story is expected to announce nested controls.
 - **D8** — affects `select`. `useDualModel` ignores external writes to `v-model:value` after the first user edit. Resetting the selection from outside the component will not take.
-

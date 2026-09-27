@@ -2,7 +2,7 @@
 // dzup-ui application shell gallery scene — ONLY @dzup-ui/core components + --dz-* tokens.
 // Dark icon-rail / light-panel sidebar + top navbar + dashboard content.
 
-import type { LucideIcon } from 'lucide-vue-next'
+import type { LucideIcon } from '@lucide/vue'
 import {
   Bell,
   FolderKanban,
@@ -15,7 +15,7 @@ import {
   TrendingDown,
   TrendingUp,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 import { DzIconButton } from '../../../src/components/buttons'
 import { DzCard, DzCardBody } from '../../../src/components/cards'

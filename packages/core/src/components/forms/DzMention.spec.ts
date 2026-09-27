@@ -259,3 +259,42 @@ describe('dzMention — single-line mode', () => {
     expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toBe('@Bob ')
   })
 })
+
+// -- D8: controlled/uncontrolled -------------------------------------------
+
+describe('dzMention — D8: an external write after a user edit is honoured', () => {
+  it('defect D8 -- a parent that clears `v-model:value` after the user typed is obeyed', async () => {
+    // This is the exact reproduction N1-O1 measured: the
+    // `RealWorldCommentComposer` story submitted a comment, set the draft back
+    // to '', and the textarea kept the text.
+    const wrapper = mountMention({ value: '' })
+
+    await typeInto(wrapper, 'ship it')
+    expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toBe('ship it')
+
+    await wrapper.setProps({ value: 'ship it' })
+    expect((wrapper.find('textarea').element as HTMLTextAreaElement).value).toBe('ship it')
+
+    await wrapper.setProps({ value: '' })
+    expect((wrapper.find('textarea').element as HTMLTextAreaElement).value).toBe('')
+  })
+})
+
+describe('dzMention — D3: the public `loading` prop is not dead', () => {
+  it('defect D3 -- `loading` puts the root in the busy state', () => {
+    // The prop was declared (via `BaseBehaviorProps`), defaulted in the
+    // component and read by nothing — `<DzMention loading>` did nothing at all
+    // (N1-O1 defect D3).
+    const wrapper = mountMention({ loading: true })
+    const root = wrapper.find('[data-part="root"]')
+
+    expect(root.attributes('data-loading')).toBe('')
+    expect(root.attributes('aria-busy')).toBe('true')
+  })
+
+  it('defect D3 -- the root is not busy by default', () => {
+    const root = mountMention().find('[data-part="root"]')
+    expect(root.attributes('data-loading')).toBeUndefined()
+    expect(root.attributes('aria-busy')).toBeUndefined()
+  })
+})

@@ -309,7 +309,7 @@ export type TablePin = 'left' | 'right'
 
 /** Props for the DzTableCell component */
 export interface DzTableCellProps {
-  /** Whether this cell is a header cell (<th> vs <td>) */
+  /** Whether this cell is a header cell (`<th>` vs `<td>`) */
   header?: boolean
   /** Text alignment */
   align?: 'left' | 'center' | 'right'

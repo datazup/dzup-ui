@@ -15,9 +15,40 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { applyResolutions, readConfig, resolutionsFor } from './vue-next-lane.mjs'
+import { applyResolutions, readConfig, resolutionsFor, versionFor } from './vue-next-lane.mjs'
 
 const config = readConfig()
+
+describe('versionFor — the empty-input defect (TASK-R1-O4)', () => {
+  it('falls back to the channel version when the env var is the EMPTY STRING', () => {
+    // The defect this pins, in full. `vue-next.yml` passes
+    // `DZUP_VUE_NEXT: ${{ inputs.version }}`; on a `schedule` trigger there are
+    // no inputs, so the variable arrives as `''` rather than undefined. The old
+    // code used `??`, which does not fall through on `''`, so the lane pinned
+    // every `@vue/*` package to `""`, yarn resolved the default range, and the
+    // suite ran against Vue 3.5.43 — under a workflow that reported success —
+    // on 2026-09-07, 2026-09-14 and 2026-09-21.
+    expect(versionFor(config, '')).toBe(config.resolutions.vue)
+    expect(versionFor(config, '   ')).toBe(config.resolutions.vue)
+  })
+
+  it('falls back when the env var is absent', () => {
+    expect(versionFor(config, undefined)).toBe(config.resolutions.vue)
+  })
+
+  it('uses an explicitly requested version, trimmed', () => {
+    expect(versionFor(config, '3.6.0')).toBe('3.6.0')
+    expect(versionFor(config, ' 3.6.0 ')).toBe('3.6.0')
+  })
+
+  it('never yields an empty pin, whatever it is handed', () => {
+    // The invariant that matters more than any single case: `resolutionsFor`
+    // substitutes this value into every `3.x` entry, and an empty version there
+    // is a resolutions block that silently means "anything".
+    for (const input of [undefined, '', '  ', null as unknown as string])
+      expect(versionFor(config, input)).not.toBe('')
+  })
+})
 
 describe('vue-next lane config', () => {
   it('pins the whole @vue/* set, not just `vue`', () => {

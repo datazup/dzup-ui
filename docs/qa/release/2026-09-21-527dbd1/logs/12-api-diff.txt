@@ -1,0 +1,26 @@
+packing the published packages… 6 tarball(s)
+  @dzup-ui/contracts@0.1.0: 167 symbol(s) · 34 const · 54 interface · 58 type · 1 class · 20 function
+  @dzup-ui/core@0.2.0: 1325 symbol(s) · 245 type · 640 interface · 50 const · 204 component · 186 function
+  @dzup-ui/mcp@0.2.0: 26 symbol(s) · 5 const · 12 interface · 1 type · 1 class · 7 function
+  @dzup-ui/nuxt@0.1.0-alpha.0: 9 symbol(s) · 1 interface · 1 type · 7 function
+  @dzup-ui/testing@0.1.0: 79 symbol(s) · 19 interface · 10 type · 15 const · 35 function
+  @dzup-ui/tokens@0.2.0: 4 symbol(s) · 4 const
+
+  @dzup-ui/contracts   +0 −0 ~0  requires none  declared minor (none)
+  @dzup-ui/core        +455 −6 ~0  requires minor declared minor (manifest-only)
+  @dzup-ui/mcp         +0 −0 ~0  requires none  declared patch (none)
+  @dzup-ui/nuxt        +0 −0 ~0  requires none  declared minor (none)
+  @dzup-ui/testing     +0 −0 ~0  requires none  declared minor (none)
+  @dzup-ui/tokens      +0 −0 ~0  requires none  declared patch (none)
+
+  generate:exports drift @dzup-ui/core: would DROP 5 line(s), ADD 2
+  manifest reconciliation @dzup-ui/core: 455 exported-and-undocumented, 6 documented-and-undelivered
+
+  5 STOP CONDITION(S) — reported, not blocked:
+    [dirty-source] worktree dirty: 221 path(s) differ from 527dbd1. doc 08: "dirty/unidentified source, generated drift, or evidence bound to a different commit/configuration".
+    [unexplained-api-diff] @dzup-ui/core: `yarn generate:exports` would DROP 5 barrel line(s) — every symbol behind them leaves the public surface. Breaking under VERSIONING.md §2.1, requiring a `minor`, performed by a generator with no changeset behind it: export * from './composables/useAffix/index.ts' / export * from './composables/useCalendar/index.ts' / export * from './composables/useInfiniteScroll/index.ts' / export * from './composables/useScrollSpy/index.ts' / export * from './composables/useScrollToTop/index.ts'. Owner decision, routed to TASK-R0-O1.
+    [manifest-omission] @dzup-ui/core: `yarn generate:exports` would ADD 2 barrel line(s) the manifest declares and the barrel does not have: export * from './composables/useCountdown/index.ts' / export * from './composables/useIntersection/index.ts'.
+    [manifest-omission] @dzup-ui/core: 455 symbol(s) reach a consumer through the root barrel and are absent from public-api.manifest.json's documented name lists. Not a generator action (the barrel star-re-exports); a stale document other tooling has already been moved off (TASK-N2-A1).
+    [manifest-omission] @dzup-ui/core: 6 symbol(s) are promised by public-api.manifest.json and absent from the packed build.
+
+written → docs/qa/release/2026-09-21-527dbd1/api-diff.{json,md}

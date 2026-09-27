@@ -81,13 +81,17 @@ export const Translated: Story = {
         },
         DzSelect: { noResults: 'Aucun résultat', searchPlaceholder: 'Rechercher…' },
       },
-      options: [{ label: 'Un', value: '1' }, { label: 'Deux', value: '2' }],
+      // `DzSelect` takes `items`, never `options`. Bound as `:options` the prop
+      // was `undefined`, `selectedLabel`'s `props.items.find(...)` threw while
+      // `SelectTrigger` rendered, and the story failed in storybook:test
+      // (N1-O1 stale prop name, fixed in TASK-R2-O3).
+      selectItems: [{ label: 'Un', value: '1' }, { label: 'Deux', value: '2' }],
     }),
     template: `
       <DzProvider locale="fr-FR" :messages="messages">
         <div class="grid gap-3 max-w-sm">
           <DzInput model-value="Effaçable" clearable />
-          <DzSelect :options="options" searchable placeholder="Choisir…" />
+          <DzSelect :items="selectItems" searchable placeholder="Choisir…" />
           <DzPagination :total="120" :page-size="10" :page="3" />
         </div>
       </DzProvider>

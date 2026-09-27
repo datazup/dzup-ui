@@ -27,6 +27,8 @@ import type { EvidenceKind, RiskTier } from '@dzup-ui/contracts'
  * What is known about one evidence cell.
  *
  * - `pass` — an artifact exists AND something recorded it passing.
+ * - `fail` — an artifact exists and something recorded it **failing**. See
+ *   below; this is the state whose absence made the matrix lie.
  * - `present` — an artifact exists; nothing here proves it ran green. A spec
  *   file on disk is `present`; the same spec with a passing result recorded
  *   against it is `pass`. Collapsing the two would let a skipped test read as
@@ -36,11 +38,35 @@ import type { EvidenceKind, RiskTier } from '@dzup-ui/contracts'
  * - `unrun` — no artifact. The default, and the one the page must not hide.
  * - `excepted` — the component provably cannot produce this row, and the
  *   reason travels with the cell. Still printed.
+ *
+ * **Why `fail` was added (TASK-R2-O2).** It was missing for the first year of
+ * this artifact's life, and its absence was not a gap in expressiveness — it was
+ * a defect that inverted the meaning of the `at-manual` row. TASK-N1-O4 §6.2
+ * measured it: the resolver counted rows whose `result !== 'unrun'` and never
+ * read the value, so a component whose every AT pairing a human had recorded as
+ * `fail` resolved to `state: 'pass'`. With no `fail` to resolve to, every
+ * downstream repair was a workaround — N2-D2 added a docs-generator tripwire
+ * (`atManualTripwire`) that stopped the *site* publishing the lie without
+ * stopping the *matrix* telling it, and routed two further lanes (2.5.7
+ * deviations, security corpus) into side registers for the same reason.
+ *
+ * The rule the value carries: **a state is never resolved upward.** A recorded
+ * failure outranks a recorded pass in the same cell, and it outranks staleness
+ * too — a failure that has not been re-run against newer code is still a
+ * failure, and laundering it into the neutral-reading `stale` is the same class
+ * of error as laundering it into `pass`. The note says the evidence is stale;
+ * the state says it failed.
+ *
+ * Readers of `totals` gain a sixth key. It is additive — no existing key
+ * changes meaning — but a reader that switches exhaustively over `CellState`
+ * must handle it, which is why {@link CELL_STATES} is the ordered list every
+ * such reader iterates.
  */
-export type CellState = 'pass' | 'present' | 'stale' | 'unrun' | 'excepted'
+export type CellState = 'pass' | 'fail' | 'present' | 'stale' | 'unrun' | 'excepted'
 
 export const CELL_STATES: readonly CellState[] = [
   'pass',
+  'fail',
   'present',
   'stale',
   'unrun',
@@ -108,7 +134,8 @@ export interface CapabilityRow {
   readonly family: string
   readonly tier: RiskTier
   readonly pattern: string
-  readonly securityBoundary: string
+  /** Every boundary the component crosses, sorted; `['none']` for none (TASK-R2-O4). */
+  readonly securityBoundary: readonly string[]
   readonly traits: readonly string[]
   /** Whether the component declares a `Dz{Name}.anatomy.ts`. */
   readonly anatomy: 'declared' | 'absent'
@@ -145,5 +172,5 @@ export const CAPABILITY_SCHEMA_VERSION = '1.1.0'
 
 /** An empty per-state tally. */
 export function emptyTally(): Record<CellState, number> {
-  return { pass: 0, present: 0, stale: 0, unrun: 0, excepted: 0 }
+  return { pass: 0, fail: 0, present: 0, stale: 0, unrun: 0, excepted: 0 }
 }

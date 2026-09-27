@@ -126,9 +126,9 @@ export interface DzSidebarItemProps extends BaseAccessibilityProps {
   disabled?: boolean
   /** Element or component to render as */
   as?: string | object
-  /** Native link href (renders as <a>) */
+  /** Native link href (renders as `<a>`) */
   href?: string
-  /** Router link destination (renders as <RouterLink>) */
+  /** Router link destination (renders as `<RouterLink>`) */
   to?: string | object
   /**
    * Per-part class overrides for the item's inner nodes (ADR-19 §5). `class`

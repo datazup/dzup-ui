@@ -2,7 +2,7 @@
 import type { VNode } from 'vue'
 import type { DzTableBodyProps, DzTableBodySlots, VirtualWindow } from './DzTable.types.ts'
 /**
- * DzTableBody — Table body section (<tbody>).
+ * DzTableBody — Table body section (`<tbody>`).
  *
  * Child of DzTable compound component.
  *

@@ -8,7 +8,7 @@ import type { Component } from 'vue'
  * Pure data — the page keeps a reactive copy so checking, adding, moving and
  * deleting feel live in the preview.
  */
-import { CalendarDays, ListTodo, Star, Sun, UserRoundCheck } from 'lucide-vue-next'
+import { CalendarDays, ListTodo, Star, Sun, UserRoundCheck } from '@lucide/vue'
 
 /** One to-do row. */
 export interface TaskItem {

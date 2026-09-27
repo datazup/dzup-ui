@@ -200,7 +200,8 @@ export interface KeyboardBindingJoin {
 export interface CapabilityJoin {
   tier: string
   pattern: string
-  securityBoundary: string
+  /** Every boundary the component crosses, sorted; `['none']` for none. */
+  securityBoundary: string[]
   traits: string[]
   cells: Record<string, number>
   /** Kinds whose cell is `unrun`, by name — never collapsed into a count alone. */
@@ -413,9 +414,19 @@ export interface ComponentMetaArtifact {
 /**
  * The single serializer. The validator compares bytes against this, so the
  * generator and the gate cannot disagree about formatting.
+ *
+ * Every string is written with `\n` line breaks. TypeScript joins a multi-line
+ * JSDoc comment with the host's newline, so a Windows extraction produced
+ * `\r\n` inside descriptions and a Linux gate then reported the committed
+ * artifact as stale although no source had changed.
  */
 export function serializeComponentMeta(artifact: ComponentMetaArtifact): string {
-  return `${JSON.stringify(artifact, null, 2)}\n`
+  const json = JSON.stringify(
+    artifact,
+    (_key, value: unknown) => typeof value === 'string' ? value.replace(/\r\n/g, '\n') : value,
+    2,
+  )
+  return `${json}\n`
 }
 
 /**

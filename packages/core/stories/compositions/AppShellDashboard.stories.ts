@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { Activity, Bell, DollarSign, LayoutDashboard, Package, Settings, TrendingUp, Users } from 'lucide-vue-next'
+import { Activity, Bell, DollarSign, LayoutDashboard, Package, Settings, TrendingUp, Users } from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzButton } from '../../src/components/buttons'

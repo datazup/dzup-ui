@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DzCheckboxEmits, DzCheckboxProps, DzCheckboxSlots } from './DzCheckbox.types.ts'
-import { Check, Minus } from 'lucide-vue-next'
+import { Check, Minus } from '@lucide/vue'
 import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
 /**
  * DzCheckbox -- Checkbox component using Reka UI (ADR-07).

@@ -9,7 +9,7 @@ import {
   Share2,
   Sparkles,
   Trash2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

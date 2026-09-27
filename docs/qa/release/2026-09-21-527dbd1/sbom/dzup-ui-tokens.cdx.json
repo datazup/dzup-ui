@@ -1,0 +1,65 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-21T14:35:45.884Z",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "@dzup-ui/tooling release:evidence",
+          "version": "0.0.1"
+        }
+      ]
+    },
+    "component": {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40dzup-ui/tokens@0.2.0",
+      "name": "@dzup-ui/tokens",
+      "version": "0.2.0",
+      "purl": "pkg:npm/%40dzup-ui/tokens@0.2.0",
+      "description": "Design tokens for the dzup-ui component library",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bb6728c9c2ef5653df5dbdb550769f73298dcbcef2da72d83dcbf00bb9ee768a"
+        },
+        {
+          "alg": "SHA-512",
+          "content": "JSJSjzho6GEPXCsIOgE2fI2syEiG7a0UFTpuPRT4BbU6Hld2UjsZ3RB5pSdD6s8Sislb7osIZgXecOxsBxNF1g=="
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:tarball",
+          "value": "dzup-ui-tokens-0.2.0.tgz"
+        },
+        {
+          "name": "dzup:bytes",
+          "value": "53584"
+        },
+        {
+          "name": "dzup:sourceCommit",
+          "value": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+        },
+        {
+          "name": "dzup:sourceWorktreeDirty",
+          "value": "true"
+        },
+        {
+          "name": "dzup:admissible",
+          "value": "false"
+        }
+      ]
+    }
+  },
+  "components": []
+}

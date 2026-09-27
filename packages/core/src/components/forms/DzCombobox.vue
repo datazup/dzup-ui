@@ -6,7 +6,7 @@ import type {
   DzComboboxResolvedItem,
   DzComboboxSlots,
 } from './DzCombobox.types.ts'
-import { Check, ChevronDown, X } from 'lucide-vue-next'
+import { Check, ChevronDown, X } from '@lucide/vue'
 import {
   ComboboxAnchor,
   ComboboxCancel,
@@ -397,11 +397,19 @@ const { testId: dzTestId } = useDzTestIds()
           v-if="model"
           as-child
         >
+          <!--
+            N1-O1 defect D9: the clear control had no `:disabled` binding while
+            its sibling trigger did, so a disabled combobox holding a value
+            still rendered a live, clickable Clear. `tabindex="-1"` kept it out
+            of the tab order, which is why it was never noticed — pointer and AT
+            users could still fire it.
+          -->
           <button
             type="button"
             data-part="clear"
             :class="[styles.clearButton(), ui?.clear]"
             :aria-label="dzMessages.clearSelection"
+            :disabled="resolvedDisabled"
             @click.stop="handleClear"
           >
             <X class="h-3.5 w-3.5" aria-hidden="true" />
@@ -445,12 +453,17 @@ const { testId: dzTestId } = useDzTestIds()
               One row instead of the list while the host is loading, has nothing, or
               failed (renderer contract C9). `optionsRow` is null whenever the control
               is static, so a control with a plain option array renders none of this.
+              Mousedown is prevented so a pointer retry keeps focus in the input
+              (C9.4, as DzMention does): the retry button unmounts the moment the
+              state leaves `error`, and a focused node that vanishes drops focus to
+              <body>, which the combobox reads as focus leaving and closes on.
             -->
             <DzOptionsState
               v-if="optionsRow !== null"
               :state="resolvedOptionsState"
               :message="optionsAnnouncement"
               :can-retry="canRetryOptions"
+              @mousedown.prevent
               @retry="handleRetryOptions"
             />
             <template v-else-if="loading">

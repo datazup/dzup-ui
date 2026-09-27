@@ -4,6 +4,11 @@
   "version": "0.1.0-alpha.0",
   "description": "Code transforms for migrating from old dzup-ui to vNext",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datazup/dzup-ui.git",
+    "directory": "packages/codemods"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -25,7 +30,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "vitest run",
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc --project tsconfig.build.json",
     "postbuild": "chmod +x bin/dzup-codemod.js",
     "codemod": "node bin/dzup-codemod.js"
   },

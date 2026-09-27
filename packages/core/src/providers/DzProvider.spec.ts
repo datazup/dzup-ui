@@ -14,6 +14,7 @@ import {
   useDzPortalTarget,
   useDzSanitizer,
   useDzTestIds,
+  useDzUrlPolicy,
 } from '../composables/provider/index.ts'
 import { clearFormatterCache } from '../composables/provider/useDzFormats.ts'
 import DzProvider from './DzProvider.vue'
@@ -547,5 +548,87 @@ describe('sanitizer', () => {
     expect(() => underProvider({ sanitizer: null }, () => useDzSanitizer()))
       .toThrow(/set `sanitizer` to null/)
     warn.mockRestore()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// URL policy (ADR-20 amendment A7, TASK-R2-O4)
+// ---------------------------------------------------------------------------
+
+describe('url policy', () => {
+  const NAV = { component: 'DzTest', prop: 'href', sink: 'navigation' } as const
+
+  it('enforces the strict default when no host configured one', () => {
+    const { value } = underProvider({}, () => useDzUrlPolicy())
+    expect(value.isAllowed('https://example.test/', NAV)).toBe(true)
+    expect(value.isAllowed('/products', NAV)).toBe(true)
+    expect(value.isAllowed('javascript:alert(1)', NAV)).toBe(false)
+  })
+
+  it('installs the scheme list an application supplies', () => {
+    const { value } = underProvider(
+      { urlPolicy: { allowedSchemes: ['https'] } },
+      () => useDzUrlPolicy(),
+    )
+    expect(value.isAllowed('https://example.test/', NAV)).toBe(true)
+    expect(value.isAllowed('mailto:a@b.test', NAV)).toBe(false)
+  })
+
+  it('installs the escape hatch, which sees the default verdict', () => {
+    const { value } = underProvider(
+      {
+        urlPolicy: {
+          allow: (url: string, c: { allowedByDefault: boolean }) =>
+            c.allowedByDefault || url.startsWith('slack:'),
+        },
+      },
+      () => useDzUrlPolicy(),
+    )
+    expect(value.isAllowed('slack://team/general', NAV)).toBe(true)
+    expect(value.isAllowed('javascript:alert(1)', NAV)).toBe(false)
+  })
+
+  it('a nested provider narrows the list and keeps the ancestor hatch', () => {
+    const { value } = underProvider(
+      {
+        urlPolicy: {
+          allow: (url: string, c: { allowedByDefault: boolean }) =>
+            c.allowedByDefault || url.startsWith('slack:'),
+        },
+      },
+      () => useDzUrlPolicy(),
+      { urlPolicy: { allowedSchemes: ['https'] } },
+    )
+    expect(value.isAllowed('slack://team/general', NAV)).toBe(true)
+    expect(value.isAllowed('http://example.test/', NAV)).toBe(false)
+    expect(value.isAllowed('https://example.test/', NAV)).toBe(true)
+  })
+
+  it('an unset prop leaves the ancestor policy alone (A1 preserved)', () => {
+    const { value } = underProvider(
+      { urlPolicy: { allowedSchemes: ['https'] } },
+      () => useDzUrlPolicy(),
+      { locale: 'ar-EG' },
+    )
+    expect(value.isAllowed('mailto:a@b.test', NAV)).toBe(false)
+    expect(value.isAllowed('https://example.test/', NAV)).toBe(true)
+  })
+
+  it('follows a live prop change', async () => {
+    const wrapper = mount(DzProvider, {
+      props: { urlPolicy: { allowedSchemes: ['https'] } },
+      slots: {
+        default: () => h(defineComponent({
+          setup() {
+            const policy = useDzUrlPolicy()
+            return () => h('div', policy.isAllowed('mailto:a@b.test', NAV) ? 'yes' : 'no')
+          },
+        })),
+      },
+    })
+
+    expect(wrapper.text()).toBe('no')
+    await wrapper.setProps({ urlPolicy: { allowedSchemes: ['https', 'mailto'] } })
+    expect(wrapper.text()).toBe('yes')
   })
 })

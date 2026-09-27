@@ -10,7 +10,7 @@
  * Self-contained: static sample data, no props, no router.
  */
 import { DzStatCard } from '@dzup-ui/core'
-import { Activity, DollarSign, ShoppingCart, Users } from 'lucide-vue-next'
+import { Activity, DollarSign, ShoppingCart, Users } from '@lucide/vue'
 
 const stats = [
   {

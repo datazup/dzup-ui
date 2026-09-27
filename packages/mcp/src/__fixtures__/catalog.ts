@@ -177,7 +177,7 @@ export const FIXTURE_FILES: Readonly<Record<string, string>> = Object.freeze({
         capability: {
           tier: 'A',
           pattern: 'button',
-          securityBoundary: 'none',
+          securityBoundary: ['none'],
           traits: [],
           cells: { pass: 3, present: 5, unrun: 2 },
           unrun: ['at-manual', 'browser-matrix'],

@@ -2,7 +2,7 @@
 import type { AnimationController } from '@formkit/auto-animate'
 import { DzAvatar, DzBadge, DzButton, DzListItem } from '@dzup-ui/core'
 import autoAnimate from '@formkit/auto-animate'
-import { Plus, Shuffle, X } from 'lucide-vue-next'
+import { Plus, Shuffle, X } from '@lucide/vue'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useReducedMotion } from '../../motion/index.ts'
 

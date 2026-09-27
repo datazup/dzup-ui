@@ -210,14 +210,16 @@ const encoded: Record<string, BoundaryBinding> = {
 }
 
 /**
- * `DzQRCode`'s second, undeclared sink.
+ * `DzQRCode`'s second sink — declared since TASK-R2-O4.
  *
  * `icon` is a host-supplied URL that becomes a subresource load — the same
- * property `DzImage`'s boundary justification uses word for word — but
- * `SecurityBoundary` holds one value per component and this component's is
- * `payload`, so the URL rows are never asked for. Bound and asserted here
- * regardless: what the component does is not a function of what the matrix can
- * express about it.
+ * property `DzImage`'s boundary justification uses word for word. It was bound
+ * and asserted here from the start, while the matrix could not express it:
+ * `SecurityBoundary` held ONE value per component and this component's was
+ * `payload`, so the URL rows were never asked for (TASK-N1-O5 finding U3). The
+ * field is a SET now and the component declares `['url', 'payload']`, so this
+ * binding is the evidence for a row that exists rather than a note beside one
+ * that does not.
  */
 const encodedIcon: BoundaryBinding = {
   component: 'DzQRCode',
@@ -387,10 +389,17 @@ export const BINDINGS = {
   style,
 } as const
 
-/** The components a URL-boundary suite covers, in matrix order. */
+/**
+ * The components a URL-boundary suite covers, in matrix order.
+ *
+ * `DzQRCode` is here through {@link encodedIcon} rather than through the
+ * `subresource` map: its primary binding is the `encoded-payload` sink, and
+ * listing it twice in that map would run the payload suite against an image.
+ */
 export const URL_BOUNDARY_COMPONENTS: readonly string[] = [
   ...Object.keys(navigation),
   ...Object.keys(subresource),
+  encodedIcon.component,
 ].sort()
 
 /** Every component with a content suite. */

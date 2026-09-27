@@ -24,12 +24,29 @@
  * receive. `npm pack` copies the literal string and produces a tarball nobody
  * can install.
  *
+ * **It refuses a stale `dist`** (TASK-R1-O2, N5-04 `F10`). `yarn pack` archives
+ * whatever `dist/` is on disk, so before this check the command was happy to
+ * pack a build older than the sources it claims to be: measured on 2026-09-21,
+ * `packages/core/dist` built at 11:36:43Z against sources edited at 12:02:06Z
+ * produced four tarballs, seven staged fixtures and **exit 0**. Every assertion
+ * those fixtures then make is evidence about a build nobody has. The check is
+ * mtime arithmetic (~40 ms), shared with `validate:published-imports` through
+ * `packages/tooling/src/pack-freshness.mjs`; `--build` makes the command build
+ * first instead of refusing.
+ *
  * Usage:
  *   node packages/nuxt/scripts/pack-fixtures.mjs
+ *   node packages/nuxt/scripts/pack-fixtures.mjs --build         # build the packed workspaces first
  *   DZUP_PRO_TARBALL=/path/pro.tgz node …/pack-fixtures.mjs   # include the Pro tier
  *   DZUP_FIXTURE_STAGE=/some/dir   node …/pack-fixtures.mjs   # choose the stage root
  *
  * Environment:
+ *   DZUP_PACK_BUILD     `1` is the same as `--build`.
+ *   DZUP_PACK_ALLOW_STALE
+ *                       `1` packs a stale dist anyway. For the one legitimate
+ *                       case — deliberately packing a known-old tree to
+ *                       reproduce a bug — and never for a green run: a pass
+ *                       under this flag is evidence about an unknown build.
  *   DZUP_PRO_TARBALL    Absolute path to a tarball produced by a Pro checkout.
  *                       Core never builds Pro; when unset, fixtures needing it
  *                       are reported `unrun` rather than quietly skipped.
@@ -57,6 +74,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { assertDistFresh } from '../../tooling/src/pack-freshness.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(HERE, '../../..')
@@ -171,7 +189,55 @@ function packWorkspace(name) {
   return out
 }
 
+/** `@dzup-ui/core` → `<repo>/packages/core`. The workspace list is the inventory. */
+export function workspaceDirs(names = WORKSPACES) {
+  return names.map(name => ({ name, packageDir: resolve(REPO_ROOT, 'packages', name.split('/')[1]) }))
+}
+
+/** `--build` on the command line, or `DZUP_PACK_BUILD=1`. */
+export function buildRequested(argv = process.argv.slice(2)) {
+  return argv.includes('--build') || process.env.DZUP_PACK_BUILD === '1'
+}
+
+/**
+ * Refuse to pack a `dist/` older than its sources — or build first when asked.
+ *
+ * Deliberately not a build by default: this runs inside a test lane, `yarn
+ * build` is minutes and rewrites `packages/core/dist` for every other lane in
+ * the session, and mtimes answer the question in milliseconds. The refusal
+ * names both timestamps and the command that fixes it, so the cheap check never
+ * leaves a human guessing (TASK-R1-O2 / N5-04 F10).
+ */
+export function ensureFreshDist({ build = buildRequested(), allowStale = process.env.DZUP_PACK_ALLOW_STALE === '1' } = {}) {
+  const targets = workspaceDirs()
+
+  if (build) {
+    for (const { name } of targets)
+      yarn(`workspace ${name} build`)
+  }
+
+  const results = assertDistFresh(targets, {
+    repoRoot: REPO_ROOT,
+    allowStale,
+    buildHint: '  Run `yarn build`, or re-run this command with `--build`, and pack again.',
+  })
+
+  if (allowStale) {
+    const bad = results.filter(r => r.status === 'stale' || r.status === 'unbuilt')
+    if (bad.length > 0) {
+      console.warn(
+        `\n! DZUP_PACK_ALLOW_STALE=1 — packing ${bad.map(r => r.name).join(', ')} from a `
+        + `${bad[0].status} dist. This run is not evidence about the current sources.`,
+      )
+    }
+  }
+
+  return results
+}
+
 export function packAll() {
+  ensureFreshDist()
+
   rmSync(TARBALL_DIR, { recursive: true, force: true })
   mkdirSync(TARBALL_DIR, { recursive: true })
 
@@ -278,7 +344,18 @@ export function stageFixtures(tarballs) {
 const isMain = process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))
 
 if (isMain) {
-  const tarballs = packAll()
+  // The freshness refusal is a message for a human, not a crash: print it and
+  // exit 1 without a stack trace, which would bury the two timestamps that are
+  // the whole point of the check.
+  let tarballs
+  try {
+    tarballs = packAll()
+  }
+  catch (error) {
+    console.error(`\n${error.message}\n`)
+    process.exit(1)
+  }
+
   const { root, results } = stageFixtures(tarballs)
 
   writeFileSync(

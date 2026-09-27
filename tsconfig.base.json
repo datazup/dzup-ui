@@ -29,7 +29,15 @@
       "@dzup-ui/testing": ["./packages/testing/src/index.ts"],
       "@dzup-ui/testing/*": ["./packages/testing/src/*"],
       "@dzup-ui/core": ["./packages/core/src/index.ts"],
-      "@dzup-ui/core/*": ["./packages/core/src/*"],
+      // Two candidates, in order. A family subpath — `@dzup-ui/core/data`,
+      // `@dzup-ui/core/forms` — lives under `src/components/`, not `src/`, so the
+      // first candidate misses and TypeScript used to fall through to
+      // node_modules → `exports` → `packages/core/dist/**`. That pulled **661**
+      // gitignored build files into `tsc -p packages/tooling` (TASK-R1-O1), where a
+      // stale `dist/i18n/messages.d.ts` merged against the live source augmentation
+      // and reported two phantom TS2717/TS2353 errors that no source edit could fix.
+      // A typecheck must not depend on whether someone has run `yarn build`.
+      "@dzup-ui/core/*": ["./packages/core/src/*", "./packages/core/src/components/*"],
       "@dzup-ui/compat": ["./packages/compat/src/index.ts"],
       "@dzup-ui/compat/*": ["./packages/compat/src/*"],
       "@dzup-ui/tooling": ["./packages/tooling/src/index.ts"],

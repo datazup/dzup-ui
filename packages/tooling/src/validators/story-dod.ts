@@ -187,14 +187,51 @@ export function indexComponentTypes(componentsDir: string = COMPONENTS_DIR): Map
 }
 
 /**
+ * The bodies of every interface whose name ends in `Props`, concatenated.
+ *
+ * N1-O1 defect D6: the state-prop scan ran over the WHOLE file, so any
+ * two-space-indented optional member of ANY interface counted as a prop —
+ * `DzMention`'s `loading?:` SLOT and `DzAnchor`'s / `DzSidebar`'s item-level
+ * `disabled?:` all made their components applicable for `states`.
+ * The `states` denominator therefore did not mean what it said.
+ *
+ * Brace-balanced rather than regex-delimited: a props interface contains inline
+ * object types and function signatures, and a non-greedy `{[^}]*}` would stop
+ * at the first one.
+ */
+export function propsInterfaceBodies(typesSource: string): string {
+  const bodies: string[] = []
+  const header = /(?:^|\n)export interface \w*Props(?:<[^>]*>)?[^{]*\{/g
+
+  for (const match of typesSource.matchAll(header)) {
+    let depth = 1
+    let i = match.index + match[0].length
+    const start = i
+    while (i < typesSource.length && depth > 0) {
+      const ch = typesSource[i]
+      if (ch === '{')
+        depth++
+      else if (ch === '}')
+        depth--
+      i++
+    }
+    bodies.push(`\n${typesSource.slice(start, i - 1)}\n`)
+  }
+
+  return bodies.join('')
+}
+
+/**
  * The state props a component declares. Matches a two-space-indented optional
- * prop (`  disabled?: boolean`) so that a mention of `disabled` inside a JSDoc
- * block or a nested type does not count as a declaration.
+ * prop (`  disabled?: boolean`) INSIDE a `*Props` interface, so that neither a
+ * mention inside a JSDoc block, nor a same-named slot, nor a nested item type
+ * counts as a declaration (defect D6).
  */
 export function declaredStateProps(typesSource: string | undefined): string[] {
   if (!typesSource)
     return []
-  return STATE_PROPS.filter(p => new RegExp(`^\\s{2}${p}\\?:`, 'm').test(typesSource))
+  const props = propsInterfaceBodies(typesSource)
+  return STATE_PROPS.filter(p => new RegExp(`^\\s{2}${p}\\?:`, 'm').test(props))
 }
 
 export function buildContext(

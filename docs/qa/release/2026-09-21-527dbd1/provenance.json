@@ -1,0 +1,398 @@
+{
+  "provenance": {
+    "sourceCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+    "branch": "main",
+    "worktreeDirty": true,
+    "dirtyCount": 221,
+    "admissible": false,
+    "inadmissibleReason": "worktree dirty: 221 path(s) differ from 527dbd1",
+    "generatedAt": "2026-09-21T14:35:57.627Z",
+    "generator": "release:evidence"
+  },
+  "statements": [
+    {
+      "_type": "https://in-toto.io/Statement/v1",
+      "subject": [
+        {
+          "name": "dzup-ui-contracts-0.1.0.tgz",
+          "digest": {
+            "sha256": "5c3d05dbb7760d07aad6a0e900fa2030b486bc622d6c8950e0c3969e19866d06",
+            "sha512": "VnJUVzz7/CRNy8X/0vXfafgDh3oKNCoQzV8VtgBgZaG7AT1t/owBQxK8u+J1yE2y+UIlXtAgbvZ6EMLd8D0TbA=="
+          }
+        }
+      ],
+      "predicateType": "https://slsa.dev/provenance/v1",
+      "predicate": {
+        "buildDefinition": {
+          "buildType": "https://datazup.dev/dzup-ui/yarn-pack/v1",
+          "externalParameters": {
+            "package": "@dzup-ui/contracts",
+            "version": "0.1.0",
+            "buildCommand": "yarn build && yarn workspace @dzup-ui/contracts pack"
+          },
+          "resolvedDependencies": [
+            {
+              "uri": "git+https://github.com/datazup/dzup-ui",
+              "digest": {
+                "gitCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+              },
+              "annotations": {
+                "branch": "main",
+                "worktreeDirty": true,
+                "dirtyPathCount": 221
+              }
+            }
+          ]
+        },
+        "runDetails": {
+          "builder": {
+            "id": "local-workstation",
+            "version": {
+              "node": "v24.14.1",
+              "yarn": "4.16.0",
+              "os": "win32 x64"
+            }
+          },
+          "metadata": {
+            "invocationId": null,
+            "startedOn": "2026-09-21T14:35:45.884Z",
+            "finishedOn": "2026-09-21T14:35:45.884Z"
+          }
+        },
+        "_dzupArtifactEntries": 50
+      },
+      "_trustedPublishing": {
+        "exercised": false,
+        "note": "NOT EXERCISED. `.github/workflows/release.yml` requests `id-token: write`, but no workflow has ever run a publish, so no npm provenance attestation exists for any @dzup-ui/* package. This statement is produced locally and is evidence about a local build, not a registry attestation."
+      },
+      "_signature": {
+        "signed": false,
+        "signature": null,
+        "keyId": null,
+        "note": "UNSIGNED. TASK-R1-O3 produces this statement and does not sign it: signing requires a key and an authorised operator, and is a separate, explicit action."
+      },
+      "_admissible": false,
+      "_inadmissibleReason": "worktree dirty: 221 path(s) differ from 527dbd1"
+    },
+    {
+      "_type": "https://in-toto.io/Statement/v1",
+      "subject": [
+        {
+          "name": "dzup-ui-core-0.2.0.tgz",
+          "digest": {
+            "sha256": "191cdecdfb76d5738cd72d6debc650fa3a3a85c26c50416cf3a5399b454394e0",
+            "sha512": "+zEow5ZfrRfVM8OupmFiA+aw6Hvtr/VUSmJaODmeRGtKlRQS8/fILTzY9qRydGvIVGf9bis/0SN9j2KI3FHrFg=="
+          }
+        }
+      ],
+      "predicateType": "https://slsa.dev/provenance/v1",
+      "predicate": {
+        "buildDefinition": {
+          "buildType": "https://datazup.dev/dzup-ui/yarn-pack/v1",
+          "externalParameters": {
+            "package": "@dzup-ui/core",
+            "version": "0.2.0",
+            "buildCommand": "yarn build && yarn workspace @dzup-ui/core pack"
+          },
+          "resolvedDependencies": [
+            {
+              "uri": "git+https://github.com/datazup/dzup-ui",
+              "digest": {
+                "gitCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+              },
+              "annotations": {
+                "branch": "main",
+                "worktreeDirty": true,
+                "dirtyPathCount": 221
+              }
+            }
+          ]
+        },
+        "runDetails": {
+          "builder": {
+            "id": "local-workstation",
+            "version": {
+              "node": "v24.14.1",
+              "yarn": "4.16.0",
+              "os": "win32 x64"
+            }
+          },
+          "metadata": {
+            "invocationId": null,
+            "startedOn": "2026-09-21T14:35:45.884Z",
+            "finishedOn": "2026-09-21T14:35:45.884Z"
+          }
+        },
+        "_dzupArtifactEntries": 1461
+      },
+      "_trustedPublishing": {
+        "exercised": false,
+        "note": "NOT EXERCISED. `.github/workflows/release.yml` requests `id-token: write`, but no workflow has ever run a publish, so no npm provenance attestation exists for any @dzup-ui/* package. This statement is produced locally and is evidence about a local build, not a registry attestation."
+      },
+      "_signature": {
+        "signed": false,
+        "signature": null,
+        "keyId": null,
+        "note": "UNSIGNED. TASK-R1-O3 produces this statement and does not sign it: signing requires a key and an authorised operator, and is a separate, explicit action."
+      },
+      "_admissible": false,
+      "_inadmissibleReason": "worktree dirty: 221 path(s) differ from 527dbd1"
+    },
+    {
+      "_type": "https://in-toto.io/Statement/v1",
+      "subject": [
+        {
+          "name": "dzup-ui-mcp-0.2.0.tgz",
+          "digest": {
+            "sha256": "5b71844808ca1dc78e67b1e5085fbeaf70356a3f2fc92871709e9c57160498b4",
+            "sha512": "nQOJNJgf8R//uINBnG+Ny5s/i50viQ/ph+mesNscc6Xpp70QFiHakNU62Ndg5kbhH8X86zse8HCjgIkFgG6NPQ=="
+          }
+        }
+      ],
+      "predicateType": "https://slsa.dev/provenance/v1",
+      "predicate": {
+        "buildDefinition": {
+          "buildType": "https://datazup.dev/dzup-ui/yarn-pack/v1",
+          "externalParameters": {
+            "package": "@dzup-ui/mcp",
+            "version": "0.2.0",
+            "buildCommand": "yarn build && yarn workspace @dzup-ui/mcp pack"
+          },
+          "resolvedDependencies": [
+            {
+              "uri": "git+https://github.com/datazup/dzup-ui",
+              "digest": {
+                "gitCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+              },
+              "annotations": {
+                "branch": "main",
+                "worktreeDirty": true,
+                "dirtyPathCount": 221
+              }
+            }
+          ]
+        },
+        "runDetails": {
+          "builder": {
+            "id": "local-workstation",
+            "version": {
+              "node": "v24.14.1",
+              "yarn": "4.16.0",
+              "os": "win32 x64"
+            }
+          },
+          "metadata": {
+            "invocationId": null,
+            "startedOn": "2026-09-21T14:35:45.884Z",
+            "finishedOn": "2026-09-21T14:35:45.884Z"
+          }
+        },
+        "_dzupArtifactEntries": 17
+      },
+      "_trustedPublishing": {
+        "exercised": false,
+        "note": "NOT EXERCISED. `.github/workflows/release.yml` requests `id-token: write`, but no workflow has ever run a publish, so no npm provenance attestation exists for any @dzup-ui/* package. This statement is produced locally and is evidence about a local build, not a registry attestation."
+      },
+      "_signature": {
+        "signed": false,
+        "signature": null,
+        "keyId": null,
+        "note": "UNSIGNED. TASK-R1-O3 produces this statement and does not sign it: signing requires a key and an authorised operator, and is a separate, explicit action."
+      },
+      "_admissible": false,
+      "_inadmissibleReason": "worktree dirty: 221 path(s) differ from 527dbd1"
+    },
+    {
+      "_type": "https://in-toto.io/Statement/v1",
+      "subject": [
+        {
+          "name": "dzup-ui-nuxt-0.1.0-alpha.0.tgz",
+          "digest": {
+            "sha256": "3a85ce380c94d7dba6eb9fcc8cdb68bbbbbf95043c1cbc4630c1d8d1d8d472b8",
+            "sha512": "FfYkCVHIWiOlMIRiFxVee0X97+G2dSaomqa3lPralwwq69HqcJw0qQk1bvbyyGiDooIs8w6DHaPtPqiZZnaLbA=="
+          }
+        }
+      ],
+      "predicateType": "https://slsa.dev/provenance/v1",
+      "predicate": {
+        "buildDefinition": {
+          "buildType": "https://datazup.dev/dzup-ui/yarn-pack/v1",
+          "externalParameters": {
+            "package": "@dzup-ui/nuxt",
+            "version": "0.1.0-alpha.0",
+            "buildCommand": "yarn build && yarn workspace @dzup-ui/nuxt pack"
+          },
+          "resolvedDependencies": [
+            {
+              "uri": "git+https://github.com/datazup/dzup-ui",
+              "digest": {
+                "gitCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+              },
+              "annotations": {
+                "branch": "main",
+                "worktreeDirty": true,
+                "dirtyPathCount": 221
+              }
+            }
+          ]
+        },
+        "runDetails": {
+          "builder": {
+            "id": "local-workstation",
+            "version": {
+              "node": "v24.14.1",
+              "yarn": "4.16.0",
+              "os": "win32 x64"
+            }
+          },
+          "metadata": {
+            "invocationId": null,
+            "startedOn": "2026-09-21T14:35:45.884Z",
+            "finishedOn": "2026-09-21T14:35:45.884Z"
+          }
+        },
+        "_dzupArtifactEntries": 7
+      },
+      "_trustedPublishing": {
+        "exercised": false,
+        "note": "NOT EXERCISED. `.github/workflows/release.yml` requests `id-token: write`, but no workflow has ever run a publish, so no npm provenance attestation exists for any @dzup-ui/* package. This statement is produced locally and is evidence about a local build, not a registry attestation."
+      },
+      "_signature": {
+        "signed": false,
+        "signature": null,
+        "keyId": null,
+        "note": "UNSIGNED. TASK-R1-O3 produces this statement and does not sign it: signing requires a key and an authorised operator, and is a separate, explicit action."
+      },
+      "_admissible": false,
+      "_inadmissibleReason": "worktree dirty: 221 path(s) differ from 527dbd1"
+    },
+    {
+      "_type": "https://in-toto.io/Statement/v1",
+      "subject": [
+        {
+          "name": "dzup-ui-testing-0.1.0.tgz",
+          "digest": {
+            "sha256": "5b5b4d3677d5a199d3114d1ef3c450742c4df34a5e125c52bc2a8efacc2f92a0",
+            "sha512": "8zh33Y0MtWAZh5qKvrmi4WTsDlHAZfL8mmhAN/EZ4EpXP628xuk/N/y/sOHna0J0dw5dPYUlwrJdNtfhbzNFCg=="
+          }
+        }
+      ],
+      "predicateType": "https://slsa.dev/provenance/v1",
+      "predicate": {
+        "buildDefinition": {
+          "buildType": "https://datazup.dev/dzup-ui/yarn-pack/v1",
+          "externalParameters": {
+            "package": "@dzup-ui/testing",
+            "version": "0.1.0",
+            "buildCommand": "yarn build && yarn workspace @dzup-ui/testing pack"
+          },
+          "resolvedDependencies": [
+            {
+              "uri": "git+https://github.com/datazup/dzup-ui",
+              "digest": {
+                "gitCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+              },
+              "annotations": {
+                "branch": "main",
+                "worktreeDirty": true,
+                "dirtyPathCount": 221
+              }
+            }
+          ]
+        },
+        "runDetails": {
+          "builder": {
+            "id": "local-workstation",
+            "version": {
+              "node": "v24.14.1",
+              "yarn": "4.16.0",
+              "os": "win32 x64"
+            }
+          },
+          "metadata": {
+            "invocationId": null,
+            "startedOn": "2026-09-21T14:35:45.884Z",
+            "finishedOn": "2026-09-21T14:35:45.884Z"
+          }
+        },
+        "_dzupArtifactEntries": 34
+      },
+      "_trustedPublishing": {
+        "exercised": false,
+        "note": "NOT EXERCISED. `.github/workflows/release.yml` requests `id-token: write`, but no workflow has ever run a publish, so no npm provenance attestation exists for any @dzup-ui/* package. This statement is produced locally and is evidence about a local build, not a registry attestation."
+      },
+      "_signature": {
+        "signed": false,
+        "signature": null,
+        "keyId": null,
+        "note": "UNSIGNED. TASK-R1-O3 produces this statement and does not sign it: signing requires a key and an authorised operator, and is a separate, explicit action."
+      },
+      "_admissible": false,
+      "_inadmissibleReason": "worktree dirty: 221 path(s) differ from 527dbd1"
+    },
+    {
+      "_type": "https://in-toto.io/Statement/v1",
+      "subject": [
+        {
+          "name": "dzup-ui-tokens-0.2.0.tgz",
+          "digest": {
+            "sha256": "bb6728c9c2ef5653df5dbdb550769f73298dcbcef2da72d83dcbf00bb9ee768a",
+            "sha512": "JSJSjzho6GEPXCsIOgE2fI2syEiG7a0UFTpuPRT4BbU6Hld2UjsZ3RB5pSdD6s8Sislb7osIZgXecOxsBxNF1g=="
+          }
+        }
+      ],
+      "predicateType": "https://slsa.dev/provenance/v1",
+      "predicate": {
+        "buildDefinition": {
+          "buildType": "https://datazup.dev/dzup-ui/yarn-pack/v1",
+          "externalParameters": {
+            "package": "@dzup-ui/tokens",
+            "version": "0.2.0",
+            "buildCommand": "yarn build && yarn workspace @dzup-ui/tokens pack"
+          },
+          "resolvedDependencies": [
+            {
+              "uri": "git+https://github.com/datazup/dzup-ui",
+              "digest": {
+                "gitCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+              },
+              "annotations": {
+                "branch": "main",
+                "worktreeDirty": true,
+                "dirtyPathCount": 221
+              }
+            }
+          ]
+        },
+        "runDetails": {
+          "builder": {
+            "id": "local-workstation",
+            "version": {
+              "node": "v24.14.1",
+              "yarn": "4.16.0",
+              "os": "win32 x64"
+            }
+          },
+          "metadata": {
+            "invocationId": null,
+            "startedOn": "2026-09-21T14:35:45.884Z",
+            "finishedOn": "2026-09-21T14:35:45.884Z"
+          }
+        },
+        "_dzupArtifactEntries": 17
+      },
+      "_trustedPublishing": {
+        "exercised": false,
+        "note": "NOT EXERCISED. `.github/workflows/release.yml` requests `id-token: write`, but no workflow has ever run a publish, so no npm provenance attestation exists for any @dzup-ui/* package. This statement is produced locally and is evidence about a local build, not a registry attestation."
+      },
+      "_signature": {
+        "signed": false,
+        "signature": null,
+        "keyId": null,
+        "note": "UNSIGNED. TASK-R1-O3 produces this statement and does not sign it: signing requires a key and an authorised operator, and is a separate, explicit action."
+      },
+      "_admissible": false,
+      "_inadmissibleReason": "worktree dirty: 221 path(s) differ from 527dbd1"
+    }
+  ]
+}

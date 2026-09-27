@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { User } from 'lucide-vue-next'
+import { User } from '@lucide/vue'
 import { expect, waitFor, within } from 'storybook/test'
 import { DzAvatar } from '../../src/components/media'
 import { a11yError, darkModeDecorator } from '../_shared'

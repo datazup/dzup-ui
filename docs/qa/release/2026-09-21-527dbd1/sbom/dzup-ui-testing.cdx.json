@@ -1,0 +1,65 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-21T14:35:45.884Z",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "@dzup-ui/tooling release:evidence",
+          "version": "0.0.1"
+        }
+      ]
+    },
+    "component": {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40dzup-ui/testing@0.1.0",
+      "name": "@dzup-ui/testing",
+      "version": "0.1.0",
+      "purl": "pkg:npm/%40dzup-ui/testing@0.1.0",
+      "description": "DOM test-environment support and anatomy conformance for dzup-ui consumers",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5b5b4d3677d5a199d3114d1ef3c450742c4df34a5e125c52bc2a8efacc2f92a0"
+        },
+        {
+          "alg": "SHA-512",
+          "content": "8zh33Y0MtWAZh5qKvrmi4WTsDlHAZfL8mmhAN/EZ4EpXP628xuk/N/y/sOHna0J0dw5dPYUlwrJdNtfhbzNFCg=="
+        }
+      ],
+      "properties": [
+        {
+          "name": "dzup:tarball",
+          "value": "dzup-ui-testing-0.1.0.tgz"
+        },
+        {
+          "name": "dzup:bytes",
+          "value": "58346"
+        },
+        {
+          "name": "dzup:sourceCommit",
+          "value": "527dbd150036b5f07bd69e672825ff14ec3a592d"
+        },
+        {
+          "name": "dzup:sourceWorktreeDirty",
+          "value": "true"
+        },
+        {
+          "name": "dzup:admissible",
+          "value": "false"
+        }
+      ]
+    }
+  },
+  "components": []
+}

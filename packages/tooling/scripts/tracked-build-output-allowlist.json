@@ -1,0 +1,33 @@
+{
+  "$comment": "Hand-written non-.ts files that git legitimately tracks under packages/*/src. Every entry needs a reason a reviewer can argue with. `.map` files can never be listed here — validate:tracked-build-output rejects a sourcemap whatever the allowlist says, because no sourcemap is hand-written.",
+  "allowed": [
+    {
+      "path": "packages/compat/src/env.d.ts",
+      "reason": "Hand-written ambient declarations (Vite client types + the `*.vue` module shape). Authored, not emitted: no `env.ts` exists to compile from."
+    },
+    {
+      "path": "packages/core/src/env.d.ts",
+      "reason": "Hand-written ambient declarations (Vite client types + the `*.vue` module shape). Authored, not emitted: no `env.ts` exists to compile from."
+    },
+    {
+      "path": "packages/tooling/src/env.d.ts",
+      "reason": "Hand-written ambient declarations for the tooling package. Authored, not emitted."
+    },
+    {
+      "path": "packages/tooling/src/release-parser.mjs",
+      "reason": "Deliberately plain JS with no dependencies so both a `node`-run `.mjs` (apps/storybook/scripts/build-releases.mjs) and a `tsx`-run `.ts` (apps/landing/scripts/build-releases.ts) can import the one changelog parser by relative path. Forking it into two typed copies is the defect this file prevents."
+    },
+    {
+      "path": "packages/tooling/src/release-parser.d.mts",
+      "reason": "Hand-written type declarations for release-parser.mjs above — the typed view the landing build script consumes. Not emitted by any build step."
+    },
+    {
+      "path": "packages/tooling/src/pack-freshness.mjs",
+      "reason": "TASK-R1-O2. Same reason as release-parser.mjs: plain JS with no dependencies so a `node`-run `.mjs` (packages/nuxt/scripts/pack-fixtures.mjs) and a `tsx`-run `.ts` (src/validators/published-imports.ts) share ONE definition of \"this dist is older than its sources\". Two copies would drift silently in the exact direction the check exists to prevent."
+    },
+    {
+      "path": "packages/tooling/src/pack-freshness.d.mts",
+      "reason": "Hand-written type declarations for pack-freshness.mjs above — the typed view the published-imports validator consumes. Not emitted by any build step."
+    }
+  ]
+}

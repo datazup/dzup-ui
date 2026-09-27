@@ -1,0 +1,400 @@
+✓ tracked-build-output: no compiler output tracked under packages/*/src (7 declared hand-written exception(s))
+Import boundary check passed: 0 violations
+Interaction contract check passed: 0 violations
+✓ contract-parity: every component the story corpus showcases has contract coverage (its own spec, or its parent family's).
+✓ hardcoded-strings: every user-visible string resolves through the message catalog, or says in a comment why it does not.
+i18n packs — 116 catalog keys, 2 pack(s) + the pseudo-locale
+  de       scaffold  0/116 translated, 116 explicit fallback
+  en       complete  116/116 translated, 0 explicit fallback
+
+i18n packs: every key translated or an explicit fallback; 0 violations
+✓ security-corpus: schema 1.1.0 — 6 category file(s), 34 fixture(s) valid against JSON Schema and checker (rejected 13 · stripped 7 · escaped 35 · inert 11 · admitted 0); 2 peer fixture(s), 2 validate-stage diagnostic(s) executed against validate:peers
+  read: packages/testing/security-corpus
+✓ tv-slot-calls: every tv() slot is called where it is bound (130 of 210 SFCs have a slot recipe in scope)
+✓ anatomy-parts: 622 data-part emissions across 142 components (47 distinct names, 104 anatomy declarations); 0/0 undeclared, 0/0 declared-but-unemitted
+  data-state: 25 distinct values across 74 components; 0/0 undeclared by a declaring component, 17/17 from components with no anatomy
+  part names outside the ADR-19 shared vocabulary (reported, not a failure) — 0 unreviewed, 0/0 held for a decision, the rest reviewed extensions:
+   · DzCascader — options-state, options-message, options-retry
+   · DzCodeBlock — copy-button, line-number
+   · DzCombobox — options-state, options-message, options-retry
+   · DzListbox — options-state, options-message, options-retry
+   · DzMention — options-state, options-message, options-retry
+   · DzMultiSelect — options-state, options-message, options-retry
+   · DzNumberInput — decrement, increment
+   · DzPersonaSelector — options-state, options-message, options-retry
+   · DzResizable — step-decrease, step-increase
+   · DzSelect — options-state, options-message, options-retry
+   · DzSplitter — step-decrease, step-increase
+   · DzTable — step-decrease, step-increase
+   · DzTransfer — options-state, options-message, options-retry
+   · DzTreeSelect — options-state, options-message, options-retry
+  :data-state expressions with no literal to resolve (reported, not failed):
+   · packages/core/src/components/feedback/DzResult.vue:47 — status
+   · packages/core/src/components/feedback/DzTokenProgressBar.vue:91 — state
+   · packages/core/src/components/forms/DzTreeSelect.vue:753 — checkboxState(node.key)
+   · packages/core/src/components/navigation/DzSidebar.vue:228 — dataState
+   · packages/core/src/components/navigation/DzSidebarItem.vue:125 — dataState
+   · packages/core/src/components/navigation/DzStepperItem.vue:95 — status
+✓ vendor-sublayers: 0 registered vendor selector(s); 0 vendor-shaped selector(s) found across 2 stylesheet(s)
+✓ rtl: every component declaring mirrors: 'layout' uses logical properties; the matrix matches the declarations.
+form-readiness: OK — 44 controls, 280 pass, 0 gap, 0 future, 20 unrun, 96 n-a
+✓ quality-tiers: 144/144 public components tiered (A:55 B:67 C:21 D:1); matrix fresh at .\packages\core\docs\quality-matrix.json
+✓ story-status: every Core component story carries exactly one status:* tag
+Story Definition of Done — Contributing.mdx, machine-checked
+
+  ✓ controls-driven  161 / 161  100%  (enforced)
+  · controls-live    134 / 161   83%  (reported)
+  · gallery           14 / 169    8%  (reported)
+  · states            53 / 56    95%  (reported)
+  ✓ dark-mode        169 / 169  100%  (enforced)
+  · accessibility    114 / 169   67%  (reported)
+  · real-world       109 / 169   64%  (reported)
+  · play             157 / 169   93%  (reported)
+  ✓ description      169 / 169  100%  (enforced)
+
+✓ story-dod: every enforced check passes. 312 reported item(s) remain — run with --all to list them.
+Story DoD, triaged by risk tier — TASK-OSS-P5-02
+
+  check           requires   open / ceiling
+  accessibility   tier C+      0 / 0
+  real-world      tier C+      0 / 0
+  states          tier B+      0 / 0
+
+  0 tier-required, 312 advisory (of 312 reported)
+  the largest advisory category is `gallery` at 155, and no tier requires it
+
+✓ story-dod-tiers: no tier-required category is above its ceiling.
+AT test scripts — TASK-N1-O4
+
+  Tier C/D components    22
+  scripted               22
+  steps                  124
+  matrix cells covered   132 of 534
+  story resolution       checked against 1648 built stories
+  mode                   check
+
+✓ at-scripts: 22/22 components scripted, every scaffold task covered, every story id resolves.
+Manual AT task matrix — TASK-OSS-P5-04
+
+  components (Tier B–D)  89
+  cells                  534
+  executed               0
+  required cells         136  (tier-differentiated, TASK-R2-O2)
+  required executed      0
+  unrun                  534  (reported)
+  stale                  0  (reported)
+
+  run with --all to list every unrun and stale cell
+
+✓ at-matrix: no malformed or unevidenced rows.
+Capability matrix — TASK-OSS-P5-06
+
+  tier       pass     fail  present    stale    unrun excepted
+  A          106        0      175        0       65        4
+  B          315        0      304       10      275       13
+  C          142        0      106       26      100        0
+  D            7        0       12        1        1        0
+
+  Counts are per tier and per state on purpose. One percentage over cells of
+  different weight is the number this packet exists to stop reporting.
+
+  browser-degradation: 2112 committed `pass` cell(s) compared; 0 degraded
+
+  visual coverage (a per-row field, not a cell — it is in neither total above):
+    covered 0 · stale 8 · not-covered 136 of 144
+
+  37 stale cell(s)
+
+✓ capability-matrix: fresh, and no Tier D cell is unexplained.
+Visual baselines — TASK-N1-O6
+
+  scope      families [buttons] · chromium · light+dark · ltr · win32
+  baselines  58 on disk, 58 accepted
+
+  ! this ledger gates on `win32` and CI runs `linux`. Baselines are platform-locked, so the per-component lane is developer-local evidence and cannot fail a CI run until one accept pass is made on linux.
+
+  24 stale baseline(s)
+
+✓ visual-baselines: every baseline is accounted for, with a cause and an author.
+Token compliance check passed: 0 raw color literals found
+DESIGN.md check passed: fresh, 97 token refs valid, 96 contrast pairs ≥ AA
+Intent-text contrast check passed: no `--dz-{intent}` text on a `{intent}-muted` fill
+✓ token-references: 433 distinct --dz-* referenced across 3354 files; 814 declared (674 from dist/tokens.css); 44 documented consumer hooks; 271 unused at ceiling; 0 alias cycles
+DTCG round-trip passed — 774 typed tokens + 26 untyped, 319 aliases preserved; 649 light and 649 dark values matched against 674/674 declared custom properties
+  high-contrast:  115 values matched, key-identical to light and dark (dist/tokens.high-contrast.css); valued in CSS system colours, which DTCG 2025.10 cannot express — see D47
+  CSS read from:  dist/tokens.css
+  DTCG read from: dist/tokens.dtcg.json
+  cross-tier shadowing: 3 at ceiling (--dz-appshell-header-bg, --dz-appshell-header-border, --dz-appshell-main-bg) — reported, not failed; see the file header
+✓ dtcg-schema: valid against the official DTCG 2025.10 JSON Schema (vendored, packages/tooling/src/token-checks/schemas/dtcg-format-2025.10.schema.json)
+  validated: dist/tokens.dtcg.json
+
+Validating @dzup-ui/core (packages\core\manifests\public-api.manifest.json)
+  PASS  components: 11 entries, 160 exports
+  PASS  composables: 22 entries, 41 exports
+  PASS  utilities: 1 entries, 1 exports
+
+Validating @dzup-ui/testing (flat-export: src/index.ts)
+  PASS  entry: src/index.ts — 52 named exports
+
+Validating @dzup-ui/compat (flat-export: src/index.ts)
+  PASS  entry: src/index.ts — 13 named exports
+
+Validating @dzup-ui/nuxt (flat-export: src/module.ts)
+  PASS  entry: src/module.ts — 8 named exports
+
+Validating export-map targets
+  PASS  @dzup-ui/codemods: 2 export targets
+  PASS  @dzup-ui/compat: 5 export targets
+  PASS  @dzup-ui/contracts: 2 export targets
+  PASS  @dzup-ui/core: 37 export targets
+  PASS  @dzup-ui/mcp: 4 export targets
+  PASS  @dzup-ui/nuxt: 4 export targets
+  PASS  @dzup-ui/testing: 6 export targets
+  PASS  @dzup-ui/tokens: 9 export targets
+
+Validating the published subpath contract (scripts/required-export-subpaths.json)
+  PASS  @dzup-ui/contracts: 1 contracted subpaths
+  PASS  @dzup-ui/core: 18 contracted subpaths
+  PASS  @dzup-ui/mcp: 2 contracted subpaths
+  PASS  @dzup-ui/nuxt: 1 contracted subpaths
+  PASS  @dzup-ui/testing: 3 contracted subpaths
+  PASS  @dzup-ui/tokens: 6 contracted subpaths
+
+============================================================
+Total: 34 entries, 202 declared exports (manifest packages)
+       + 3 flat-export packages validated
+
+Export validation passed: 0 errors
+validate:published-imports — 6 published packages (packages/tooling/scripts/release-policy.json)
+
+  PASS  @dzup-ui/contracts@0.1.0: 1 probes
+  PASS  @dzup-ui/core@0.2.0: 18 probes
+  PASS  @dzup-ui/mcp@0.2.0: 2 probes
+  PASS  @dzup-ui/nuxt@0.1.0-alpha.0: 1 probes
+  PASS  @dzup-ui/testing@0.1.0: 3 probes
+  PASS  @dzup-ui/tokens@0.2.0: 6 probes
+
+  62 exports leaves · 31 runtime entries · 26 types entries · 18.8s
+  types probe: PASS (consumer tsconfig: moduleResolution bundler, skipLibCheck, no allowImportingTsExtensions)
+  DzMessageCatalog reachable from `import '@dzup-ui/core'` alone: YES (isolated program — N5-04 D4/F9)
+
+validate:published-imports PASSED
+  31 entries verified: 26 imported under Node · 2 imported as JSON · 3 assets present in the tarball (not importable under Node)
+  tarballs: (removed — pass --keep to inspect)
+✓ ownership-manifest: 1338 entries fresh and internally consistent, runtime lookup in sync; 29/29 unclassified; 41/41 public components without anatomy
+  part names outside the shared vocabulary (reported, not a failure):
+   · DzCascader — options-state, options-message, options-retry
+   · DzCodeBlock — copy-button, line-number
+   · DzCombobox — options-state, options-message, options-retry
+   · DzListbox — options-state, options-message, options-retry
+   · DzMention — options-state, options-message, options-retry
+   · DzMultiSelect — options-state, options-message, options-retry
+   · DzNumberInput — decrement, increment
+   · DzPersonaSelector — options-state, options-message, options-retry
+   · DzResizable — step-decrease, step-increase
+   · DzSelect — options-state, options-message, options-retry
+   · DzSplitter — step-decrease, step-increase
+   · DzTable — step-decrease, step-increase
+   · DzTransfer — options-state, options-message, options-retry
+   · DzTreeSelect — options-state, options-message, options-retry
+  component tokens read but not declared as override points (reported, not a failure):
+   · DzPopconfirm — --dz-popconfirm-icon-color, --dz-popconfirm-icon-size
+   · DzSidebar — --dz-sidebar-foreground-hover, --dz-sidebar-heading, --dz-sidebar-z-index
+   · DzText — --dz-text-base, --dz-text-lg, --dz-text-sm, --dz-text-xl, --dz-text-xs
+  awaiting a maintainer decision (reported, not a failure):
+   · @dzup-ui/core DZ_ACCORDION_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_AVATAR_GROUP_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_BREADCRUMB_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_BUTTON_GROUP_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_CAROUSEL_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_CHECKBOX_GROUP_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_DATA_GRID_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_DESCRIPTIONS_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_DIALOG_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_FORM_FIELD_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_LIST_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_MENU_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_RESIZABLE_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_SIDEBAR_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_SPLITTER_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_SPLIT_BUTTON_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_STEPPER_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_TABLE_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_TABS_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_THEME_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_TIMELINE_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_TOAST_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DZ_TREE_KEY — compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`.
+   · @dzup-ui/core DzResolver — runtime export that is not a component, composable, recipe, token module, or type. Ownership schema 1.0.0 has no `utility` kind — maintainer decision required.
+   · @dzup-ui/core cn — runtime export that is not a component, composable, recipe, token module, or type. Ownership schema 1.0.0 has no `utility` kind — maintainer decision required.
+   · @dzup-ui/core getThemeScript — runtime export that is not a component, composable, recipe, token module, or type. Ownership schema 1.0.0 has no `utility` kind — maintainer decision required.
+   · @dzup-ui/compat resetDeprecationWarnings — migration helper that is not an adapter component. Ownership schema 1.0.0 has no `utility` kind — maintainer decision required.
+   · @dzup-ui/core themeScript — runtime export that is not a component, composable, recipe, token module, or type. Ownership schema 1.0.0 has no `utility` kind — maintainer decision required.
+   · @dzup-ui/compat warnDeprecated — migration helper that is not an adapter component. Ownership schema 1.0.0 has no `utility` kind — maintainer decision required.
+  note: dist modules shipped but not reachable through the `exports` map: tools.js. Encapsulated by Node, so this is dead weight in the tarball rather than an accidental API.
+  warn: README.md links to ../../DESIGN.md, which is outside the package — it 404s on the npm page.
+@dzup-ui/mcp surface OK — 12 tools, all with a contract clause, a unit spec, a [malformed] case and an observed data source; version 0.2.0 agrees across package.json, server.json (x2), CHANGELOG.md and the artifact.
+  ratchets: 0 public components unreachable · 5 tools not smoke-called
+Component metadata — TASK-N2-A2
+
+  209 components: 144 public-component, 65 compound-part; 0 unclassifiable
+  extractor: vue-component-meta@3.3.7
+
+  field      total  described  source
+  props       1821       1821  vue-component-meta
+  events       366        366  0 extractor + 296 emits-interface + 70 model-synthesised (A2-D2, generated not authored)
+  slots        328        328  vue-component-meta
+  exposed       27         27  vue-component-meta
+
+  examples: 143/209 have a real story source; 129 also yield a paste-ready template
+
+  ratchets: unclassifiable 0 · unresolvedTypes 0 · publicComponentsWithoutRecord 0 · propsWithoutDescription 0 · slotsWithoutDescription 0 · eventsWithoutDescription 0 · exposedWithoutDescription 0 · publicComponentsWithoutExample 1 · componentsWithoutStaticTemplate 80
+
+✓ component-meta: fresh, complete for all 144 public components, and every debt number at its ceiling.
+Provider defaults adoption — TASK-R5-O3 (D32(a), D33(a))
+
+  useDzDefaults consumers (component-meta.json, writers excluded): 22
+  raw-binding audit rows: 22 components
+  canonical-axis components: 101 · resolving 22 · unresolved 79 · excluded 3 · residual 76 (ceiling 76)
+
+✓ provider-defaults: every consumer is audited, every exclusion is argued and current, and the residual is at its ceiling.
+llms docs — TASK-N2-A3
+
+  components index   packages/core/docs/llms.txt          49403 B
+  components full    packages/core/docs/llms-full.txt     487645 B
+  blocks index       apps/landing/public/llms.txt         30316 B
+  blocks full        apps/landing/public/llms-full.txt    517939 B
+
+
+✓ blocks llms docs fresh — 87 blocks across 12 categories → llms.txt, llms-full.txt
+
+  ratchets: publicComponentsUnreachableFromLlms 0 · componentsWithoutDescription 0 · publicComponentsWithNoMembers 0 · publicComponentsWithoutExampleInLlms 0
+
+✓ llms: both documents fresh against the metadata artifact, structurally sound, and every one of the 144 public components discoverable by an MCP client.
+  ✓ docs pages fresh — 144 component pages + index + 6 evidence pages + nav + playground seeds, rendered from packages/core/docs/component-meta.json
+    evidence: 1662 capability cells (441 unrun, 37 stale) · AT cells executed 0/534
+    page contract: 10 sections, each rendered on all 144 pages — "not declared" cells per section: intent=144 · api=0 · usage=0 · variants=49 · parts=41 · provider=39 · keyboard=41 · locale=41 · operational=0 · states=41
+  ✓ playground parity — 3 surfaces agree with the contract (3 assets, 2 editor stylesheets, specifier @dzup-ui/core, Tailwind JIT pinned)
+✓ package-names: no retired package name outside history (@dzup-ui/pro)
+✓ doc-snippets: 20 fixture-backed snippet(s) match their fixtures
+✓ engines: floor "^20.19.0 || >=22.13.0" is declared consistently and every gate dependency satisfies it
+✓ adr-references: 17 ADR(s) cited · 3 documented · 14 registry-only (ceiling 14)
+  README.md: already current (4 region(s))
+  packages/contracts/README.md: already current (1 region(s))
+  packages/core/README.md: already current (1 region(s))
+  packages/nuxt/README.md: no fact markers (0 region(s))
+  packages/tokens/README.md: no fact markers (0 region(s))
+✓ readme-facts: 6 generated region(s) across the repository
+External import validation
+
+  PASS  @dzup-ui/codemods
+  PASS  @dzup-ui/compat
+  PASS  @dzup-ui/contracts
+  PASS  @dzup-ui/core
+  PASS  @dzup-ui/mcp
+  PASS  @dzup-ui/nuxt
+  PASS  @dzup-ui/testing
+  PASS  @dzup-ui/tokens
+  SKIP  @dzup-ui/tooling — no dist/ (build first)
+
+============================================================
+Results: 8 passed, 0 failed, 1 skipped
+
+External import validation passed.
+Declaration file (.d.ts) validation
+
+Validating @dzup-ui/contracts (packages\contracts\dist)
+  PASS  .d.ts parity: 15 .js files, 15 .d.ts files, 0 missing
+  PASS  index.d.ts export coverage
+  PASS  declaration import boundaries
+Validating @dzup-ui/tokens (packages\tokens\dist)
+  PASS  .d.ts parity: 4 .js files, 6 .d.ts files, 0 missing
+  PASS  index.d.ts export coverage
+  PASS  declaration import boundaries
+Validating @dzup-ui/testing (packages\testing\dist)
+  PASS  .d.ts parity: 7 .js files, 7 .d.ts files, 0 missing
+  PASS  index.d.ts export coverage
+  PASS  declaration import boundaries
+Validating @dzup-ui/core (packages\core\dist)
+  PASS  .d.ts parity: 228 .js files, 804 .d.ts files, 0 missing (420 Vite chunks skipped)
+  PASS  index.d.ts export coverage
+  PASS  declaration import boundaries
+Validating @dzup-ui/compat (packages\compat\dist)
+  PASS  .d.ts parity: 2 .js files, 14 .d.ts files, 0 missing (22 Vite chunks skipped)
+  PASS  index.d.ts export coverage
+  PASS  declaration import boundaries
+Validating @dzup-ui/codemods (packages\codemods\dist)
+  PASS  .d.ts parity: 17 .js files, 17 .d.ts files, 0 missing
+  PASS  index.d.ts export coverage
+  PASS  declaration import boundaries
+Validating @dzup-ui/nuxt (packages\nuxt\dist)
+  PASS  .d.ts parity: 1 .js files, 1 .d.ts files, 0 missing
+  PASS  module.d.ts export coverage
+  PASS  declaration import boundaries
+
+============================================================
+Total: 274 .js files, 864 .d.ts files
+
+Declaration file validation passed: 0 errors
+Changelog validation
+
+  PASS  @dzup-ui/contracts — packages\contracts\CHANGELOG.md is valid
+  PASS  @dzup-ui/tokens — packages\tokens\CHANGELOG.md is valid
+  PASS  @dzup-ui/testing — packages\testing\CHANGELOG.md is valid
+  PASS  @dzup-ui/core — packages\core\CHANGELOG.md is valid
+  PASS  @dzup-ui/compat — packages\compat\CHANGELOG.md is valid
+  PASS  @dzup-ui/codemods — packages\codemods\CHANGELOG.md is valid
+  PASS  @dzup-ui/nuxt — packages\nuxt\CHANGELOG.md is valid
+
+============================================================
+Results: 7 passed, 0 warnings, 0 failed
+
+Changelog validation passed.
+✓ release-policy: `changeset status` assembles; 6 published, 2 withheld, 5 private of 13 workspace packages; 36 pending changeset(s), 0 major, 0 mixed; changelog-format collisions at the ceiling of 1
+Peer dependency validation
+
+
+  @dzup-ui/compat
+    PASS  vue ^3.5.0 — 3.5.31 satisfies ^3.5.0
+
+  @dzup-ui/contracts
+    PASS  vue ^3.5.0 — 3.5.31 satisfies ^3.5.0
+
+  @dzup-ui/core
+    PASS  reka-ui ^2.0.0 — 2.9.2 satisfies ^2.0.0
+    PASS  vue ^3.5.0 — 3.5.31 satisfies ^3.5.0
+
+  @dzup-ui/nuxt
+    PASS  @dzup-ui/core >=0.1.0-alpha.0 — workspace 0.2.0 satisfies >=0.1.0-alpha.0
+    PASS  @dzup-ui/tokens >=0.1.0-alpha.0 — workspace 0.2.0 satisfies >=0.1.0-alpha.0
+    PASS  nuxt >=3.0.0 — 4.4.5 satisfies >=3.0.0
+
+============================================================
+Results: 7 compatible, 0 warnings, 0 incompatible
+
+Peer dependency validation passed.
+
+=== Dependency License Audit ===
+
+  OK    @floating-ui/vue         MIT             v1.1.11
+  OK    @internationalized/date  Apache-2.0      v3.12.0
+  OK    clsx                     MIT             v2.1.1
+  OK    lucide-vue-next          ISC             v0.475.0
+  OK    qrcode-generator         MIT             v2.0.4
+  OK    reka-ui                  MIT             v2.9.2
+  OK    tailwind-merge           MIT             v3.6.0
+  OK    tailwind-variants        MIT             v0.3.1
+  OK    vue                      MIT             v3.5.31
+
+Results: 9 allowed, 0 blocked, 0 unknown
+
+All dependency licenses are compatible.
+
+=== Tree-shaking Validation ===
+
+PASS  DzButton (194.3 KB)
+PASS  DzInput (202.5 KB)
+PASS  DzSelect (212.1 KB)
+PASS  DzAlert (192.4 KB)
+
+All checks passed!

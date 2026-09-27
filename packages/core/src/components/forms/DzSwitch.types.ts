@@ -20,6 +20,12 @@ import type { DzSwitchUi } from './DzSwitch.anatomy.ts'
 
 /** Props for the DzSwitch component */
 export interface DzSwitchProps extends BaseAccessibilityProps {
+  // Declared locally since TASK-R0-O2 (2026-09-22): `ariaInvalid` left
+  // BaseAccessibilityProps for BaseValidationProps (N5-02 D1). This control
+  // resolves invalidity from the enclosing DzFormField, so it keeps the one
+  // prop rather than inheriting `invalid`/`error` it never reads.
+  /** Indicates the component has invalid input */
+  ariaInvalid?: boolean | 'grammar' | 'spelling'
   /** Disabled state -- prevents interaction */
   disabled?: boolean
   /** Component size */

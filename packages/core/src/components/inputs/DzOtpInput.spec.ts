@@ -19,6 +19,26 @@ describe('dzOtpInput — Unit Tests', () => {
     expect(cells.length).toBe(6)
   })
 
+  // WCAG 2.2 SC 3.3.8 Accessible Authentication (AA): transcribing a code from
+  // another device is a cognitive-function test, and platform autofill is the
+  // mechanism that removes it. Reka emits `autocomplete="one-time-code"` only
+  // when its `otp` flag is set, and the flag was never passed, so every cell
+  // shipped with autofill switched off (TASK-R2-O5).
+  it('advertises one-time-code autofill on every cell', () => {
+    const wrapper = mount(DzOtpInput, { props: { length: 4 } })
+    const cells = wrapper.findAll('input').filter(i => i.element.type !== 'hidden')
+    expect(cells).toHaveLength(4)
+    for (const cell of cells)
+      expect(cell.attributes('autocomplete')).toBe('one-time-code')
+  })
+
+  it('withdraws the autofill hint when the cells are not a one-time code', () => {
+    const wrapper = mount(DzOtpInput, { props: { length: 4, otp: false } })
+    const cells = wrapper.findAll('input').filter(i => i.element.type !== 'hidden')
+    for (const cell of cells)
+      expect(cell.attributes('autocomplete')).not.toBe('one-time-code')
+  })
+
   it('renders exactly `length` cells for custom lengths', () => {
     for (const length of [4, 6, 8]) {
       const wrapper = mount(DzOtpInput, { props: { length } })

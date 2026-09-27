@@ -122,8 +122,10 @@ export type {
 } from './props.types.js'
 
 // Provider contract — injection keys and concern shapes (ADR-20; sanitizer
-// concern added by ADR-20 amendment A6, TASK-R3-O2)
+// concern added by ADR-20 amendment A6, TASK-R3-O2; URL policy added by ADR-20
+// amendment A7, TASK-R2-O4)
 export {
+  DZ_ALLOWED_URL_SCHEMES,
   DZ_DEFAULTS_KEY,
   DZ_DIRECTION_KEY,
   DZ_FORMATS_KEY,
@@ -135,6 +137,7 @@ export {
   DZ_PROVIDER_DEFAULTS,
   DZ_SANITIZER_KEY,
   DZ_TEST_IDS_KEY,
+  DZ_URL_POLICY_KEY,
   // Runtime: the error the sanitizer seam throws. Exported as a value because
   // `instanceof` is the point — see its docstring.
   DzSanitizeLimitError,
@@ -167,6 +170,10 @@ export type {
   DzSanitizerOptions,
   DzSanitizeSink,
   DzTestIds,
+  DzUrlPolicy,
+  DzUrlPolicyContext,
+  DzUrlPolicyOptions,
+  DzUrlSink,
 } from './provider.types.js'
 
 // Quality tiers — the evidence a component owes at its risk tier (P5-01)
@@ -174,15 +181,21 @@ export {
   APG_PATTERNS,
   BASELINE_WCAG,
   baselineWcagFor,
+  BOUNDARY_COVERS_COMPOUND_PARTS,
   BOUNDARY_EVIDENCE,
   COMPONENT_TRAITS,
+  crossesBoundary,
   EVIDENCE_KINDS,
   evidenceFor,
   evidenceOrigin,
+  formatBoundaries,
   INTERACTIVE_WCAG,
+  normaliseBoundaries,
+  requiredAtPairs,
   requiredEvidence,
   RISK_TIER_ORDER,
   SECURITY_BOUNDARIES,
+  TIER_AT_PAIR_INCREMENT,
   TIER_EVIDENCE_INCREMENT,
   TRAIT_EVIDENCE,
   TRAIT_WCAG,
@@ -196,6 +209,7 @@ export type {
   ComponentTrait,
   EvidenceKind,
   SecurityBoundary,
+  SecurityBoundarySet,
   WcagCriterion,
   WcagLevel,
 } from './quality-tiers.js'

@@ -16,8 +16,8 @@ published [styling posture statement](/evidence/styling-posture), whose numbers
 are generated rather than written.
 
 ::: warning Status
-The contract is specified by **ADR-19**, which is still *Proposed* — accepting it
-is an owner decision. Its layer names and its `data-part` / `data-state` /
+The contract is specified by **ADR-19**, which the owner accepted on 2026-09-26.
+Its layer names and its `data-part` / `data-state` /
 `ui`-prop mechanisms are shipped and load-bearing today; the anatomy declarations
 that make each component's parts discoverable are being rolled out family by
 family. A component page shows its declared parts when it has them, and says

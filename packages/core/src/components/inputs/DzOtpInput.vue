@@ -29,6 +29,7 @@ const props = withDefaults(defineProps<DzOtpInputProps>(), {
   length: 6,
   type: 'number',
   mask: false,
+  otp: true,
   disabled: false,
   size: 'md',
   invalid: false,
@@ -184,6 +185,7 @@ const { testId: dzTestId } = useDzTestIds()
       :name="name"
       :type="type === 'number' ? 'number' : 'text'"
       :mask="mask"
+      :otp="otp"
       :class="rootClasses"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"

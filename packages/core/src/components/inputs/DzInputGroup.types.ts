@@ -38,6 +38,13 @@ export const DZ_INPUT_GROUP_KEY: InjectionKey<DzInputGroupContext>
 
 /** Props for the DzInputGroup component */
 export interface DzInputGroupProps extends BaseAccessibilityProps {
+  // Declared locally since TASK-R0-O2 (2026-09-22): `ariaInvalid` left
+  // BaseAccessibilityProps for BaseValidationProps (N5-02 D1). This group
+  // forwards the attribute to its own element without being a form control,
+  // so it keeps the one prop rather than inheriting `invalid`/`error`/
+  // `required` it never reads — the wrapped control owns those.
+  /** Indicates the component has invalid input */
+  ariaInvalid?: boolean | 'grammar' | 'spelling'
   /** Component size */
   size?: CanonicalSize
   /** Disabled state */

@@ -59,7 +59,7 @@ export interface DzMenuItemProps {
   active?: boolean
   /** Whether this item is disabled */
   disabled?: boolean
-  /** URL to navigate to (renders as <a>) */
+  /** URL to navigate to (renders as `<a>`) */
   href?: string
   /** Accessible label */
   ariaLabel?: string

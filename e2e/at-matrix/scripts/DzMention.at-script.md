@@ -164,7 +164,6 @@ The scaffold says this component owes 8 task(s):
 
 **Read from:** ARIA live regions and `aria-busy`; a busy popup is a status, not a focus event.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -173,4 +172,3 @@ defect. If a step failed for any other reason, it **is** new — file it.
 
 - **D3** — affects `live`. The `loading` prop is dead — shadowed by an internal ref of the same name. The pending state is only reachable through an async resolver, which is why the `live` step uses the async story.
 - **D8** — affects `select`. `useDualModel` ignores external writes to `v-model:value` after the first user edit. Resetting the composer from outside will not take.
-

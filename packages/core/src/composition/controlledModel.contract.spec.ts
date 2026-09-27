@@ -27,12 +27,17 @@
  *
  * ## Scope
  *
- * This spec does **not** fix D8 — TASK-R2-O3 owns that. It is the contract that
- * would have caught it, and it is deliberately arranged so that the fix makes
- * this file go red: the seven are asserted to be *still broken*, so a control
- * that starts behaving correctly fails here and has to be removed from the
- * list. A known-defect list that does not notice being fixed is how a defect
- * register drifts from the code.
+ * **D8 is fixed (TASK-R2-O3).** `useDualModel` now remembers the value it last
+ * wrote, so a model that has moved away from it was moved by the parent and the
+ * parent's write wins. R5-O6 wrote this file deliberately arranged to go red on
+ * that fix — the seven were asserted to be *still broken*, so a control that
+ * started behaving correctly failed here. It did, and the expected-failure test
+ * has been deleted rather than worked around; the contract that was skipped
+ * behind it is now the live assertion.
+ *
+ * The population list stays, with its meaning inverted: it no longer records who
+ * carries the defect, it records who must carry a **regression spec** for it.
+ * A component that starts using `useDualModel` without one fails here.
  */
 
 import { readdirSync, readFileSync, statSync } from 'node:fs'
@@ -47,13 +52,14 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 const CORE_SRC = resolve(HERE, '..')
 
 /**
- * The controls D8 applies to, as recorded by the N1-O1 defect register.
+ * The controls that share `useDualModel`, as recorded by the N1-O1 defect
+ * register and re-measured here.
  *
  * A list rather than a scan result so the two can be compared: if the scan
- * finds a component the register does not name, an eighth control has acquired
- * the defect.
+ * finds a component the register does not name, an eighth control has joined
+ * the population and owes the D8 regression spec the other seven carry.
  */
-const D8_CONTROLS = [
+const DUAL_MODEL_CONTROLS = [
   'DzCascader',
   'DzInplace',
   'DzKnob',
@@ -108,39 +114,15 @@ describe('an external write after a user edit is honoured', () => {
     expect(model.value).toBe('from the parent')
   })
 
-  it('is VIOLATED after one user edit — this is defect D8', () => {
+  it('defect D8 -- holds after one user edit — the write that used to be discarded', () => {
     const { legacy, model } = bindLegacyOnly('first')
 
     // The user edits. `set` writes BOTH models, latching a value into the
-    // default model that nobody bound.
+    // default model that nobody bound — which is what D8 then preferred
+    // forever.
     model.value = 'typed by the user'
 
     // The parent now writes — a form reset, a revert, a loaded draft.
-    legacy.value = ''
-
-    const trace = {
-      afterUserEdit: 'typed by the user',
-      externalWrite: '',
-      afterExternalWrite: model.value,
-    }
-
-    // Recorded as an expected failure rather than asserted away. When
-    // TASK-R2-O3 fixes `useDualModel`, `checkExternalWrite` returns no problems
-    // and this expectation fails — which is the signal to delete this test and
-    // enable the one below.
-    expect(
-      checkExternalWrite('useDualModel', trace),
-      'D8 appears to be FIXED. Delete this expected-failure test, remove the '
-      + 'D8_CONTROLS list, and enable `the contract, once D8 is fixed` below.',
-    ).toHaveLength(1)
-
-    expect(model.value).toBe('typed by the user')
-  })
-
-  it.skip('the contract, once D8 is fixed (TASK-R2-O3 enables this)', () => {
-    const { legacy, model } = bindLegacyOnly('first')
-
-    model.value = 'typed by the user'
     legacy.value = ''
 
     expectExternalWrite('useDualModel', {
@@ -148,6 +130,37 @@ describe('an external write after a user edit is honoured', () => {
       externalWrite: '',
       afterExternalWrite: model.value,
     })
+  })
+
+  it('defect D8 -- a second external write is honoured too, and a later user edit still wins', () => {
+    // The fix must not leave the model pinned to the parent either — it is a
+    // dual model, not a read-only projection.
+    const { legacy, model } = bindLegacyOnly('first')
+
+    model.value = 'typed by the user'
+    legacy.value = ''
+    expect(model.value).toBe('')
+
+    legacy.value = 'a loaded draft'
+    expect(model.value).toBe('a loaded draft')
+
+    model.value = 'typed again'
+    expect(model.value).toBe('typed again')
+
+    legacy.value = ''
+    expect(model.value).toBe('')
+  })
+
+  it('defect D8 -- an array model is compared by identity, not frozen by it', () => {
+    // `DzTagsInput` and `DzCascader` hold arrays; a reference comparison that
+    // treated a fresh array as "unchanged" would re-introduce the defect for
+    // exactly the two controls where a reset matters most.
+    const { legacy, model } = bindLegacyOnly<string[]>(['a'])
+
+    model.value = ['a', 'typed']
+    legacy.value = []
+
+    expect(model.value).toEqual([])
   })
 
   it('a consumer who binds the DEFAULT v-model is unaffected', () => {
@@ -169,21 +182,36 @@ describe('an external write after a user edit is honoured', () => {
   })
 })
 
-describe('the population D8 applies to is exactly the recorded seven', () => {
+describe('the population that owes a D8 regression spec is exactly the recorded seven', () => {
   const users = dualModelUsers()
 
-  it('no eighth control has acquired the defect', () => {
+  it('no eighth control has joined without being recorded', () => {
     expect(
       users,
-      'A component started using `useDualModel`. Until D8 is fixed (TASK-R2-O3) that '
-      + 'means a consumer binding only `v-model:value` loses control of the value after '
-      + 'the first user edit. Either bind the default model, or wait for the fix.',
-    ).toEqual([...D8_CONTROLS])
+      'A component started using `useDualModel`. Add it to DUAL_MODEL_CONTROLS and give it '
+      + 'the same D8 regression spec the other seven carry — a mounted control, bound with '
+      + '`v-model:value` only, edited by the user and then written to by the parent.',
+    ).toEqual([...DUAL_MODEL_CONTROLS])
   })
 
   it('every recorded control still exists', () => {
     const present = new Set(users)
-    expect(D8_CONTROLS.filter(name => !present.has(name))).toEqual([])
+    expect(DUAL_MODEL_CONTROLS.filter(name => !present.has(name))).toEqual([])
+  })
+
+  it('every recorded control carries a D8 regression spec of its own', () => {
+    // The composable-level assertions above prove the rule; these prove it
+    // reaches the seven shipped controls through their real templates, which is
+    // where D8 was actually observed (N1-O1, `DzMention.RealWorldCommentComposer`).
+    const missing = DUAL_MODEL_CONTROLS.filter((name) => {
+      const path = join(CORE_SRC, 'components', 'forms', `${name}.spec.ts`)
+      return !/\bD8\b/.test(readFileSync(path, 'utf8'))
+    })
+
+    expect(
+      missing,
+      'These controls use `useDualModel` but their spec file has no D8 regression test.',
+    ).toEqual([])
   })
 })
 

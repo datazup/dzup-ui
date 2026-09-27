@@ -26,7 +26,7 @@ import type { CommandGroup, CommandItem } from '@dzup-ui/core'
  * Built only from @dzup-ui/core + `--dz-*` tokens.
  */
 import { DzCommandPalette, DzKbd } from '@dzup-ui/core'
-import { Box, LayoutGrid, LayoutTemplate, Search } from 'lucide-vue-next'
+import { Box, LayoutGrid, LayoutTemplate, Search } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { blocksByCategory, CATEGORIES } from '../../blocks/registry.ts'
 import { useBlockSearch } from '../../composables/useBlockSearch.ts'

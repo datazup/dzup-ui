@@ -12,7 +12,7 @@
  * reflows cleanly 390px → up.
  */
 import { DzBadge, DzButton, DzCard, DzDivider, DzHeading, DzInput, DzProgress, DzText } from '@dzup-ui/core'
-import { ArrowRight, Boxes, Clock, Wrench } from 'lucide-vue-next'
+import { ArrowRight, Boxes, Clock, Wrench } from '@lucide/vue'
 import { ref } from 'vue'
 
 /** Live progress of the maintenance window (static sample value). */

@@ -27,7 +27,7 @@ import {
   DzTableRow,
   DzText,
 } from '@dzup-ui/core'
-import { Download, Printer, Send, Sparkles } from 'lucide-vue-next'
+import { Download, Printer, Send, Sparkles } from '@lucide/vue'
 import { computed } from 'vue'
 import {
   CLIENT,

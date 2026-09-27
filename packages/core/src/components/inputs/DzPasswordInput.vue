@@ -40,6 +40,7 @@ const props = withDefaults(defineProps<DzPasswordInputProps>(), {
   invalid: false,
   required: false,
   loadingLabel: undefined,
+  autocomplete: 'current-password',
   ui: undefined,
 })
 
@@ -200,7 +201,7 @@ const { testId: dzTestId } = useDzTestIds()
         :aria-invalid="isInvalid || undefined"
         :aria-required="resolvedRequired || undefined"
         :aria-busy="loading || undefined"
-        autocomplete="current-password"
+        :autocomplete="autocomplete"
         @change="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"
@@ -221,10 +222,9 @@ const { testId: dzTestId } = useDzTestIds()
         type="button"
         data-part="toggle"
         :class="toggleClasses"
-        :aria-label="showPassword ? 'Hide password' : 'Show password'"
+        :aria-label="showPassword ? dzMessages.hidePassword : dzMessages.showPassword"
         :aria-pressed="showPassword"
         :disabled="resolvedDisabled || loading"
-        tabindex="-1"
         @click="toggleVisibility"
       >
         <!-- Eye icon (show password) -->

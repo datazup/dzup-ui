@@ -24,7 +24,7 @@ import {
   DzTimeline,
   DzTimelineItem,
 } from '@dzup-ui/core'
-import { Rss } from 'lucide-vue-next'
+import { Rss } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import Section from '../components/Section.vue'
 import { LINKS } from '../config.ts'

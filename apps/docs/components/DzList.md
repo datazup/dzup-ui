@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzList
 
 Compound list root component.
@@ -46,18 +50,17 @@ never as asserted.
 :::
 
 
-## Props (11, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (10, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `interactive` | `boolean \| undefined` | no | `false` | Whether list items are interactive (clickable) |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state |
-| `ordered` | `boolean \| undefined` | no | `false` | Whether the list is ordered (renders &lt;ol> instead of &lt;ul>) |
+| `ordered` | `boolean \| undefined` | no | `false` | Whether the list is ordered (renders `<ol>` instead of `<ul>`) |
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
 | `variant` | `ListVariant \| undefined` | no | `undefined` | Visual style variant |
@@ -136,7 +139,7 @@ others for no stated reason.
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
@@ -155,7 +158,7 @@ examples for.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `80ce301`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -164,7 +167,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 11 | 11 | 3 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 10 | 10 | 3 declare a default, of which 3 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 2 | 2 | 2 recovered from the `Dz*Emits` interface · 0 synthesised by `defineModel` |
 | Slots | 2 | 2 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -173,8 +176,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `7f340779` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -184,7 +187,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`
 - **Security boundary:** `none`
 - **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `a01965fa`
 
 ### WCAG 2.2 criteria in scope (10)
 
@@ -233,7 +236,7 @@ Every kind of evidence required of this component — by Tier A, by its traits (
 | `unit-spec` | tier A | `present` | `packages/core/src/components/data/DzList.spec.ts` |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/data.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzList.stories.ts` |
-| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/data/DzList.stories.ts` |
 

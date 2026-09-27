@@ -64,8 +64,14 @@ const dzMotionAttr = useDzMotionAttribute()
     :disabled="portalDisabled"
     :defer="portalDefer"
   >
+    <!--
+      N1-O1 defect D11: `:id="id"` with no `id` handed an explicit `undefined`
+      to the Reka component, which OVERRODE the content id Reka generates for
+      itself. The trigger then advertised `aria-controls=""` and the panel
+      carried no id at all -- axe `aria-valid-attr-value`, and an AT user
+      following the reference found nothing. Bind it only when there is one.
+    -->
     <ContextMenuContent
-      :id="id"
       :side="side"
       :align="align"
       :side-offset="sideOffset"
@@ -73,7 +79,7 @@ const dzMotionAttr = useDzMotionAttribute()
       :class="classes"
       :data-dz-motion="dzMotionAttr"
       :aria-label="ariaLabel"
-      v-bind="{ ...$attrs, class: undefined }"
+      v-bind="{ ...(id === undefined ? {} : { id }), ...$attrs, class: undefined }"
       @escape-key-down="handleEscapeKeyDown"
       @pointer-down-outside="handlePointerDownOutside"
     >

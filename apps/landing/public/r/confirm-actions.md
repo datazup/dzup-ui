@@ -30,7 +30,7 @@ import {
   DzPopconfirm,
   DzText,
 } from '@dzup-ui/core'
-import { RotateCcw, Trash2 } from 'lucide-vue-next'
+import { RotateCcw, Trash2 } from '@lucide/vue'
 import { ref } from 'vue'
 
 const status = ref('')

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { AlertCircle, AlertTriangle, Bell, CheckCircle, Info } from 'lucide-vue-next'
+import { AlertCircle, AlertTriangle, Bell, CheckCircle, Info } from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzNotification } from '../../src/components/feedback'
 import { darkModeDecorator } from '../_shared'

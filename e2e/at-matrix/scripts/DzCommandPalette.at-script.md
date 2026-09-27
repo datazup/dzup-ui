@@ -33,8 +33,8 @@ is a fact; it is never `fail`.
 
 ## Steps
 
-The scaffold says this component owes 8 task(s):
-`reach`, `open`, `navigate`, `typeahead`, `select`, `dismiss`, `error`, `live`. There is exactly one step per task.
+The scaffold says this component owes 7 task(s):
+`reach`, `open`, `navigate`, `typeahead`, `select`, `dismiss`, `live`. There is exactly one step per task.
 
 ### Step 1 — task `reach`
 
@@ -133,13 +133,7 @@ The scaffold says this component owes 8 task(s):
 
 **Read from:** Dialog (Modal) — Escape closes; focus returns to the invoking element.
 
-### Step 7 — task `error`
-
-**Open:** [`core-overlays-dzcommandpalette--accessibility`](http://127.0.0.1:6006/iframe.html?id=core-overlays-dzcommandpalette--accessibility&viewMode=story)
-
-**Not applicable.** The scaffold derives an `error` task from the `combobox` pattern. DzCommandPalette has no validation surface at all — no invalid state, no error message, no required semantics — so there is nothing to drive. Write `error task not applicable: no validation surface` in the run row `notes`. Do NOT record `fail`; a task with no surface is not a failed task.
-
-### Step 8 — task `live`
+### Step 7 — task `live`
 
 **Open:** [`core-overlays-dzcommandpalette--accessibility`](http://127.0.0.1:6006/iframe.html?id=core-overlays-dzcommandpalette--accessibility&viewMode=story)
 
@@ -155,7 +149,6 @@ The scaffold says this component owes 8 task(s):
 
 **Read from:** ARIA live regions.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -163,4 +156,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 None on the register for this component. Anything that fails here is new — file it.
-

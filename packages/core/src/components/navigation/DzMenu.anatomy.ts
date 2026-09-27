@@ -35,7 +35,7 @@ export const anatomy = {
    * presence-only marker. All three were emitted before this declaration; none
    * is new.
    */
-  states: ['ready', 'active', 'disabled'],
+  states: ['ready', 'active', 'disabled', 'url-rejected'],
 
   /**
    * Empty and measured: `DzMenu.tokens.ts` maps to global semantic tokens

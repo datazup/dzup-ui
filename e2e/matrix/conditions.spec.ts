@@ -8,6 +8,7 @@ import {
   matrixProject,
   openTarget,
   RUNNABLE_TARGETS,
+  withConditionSuspended,
 } from './fixtures'
 
 /**
@@ -243,6 +244,26 @@ for (const target of RUNNABLE_TARGETS) {
             undersized,
             `${target.component} has pointer targets under 24x24 CSS px`,
           ).toEqual([])
+
+          // The sweep above skips anything at `opacity: 0`, which is right for
+          // a visually-hidden native input but wrong for the SC 2.5.7 stepper
+          // pair added by owner decision D117 (TASK-R2-O5): those rest
+          // transparent so that the resting rendering of a splitter is
+          // unchanged, and they are revealed by a hover, a focus or a tap. They
+          // are real pointer targets and they are measured as such — a box is a
+          // box whether or not it is painted, so no reveal is needed to read
+          // one. Left to the sweep, a 12px stepper would have passed this lane
+          // in three engines while failing the criterion it was added for.
+          const undersizedSteppers = await page
+            .locator('#storybook-root [data-dz-resize-step]')
+            .evaluateAll(els => els
+              .map(el => el.getBoundingClientRect())
+              .filter(r => r.width < 24 || r.height < 24)
+              .map(r => `${r.width} x ${r.height}`))
+          expect(
+            undersizedSteppers,
+            `${target.component} has resize steppers under 24x24 CSS px`,
+          ).toEqual([])
           break
         }
 
@@ -255,9 +276,151 @@ for (const target of RUNNABLE_TARGETS) {
           expect(dir, `${target.component} did not render right-to-left`).toBe('rtl')
           break
         }
+
+        case 'text-200': {
+          // WCAG 1.4.4 Resize Text (AA): text can be resized to 200 % without
+          // loss of content or functionality.
+          //
+          // The mechanism is asserted first, for the same reason `rtl` asserts
+          // the document flipped: the condition is a stylesheet this harness
+          // injects, and a stylesheet that stopped applying would turn 88 green
+          // cells into a claim about nothing.
+          const rootFontSize = await page.evaluate(() =>
+            Number.parseFloat(getComputedStyle(document.documentElement).fontSize))
+          expect(
+            rootFontSize,
+            'the text-200 stylesheet did not reach the document — the condition is vacuous, not passing',
+          ).toBeGreaterThanOrEqual(24)
+
+          await expectNoNewClipping(page, target.component, '200 % text')
+          break
+        }
+
+        case 'spacing': {
+          // WCAG 1.4.12 Text Spacing (AA): no loss of content or functionality
+          // when the user sets line height to 1.5×, paragraph spacing to 2×,
+          // letter spacing to 0.12× and word spacing to 0.16× the font size.
+          const applied = await page.evaluate(() => {
+            const style = getComputedStyle(document.documentElement)
+            const fontSize = Number.parseFloat(style.fontSize)
+            return {
+              fontSize,
+              letterRatio: Number.parseFloat(style.letterSpacing) / fontSize,
+              lineRatio: Number.parseFloat(style.lineHeight) / fontSize,
+            }
+          })
+          expect(
+            applied.letterRatio,
+            'the spacing stylesheet did not reach the document — the condition is vacuous, not passing',
+          ).toBeGreaterThanOrEqual(0.11)
+          expect(applied.lineRatio, 'line-height override did not apply').toBeGreaterThanOrEqual(1.49)
+
+          await expectNoNewClipping(page, target.component, 'the 1.4.12 text-spacing overrides')
+          break
+        }
       }
     })
   })
+}
+
+/** One box whose own overflow rule cuts its content off vertically. */
+interface ClippedBox {
+  /** Position inside `#storybook-root`, stable between the two reads of one render. */
+  path: string
+  tag: string
+  clientHeight: number
+  scrollHeight: number
+}
+
+/**
+ * Every box inside the story canvas whose vertical overflow is CLIPPED and whose
+ * content is taller than the box.
+ *
+ * **Vertical only, deliberately.** A box that clips horizontally is usually a
+ * carousel viewport, a scroller, or a `text-overflow: ellipsis` label — designed
+ * truncation with the content still reachable, which is not what SC 1.4.4 or SC
+ * 1.4.12 call loss of content. Vertical clipping is the failure both criteria
+ * actually produce: bigger text or looser leading inside a box whose height was
+ * fixed by the author, with the last line cut off and no way to reach it. Adding
+ * the horizontal axis would report ~every carousel and data table in the
+ * catalogue and get the lane switched off.
+ *
+ * `overflow: auto`/`scroll` is excluded for the same reason: the content is
+ * reachable. Zero-height boxes are excluded because a collapsed accordion panel
+ * is `height: 0; overflow: hidden` holding its full content, which is a
+ * disclosure pattern, not a clip. Portalled content (a dialog teleported to
+ * `<body>`) is out of this scope, exactly as it is for the focus-indicator
+ * assertion above.
+ */
+async function measureVerticalClipping(page: import('@playwright/test').Page): Promise<ClippedBox[]> {
+  return page.evaluate(() => {
+    const root = document.querySelector('#storybook-root')
+    if (root === null)
+      return []
+
+    function pathOf(element: Element): string {
+      const parts: string[] = []
+      let node: Element | null = element
+      while (node !== null && node !== root) {
+        const parent: HTMLElement | null = node.parentElement
+        const index = parent === null ? 0 : [...parent.children].indexOf(node)
+        parts.unshift(`${node.tagName}[${index}]`)
+        node = parent
+      }
+      return parts.join('>')
+    }
+
+    const out: { path: string, tag: string, clientHeight: number, scrollHeight: number }[] = []
+    for (const el of [root, ...root.querySelectorAll('*')]) {
+      const style = getComputedStyle(el)
+      if (style.overflowY !== 'hidden' && style.overflowY !== 'clip')
+        continue
+      const rect = el.getBoundingClientRect()
+      if (rect.width === 0 || rect.height === 0 || !el.checkVisibility())
+        continue
+      if ((el.textContent ?? '').trim() === '')
+        continue
+      // 2px of tolerance: sub-pixel layout and a rounded corner's clip both land
+      // inside it, and neither hides a line of text.
+      if (el.scrollHeight - el.clientHeight <= 2)
+        continue
+      out.push({
+        path: pathOf(el),
+        tag: el.tagName.toLowerCase(),
+        clientHeight: el.clientHeight,
+        scrollHeight: el.scrollHeight,
+      })
+    }
+    return out
+  })
+}
+
+/**
+ * Assert the condition introduced no new clipping.
+ *
+ * The comparison is against the SAME render with the condition's stylesheet
+ * switched off, not against a stored baseline: a box that already clips at the
+ * default font size is a defect of some other kind, and attributing it to SC
+ * 1.4.4 would make the first run of this lane a list of 88 pre-existing design
+ * decisions that nobody could act on.
+ */
+async function expectNoNewClipping(
+  page: import('@playwright/test').Page,
+  component: string,
+  condition: string,
+): Promise<void> {
+  const before = await withConditionSuspended(page, () => measureVerticalClipping(page))
+  const after = await measureVerticalClipping(page)
+  const baseline = new Set(before.map(box => box.path))
+  const introduced = after
+    .filter(box => !baseline.has(box.path))
+    .map(box => `${box.tag} ${box.path} clips ${box.scrollHeight - box.clientHeight}px `
+      + `(content ${box.scrollHeight}px in a ${box.clientHeight}px box)`)
+
+  expect(
+    introduced,
+    `${component} loses content under ${condition}: text is cut off by a box that does not clip it at the default`,
+  ).toEqual([])
 }
 
 /**

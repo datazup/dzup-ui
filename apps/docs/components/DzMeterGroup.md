@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzMeterGroup
 
 Segmented proportional meter with legend.
@@ -46,12 +50,11 @@ never as asserted.
 :::
 
 
-## Props (10, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (9, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -142,7 +145,7 @@ examples for.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `80ce301`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -151,7 +154,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 10 | 10 | 3 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 9 | 9 | 3 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 4 | 4 | 4 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -160,8 +163,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `7f340779` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -171,7 +174,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `a01965fa`
 
 ### WCAG 2.2 criteria in scope (9)
 

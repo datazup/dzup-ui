@@ -30,6 +30,7 @@ import type { DzAnchorEmits, DzAnchorItem, DzAnchorProps, DzAnchorSlots } from '
 import { computed, h, toRef, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzMotion } from '../../composables/provider/useDzMotion.ts'
+import { useDzUrlGuard } from '../../composables/provider/useDzUrlPolicy.ts'
 import { useScrollSpy } from '../../composables/useScrollSpy/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -149,6 +150,16 @@ const rootStyle = computed<Record<string, string>>(() => ({
 }))
 
 /**
+ * The URL policy (ADR-20 §12, TASK-R2-O4).
+ *
+ * `items[].href` is a host-supplied URL rendered into an `<a>` by the recursive
+ * renderer below — the sink TASK-N1-O5 measured as unguarded (`S3`/`S4`).
+ * In-page fragments are the intended use and carry no scheme, so every
+ * legitimate `DzAnchor` item is admitted unchanged.
+ */
+const guardUrl = useDzUrlGuard('DzAnchor')
+
+/**
  * Recursive list renderer. A hoisted function declaration so it can reference
  * itself for nested `children`, closing over the active state, styles, slots and
  * click handler. Returns a VNode tree consumed by the `AnchorTree` functional
@@ -160,6 +171,7 @@ function renderList(list: DzAnchorItem[], level: number): VNode {
     { 'class': cn(anchorVariants().list(), props.ui?.list), 'data-part': 'list', 'data-level': level },
     list.map((item) => {
       const isActive = activeHref.value === item.href
+      const url = guardUrl(item.href, 'items[].href')
       const linkClass = anchorVariants({ active: isActive, disabled: item.disabled }).link()
       const linkChildren: VNodeArrayChildren | string = slots.item
         ? (slots.item({ item, active: isActive, level }) as VNodeArrayChildren)
@@ -168,7 +180,15 @@ function renderList(list: DzAnchorItem[], level: number): VNode {
         h(
           'a',
           {
-            'href': item.href,
+            // A refused URL renders the SAME element with no `href`. This is
+            // the one of the six components with no non-link branch to fall
+            // into: the tree is `<li><a>`, and an `<a>` without an `href` is
+            // already not a link — no implicit `link` role, not in the tab
+            // order, not activatable — so the outline keeps its shape and the
+            // entry stops navigating. Swapping the tag to `button` would put a
+            // button inside a table of contents and change the APG `link`
+            // pattern this component is measured against.
+            'href': url.href,
             'class': cn(linkClass, props.ui?.item),
             'data-part': 'item',
             'style': {
@@ -178,7 +198,10 @@ function renderList(list: DzAnchorItem[], level: number): VNode {
             'aria-disabled': item.disabled || undefined,
             'tabindex': item.disabled ? -1 : undefined,
             'data-active': isActive ? '' : undefined,
-            'onClick': (event: MouseEvent) => handleClick(event, item),
+            'data-state': url.rejected ? 'url-rejected' : undefined,
+            'onClick': url.rejected
+              ? (event: MouseEvent) => { event.preventDefault() }
+              : (event: MouseEvent) => handleClick(event, item),
           },
           linkChildren,
         ),

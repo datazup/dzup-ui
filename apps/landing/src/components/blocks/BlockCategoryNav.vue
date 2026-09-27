@@ -15,7 +15,7 @@ import {
   ShoppingCart,
   Table2,
   TextCursorInput,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 /** Selected category — drives which panel the page renders. */

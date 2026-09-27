@@ -31,7 +31,7 @@ import type {
  * />
  * ```
  */
-import { Plus, X } from 'lucide-vue-next'
+import { Plus, X } from '@lucide/vue'
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'

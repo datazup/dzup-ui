@@ -4,6 +4,18 @@
   "version": "0.1.0",
   "description": "DOM test-environment support and anatomy conformance for dzup-ui consumers",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datazup/dzup-ui.git",
+    "directory": "packages/testing"
+  },
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 128",
+    "safari >= 16.4",
+    "ios_saf >= 16.4"
+  ],
   "sideEffects": [
     "./dist/vitest.js"
   ],

@@ -128,7 +128,9 @@
       "lastPage": "Go to last page"
     },
     "DzPasswordInput": {
-      "loading": "Loading"
+      "loading": "Loading",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     },
     "DzPopconfirm": {
       "confirm": "Confirm",
@@ -136,6 +138,10 @@
     },
     "DzRating": {
       "starTitle": "{count, plural, one {# star} other {# stars}}"
+    },
+    "DzResizableHandle": {
+      "shrinkPane": "Shrink panel",
+      "growPane": "Grow panel"
     },
     "DzScrollProgress": {
       "ariaLabel": "Page scroll progress"
@@ -156,7 +162,9 @@
       "closeTab": "Close tab"
     },
     "DzTableCell": {
-      "resizeColumn": "Resize column"
+      "resizeColumn": "Resize column",
+      "narrowColumn": "Narrow column",
+      "widenColumn": "Widen column"
     },
     "DzTagsInput": {
       "count": "{count, plural, one {# tag} other {# tags}}",

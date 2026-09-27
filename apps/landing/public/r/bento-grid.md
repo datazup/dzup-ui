@@ -35,7 +35,7 @@ import {
   DzPanel,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowDownRight, ArrowUpRight, Sparkles } from 'lucide-vue-next'
+import { ArrowDownRight, ArrowUpRight, Sparkles } from '@lucide/vue'
 
 interface Metric {
   label: string

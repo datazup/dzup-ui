@@ -4,7 +4,7 @@
  * notifications — never lorem ipsum (§7 "realistic content").
  */
 import type { Component } from 'vue'
-import { Archive, AtSign, Bell, Inbox, Settings } from 'lucide-vue-next'
+import { Archive, AtSign, Bell, Inbox, Settings } from '@lucide/vue'
 
 /** A sidebar navigation entry. */
 export interface NavItem {

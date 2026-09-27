@@ -21,7 +21,7 @@ import type { DzIconButtonUi } from './DzIconButton.anatomy.ts'
 
 /** Props for the DzIconButton component */
 export interface DzIconButtonProps {
-  /** Icon component to render (from lucide-vue-next or similar) */
+  /** Icon component to render (from @lucide/vue or similar) */
   icon: Component
   /** Accessible label -- REQUIRED since there is no visible text */
   ariaLabel?: string

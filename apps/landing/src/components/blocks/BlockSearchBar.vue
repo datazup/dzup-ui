@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UseBlockSearch } from '../../composables/useBlockSearch.ts'
 import { DzSearchInput, DzText, DzVisuallyHidden } from '@dzup-ui/core'
-import { X } from 'lucide-vue-next'
+import { X } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { DzOdometer } from '../../motion/index.ts'
 

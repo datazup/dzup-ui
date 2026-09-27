@@ -16,6 +16,7 @@ import type { DzButtonEmits, DzButtonProps, DzButtonSlots } from './DzButton.typ
  */
 import { computed, getCurrentInstance, inject, isProxy, markRaw, toRaw, useAttrs } from 'vue'
 import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzUrlGuard } from '../../composables/provider/useDzUrlPolicy.ts'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { DZ_BUTTON_GROUP_KEY } from './DzButtonGroup.types.ts'
@@ -81,8 +82,33 @@ const resolvedDisabled = computed(() => props.disabled || (groupContext?.disable
 const isInert = computed(() => resolvedDisabled.value || props.loading)
 
 /**
+ * The URL policy (ADR-20 §12, TASK-R2-O4).
+ *
+ * `href` is a host-supplied URL that becomes a navigation, which is the sink
+ * TASK-N1-O5 measured as unguarded — nine hostile schemes reached this
+ * attribute verbatim (`S1`/`S2`). A refused value renders the component as the
+ * `<button>` it already knows how to be, so `<DzButton href="javascript:void(0)"
+ * @click="…">` — the legacy idiom this policy breaks — keeps working as a
+ * button with the consumer's handler attached.
+ */
+const guardUrl = useDzUrlGuard('DzButton')
+
+/** What would be bound to `href` before the policy sees it. */
+const hrefCandidate = computed<string | undefined>(() =>
+  props.href ?? (typeof props.to === 'string' ? props.to : undefined),
+)
+
+const urlDecision = computed(() =>
+  guardUrl(hrefCandidate.value, props.href === undefined ? 'to' : 'href'),
+)
+
+/**
  * Resolved root element/component for polymorphic rendering.
  * Priority: explicit `as` > `href` (renders <a>) > `to` (renders router-link) > 'button'
+ *
+ * A refused `href` does **not** make this an anchor: an `<a>` that carries no
+ * `href` is not a link, and leaving the tag as `a` would produce an element
+ * with a link's appearance, no role and no keyboard reachability.
  */
 const computedTag = computed(() => {
   if (props.as) {
@@ -93,7 +119,7 @@ const computedTag = computed(() => {
     return props.as
   }
   if (props.href)
-    return 'a'
+    return urlDecision.value.rejected ? 'button' : 'a'
   if (props.to) {
     const routerLink = instance?.appContext.components.RouterLink
     return routerLink ? markRaw(routerLink) : 'a'
@@ -166,7 +192,7 @@ const { testId: dzTestId } = useDzTestIds()
     :type="isButton ? type : undefined"
     :class="classes"
     :disabled="isButton ? (resolvedDisabled || undefined) : undefined"
-    :href="isAnchor && !resolvedDisabled ? (href ?? (to && typeof to === 'string' ? to : undefined)) : undefined"
+    :href="isAnchor && !resolvedDisabled ? urlDecision.href : undefined"
     :to="!isAnchor && !isButton && to ? to : undefined"
     :role="!isButton ? 'button' : undefined"
     :tabindex="!isButton && isInert ? -1 : (!isButton ? 0 : undefined)"
@@ -176,7 +202,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     data-part="root"
-    :data-state="loading ? 'loading' : resolvedDisabled ? 'disabled' : 'idle'"
+    :data-state="urlDecision.rejected ? 'url-rejected' : loading ? 'loading' : resolvedDisabled ? 'disabled' : 'idle'"
     :data-tone="resolvedTone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"

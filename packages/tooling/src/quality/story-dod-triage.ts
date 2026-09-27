@@ -116,7 +116,7 @@ export function triage(
     }
   }
 
-  const byCheck: TriageSummary['byCheck'] = {}
+  const byCheck: Record<string, TriageSummary['byCheck'][string]> = {}
   for (const result of results) {
     if (result.level !== 'report')
       continue

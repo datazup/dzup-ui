@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzMenu, DzMenuItem, DzMenuSeparator, DzText } from '@dzup-ui/core'
-import { Archive, ChevronDown, Info, Pencil, Share2, Trash2 } from 'lucide-vue-next'
+import { Archive, ChevronDown, Info, Pencil, Share2, Trash2 } from '@lucide/vue'
 import { ref } from 'vue'
 import { DzNativePopover, useReducedMotion } from '../../motion/index.ts'
 

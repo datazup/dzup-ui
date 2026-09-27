@@ -156,6 +156,13 @@ hold. The handoff is complete through §9 and its appendix.
 
 ## Owner decisions accumulated (nothing below is an agent call)
 
+> **Appended 2026-09-22 (TASK-R0-O1).** Every decision below is now consolidated,
+> with its state and a recommendation, in
+> [`../program-2026-09-04/reports/owner-decision-register-2026-09.md`](../program-2026-09-04/reports/owner-decision-register-2026-09.md).
+> Nothing here is superseded — the register cites this section by path and does
+> not restate it. Measured backlog across all programmes at `527dbd1`:
+> **298 decisions raised, 217 open** (README §7's "~125" was an estimate).
+
 | # | Decision | Raised by |
 |---|---|---|
 | **Name an AT tester and adopt a cadence.** This is TASK-N1-O4's `<owner_gate>` itself and nothing downstream moves without it. Wave 1 (`nvda-firefox` + `jaws-chrome` over the 22 Tier C/D components) is **44 cells, ~21 h**; the full six-pair Tier C/D sweep is **132 cells, ~75 h**. | O4 |

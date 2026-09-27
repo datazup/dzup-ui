@@ -1,7 +1,7 @@
 /**
- * Capability-matrix validator (TASK-OSS-P5-06).
+ * Capability-matrix validator (TASK-OSS-P5-06, extended by TASK-R2-O1).
  *
- * Four gates:
+ * Six gates:
  *
  *   1. **freshness** — the committed `capability-matrix.json` equals what the
  *      generator produces now, with the `sourceCommit` and per-row
@@ -19,23 +19,53 @@
  *   4. **inputs** — an absent input is reported by name. Without this, a whole
  *      column of `unrun` reads as a catalog-wide failure when it is one
  *      artifact nobody generated.
+ *   5. **browser-degradation** (TASK-R2-O1) — a `{component, engine, condition}`
+ *      cell the **committed** `e2e/matrix/browser-evidence.json` records as
+ *      `pass` may not read `unrun` or `fail` in the working tree. `unrun` is
+ *      what a lane that quietly stopped running looks like from the outside, and
+ *      it is indistinguishable from one that was never wired up unless something
+ *      refuses it. The message names the component, the engine and the
+ *      condition, because "the browser matrix got worse" is not actionable.
+ *   6. **browser-shape** (TASK-R2-O1) — the ledger's declared engines and
+ *      conditions must equal what `playwright.config.ts` declares. The lane went
+ *      from six conditions to eight in TASK-R2-O5 and three documents went on
+ *      saying six; a ledger that claimed 18/18 projects while the config
+ *      declared 24 would read as complete coverage of a lane it had not run.
  *
- * Gates 3 and 4 report; 1 and 2 fail. That split is the packet's own rule: the
- * page exists to make gaps visible, and a validator that failed on every
- * visible gap would be a validator people delete.
+ * Gates 3 and 4 report; 1, 2, 5 and 6 fail. That split is the packet's own rule:
+ * the page exists to make gaps visible, and a validator that failed on every
+ * visible gap would be a validator people delete. A gap that *used to be
+ * evidence* is the exception — that is a regression, not a gap.
  *
  * Usage:
  *   tsx packages/tooling/src/validators/capability-matrix.ts
  *   tsx packages/tooling/src/validators/capability-matrix.ts --all
  *
+ * Two escape hatches exist for driving gate 5 by hand, and both print a banner
+ * so a green run under one can never be mistaken for a real one:
+ * `DZUP_BROWSER_EVIDENCE_BASELINE` and `DZUP_BROWSER_EVIDENCE_CURRENT` replace
+ * the two sides of the comparison with files on disk. They are how the seeded
+ * regression in the TASK-R2-O1 handoff is demonstrated end-to-end without
+ * touching the tracked ledger.
+ *
  * Exit code 1 if a hard gate fails.
  */
 
+import type { BrowserEvidenceLedger } from '../quality/browser-evidence.ts'
 import type { CapabilityMatrix } from '../quality/capability-matrix.ts'
+import { execFileSync } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { ROOT } from '../ownership/generate-ownership-manifest.ts'
+import {
+  BROWSER_EVIDENCE_PATH,
+  checkBrowserDegradation,
+  readBrowserEvidence,
+  readDeclaredMatrixProjects,
+} from '../quality/browser-evidence.ts'
+import { CELL_STATES } from '../quality/capability-matrix.ts'
 import {
   buildCapabilityMatrix,
   CAPABILITY_MATRIX_PATH,
@@ -44,9 +74,72 @@ import {
 import { stripComponentCommits } from '../quality/git.ts'
 
 export interface CapabilityViolation {
-  rule: 'freshness' | 'tier-d' | 'stale' | 'inputs'
+  rule: 'freshness' | 'tier-d' | 'stale' | 'inputs' | 'browser-degradation' | 'browser-shape'
   level: 'error' | 'report'
   message: string
+}
+
+/**
+ * The ledger as `HEAD` has it, or `undefined` when HEAD has no copy yet.
+ *
+ * Read through `git show` rather than from a second file on disk, because the
+ * question the gate asks is "what has this repository *committed* as true", and
+ * the answer to that lives in git and nowhere else. A first landing has no
+ * committed copy; the gate says so and passes, which is the only honest thing it
+ * can do and is stated in the output rather than left to be inferred.
+ */
+export function readCommittedBrowserEvidence(): BrowserEvidenceLedger | undefined {
+  const override = process.env.DZUP_BROWSER_EVIDENCE_BASELINE
+  if (override !== undefined && override !== '')
+    return JSON.parse(readFileSync(override, 'utf8')) as BrowserEvidenceLedger
+  try {
+    const json = execFileSync('git', ['show', 'HEAD:e2e/matrix/browser-evidence.json'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    })
+    return JSON.parse(json) as BrowserEvidenceLedger
+  }
+  catch {
+    return undefined
+  }
+}
+
+/**
+ * Gate 6 — the ledger's declared lane shape against `playwright.config.ts`.
+ *
+ * Exported so `browser-evidence.spec.ts` can drive it; the numbers it compares
+ * are the ones a reader of the ledger would quote.
+ */
+export function checkBrowserShape(ledger: BrowserEvidenceLedger): CapabilityViolation[] {
+  const declared = readDeclaredMatrixProjects()
+  const out: CapabilityViolation[] = []
+  const compare = (name: 'engines' | 'conditions', want: string[], got: readonly string[]) => {
+    if (want.join(',') === [...got].join(','))
+      return
+    out.push({
+      rule: 'browser-shape',
+      level: 'error',
+      message: `e2e/matrix/browser-evidence.json declares ${name} [${got.join(', ')}] and `
+        + `playwright.config.ts declares [${want.join(', ')}]. The ledger would report coverage `
+        + `of a lane that is not the lane. Re-run the projection: `
+        + `\`yarn generate:browser-evidence\`.`,
+    })
+  }
+  compare('engines', declared.engines, ledger.engines)
+  compare('conditions', declared.conditions, ledger.conditions)
+
+  const expected = declared.engines.length * declared.conditions.length
+  if (ledger.totals.projects !== expected) {
+    out.push({
+      rule: 'browser-shape',
+      level: 'error',
+      message: `e2e/matrix/browser-evidence.json totals ${ledger.totals.projects} projects; `
+        + `playwright.config.ts declares ${declared.engines.length} engines × `
+        + `${declared.conditions.length} conditions = ${expected}.`,
+    })
+  }
+  return out
 }
 
 /** Run the content gates. Pure — this is what the unit tests drive. */
@@ -112,6 +205,37 @@ if (isMain) {
   const fresh = buildCapabilityMatrix()
   const violations = checkCapabilityMatrix(fresh)
 
+  // Gates 5 and 6 — the browser ledger (TASK-R2-O1).
+  const currentOverride = process.env.DZUP_BROWSER_EVIDENCE_CURRENT
+  const baselineOverride = process.env.DZUP_BROWSER_EVIDENCE_BASELINE
+  const overridden = (currentOverride ?? '') !== '' || (baselineOverride ?? '') !== ''
+  const current = readBrowserEvidence(
+    (currentOverride ?? '') === '' ? BROWSER_EVIDENCE_PATH : currentOverride!,
+  )
+  const committed = readCommittedBrowserEvidence()
+  let degradationNote: string
+  if (current === undefined) {
+    degradationNote = 'no working-tree browser ledger — gate inert (run '
+      + '`yarn generate:browser-evidence`)'
+  }
+  else {
+    violations.push(...checkBrowserShape(current))
+    if (committed === undefined) {
+      degradationNote = 'no committed browser ledger at HEAD yet, so there is nothing to have '
+        + 'degraded FROM. The gate is inert on this first landing and becomes live the moment '
+        + 'the owner commits the ledger.'
+    }
+    else {
+      const degraded = checkBrowserDegradation(committed, current)
+      for (const d of degraded)
+        violations.push({ rule: 'browser-degradation', level: 'error', message: d.message })
+      const passesAtHead = committed.components
+        .reduce((n, c) => n + Object.values(c.cells).filter(r => r === 'pass').length, 0)
+      degradationNote = `${passesAtHead} committed \`pass\` cell(s) compared; `
+        + `${degraded.length} degraded`
+    }
+  }
+
   if (!existsSync(CAPABILITY_MATRIX_PATH)) {
     violations.push({
       rule: 'freshness',
@@ -149,13 +273,16 @@ if (isMain) {
   const inputs = violations.filter(v => v.rule === 'inputs')
 
   console.warn('Capability matrix — TASK-OSS-P5-06\n')
-  console.warn('  tier   pass  present  stale  unrun  excepted')
+  // Driven from CELL_STATES rather than a hand-written column list (TASK-R2-O2).
+  // The list used to name five states; when `fail` was added, a hardcoded header
+  // would have gone on printing five and a failing cell would have been counted
+  // into a column nobody printed — a summary that hides the one state it most
+  // matters to show.
+  console.warn(`  tier  ${CELL_STATES.map(s => s.padStart(9)).join('')}`)
   for (const tier of ['A', 'B', 'C', 'D'] as const) {
     const t = fresh.totals[tier]
     console.warn(
-      `  ${tier}     ${String(t.pass).padStart(5)}${String(t.present).padStart(9)}`
-      + `${String(t.stale).padStart(7)}${String(t.unrun).padStart(7)}`
-      + `${String(t.excepted).padStart(10)}`,
+      `  ${tier}    ${CELL_STATES.map(s => String(t[s] ?? 0).padStart(9)).join('')}`,
     )
   }
   console.warn('\n  Counts are per tier and per state on purpose. One percentage over cells of')
@@ -163,6 +290,36 @@ if (isMain) {
 
   for (const v of inputs)
     console.warn(`\n  ! ${v.message}`)
+
+  if (overridden) {
+    console.warn(
+      `\n  !! browser-degradation gate is running under an ENV OVERRIDE — this run proves `
+      + `nothing about the tracked ledger.`,
+    )
+    if ((baselineOverride ?? '') !== '')
+      console.warn(`     DZUP_BROWSER_EVIDENCE_BASELINE=${baselineOverride}`)
+    if ((currentOverride ?? '') !== '')
+      console.warn(`     DZUP_BROWSER_EVIDENCE_CURRENT=${currentOverride}`)
+  }
+  console.warn(`\n  browser-degradation: ${degradationNote}`)
+
+  // Visual coverage is a per-row FIELD, not an evidence cell (N1-O6 §4.2), so it
+  // is absent from the tier table above by design. It is REPORTED here — this
+  // block changes no violation and no exit code — because a reader auditing the
+  // visual lane through this command otherwise learns nothing from it, and
+  // because `covered` on a platform CI does not run is the kind of claim that
+  // must be printed next to its qualifier rather than looked up (TASK-R2-O6).
+  const visual: Record<string, number> = { 'covered': 0, 'stale': 0, 'not-covered': 0 }
+  for (const row of fresh.rows)
+    visual[row.visual.state] = (visual[row.visual.state] ?? 0) + 1
+  const ledgerNote = fresh.inputs['visual-baselines']?.available === true
+    ? ''
+    : '\n    no acceptance ledger — every row reads `not-covered` for want of an input'
+  console.warn(
+    `\n  visual coverage (a per-row field, not a cell — it is in neither total above):`
+    + `\n    covered ${visual.covered} · stale ${visual.stale} · `
+    + `not-covered ${visual['not-covered']} of ${fresh.rows.length}${ledgerNote}`,
+  )
 
   if (stale.length > 0) {
     console.warn(`\n  ${stale.length} stale cell(s)`)

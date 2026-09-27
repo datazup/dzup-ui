@@ -10,7 +10,8 @@
  *   rename-imports   Rewrite old import paths to @dzup-ui/core and @dzup-ui-pro/pro
  *   rename-props     Rename deprecated props to vNext equivalents
  *   rename-events    Rename deprecated events to vNext equivalents
- *   all              Run all transforms in sequence
+ *   swap-icon-library  lucide-vue-next -> @lucide/vue (owner-gated; not in `all`)
+ *   all              Run the vNext migration transforms in sequence
  *
  * Options:
  *   --dry-run        Preview changes without writing files
@@ -28,7 +29,7 @@ import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import process from 'node:process'
 
-const TRANSFORMS = ['rename-imports', 'rename-props', 'rename-events', 'all']
+const TRANSFORMS = ['rename-imports', 'rename-props', 'rename-events', 'swap-icon-library', 'all']
 
 function printHelp() {
   process.stdout.write(`
@@ -41,7 +42,11 @@ Transforms:
   rename-imports   Rewrite old import paths to @dzup-ui/core and @dzup-ui-pro/pro
   rename-props     Rename deprecated props to vNext equivalents
   rename-events    Rename deprecated events to vNext equivalents
-  all              Run all transforms in sequence
+  swap-icon-library  Rewrite lucide-vue-next imports to @lucide/vue. Deliberately
+                   NOT part of "all": it is an owner decision -- see
+                   docs/program-2026-09-04/reports/icon-swap-contract-2026-09.md.
+                   Run "yarn lint --fix" afterwards.
+  all              Run the vNext migration transforms in sequence
 
 Options:
   --dry-run        Preview changes without writing files

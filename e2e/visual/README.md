@@ -11,7 +11,7 @@
 |---|---|---|---|
 | screen-level | `gallery.spec.ts` | 8 demo screens × light/dark | 16, `chromium-linux` |
 | theme recipes | `theme-recipe-matrix.spec.ts` | 2 screens × 9 theme/density/direction/motion cases | 18, `chromium-linux` |
-| **per-component** | `component-baselines.spec.ts` | every component in an opted-in **family**, light + dark — plus declared **stress fixtures** over those families | 16 + 8 fixture, `chromium-win32` (pilot: `buttons`) |
+| **per-component** | `component-baselines.spec.ts` | every component in an opted-in **family**, light + dark — plus declared **stress fixtures** over those families | 16 + 8 fixture, `chromium-linux` (pilot: `buttons`) |
 
 The first two answer "does the composition still look right". Only the third
 answers "which component moved", which is the question TASK-N1-O3 had to answer
@@ -64,10 +64,23 @@ because font rasterisation genuinely differs between them. So "which platform is
 authoritative" is a decision somebody makes, and it is recorded as
 `scope.platform`.
 
-Right now `scope.platform` is `win32` and `scope.ciPlatform` is `linux`. They
-disagree, and `validate:visual-baselines` says so on every run. Until one accept
-pass is made on Linux, **the per-component lane is developer-local evidence and
-cannot fail a CI run.**
+Since 2026-09-26 `scope.platform` and `scope.ciPlatform` are both `linux`, and
+"linux" means one exact environment: the Playwright image the CI `visual` job
+runs in, pinned by digest in `.github/workflows/ci.yml`. A bare Linux host is
+not enough. Two apt font packages changed 20 of 24 baselines in the TASK-R2-O6
+probes, 10 of them in size. So **capture and accept inside that image**, with
+the repository mounted at its own path:
+
+```bash
+docker run --rm --ipc=host -u "$(id -u):$(id -g)" -e HOME=/tmp \
+  -v "$PWD:$PWD" -w "$PWD" <the image@digest from ci.yml> bash -c \
+  'mkdir -p /tmp/bin && corepack enable --install-directory /tmp/bin \
+   && PATH=/tmp/bin:$PATH yarn visual:accept --component … --theme … --by … --reason …'
+```
+
+Build Storybook first (`DZUP_GALLERY=1 yarn storybook:build`); the bytes it
+serves do not depend on the host. From a linked worktree, also mount the owning
+repository's `.git` so the tool can read the capture commit.
 
 ## The authority rule
 

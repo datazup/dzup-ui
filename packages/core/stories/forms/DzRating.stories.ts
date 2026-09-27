@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { Heart } from 'lucide-vue-next'
+import { Heart } from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import {
   DzFormDescription,

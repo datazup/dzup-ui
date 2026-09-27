@@ -3,7 +3,7 @@
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 
-import type { LucideIcon } from 'lucide-vue-next'
+import type { LucideIcon } from '@lucide/vue'
 import {
   Bell,
   FolderKanban,
@@ -16,7 +16,7 @@ import {
   TrendingDown,
   TrendingUp,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 interface NavItem {

@@ -79,7 +79,62 @@ export function readCeilings(path: string = CEILINGS_PATH): Record<string, numbe
   return out
 }
 
-/** The nine measured debt numbers, derived from the artifact. */
+/**
+ * A markdown-visible HTML tag in a description — TASK-R1-O5.
+ *
+ * Every consumer of a description renders it as markdown: the docs pages, the
+ * `llms.txt` endpoints, the MCP tool payloads and the registry item prose. A
+ * tag written bare (`renders as <a>`) is therefore raw HTML in all four, and in
+ * a VitePress page it is a Vue *component* — which is exactly the build failure
+ * D1 F-1 recorded (`DzBreadcrumb.md`, "Element is missing end tag"). The docs
+ * generator's `escapeForVue()` neutralises it for the SITE, and must keep doing
+ * so; but an escaper is a last line, not a fix, and it protects only the one
+ * consumer that has one. The fix is one backtick pair in the JSDoc, and this is
+ * the ratchet that keeps it there.
+ *
+ * Inline and fenced code spans are stripped first, because a tag inside
+ * backticks is already correct markdown everywhere.
+ */
+export function bareHtmlInDescription(text: string): string | null {
+  const withoutCode = text.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '')
+  return /<\/?[A-Z][\w-]*(?:\s[^<>]*)?>/i.exec(withoutCode)?.[0] ?? null
+}
+
+/** Every description field on a record, with a dotted path naming its member. */
+function describedMembers(record: ComponentMetaArtifact['components'][number]): Array<[string, string]> {
+  const out: Array<[string, string]> = [[record.name, record.description]]
+  for (const [kind, members] of [
+    ['props', record.props],
+    ['events', record.events],
+    ['slots', record.slots],
+    ['exposed', record.exposed],
+  ] as const) {
+    // Not `for…of` on the raw field: the schema clause above exists precisely
+    // because a record can arrive with `props` as something other than an
+    // array, and a ratchet that threw on it would replace that clause's precise
+    // message with a TypeError from this function.
+    if (!Array.isArray(members))
+      continue
+    for (const m of members as ReadonlyArray<{ name: string, description: string }>)
+      out.push([`${record.name}.${kind}.${m.name}`, m.description])
+  }
+  return out
+}
+
+/** Members whose description carries a bare (un-backticked) HTML tag. */
+export function membersWithBareHtml(artifact: ComponentMetaArtifact): Array<{ member: string, tag: string }> {
+  const out: Array<{ member: string, tag: string }> = []
+  for (const record of artifact.components) {
+    for (const [member, description] of describedMembers(record)) {
+      const tag = bareHtmlInDescription(description)
+      if (tag !== null)
+        out.push({ member, tag })
+    }
+  }
+  return out
+}
+
+/** The ten measured debt numbers, derived from the artifact. */
 export function measure(artifact: ComponentMetaArtifact, publicSymbols: Set<string>): Record<string, number> {
   const t = artifact.totals
   const recorded = new Set(artifact.components.map(c => c.name))
@@ -96,6 +151,7 @@ export function measure(artifact: ComponentMetaArtifact, publicSymbols: Set<stri
     componentsWithoutStaticTemplate: artifact.components.filter(
       c => c.stories.primary?.template === undefined,
     ).length,
+    descriptionsWithBareHtml: membersWithBareHtml(artifact).length,
   }
 }
 
@@ -254,6 +310,21 @@ export function checkComponentMeta(
           + `progress is recorded and cannot be given back.`,
       })
     }
+  }
+
+  // A bare tag is the one ratchet whose number alone is not actionable — the
+  // fix is a backtick pair in a named JSDoc block, so the members are named.
+  const bareHtml = membersWithBareHtml(artifact)
+  if (bareHtml.length > 0) {
+    violations.push({
+      rule: 'schema',
+      level: 'error',
+      message: `${bareHtml.length} description(s) carry a bare HTML tag: `
+        + `${bareHtml.slice(0, 5).map(b => `${b.member} ${b.tag}`).join(', ')}`
+        + `${bareHtml.length > 5 ? ', …' : ''}. Wrap the tag in backticks in the source JSDoc. `
+        + `Descriptions are rendered as markdown by the docs pages, llms.txt, the MCP payloads `
+        + `and the registry prose; only the docs generator has an escaper.`,
+    })
   }
 
   // ── 5. reachability ────────────────────────────────────────────────────────

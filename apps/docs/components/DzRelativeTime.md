@@ -46,12 +46,11 @@ never as asserted.
 :::
 
 
-## Props (12, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (11, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -184,7 +183,7 @@ component that renders the same way every time is the normal case for this.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `e0d1707`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -193,7 +192,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 12 | 12 | 3 declare a default, of which 7 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 11 | 11 | 3 declare a default, of which 7 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 1 | 1 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -202,8 +201,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `7f340779` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -213,7 +212,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `teleports`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `e0d17078`
+- **Component last changed at:** `a01965fa`
 
 ### WCAG 2.2 criteria in scope (11)
 

@@ -1,7 +1,7 @@
 ---
-"@dzup-ui/contracts": patch
-"@dzup-ui/core": patch
-"@dzup-ui/tokens": patch
+"@dzup-ui/contracts": minor
+"@dzup-ui/core": minor
+"@dzup-ui/tokens": minor
 ---
 
 **All six cascade layers are declared, so a consumer override wins by contract instead of by accident.**
@@ -50,6 +50,25 @@ CSS, which beats every library layer in either order. `yarn test:e2e:layer-order
 asserts all of this in chromium, firefox and webkit **against the packed
 tarballs**, because what a consumer receives is the built artifact and every step
 between source and artifact can drop a layer statement.
+
+**What can break, and what to do.** This is a `minor` because two placements
+of consumer CSS that used to win now lose. Both were measured in Chromium and
+Firefox against the packed tarballs of this release and of the one before it,
+in both stylesheet emit orders (`docs/qa/changeset-audit-2026-09-26/REPORT.md`):
+
+- **Rules you wrote inside `@layer dz-reset`.** The library used to leave that
+  name unregistered, so your `dz-reset` layer was appended last and beat
+  `dz-components` and `dz-tokens`. It is now the first, lowest layer, as ADR-19
+  §2 decided, and those rules lose. Move them to `@layer dz-overrides`, or make
+  them unlayered.
+- **Reset overrides inside `@layer dz-base`, in a sheet loaded before the
+  dzup stylesheets.** `box-sizing`, `body` margin and font, and
+  `scroll-behavior` moved from `dz-base` to `dz-reset`. A `dz-base` rule that
+  loads first now loses to them. Load the dzup stylesheets first, or move the
+  rule to `dz-overrides`.
+
+Unlayered CSS, `@layer dz-overrides`, `dz-components`, `dz-utilities` and a
+layer of your own name behave exactly as before, in every position.
 
 **`data-state` is no longer typed by a union a shipped component violated.**
 `DataAttributes['data-state']` was typed `DataState`, a closed eight-value list;

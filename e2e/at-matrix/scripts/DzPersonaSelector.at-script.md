@@ -115,7 +115,6 @@ The scaffold says this component owes 5 task(s):
 
 **Read from:** ARIA live regions; an empty popup states why it is empty.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -123,4 +122,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 - **D9** — affects `reach`. The clear button ignores `disabled`. On `core-forms-dzpersonaselector--disabled` a live "Clear selection" control is still present. It is out of the tab order, so keyboard-only pairs will not find it — but VoiceOver iOS and TalkBack reach controls by gesture, not by Tab, and are expected to reach and press it.
-

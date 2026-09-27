@@ -183,6 +183,7 @@ const context: DzTreeContext = {
   selectedKeys,
   selectable: toRef(() => props.selectable),
   checkable: toRef(() => props.checkable),
+  disabled: toRef(() => props.disabled),
   tabbableKey,
   itemId,
   toggleExpand,

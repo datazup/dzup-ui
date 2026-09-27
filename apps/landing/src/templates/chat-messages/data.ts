@@ -5,7 +5,7 @@
  * default conversation plus lighter histories for the rest so switching feels live.
  */
 import type { Component } from 'vue'
-import { Archive, MessageSquare, Phone, Settings, Users } from 'lucide-vue-next'
+import { Archive, MessageSquare, Phone, Settings, Users } from '@lucide/vue'
 
 /** A sidebar navigation entry for the app rail. */
 export interface NavItem {

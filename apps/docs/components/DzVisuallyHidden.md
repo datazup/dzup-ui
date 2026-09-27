@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzVisuallyHidden
 
 Screen-reader-only content wrapper.
@@ -173,7 +177,7 @@ component that renders the same way every time is the normal case for this.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `e0d1707`.
+last changed at `a01965f`.
 
 ## Extraction fidelity
 
@@ -191,8 +195,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `7f340779` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -202,7 +206,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `e0d17078`
+- **Component last changed at:** `a01965fa`
 
 ::: warning Recorded exceptions
 A requirement this component provably cannot meet. The row stays in the matrix and the reason

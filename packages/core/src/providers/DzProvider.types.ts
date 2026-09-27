@@ -2,8 +2,9 @@
  * DzProvider — type definitions (TASK-OSS-P4-02, ADR-20).
  *
  * One props object for the nine concerns ADR-20 fixed, the sanitizer its
- * amendment A6 added (TASK-R3-O2), and the theme contract ADR-09 already
- * shipped. Every prop is optional and **every prop is optional
+ * amendment A6 added (TASK-R3-O2), the URL policy its amendment A7 added
+ * (TASK-R2-O4), and the theme contract ADR-09 already shipped. Every prop is
+ * optional and **every prop is optional
  * for the same reason**: ADR-20 §3 says a provider overrides *the keys it
  * sets*, so an undefined prop is not "use the default" — it is "leave whatever
  * the ancestor decided alone". That distinction is what makes nesting compose
@@ -21,6 +22,7 @@ import type {
   DzMotionPreference,
   DzSanitizerOptions,
   DzTestIds,
+  DzUrlPolicyOptions,
 } from '@dzup-ui/contracts'
 import type { InjectionKey } from 'vue'
 import type { ThemePreference } from './DzThemeProvider.types.ts'
@@ -132,6 +134,26 @@ export interface DzProviderProps {
    * `useDzSanitizer()` throws in development if nothing then supplies it.
    */
   sanitizer?: DzSanitizerOptions | null
+  /**
+   * The organisation-wide URL policy for navigation sinks (TASK-R2-O4,
+   * ADR-20 amendment A7).
+   *
+   * Set once at the root: which schemes may become a live `<a href>`, and an
+   * explicit `allow` function for the cases a list cannot express. Partial — a
+   * nested provider narrowing `allowedSchemes` keeps the ancestor's `allow`.
+   *
+   * Omitted, the six navigation components enforce Core's default allowlist
+   * (`http`, `https`, `mailto`, `tel`, `sms`, plus relative and fragment URLs).
+   * A refused URL is **omitted**, never rewritten: the element renders as a
+   * non-link carrying `data-state="url-rejected"`, and development builds warn
+   * once per component, prop and scheme.
+   *
+   * There is deliberately **no `null` arm** and no per-component opt-out. A
+   * policy whose absent value is the safe value cannot be switched off by
+   * forgetting something, and a `:unsafe-href` prop would re-open the hole one
+   * call site at a time for exactly the consumers most likely to reach for it.
+   */
+  urlPolicy?: DzUrlPolicyOptions
   /** Test-id policy: whether they render at all, and under which attribute. */
   testIds?: Partial<DzTestIds>
   /**

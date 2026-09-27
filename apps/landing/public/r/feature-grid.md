@@ -17,7 +17,7 @@ import {
   Lock,
   Sparkles,
   Zap,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 /**
  * Feature grid — six feature cards, each with an icon, title, and short blurb.

@@ -1,12 +1,16 @@
 import type { AtMatrixIndex } from '../quality/at-matrix.ts'
 import { describe, expect, it } from 'vitest'
-import { AT_PAIRS, tasksFor } from '../quality/at-matrix.ts'
+import { requiredAtPairs } from '../../../contracts/src/quality-tiers.ts'
+import { ALL_TASKS, AT_PAIRS, tasksFor } from '../quality/at-matrix.ts'
 import { parseResults, renderHeader, RESULTS_MARKER } from '../quality/generate-at-matrix.ts'
 import { checkAtMatrix } from './at-matrix.ts'
 
 const PAIR = AT_PAIRS[0]!.id
 
-function index(rows: Partial<AtMatrixIndex['entries'][number]['rows'][number]>[] = []): AtMatrixIndex {
+function index(
+  rows: Partial<AtMatrixIndex['entries'][number]['rows'][number]>[] = [],
+  componentCommit = 'unknown',
+): AtMatrixIndex {
   return {
     schemaVersion: '1.0.0',
     generatedFrom: [],
@@ -18,9 +22,11 @@ function index(rows: Partial<AtMatrixIndex['entries'][number]['rows'][number]>[]
         pattern: 'button',
         file: 'e2e/at-matrix/DzThing.md',
         tasks: ['reach'],
-        componentCommit: 'unknown',
+        requiredPairs: requiredAtPairs('B'),
+        componentCommit,
         rows: rows.map(r => ({
           pair: PAIR,
+          task: ALL_TASKS,
           result: 'unrun',
           versions: '-',
           tester: '-',
@@ -99,14 +105,15 @@ describe('substance', () => {
 
 describe('staleness', () => {
   it('reports, rather than fails, a result taken before a change', () => {
+    // The entry is readonly, so the commit that post-dates the run is built
+    // into the index rather than written over it afterwards.
     const i = index([{
       result: 'pass',
       versions: 'NVDA 2025.3',
       tester: 'e.isic',
       date: '2026-08-24',
       sourceCommit: '0000000000000000000000000000000000000000',
-    }])
-    i.entries[0]!.componentCommit = '1111111111111111111111111111111111111111'
+    }], '1111111111111111111111111111111111111111')
 
     const v = checkAtMatrix(i, ['DzThing'], ['DzThing'])
     const stale = v.find(x => x.rule === 'stale')
@@ -134,7 +141,7 @@ describe('the generated file, round-tripped', () => {
     family: 'forms',
     tier: 'C' as const,
     pattern: 'combobox' as const,
-    securityBoundary: 'none' as const,
+    securityBoundary: ['none'] as const,
     traits: ['dataset' as const],
     wcag: ['3.3.1'],
     evidence: [],

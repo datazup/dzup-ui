@@ -46,8 +46,17 @@ export interface TierAssignment {
    * when `tier` is C or D.
    */
   readonly why?: string
-  /** Data boundary the component crosses. Defaults to `none`. */
-  readonly boundary?: SecurityBoundary
+  /**
+   * Data boundaries the component crosses. Defaults to `none`.
+   *
+   * A single value or a set (TASK-R2-O4). The set exists because `DzQRCode`
+   * crosses two — it encodes an arbitrary `value` into a machine-readable code
+   * AND renders a host-supplied `icon` as an `<img src>` — and a single value
+   * meant the second sink could not be declared at all (finding U3). The
+   * fourteen components that cross exactly one keep the scalar: a list of one
+   * is noise in a file whose job is to be read.
+   */
+  readonly boundary?: SecurityBoundary | readonly SecurityBoundary[]
   /** Required by the validator whenever `boundary` is set and not `none`. */
   readonly boundaryWhy?: string
   /** Behaviours that add evidence rows on their own. */
@@ -535,10 +544,19 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
   DzQRCode: {
     tier: 'A',
     pattern: 'none',
-    boundary: 'payload',
+    // TWO boundaries, and the second one is the whole reason the field became a
+    // set (TASK-N1-O5 finding U3 → TASK-R2-O4, owner decision O5-2). Until then
+    // `securityBoundary` held one value, so declaring `payload` meant the
+    // `url-policy` row was never asked for and the `icon` sink — a host-supplied
+    // URL rendered as `<img src>`, word for word the property DzImage's
+    // justification uses — was invisible to the matrix while being bound and
+    // asserted in `packages/core/security/boundary-bindings.ts`.
+    boundary: ['url', 'payload'],
     boundaryWhy: 'Encodes an arbitrary `value` into a machine-readable code. A camera will '
       + 'follow whatever URL that value turns out to be, so the payload leaves the origin '
-      + 'without a browser between it and the person scanning it.',
+      + 'without a browser between it and the person scanning it. Separately, the `icon` '
+      + 'prop is a host-supplied URL rendered as an `<img src>` logo over the code, which '
+      + 'is a subresource load and owes the url rows on its own.',
   },
   DzWatermark: { tier: 'A', pattern: 'none' },
 
@@ -584,9 +602,21 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
   DzSegmented: { tier: 'B', pattern: 'radio-group' },
   DzSidebar: {
     tier: 'C',
-    pattern: 'treeview',
-    why: 'A nested navigation tree that also owns a collapsed rail mode and, on small screens, '
-      + 'a teleported overlay — three focus contracts on one component.',
+    // TASK-R2-O2, closing N1-O4 §3d QA1 / owner decision #7. This said
+    // `treeview` and the component has never implemented one: DzSidebar.vue
+    // ships `role="navigation"` and DzSidebarItem.vue ships links carrying
+    // `aria-current="page"` — no `role="tree"`, no `treeitem`, no `aria-level`.
+    // APG recommends explicitly *against* the tree and menu patterns for a set
+    // of page links, so the component is right and the declaration was wrong.
+    // N1-O4 measured the cost of believing the declaration: writing the AT
+    // script against `treeview` would have manufactured 30 guaranteed failures
+    // (5 tasks × 6 pairings) for a metadata defect, and the script was written
+    // against the landmark contract instead, with a capitalised warning telling
+    // the tester not to file the mismatch again. That warning is now unnecessary.
+    pattern: 'landmarks',
+    why: 'A navigation landmark of links that also owns a collapsed rail mode and, on small '
+      + 'screens, a teleported overlay — three focus contracts on one component. Tier C is '
+      + 'earned by those contracts, not by the APG pattern, which is deliberately the simple one.',
     boundary: 'url',
     boundaryWhy: 'Navigation entries carry a host-supplied `href`.',
     traits: ['dataset', 'teleports'],

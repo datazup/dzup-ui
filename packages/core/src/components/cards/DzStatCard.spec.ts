@@ -43,6 +43,20 @@ describe('dzStatCard — Unit Tests', () => {
     expect(wrapper.text()).toContain('+12%')
   })
 
+  it('separates the trend value from the description with a space', () => {
+    const wrapper = mount(DzStatCard, {
+      props: { title: 'Revenue', value: 100, trend: 'up', trendValue: '+12%', description: 'vs. last month' },
+    })
+    expect(wrapper.find('[data-part="description"]').text()).toBe('+12% vs. last month')
+  })
+
+  it('adds no leading space to a description without a trend value', () => {
+    const wrapper = mount(DzStatCard, {
+      props: { title: 'Sales', value: 100, description: 'vs. last month' },
+    })
+    expect(wrapper.find('[data-part="description"]').element.textContent).toBe('vs. last month')
+  })
+
   it('renders icon component', () => {
     const IconComp = defineComponent({
       render() { return h('svg', { 'data-testid': 'icon' }) },

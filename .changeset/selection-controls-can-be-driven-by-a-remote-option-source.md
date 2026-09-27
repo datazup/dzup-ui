@@ -1,5 +1,5 @@
 ---
-"@dzup-ui/contracts": minor
+"@dzup-ui/contracts": patch
 "@dzup-ui/core": minor
 ---
 

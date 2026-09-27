@@ -24,7 +24,7 @@ export interface DzMegaMenuLink {
   label: string
   /** Stable key (falls back to `label` when omitted) */
   key?: string
-  /** URL to navigate to (renders as <a>); omit for button semantics */
+  /** URL to navigate to (renders as `<a>`); omit for button semantics */
   href?: string
   /** Secondary description line (rendered by the default #link template) */
   description?: string

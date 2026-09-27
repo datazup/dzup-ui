@@ -34,7 +34,7 @@ import {
   Redo2,
   Underline,
   Undo2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { reactive } from 'vue'
 
 interface Tip {

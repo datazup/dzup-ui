@@ -26,6 +26,21 @@ export interface DzOtpInputProps extends BaseAccessibilityProps, BaseValidationP
   type?: 'number' | 'text'
   /** Mask input values (like a password field) */
   mask?: boolean
+  /**
+   * Whether the cells are a **one-time code** the platform may autofill.
+   *
+   * Defaults to `true`, which is what the component is named for: each cell
+   * renders `autocomplete="one-time-code"`, so iOS, macOS and Android offer the
+   * code they just received in an SMS, and focus lands on the first empty cell
+   * rather than the cell that was tapped.
+   *
+   * That autofill is the *mechanism* WCAG 2.2 SC 3.3.8 Accessible
+   * Authentication (AA) accepts in place of asking the user to transcribe a code
+   * from another device — a cognitive-function test the criterion exists to
+   * remove. Set `:otp="false"` for a PIN or passcode the platform must not
+   * offer to fill, such as a local unlock code.
+   */
+  otp?: boolean
   /** Disabled state -- prevents interaction */
   disabled?: boolean
   /** Component size */

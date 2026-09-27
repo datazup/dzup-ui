@@ -340,3 +340,30 @@ describe('dzCombobox — Accessible Name (axe aria-input-field-name)', () => {
     expect(input.attributes('aria-label')).toBeUndefined()
   })
 })
+
+describe('dzCombobox — D9: a disabled control has no live clear button', () => {
+  it('defect D9 -- the clear control is disabled when the combobox is', () => {
+    // `ComboboxCancel`'s button had no `:disabled` binding while its sibling
+    // `ComboboxTrigger` did, so a disabled combobox holding a value still
+    // rendered a live, clickable Clear. `tabindex="-1"` kept keyboard users
+    // safe; pointer and AT users were not (N1-O1 defect D9).
+    const wrapper = mount(DzCombobox, {
+      props: { items, modelValue: 'apple', disabled: true },
+    })
+
+    const clear = wrapper.find('[data-part="clear"]')
+    expect(clear.exists()).toBe(true)
+    expect((clear.element as HTMLButtonElement).disabled).toBe(true)
+
+    // Nothing enabled inside a disabled control.
+    const enabled = wrapper.findAll('button').filter(b => !(b.element as HTMLButtonElement).disabled)
+    expect(enabled).toHaveLength(0)
+  })
+
+  it('defect D9 -- the clear control stays enabled when the combobox is not disabled', () => {
+    const wrapper = mount(DzCombobox, { props: { items, modelValue: 'apple' } })
+    const clear = wrapper.find('[data-part="clear"]')
+    expect(clear.exists()).toBe(true)
+    expect((clear.element as HTMLButtonElement).disabled).toBe(false)
+  })
+})

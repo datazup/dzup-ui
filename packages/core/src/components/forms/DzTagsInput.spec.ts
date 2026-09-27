@@ -241,3 +241,23 @@ describe('dzTagsInput — emits', () => {
     vi.useRealTimers()
   })
 })
+
+// -- D8: controlled/uncontrolled -------------------------------------------
+
+describe('dzTagsInput — D8: an external write after a user edit is honoured', () => {
+  it('defect D8 -- a parent that clears `v-model:value` after a token was added is obeyed', async () => {
+    // An array model is the case where D8 costs most: a form reset that leaves
+    // the user's tokens on screen looks like the reset worked and the data did
+    // not save. Bound with the legacy named model only (N1-O1 defect D8).
+    const wrapper = mountTags({ value: [] })
+
+    await typeAndKey(wrapper, 'apple', 'Enter')
+    expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toEqual(['apple'])
+
+    await wrapper.setProps({ value: ['apple'] })
+    expect(wrapper.text()).toContain('apple')
+
+    await wrapper.setProps({ value: [] })
+    expect(wrapper.text()).not.toContain('apple')
+  })
+})

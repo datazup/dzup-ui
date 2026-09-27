@@ -13,7 +13,7 @@ import {
   DzText,
   DzTimePicker,
 } from '@dzup-ui/core'
-import { CalendarCheck, Users } from 'lucide-vue-next'
+import { CalendarCheck, Users } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

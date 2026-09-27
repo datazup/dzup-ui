@@ -11,7 +11,7 @@ import {
   DzSwitch,
   DzText,
 } from '@dzup-ui/core'
-import { ChevronDown } from 'lucide-vue-next'
+import { ChevronDown } from '@lucide/vue'
 /**
  * Collapsible sections — a settings page of expandable panels built on DzPanel
  * and DzCollapse.

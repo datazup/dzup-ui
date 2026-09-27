@@ -1,6 +1,6 @@
 # ADR-20 — Provider contract: locale, direction, messages, formats, portals, motion, defaults, nonce, test ids
 
-- **Status:** Proposed (TASK-OSS-P4-01, 2026-08-21; amended by TASK-OSS-P4-02 and P4-03, 2026-08-21 — see *Amendments*)
+- **Status:** Accepted (owner, 2026-09-26; proposed by TASK-OSS-P4-01, 2026-08-21; amended by TASK-OSS-P4-02 and P4-03, 2026-08-21, TASK-R3-O2 2026-09-04, TASK-R2-O4 2026-09-18 and TASK-R0-O2 2026-09-22 — see *Amendments*)
 - **Extends:** ADR-09 (theme context), ADR-08 (compound context by provide/inject)
 - **Depended on by:** TASK-OSS-P4-02 (`DzProvider`), P4-03 (message catalogs),
   P4-04 (portal migration), P4-05 (RTL matrices), and every Pro slice that needs
@@ -232,9 +232,13 @@ ancestor's per-component map.
 ## Amendments (TASK-OSS-P4-02)
 
 Building the writer forced four decisions this ADR had not taken (A1–A4); P4-03
-added a fifth (A5), and TASK-R3-O2 a sixth (A6, 2026-09-04) that adds a concern
-rather than a rule. They are recorded here rather than in a second ADR because
-each one is a rule about the keys and merge semantics §1–§9 define.
+added a fifth (A5), TASK-R3-O2 a sixth (A6, 2026-09-04) and TASK-R2-O4 a seventh
+(A7, 2026-09-18), each adding a concern rather than a rule. **A8 (TASK-R0-O2,
+2026-09-22) is different in kind**: it adds nothing and decides nothing — it
+corrects seven statements of fact this document makes that measurement has since
+contradicted, including the `getTextInfo()` claim in §4 (**D181**). They are all
+recorded here rather than in a second ADR because each is a rule — or a
+correction to a rule — about the keys and merge semantics §1–§9 define.
 
 ### A1. A provider provides only the keys its props set
 
@@ -412,10 +416,90 @@ un-run rollout. It is stated here so acceptance records it: what ships is *the
 contract and its default*, exercised by its own suite and by Pro
 TASK-R5-P2, not adoption across 144 components.
 
+
+### A7. An eleventh concern: the URL policy (TASK-R2-O4, 2026-09-18)
+
+08-11 doc 06 asks for a URL/DOM policy on the navigation sinks. TASK-N1-O5 then
+**measured** that none existed anywhere in `packages/core/src` — no scheme
+check, no allowlist, no normalization — and that all nine `url-scheme` corpus
+fixtures reached the rendered `href` verbatim on all six navigation-sink
+components: **54 measurements**, severity high, recorded as `S1`–`S12` in
+`packages/core/security/security-deviations.json` and as finding U1 in
+`packages/core/security/url-boundary.threat-model.md` §2a. It reported rather
+than fixed, because refusing `javascript:void(0)` is a public-behaviour change.
+This amendment is the fix.
+
+**`urlPolicy` is the eleventh concern by §1's count** — the nine keys plus
+theme, plus A6's sanitizer — and the *twelfth* by the composables barrel's,
+which counts `useDzTheme` as one of its readers. Both numbers are in the source
+and neither is wrong; they count different lists.
+
+`DZ_URL_POLICY_KEY` lives in
+`@dzup-ui/contracts`; `useDzUrlPolicy()` in Core; `DzProvider`'s `urlPolicy`
+prop is the one writer. Default allowlist:
+`http`, `https`, `mailto`, `tel`, `sms`, plus every relative, query and fragment
+URL — those carry no scheme and resolve against the document the host already
+served. Everything else is refused.
+
+**Four properties, and each is a decision rather than an implementation detail.**
+
+1. **An allowlist, not a denylist.** A denylist is a list of the attacks
+   somebody thought of; `javascript:` alone is four evasions wide, and the next
+   scheme a browser ships is admitted by default. An allowlist is wrong in the
+   direction where a legitimate scheme is visibly refused until a host adds it.
+2. **The decision is made after WHATWG normalization** (§4.4: strip leading and
+   trailing C0 controls and spaces, remove tab/LF/CR from anywhere, compare the
+   scheme case-insensitively). A check written as `startsWith('javascript:')`
+   closes one of the four evasions the corpus carries and admits the other
+   three, which is exactly the shape of a security control that tests green.
+3. **A rejected URL is omitted, never rewritten.** Every one of the six keeps
+   the non-link branch it already had, so the element degrades instead of
+   disappearing: `DzButton`, `DzMenuItem` and `DzSidebarItem` render their
+   `<button>` and still emit `click`; `DzBreadcrumbItem` renders its
+   `<span role="link">`; `DzAnchor` renders the same `<a>` with no `href`, which
+   by definition is not a link. Rewriting to `#` or to `javascript:void(0)`
+   would produce a control that looks operable and is not — a worse failure
+   than refusing to draw a link, and one nothing except a click can see. The
+   element carries `data-state="url-rejected"`, declared in each anatomy, so a
+   consumer can style it and a test can assert it.
+4. **The escape hatch is the provider, once.** `urlPolicy.allow` receives the
+   library's own verdict as `allowedByDefault`, so widening is one line that
+   cannot accidentally disable the base policy, and narrowing is the same line
+   inverted. A per-component opt-out prop was rejected: it re-opens the hole for
+   exactly the consumers most likely to reach for it, one call site at a time,
+   with no central record of where.
+
+**The asymmetry with A6 is deliberate.** `DZ_SANITIZER_KEY` has a `null` arm
+meaning "the host said it would supply one and did not"; `DZ_URL_POLICY_KEY` has
+none. A URL policy has no such state, because the library's answer with nothing
+configured is the **strict** one — a tree that forgot its provider is the strict
+tree, not the open one, and a key whose absent value is the safe value cannot be
+switched off by forgetting something. Nesting still folds per field: a nested
+provider narrowing `allowedSchemes` keeps an ancestor's `allow`, which A6's
+per-field fold established and which required Core to carry the resolved `allow`
+beside the verdict (`DzResolvedUrlPolicy`, Core-internal).
+
+**Consequences for §2 and for the ratchet.** `DZ_PROVIDER_DEFAULTS` grows a
+`urlPolicy` key, the second growth after A6's, and for the same reason: a
+defaults object that cannot describe a concern stops being the answer to "what
+do I get with no provider", and Pro must resolve to the same scheme list.
+Security-corpus deviations move **54 → 0**, and the ceiling moves with them, so
+a regression fails the corpus rather than matching a pin.
+
+**What this amendment does *not* claim.** It governs the **navigation** sink
+only. The eight subresource sinks (`<img src>`) still pass their URL through and
+still measure `inert`: no shipping engine has fetched a `javascript:`
+subresource this decade, `data:image/svg+xml` in an `<img>` is script-disabled
+by specification, and the residual — an unconditional GET to an origin the
+page's author did not choose — is the host's `img-src` directive. No component
+can decide which origins a consumer trusts, and one that tried would be useless.
+`DzUrlSink` names both kinds so a host *can* opt an image sink in; the library
+does not do it for them.
+
 ### What did not change
 
-Every default in §2 **that existed before A6** (A6 adds a key rather than
-changing one), the deep-merge rule for messages in §3, the direction
+Every default in §2 **that existed before A6 and A7** (both add a key rather
+than changing one), the deep-merge rule for messages in §3, the direction
 resolution in §4, the formatter cache in §5, the precedence in §6, the motion
 policy in §7, and the Pro extension rule in §9. No component's default changed,
 and every concern still resolves with no provider mounted.
@@ -436,9 +520,190 @@ media-query value, not this contract's. The implementation follows this ADR.
 | `packages/core/src/providers/DzProvider.contract.spec.ts` · `DzThemeProvider.contract.spec.ts` | Contract Spec v1 and anatomy conformance — including `parts: 'none'`, i.e. that neither renders an element |
 | `packages/core/tests/ssr/dz-provider-ssr.spec.ts` | server render with the browser globals deleted, **plus** hydration with zero mismatch warnings for a configured, a nested, and a themed tree |
 | `packages/core/src/security/sanitize.spec.ts` | A6: escaping default is not a pass-through · ceilings enforced before parsing, length before depth · the depth scanner's over-count and under-count bypasses · per-field fold · options read at call time |
+| `packages/core/src/security/url-policy.spec.ts` | A7: WHATWG normalization on all three steps · all four `javascript:` evasions · allowlist refuses what nobody has thought of yet · the provider fold, including a nested list keeping an ancestor's `allow` · rejection is omission, with neither `#` nor `javascript:void(0)` substituted · the dev warning fires once per component, prop and scheme · agreement with the corpus oracle, which keeps its own normalizer |
+| `packages/core/security/url-boundary.url-policy.spec.ts` · `.malicious-corpus.spec.ts` | A7: the 54 measurements that found the gap, now asserting the REQUIRED outcome with an empty deviation register behind them |
+| `yarn test:e2e:csp` | A7 and A6 §8: `DzThemeProvider` + `DzFileUpload` render identically under a real `Content-Security-Policy` header with no `'unsafe-inline'`, no un-nonced `<style>` survives, and the URL policy holds in chromium, firefox and webkit |
 | `yarn validate:contract-parity` | now covers `packages/core/src/providers`, which it never did |
 | `yarn validate:hardcoded-strings` | no static `aria-label` in a template and no literal default on a user-visible prop, unless a comment says why |
 | `packages/core/src/i18n/i18n.spec.ts` | every catalog value equals the literal it replaced · per-key override · a non-string override falls back rather than rendering `[object Object]` · 1,000 rows construct at most one formatter per (locale, options) pair |
 | Storybook Pseudo-locale toolbar | every story, every family: un-accented text is a string the catalog does not reach |
 | `yarn validate:exports` · `validate:ownership` | the composables are in the generated barrel and the ownership manifest |
 | `yarn validate:adr-references` | this document resolves for every `ADR-20` citation |
+
+---
+
+### A8. Corrections at acceptance review (TASK-R0-O2, 2026-09-22)
+
+Seven corrections, from the acceptance packet
+`docs/program-2026-09/reports/N5-05-adr-20-acceptance-packet.md` §4 and from
+`docs/program-2026-09-04/reports/owner-decision-register-2026-09.md` **D181**.
+Each is a correction of **fact**; none changes a decision. The one decision this
+amendment does not take is the acceptance itself — see A8.7.
+
+#### A8.1 §4 is wrong about `getTextInfo()`, on every Node floor under discussion — the **D181** correction
+
+Decision 4 says `Intl.Locale.prototype.getTextInfo()` is *"Baseline-2023 and
+unavailable across this repository's Node floor (`^20.19.0 || >=22.13.0`,
+ADR-18)"*, and that *"when the floor moves past it, the list becomes a one-line
+delegation."* *Alternatives considered* repeats it: *"Rejected for now —
+unavailable across the supported Node range (ADR-18)."*
+
+**The rejection is right and the reason is wrong, in a way that matters.**
+`getTextInfo()` requires Node **24.0.0**. It is not unlocked by `>=22.13.0`, and
+it is not unlocked by the floor the repository declares today. Measured and
+recorded independently by two reports:
+
+- `docs/program-2026-09/reports/N5-04-peer-hygiene-handoff.md` §3 (**N5-04 D3**):
+  the floor should *"stop coupling the floor to the RTL list — that needs Node
+  ≥ 24.0.0"*.
+- `docs/program-2026-09-04/reports/TASK-R1-O6-handoff.md` §7.3 (**D176**):
+  *"raising to `>=22.13.0` does not unlock `Intl.Locale.prototype.getTextInfo()`
+  — that needs Node 24.0.0 — so ADR-20 §4's 'when the floor moves past it'
+  prediction is wrong and must be corrected in the same amendment."*
+
+**Read §4 and the *Alternatives considered* entry as saying this instead:** the
+checked-in RTL subtag list is kept because `getTextInfo()` requires **Node ≥
+24.0.0**, which is above every floor currently under consideration for ADR-18 —
+the declared `^20.19.0 || >=22.13.0`, and the `>=22.13.0` that two reports
+recommend. `>=24.0.0` was considered as an ADR-18 floor and **rejected**
+(**D176**): Node 22 LTS runs to April 2027 and a library floor excluding it is
+aggressive. So the list is not a stopgap waiting on a floor bump that is about
+to happen — **it is the mechanism for the foreseeable life of this ADR**, and
+§4's "one-line delegation" is a long-dated intention rather than a plan.
+
+The corollary, recorded as ADR-18 amendment **A3**: the Node floor and the RTL
+mechanism are **independent** decisions and must stop being argued as one.
+Nothing in ADR-18's Decision section depends on the RTL list, and no amendment
+to the floor should be justified by it.
+
+*Custody note: D181 records that this correction "has no owner" — TASK-R0-O2's
+scope as written covered acceptance and not this. D181's recommendation (a) was
+to widen TASK-R0-O2 to carry it, on the ground that "accepting an ADR whose §4
+is known wrong makes the acceptance itself unciteable". That is what this
+sub-amendment does. The Node floor itself is **not** decided here; see ADR-18
+amendment A1.*
+
+#### A8.2 The motion policy has consumers now — packet D20-1 is falsified
+
+The packet's most consequential finding was that **`useDzMotion` had zero `.vue`
+consumers**, so a host setting `motion="reduced"` changed nothing anywhere, and
+it recommended amending §7 to say the policy was *"specified and unadopted"*.
+
+**Do not make that amendment.** `TASK-R5-O3` landed the adoption. Measured
+2026-09-22 at `527dbd1` over `packages/core/src/components`: **18 components**
+consume the policy — three through `useDzMotion()` (`DzAnimatedNumber`,
+`DzAnchor`, `DzTour`) and fifteen through `useDzMotionAttribute()`. §7 now
+describes something the catalogue partly does, and the accessibility consequence
+the packet named — that §7 admits `'full'` as an override of a stated preference
+while "the library pays the cost and banks none of the benefit" — no longer
+holds.
+
+#### A8.3 Adoption counts for the Consequences — packet D20-2/3/4, with today's figures
+
+The packet asked for the adoption counts to be written into Consequences,
+because without them *"the Consequences read as a description of a system in
+use"*. They are recorded **here** rather than in Consequences, because the
+numbers the packet measured are not the numbers today and a Consequences bullet
+would simply go stale a third time. Measured 2026-09-22 at `527dbd1`, over
+`packages/core/src/components` unless stated:
+
+| Concern | Packet, 2026-09-03 | **2026-09-22** | Measured by |
+|---|---|---|---|
+| portal target | 18 | **18** | `useDzPortalTarget(` |
+| test ids | **0** | **89** | `useDzTestIds(` |
+| defaults | **1** | **23** | `useDzDefaults(` |
+| direction | **0** | **19** | `useDzDirection(` |
+| motion | **0** | **18** | `useDzMotion(` + `useDzMotionAttribute(` |
+| messages | 40 catalog entries | **44** entries · **45** components read through `useComponentMessages` | `packages/core/src/i18n/messages.ts` |
+| formats | "every `Intl` use" | **3** components call `useDzFormats(`; **0** `new Intl.` outside `i18n/intl-cache.ts` | grep |
+| locale | — | **1** direct `useDzLocale(`; the rest reach locale through formats and messages | grep |
+| nonce | — | **1** (`DzProvider` itself) | grep |
+| sanitizer (A6) | 0 by construction | **0 by construction** — the seam exists for `@dzup-ui-pro` | A6 |
+
+So of the packet's four "over-claimed adoption" divergences, **three are closed**
+(D20-1 motion, D20-2 direction, D20-3 test ids) and **one is substantially
+closed** (D20-4 defaults, 1 → 23). The residual for §6 is tracked as a
+**generated** ratchet with argued exclusions rather than a hand-listed figure —
+owner decision **D33**, taken as option (a) under delegation on 2026-09-17 and
+recorded as **D80** in
+`docs/program-2026-09-04/reports/TASK-R5-O3-handoff.md`.
+
+#### A8.4 Rollout §4 is Done — packet D20-6
+
+Rollout item 4 (*"**P4-04** migrates the 15 portal props to the provider
+default"*) is still written as open while items 2 and 3 are struck through.
+**Read it as struck through and Done.** 18 components consume
+`useDzPortalTarget()` against a 15-component target; resolution is
+`props.portalTo ?? dzPortalTarget.value`, matching §6 step 1 (`DzSelect.vue:84`);
+and the props were **retained**, matching the Consequences line *"The props stay
+— P4-04 decides their deprecation"*.
+
+**The half P4-04 did not do is still not done:** it was chartered to decide the
+deprecation of the 15 `portalTo` props and did not. That remains `[!owner]`
+**D-M**; the packet's recommendation is *keep them permanently, and say so*, on
+the ground that they are §6 step 1's escape hatch.
+
+#### A8.5 §5's formatter migration is complete — packet D20-7
+
+The Consequences bullet reads *"the five independent `Intl` construction sites
+**can be** migrated one at a time to the same cache."* **Read it in the past
+tense.** Measured 2026-09-22: **zero `new Intl.` constructions anywhere in
+`packages/core/src` outside `i18n/intl-cache.ts`**, which holds four. The
+per-frame construction in `DzAnimatedNumber.tween.ts` that the Context table
+called out is gone. A clean win the document under-claims.
+
+#### A8.6 A5's Core-component count — packet D20-8
+
+Amendment A5 says *"Core's ~38 components are contributed by exactly the
+augmentation above."* The figure has been 40 and is now **44** top-level entries
+in `packages/core/src/i18n/messages.ts`. Rather than correct the literal a third
+time: **the count is whatever that file declares**, and this document should
+cite the file rather than transcribe a number out of it. This is the
+hand-typed-facts class N2-S1 §11.3 records five prior sightings of.
+
+#### A8.7 Status — and what is still open
+
+This ADR remains **`Proposed`**. TASK-R0-O2 found **no recorded owner
+acceptance** for ADR-18, ADR-19 or ADR-20 in any ledger, handoff or decision
+register, and will not invent an owner name or a date. Since 2026-09-22 the
+status is measured rather than inert: `yarn validate:adr-references` reads the
+`Status:` line at the top of this file and counts this document in
+`maxProposedCitedFromCode` (`packages/tooling/scripts/adr-registry.json`), which
+is **3** today.
+
+The `[!owner]` decisions acceptance still depends on, after this amendment:
+
+| Id | Question | State after A8 |
+|---|---|---|
+| **N5-05 D-H** | motion: adopt · amend-and-defer · drop §7 | **Overtaken by events** — A8.2. 18 components adopt it; there is nothing left to defer |
+| **N5-05 D-I** | record the adoption counts | **Done** — A8.3, with today's figures rather than the packet's |
+| **N5-05 D-J** | strike Rollout §4 as Done | **Done** — A8.4. Its second half (`D-M`) is still open |
+| **N5-05 D-K** | restate §5's migration as complete | **Done** — A8.5 |
+| **N5-05 D-L** | should `DZ_THEME_KEY` move to contracts, **and** should `useDzTheme` stop throwing? (packet D20-5 + D20-9, Rollout §6) | **Open.** One question, not two — whether theme stops being special. Both halves unchanged in the tree |
+| **N5-05 D-M** | deprecate the 15 `portalTo` props, or keep them permanently? | **Open** — A8.4 |
+| **N5-05 D-N** | batch the three contracts-shape questions | **Partly closed.** Its `ariaInvalid` half (N5-02 **D1**) was completed by TASK-R0-O2 on 2026-09-22; `D-L`'s two halves remain |
+| **N5-05 D-P** | write ADR-09 before answering D-L | **Open.** D-L proposes amending ADR-09, which has no document — it is one of the 14 in `adr-registry.json` |
+| **D6** | `DZ_PROVIDER_DEFAULTS` grew a `sanitizer` key (A6) — accept the growth under a `minor`, or hold it in a second constant | **Open.** Register §3.1 |
+
+**None of these blocks acceptance on a factual contradiction.** The packet's own
+summary holds and is now stronger: ADR-20 has **no clause whose code contradicts
+it** — every divergence was either the document under-claiming what shipped or
+over-claiming adoption, and A8 corrects both directions. What is missing is a
+signature and five genuinely open questions, four of which (`D-L`, `D-M`, `D-P`,
+`D6`) the packet itself marks non-blocking.
+
+### A9. D181 decided; the Node floor is settled *(DZUP-UI-ADR-PREP-20260926-R1, 2026-09-26)*
+
+The owner took **D181** option (a) on 2026-09-26: the §4 correction is carried
+by this ADR's acceptance review. **A8.1 is that correction**, so D181 is
+discharged and no separate amendment packet is owed.
+
+The owner also decided the Node floor, **D176**: it stays
+`^20.19.0 || >=22.13.0` (ADR-18 amendment A6). A8.1's reading is unchanged by
+that. `getTextInfo()` needs Node 24.0.0, which is above the kept floor, so the
+checked-in RTL list stays the mechanism.
+
+**Status.** The open questions in A8.7 (`D-L`, `D-M`, `D-P`, `D6`) are unchanged,
+and A8.7 already records that none of them blocks acceptance. This ADR remains
+`Proposed` until the owner accepts it; `docs/qa/adr-prep-2026-09-26/ACCEPTANCE.md`
+lists the exact edit.

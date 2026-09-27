@@ -10,7 +10,7 @@
  * reflows cleanly 390px → up.
  */
 import { DzAlert, DzButton, DzCard, DzCountdown, DzHeading, DzOtpInput, DzText } from '@dzup-ui/core'
-import { ArrowLeft, Boxes, CheckCircle2, ShieldCheck } from 'lucide-vue-next'
+import { ArrowLeft, Boxes, CheckCircle2, ShieldCheck } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /** Demo code that "verifies" — purely illustrative for the static template. */

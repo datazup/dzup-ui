@@ -42,7 +42,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { AT_PAIRS, AT_RESULTS } from '../quality/at-matrix.ts'
+import { ALL_TASKS, AT_PAIRS, AT_RESULTS } from '../quality/at-matrix.ts'
 import {
   AT_MATRIX_DIR,
   AT_MATRIX_INDEX,
@@ -127,11 +127,44 @@ export function checkAtMatrix(
         continue
       }
 
+      // TASK-R2-O2. A run record now names the task it is evidence about, and a
+      // task id that is not one the component owes makes the row
+      // unattributable: it cannot be counted toward qualification, it cannot be
+      // re-tested against the right step, and the likeliest cause is a typo that
+      // would otherwise sit in the matrix reading as evidence.
+      if (row.task !== ALL_TASKS && !entry.tasks.includes(row.task)) {
+        violations.push({
+          rule: 'shape',
+          level: 'error',
+          message: `${entry.component} / ${row.pair} records a run against task \`${row.task}\`, `
+            + `which is not one of the tasks ${entry.component} owes `
+            + `(${entry.tasks.join(', ')}, or \`${ALL_TASKS}\` for all of them). Either the id is `
+            + `a typo, or the scaffold was regenerated after the component's pattern changed — `
+            + `check which before editing the row, because the row is somebody's session.`,
+        })
+        continue
+      }
+
       if (row.result === 'unrun') {
         violations.push({
           rule: 'unrun',
           level: 'report',
           message: `${entry.component} / ${row.pair} has never been run.`,
+        })
+        continue
+      }
+
+      // An `unrun` row is the generator's own default and says nothing about a
+      // task, so it may carry `*`. A row claiming a real outcome may not: an
+      // unattributed result cannot be re-tested, and `pass` over eight tasks at
+      // once is the aggregate this matrix exists to refuse.
+      if (row.task === ALL_TASKS && entry.tasks.length > 1) {
+        violations.push({
+          rule: 'substance',
+          level: 'error',
+          message: `${entry.component} / ${row.pair} claims \`${row.result}\` for \`${ALL_TASKS}\` `
+            + `— all ${entry.tasks.length} tasks at once. Record one row per {task, pair} you `
+            + `actually drove, naming the task: ${entry.tasks.join(', ')}.`,
         })
         continue
       }
@@ -221,10 +254,25 @@ if (isMain) {
   const unrun = violations.filter(v => v.rule === 'unrun')
   const cells = fresh.entries.flatMap(e => e.rows).length
 
+  // TASK-R2-O2. Both denominators, always. `required` is the subset whose
+  // absence blocks qualification (`requiredAtPairs(tier)`); `cells` is every
+  // pairing the scaffold carries. Printing only the smaller one would make the
+  // ratchet look better for free, which is the specific move
+  // `<generated_authority>` forbids — a ratchet moves by work, not by
+  // redefinition.
+  const requiredCells = fresh.entries
+    .reduce((n, e) => n + e.requiredPairs.length, 0)
+  const requiredExecuted = fresh.entries.reduce((n, e) => {
+    const req = new Set(e.requiredPairs)
+    return n + e.rows.filter(r => req.has(r.pair) && r.result !== 'unrun').length
+  }, 0)
+
   console.warn('Manual AT task matrix — TASK-OSS-P5-04\n')
   console.warn(`  components (Tier B–D)  ${fresh.entries.length}`)
   console.warn(`  cells                  ${cells}`)
   console.warn(`  executed               ${cells - unrun.length}`)
+  console.warn(`  required cells         ${requiredCells}  (tier-differentiated, TASK-R2-O2)`)
+  console.warn(`  required executed      ${requiredExecuted}`)
   console.warn(`  unrun                  ${unrun.length}  (reported)`)
   console.warn(`  stale                  ${stale.length}  (reported)`)
 

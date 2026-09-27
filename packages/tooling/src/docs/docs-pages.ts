@@ -125,6 +125,54 @@ export function escapeVueText(text: string): string {
 export const ALLOWED_PAGE_COMPONENTS = ['DzPlayground'] as const
 
 /**
+ * Where a generated page imports its chrome from — TASK-R1-O5, closing D3-F8.
+ *
+ * The component used to be registered globally in `.vitepress/theme/index.ts`,
+ * and D3 measured what that costs: the shared `theme` chunk (59,482 B) is
+ * `modulepreload`ed by **every** page on the site, including
+ * `/guide/getting-started`, which has no playground on it and never will. The
+ * isolation requirement was met only because nothing REPL-related is
+ * statically reachable* from the chrome — so the day anyone adds a static
+ * `@vue/repl` import anywhere in `apps/docs`, a 1.3 MB on-demand cost becomes an
+ * every-page cost and no gate sees it.
+ *
+ * Importing the component **in the pages that use it** makes Rollup put it in a
+ * chunk those pages load and nobody else does, which is the property D3-F8 asks
+ * for, with one implementation rather than two. What it does *not* fix is
+ * D3-F5: VitePress 1.6.4 disables `cssCodeSplit`, so the chrome's CSS still
+ * lands in the one shared stylesheet no matter how it is registered. "Lazy" and
+ * "lazy in the bytes" stay different claims; this moves the code, not the CSS,
+ * and says so.
+ *
+ * The path is relative to `apps/docs/components/`, where every generated page
+ * is written.
+ */
+export const PAGE_COMPONENT_IMPORT_PATH = '../.vitepress/theme/components'
+
+/**
+ * The generator's own `<script setup>` block — the second, and last, channel by
+ * which a generated page may contain markup.
+ *
+ * Like {@link ALLOWED_PAGE_COMPONENTS} it is a closed shape rather than a
+ * pattern: only an `import` of an allowlisted component, on its own line,
+ * between an exact opener and an exact closer. A `<script>` block with anything
+ * else in it is escaped like any other prose, so a description that happens to
+ * contain one cannot become executable page code.
+ */
+export const SCRIPT_OPEN = '<script setup>'
+export const SCRIPT_CLOSE = '</script>'
+
+/** The import line for one allowlisted component. */
+export function componentImportLine(name: (typeof ALLOWED_PAGE_COMPONENTS)[number]): string {
+  return `import ${name} from '${PAGE_COMPONENT_IMPORT_PATH}/${name}.vue'`
+}
+
+/** True when a line is an import of an allowlisted component, and nothing else. */
+export function isAllowedImportLine(line: string): boolean {
+  return ALLOWED_PAGE_COMPONENTS.some(name => line.trim() === componentImportLine(name))
+}
+
+/**
  * A line that is entirely one allowlisted component tag, on its own.
  *
  * Anchored at both ends so the tag can only be the whole line — a description
@@ -152,6 +200,28 @@ export function isAllowedComponentLine(line: string): boolean {
 }
 
 /**
+ * True when `lines[open]` begins a block this generator wrote: `<script setup>`,
+ * one or more allowlisted import lines, `</script>`, and nothing else.
+ *
+ * Checked as a **whole block** before the first line passes, so the channel can
+ * never be opened by a stray `<script setup>` in prose and then left open over
+ * the rest of the page — which is the failure shape the fence tracker above
+ * already had once (`DzBreadcrumb.md`, D3-F6).
+ */
+export function isGeneratedScriptBlock(lines: readonly string[], open: number): boolean {
+  if (lines[open]?.trim() !== SCRIPT_OPEN)
+    return false
+  for (let i = open + 1; i < lines.length; i += 1) {
+    const line = lines[i]!.trim()
+    if (line === SCRIPT_CLOSE)
+      return i > open + 1
+    if (!isAllowedImportLine(line))
+      return false
+  }
+  return false
+}
+
+/**
  * Apply {@link escapeVueText} to a rendered page, skipping fenced code blocks
  * and inline code spans — markdown-it already escapes both, and injecting
  * entities there would make them visible as literal `&lt;`.
@@ -165,6 +235,7 @@ export function escapeForVue(lines: readonly string[]): string[] {
   const out: string[] = []
   let openFence: string | null = null
   let inComment = false
+  let inScript = false
   // Split on real newlines first. `render-llms.ts`'s `fenced()` returns a whole
   // fenced block — opener, body and closer — as ONE array element, so a tracker
   // that only inspected elements would open a fence and never see it close, and
@@ -172,7 +243,8 @@ export function escapeForVue(lines: readonly string[]): string[] {
   // hypothetical: it was the first VitePress build failure of this packet
   // (`DzBreadcrumb.md`, "Element is missing end tag" on an unescaped `<span>` in
   // a prop description that sat after the usage snippet).
-  for (const line of lines.flatMap(l => l.split('\n'))) {
+  const flat = lines.flatMap(l => l.split('\n'))
+  for (const [index, line] of flat.entries()) {
     const fence = /^(\s*)([`~]{3,})/.exec(line)
     if (openFence !== null) {
       out.push(line)
@@ -208,10 +280,70 @@ export function escapeForVue(lines: readonly string[]): string[] {
       out.push(line)
       continue
     }
+    // The generator's own script block — opener, allowlisted import lines,
+    // closer, and nothing else. Anything unexpected between the two closes the
+    // channel immediately and falls through to the escaper, so a malformed or
+    // injected block is escaped rather than executed.
+    if (line.trim() === SCRIPT_OPEN && isGeneratedScriptBlock(flat, index)) {
+      out.push(line)
+      inScript = true
+      continue
+    }
+    if (inScript) {
+      out.push(line)
+      if (line.trim() === SCRIPT_CLOSE)
+        inScript = false
+      continue
+    }
     // Outside a fence: split on inline-code spans and escape only the gaps.
     const segments = line.split('`')
     out.push(segments.map((seg, i) => (i % 2 === 1 ? seg : escapeVueText(seg))).join('`'))
   }
+  return out
+}
+
+/**
+ * Lines of a rendered page that carry markup VitePress would compile — the
+ * "did the escaper do its job" question, answered in ONE place.
+ *
+ * It used to be answered in three: `escapeForVue` here, and a hand-rolled copy
+ * of its rules in each of `docs-pages.spec.ts` and `evidence.spec.ts`. That is
+ * D3-F6 — the escaper gained the component-tag channel and only one of the
+ * copies learned about it, so the whole-catalogue assertion went red against a
+ * correct page. It happened again the moment the `<script setup>` channel
+ * landed. A rule stated three times is a rule that will disagree with itself;
+ * both specs now ask this function.
+ *
+ * @returns one entry per offending line, 1-based, with the line verbatim.
+ */
+export function unescapedMarkupLines(page: string): Array<{ line: number, text: string }> {
+  const lines = page.split('\n')
+  const out: Array<{ line: number, text: string }> = []
+  let inFence = false
+  let inScript = false
+  lines.forEach((text, i) => {
+    if (/^\s*[`~]{3,}/.test(text)) {
+      inFence = !inFence
+      return
+    }
+    if (isGeneratedScriptBlock(lines, i)) {
+      inScript = true
+      return
+    }
+    if (inScript) {
+      if (text.trim() === SCRIPT_CLOSE)
+        inScript = false
+      return
+    }
+    // An indented run is a code block; `<!--` is an authoring note, inert in a
+    // Vue template; an allowlisted whole-line tag is a component this generator
+    // means to open.
+    if (inFence || text.startsWith('<!--') || text.startsWith('     ') || isAllowedComponentLine(text))
+      return
+    const outsideCode = text.split('`').filter((_, idx) => idx % 2 === 0).join('')
+    if (outsideCode.includes('<'))
+      out.push({ line: i + 1, text })
+  })
   return out
 }
 
@@ -539,7 +671,23 @@ export function renderComponentPage(input: ComponentPageInput): string {
   if (parts.length > 0)
     provenance.push(`- **Compound parts:** ${parts.map(p => `\`${p.name}\``).join(', ')}`)
 
+  // TASK-N2-D3. Directly under the static usage snippet, because the two are
+  // the same story file read two ways: the snippet is what you paste, the
+  // playground is what you press.
+  const playground = renderPlayground(
+    record,
+    playgroundSeeded === undefined ? undefined : playgroundSeeded.has(record.name),
+    playgroundRefusals?.get(record.name),
+  )
+
   const body: string[] = [
+    // TASK-R1-O5, D3-F8. The chrome is imported by the pages that USE it rather
+    // than registered globally, so Rollup charges its bytes to those pages'
+    // chunk instead of to the shared `theme` chunk every page preloads. A page
+    // that only carries a refusal sentence emits no import and pays nothing.
+    ...(playground.some(isAllowedComponentLine)
+      ? [SCRIPT_OPEN, componentImportLine('DzPlayground'), SCRIPT_CLOSE, '']
+      : []),
     ...head,
     ...provenance,
     ...meta,
@@ -551,14 +699,7 @@ export function renderComponentPage(input: ComponentPageInput): string {
     ...HOW_TO_READ,
     '',
     ...rest,
-    // TASK-N2-D3. Directly under the static usage snippet, because the two are
-    // the same story file read two ways: the snippet is what you paste, the
-    // playground is what you press.
-    ...renderPlayground(
-      record,
-      playgroundSeeded === undefined ? undefined : playgroundSeeded.has(record.name),
-      playgroundRefusals?.get(record.name),
-    ),
+    ...playground,
   ]
 
   const prose = stripHtmlComments(usageProse ?? '').trim()

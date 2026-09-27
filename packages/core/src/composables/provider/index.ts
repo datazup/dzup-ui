@@ -2,8 +2,9 @@
  * Provider composables — the read side of the ADR-20 contract
  * (TASK-OSS-P4-01).
  *
- * Eleven concerns an application configures once — the ten of ADR-20 plus the
- * sanitizer added by amendment A6 (TASK-R3-O2). Every one has a typed default,
+ * Twelve concerns an application configures once — the ten of ADR-20 plus the
+ * sanitizer added by amendment A6 (TASK-R3-O2) and the URL policy added by
+ * amendment A7 (TASK-R2-O4). Every one has a typed default,
  * so **every component works with no provider mounted** — the property that
  * lets a consumer adopt one component without adopting an architecture.
  *
@@ -63,3 +64,10 @@ export { useDzMotion } from './useDzMotion.ts'
 // the same rule as the other ten: `createDzSanitizer` and `provideDzSanitizer`
 // stay off the barrel so `DzProvider` remains the one sanctioned writer.
 export { useDzSanitizer } from './useDzSanitizer.ts'
+
+// The twelfth concern (TASK-R2-O4, ADR-20 amendment A7). The reader only.
+// `createDzUrlPolicy` and `provideDzUrlPolicy` stay off the barrel on the
+// one-sanctioned-writer rule; `useDzUrlGuard` stays off it for the reason
+// `useDzMotionAttribute` does — it is a rendering detail of the six components
+// that own a navigation sink, not a concern a host configures.
+export { useDzUrlPolicy } from './useDzUrlPolicy.ts'

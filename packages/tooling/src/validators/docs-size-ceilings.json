@@ -1,0 +1,21 @@
+{
+  "//": "TASK-R1-O5. Byte ceilings for the repository's publishable STATIC artifacts, read by `yarn validate:docs-size`. Down-only, like every ratchet here: `ceilingBytes` may fall and may never rise to make a build pass. Because these are bytes rather than counts they carry `relaxToleranceBytes` — the gap between 'over the ceiling' (fail) and 'so far under it that the ceiling is stale' (also fail). Without a tolerance a byte ratchet fails on ordinary build-to-build noise and gets switched off within a week; with too large a tolerance it stops recording progress. The values below are ~4 % of the artifact, which is roughly two of the largest single chunks.",
+
+  "docsDist": {
+    "//": "apps/docs/.vitepress/dist — the VitePress site: 144 component pages, 6 evidence pages, the guide, the offline MiniSearch index and the playground assets. Ungated until 2026-09-21 despite three consecutive packets growing it: 16.04 MB (N2-D1) → 20.67 MB (N2-D2, +28.9 %) → 29.82 MB (N2-D3, +44.3 %, D3-F10) → 33.12 MB here. `apps/storybook/scripts/check-bundle-size.mjs` covers `storybook-static` and nothing else (D1-F-4), so none of that growth was ever charged to a budget. Seeded from a measured build at HEAD 527dbd1 and rounded up by 3.65 %, inside the <= 5 % the task allows. The three biggest single files are the offline search index (2.54 MB), the @vue/repl Babel chunk (4.34 MB, fetched by nothing unless a reader edits a playground) and the REPL core bundle (1.84 MB); a serious reduction starts there, not in the pages.",
+    "path": "apps/docs/.vitepress/dist",
+    "ceilingBytes": 36000000,
+    "seededFromBytes": 34730981,
+    "seededAt": "2026-09-21",
+    "relaxToleranceBytes": 1400000
+  },
+
+  "storybookStatic": {
+    "//": "apps/storybook/storybook-static — brought under the same ratchet as the docs site so the two publishable artifacts are governed by one mechanism rather than two. It already had a budget, expressed as `--max-mb 25` inside `apps/storybook/package.json`'s `check:size`, and on 2026-09-21 that budget failed CI with `Storybook build 25.00 MB EXCEEDS budget 25 MB` — a TRUE statement that reads as a rounding bug, because two decimal places cannot show a 4 KB overage on 25 MB (TASK-R1-O4's handoff, `storybook` job). The flat 25 MB had no seed measurement and no provenance behind it; this ceiling does: 26 MiB exactly, so `check:size --max-mb 26` and this file state ONE number, and `validate:docs-size` fails when the two drift apart (the same one-contract-asserted shape `validate:playground-parity` uses). `check:size` keeps printing the per-artifact report and writing the CI badge; this entry is the one that fails `validate:all`.",
+    "path": "apps/storybook/storybook-static",
+    "ceilingBytes": 27262976,
+    "seededFromBytes": 26232563,
+    "seededAt": "2026-09-21",
+    "relaxToleranceBytes": 1100000
+  }
+}

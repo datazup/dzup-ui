@@ -15,10 +15,8 @@
   },
   "ignore": [
     "@dzup-ui/compat",
-    "@dzup-ui/codemods",
     "@dzup-ui/tooling",
-    "@dzup-ui/storybook",
-    "@dzup-ui/sandbox"
+    "@dzup-ui/storybook"
   ],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true

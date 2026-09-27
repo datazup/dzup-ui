@@ -42,7 +42,7 @@ import {
   LayoutDashboard,
   Settings,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 const sidebarCollapsed = ref(false)

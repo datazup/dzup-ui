@@ -21,7 +21,7 @@ import {
   DzSheetTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { Menu, X, Zap } from 'lucide-vue-next'
+import { Menu, X, Zap } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

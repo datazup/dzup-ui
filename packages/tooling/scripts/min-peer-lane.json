@@ -1,0 +1,41 @@
+{
+  "//": "TASK-R1-O4. The MINIMUM declared peer lane, as DATA. The runner (min-peer-lane.mjs) derives the floor of every peer named here FROM THE WORKSPACES THEMSELVES -- it never carries a version number of its own, because a number written here would be a second declaration that silently drifts from `peerDependencies`. It then writes `resolutions` into the root package.json, installs, ASSERTS the resolved version equals the derived floor, runs the commands, and puts both the manifest and the lockfile back.",
+  "//why": "08-11 doc 08 (Package matrix) requires a minimum-peer row and the repository only ever exercised current versions (N5-04 R-058c). The root manifest depends on `vue@^3.5.13` while `@dzup-ui/core` declares the peer `vue@^3.5.0`, so nothing in this repository has ever resolved 3.5.0-3.5.12: the declared floor is eleven patch releases below anything that has run. `reka-ui@^2.0.0` is the same shape -- the tree resolves 2.9.x and 2.0.0 has never been installed here.",
+  "//blocking": "NOT advisory, unlike the Vue 3.6 lane. A red result here is a defect claim against THIS repository: it says a peer range this project publishes to consumers is false. It is a separate dispatchable workflow rather than a ci.yml job only because it needs its own install (a second full resolution of the tree), and it is wired with `workflow_call` so promoting it to a blocking CI job is one line in ci.yml once it has been green on a dispatch.",
+  "peers": {
+    "//": "The peers whose floor this lane exercises. `sources` names the workspace manifests that declare each one; every declared range is collected and the floor used is the LOWEST VERSION THAT SATISFIES ALL OF THEM, so a package with a narrower range can never be silently under-tested.",
+    "vue": {
+      "sources": ["packages/core", "packages/contracts", "packages/compat"]
+    },
+    "reka-ui": {
+      "sources": ["packages/core"]
+    }
+  },
+  "lockstep": {
+    "//": "Packages that must move with their principal. Vue's runtime is published as one release across several packages; `@vue/runtime-core` at 3.5.0 against `@vue/shared` at 3.5.43 is not a state anybody ships, so a red run in it says nothing about the floor. `reka-ui` has no such set -- it is one package.",
+    "vue": [
+      "@vue/compiler-sfc",
+      "@vue/runtime-core",
+      "@vue/runtime-dom",
+      "@vue/server-renderer",
+      "@vue/shared"
+    ]
+  },
+  "//not-overridden": {
+    "vue-component-meta": "Left at its 3.3.7 pin, for the reason TASK-N5-02 recorded: component-meta.json, llms-full.txt, 144 docs pages, the playground seeds and the docs nav are all projections of its output and each is byte-compared by a gate. This lane is about the RUNTIME the library is asked to work under, not about the extractor.",
+    "vue-tsc": "Same reason -- vue-tsc and vue-component-meta share vue-language-core.",
+    "nuxt": "`@dzup-ui/nuxt` declares `nuxt: >=3.0.0`, whose floor is 3.0.0. That is a CONSUMER-app floor and it is exercised by the `nuxt-majors` matrix in vue-next.yml against real fixtures, which is the honest way to ask it. Pinning nuxt inside this repository's own install would pin a devDependency graph, not a consumer."
+  },
+  "commands": [
+    {
+      "name": "typecheck",
+      "run": "typecheck",
+      "//": "vue-tsc over packages/core. The first thing a lower Vue breaks is a type that moved between minors, and it breaks it before a single test runs."
+    },
+    {
+      "name": "suite",
+      "run": "vitest run packages/core packages/contracts packages/nuxt",
+      "//": "Core + contracts + the Nuxt module's UNIT suite (packages/nuxt/src), as doc 08's package-matrix row asks. Deliberately NOT the whole `yarn test`: apps/landing and apps/docs are not published and their specs would make a floor failure look like a library failure."
+    }
+  ]
+}

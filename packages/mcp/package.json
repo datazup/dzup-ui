@@ -4,6 +4,13 @@
   "version": "0.2.0",
   "description": "Model Context Protocol server for dzup-ui — browse components, blocks, templates and design tokens, and fetch real block source + install commands from any AI coding tool (Cursor, Claude Code, Windsurf).",
   "license": "MIT",
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 128",
+    "safari >= 16.4",
+    "ios_saf >= 16.4"
+  ],
   "homepage": "https://dzup-ui.com",
   "repository": {
     "type": "git",

@@ -8,7 +8,7 @@ import {
   Pencil,
   Rocket,
   UserPlus,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 import { DzButton } from '../../../src/components/buttons'
 import { DzCard } from '../../../src/components/cards'

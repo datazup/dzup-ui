@@ -1,4 +1,5 @@
 ---
+"@dzup-ui/codemods": patch
 "@dzup-ui/core": patch
 "@dzup-ui/nuxt": patch
 ---

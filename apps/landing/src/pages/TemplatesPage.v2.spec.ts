@@ -15,6 +15,7 @@ import { afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import DzCountUp from '../motion/components/DzCountUp.vue'
+import { COMMERCIAL_TEMPLATES } from '../templates/commercial.ts'
 import { TEMPLATE_CATEGORIES, TEMPLATES } from '../templates/registry.ts'
 import TemplatesPage from './TemplatesPage.vue'
 
@@ -63,6 +64,14 @@ afterEach(() => {
  * Mount the page under a DzThemeProvider (useTheme reads the provider context)
  * with a memory router (the page calls useRouter and renders router-links).
  */
+/**
+ * The free gallery grid. The commercial section (DT4) below it reuses the card
+ * styling, so free-gallery assertions are scoped to this list rather than to
+ * every `.tile` on the page. Matched by its label, not its tag: the grid is a
+ * TransitionGroup, which some environments stub to a custom element.
+ */
+const FREE_GRID = '[aria-label="Templates"]'
+
 async function mountPage(theme: 'light' | 'dark' = 'light') {
   window.localStorage.clear()
   const Blank = { template: '<div />' }
@@ -201,7 +210,7 @@ describe('tv2-02 hero depth field + counted-up truth', () => {
 describe('tv2-03 card display screen', () => {
   it('every tile stacks BOTH theme screenshots — dark derived from light, both lazy', async () => {
     const { container } = await mountPage()
-    const tiles = [...container.querySelectorAll('.tile')]
+    const tiles = [...container.querySelectorAll(`${FREE_GRID} .tile`)]
     expect(tiles.length).toBe(TEMPLATES.length)
     for (const tile of tiles) {
       const imgs = [...tile.querySelectorAll<HTMLImageElement>('.tile-shot img')]
@@ -250,7 +259,7 @@ describe('tv2-04 grid choreography', () => {
 
   it('tiles carry the real scroll-reveal — the entrance that used to be dead code', async () => {
     const { container } = await mountPage()
-    const tiles = [...container.querySelectorAll('.tile')]
+    const tiles = [...container.querySelectorAll(`${FREE_GRID} .tile`)]
     expect(tiles.length).toBeGreaterThan(0)
     for (const tile of tiles) {
       // v-reveal adds `dz-reveal` immediately; the (immediately-firing) observer
@@ -281,7 +290,7 @@ describe('tv2-04 grid choreography', () => {
       throw new Error('no tag chips rendered')
     await fireEvent.click(chip)
     await search(container, 'zzz-no-such-template-anywhere')
-    expect(container.querySelector('.gallery-grid')).toBeNull()
+    expect(container.querySelector(FREE_GRID)).toBeNull()
     const suggestions = [...container.querySelectorAll('.templates-empty-tag')]
     expect(suggestions).toHaveLength(3)
     // Recompute the expectation the same way the page does: top-3 by frequency
@@ -299,7 +308,7 @@ describe('tv2-04 grid choreography', () => {
     await fireEvent.click(suggestion)
     await flushPromises()
     expect(container.querySelector('.templates-empty')).toBeNull()
-    expect(container.querySelectorAll('.tile').length).toBeGreaterThan(0)
+    expect(container.querySelectorAll(`${FREE_GRID} .tile`).length).toBeGreaterThan(0)
     // Exactly one tag chip is now pressed — the suggestion.
     const pressed = [...container.querySelectorAll('.tag-chip[aria-pressed="true"]')]
     expect(pressed).toHaveLength(1)
@@ -330,6 +339,28 @@ describe('tv2-05 toolbar presence', () => {
     await fireEvent.click(clear!)
     await flushPromises()
     expect(chip.getAttribute('aria-pressed')).toBe('false')
-    expect(container.querySelectorAll('.tile').length).toBe(TEMPLATES.length)
+    expect(container.querySelectorAll(`${FREE_GRID} .tile`).length).toBe(TEMPLATES.length)
+  })
+})
+
+describe('dt4 commercial templates', () => {
+  it('lists each commercial template outside the free grid, badged and linking to the showroom', async () => {
+    const { container } = await mountPage()
+    const section = container.querySelector<HTMLElement>('section.commercial')
+    expect(section).not.toBeNull()
+    const tiles = [...section!.querySelectorAll('.tile')]
+    expect(tiles).toHaveLength(COMMERCIAL_TEMPLATES.length)
+    for (const [i, tile] of tiles.entries()) {
+      const template = COMMERCIAL_TEMPLATES[i]!
+      expect(tile.textContent).toContain(template.name)
+      expect(tile.textContent).toMatch(/Commercial/)
+      const link = tile.querySelector<HTMLAnchorElement>('a.tile-link')!
+      expect(link.getAttribute('href')).toBe(template.detailUrl)
+      expect(link.getAttribute('target')).toBe('_blank')
+      expect(link.getAttribute('rel')).toContain('noopener')
+    }
+    const freeSlugs = [...container.querySelectorAll(`${FREE_GRID} a.tile-link`)].map(a => a.getAttribute('href'))
+    for (const template of COMMERCIAL_TEMPLATES)
+      expect(freeSlugs).not.toContain(`/templates/${template.slug}`)
   })
 })

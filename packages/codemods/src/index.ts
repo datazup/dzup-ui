@@ -34,6 +34,19 @@ export type {
   TransformStoryColorsResult,
   UnclassifiedLiteral,
 } from './transforms/story-color-tokens.js'
+// TASK-R1-O6 decision item 1 — prepared, NOT applied. See
+// docs/program-2026-09-04/reports/icon-swap-contract-2026-09.md.
+export {
+  ALIASED_GLYPHS,
+  CLASS_RENAMES,
+  flaggedGlyphs,
+  GLYPH_MAP,
+  NEW_PACKAGE as NEW_ICON_PACKAGE,
+  OLD_PACKAGE as OLD_ICON_PACKAGE,
+  REDRAWN_GLYPHS,
+  rewriteSpecifier as rewriteIconSpecifier,
+  default as swapIconLibrary,
+} from './transforms/swap-icon-library.js'
 
 // Utilities
 export { CodemodLogger } from './utils/logger.js'

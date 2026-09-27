@@ -1,0 +1,6276 @@
+{
+  "provenance": {
+    "sourceCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+    "branch": "main",
+    "worktreeDirty": true,
+    "dirtyCount": 221,
+    "admissible": false,
+    "inadmissibleReason": "worktree dirty: 221 path(s) differ from 527dbd1",
+    "generatedAt": "2026-09-21T14:35:43.943Z",
+    "generator": "release:api-diff"
+  },
+  "packages": [
+    {
+      "package": "@dzup-ui/contracts",
+      "version": "0.1.0",
+      "fidelity": "none",
+      "baseline": "no published version, no snapshot, no manifest",
+      "degraded": false,
+      "comparedSymbols": 0,
+      "changes": [
+        {
+          "package": "@dzup-ui/contracts",
+          "kind": "unbaselined",
+          "symbol": "167 symbol(s)",
+          "symbolKind": "surface",
+          "severity": "none",
+          "level": "none",
+          "detail": "no baseline of any kind exists for this package — nothing has been published and no snapshot has been recorded. The surface is reported, not diffed."
+        }
+      ],
+      "requiredLevel": "none",
+      "beyondBaseline": []
+    },
+    {
+      "package": "@dzup-ui/core",
+      "version": "0.2.0",
+      "fidelity": "manifest-only",
+      "baseline": "public-api.manifest.json@worktree",
+      "degraded": false,
+      "comparedSymbols": 1317,
+      "changes": [
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "AnchorVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "AppShellVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "AsyncOptionsMessages",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "AsyncOptionsRow",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "BackTopVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "BlockUiVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CalendarDay",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CalendarMode",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CalendarPanelChangePayload",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CalendarRangeValue",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CalendarVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CalendarView",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CascaderVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CodeBlockVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ColorModeToggleVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ConfirmDialogVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CoordinatorPattern",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "CopyButtonVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DZ_DESCRIPTIONS_KEY",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DZ_SIDEBAR_KEY",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DataViewLayout",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DataViewSortOption",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DataViewSortOrder",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DataViewSortPayload",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DataViewVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DescriptionsColumns",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DescriptionsItem",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DescriptionsLayout",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DescriptionsResponsiveColumns",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DescriptionsVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAffix",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAffixEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAffixProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAffixSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAnchor",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAnchorEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAnchorItem",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAnchorItemSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAnchorProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAnchorSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAppShell",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAppShellProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAppShellSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAsyncBoundary",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAsyncBoundaryEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAsyncBoundaryProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzAsyncBoundarySlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBackTop",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBackTopEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBackTopProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBackTopSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBlockUI",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBlockUIEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBlockUIProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBlockUISlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzBlockUISlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCalendar",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCalendarDaySlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCalendarEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCalendarModelValue",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCalendarProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCalendarSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascader",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascaderEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascaderExpandTrigger",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascaderFlatPath",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascaderKey",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascaderOption",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascaderProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascaderSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCascaderValue",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCodeBlock",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCodeBlockProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCodeBlockSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzColorModeToggleEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzColorModeToggleLabels",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzColorModeToggleProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzColorModeToggleSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzColorModeToggleVariant",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzComboboxItem",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzComboboxResolvedItem",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzConfirmDialog",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzConfirmDialogEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzConfirmDialogProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzConfirmDialogSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCopyButton",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCopyButtonEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCopyButtonProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzCopyButtonSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDataGridFilter",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDataView",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDataViewEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDataViewItemSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDataViewProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDataViewSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDataViewSortSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDescriptions",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDescriptionsContext",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDescriptionsItem",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDescriptionsItemProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDescriptionsItemSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDescriptionsProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDescriptionsSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzDialogCloseProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzErrorBoundary",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzErrorBoundaryProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzErrorBoundarySlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFab",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFabEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFabPosition",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFabProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFabSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFabVariant",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFieldArray",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFieldArrayEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFieldArrayProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFieldArraySlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFieldArraySlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFloatLabel",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFloatLabelProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFloatLabelSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzFloatLabelVariant",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzImageComparison",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzImageComparisonEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzImageComparisonProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzImageComparisonSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInfiniteScroll",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInfiniteScrollEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInfiniteScrollErrorSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInfiniteScrollExpose",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInfiniteScrollProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInfiniteScrollSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInplace",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInplaceDisplaySlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInplaceEditSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInplaceEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInplaceProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInplaceSaveOn",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInplaceSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInputMask",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./inputs"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInputMaskEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./inputs"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInputMaskProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./inputs"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzInputMaskSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./inputs"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzKnob",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzKnobEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzKnobProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzKnobSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMasonry",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMasonryProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMasonrySlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenu",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuGroup",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuGroupSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuItem",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuItemSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuLink",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuLinkSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuOrientation",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMegaMenuSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMention",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMentionEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMentionOption",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMentionOptionResolver",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMentionProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMentionSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMentionTrigger",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMessageReader",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMeterGroup",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMeterGroupComputedSegment",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMeterGroupOrientation",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMeterGroupProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMeterGroupSegment",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMeterGroupSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzMeterGroupSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzOrderList",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzOrderListEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzOrderListItemSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzOrderListProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzOrderListSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPageHero",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPageHeroProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPageHeroSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPanel",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPanelEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPanelProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPanelSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPersonaSelectorEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPersonaSelectorProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPersonaSelectorSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPopconfirm",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPopconfirmEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPopconfirmProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzPopconfirmSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzQRCode",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzQRCodeEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzQRCodeProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzQRCodeSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzQRErrorLevel",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzQRStatus",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzRating",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzRatingEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzRatingProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzRatingSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzRunStatusBadgeProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzRunStatusBadgeSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzScrollProgressEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzScrollProgressProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzScrollProgressSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebar",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarContext",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarFooter",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarFooterProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarFooterSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarHeader",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarHeaderProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarHeaderSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarItem",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarItemEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarItemProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarItemSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarSection",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarSectionProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarSectionSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSidebarSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSpeedDial",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSpeedDialDirection",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSpeedDialEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSpeedDialItem",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSpeedDialProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzSpeedDialType",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzStepperItemEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTableEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTableFooter",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTableFooterProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTableFooterSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTagsInput",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTagsInputEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTagsInputProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTagsInputRejectReason",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTagsInputSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzThemeContext",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./providers"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzThemeProviderProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./providers"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTokenProgressBarProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTokenProgressBarSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTokenProgressBarSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzToolbar",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzToolbarProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzToolbarSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTour",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTourEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTourProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTourSlotProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTourSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTourStep",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTreeSelect",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTreeSelectEmits",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTreeSelectProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzTreeSelectSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzWatermark",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzWatermarkProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "DzWatermarkSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "FabVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "FilterOperator",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "FilterType",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "FloatLabelVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "FloatingPlacement",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "GOVERNANCE_PATTERN_TOKENS",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "GovernanceBadge",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "GovernanceBadgeProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "GovernanceBadgeSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "GovernanceBadgeVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ImageComparisonOrientation",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ImageComparisonVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "InfiniteScrollDirection",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "InfiniteScrollVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "InplaceVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "KnobVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MaskElementVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./inputs"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MaskWrapperVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./inputs"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MasonryColumns",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MasonryGap",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MasonryVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MegaMenuVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MentionVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MeterGroupSegmentVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "MeterGroupTrackVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "OrderListControlsPosition",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "OrderListKey",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "OrderListMove",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "OrderListReorderPayload",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "OrderListVariant",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "OrderListVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "PageHeroVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "PanelVariant",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "PanelVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "Persona",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "PopconfirmPlacement",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "PopconfirmVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "QRCodeVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "RatingVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ResolvedTheme",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./providers"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ResponsiveColumns",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "RevealAndFocusOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ScrollProgressBarVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ScrollProgressRootVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "SheetContentSize",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "SidebarVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "SpeedDialVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TEAM_MEMBER_STATUS_TOKENS",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TabItem",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TablePin",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TagsInputVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TeamMemberBadge",
+          "symbolKind": "component",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new component on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TeamMemberBadgeProps",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TeamMemberBadgeSlots",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TeamMemberBadgeVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TeamMemberStatus",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ThemePreference",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./providers"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ThemeScriptOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./providers"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ToolbarOrientation",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ToolbarVariant",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ToolbarVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TourPlacement",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TourTarget",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TourVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TreeSelectSelectionMode",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TreeSelectValue",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "TreeSelectVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseAffixOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseAffixReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseAsyncOptionsOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseAsyncOptionsReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseCalendarOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseCalendarReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseClickOutsideOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseDataGridHeaderOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseDataGridHeaderReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseDataGridPaginationOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseDataGridPaginationReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseDataGridSortOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseDataGridSortReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseDialogOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseDialogReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseFloatingOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseFloatingReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseFocusTrapOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseFocusTrapReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseInfiniteScrollOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseInfiniteScrollReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "removed",
+          "symbol": "UseIntersectionOptions",
+          "symbolKind": "const",
+          "severity": "breaking",
+          "level": "minor",
+          "detail": "const no longer exported by the packed declarations"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "removed",
+          "symbol": "UseIntersectionReturn",
+          "symbolKind": "const",
+          "severity": "breaking",
+          "level": "minor",
+          "detail": "const no longer exported by the packed declarations"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseScrollSpyOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseScrollSpyReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseScrollToTopOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseScrollToTopReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseSelectKeyboardOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseSelectKeyboardReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseSelectOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseSelectReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseTabsOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseTabsReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseThemeOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./providers"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseTransferOptions",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "UseTransferReturn",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "VirtualWindow",
+          "symbolKind": "interface",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new interface on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "WatermarkVariantProps",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "WeekdayIndex",
+          "symbolKind": "type",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new type on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "anchorVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "animatedNumberVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "appShellVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "backTopVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "blockUiTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "blockUiVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "calendarVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "cascaderVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "circularSizeMap",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "codeBlockVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "colorModeToggleVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "confirmDialogVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "copyButtonVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "countdownVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "dataViewVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "defaultStrokeWidth",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "deferredContentVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "descriptionsVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "emojiTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "fabVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "floatLabelVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "removed",
+          "symbol": "formatRemaining",
+          "symbolKind": "const",
+          "severity": "breaking",
+          "level": "minor",
+          "detail": "const no longer exported by the packed declarations"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "governanceBadgeVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "headingTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./typography"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "iconTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "imageComparisonTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "imageComparisonVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "infiniteScrollVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "inplaceVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "kbdTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./typography"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "kbdVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./typography"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "knobVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "listboxVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "maskElementVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./inputs"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "maskWrapperVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./inputs"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "masonryColumn",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "masonryColumnContainer",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "masonryVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "megaMenuVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "mentionVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupLegendItemVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupLegendSwatchVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupLegendVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupPalette",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupRootVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupSegmentVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupToneColors",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "meterGroupTrackVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "orderListVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./data"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "pageHeroVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "panelVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "popconfirmTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "popconfirmVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "qrCodeTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "qrCodeVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "ratingVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "relativeTimeTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./typography"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "relativeTimeVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./typography"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "responsiveColsMap",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "responsiveColumnsMap",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "scrollProgressBarVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "scrollProgressCircularSize",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "scrollProgressRootVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "scrollProgressTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "scrollProgressToneVar",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "sidebarVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./navigation"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "speedDialVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./buttons"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "tagsInputVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "teamMemberBadgeVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./feedback"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "textTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./typography"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "removed",
+          "symbol": "toRemainingParts",
+          "symbolKind": "const",
+          "severity": "breaking",
+          "level": "minor",
+          "detail": "const no longer exported by the packed declarations"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "toolbarRegionVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "toolbarVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./layout"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "tourVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./overlays"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "treeSelectVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./forms"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "useAffix",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "useCalendar",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "removed",
+          "symbol": "useCountdown",
+          "symbolKind": "const",
+          "severity": "breaking",
+          "level": "minor",
+          "detail": "const no longer exported by the packed declarations"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "useDataGridPagination",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "useDataGridSort",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "useDzUrlPolicy",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "useInfiniteScroll",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "removed",
+          "symbol": "useIntersection",
+          "symbolKind": "const",
+          "severity": "breaking",
+          "level": "minor",
+          "detail": "const no longer exported by the packed declarations"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "useScrollSpy",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "useScrollToTop",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ."
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "visuallyHiddenTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./typography"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "visuallyHiddenVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./typography"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "watermarkTokens",
+          "symbolKind": "const",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new const on ., ./media"
+        },
+        {
+          "package": "@dzup-ui/core",
+          "kind": "added",
+          "symbol": "watermarkVariants",
+          "symbolKind": "function",
+          "severity": "additive",
+          "level": "patch",
+          "detail": "new function on ., ./media"
+        }
+      ],
+      "requiredLevel": "minor",
+      "beyondBaseline": [
+        {
+          "name": "COMPONENT_OWNERSHIP",
+          "kind": "const",
+          "subpaths": [
+            "./ownership"
+          ]
+        },
+        {
+          "name": "DzResolvedComponent",
+          "kind": "interface",
+          "subpaths": [
+            "./resolver"
+          ]
+        },
+        {
+          "name": "DzResolver",
+          "kind": "function",
+          "subpaths": [
+            "./resolver"
+          ]
+        },
+        {
+          "name": "DzResolverOptions",
+          "kind": "interface",
+          "subpaths": [
+            "./resolver"
+          ]
+        },
+        {
+          "name": "OWNERSHIP_TIERS",
+          "kind": "const",
+          "subpaths": [
+            "./ownership"
+          ]
+        },
+        {
+          "name": "OwnedComponent",
+          "kind": "interface",
+          "subpaths": [
+            "./ownership"
+          ]
+        },
+        {
+          "name": "OwnedKind",
+          "kind": "type",
+          "subpaths": [
+            "./ownership"
+          ]
+        },
+        {
+          "name": "OwningPackage",
+          "kind": "type",
+          "subpaths": [
+            "./ownership"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "@dzup-ui/mcp",
+      "version": "0.2.0",
+      "fidelity": "none",
+      "baseline": "no published version, no snapshot, no manifest",
+      "degraded": false,
+      "comparedSymbols": 0,
+      "changes": [
+        {
+          "package": "@dzup-ui/mcp",
+          "kind": "unbaselined",
+          "symbol": "26 symbol(s)",
+          "symbolKind": "surface",
+          "severity": "none",
+          "level": "none",
+          "detail": "no baseline of any kind exists for this package — nothing has been published and no snapshot has been recorded. The surface is reported, not diffed."
+        }
+      ],
+      "requiredLevel": "none",
+      "beyondBaseline": []
+    },
+    {
+      "package": "@dzup-ui/nuxt",
+      "version": "0.1.0-alpha.0",
+      "fidelity": "none",
+      "baseline": "no published version, no snapshot, no manifest",
+      "degraded": false,
+      "comparedSymbols": 0,
+      "changes": [
+        {
+          "package": "@dzup-ui/nuxt",
+          "kind": "unbaselined",
+          "symbol": "9 symbol(s)",
+          "symbolKind": "surface",
+          "severity": "none",
+          "level": "none",
+          "detail": "no baseline of any kind exists for this package — nothing has been published and no snapshot has been recorded. The surface is reported, not diffed."
+        }
+      ],
+      "requiredLevel": "none",
+      "beyondBaseline": []
+    },
+    {
+      "package": "@dzup-ui/testing",
+      "version": "0.1.0",
+      "fidelity": "none",
+      "baseline": "no published version, no snapshot, no manifest",
+      "degraded": false,
+      "comparedSymbols": 0,
+      "changes": [
+        {
+          "package": "@dzup-ui/testing",
+          "kind": "unbaselined",
+          "symbol": "79 symbol(s)",
+          "symbolKind": "surface",
+          "severity": "none",
+          "level": "none",
+          "detail": "no baseline of any kind exists for this package — nothing has been published and no snapshot has been recorded. The surface is reported, not diffed."
+        }
+      ],
+      "requiredLevel": "none",
+      "beyondBaseline": []
+    },
+    {
+      "package": "@dzup-ui/tokens",
+      "version": "0.2.0",
+      "fidelity": "none",
+      "baseline": "no published version, no snapshot, no manifest",
+      "degraded": false,
+      "comparedSymbols": 0,
+      "changes": [
+        {
+          "package": "@dzup-ui/tokens",
+          "kind": "unbaselined",
+          "symbol": "4 symbol(s)",
+          "symbolKind": "surface",
+          "severity": "none",
+          "level": "none",
+          "detail": "no baseline of any kind exists for this package — nothing has been published and no snapshot has been recorded. The surface is reported, not diffed."
+        }
+      ],
+      "requiredLevel": "none",
+      "beyondBaseline": []
+    }
+  ],
+  "reconciliations": [
+    {
+      "package": "@dzup-ui/core",
+      "manifestVersion": "0.0.1",
+      "packageVersion": "0.2.0",
+      "undocumented": [
+        {
+          "name": "AnchorVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "AppShellVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "AsyncOptionsMessages",
+          "kind": "interface"
+        },
+        {
+          "name": "AsyncOptionsRow",
+          "kind": "type"
+        },
+        {
+          "name": "BackTopVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "BlockUiVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "CalendarDay",
+          "kind": "interface"
+        },
+        {
+          "name": "CalendarMode",
+          "kind": "type"
+        },
+        {
+          "name": "CalendarPanelChangePayload",
+          "kind": "interface"
+        },
+        {
+          "name": "CalendarRangeValue",
+          "kind": "interface"
+        },
+        {
+          "name": "CalendarVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "CalendarView",
+          "kind": "type"
+        },
+        {
+          "name": "CascaderVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "CodeBlockVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "ColorModeToggleVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "ConfirmDialogVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "CoordinatorPattern",
+          "kind": "type"
+        },
+        {
+          "name": "CopyButtonVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "DZ_DESCRIPTIONS_KEY",
+          "kind": "const"
+        },
+        {
+          "name": "DZ_SIDEBAR_KEY",
+          "kind": "const"
+        },
+        {
+          "name": "DataViewLayout",
+          "kind": "type"
+        },
+        {
+          "name": "DataViewSortOption",
+          "kind": "interface"
+        },
+        {
+          "name": "DataViewSortOrder",
+          "kind": "type"
+        },
+        {
+          "name": "DataViewSortPayload",
+          "kind": "interface"
+        },
+        {
+          "name": "DataViewVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "DescriptionsColumns",
+          "kind": "type"
+        },
+        {
+          "name": "DescriptionsItem",
+          "kind": "interface"
+        },
+        {
+          "name": "DescriptionsLayout",
+          "kind": "type"
+        },
+        {
+          "name": "DescriptionsResponsiveColumns",
+          "kind": "interface"
+        },
+        {
+          "name": "DescriptionsVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "DzAffix",
+          "kind": "component"
+        },
+        {
+          "name": "DzAffixEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAffixProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAffixSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAnchor",
+          "kind": "component"
+        },
+        {
+          "name": "DzAnchorEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAnchorItem",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAnchorItemSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAnchorProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAnchorSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAppShell",
+          "kind": "component"
+        },
+        {
+          "name": "DzAppShellProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAppShellSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAsyncBoundary",
+          "kind": "component"
+        },
+        {
+          "name": "DzAsyncBoundaryEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAsyncBoundaryProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzAsyncBoundarySlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzBackTop",
+          "kind": "component"
+        },
+        {
+          "name": "DzBackTopEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzBackTopProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzBackTopSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzBlockUI",
+          "kind": "component"
+        },
+        {
+          "name": "DzBlockUIEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzBlockUIProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzBlockUISlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzBlockUISlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCalendar",
+          "kind": "component"
+        },
+        {
+          "name": "DzCalendarDaySlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCalendarEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCalendarModelValue",
+          "kind": "type"
+        },
+        {
+          "name": "DzCalendarProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCalendarSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCascader",
+          "kind": "component"
+        },
+        {
+          "name": "DzCascaderEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCascaderExpandTrigger",
+          "kind": "type"
+        },
+        {
+          "name": "DzCascaderFlatPath",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCascaderKey",
+          "kind": "type"
+        },
+        {
+          "name": "DzCascaderOption",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCascaderProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCascaderSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCascaderValue",
+          "kind": "type"
+        },
+        {
+          "name": "DzCodeBlock",
+          "kind": "component"
+        },
+        {
+          "name": "DzCodeBlockProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCodeBlockSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzColorModeToggleEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzColorModeToggleLabels",
+          "kind": "interface"
+        },
+        {
+          "name": "DzColorModeToggleProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzColorModeToggleSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzColorModeToggleVariant",
+          "kind": "type"
+        },
+        {
+          "name": "DzComboboxItem",
+          "kind": "type"
+        },
+        {
+          "name": "DzComboboxResolvedItem",
+          "kind": "interface"
+        },
+        {
+          "name": "DzConfirmDialog",
+          "kind": "component"
+        },
+        {
+          "name": "DzConfirmDialogEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzConfirmDialogProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzConfirmDialogSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCopyButton",
+          "kind": "component"
+        },
+        {
+          "name": "DzCopyButtonEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCopyButtonProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzCopyButtonSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDataGridFilter",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDataView",
+          "kind": "function"
+        },
+        {
+          "name": "DzDataViewEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDataViewItemSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDataViewProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDataViewSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDataViewSortSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDescriptions",
+          "kind": "component"
+        },
+        {
+          "name": "DzDescriptionsContext",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDescriptionsItem",
+          "kind": "component"
+        },
+        {
+          "name": "DzDescriptionsItemProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDescriptionsItemSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDescriptionsProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDescriptionsSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzDialogCloseProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzErrorBoundary",
+          "kind": "component"
+        },
+        {
+          "name": "DzErrorBoundaryProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzErrorBoundarySlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFab",
+          "kind": "component"
+        },
+        {
+          "name": "DzFabEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFabPosition",
+          "kind": "type"
+        },
+        {
+          "name": "DzFabProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFabSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFabVariant",
+          "kind": "type"
+        },
+        {
+          "name": "DzFieldArray",
+          "kind": "function"
+        },
+        {
+          "name": "DzFieldArrayEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFieldArrayProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFieldArraySlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFieldArraySlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFloatLabel",
+          "kind": "component"
+        },
+        {
+          "name": "DzFloatLabelProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFloatLabelSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzFloatLabelVariant",
+          "kind": "type"
+        },
+        {
+          "name": "DzImageComparison",
+          "kind": "component"
+        },
+        {
+          "name": "DzImageComparisonEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzImageComparisonProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzImageComparisonSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInfiniteScroll",
+          "kind": "component"
+        },
+        {
+          "name": "DzInfiniteScrollEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInfiniteScrollErrorSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInfiniteScrollExpose",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInfiniteScrollProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInfiniteScrollSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInplace",
+          "kind": "function"
+        },
+        {
+          "name": "DzInplaceDisplaySlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInplaceEditSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInplaceEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInplaceProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInplaceSaveOn",
+          "kind": "type"
+        },
+        {
+          "name": "DzInplaceSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInputMask",
+          "kind": "component"
+        },
+        {
+          "name": "DzInputMaskEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInputMaskProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzInputMaskSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzKnob",
+          "kind": "component"
+        },
+        {
+          "name": "DzKnobEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzKnobProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzKnobSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMasonry",
+          "kind": "component"
+        },
+        {
+          "name": "DzMasonryProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMasonrySlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenu",
+          "kind": "component"
+        },
+        {
+          "name": "DzMegaMenuEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenuGroup",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenuGroupSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenuItem",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenuItemSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenuLink",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenuLinkSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenuOrientation",
+          "kind": "type"
+        },
+        {
+          "name": "DzMegaMenuProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMegaMenuSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMention",
+          "kind": "component"
+        },
+        {
+          "name": "DzMentionEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMentionOption",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMentionOptionResolver",
+          "kind": "type"
+        },
+        {
+          "name": "DzMentionProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMentionSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMentionTrigger",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMessageReader",
+          "kind": "type"
+        },
+        {
+          "name": "DzMeterGroup",
+          "kind": "component"
+        },
+        {
+          "name": "DzMeterGroupComputedSegment",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMeterGroupOrientation",
+          "kind": "type"
+        },
+        {
+          "name": "DzMeterGroupProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMeterGroupSegment",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMeterGroupSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzMeterGroupSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzOrderList",
+          "kind": "function"
+        },
+        {
+          "name": "DzOrderListEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzOrderListItemSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzOrderListProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzOrderListSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPageHero",
+          "kind": "component"
+        },
+        {
+          "name": "DzPageHeroProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPageHeroSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPanel",
+          "kind": "component"
+        },
+        {
+          "name": "DzPanelEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPanelProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPanelSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPersonaSelectorEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPersonaSelectorProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPersonaSelectorSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPopconfirm",
+          "kind": "component"
+        },
+        {
+          "name": "DzPopconfirmEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPopconfirmProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzPopconfirmSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzQRCode",
+          "kind": "component"
+        },
+        {
+          "name": "DzQRCodeEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzQRCodeProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzQRCodeSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzQRErrorLevel",
+          "kind": "type"
+        },
+        {
+          "name": "DzQRStatus",
+          "kind": "type"
+        },
+        {
+          "name": "DzRating",
+          "kind": "component"
+        },
+        {
+          "name": "DzRatingEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzRatingProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzRatingSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzRunStatusBadgeProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzRunStatusBadgeSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzScrollProgressEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzScrollProgressProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzScrollProgressSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebar",
+          "kind": "component"
+        },
+        {
+          "name": "DzSidebarContext",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarFooter",
+          "kind": "component"
+        },
+        {
+          "name": "DzSidebarFooterProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarFooterSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarHeader",
+          "kind": "component"
+        },
+        {
+          "name": "DzSidebarHeaderProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarHeaderSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarItem",
+          "kind": "component"
+        },
+        {
+          "name": "DzSidebarItemEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarItemProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarItemSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarSection",
+          "kind": "component"
+        },
+        {
+          "name": "DzSidebarSectionProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarSectionSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSidebarSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSpeedDial",
+          "kind": "component"
+        },
+        {
+          "name": "DzSpeedDialDirection",
+          "kind": "type"
+        },
+        {
+          "name": "DzSpeedDialEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSpeedDialItem",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSpeedDialProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzSpeedDialType",
+          "kind": "type"
+        },
+        {
+          "name": "DzStepperItemEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTableEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTableFooter",
+          "kind": "component"
+        },
+        {
+          "name": "DzTableFooterProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTableFooterSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTagsInput",
+          "kind": "component"
+        },
+        {
+          "name": "DzTagsInputEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTagsInputProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTagsInputRejectReason",
+          "kind": "type"
+        },
+        {
+          "name": "DzTagsInputSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzThemeContext",
+          "kind": "interface"
+        },
+        {
+          "name": "DzThemeProviderProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTokenProgressBarProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTokenProgressBarSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTokenProgressBarSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzToolbar",
+          "kind": "component"
+        },
+        {
+          "name": "DzToolbarProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzToolbarSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTour",
+          "kind": "component"
+        },
+        {
+          "name": "DzTourEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTourProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTourSlotProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTourSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTourStep",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTreeSelect",
+          "kind": "component"
+        },
+        {
+          "name": "DzTreeSelectEmits",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTreeSelectProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzTreeSelectSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "DzWatermark",
+          "kind": "component"
+        },
+        {
+          "name": "DzWatermarkProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DzWatermarkSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "FabVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "FilterOperator",
+          "kind": "type"
+        },
+        {
+          "name": "FilterType",
+          "kind": "type"
+        },
+        {
+          "name": "FloatLabelVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "FloatingPlacement",
+          "kind": "type"
+        },
+        {
+          "name": "GOVERNANCE_PATTERN_TOKENS",
+          "kind": "const"
+        },
+        {
+          "name": "GovernanceBadge",
+          "kind": "component"
+        },
+        {
+          "name": "GovernanceBadgeProps",
+          "kind": "interface"
+        },
+        {
+          "name": "GovernanceBadgeSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "GovernanceBadgeVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "ImageComparisonOrientation",
+          "kind": "type"
+        },
+        {
+          "name": "ImageComparisonVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "InfiniteScrollDirection",
+          "kind": "type"
+        },
+        {
+          "name": "InfiniteScrollVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "InplaceVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "KnobVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "MaskElementVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "MaskWrapperVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "MasonryColumns",
+          "kind": "type"
+        },
+        {
+          "name": "MasonryGap",
+          "kind": "type"
+        },
+        {
+          "name": "MasonryVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "MegaMenuVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "MentionVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "MeterGroupSegmentVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "MeterGroupTrackVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "OrderListControlsPosition",
+          "kind": "type"
+        },
+        {
+          "name": "OrderListKey",
+          "kind": "type"
+        },
+        {
+          "name": "OrderListMove",
+          "kind": "type"
+        },
+        {
+          "name": "OrderListReorderPayload",
+          "kind": "interface"
+        },
+        {
+          "name": "OrderListVariant",
+          "kind": "type"
+        },
+        {
+          "name": "OrderListVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "PageHeroVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "PanelVariant",
+          "kind": "type"
+        },
+        {
+          "name": "PanelVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "Persona",
+          "kind": "interface"
+        },
+        {
+          "name": "PopconfirmPlacement",
+          "kind": "type"
+        },
+        {
+          "name": "PopconfirmVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "QRCodeVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "RatingVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "ResolvedTheme",
+          "kind": "type"
+        },
+        {
+          "name": "ResponsiveColumns",
+          "kind": "type"
+        },
+        {
+          "name": "RevealAndFocusOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "ScrollProgressBarVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "ScrollProgressRootVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "SheetContentSize",
+          "kind": "type"
+        },
+        {
+          "name": "SidebarVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "SpeedDialVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "TEAM_MEMBER_STATUS_TOKENS",
+          "kind": "const"
+        },
+        {
+          "name": "TabItem",
+          "kind": "interface"
+        },
+        {
+          "name": "TablePin",
+          "kind": "type"
+        },
+        {
+          "name": "TagsInputVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "TeamMemberBadge",
+          "kind": "component"
+        },
+        {
+          "name": "TeamMemberBadgeProps",
+          "kind": "interface"
+        },
+        {
+          "name": "TeamMemberBadgeSlots",
+          "kind": "interface"
+        },
+        {
+          "name": "TeamMemberBadgeVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "TeamMemberStatus",
+          "kind": "type"
+        },
+        {
+          "name": "ThemePreference",
+          "kind": "type"
+        },
+        {
+          "name": "ThemeScriptOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "ToolbarOrientation",
+          "kind": "type"
+        },
+        {
+          "name": "ToolbarVariant",
+          "kind": "type"
+        },
+        {
+          "name": "ToolbarVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "TourPlacement",
+          "kind": "type"
+        },
+        {
+          "name": "TourTarget",
+          "kind": "type"
+        },
+        {
+          "name": "TourVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "TreeSelectSelectionMode",
+          "kind": "type"
+        },
+        {
+          "name": "TreeSelectValue",
+          "kind": "type"
+        },
+        {
+          "name": "TreeSelectVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "UseAffixOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseAffixReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseAsyncOptionsOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseAsyncOptionsReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseCalendarOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseCalendarReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseClickOutsideOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseDataGridHeaderOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseDataGridHeaderReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseDataGridPaginationOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseDataGridPaginationReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseDataGridSortOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseDataGridSortReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseDialogOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseDialogReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseFloatingOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseFloatingReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseFocusTrapOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseFocusTrapReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseInfiniteScrollOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseInfiniteScrollReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseScrollSpyOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseScrollSpyReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseScrollToTopOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseScrollToTopReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseSelectKeyboardOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseSelectKeyboardReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseSelectOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseSelectReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseTabsOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseTabsReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "UseThemeOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseTransferOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "UseTransferReturn",
+          "kind": "interface"
+        },
+        {
+          "name": "VirtualWindow",
+          "kind": "interface"
+        },
+        {
+          "name": "WatermarkVariantProps",
+          "kind": "type"
+        },
+        {
+          "name": "WeekdayIndex",
+          "kind": "type"
+        },
+        {
+          "name": "anchorVariants",
+          "kind": "function"
+        },
+        {
+          "name": "animatedNumberVariants",
+          "kind": "function"
+        },
+        {
+          "name": "appShellVariants",
+          "kind": "function"
+        },
+        {
+          "name": "backTopVariants",
+          "kind": "function"
+        },
+        {
+          "name": "blockUiTokens",
+          "kind": "const"
+        },
+        {
+          "name": "blockUiVariants",
+          "kind": "function"
+        },
+        {
+          "name": "calendarVariants",
+          "kind": "function"
+        },
+        {
+          "name": "cascaderVariants",
+          "kind": "function"
+        },
+        {
+          "name": "circularSizeMap",
+          "kind": "const"
+        },
+        {
+          "name": "codeBlockVariants",
+          "kind": "function"
+        },
+        {
+          "name": "colorModeToggleVariants",
+          "kind": "function"
+        },
+        {
+          "name": "confirmDialogVariants",
+          "kind": "function"
+        },
+        {
+          "name": "copyButtonVariants",
+          "kind": "function"
+        },
+        {
+          "name": "countdownVariants",
+          "kind": "function"
+        },
+        {
+          "name": "dataViewVariants",
+          "kind": "function"
+        },
+        {
+          "name": "defaultStrokeWidth",
+          "kind": "const"
+        },
+        {
+          "name": "deferredContentVariants",
+          "kind": "function"
+        },
+        {
+          "name": "descriptionsVariants",
+          "kind": "function"
+        },
+        {
+          "name": "emojiTokens",
+          "kind": "const"
+        },
+        {
+          "name": "fabVariants",
+          "kind": "function"
+        },
+        {
+          "name": "floatLabelVariants",
+          "kind": "function"
+        },
+        {
+          "name": "governanceBadgeVariants",
+          "kind": "function"
+        },
+        {
+          "name": "headingTokens",
+          "kind": "const"
+        },
+        {
+          "name": "iconTokens",
+          "kind": "const"
+        },
+        {
+          "name": "imageComparisonTokens",
+          "kind": "const"
+        },
+        {
+          "name": "imageComparisonVariants",
+          "kind": "function"
+        },
+        {
+          "name": "infiniteScrollVariants",
+          "kind": "function"
+        },
+        {
+          "name": "inplaceVariants",
+          "kind": "function"
+        },
+        {
+          "name": "kbdTokens",
+          "kind": "const"
+        },
+        {
+          "name": "kbdVariants",
+          "kind": "function"
+        },
+        {
+          "name": "knobVariants",
+          "kind": "function"
+        },
+        {
+          "name": "listboxVariants",
+          "kind": "function"
+        },
+        {
+          "name": "maskElementVariants",
+          "kind": "function"
+        },
+        {
+          "name": "maskWrapperVariants",
+          "kind": "function"
+        },
+        {
+          "name": "masonryColumn",
+          "kind": "function"
+        },
+        {
+          "name": "masonryColumnContainer",
+          "kind": "function"
+        },
+        {
+          "name": "masonryVariants",
+          "kind": "function"
+        },
+        {
+          "name": "megaMenuVariants",
+          "kind": "function"
+        },
+        {
+          "name": "mentionVariants",
+          "kind": "function"
+        },
+        {
+          "name": "meterGroupLegendItemVariants",
+          "kind": "function"
+        },
+        {
+          "name": "meterGroupLegendSwatchVariants",
+          "kind": "function"
+        },
+        {
+          "name": "meterGroupLegendVariants",
+          "kind": "function"
+        },
+        {
+          "name": "meterGroupPalette",
+          "kind": "const"
+        },
+        {
+          "name": "meterGroupRootVariants",
+          "kind": "function"
+        },
+        {
+          "name": "meterGroupSegmentVariants",
+          "kind": "function"
+        },
+        {
+          "name": "meterGroupTokens",
+          "kind": "const"
+        },
+        {
+          "name": "meterGroupToneColors",
+          "kind": "const"
+        },
+        {
+          "name": "meterGroupTrackVariants",
+          "kind": "function"
+        },
+        {
+          "name": "orderListVariants",
+          "kind": "function"
+        },
+        {
+          "name": "pageHeroVariants",
+          "kind": "function"
+        },
+        {
+          "name": "panelVariants",
+          "kind": "function"
+        },
+        {
+          "name": "popconfirmTokens",
+          "kind": "const"
+        },
+        {
+          "name": "popconfirmVariants",
+          "kind": "function"
+        },
+        {
+          "name": "qrCodeTokens",
+          "kind": "const"
+        },
+        {
+          "name": "qrCodeVariants",
+          "kind": "function"
+        },
+        {
+          "name": "ratingVariants",
+          "kind": "function"
+        },
+        {
+          "name": "relativeTimeTokens",
+          "kind": "const"
+        },
+        {
+          "name": "relativeTimeVariants",
+          "kind": "function"
+        },
+        {
+          "name": "responsiveColsMap",
+          "kind": "const"
+        },
+        {
+          "name": "responsiveColumnsMap",
+          "kind": "const"
+        },
+        {
+          "name": "scrollProgressBarVariants",
+          "kind": "function"
+        },
+        {
+          "name": "scrollProgressCircularSize",
+          "kind": "const"
+        },
+        {
+          "name": "scrollProgressRootVariants",
+          "kind": "function"
+        },
+        {
+          "name": "scrollProgressTokens",
+          "kind": "const"
+        },
+        {
+          "name": "scrollProgressToneVar",
+          "kind": "const"
+        },
+        {
+          "name": "sidebarVariants",
+          "kind": "function"
+        },
+        {
+          "name": "speedDialVariants",
+          "kind": "function"
+        },
+        {
+          "name": "tagsInputVariants",
+          "kind": "function"
+        },
+        {
+          "name": "teamMemberBadgeVariants",
+          "kind": "function"
+        },
+        {
+          "name": "textTokens",
+          "kind": "const"
+        },
+        {
+          "name": "toolbarRegionVariants",
+          "kind": "function"
+        },
+        {
+          "name": "toolbarVariants",
+          "kind": "function"
+        },
+        {
+          "name": "tourVariants",
+          "kind": "function"
+        },
+        {
+          "name": "treeSelectVariants",
+          "kind": "function"
+        },
+        {
+          "name": "useAffix",
+          "kind": "function"
+        },
+        {
+          "name": "useCalendar",
+          "kind": "function"
+        },
+        {
+          "name": "useDataGridPagination",
+          "kind": "function"
+        },
+        {
+          "name": "useDataGridSort",
+          "kind": "function"
+        },
+        {
+          "name": "useDzUrlPolicy",
+          "kind": "function"
+        },
+        {
+          "name": "useInfiniteScroll",
+          "kind": "function"
+        },
+        {
+          "name": "useScrollSpy",
+          "kind": "function"
+        },
+        {
+          "name": "useScrollToTop",
+          "kind": "function"
+        },
+        {
+          "name": "visuallyHiddenTokens",
+          "kind": "const"
+        },
+        {
+          "name": "visuallyHiddenVariants",
+          "kind": "function"
+        },
+        {
+          "name": "watermarkTokens",
+          "kind": "const"
+        },
+        {
+          "name": "watermarkVariants",
+          "kind": "function"
+        }
+      ],
+      "undelivered": [
+        "UseIntersectionOptions",
+        "UseIntersectionReturn",
+        "formatRemaining",
+        "toRemainingParts",
+        "useCountdown",
+        "useIntersection"
+      ]
+    }
+  ],
+  "barrelDrift": [
+    {
+      "package": "@dzup-ui/core",
+      "packageDir": "packages/core",
+      "clean": false,
+      "wouldDrop": [
+        "export * from './composables/useAffix/index.ts'",
+        "export * from './composables/useCalendar/index.ts'",
+        "export * from './composables/useInfiniteScroll/index.ts'",
+        "export * from './composables/useScrollSpy/index.ts'",
+        "export * from './composables/useScrollToTop/index.ts'"
+      ],
+      "wouldAdd": [
+        "export * from './composables/useCountdown/index.ts'",
+        "export * from './composables/useIntersection/index.ts'"
+      ]
+    }
+  ],
+  "changesets": {
+    "total": 36,
+    "byPackage": {
+      "@dzup-ui/contracts": "minor",
+      "@dzup-ui/core": "minor",
+      "@dzup-ui/mcp": "patch",
+      "@dzup-ui/nuxt": "minor",
+      "@dzup-ui/testing": "minor",
+      "@dzup-ui/tokens": "patch"
+    },
+    "majorOffenders": []
+  },
+  "stopConditions": [
+    {
+      "code": "dirty-source",
+      "detail": "worktree dirty: 221 path(s) differ from 527dbd1. doc 08: \"dirty/unidentified source, generated drift, or evidence bound to a different commit/configuration\"."
+    },
+    {
+      "code": "unexplained-api-diff",
+      "detail": "@dzup-ui/core: `yarn generate:exports` would DROP 5 barrel line(s) — every symbol behind them leaves the public surface. Breaking under VERSIONING.md §2.1, requiring a `minor`, performed by a generator with no changeset behind it: export * from './composables/useAffix/index.ts' / export * from './composables/useCalendar/index.ts' / export * from './composables/useInfiniteScroll/index.ts' / export * from './composables/useScrollSpy/index.ts' / export * from './composables/useScrollToTop/index.ts'. Owner decision, routed to TASK-R0-O1."
+    },
+    {
+      "code": "manifest-omission",
+      "detail": "@dzup-ui/core: `yarn generate:exports` would ADD 2 barrel line(s) the manifest declares and the barrel does not have: export * from './composables/useCountdown/index.ts' / export * from './composables/useIntersection/index.ts'."
+    },
+    {
+      "code": "manifest-omission",
+      "detail": "@dzup-ui/core: 455 symbol(s) reach a consumer through the root barrel and are absent from public-api.manifest.json's documented name lists. Not a generator action (the barrel star-re-exports); a stale document other tooling has already been moved off (TASK-N2-A1)."
+    },
+    {
+      "code": "manifest-omission",
+      "detail": "@dzup-ui/core: 6 symbol(s) are promised by public-api.manifest.json and absent from the packed build."
+    }
+  ],
+  "summary": {
+    "@dzup-ui/contracts": {
+      "added": 0,
+      "removed": 0,
+      "changed": 0,
+      "requiredLevel": "none",
+      "declaredLevel": "minor",
+      "fidelity": "none"
+    },
+    "@dzup-ui/core": {
+      "added": 455,
+      "removed": 6,
+      "changed": 0,
+      "requiredLevel": "minor",
+      "declaredLevel": "minor",
+      "fidelity": "manifest-only"
+    },
+    "@dzup-ui/mcp": {
+      "added": 0,
+      "removed": 0,
+      "changed": 0,
+      "requiredLevel": "none",
+      "declaredLevel": "patch",
+      "fidelity": "none"
+    },
+    "@dzup-ui/nuxt": {
+      "added": 0,
+      "removed": 0,
+      "changed": 0,
+      "requiredLevel": "none",
+      "declaredLevel": "minor",
+      "fidelity": "none"
+    },
+    "@dzup-ui/testing": {
+      "added": 0,
+      "removed": 0,
+      "changed": 0,
+      "requiredLevel": "none",
+      "declaredLevel": "minor",
+      "fidelity": "none"
+    },
+    "@dzup-ui/tokens": {
+      "added": 0,
+      "removed": 0,
+      "changed": 0,
+      "requiredLevel": "none",
+      "declaredLevel": "patch",
+      "fidelity": "none"
+    }
+  }
+}

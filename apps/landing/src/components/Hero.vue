@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton } from '@dzup-ui/core'
-import { ArrowRight, Star } from 'lucide-vue-next'
+import { ArrowRight, Star } from '@lucide/vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { FACTS, LINKS } from '../config.ts'
 import HeroCodePanel from './HeroCodePanel.vue'

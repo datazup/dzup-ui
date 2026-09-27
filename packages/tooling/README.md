@@ -9,7 +9,8 @@ Internal build tooling, validators, and quality-gate scripts for the dzup-ui mon
 | `validate:boundaries` | Enforces package import boundaries (core must not import from pro) |
 | `validate:interaction-contract` | Validates interactive components expose correct a11y API |
 | `validate:tokens` | Color-lint: ensures no raw color literals in component source |
-| `validate:exports` | Verifies `exports` maps match actual dist output |
+| `validate:exports` | Verifies `exports` maps match actual dist output, **and** that the six published packages still offer every subpath in `scripts/required-export-subpaths.json` — removing one is a breaking change under VERSIONING.md, and nothing else notices |
+| `validate:published-imports` | Packs each published package with `yarn pack`, extracts the tarballs into a scratch consumer and `import()`s every `exports` subpath under plain Node, plus a consumer-flavoured `tsc --noEmit` over every `types` condition. The only gate that **loads** what it ships |
 | `validate:bundle` | Bundle-size assertions (configured in `bundlesize.config.json`) |
 | `validate:changelog` | Checks that CHANGELOG entries exist for staged changes |
 | `validate:dts` | Validates that `.d.ts` files are generated and exported correctly |
@@ -17,6 +18,13 @@ Internal build tooling, validators, and quality-gate scripts for the dzup-ui mon
 | `generate:exports` | Regenerates `src/index.ts` barrel from `public-api.manifest.json` |
 | `design:application-plan` | Generates a read-only `DESIGN_TO_DZUP_UI_PLAN.md` for an app that should apply `DESIGN.md` through dzup-ui overrides/components |
 | `validate:tree-shake` | Checks that tree-shaking works for the main entry point |
+| `release:api-surface:record` | Records the public API surface of every published package, read through the TypeScript compiler from the **packed** declarations, into `api-surface/<sha>.json`. **Refuses on a dirty tree** — a baseline taken from a tree nobody can check out has no referent. `--force` writes an `admissible: false` snapshot for exercising the machinery |
+| `release:api-diff` | Diffs the packed surface against that baseline, classifies each change against `VERSIONING.md` and maps it to the level the **0.x** policy requires (breaking = `minor`, additive = `patch`, `major` refused). Also measures what `yarn generate:exports` would change, without writing anything |
+| `release:evidence` | CycloneDX 1.6 SBOM per tarball plus an aggregate, a vulnerability report keyed by exact resolved version, a licence report using the **same** allow/block sets `validate:licenses` gates on, sha256+sha512 per tarball and per file, and an unsigned in-toto/SLSA provenance statement |
+| `release:report` | Renders the eight sections 08-11 doc 08 requires of a release report, as a pure projection of the bundle's own artifacts. With no gate ledger it reports sections 2 and 3 as **unrun**, never as green |
+| `release:bundle` | `release:api-diff && release:evidence && release:report` |
+| `test:vue-next` | ADVISORY forward-compatibility lane: the unit + contract suite against the Vue 3.6 release candidate. Pins every `@vue/*` package in lockstep with `resolutions`, installs, runs, restores **both** `package.json` and `yarn.lock` and verifies the restore. Exit 2 (not 1) when it could not run — including when `vue` did not resolve to the pinned version, which is a run that measured the wrong thing |
+| `test:min-peer` | The **minimum declared peer** lane: derives the floor of `vue` and `reka-ui` from `peerDependencies` at run time (never a literal — a second declaration drifts), pins it, installs, **asserts the version on disk equals the floor**, then runs typecheck plus the core/contracts/nuxt suites. Unlike `test:vue-next` it is **not advisory**: a failure says a peer range this repository publishes is false |
 
 ## Resolution — `@dzup-ui/tooling/resolution`
 

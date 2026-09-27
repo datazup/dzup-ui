@@ -7,6 +7,39 @@
 import { execFileSync } from 'node:child_process'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 
+/**
+ * The commit of the checkout an artifact is being generated from — the single
+ * shared answer to "what is `sourceCommit`?" (TASK-R1-O1, N0-05 **D1**).
+ *
+ * Before this existed, three generators answered the question three ways:
+ * `generate:ownership` asked git, `generate:quality-matrix` **copied**
+ * `manifest.sourceCommit`, and `generate:capability-matrix` **copied**
+ * `quality.sourceCommit`. Copying is not provenance: a matrix regenerated an
+ * hour and four commits after the manifest still claimed the manifest's commit,
+ * and every "N commits behind" statement derived from the chain inherited the
+ * oldest hash in it. Each artifact now records the tree **it** was built from.
+ *
+ * **What this does not fix, and cannot.** The value is written into a file in
+ * the working tree at `HEAD = X`; the commit that lands that file is `X+1`. A
+ * committed artifact therefore always stamps its own parent, and no generator
+ * can do better, because the commit it "should" name does not exist while the
+ * file is being written. That off-by-one is the structural half of D1 and is an
+ * owner decision (post-commit re-stamp, a CI check, or documented acceptance) —
+ * see the TASK-R1-O1 handoff. It is harmless to the gates: `sourceCommit` is
+ * excluded from every freshness byte-comparison (`stripProvenance`), precisely
+ * so that a provenance field can never be the reason a committed tree is red.
+ *
+ * Returns `unknown` outside a git checkout, matching the rest of this module.
+ */
+export function headCommit(): string {
+  try {
+    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim()
+  }
+  catch {
+    return 'unknown'
+  }
+}
+
 /** The commit that last touched a path, or `unknown` outside a git checkout. */
 export function lastCommitFor(path: string): string {
   if (path === '')

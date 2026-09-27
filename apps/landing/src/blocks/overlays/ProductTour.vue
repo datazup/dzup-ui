@@ -20,7 +20,7 @@ import {
   DzText,
   DzTour,
 } from '@dzup-ui/core'
-import { Bell, Plus, Search, Sparkles } from 'lucide-vue-next'
+import { Bell, Plus, Search, Sparkles } from '@lucide/vue'
 import { ref } from 'vue'
 
 const open = ref(false)

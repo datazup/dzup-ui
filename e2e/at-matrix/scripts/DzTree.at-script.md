@@ -121,7 +121,6 @@ The scaffold says this component owes 5 task(s):
 
 **Read from:** ARIA `aria-busy` and live regions; and the rule that a disabled composite is disabled throughout, not only on its container.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -129,4 +128,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 - **D1** — affects `live`. Tree-level `disabled` is presentational only: the root is marked disabled but the prop never reaches the rows, so every row keeps its roving tabindex, its click handler, its expand chevron and its selection. The third expectation of the `live` step is expected to FAIL. This is a known open defect.
-

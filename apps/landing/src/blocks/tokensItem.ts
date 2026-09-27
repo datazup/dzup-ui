@@ -21,6 +21,32 @@
  * values* are identical either way; only the activating selector differs. The
  * npm package (`@dzup-ui/tokens`) is listed in `dependencies` so the source of
  * truth stays installable.
+ *
+ * ── A4-F4, closed by TASK-R1-O5 ─────────────────────────────────────────────
+ * The spike note above described the gap and left it open, and the registry
+ * evaluation then measured what it costs: **0 `data-theme` and 0 `@layer` in the
+ * 78.8 KB the CLI writes**. A consumer who installs this theme and drives dark
+ * mode with dzup-ui's own runtime — the documented way, and the only way
+ * `DzThemeProvider` offers — gets 673 light tokens and 123 dead ones. "The
+ * consumer can use `.dark` instead" is a workaround the consumer has to be told
+ * about, on a page that does not exist yet.
+ *
+ * So the item now also carries a `css` block, which is the schema's field for
+ * CSS the `cssVars` shape cannot express:
+ *
+ *   - `[data-theme="dark"]` re-declares the dark scheme under the selector
+ *     dzup-ui's runtime actually toggles, so both conventions work and neither
+ *     is documentation-only;
+ *   - the whole block sits in `@layer dz-tokens`, the layer ADR-19 gives the
+ *     tokens. Unlayered declarations outrank every layer, so an alias written
+ *     outside one would quietly beat the package's own stylesheet in a project
+ *     that imports both — the opposite of what an override-by-contract system
+ *     promises.
+ *
+ * Only the **dark** scheme is aliased, and deliberately: shadcn's `:root` write
+ * is already the selector dzup-ui uses for light, so duplicating 673 light
+ * tokens would add ~30 KB to every install and change nothing. `validate:registry`
+ * holds all three properties — both schemes present, the dark alias, the layer.
  */
 
 import type { RegistryDirectoryEntry } from './registryItem.ts'
@@ -43,6 +69,18 @@ export interface CssVarBuckets {
   dark: Record<string, string>
 }
 
+/** dzup-ui's own dark-scheme selector — what `DzThemeProvider` toggles. */
+export const DZUP_DARK_SELECTOR = '[data-theme="dark"]'
+
+/** The cascade layer ADR-19 gives the design tokens. */
+export const DZUP_TOKEN_LAYER = '@layer dz-tokens'
+
+/**
+ * The shadcn `css` field: an at-rule or selector, to a declaration block or a
+ * nested selector map. One level of nesting is all this item uses.
+ */
+export type RegistryCss = Record<string, Record<string, Record<string, string> | string>>
+
 /** The `tokens.json` registry-item payload. */
 export interface TokensRegistryItem {
   $schema: typeof REGISTRY_ITEM_SCHEMA
@@ -53,6 +91,7 @@ export interface TokensRegistryItem {
   dependencies: string[]
   registryDependencies: string[]
   cssVars: CssVarBuckets
+  css: RegistryCss
 }
 
 /**
@@ -119,14 +158,33 @@ export function parseTokenCssVars(cssText: string): CssVarBuckets {
 }
 
 /**
+ * The `css` block that makes an installed theme live under dzup-ui's own dark
+ * mode, inside the layer ADR-19 gives the tokens (A4-F4).
+ *
+ * Written with the `--` prefix restored: `cssVars` keys are bare names because
+ * that is the shape shadcn's CLI expects there, but `css` is literal CSS and a
+ * custom property without its prefix is not one.
+ */
+export function darkSchemeAlias(cssVars: CssVarBuckets): RegistryCss {
+  const declarations: Record<string, string> = {}
+  for (const [name, value] of Object.entries(cssVars.dark))
+    declarations[`--${name}`] = value
+  return { [DZUP_TOKEN_LAYER]: { [DZUP_DARK_SELECTOR]: declarations } }
+}
+
+/**
  * Build the `tokens.json` registry item from the tokens stylesheet text. Throws
  * on an empty parse (a broken/renamed stylesheet) rather than shipping a theme
- * with no variables.
+ * with no variables — and on an empty DARK parse, because a theme that installs
+ * only one colour scheme is the A4-F4 defect in a different shape.
  */
 export function toTokensItem(cssText: string): TokensRegistryItem {
   const cssVars = parseTokenCssVars(cssText)
   if (Object.keys(cssVars.light).length === 0) {
     throw new Error('parseTokenCssVars found no light-mode tokens — stylesheet shape changed?')
+  }
+  if (Object.keys(cssVars.dark).length === 0) {
+    throw new Error('parseTokenCssVars found no dark-mode tokens — stylesheet shape changed?')
   }
   return {
     $schema: REGISTRY_ITEM_SCHEMA,
@@ -138,6 +196,7 @@ export function toTokensItem(cssText: string): TokensRegistryItem {
     dependencies: [...TOKENS_DEPENDENCIES],
     registryDependencies: [],
     cssVars,
+    css: darkSchemeAlias(cssVars),
   }
 }
 

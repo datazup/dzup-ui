@@ -8,6 +8,10 @@ outline: [2, 3]
      Every API fact on this page is a projection of that artifact (constraint B9); edits are
      overwritten on the next run. Hand-written prose belongs in components/_usage/<Name>.md. -->
 
+<script setup>
+import DzPlayground from '../.vitepress/theme/components/DzPlayground.vue'
+</script>
+
 # DzIcon
 
 Icon wrapper component with consistent sizing and accessibility.
@@ -50,7 +54,7 @@ never as asserted.
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label. When provided, the icon is treated as meaningful (not decorative). |
-| `icon` | `Component` | yes | — | Icon component to render (e.g. from lucide-vue-next) |
+| `icon` | `Component` | yes | — | Icon component to render (e.g. from |
 | `id` | `string \| undefined` | no | — | Accessible identifier |
 | `size` | `IconSize \| undefined` | no | `"md"` | Icon size |
 | `strokeWidth` | `number \| undefined` | no | — | SVG stroke width override |
@@ -125,7 +129,7 @@ examples for.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `80ce301`.
+last changed at `63c1325`.
 
 ## Extraction fidelity
 
@@ -143,8 +147,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `99b963a0` for the capability matrix,
-`569d8872` for the quality matrix. It is **locally qualified**:
+artifact records — `7f340779` for the capability matrix,
+`527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -154,7 +158,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
-- **Component last changed at:** `80ce3012`
+- **Component last changed at:** `63c1325d`
 
 ### WCAG 2.2 criteria in scope (9)
 

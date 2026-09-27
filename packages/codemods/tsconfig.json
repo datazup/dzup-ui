@@ -8,5 +8,9 @@
     "outDir": "dist"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  // __fixtures__ holds codemod input/output text read by the specs through the
+  // file system. The outputs import packages this repository does not install
+  // (@lucide/vue), so type-checking or emitting them reports the fixture as the
+  // bug and ships it in dist/.
+  "exclude": ["node_modules", "dist", "src/**/__fixtures__/**"]
 }

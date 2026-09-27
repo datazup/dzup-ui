@@ -33,7 +33,7 @@ import {
   DzText,
   DzToolbar,
 } from '@dzup-ui/core'
-import { Circle, FileCode, FileText, Folder, Play, Save } from 'lucide-vue-next'
+import { Circle, FileCode, FileText, Folder, Play, Save } from '@lucide/vue'
 
 interface TreeRow {
   label: string

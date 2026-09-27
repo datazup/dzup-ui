@@ -8,7 +8,7 @@
  * in light + dark.
  */
 import type { Component } from 'vue'
-import { Armchair, Lamp, Package } from 'lucide-vue-next'
+import { Armchair, Lamp, Package } from '@lucide/vue'
 
 // ---------------------------------------------------------------------------
 // Delivery progress (DzStepper)

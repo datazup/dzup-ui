@@ -34,7 +34,7 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { Bell, Boxes, CreditCard, Palette, Plug, Shield, User } from 'lucide-vue-next'
+import { Bell, Boxes, CreditCard, Palette, Plug, Shield, User } from '@lucide/vue'
 import { ref } from 'vue'
 
 const NAV = [

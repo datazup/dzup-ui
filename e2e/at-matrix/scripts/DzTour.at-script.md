@@ -103,7 +103,6 @@ The scaffold says this component owes 4 task(s):
 
 **Read from:** ARIA live regions — a step change is a status, announced once.
 
-
 ## Known open defects — read this AFTER you have recorded your result
 
 These are already on the register. If a step failed for one of these reasons,
@@ -111,4 +110,3 @@ say so in the row's `notes` and reference the id; do **not** file it as a new
 defect. If a step failed for any other reason, it **is** new — file it.
 
 - **D7** — affects `dismiss`. `useFocusTrap.deactivate()` removes its keydown listener and nothing else — it never restores focus. Dismissing the tour by Escape, Skip or Finish is expected to leave focus on the document body instead of on "Start accessible tour". The dismiss step is expected to FAIL on every pair. This is a known open defect, not a new finding.
-
