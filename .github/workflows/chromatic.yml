@@ -12,9 +12,9 @@ name: Chromatic
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 concurrency:
   group: chromatic-${{ github.ref }}
@@ -23,7 +23,9 @@ concurrency:
 jobs:
   chromatic:
     name: Visual Regression (Chromatic)
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     # Non-blocking initially — never fail the build while baselines settle.
     continue-on-error: true
     steps:
@@ -82,3 +84,5 @@ jobs:
             echo ""
             echo "> Non-blocking check — review diffs in Chromatic and accept baselines there."
           } >> "$GITHUB_STEP_SUMMARY"
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
