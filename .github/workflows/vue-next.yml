@@ -51,7 +51,9 @@ concurrency:
 jobs:
   suite:
     name: Unit + contract suite under Vue 3.6-RC
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -151,6 +153,8 @@ jobs:
       - name: Prove the default toolchain was restored
         if: always()
         run: git diff --exit-code -- package.json yarn.lock
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   # Separate job, separate install, on purpose: the Nuxt module's compatibility
   # question is "does the published module work in a real consumer app", and the
@@ -164,7 +168,9 @@ jobs:
   # matrix pins an exact version rather than `^4`.
   nuxt-majors:
     name: Nuxt consumer fixtures (nuxt ${{ matrix.nuxt }})
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     continue-on-error: true
     strategy:
       fail-fast: false
@@ -213,3 +219,5 @@ jobs:
           echo "## Nuxt ${{ matrix.nuxt }} consumer fixtures — **${{ steps.fixtures.outcome }}**" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Both majors in this matrix are RELEASED versions: a failure here is a defect claim against this repository, advisory only because N5-03-D6 has not been decided." >> "$GITHUB_STEP_SUMMARY"
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45

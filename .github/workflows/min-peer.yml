@@ -75,7 +75,9 @@ concurrency:
 jobs:
   min-peer:
     name: Declared peer floor (vue + reka-ui)
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -135,3 +137,5 @@ jobs:
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "The floors are derived from \`peerDependencies\` at run time, not written down here." >> "$GITHUB_STEP_SUMMARY"
           echo "A failure is a defect claim against THIS repository: a published peer range admits a version the library does not work on." >> "$GITHUB_STEP_SUMMARY"
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45

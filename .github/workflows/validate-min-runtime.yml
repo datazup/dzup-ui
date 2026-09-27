@@ -44,7 +44,9 @@ concurrency:
 jobs:
   validate-min-runtime:
     name: Validators at the minimum runtime
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     steps:
       - uses: actions/checkout@v4
         with:
@@ -129,3 +131,5 @@ jobs:
       # place: both require `^20.19.0`, which is why `engines` says so.
       - name: Test at the floor
         run: yarn test
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45

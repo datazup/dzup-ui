@@ -34,12 +34,14 @@ name: Landing E2E Snapshots
 on:
   workflow_dispatch:
   push:
-    branches: [ci/landing-snapshots]
+    branches: [ ci/landing-snapshots ]
 
 jobs:
   snapshots:
     name: Shoot Linux baselines
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -67,7 +69,9 @@ jobs:
         env:
           LANDING_SKIP_STORYBOOK: '1'
       - name: Install Playwright Chromium
-        run: node node_modules/@playwright/test/cli.js install --with-deps chromium
+        run: |-
+          # System browser dependencies are provisioned on the managed builder.
+          node node_modules/@playwright/test/cli.js install chromium
       # `--update-snapshots` writes any missing or changed baseline. Scoped to the
       # chromium project (the only one with `toHaveScreenshot` assertions) and run
       # with no retries so a flaky first shot cannot be silently re-taken and
@@ -85,3 +89,4 @@ jobs:
           path: apps/landing/e2e/**/*-snapshots/
           retention-days: 14
           if-no-files-found: error
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}

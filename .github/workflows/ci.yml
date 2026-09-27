@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
   # TASK-R1-O4. Hand-runnable at any ref. Without this, `gh workflow run CI`
   # fails with "workflow does not have workflow_dispatch trigger" and the only
   # way to re-ask a question of CI is to push a commit — which is how three
@@ -24,7 +24,9 @@ jobs:
 
   typecheck:
     name: Typecheck
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -46,10 +48,14 @@ jobs:
       # build in the `storybook` job instead — see docs/storybook-decisions.md.
       - name: Typecheck (all packages + apps/landing)
         run: yarn typecheck:all
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -73,13 +79,17 @@ jobs:
       # to ignore. Generated output is excluded via eslint.config.js `ignores`.
       - name: ESLint (packages + apps, zero warnings)
         run: yarn lint
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   test:
     name: Unit Tests (Node ${{ matrix.node-version }})
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     strategy:
       matrix:
-        node-version: ['20.19.0', '22.13.0']
+        node-version: [ '20.19.0', '22.13.0' ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -104,6 +114,8 @@ jobs:
         run: yarn test:a11y
       - name: Run SSR smoke tests
         run: yarn test:ssr
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   # ──────────────────────────────────────────────
   # The floor, exercised (ADR-18, TASK-OSS-P2-01)
@@ -123,7 +135,9 @@ jobs:
 
   validate:
     name: Validate (boundaries + tokens)
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -207,8 +221,22 @@ jobs:
           yarn workspace @dzup-ui/landing build:sitemap
           yarn workspace @dzup-ui/landing build:og
           yarn workspace @dzup-ui/landing build:releases
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'
+          import assert from 'node:assert/strict'
+          import { execFileSync } from 'node:child_process'
+          const file = 'apps/landing/public/r/component-meta.json'
+          const generated = JSON.parse(fs.readFileSync(file, 'utf8'))
+          const committed = JSON.parse(execFileSync('git', ['show', 'HEAD:' + file], { encoding: 'utf8' }))
+          for (const artifact of [generated, committed]) {
+            assert.match(artifact.sourceCommit, /^[a-f0-9]{40}$/)
+            delete artifact.sourceCommit
+          }
+          assert.deepEqual(generated, committed, 'Generated component metadata content changed')
+          NODE
           git diff --exit-code \
             apps/landing/public/r/ \
+            ':(exclude)apps/landing/public/r/component-meta.json' \
             apps/landing/public/llms.txt \
             apps/landing/public/llms-full.txt \
             apps/landing/public/feed.xml \
@@ -246,6 +274,8 @@ jobs:
       # (TASK-FREE-11). Rate-limited hosts are allowlisted inside the script.
       - name: External link check (identity surfaces)
         run: yarn check:links
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   # ──────────────────────────────────────────────
   # G1: Merge Gates (main branch)
@@ -253,8 +283,10 @@ jobs:
 
   build:
     name: Build (library mode)
-    runs-on: ubuntu-latest
-    needs: [typecheck, lint, test, validate]
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
+    needs: [ typecheck, lint, test, validate ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -337,11 +369,15 @@ jobs:
           path: |
             packages/core/dist/
           retention-days: 7
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   storybook:
     name: Storybook Build
-    runs-on: ubuntu-latest
-    needs: [typecheck]
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
+    needs: [ typecheck ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -412,7 +448,9 @@ jobs:
       # does: this drives the real static build in Chromium and fails on a dead
       # asset, an unstyled/non-reactive component, or a broken theme toggle.
       - name: Install Playwright Chromium
-        run: yarn workspace @dzup-ui/storybook exec playwright install --with-deps chromium
+        run: |-
+          # System browser dependencies are provisioned on the managed builder.
+          yarn workspace @dzup-ui/storybook exec playwright install chromium
       # Also drives the TASK-FREE2-12 per-component "Open in playground": it opens a
       # cross-family sample of component docs pages (DzButton / DzTable / DzSelect),
       # expands the playground, and asserts the DERIVED snippet actually mounts —
@@ -432,11 +470,15 @@ jobs:
           name: storybook
           path: apps/storybook/storybook-static/
           retention-days: 7
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   storybook-test:
     name: Storybook Tests (play + a11y)
-    runs-on: ubuntu-latest
-    needs: [typecheck]
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
+    needs: [ typecheck ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -456,7 +498,9 @@ jobs:
       - name: Build token artifacts
         run: yarn workspace @dzup-ui/tokens build
       - name: Install Playwright Chromium
-        run: yarn workspace @dzup-ui/storybook exec playwright install --with-deps chromium
+        run: |-
+          # System browser dependencies are provisioned on the managed builder.
+          yarn workspace @dzup-ui/storybook exec playwright install chromium
       # TASK-0.9 / TASK-X.3 — runs every story's play() + WCAG 2.2 AA axe audit
       # in-browser. The a11y gate rolls out per family (preview.ts): the default
       # is report-only, but any family opted into `a11yError` runs at 'error', so
@@ -491,12 +535,16 @@ jobs:
           name: storybook-coverage
           path: apps/storybook/coverage/
           retention-days: 7
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   e2e:
     name: E2E Tests (Playwright)
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     timeout-minutes: 45
-    needs: [typecheck]
+    needs: [ typecheck ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -514,7 +562,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: |-
+          # System browser dependencies are provisioned on the managed builder.
+          npx playwright install chromium
       - name: Run functional E2E tests (Chromium)
         timeout-minutes: 20
         run: yarn test:e2e:functional --project=chromium
@@ -525,6 +575,7 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
 
   # The visual lane, in the image its baselines were captured in (TASK-R2-O6,
   # owner decision O6-D2 option b, 2026-09-26). Pixels depend on the installed
@@ -544,9 +595,11 @@ jobs:
   # the regression or re-accept with `yarn visual:accept` inside this image.
   visual:
     name: Visual Snapshots (pinned container)
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     timeout-minutes: 30
-    needs: [typecheck]
+    needs: [ typecheck ]
     container:
       image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
       options: --ipc=host
@@ -579,6 +632,7 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 7
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
 
   # The landing's own browser suite (TASK-FREE3-06). Until this job existed, 1,953
   # unit tests ran in jsdom and the ONLY real browser that touched the landing in
@@ -592,9 +646,11 @@ jobs:
   # real SPA history fallback), so a failure here is a real user-visible break.
   landing-e2e:
     name: Landing E2E (built dist)
-    runs-on: ubuntu-latest
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
     timeout-minutes: 20
-    needs: [typecheck]
+    needs: [ typecheck ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -634,7 +690,9 @@ jobs:
         env:
           LANDING_SKIP_STORYBOOK: '1'
       - name: Install Playwright Chromium
-        run: node node_modules/@playwright/test/cli.js install --with-deps chromium
+        run: |-
+          # System browser dependencies are provisioned on the managed builder.
+          node node_modules/@playwright/test/cli.js install chromium
       # LANDING_E2E_TARGET=preview (set by the script) swaps the dev server for
       # `vite preview` over apps/landing/dist: minified, code-split, real asset URLs,
       # the SPA history fallback. Both Playwright projects run — Desktop Chrome for
@@ -670,11 +728,14 @@ jobs:
             apps/landing/playwright-report/
             apps/landing/test-results/
           retention-days: 7
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
 
   landing-perf:
     name: Landing Perf (Lighthouse + bundle budget)
-    runs-on: ubuntu-latest
-    needs: [typecheck]
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
+    needs: [ typecheck ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -773,12 +834,16 @@ jobs:
             apps/landing/dist/perf-badge.json
             .lighthouseci/
           retention-days: 7
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') }}
+    timeout-minutes: 45
 
   coverage:
     name: Test Coverage
-    runs-on: ubuntu-latest
-    needs: [test]
-    if: github.event_name == 'pull_request'
+    runs-on:
+      group: datazup-public-builders
+      labels: coolify-cicd-codev
+    needs: [ test ]
+    if: ${{ (github.repository == 'datazup/dzup-ui' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request') && (github.event_name == 'pull_request') }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -805,3 +870,4 @@ jobs:
           name: coverage
           path: coverage/
           retention-days: 7
+    timeout-minutes: 45
