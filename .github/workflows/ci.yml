@@ -536,9 +536,12 @@ jobs:
   # step. Bump the tag and the digest together with @playwright/test, then
   # re-capture: a new image is environment drift, not a product change.
   #
-  # Report-only until the lane is green three times in a row here (the
-  # <ci_gate> rule in the TASK-R2-O6 prompt). Removing continue-on-error is its
-  # own commit, citing those runs.
+  # Blocking since 2026-09-27 (DZUP-UI-VISUAL-GATE-FLIP-20260927-R1). The
+  # <ci_gate> rule in the TASK-R2-O6 prompt kept it report-only until the lane
+  # was green three times in a row here: runs 36268407552 (bce1312),
+  # 36269511350 (bf8d5bd) and 36301560614 (e473e64), 58 passed each.
+  # A red here is a pixel change: look at the uploaded diff, then either fix
+  # the regression or re-accept with `yarn visual:accept` inside this image.
   visual:
     name: Visual Snapshots (pinned container)
     runs-on: ubuntu-latest
@@ -563,13 +566,12 @@ jobs:
           restore-keys: yarn-visual-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Run visual snapshot tests (Chromium, report-only)
+      - name: Run visual snapshot tests (Chromium)
         id: visual
         timeout-minutes: 20
-        continue-on-error: true
         run: yarn test:e2e:visual --project=chromium --retries=0
       - name: Upload visual report
-        if: failure() || steps.visual.outcome == 'failure'
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: visual-report

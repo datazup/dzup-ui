@@ -430,7 +430,10 @@ G5, `N2-D2-evidence-pages-handoff.md` F-2._
 > and 12 dark screens failed on it; this is fixed in `preview.ts`.
 >
 > Still open:
-> - removing `continue-on-error` once the lane is green three times in CI;
+> - ~~removing `continue-on-error` once the lane is green three times in CI~~ —
+>   done 2026-09-27 after runs 36268407552, 36269511350 and 36301560614
+>   (58 passed each); the `visual` job now fails CI
+>   (`docs/qa/visual-gate-flip-2026-09-27/ADMISSION.md`);
 > - waves 0–4, which is coverage 8 → 89 of 144 with the owner accepting per family;
 > - O6-D1, O6-D3, O6-D4 and O6-D5.
 
