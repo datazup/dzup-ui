@@ -100,6 +100,65 @@ export function bareHtmlInDescription(text: string): string | null {
   return /<\/?[A-Z][\w-]*(?:\s[^<>]*)?>/i.exec(withoutCode)?.[0] ?? null
 }
 
+/**
+ * The first parameter name a printed call signature repeats, or null.
+ *
+ * D152: Vue names an emit's event-name parameter `event`, so an emits tuple
+ * whose payload is ALSO labelled `event` prints `(event: "click", event:
+ * MouseEvent)` — here, in every docs page and llms.txt, and in the published
+ * `.d.ts` of any component that inlines another's instance type, where it is
+ * `TS2300 Duplicate identifier` under TypeScript's default `skipLibCheck: false`.
+ * The metadata comes from the same printer, so this catches the published defect
+ * at the one gate that reads every signature.
+ *
+ * Only the top level of the outermost parameter list is read: commas inside
+ * `<>`, `()`, `[]`, `{}` or a string literal separate nothing here.
+ */
+export function duplicateSignatureParam(signature: string): string | null {
+  const open = signature.indexOf('(')
+  if (open === -1)
+    return null
+  const params: string[] = []
+  let depth = 0
+  let quote: string | null = null
+  let current = ''
+  for (let i = open + 1; i < signature.length; i++) {
+    const ch = signature[i]!
+    if (quote !== null) {
+      if (ch === quote)
+        quote = null
+    }
+    else if (ch === '"' || ch === '\'' || ch === '`') {
+      quote = ch
+    }
+    else if (ch === '(' || ch === '[' || ch === '{' || ch === '<') {
+      depth++
+    }
+    else if (ch === ')' || ch === ']' || ch === '}' || (ch === '>' && signature[i - 1] !== '=')) {
+      if (depth === 0 && ch === ')')
+        break
+      depth--
+    }
+    else if (ch === ',' && depth === 0) {
+      params.push(current)
+      current = ''
+      continue
+    }
+    current += ch
+  }
+  params.push(current)
+  const seen = new Set<string>()
+  for (const param of params) {
+    const name = /^\s*(?:\.\.\.)?([A-Z_$][\w$]*)\??\s*:/i.exec(param)?.[1]
+    if (name === undefined)
+      continue
+    if (seen.has(name))
+      return name
+    seen.add(name)
+  }
+  return null
+}
+
 /** Every description field on a record, with a dotted path naming its member. */
 function describedMembers(record: ComponentMetaArtifact['components'][number]): Array<[string, string]> {
   const out: Array<[string, string]> = [[record.name, record.description]]
@@ -268,6 +327,16 @@ export function checkComponentMeta(
           rule: 'schema',
           level: 'error',
           message: `${c.name} event ${e.name}: description and descriptionSource disagree.`,
+        })
+      }
+      const duplicate = duplicateSignatureParam(e.signature)
+      if (duplicate !== null) {
+        violations.push({
+          rule: 'schema',
+          level: 'error',
+          message: `${c.name} event ${e.name}: signature \`${e.signature}\` names two parameters `
+            + `\`${duplicate}\`. Relabel the emits payload in the component's .types.ts (D152): `
+            + `the same text is TS2300 in any published .d.ts that inlines this component.`,
         })
       }
     }

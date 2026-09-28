@@ -24,6 +24,7 @@ import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 import {
   bareHtmlInDescription,
   checkComponentMeta,
+  duplicateSignatureParam,
   measure,
   membersWithBareHtml,
   readCeilings,
@@ -210,6 +211,18 @@ describe('schema', () => {
     expect(errors(v).join('\n')).toContain('event click: description and descriptionSource disagree')
   })
 
+  it('fails when an event signature names the same parameter twice (D152)', () => {
+    const v = checkComponentMeta(
+      artifact([record({
+        events: [{ name: 'click', type: '[event: MouseEvent]', signature: '(event: "click", event: MouseEvent): void', description: 'Clicked', descriptionSource: 'emits-interface', modelDerived: false }],
+      })]),
+      new Set(['DzButton']),
+      EXACT_CEILINGS,
+      COPY_LINE,
+    )
+    expect(errors(v).join('\n')).toContain('event click: signature `(event: "click", event: MouseEvent): void` names two parameters `event`')
+  })
+
   it('fails when a published example has an empty source slice', () => {
     const v = checkComponentMeta(
       artifact([record({
@@ -243,6 +256,28 @@ describe('schema', () => {
 })
 
 // ── Clause 4 · ratchets ──────────────────────────────────────────────────────
+
+describe('duplicateSignatureParam', () => {
+  it('finds the D152 collision', () => {
+    expect(duplicateSignatureParam('(event: "click", event: MouseEvent): void')).toBe('event')
+  })
+
+  it('passes distinct names, including rest parameters and optional ones', () => {
+    expect(duplicateSignatureParam('(event: "click", e: MouseEvent): void')).toBeNull()
+    expect(duplicateSignatureParam('(event: "select", item?: Item, ...rest: unknown[]): void')).toBeNull()
+  })
+
+  it('reads only the top level: nested names and commas in types or strings do not count', () => {
+    expect(duplicateSignatureParam('(event: "change", value: Record<string, number>, meta: { event: string, e: 1 }): void')).toBeNull()
+    expect(duplicateSignatureParam('(event: "a,b", cb: (event: Event, x: number) => void): void')).toBeNull()
+    expect(duplicateSignatureParam('(event: "a", cb: (x: number) => void, cb: 1): void')).toBe('cb')
+  })
+
+  it('returns null for an empty or non-call signature', () => {
+    expect(duplicateSignatureParam('')).toBeNull()
+    expect(duplicateSignatureParam('s')).toBeNull()
+  })
+})
 
 describe('ratchets', () => {
   it('fails when a debt number rises', () => {

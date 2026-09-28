@@ -68,7 +68,7 @@ export interface DzAnchorEmits {
   /** Active link changed (via scroll or click). Payload is the item `href`. */
   change: [href: string]
   /** A link was clicked. */
-  click: [event: MouseEvent, item: DzAnchorItem]
+  click: [e: MouseEvent, item: DzAnchorItem]
 }
 
 // ---------------------------------------------------------------------------

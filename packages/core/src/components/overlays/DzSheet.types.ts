@@ -43,11 +43,11 @@ export interface DzSheetContentProps extends BaseAccessibilityProps, BasePortalP
 /** Events emitted by DzSheetContent */
 export interface DzSheetContentEmits {
   /** Escape key pressed */
-  escapeKeyDown: [event: KeyboardEvent]
+  escapeKeyDown: [e: KeyboardEvent]
   /** Pointer down outside sheet content */
-  pointerDownOutside: [event: Event]
+  pointerDownOutside: [e: Event]
   /** Any interaction outside sheet content */
-  interactOutside: [event: Event]
+  interactOutside: [e: Event]
 }
 
 // ---------------------------------------------------------------------------

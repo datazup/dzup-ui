@@ -90,7 +90,7 @@ export interface DzSplitButtonActionProps {
 /** Events emitted by DzSplitButtonAction */
 export interface DzSplitButtonActionEmits {
   /** Primary action clicked */
-  click: [event: MouseEvent]
+  click: [e: MouseEvent]
 }
 
 /** Slot definitions for DzSplitButtonAction */

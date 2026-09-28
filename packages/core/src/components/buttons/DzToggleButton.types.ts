@@ -50,9 +50,9 @@ export interface DzToggleButtonEmits {
   /** Pressed state changed */
   change: [pressed: boolean]
   /** Focus gained */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus lost */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

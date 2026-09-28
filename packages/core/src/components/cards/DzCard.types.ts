@@ -54,7 +54,7 @@ export interface DzCardProps extends BaseAccessibilityProps {
  */
 export interface DzCardEmits {
   /** Emitted when a clickable card is clicked (mouse or keyboard) */
-  click: [event: MouseEvent | KeyboardEvent]
+  click: [e: MouseEvent | KeyboardEvent]
 }
 
 /**

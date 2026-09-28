@@ -62,9 +62,9 @@ export interface DzContextMenuContentProps extends BaseAccessibilityProps, BaseP
 /** Events emitted by DzContextMenuContent */
 export interface DzContextMenuContentEmits {
   /** Escape key pressed */
-  escapeKeyDown: [event: KeyboardEvent]
+  escapeKeyDown: [e: KeyboardEvent]
   /** Pointer down outside content */
-  pointerDownOutside: [event: Event]
+  pointerDownOutside: [e: Event]
 }
 
 /** Slot definitions for DzContextMenuContent */
@@ -92,7 +92,7 @@ export interface DzContextMenuItemProps {
 /** Events emitted by DzContextMenuItem */
 export interface DzContextMenuItemEmits {
   /** Item selected (clicked or Enter key) */
-  select: [event: Event]
+  select: [e: Event]
 }
 
 /** Slot definitions for DzContextMenuItem */

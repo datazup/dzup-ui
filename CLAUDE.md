@@ -172,9 +172,9 @@ export interface DzButtonProps extends BaseAccessibilityProps {
 }
 
 export interface DzButtonEmits {
-  click: [event: MouseEvent]
-  focus: [event: FocusEvent]
-  blur: [event: FocusEvent]
+  click: [e: MouseEvent]
+  focus: [e: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 export interface DzButtonSlots {
@@ -262,6 +262,10 @@ All PRs must pass:
 2. **Never use `<style scoped>`** -- use `tv()` in `.variants.ts`
 3. **Always extend contracts** -- props interfaces extend `Base*Props` from `@dzup-ui/contracts`
 4. **Use `defineModel`** for v-model, not manual prop+emit (ADR-16)
+4b. **Never label an emits payload `event`** -- write `click: [e: MouseEvent]`. Vue
+   names the event-name parameter `event`, so `[event: …]` prints
+   `(event: "click", event: MouseEvent)`: `TS2300` in any published `.d.ts` that
+   inlines the component (D152). `yarn validate:component-meta` rejects it.
 5. **Use `.ts` extensions** in all relative imports
 6. **Stories live separately** -- `packages/core/stories/{family}/`
 7. **Respect import boundaries** -- contracts has no runtime deps, compat never imported by core

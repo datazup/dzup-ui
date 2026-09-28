@@ -103,3 +103,15 @@ Source files (27):
   fix, if ours, is a separate packet.
 - `packages/mcp/src/__fixtures__/catalog.ts` is a frozen fixture and keeps its
   old signature text.
+
+## Amendment 1 (before the implementation commit)
+
+The repository's own agent guide taught the defect: `CLAUDE.md` §"Type
+Definitions Pattern" shows `click: [event: MouseEvent]`, which every agent
+copies. Added to the allowed paths:
+
+- `CLAUDE.md` — the example relabelled, plus quick rule 4b.
+- `packages/tooling/src/meta/component-meta.ts` — one JSDoc example
+  (`[event: MouseEvent]` → `[e: MouseEvent]`); no code change.
+
+Lease amended to generation 3 with the same two paths.

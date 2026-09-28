@@ -103,7 +103,7 @@ export interface PropMeta {
 /** One emitted event. */
 export interface EventMetaRecord {
   name: string
-  /** Payload tuple as printed by the extractor, e.g. `[event: MouseEvent]`. */
+  /** Payload tuple as printed by the extractor, e.g. `[e: MouseEvent]`. */
   type: string
   /** Full call signature as printed by the extractor. */
   signature: string

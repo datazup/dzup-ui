@@ -69,9 +69,9 @@ export interface DzOtpInputEmits {
   /** All digits filled */
   complete: [value: string]
   /** Focus gained */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus lost */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

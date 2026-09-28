@@ -33,9 +33,9 @@ export interface DzImageProps extends BaseAccessibilityProps {
 /** Events emitted by DzImage */
 export interface DzImageEmits {
   /** Image loaded successfully */
-  load: [event: Event]
+  load: [e: Event]
   /** Image failed to load */
-  error: [event: Event]
+  error: [e: Event]
 }
 
 // ---------------------------------------------------------------------------

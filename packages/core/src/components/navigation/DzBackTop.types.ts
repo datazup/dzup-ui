@@ -61,7 +61,7 @@ export interface DzBackTopProps extends BaseAccessibilityProps {
 /** Events emitted by DzBackTop */
 export interface DzBackTopEmits {
   /** Native click event, fired after the scroll-to-top action is triggered. */
-  click: [event: MouseEvent]
+  click: [e: MouseEvent]
 }
 
 // ---------------------------------------------------------------------------

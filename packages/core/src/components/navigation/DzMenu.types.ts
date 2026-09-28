@@ -75,7 +75,7 @@ export interface DzMenuItemProps {
 /** Events emitted by DzMenuItem */
 export interface DzMenuItemEmits {
   /** Item clicked */
-  click: [event: MouseEvent]
+  click: [e: MouseEvent]
 }
 
 /** Slot definitions for DzMenuItem */
