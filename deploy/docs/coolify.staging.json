@@ -19,7 +19,8 @@
         "dockerfile": "ui/dzup-ui/deploy/Dockerfile.static",
         "args": {
           "UI_WORKSPACE": "@dzup-ui/docs",
-          "UI_DIST_PATH": "apps/docs/.vitepress/dist"
+          "UI_DIST_PATH": "apps/docs/.vitepress/dist",
+          "UI_BUILD_STORYBOOK": "1"
         }
       },
       "postBuildAssertions": {
