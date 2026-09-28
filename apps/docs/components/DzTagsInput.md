@@ -88,8 +88,8 @@ never as asserted.
 | Event | Payload | Description |
 | --- | --- | --- |
 | `add` | `[token: string]` | Emitted after a token is committed, with the token text. |
-| `blur` | `[event: FocusEvent]` | Emitted when the text field loses focus, after any `addOnBlur` commit. |
-| `focus` | `[event: FocusEvent]` | Emitted when the text field takes focus. |
+| `blur` | `[e: FocusEvent]` | Emitted when the text field loses focus, after any `addOnBlur` commit. |
+| `focus` | `[e: FocusEvent]` | Emitted when the text field takes focus. |
 | `invalid` | `[token: string, reason: DzTagsInputRejectReason]` | Emitted when a token is rejected instead of committed, with the text and why. |
 | `remove` | `[token: string, index: number]` | Emitted after a token is detached, with the token text and the index it held. |
 | `update:modelValue` | `[value: string[] \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -263,7 +263,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `7f340779` for the capability matrix,
+artifact records — `667b0b1b` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.

@@ -70,7 +70,7 @@ never as asserted.
 | Event | Payload | Description |
 | --- | --- | --- |
 | `change` | `[href: string]` | Active link changed (via scroll or click). Payload is the item `href`. |
-| `click` | `[event: MouseEvent, item: DzAnchorItem]` | A link was clicked. |
+| `click` | `[e: MouseEvent, item: DzAnchorItem]` | A link was clicked. |
 | `update:active` | `[value: string]` | Emitted when the `v-model:active` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:active` consumes it for you. |
 
 ## Slots (1)
@@ -234,7 +234,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `7f340779` for the capability matrix,
+artifact records — `667b0b1b` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.

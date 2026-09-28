@@ -90,10 +90,10 @@ never as asserted.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Emitted when the trigger loses focus |
+| `blur` | `[e: FocusEvent]` | Emitted when the trigger loses focus |
 | `change` | `[value: TreeSelectValue]` | Emitted when the selected value changes |
 | `close` | `[]` | Emitted when the panel closes |
-| `focus` | `[event: FocusEvent]` | Emitted when the trigger receives focus |
+| `focus` | `[e: FocusEvent]` | Emitted when the trigger receives focus |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Emitted when the panel opens |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
@@ -305,7 +305,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `7f340779` for the capability matrix,
+artifact records — `667b0b1b` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.

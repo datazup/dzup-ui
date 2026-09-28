@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "e6ba67b8f013d0d51ecec9977ffc83fbef9a5fb7",
+  "sourceCommit": "667b0b1b0ee9a74da7784737ad0ce0d04b00fbc5",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -1558,8 +1558,8 @@
         },
         {
           "name": "click",
-          "type": "[event: MouseEvent, item: DzAnchorItem]",
-          "signature": "(event: \"click\", event: MouseEvent, item: DzAnchorItem): void",
+          "type": "[e: MouseEvent, item: DzAnchorItem]",
+          "signature": "(event: \"click\", e: MouseEvent, item: DzAnchorItem): void",
           "description": "A link was clicked.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -2719,8 +2719,8 @@
       "events": [
         {
           "name": "error",
-          "type": "[event: Event]",
-          "signature": "(event: \"error\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"error\", e: Event): void",
           "description": "Emitted when the avatar image fails to load",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -3256,8 +3256,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Native click event, fired after the scroll-to-top action is triggered.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -4722,24 +4722,24 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Native click event (suppressed when disabled or loading)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -6111,8 +6111,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent | KeyboardEvent]",
-          "signature": "(event: \"click\", event: MouseEvent | KeyboardEvent): void",
+          "type": "[e: MouseEvent | KeyboardEvent]",
+          "signature": "(event: \"click\", e: MouseEvent | KeyboardEvent): void",
           "description": "Emitted when a clickable card is clicked (mouse or keyboard)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -7575,8 +7575,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -7607,8 +7607,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -8009,8 +8009,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -8025,8 +8025,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -8651,8 +8651,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -8667,8 +8667,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -10173,8 +10173,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -10189,8 +10189,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -10830,8 +10830,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -10862,8 +10862,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -12586,16 +12586,16 @@
       "events": [
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -12672,8 +12672,8 @@
       "events": [
         {
           "name": "select",
-          "type": "[event: Event]",
-          "signature": "(event: \"select\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"select\", e: Event): void",
           "description": "Item selected (clicked or Enter key)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -15113,8 +15113,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -15145,8 +15145,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -15667,8 +15667,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -15699,8 +15699,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -16903,40 +16903,40 @@
       "events": [
         {
           "name": "closeAutoFocus",
-          "type": "[event: Event]",
-          "signature": "(event: \"closeAutoFocus\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"closeAutoFocus\", e: Event): void",
           "description": "Focus event when dialog closes -- call event.preventDefault() to prevent focus return",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed while dialog is open",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "interactOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"interactOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"interactOutside\", e: Event): void",
           "description": "Any interaction outside dialog content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "openAutoFocus",
-          "type": "[event: Event]",
-          "signature": "(event: \"openAutoFocus\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"openAutoFocus\", e: Event): void",
           "description": "Focus event when dialog opens -- call event.preventDefault() to prevent auto-focus",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside dialog content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -17804,16 +17804,16 @@
       "events": [
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -17890,8 +17890,8 @@
       "events": [
         {
           "name": "select",
-          "type": "[event: Event]",
-          "signature": "(event: \"select\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"select\", e: Event): void",
           "description": "Item selected (clicked or Enter key)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -18786,24 +18786,24 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Native click event (suppressed when disabled or loading)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -19400,8 +19400,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -19416,8 +19416,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -21378,24 +21378,24 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Native click event (suppressed when disabled or loading)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -21672,16 +21672,16 @@
       "events": [
         {
           "name": "error",
-          "type": "[event: Event]",
-          "signature": "(event: \"error\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"error\", e: Event): void",
           "description": "Image failed to load",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "load",
-          "type": "[event: Event]",
-          "signature": "(event: \"load\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"load\", e: Event): void",
           "description": "Image loaded successfully",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -23490,8 +23490,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -23514,8 +23514,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -24330,8 +24330,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -24346,8 +24346,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -25118,8 +25118,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -25134,8 +25134,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -25786,16 +25786,16 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -26421,8 +26421,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -26453,8 +26453,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -26782,8 +26782,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Emitted when an interactive item is clicked",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -27975,8 +27975,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -27999,8 +27999,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -28590,8 +28590,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Item clicked",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -29301,8 +29301,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -29333,8 +29333,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -30181,8 +30181,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -30205,8 +30205,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -30756,16 +30756,16 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(evt: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(evt: \"blur\", e: FocusEvent): void",
           "description": "Focus left the list",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(evt: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(evt: \"focus\", e: FocusEvent): void",
           "description": "Focus entered the list",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -31164,8 +31164,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -31180,8 +31180,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -31705,8 +31705,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -31721,8 +31721,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -32515,8 +32515,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -32531,8 +32531,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -33860,40 +33860,40 @@
       "events": [
         {
           "name": "closeAutoFocus",
-          "type": "[event: Event]",
-          "signature": "(event: \"closeAutoFocus\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"closeAutoFocus\", e: Event): void",
           "description": "Focus event when popover closes",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed while popover is open",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "interactOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"interactOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"interactOutside\", e: Event): void",
           "description": "Any interaction outside popover content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "openAutoFocus",
-          "type": "[event: Event]",
-          "signature": "(event: \"openAutoFocus\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"openAutoFocus\", e: Event): void",
           "description": "Focus event when popover opens",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside popover content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -35250,8 +35250,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -35266,8 +35266,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -35722,8 +35722,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -35738,8 +35738,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -36222,8 +36222,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -36238,8 +36238,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -38342,8 +38342,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -38366,8 +38366,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -39340,8 +39340,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -39372,8 +39372,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -39979,24 +39979,24 @@
       "events": [
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "interactOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"interactOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"interactOutside\", e: Event): void",
           "description": "Any interaction outside sheet content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside sheet content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -40827,8 +40827,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Item was clicked",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -41491,8 +41491,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -41507,8 +41507,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -42820,8 +42820,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Primary action clicked",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -43664,7 +43664,7 @@
       ],
       "source": "packages/core/src/components/cards/DzStatCard.vue",
       "typesSource": "packages/core/src/components/cards/DzStatCard.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "bf8d5bd3b9922e19100f5697e2db95aab47a5e8d",
       "componentType": "class",
       "tier": "A",
       "anatomy": {
@@ -44713,8 +44713,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -44729,8 +44729,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -46598,8 +46598,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -46614,8 +46614,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -47112,16 +47112,16 @@
         },
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Emitted when the text field loses focus, after any `addOnBlur` commit.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Emitted when the text field takes focus.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -47842,8 +47842,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -47858,8 +47858,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -49046,8 +49046,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -49078,8 +49078,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -49913,8 +49913,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -49929,8 +49929,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -51763,8 +51763,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -51779,8 +51779,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -53201,8 +53201,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Emitted when the trigger loses focus",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -53225,8 +53225,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Emitted when the trigger receives focus",
           "descriptionSource": "emits-interface",
           "modelDerived": false

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.1.0",
-  "sourceCommit": "7f340779d933919470b4469d316dd8f6fb8a7ecd",
+  "sourceCommit": "667b0b1b0ee9a74da7784737ad0ce0d04b00fbc5",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -15397,7 +15397,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/cards/DzStatCard.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "bf8d5bd3b9922e19100f5697e2db95aab47a5e8d",
       "cells": [
         {
           "kind": "contract-spec",

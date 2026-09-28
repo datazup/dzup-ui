@@ -80,8 +80,8 @@ never as asserted.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus left the list |
-| `focus` | `[event: FocusEvent]` | Focus entered the list |
+| `blur` | `[e: FocusEvent]` | Focus left the list |
+| `focus` | `[e: FocusEvent]` | Focus entered the list |
 | `reorder` | `[payload: OrderListReorderPayload]` | A reorder completed (drag, control button, or keyboard drop) |
 | `selectionChange` | `[keys: OrderListKey[]]` | The selected key set changed (only fired when `selectable`) |
 | `update:value` | `[value: T[]]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
@@ -266,7 +266,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `7f340779` for the capability matrix,
+artifact records — `667b0b1b` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.

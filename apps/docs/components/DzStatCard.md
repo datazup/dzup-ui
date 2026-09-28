@@ -190,7 +190,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `a01965f`.
+last changed at `bf8d5bd`.
 
 ## Extraction fidelity
 
@@ -208,7 +208,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `7f340779` for the capability matrix,
+artifact records — `667b0b1b` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
@@ -219,7 +219,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `a01965fa`
+- **Component last changed at:** `bf8d5bd3`
 
 ### WCAG 2.2 criteria in scope (9)
 

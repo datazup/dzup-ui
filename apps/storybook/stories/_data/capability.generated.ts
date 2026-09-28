@@ -105,7 +105,7 @@ export const CAPABILITY_TOTALS = {
 } as const
 
 /** Repository HEAD the evidence was collected at. */
-export const CAPABILITY_SOURCE_COMMIT = "7f340779d933919470b4469d316dd8f6fb8a7ecd"
+export const CAPABILITY_SOURCE_COMMIT = "667b0b1b0ee9a74da7784737ad0ce0d04b00fbc5"
 
 export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
   {

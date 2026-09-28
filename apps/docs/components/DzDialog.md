@@ -160,11 +160,11 @@ Content panel for DzDialog compound.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `closeAutoFocus` | `[event: Event]` | Focus event when dialog closes -- call event.preventDefault() to prevent focus return |
-| `escapeKeyDown` | `[event: KeyboardEvent]` | Escape key pressed while dialog is open |
-| `interactOutside` | `[event: Event]` | Any interaction outside dialog content |
-| `openAutoFocus` | `[event: Event]` | Focus event when dialog opens -- call event.preventDefault() to prevent auto-focus |
-| `pointerDownOutside` | `[event: Event]` | Pointer down outside dialog content |
+| `closeAutoFocus` | `[e: Event]` | Focus event when dialog closes -- call event.preventDefault() to prevent focus return |
+| `escapeKeyDown` | `[e: KeyboardEvent]` | Escape key pressed while dialog is open |
+| `interactOutside` | `[e: Event]` | Any interaction outside dialog content |
+| `openAutoFocus` | `[e: Event]` | Focus event when dialog opens -- call event.preventDefault() to prevent auto-focus |
+| `pointerDownOutside` | `[e: Event]` | Pointer down outside dialog content |
 
 #### Slots (3)
 
@@ -356,7 +356,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `7f340779` for the capability matrix,
+artifact records — `667b0b1b` for the capability matrix,
 `527dbd15` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
