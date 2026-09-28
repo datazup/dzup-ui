@@ -11,8 +11,8 @@
  * The second block asserts the state of the real repository. It is written to
  * describe reality rather than to demand a particular outcome. The version
  * duplication closed on 2026-09-24 (landing and sandbox moved to core's
- * ^0.477.0); the swap away from the deprecated `lucide-vue-next` is still the
- * open owner decision (TASK-R1-O6 item 1, D174) and is not asserted here.
+ * ^0.477.0); the swap away from the deprecated `lucide-vue-next` was decided
+ * (D174) and landed on 2026-09-26, and is not asserted here.
  */
 
 import { describe, expect, it } from 'vitest'

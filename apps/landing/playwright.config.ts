@@ -25,7 +25,7 @@ import { defineConfig, devices } from '@playwright/test'
  * mounted, real asset URLs — had never been driven by a browser at all. The dev
  * target stays because it is seconds to iterate against; CI drives dist.
  *
- * Distinct ports (not the app's default 3001) so a dev server you already have
+ * Distinct ports (not the app's default 5299) so a dev server you already have
  * open is never adopted or clobbered by a test run, and so the two targets cannot
  * collide with each other. `--no-open` suppresses `server.open` in vite.config.ts;
  * otherwise every run would launch a browser.

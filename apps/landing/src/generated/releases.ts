@@ -1556,6 +1556,16 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/codemods"
+    ],
+    "level": "patch",
+    "summary": "`@dzup-ui/codemods` declares the Node floor its `dzup-codemod` binary runs on, `^20.19.0 || >=22.13.0` (ADR-18), so a package manager warns on an older runtime instead of the CLI failing at startup.",
+    "body": "`@dzup-ui/codemods` declares the Node floor its `dzup-codemod` binary runs on, `^20.19.0 || >=22.13.0` (ADR-18), so a package manager warns on an older runtime instead of the CLI failing at startup.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/core"
     ],
     "level": "patch",

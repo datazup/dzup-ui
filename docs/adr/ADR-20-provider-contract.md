@@ -212,7 +212,7 @@ ancestor's per-component map.
 
 ## Rollout
 
-1. This ADR is **Proposed** until a maintainer approves it. The composables are
+1. This ADR was **Proposed** until the owner accepted it on 2026-09-26. The composables are
    additive and safe to land either way; nothing consumes them yet.
 2. ~~**P4-02** builds `DzProvider` on the `provideDz*` half, keeping
    `DzThemeProvider` working.~~ **Done.** `DzProvider` ships in
@@ -663,6 +663,8 @@ hand-typed-facts class N2-S1 §11.3 records five prior sightings of.
 
 #### A8.7 Status — and what is still open
 
+> **Superseded 2026-09-26.** The owner accepted ADR-18, ADR-19 and ADR-20 together (the `Status:` line at the top; `maxProposedCitedFromCode` lowered to **0**). The section below is the status as it stood when it was written.
+
 This ADR remains **`Proposed`**. TASK-R0-O2 found **no recorded owner
 acceptance** for ADR-18, ADR-19 or ADR-20 in any ledger, handoff or decision
 register, and will not invent an owner name or a date. Since 2026-09-22 the
@@ -707,3 +709,5 @@ checked-in RTL list stays the mechanism.
 and A8.7 already records that none of them blocks acceptance. This ADR remains
 `Proposed` until the owner accepts it; `docs/qa/adr-prep-2026-09-26/ACCEPTANCE.md`
 lists the exact edit.
+
+> **Superseded 2026-09-26.** The owner accepted ADR-18, ADR-19 and ADR-20 together (the `Status:` line at the top; `maxProposedCitedFromCode` lowered to **0**). The passage above is the status as it stood when it was written.

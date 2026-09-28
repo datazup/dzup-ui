@@ -67,7 +67,7 @@ export default defineConfig({
   build: {
     lib: { entry: '${entryForward}', formats: ['es'] },
     outDir: '${distForward}',
-    rollupOptions: { external: ['vue', 'reka-ui', '@floating-ui/vue', '@internationalized/date', 'lucide-vue-next'] },
+    rollupOptions: { external: ['vue', 'reka-ui', '@floating-ui/vue', '@internationalized/date', '@lucide/vue'] },
     minify: false,
   },
   resolve: {

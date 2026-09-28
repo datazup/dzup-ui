@@ -31,7 +31,7 @@ const EXTERNALS = [
   'reka-ui',
   '@floating-ui/vue',
   '@internationalized/date',
-  'lucide-vue-next',
+  '@lucide/vue',
   'tailwind-variants',
   'clsx',
   'qrcode-generator',

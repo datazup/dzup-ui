@@ -185,6 +185,8 @@ handoff, and does not invent one. Since 2026-09-22 that status is measured:
 document in `maxProposedCitedFromCode` (**3** today). Acceptance means an owner
 flipping that line and lowering the ceiling in the same change.
 
+> **Superseded 2026-09-26.** The owner accepted ADR-18, ADR-19 and ADR-20 together (the `Status:` line at the top; `maxProposedCitedFromCode` lowered to **0**). The passage above is the status as it stood when it was written.
+
 Its unmet precondition is **A1** — a floor decision. See the precondition table
 in `docs/program-2026-09-04/reports/TASK-R0-O2-handoff.md`.
 
@@ -226,3 +228,5 @@ owner* section already says. The owner kept the branch knowing that.
 owner accepts it. Acceptance is the owner flipping the `Status:` line and
 lowering `maxProposedCitedFromCode` in the same change.
 `docs/qa/adr-prep-2026-09-26/ACCEPTANCE.md` lists the exact edit.
+
+> **Superseded 2026-09-26.** The owner accepted ADR-18, ADR-19 and ADR-20 together (the `Status:` line at the top; `maxProposedCitedFromCode` lowered to **0**). The passage above is the status as it stood when it was written.
