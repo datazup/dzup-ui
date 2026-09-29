@@ -17,10 +17,12 @@
  * Exit code 1 if any errors found.
  */
 
+import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { dirname, isAbsolute, relative, resolve } from 'node:path'
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+import ts from 'typescript'
 
 // --- Types ---
 
@@ -66,6 +68,12 @@ interface PackageDef {
   hasViteChunks?: boolean
   /** Optional path to public-api.manifest.json — used only for index.d.ts export coverage */
   manifestPath?: string
+  /**
+   * Load the root .js under Node and require every runtime export to be
+   * declared by the root .d.ts. Only for packages whose root entry loads
+   * without a bundler (no .vue or CSS imports).
+   */
+  runtimeExportParity?: boolean
 }
 
 const PACKAGES: PackageDef[] = [
@@ -76,6 +84,7 @@ const PACKAGES: PackageDef[] = [
   {
     name: '@dzup-ui/tokens',
     distDir: resolve(ROOT, 'packages/tokens/dist'),
+    runtimeExportParity: true,
   },
   {
     name: '@dzup-ui/testing',
@@ -327,6 +336,54 @@ function validateRootDtsExports(
   return errors
 }
 
+/**
+ * Names a module declares, read through the TypeScript checker so that
+ * `export *` chains across per-file declarations are followed.
+ */
+export function declaredExportNames(rootDts: string): Set<string> {
+  const program = ts.createProgram([rootDts], { noEmit: true, skipLibCheck: true, module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler })
+  const checker = program.getTypeChecker()
+  const source = program.getSourceFile(rootDts)
+  const symbol = source === undefined ? undefined : checker.getSymbolAtLocation(source)
+  if (symbol === undefined) {
+    return new Set()
+  }
+  return new Set(checker.getExportsOfModule(symbol).map(s => s.getName()))
+}
+
+/** Names the root entry exports at runtime, loaded in a child Node process. */
+export function runtimeExportNames(rootJs: string): string[] {
+  const script = `const m = await import(${JSON.stringify(pathToFileURL(rootJs).href)}); process.stdout.write(JSON.stringify(Object.keys(m)))`
+  return JSON.parse(execFileSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf-8' })) as string[]
+}
+
+/**
+ * Every value the root entry exports at runtime must be declared by the root
+ * declaration file. A rolled-up declaration written over the wrong entry still
+ * contains export statements, so the coverage check above cannot see it
+ * (@dzup-ui/tokens shipped only its theme-script types from 843607b on).
+ */
+export function validateRuntimeExportParity(
+  packageName: string,
+  distDir: string,
+  rootDtsName: string,
+): ValidationError[] {
+  const rootDts = resolve(distDir, rootDtsName)
+  const rootJs = rootDts.replace(/\.d\.ts$/, '.js')
+  if (!existsSync(rootDts) || !existsSync(rootJs)) {
+    return []
+  }
+  const declared = declaredExportNames(rootDts)
+  const missing = runtimeExportNames(rootJs).filter(name => !declared.has(name))
+  return missing.length === 0
+    ? []
+    : [{
+        package: packageName,
+        file: relative(ROOT, rootDts),
+        message: `${missing.length} runtime export(s) of ${relative(ROOT, rootJs)} are not declared: ${missing.slice(0, 10).join(', ')}${missing.length > 10 ? ', …' : ''}`,
+      }]
+}
+
 // --- Main ---
 
 function main(): void {
@@ -381,6 +438,12 @@ function main(): void {
     const rootStatus = rootErrors.length === 0 ? 'PASS' : 'FAIL'
     console.warn(`  ${rootStatus}  ${rootDtsName} export coverage`)
 
+    if (pkg.runtimeExportParity === true) {
+      const parity = validateRuntimeExportParity(pkg.name, pkg.distDir, rootDtsName)
+      allErrors.push(...parity)
+      console.warn(`  ${parity.length === 0 ? 'PASS' : 'FAIL'}  runtime export parity`)
+    }
+
     const boundaryErrors = validateDtsImportBoundaries(pkg.name, pkg.distDir)
     allErrors.push(...boundaryErrors)
     const boundaryStatus = boundaryErrors.length === 0 ? 'PASS' : 'FAIL'
@@ -409,4 +472,6 @@ function main(): void {
   process.exit(1)
 }
 
-main()
+if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main()
+}
