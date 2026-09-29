@@ -111,6 +111,8 @@
     "perf:capture": "tsx packages/tooling/src/perf/capture-baselines.ts",
     "//perf:propose": "TASK-R2-O7. The same capture, written to a path you name instead of to packages/core/perf/baselines.json: `yarn perf:propose docs/.../baselines.proposed.json`. Adding a lane and replacing a budget are different acts with different authority -- a contributor measures and proposes, the owner adopts. Before this flag existed the only way to see what a new lane would record was to overwrite the file thirty-three live metrics depend on.",
     "perf:propose": "tsx packages/tooling/src/perf/capture-baselines.ts --propose",
+    "//perf:size-gate": "D140, owner decision D135 (a), 2026-09-29. Builds the same tree-shaken one-export fixture perf:capture measured for every size:* budget in packages/core/perf/baselines.json and exits 1 naming each export over its threshold. Not behind DZUP_PERF_GATE: a gzipped byte count of a deterministic build does not vary with machine load. Blocking in the CI build job; kept out of validate:all because 22 Vite builds cost ~22 s locally and more on a CI runner. It never writes the file it reads -- raising a budget stays an owner act (perf:capture).",
+    "perf:size-gate": "tsx packages/tooling/src/perf/size-gate.ts",
     "validate:story-status": "tsx packages/tooling/src/validators/story-status.ts",
     "validate:story-dod": "tsx packages/tooling/src/validators/story-dod.ts",
     "validate:tokens": "tsx packages/tooling/src/token-checks/color-lint.ts && tsx packages/tooling/src/token-checks/design-md-check.ts && tsx packages/tooling/src/token-checks/intent-text-contrast.ts",

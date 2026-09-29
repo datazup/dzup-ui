@@ -315,6 +315,12 @@ jobs:
         run: npx tsx packages/tooling/src/bundle-budget-check.ts --ci
       - name: Per-component size report
         run: npx tsx packages/tooling/src/component-size-report.ts --top=30
+      # D140 / D135 (a). The report above cannot fail; this can. It rebuilds the
+      # one-export fixture behind each `size:*` budget in
+      # packages/core/perf/baselines.json and fails naming every export over its
+      # threshold. Sizes are deterministic, so it does not wait on DZUP_PERF_GATE.
+      - name: Per-export size gate (blocking)
+        run: yarn perf:size-gate
       - name: Pack smoke test (all publishable packages)
         run: |
           for pkg in contracts tokens core compat codemods nuxt; do
