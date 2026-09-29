@@ -1598,6 +1598,16 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/contracts"
+    ],
+    "level": "patch",
+    "summary": "The WCAG and evidence tables in `@dzup-ui/contracts` now tree-shake. Previously they shipped in every bundle that imported a runtime value from contracts, about 680 bytes gzip per component, although only tooling reads them. `WCAG_CRITERION_IDS` keeps the same value and type.",
+    "body": "The WCAG and evidence tables in `@dzup-ui/contracts` now tree-shake. Previously they shipped in every bundle that imported a runtime value from contracts, about 680 bytes gzip per component, although only tooling reads them. `WCAG_CRITERION_IDS` keeps the same value and type.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/core",
       "@dzup-ui/contracts"
     ],

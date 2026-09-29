@@ -591,10 +591,22 @@ export const WCAG_22_CRITERIA = [
   { id: '4.1.3', name: 'Status Messages', level: 'AA', since: '2.1' },
 ] as const satisfies readonly WcagCriterion[]
 
-/** Fast membership test for a criterion id. */
-export const WCAG_CRITERION_IDS: ReadonlySet<string> = new Set(
+/**
+ * Fast membership test for a criterion id.
+ *
+ * Built inside a pure-annotated IIFE so bundlers can drop it. A bare
+ * `new Set(WCAG_22_CRITERIA.map(...))` is a top-level call they cannot prove
+ * pure, and a `@__PURE__` annotation on the `new` alone keeps the `.map()`
+ * argument.
+ * Either way the whole WCAG table, and with it this module (~680 B gzip),
+ * shipped in every component bundle that imports a runtime value from
+ * `@dzup-ui/contracts`, although only tooling reads it (D135 investigation,
+ * `docs/qa/d135-quality-tiers-treeshake-2026-09-29/`). `validate:tree-shake`
+ * guards it.
+ */
+export const WCAG_CRITERION_IDS: ReadonlySet<string> = /* @__PURE__ */ (() => new Set(
   WCAG_22_CRITERIA.map(c => c.id),
-)
+))()
 
 /**
  * The criteria every tier owes regardless of what the component does.

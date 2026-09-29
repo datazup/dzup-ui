@@ -29,6 +29,17 @@ const COMPONENTS_TO_TEST = ['DzButton', 'DzInput', 'DzSelect', 'DzAlert']
 /** Sentinel components — these should NOT appear in single-component bundles */
 const SENTINEL_COMPONENTS = ['DzDataGrid', 'DzGantt', 'DzKanban']
 
+/**
+ * String literals that exist only in tooling-only contract data. Any of them
+ * in a single-component bundle means that data is shipping to consumers.
+ * `quality-tiers.ts` did, in every bundle that touched `@dzup-ui/contracts`,
+ * until a top-level `new Set(...map())` was made pure (D135 investigation,
+ * docs/qa/d135-quality-tiers-treeshake-2026-09-29/).
+ */
+const TOOLING_ONLY_MARKERS = [
+  { marker: 'Accessible Authentication (Minimum)', source: 'contracts quality-tiers WCAG_22_CRITERIA' },
+]
+
 const ROOT_DIR = resolve(import.meta.dirname, '..', '..', '..')
 
 async function checkTreeShaking(): Promise<void> {
@@ -122,6 +133,11 @@ export default defineConfig({
         for (const sentinel of SENTINEL_COMPONENTS) {
           if (sentinelPresent(bundleContent, sentinel)) {
             unexpectedIncludes.push(sentinel)
+          }
+        }
+        for (const { marker, source } of TOOLING_ONLY_MARKERS) {
+          if (bundleContent.includes(marker)) {
+            unexpectedIncludes.push(`tooling-only data (${source})`)
           }
         }
 
