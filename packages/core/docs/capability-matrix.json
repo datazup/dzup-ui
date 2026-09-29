@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.1.0",
-  "sourceCommit": "c76c5aa61edd0f912d14f7b498ef27906ed89ae2",
+  "sourceCommit": "a6150b6fa5d16e37363b35600d7e453fd7e8e323",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -59,10 +59,10 @@
       "excepted": 13
     },
     "C": {
-      "pass": 157,
+      "pass": 166,
       "fail": 0,
       "present": 106,
-      "stale": 11,
+      "stale": 2,
       "unrun": 100,
       "excepted": 0
     },
@@ -2174,7 +2174,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -3827,7 +3827,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -4216,7 +4216,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -5384,7 +5384,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -5558,7 +5558,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -10816,7 +10816,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -14386,7 +14386,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -17090,7 +17090,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -18119,7 +18119,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
