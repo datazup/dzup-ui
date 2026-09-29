@@ -742,28 +742,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          21757,
-          21757,
-          21757,
-          21757,
-          21757
+          23559,
+          23559,
+          23559,
+          23559,
+          23559
         ],
         "runs": 5,
-        "median": 21757,
-        "p95": 21757,
-        "mean": 21757,
+        "median": 23559,
+        "p95": 23559,
+        "mean": 23559,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 22844.85,
-      "thresholdFormula": "median 21757.00 + max(3σ 0.00, 5% 1087.85) = 22844.85",
+      "threshold": 24736.95,
+      "thresholdFormula": "median 23559.00 + max(3σ 0.00, 5% 1177.95) = 24736.95",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -808,28 +808,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          20675,
-          20675,
-          20675,
-          20675,
-          20675
+          22616,
+          22616,
+          22616,
+          22616,
+          22616
         ],
         "runs": 5,
-        "median": 20675,
-        "p95": 20675,
-        "mean": 20675,
+        "median": 22616,
+        "p95": 22616,
+        "mean": 22616,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 21708.75,
-      "thresholdFormula": "median 20675.00 + max(3σ 0.00, 5% 1033.75) = 21708.75",
+      "threshold": 23746.8,
+      "thresholdFormula": "median 22616.00 + max(3σ 0.00, 5% 1130.80) = 23746.80",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -874,28 +874,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          33117,
-          33117,
-          33117,
-          33117,
-          33117
+          36450,
+          36450,
+          36450,
+          36450,
+          36450
         ],
         "runs": 5,
-        "median": 33117,
-        "p95": 33117,
-        "mean": 33117,
+        "median": 36450,
+        "p95": 36450,
+        "mean": 36450,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 34772.85,
-      "thresholdFormula": "median 33117.00 + max(3σ 0.00, 5% 1655.85) = 34772.85",
+      "threshold": 38272.5,
+      "thresholdFormula": "median 36450.00 + max(3σ 0.00, 5% 1822.50) = 38272.50",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -907,28 +907,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          22256,
-          22256,
-          22256,
-          22256,
-          22256
+          24871,
+          24871,
+          24871,
+          24871,
+          24871
         ],
         "runs": 5,
-        "median": 22256,
-        "p95": 22256,
-        "mean": 22256,
+        "median": 24871,
+        "p95": 24871,
+        "mean": 24871,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 23368.8,
-      "thresholdFormula": "median 22256.00 + max(3σ 0.00, 5% 1112.80) = 23368.80",
+      "threshold": 26114.55,
+      "thresholdFormula": "median 24871.00 + max(3σ 0.00, 5% 1243.55) = 26114.55",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -1006,28 +1006,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19418,
-          19418,
-          19418,
-          19418,
-          19418
+          20629,
+          20629,
+          20629,
+          20629,
+          20629
         ],
         "runs": 5,
-        "median": 19418,
-        "p95": 19418,
-        "mean": 19418,
+        "median": 20629,
+        "p95": 20629,
+        "mean": 20629,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 20388.9,
-      "thresholdFormula": "median 19418.00 + max(3σ 0.00, 5% 970.90) = 20388.90",
+      "threshold": 21660.45,
+      "thresholdFormula": "median 20629.00 + max(3σ 0.00, 5% 1031.45) = 21660.45",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -1039,28 +1039,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          18101,
-          18101,
-          18101,
-          18101,
-          18101
+          19434,
+          19434,
+          19434,
+          19434,
+          19434
         ],
         "runs": 5,
-        "median": 18101,
-        "p95": 18101,
-        "mean": 18101,
+        "median": 19434,
+        "p95": 19434,
+        "mean": 19434,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 19006.05,
-      "thresholdFormula": "median 18101.00 + max(3σ 0.00, 5% 905.05) = 19006.05",
+      "threshold": 20405.7,
+      "thresholdFormula": "median 19434.00 + max(3σ 0.00, 5% 971.70) = 20405.70",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -1072,28 +1072,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          21353,
-          21353,
-          21353,
-          21353,
-          21353
+          25287,
+          25287,
+          25287,
+          25287,
+          25287
         ],
         "runs": 5,
-        "median": 21353,
-        "p95": 21353,
-        "mean": 21353,
+        "median": 25287,
+        "p95": 25287,
+        "mean": 25287,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 22420.65,
-      "thresholdFormula": "median 21353.00 + max(3σ 0.00, 5% 1067.65) = 22420.65",
+      "threshold": 26551.35,
+      "thresholdFormula": "median 25287.00 + max(3σ 0.00, 5% 1264.35) = 26551.35",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -1105,28 +1105,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19840,
-          19840,
-          19840,
-          19840,
-          19840
+          21441,
+          21441,
+          21441,
+          21441,
+          21441
         ],
         "runs": 5,
-        "median": 19840,
-        "p95": 19840,
-        "mean": 19840,
+        "median": 21441,
+        "p95": 21441,
+        "mean": 21441,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 20832,
-      "thresholdFormula": "median 19840.00 + max(3σ 0.00, 5% 992.00) = 20832.00",
+      "threshold": 22513.05,
+      "thresholdFormula": "median 21441.00 + max(3σ 0.00, 5% 1072.05) = 22513.05",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -1171,28 +1171,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          21240,
-          21240,
-          21240,
-          21240,
-          21240
+          23273,
+          23273,
+          23273,
+          23273,
+          23273
         ],
         "runs": 5,
-        "median": 21240,
-        "p95": 21240,
-        "mean": 21240,
+        "median": 23273,
+        "p95": 23273,
+        "mean": 23273,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 22302,
-      "thresholdFormula": "median 21240.00 + max(3σ 0.00, 5% 1062.00) = 22302.00",
+      "threshold": 24436.65,
+      "thresholdFormula": "median 23273.00 + max(3σ 0.00, 5% 1163.65) = 24436.65",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -1336,28 +1336,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          20028,
-          20028,
-          20028,
-          20028,
-          20028
+          21396,
+          21396,
+          21396,
+          21396,
+          21396
         ],
         "runs": 5,
-        "median": 20028,
-        "p95": 20028,
-        "mean": 20028,
+        "median": 21396,
+        "p95": 21396,
+        "mean": 21396,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 21029.4,
-      "thresholdFormula": "median 20028.00 + max(3σ 0.00, 5% 1001.40) = 21029.40",
+      "threshold": 22465.8,
+      "thresholdFormula": "median 21396.00 + max(3σ 0.00, 5% 1069.80) = 22465.80",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -1369,28 +1369,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          17915,
-          17915,
-          17915,
-          17915,
-          17915
+          19016,
+          19016,
+          19016,
+          19016,
+          19016
         ],
         "runs": 5,
-        "median": 17915,
-        "p95": 17915,
-        "mean": 17915,
+        "median": 19016,
+        "p95": 19016,
+        "mean": 19016,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 18810.75,
-      "thresholdFormula": "median 17915.00 + max(3σ 0.00, 5% 895.75) = 18810.75",
+      "threshold": 19966.8,
+      "thresholdFormula": "median 19016.00 + max(3σ 0.00, 5% 950.80) = 19966.80",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     },
     {
@@ -1402,28 +1402,28 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          25391,
-          25391,
-          25391,
-          25391,
-          25391
+          27873,
+          27873,
+          27873,
+          27873,
+          27873
         ],
         "runs": 5,
-        "median": 25391,
-        "p95": 25391,
-        "mean": 25391,
+        "median": 27873,
+        "p95": 27873,
+        "mean": 27873,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 26660.55,
-      "thresholdFormula": "median 25391.00 + max(3σ 0.00, 5% 1269.55) = 26660.55",
+      "threshold": 29266.65,
+      "thresholdFormula": "median 27873.00 + max(3σ 0.00, 5% 1393.65) = 29266.65",
       "unmeasurable": null,
-      "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
       "host": {
-        "platform": "win32",
+        "platform": "linux",
         "arch": "x64",
-        "cpus": 16,
-        "node": "v24.14.1"
+        "cpus": 32,
+        "node": "v24.20.0"
       }
     }
   ]
