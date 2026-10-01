@@ -77,8 +77,25 @@ export const anatomy = {
       wcag: ['2.1.1'],
       apg: 'combobox',
     },
-    { key: 'Home', when: 'list open', action: 'Move to the first option.', wcag: ['2.1.1'], apg: 'combobox' },
-    { key: 'End', when: 'list open', action: 'Move to the last option.', wcag: ['2.1.1'], apg: 'combobox' },
+    // Corrected and implemented in RESIDUAL-13 (RESIDUAL-12 §4 `F5`), together
+    // with DzDatePicker's identical pair. Both said `when: 'list open'` / "Move to
+    // the first option." in a popover that is a calendar GRID with no option list.
+    // The APG date-picker-dialog pattern specifies them as the first and last day
+    // of the focused week; `DzDateRangePicker.vue`'s `onCalendarKeydown` owns them.
+    {
+      key: 'Home',
+      when: 'calendar open',
+      action: 'Move to the first day of the focused week.',
+      wcag: ['2.1.1'],
+      apg: 'grid',
+    },
+    {
+      key: 'End',
+      when: 'calendar open',
+      action: 'Move to the last day of the focused week.',
+      wcag: ['2.1.1'],
+      apg: 'grid',
+    },
     {
       key: 'Enter',
       action: 'Select the highlighted option and close the calendar.',

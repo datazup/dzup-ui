@@ -42,6 +42,7 @@ import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { listboxVariants } from './DzListbox.variants.ts'
 import DzOptionsState from './DzOptionsState.vue'
+import { provideRetryKeyboardRoute } from './optionsStateFocus.ts'
 
 defineOptions({
   inheritAttrs: false,
@@ -375,10 +376,40 @@ function onContentClickCapture(event: MouseEvent): void {
 
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
 const { testId: dzTestId } = useDzTestIds()
+/**
+ * Renderer contract C9.4's keyboard **route** (RESIDUAL-06). The async-options row
+ * registers itself through the component tree; this binds the owner half to the
+ * control's root, so a bare `ArrowDown` from the element that owns this control's
+ * focus reaches the retry control the row renders — the only key that can, because
+ * `Tab` is the combobox pattern's way out of the popup. One definition of the rule,
+ * in `optionsStateFocus.ts`; the argument and the seven measured dead ends are there.
+ */
+/**
+ * Where focus goes when the async-options row **unmounts** (`D-RES06-1`, RESIDUAL-07).
+ *
+ * This control's row sits in its own tab order, so a keyboard user reaches the retry
+ * control by `Tab` — and measured, that `Tab` wraps past the end of the document first,
+ * so the row is handed `document.body` as the place focus came from and refuses it.
+ * Focus was therefore parked on the row, and a **successful** retry unmounted the row
+ * with focus on it: `document.activeElement` became `BODY` at the instant the user got
+ * the options they asked for.
+ *
+ * The destination is the listbox viewport — the element the options render into, which
+ * is mounted for the control's whole life and carries Reka's roving `tabindex`, so the
+ * arrow keys work from it immediately. Only this control can name it, which is why the
+ * shared row takes it from the host rather than guessing.
+ */
+const viewportRef = ref<{ $el?: HTMLElement } | HTMLElement | null>(null)
+function asyncOptionsExit(): HTMLElement | null {
+  const held = viewportRef.value
+  const node = (held as { $el?: unknown } | null)?.$el ?? held
+  return node instanceof HTMLElement ? node : null
+}
+const handleAsyncOptionsKeydown = provideRetryKeyboardRoute(null, asyncOptionsExit)
 </script>
 
 <template>
-  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-listbox')">
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-listbox')" @keydown="handleAsyncOptionsKeydown">
     <ListboxRoot
       :dir="dzDirection"
       :model-value="rekaModel"
@@ -437,6 +468,7 @@ const { testId: dzTestId } = useDzTestIds()
 
       <ListboxContent
         :id="resolvedId"
+        ref="viewportRef"
         data-part="viewport"
         :class="[styles.viewport(), ui?.viewport]"
         :aria-label="ariaLabel"

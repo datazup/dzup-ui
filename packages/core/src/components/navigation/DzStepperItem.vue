@@ -3,7 +3,7 @@ import type { DzStepperItemEmits, DzStepperItemProps, DzStepperItemSlots } from 
 /**
  * DzStepperItem — A single step within DzStepper.
  */
-import { computed, inject, onMounted, ref, useAttrs } from 'vue'
+import { computed, inject, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_STEPPER_KEY } from './DzStepper.types.ts'
@@ -23,21 +23,41 @@ defineSlots<DzStepperItemSlots>()
 
 const attrs = useAttrs()
 const ctx = inject(DZ_STEPPER_KEY, null)
-const stepIndex = ref(-1)
 
-onMounted(() => {
-  if (ctx) {
-    stepIndex.value = ctx.registerStep()
-  }
-})
+/**
+ * This step's zero-based position, claimed from the parent's counter **during
+ * `setup`** (RESIDUAL-11, `D-RES10-1`).
+ *
+ * It used to be claimed in `onMounted`, and `onMounted` never runs during SSR.
+ * `stepIndex` therefore stayed `-1` on the server, `-1 < activeStep` is true for
+ * every step of a stepper on step 0, and so **every** step server-rendered
+ * `data-state="completed"` with the completed check-mark while **no** step
+ * carried `aria-current="step"`. Measured: a three-step stepper emitted the same
+ * 2,706 bytes for `modelValue` 0, 1 and 2 — the server HTML did not depend on the
+ * model at all. Nothing warned, either: the client's *first* render agreed with
+ * the server (both had `-1`), so Vue reported no hydration mismatch and the
+ * correction arrived afterwards as an ordinary reactive patch that silently
+ * rewrote three indicators.
+ *
+ * `setup` runs on the server and on the client, once per instance, in the order
+ * the children are created — which is document order for a slot — so the index
+ * is the same number in both passes and the server HTML is now the client's
+ * first paint. It is a plain `const` rather than a `ref` on purpose: a step's
+ * position is fixed for the life of the instance, and the reactivity `status`
+ * needs is `ctx.activeStep`, not this.
+ *
+ * `registerStep`'s contract is unchanged (`() => number`, ADR-08 context in
+ * `DzStepper.types.ts`); only the moment it is called moved.
+ */
+const stepIndex = ctx ? ctx.registerStep() : -1
 
 /** Status of this step relative to the active step */
 const status = computed(() => {
   if (!ctx)
     return 'upcoming' as const
-  if (stepIndex.value < ctx.activeStep.value)
+  if (stepIndex < ctx.activeStep.value)
     return 'completed' as const
-  if (stepIndex.value === ctx.activeStep.value)
+  if (stepIndex === ctx.activeStep.value)
     return 'active' as const
   return 'upcoming' as const
 })
@@ -69,10 +89,10 @@ const stepClasses = computed(() =>
 function activate(): void {
   if (!isClickable.value || !ctx)
     return
-  if (stepIndex.value < 0)
+  if (stepIndex < 0)
     return
-  ctx.setActiveStep(stepIndex.value)
-  emit('navigate', stepIndex.value)
+  ctx.setActiveStep(stepIndex)
+  emit('navigate', stepIndex)
 }
 
 function handleKeydown(event: KeyboardEvent): void {

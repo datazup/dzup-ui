@@ -81,44 +81,85 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
-   * Keyboard contract (TASK-R5-O5). A colour area and its sliders. The
-   * saturation and value area is a two-dimensional slider, and the arrows
-   * move the pointer inside it.
+   * Keyboard contract — **rewritten in RESIDUAL-13** (RESIDUAL-12 §4 `F2`).
+   *
+   * ## What was here, and why it was withdrawn rather than implemented
+   *
+   * Until this change the table declared six APG `slider` rows —
+   * ArrowRight/ArrowLeft *"along the saturation axis"*, ArrowUp/ArrowDown *"up
+   * the value axis"*, Home/End *"to the start / end of the axis"* — and
+   * RESIDUAL-12 measured all six as backed by nothing. Reading
+   * `DzColorPicker.vue` is what settled the direction: **there is no colour
+   * pointer, no saturation axis and no value axis.** The panel is a native
+   * `<input type="color">` sized by `canvasHeight`, a hex text field, and a grid
+   * of preset `<button>`s. The rows do not describe an unimplemented behaviour of
+   * this component; they describe a *different* component.
+   *
+   * This is the `DzChip`/`DzTag` disposition and not the `DzListItem` one, and the
+   * difference is measurable rather than aesthetic. `DzListItem` had a pointer
+   * action with no key, so the gap was an **SC 2.1.1 failure** and deleting the
+   * rows would have hidden it. Here there is no failure to hide: a keyboard user
+   * can set any colour today — Tab to the hex field and type `#ff0000`, or open
+   * the native colour input, which the platform operates fully with the keyboard
+   * and exposes to assistive technology. What was false was the *description* of
+   * how, not the existence of a way.
+   *
+   * **Rejected: build a real two-dimensional HSV slider.** It is the change that
+   * would have made the old rows true, and it is a redesign of a published
+   * panel — a saturation/value canvas with a draggable thumb, a hue slider, HSV
+   * conversion, new parts and new tokens — replacing the one element in the panel
+   * that is *already* fully keyboard- and AT-operable with a custom one that would
+   * have to earn that back. It also repaints the component, and visual capture is
+   * owner-gated on linux while this machine is win32, so nothing here could
+   * qualify it. Raised as `D-RES13-1` instead of half-done.
+   *
+   * ## What is declared now
+   *
+   * The six rows the panel actually has, each scoped to the node it is about so
+   * `validate:anatomy-keyboard` resolves it against that node rather than against
+   * whatever else the family renders. Every one is backed by the platform or by
+   * Reka's popover, which is the honest answer for a control that composes both.
    */
   keyboard: [
     {
-      key: 'ArrowRight',
-      action: 'Move the colour pointer one step along the saturation axis.',
+      key: 'Enter',
+      when: 'trigger',
+      action: 'Open the colour panel.',
       wcag: ['2.1.1'],
-      apg: 'slider',
-      rtl: 'fixed',
+      apg: 'button',
     },
     {
-      key: 'ArrowLeft',
-      action: 'Move the colour pointer one step back along the saturation axis.',
+      key: ' ',
+      when: 'trigger',
+      action: 'Open the colour panel.',
       wcag: ['2.1.1'],
-      apg: 'slider',
-      rtl: 'fixed',
+      apg: 'button',
     },
     {
-      key: 'ArrowUp',
-      action: 'Move the colour pointer one step up the value axis.',
-      wcag: ['2.1.1'],
-      apg: 'slider',
+      key: 'Escape',
+      action: 'Close the colour panel without changing the value.',
+      wcag: ['2.1.1', '2.1.2'],
+      apg: 'dialog',
     },
     {
-      key: 'ArrowDown',
-      action: 'Move the colour pointer one step down the value axis.',
-      wcag: ['2.1.1'],
-      apg: 'slider',
+      key: 'Tab',
+      action: 'Move through the panel: the colour field, the hex field, then the presets.',
+      wcag: ['2.1.2'],
+      apg: 'dialog',
     },
     {
-      key: 'Home',
-      action: 'Move the colour pointer to the start of the axis.',
+      key: 'Enter',
+      when: 'item',
+      action: 'Select the focused preset colour.',
       wcag: ['2.1.1'],
-      apg: 'slider',
+      apg: 'button',
     },
-    { key: 'End', action: 'Move the colour pointer to the end of the axis.', wcag: ['2.1.1'], apg: 'slider' },
+    {
+      key: '<character>',
+      when: 'input',
+      action: 'Type a hex value into the colour field.',
+      wcag: ['2.1.1'],
+    },
   ],
 
   /** Tier C — a popover-backed, portal-rendering, form-bearing composite. */

@@ -31,32 +31,82 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
-   * Keyboard contract (TASK-R5-O5). APG `menu-button`: the primary half
-   * is a button, the secondary half opens the menu.
+   * Keyboard contract (TASK-R5-O5). Two `<button>`s: the primary action, and the
+   * disclosure that a **consumer's** menu is attached to.
+   *
+   * ## `D-RES14-4`, decided by RESIDUAL-15: the menu rows are withdrawn
+   *
+   * The table used to publish the whole APG `menu-button` pattern: `ArrowDown` and
+   * `Enter`, both scoped to `trigger`, "open the menu and focus its first item",
+   * and `Escape` scoped to `menu open` "closes the menu and returns focus to the
+   * trigger". The measurement, and it is not close:
+   *
+   * - `DzSplitButtonMenu.vue` is a `<div class="relative">` containing a `<slot>`
+   *   whose **fallback** is a bare `<button data-part="trigger" type="button"
+   *   aria-haspopup="true">` at `:55`. There is no `open` ref, no
+   *   `DZ_SPLIT_BUTTON_KEY` field for menu state, no `reka-ui` import and no
+   *   `keydown` anywhere in the file or in `DzSplitButton.vue`.
+   * - Both `@example` blocks in the family — `DzSplitButton.vue:13` and
+   *   `DzSplitButtonMenu.vue:10` — show the menu being **composed into the slot**
+   *   (`<DzDropdownMenu>` / `<DzDropdownMenuContent>`). The menu is the
+   *   consumer's, by design and by documentation. RESIDUAL-14 §2.3 found that
+   *   those very `@example` blocks were what had been crediting the rows: every
+   *   menu primitive in this component's closure arrived through its own prose.
+   * - **`DzDropdownMenu` already publishes the withdrawn rows, correctly.**
+   *   `DzDropdownMenu.anatomy.ts:96` declares `Escape` → *"Close the menu and
+   *   return focus to the trigger."* — the identical sentence — backed by Reka's
+   *   `DismissableLayer`; `:66` declares `ArrowDown`, and
+   *   `DzDropdownMenuTrigger.vue` wraps Reka's `DropdownMenuTrigger`, which opens
+   *   on the arrow. So the pattern is implemented in this repository, on the
+   *   component that owns a menu.
+   *
+   * This is the `DzTable` → `DzDataGrid` move RESIDUAL-14 §5 made for the three
+   * sort rows, for the same reason: a row belongs to the component that
+   * implements it, and a second copy on a wrapper is a promise the wrapper cannot
+   * keep. `Enter` *(trigger)* is **kept and re-described** rather than withdrawn,
+   * because the trigger really is a `<button>` and `Enter` really does activate
+   * it — what the old sentence over-claimed was the consequence.
+   *
+   * **Rejected alternative (a): implement the menu-button contract here.** It
+   * means this component owning a menu rather than slotting one — open state, an
+   * overlay primitive, focus restoration — and it changes what the slot *means*
+   * from "your menu" to "your items", which is a breaking change to the published
+   * API of both `@example` blocks. It would also be a second implementation of
+   * `DzDropdownMenu` inside a button family. **Rejected alternative (c): document
+   * both rows as requirements on the slotted menu.** There is no column for that;
+   * `expectKeyboardContract`'s `conditions` is the nearest thing and it admits a
+   * prop name, not a slot. Nothing about the rendered markup changed here — two
+   * rows left a published table and one sentence became true.
    */
   keyboard: [
-    { key: 'Enter', when: 'root', action: 'Activate the primary action.', wcag: ['2.1.1'], apg: 'button' },
-    { key: ' ', when: 'root', action: 'Activate the primary action.', wcag: ['2.1.1'], apg: 'button' },
-    {
-      key: 'ArrowDown',
-      when: 'trigger',
-      action: 'Open the menu and focus its first item.',
-      wcag: ['2.1.1'],
-      apg: 'menu-button',
-    },
+    /**
+     * RESIDUAL-14 re-scoped these two from `root` to `action`. `root` is the
+     * `role="group"` wrapper at `DzSplitButton.vue`'s top, which contains a `<slot />`
+     * and activates on nothing; the primary action is the
+     * `<button data-part="action">` at `DzSplitButtonAction.vue:59`, which is what the
+     * sentence has always described. Scoped to `root`, the row was satisfied by a menu
+     * primitive that entered the closure through this file's own `@example` — and once
+     * comments stopped being evidence it was satisfied by nothing at all. The words on
+     * the documentation page do not change; the node the citation points at does.
+     */
+    { key: 'Enter', when: 'action', action: 'Activate the primary action.', wcag: ['2.1.1'], apg: 'button' },
+    { key: ' ', when: 'action', action: 'Activate the primary action.', wcag: ['2.1.1'], apg: 'button' },
+    /**
+     * Re-described by RESIDUAL-15 (see the `D-RES14-4` note above). It used to
+     * read "Open the menu and focus its first item", which the
+     * `<button data-part="trigger" aria-haspopup="true">` at
+     * `DzSplitButtonMenu.vue:55` cannot do: activating it is all this component
+     * owns, and what opens is whatever the consumer composed into the slot.
+     * `apg` drops from `menu-button` to `button` for the same reason — the
+     * `menu-button` pattern is `DzDropdownMenu`'s, and `aria-haspopup="true"` on
+     * this node is what tells a screen reader a menu is on the other end of it.
+     */
     {
       key: 'Enter',
       when: 'trigger',
-      action: 'Open the menu and focus its first item.',
+      action: 'Activate the disclosure; the menu composed into its slot is what opens.',
       wcag: ['2.1.1'],
-      apg: 'menu-button',
-    },
-    {
-      key: 'Escape',
-      when: 'menu open',
-      action: 'Close the menu and return focus to the trigger.',
-      wcag: ['2.1.1', '2.1.2'],
-      apg: 'menu-button',
+      apg: 'button',
     },
   ],
 

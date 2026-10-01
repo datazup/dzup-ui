@@ -110,6 +110,47 @@ export {
   toNumberValue,
 } from './form-value.js'
 
+// The published component-ownership manifest schema (TASK-S3-O1).
+//
+// The contract a SECOND-TIER package conforms to so this library's auto-import
+// resolver and Nuxt module can resolve its components by exact name. Published
+// from here, not from the private `@dzup-ui/tooling`, because a contract a
+// consumer cannot import is not a published contract — and not from
+// `@dzup-ui/core`, for the same ownership-ceiling reason as `form-value.js`.
+// Everything is pure: no `node:*`, no DOM. Resolving a package and reading a
+// file stay in the build-time consumers.
+export {
+  consumeOwnershipManifest,
+  indexOwnershipManifest,
+  isSupportedOwnershipSchema,
+  MOUNTABLE_OWNERSHIP_KINDS,
+  OWNERSHIP_MANIFEST_KINDS,
+  OWNERSHIP_MANIFEST_SCHEMA_MAJOR,
+  OWNERSHIP_MANIFEST_SCHEMA_VERSION,
+  OWNERSHIP_MANIFEST_STATUSES,
+  OWNERSHIP_MANIFEST_SUBPATH,
+  ownershipCollisionDiagnostic,
+  ownershipManifestDiagnostic,
+  ownershipSpecifier,
+  readOwnershipManifest,
+} from './ownership-manifest.js'
+
+export type {
+  OwnershipManifestAvailability,
+  OwnershipManifestConsumption,
+  OwnershipManifestDeprecation,
+  OwnershipManifestDocument,
+  OwnershipManifestEntry,
+  OwnershipManifestIo,
+  OwnershipManifestKind,
+  OwnershipManifestProblem,
+  OwnershipManifestReadResult,
+  OwnershipManifestRejection,
+  OwnershipManifestResolution,
+  OwnershipManifestStatus,
+  OwnershipManifestTier,
+} from './ownership-manifest.js'
+
 // Base prop interfaces
 export type {
   BaseAccessibilityProps,

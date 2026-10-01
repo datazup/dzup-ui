@@ -1,5 +1,6 @@
 import type { DzTourStep } from './DzTour.types.ts'
-import { flushPromises, mount } from '@vue/test-utils'
+import { expectKeyboardContract } from '@dzup-ui/testing'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzTour -- Behavior tests.
  *
@@ -10,7 +11,22 @@ import { flushPromises, mount } from '@vue/test-utils'
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, ref } from 'vue'
+import { anatomy as tourAnatomy } from './DzTour.anatomy.ts'
 import DzTour from './DzTour.vue'
+
+/**
+ * Nodes this file appends to the document itself — tour targets, an opener — as
+ * opposed to anything a component mounted. Unmounting cannot know about these, so
+ * they are removed explicitly in `afterEach`; the `document.body` wipe this file used
+ * to end on was removing them as a side effect of removing everything.
+ */
+const appended: Element[] = []
+
+/** Append `nodes` to the body and register them for removal after this test. */
+function appendToBody(...nodes: Element[]): void {
+  document.body.append(...nodes)
+  appended.push(...nodes)
+}
 
 /** Append two real targets and return the matching step definitions. */
 function setupTargets(): DzTourStep[] {
@@ -20,7 +36,7 @@ function setupTargets(): DzTourStep[] {
   const b = document.createElement('button')
   b.id = 'tour-b'
   b.textContent = 'B'
-  document.body.append(a, b)
+  appendToBody(a, b)
   return [
     { target: '#tour-a', title: 'Step A', description: 'First.' },
     { target: '#tour-b', title: 'Step B', description: 'Second.', placement: 'top' },
@@ -67,8 +83,16 @@ function panelText(): string {
   return document.body.querySelector('[data-testid="dz-tour-panel"]')?.textContent ?? ''
 }
 
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). The overlay teleports to
+ * `document.body`, which made a body wipe look like the way to clear it — while
+ * leaving the tour mounted with its focus trap and resize listener attached.
+ */
+enableAutoUnmount(afterEach)
+
 afterEach(() => {
-  document.body.innerHTML = ''
+  for (const node of appended.splice(0))
+    node.remove()
   vi.restoreAllMocks()
 })
 
@@ -186,7 +210,7 @@ describe('dzTour -- D7: focus is restored when the tour is dismissed', () => {
     const opener = document.createElement('button')
     opener.id = 'tour-opener'
     opener.textContent = 'Start tour'
-    document.body.append(opener)
+    appendToBody(opener)
     opener.focus()
 
     const wrapper = mount(
@@ -235,5 +259,106 @@ describe('dzTour -- D7: focus is restored when the tour is dismissed', () => {
 
     expect(vm.open).toBe(false)
     expect(document.activeElement).toBe(opener)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// RESIDUAL-13, closing RESIDUAL-12 §4 `F8`: both step-navigation rows were
+// published as WCAG 2.1.1 and the panel bound neither. `useFocusTrap` made Tab
+// real and `useEscapeKey` made Escape real; ArrowRight and ArrowLeft were not.
+// ---------------------------------------------------------------------------
+
+/** Dispatch a key at the teleported step panel and return the event. */
+function keyPanel(key: string): KeyboardEvent {
+  const panel = document.body.querySelector<HTMLElement>('[data-testid="dz-tour-panel"]')
+  const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })
+  panel?.dispatchEvent(event)
+  return event
+}
+
+describe('dzTour -- arrow-key step navigation', () => {
+  it('advances a step on ArrowRight and consumes the key', async () => {
+    const { wrapper, onChange } = mountHost(setupTargets())
+    await flushPromises()
+
+    const event = keyPanel('ArrowRight')
+    await flushPromises()
+
+    expect((wrapper.vm as unknown as { current: number }).current).toBe(1)
+    expect(panelText()).toContain('Step B')
+    expect(onChange).toHaveBeenCalledWith(1)
+    expect(event.defaultPrevented).toBe(true)
+  })
+
+  it('returns to the previous step on ArrowLeft', async () => {
+    const { wrapper } = mountHost(setupTargets())
+    await flushPromises()
+    keyPanel('ArrowRight')
+    await flushPromises()
+
+    keyPanel('ArrowLeft')
+    await flushPromises()
+
+    expect((wrapper.vm as unknown as { current: number }).current).toBe(0)
+    expect(panelText()).toContain('Step A')
+  })
+
+  it('does not advance past the last step, and does not finish the tour on an arrow', async () => {
+    const { wrapper, onFinish } = mountHost(setupTargets())
+    await flushPromises()
+    keyPanel('ArrowRight')
+    await flushPromises()
+    expect(panelText()).toContain('Step B')
+
+    // The Next BUTTON finishes here; the arrow deliberately does not — closing
+    // a modal on an arrow key is not what the press asked for.
+    const event = keyPanel('ArrowRight')
+    await flushPromises()
+
+    expect((wrapper.vm as unknown as { current: number }).current).toBe(1)
+    expect(onFinish).not.toHaveBeenCalled()
+    expect((wrapper.vm as unknown as { open: boolean }).open).toBe(true)
+    expect(event.defaultPrevented).toBe(false)
+  })
+
+  it('does not regress before the first step', async () => {
+    const { wrapper, onChange } = mountHost(setupTargets())
+    await flushPromises()
+
+    const event = keyPanel('ArrowLeft')
+    await flushPromises()
+
+    expect((wrapper.vm as unknown as { current: number }).current).toBe(0)
+    expect(onChange).not.toHaveBeenCalled()
+    expect(event.defaultPrevented).toBe(false)
+  })
+
+  it('leaves a field inside the step its own arrows', async () => {
+    const { wrapper } = mountHost(setupTargets())
+    await flushPromises()
+
+    const panel = document.body.querySelector<HTMLElement>('[data-testid="dz-tour-panel"]')!
+    const field = document.createElement('input')
+    field.type = 'text'
+    panel.append(field)
+
+    const event = new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true })
+    field.dispatchEvent(event)
+    await flushPromises()
+
+    expect((wrapper.vm as unknown as { current: number }).current).toBe(0)
+    expect(event.defaultPrevented).toBe(false)
+  })
+
+  it('conforms to its declared keyboard contract, both arrows consumed', async () => {
+    mountHost(setupTargets())
+    await flushPromises()
+    const panel = document.body.querySelector<HTMLElement>('[data-testid="dz-tour-panel"]')!
+    // ArrowLeft is asserted from the SECOND step: the row is real there, and on
+    // step one the component legitimately declines it. Consumption is a claim
+    // about the key being acted on, not about it being swallowed everywhere.
+    keyPanel('ArrowRight')
+    await flushPromises()
+    expectKeyboardContract(panel, tourAnatomy, { handled: ['ArrowLeft'] })
   })
 })

@@ -1,13 +1,10 @@
 {
+  "$comment": "TYPECHECK view of packages/nuxt (TASK-S2-O1). It deliberately sets no `rootDir` and does not emit. `tsconfig.base.json` maps `@dzup-ui/contracts` to packages/contracts/src/index.ts on purpose -- 'a typecheck must not depend on whether someone has run yarn build' -- but a `rootDir` of ./src plus a source-resolved workspace import is a contradiction: every contracts file is then a program input outside rootDir, which is 16 x TS6059. Emitting is the BUILD view's job; see tsconfig.build.json.",
+  "$comment2": "RESIDUAL-01 (D-S2O1-1) moved `allowImportingTsExtensions: false` OUT of this view and INTO tsconfig.build.json. The flag was here only because TypeScript refuses it together with emit, and tsconfig.build.json extends this file -- but this view does not emit, and `include: src/**/*.ts` covers the three spec files, whose `await import('./module.ts')` calls are the repo's own mandated form (CLAUDE.md rule 5). With the flag false here, wiring this project into `yarn typecheck:all` reported 6 x TS5097 against those specs: a gate that fails on the repository's own convention is not a gate. It is declared in the build view instead, where emit makes it mandatory and where the specs are already excluded, so no `.ts` specifier is in that program and the emitted bytes are unchanged (verified: packages/nuxt/dist md5s identical before and after).",
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "allowImportingTsExtensions": false,
-    "declaration": true,
-    "declarationDir": "./dist",
-    "noEmit": false,
-    "outDir": "./dist"
+    "noEmit": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "src/**/*.spec.ts"]
+  "exclude": ["node_modules", "dist"]
 }

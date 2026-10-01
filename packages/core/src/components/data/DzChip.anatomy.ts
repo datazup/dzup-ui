@@ -39,15 +39,35 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
-   * Keyboard contract (TASK-R5-O5). APG `button` for activation, plus the
-   * removal keys this component handles itself — both are in
-   * `DzChip.vue`, on the chip root, and only while `removable`.
+   * Keyboard contract (TASK-R5-O5), corrected 2026-09-28 (RESIDUAL-12, closing
+   * `D-RES11-2`).
+   *
+   * **What was removed and why.** This table used to open with
+   * `{ key: 'Enter', action: 'Activate the chip.', apg: 'button' }` and the same
+   * row for `' '`. `DzChip.vue` has never implemented either: `handleKeyDown`
+   * tests only `Delete` and `Backspace`, the root carries **no** `@click`, and
+   * the only events this component emits are `close`, `focus` and `blur`. So
+   * there was no mouse activation for a key to mirror — nothing to satisfy WCAG
+   * 2.1.1 *about* — and the two rows were a published accessibility claim with
+   * nothing behind them. `DzTag`, whose root is attribute-for-attribute
+   * identical (RESIDUAL-11 §3.2), carried the same two rows and lost them in the
+   * same change.
+   *
+   * **The alternative, recorded rather than left implicit.** The other option was
+   * to *implement* activation — give the root a click handler and an `activate`
+   * event. Rejected: it is a new behaviour on a published component, it needs a
+   * reason to exist that no consumer has asked for, and `role="button"` on this
+   * root was already considered and rejected on this same evidence
+   * (RESIDUAL-11 §3.2, and the `NO ROLE ON THE ROOT` note in `DzChip.vue`).
+   * A chip is a label, not a control; its one control is the remove button.
+   *
+   * `when: 'removable'` is now `when: 'closable'` — the prop is `closable`, and a
+   * context column that names a prop the component does not have is a scope a
+   * reader cannot check.
    */
   keyboard: [
-    { key: 'Enter', action: 'Activate the chip.', wcag: ['2.1.1'], apg: 'button' },
-    { key: ' ', action: 'Activate the chip.', wcag: ['2.1.1'], apg: 'button' },
-    { key: 'Backspace', when: 'removable', action: 'Remove the chip.', wcag: ['2.1.1'] },
-    { key: 'Delete', when: 'removable', action: 'Remove the chip.', wcag: ['2.1.1'] },
+    { key: 'Backspace', when: 'closable', action: 'Remove the chip.', wcag: ['2.1.1'] },
+    { key: 'Delete', when: 'closable', action: 'Remove the chip.', wcag: ['2.1.1'] },
   ],
 
   /** Tier B — a closable chip owns focus and keyboard removal. */

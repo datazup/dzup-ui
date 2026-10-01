@@ -1,3 +1,4 @@
+import { expectKeyboardContract } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
 /**
  * DzCheckboxGroup — Unit / behavior tests.
@@ -5,6 +6,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 import DzCheckbox from './DzCheckbox.vue'
+import { anatomy as checkboxGroupAnatomy } from './DzCheckboxGroup.anatomy.ts'
 import DzCheckboxGroup from './DzCheckboxGroup.vue'
 
 describe('dzCheckboxGroup — Unit Tests', () => {
@@ -122,5 +124,84 @@ describe('dzCheckboxGroup — Unit Tests', () => {
     })
     const checkbox = wrapper.findComponent(DzCheckbox)
     expect(checkbox.attributes('data-disabled')).toBe('')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// RESIDUAL-13, closing RESIDUAL-12 §4 `F11` for this component's one
+// `undetermined` row. `DzCheckboxGroup` is a `<div role="group">` and a
+// `<slot />`, so `validate:anatomy-keyboard` cannot see who receives the declared
+// Space — the checkboxes are the application's. A spec mounted with real children
+// can, which is the whole of the mechanism.
+// ---------------------------------------------------------------------------
+
+describe('dzCheckboxGroup — the declared Space, asserted where source cannot reach', () => {
+  const mountGroup = (props: Record<string, unknown> = {}) =>
+    mount(DzCheckboxGroup, {
+      props: { 'modelValue': [], 'onUpdate:modelValue': () => {}, ...props },
+      slots: {
+        default: () => [
+          h(DzCheckbox, { value: 'a' }, { default: () => 'Option A' }),
+          h(DzCheckbox, { value: 'b' }, { default: () => 'Option B' }),
+        ],
+      },
+      attachTo: document.body,
+    })
+
+  it('renders children whose own platform behaviour is the declared Space', () => {
+    const wrapper = mountGroup()
+    // `platform: [' ']` is the runtime half: it looks at the RENDERED tree —
+    // the consumer's children included — and fails unless something in it owns
+    // Space natively. `handled` would be the wrong assertion: Reka's
+    // `CheckboxRoot` prevents `enter` only, because Space on a `<button>` IS the
+    // activation and preventing it would break the toggle.
+    expectKeyboardContract(wrapper, checkboxGroupAnatomy, { platform: [' '] })
+    wrapper.unmount()
+  })
+
+  it('gives every box its own tab stop, which is what the Tab row says', () => {
+    const wrapper = mountGroup()
+    const boxes = wrapper.findAll('[role="checkbox"]')
+    expect(boxes).toHaveLength(2)
+    for (const box of boxes)
+      expect(box.attributes('disabled')).toBeUndefined()
+
+    // The row itself, asserted rather than described (RESIDUAL-15, closing the
+    // `Tab` half of RESIDUAL-14 §4.2). `expect: 'each'` is the direction that
+    // matters: the old citation for this row was `RovingFocusItem.js`, which is
+    // the mechanism that makes a group ONE tab stop — the opposite of what the
+    // sentence promises. `platform: ['Tab']` cannot say this; see `tabStops`.
+    expectKeyboardContract(wrapper, checkboxGroupAnatomy, {
+      tabStops: { of: '[role="checkbox"]', expect: 'each' },
+    })
+    wrapper.unmount()
+  })
+
+  it('toggles the focused box through the activation Space produces', async () => {
+    const wrapper = mountGroup()
+    const box = wrapper.findAll('[role="checkbox"]')[1]!
+
+    // jsdom synthesises no click from Space, so the two halves are asserted: the
+    // group does not intercept the key, and the activation it produces toggles.
+    const event = new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+    box.element.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(false)
+
+    ;(box.element as HTMLElement).click()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual(['b'])
+    wrapper.unmount()
+  })
+
+  it('does not answer Space for a disabled group', async () => {
+    const wrapper = mountGroup({ disabled: true })
+    const box = wrapper.findAll('[role="checkbox"]')[0]!
+
+    ;(box.element as HTMLElement).click()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    wrapper.unmount()
   })
 })

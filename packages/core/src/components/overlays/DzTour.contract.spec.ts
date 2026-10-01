@@ -6,14 +6,25 @@ import type { DzTourStep } from './DzTour.types.ts'
  * teleported dialog semantics. The overlay teleports to document.body, so
  * assertions query the body rather than the wrapper subtree.
  */
-import { flushPromises, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import DzTour from './DzTour.vue'
 
-// Body-querying tests leave teleported overlays + targets behind; reset between
-// tests so leftovers from one case don't leak into the next.
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). Body-querying tests do
+ * leave teleported overlays behind, but a `document.body` wipe cleared the
+ * markup while leaving each tour mounted — focus trap and resize listener included.
+ * Unmounting removes the teleported overlay; the targets this file appends by hand
+ * are removed by hand.
+ */
+enableAutoUnmount(afterEach)
+
+/** Targets this file appends to the document itself, removed after each test. */
+const appended: Element[] = []
+
 afterEach(() => {
-  document.body.innerHTML = ''
+  for (const node of appended.splice(0))
+    node.remove()
 })
 
 /** Minimal step set with real DOM targets attached to the document body. */
@@ -23,6 +34,7 @@ function makeSteps(): DzTourStep[] {
   const b = document.createElement('div')
   b.id = 'tour-target-b'
   document.body.append(a, b)
+  appended.push(a, b)
   return [
     { target: '#tour-target-a', title: 'Step A', description: 'First step.' },
     { target: '#tour-target-b', title: 'Step B', description: 'Second step.' },

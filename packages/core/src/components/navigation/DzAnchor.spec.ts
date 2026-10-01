@@ -1,5 +1,5 @@
 import type { DzAnchorItem } from './DzAnchor.types.ts'
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzAnchor — Unit / behavior tests.
  *
@@ -40,12 +40,22 @@ function clickLink(el: Element, detail: number): void {
 }
 
 /** Append heading targets to the document so getElementById resolves them. */
+/**
+ * Scroll targets this file appends to the document itself, not through a component.
+ * Unmounting cannot know about them, so `afterEach` removes them by name; the
+ * `document.body` wipe this file used to do removed them as a side effect of
+ * removing everything, the `DzAnchor` instance included — while leaving that
+ * instance mounted, with its IntersectionObserver still observing detached sections.
+ */
+const targets: Element[] = []
+
 function mountTargets(ids: string[]): void {
   for (const id of ids) {
     const el = document.createElement('section')
     el.id = id
     el.textContent = id
     document.body.appendChild(el)
+    targets.push(el)
   }
 }
 
@@ -67,8 +77,11 @@ beforeEach(() => {
   mountTargets(['intro', 'usage', 'install', 'api'])
 })
 
+enableAutoUnmount(afterEach)
+
 afterEach(() => {
-  document.body.innerHTML = ''
+  for (const target of targets.splice(0))
+    target.remove()
   vi.unstubAllGlobals()
 })
 

@@ -1,4 +1,5 @@
-import { mount } from '@vue/test-utils'
+import { expectKeyboardContract } from '@dzup-ui/testing'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzTimePicker — Unit / behavior tests.
  *
@@ -7,6 +8,7 @@ import { mount } from '@vue/test-utils'
  * the picker by clicking the trigger.
  */
 import { afterEach, describe, expect, it } from 'vitest'
+import { anatomy as timePickerAnatomy } from './DzTimePicker.anatomy.ts'
 import DzTimePicker from './DzTimePicker.vue'
 
 /** Stub the portal so popover content renders inline (not teleported). */
@@ -30,11 +32,15 @@ async function open(wrapper: ReturnType<typeof mountPicker>) {
   await wrapper.vm.$nextTick()
 }
 
-describe('dzTimePicker — Trigger', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). Each of the five `describe`
+ * blocks below used to carry its own `document.body` wipe — five copies of a hook that
+ * detached the markup and left the picker mounted with its popover listeners live.
+ * One `enableAutoUnmount` replaces all five and actually unmounts.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzTimePicker — Trigger', () => {
   it('renders a trigger button', () => {
     const wrapper = mountPicker()
     expect(wrapper.find('button').exists()).toBe(true)
@@ -133,10 +139,6 @@ describe('dzTimePicker — Trigger', () => {
 })
 
 describe('dzTimePicker — Cleaner', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('shows the cleaner only when a value is set', () => {
     expect(mountPicker().find('[aria-label="Clear time"]').exists()).toBe(false)
     expect(mountPicker({ modelValue: '10:00' }).find('[aria-label="Clear time"]').exists()).toBe(true)
@@ -168,10 +170,6 @@ describe('dzTimePicker — Cleaner', () => {
 })
 
 describe('dzTimePicker — Popover (roll layout)', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('emits open when the trigger is clicked', async () => {
     const wrapper = mountPicker()
     await open(wrapper)
@@ -263,10 +261,6 @@ describe('dzTimePicker — Popover (roll layout)', () => {
 })
 
 describe('dzTimePicker — Popover (select layout)', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('renders native selects', async () => {
     const wrapper = mountPicker({ selection: 'select' })
     await open(wrapper)
@@ -281,5 +275,131 @@ describe('dzTimePicker — Popover (select layout)', () => {
     await wrapper.find('select[aria-label="Select minutes"]').setValue('45')
     const updates = wrapper.emitted('update:modelValue')!
     expect(updates[updates.length - 1]).toEqual(['11:45'])
+  })
+})
+
+// ---------------------------------------------------------------------------
+// RESIDUAL-13, closing RESIDUAL-12 §4 `F3`. Its words: the declared `Enter` IS
+// backed (the trigger is a real button), "so the list opens; nothing moves the
+// highlight once it is open". Both halves of the combobox contract are asserted.
+// ---------------------------------------------------------------------------
+
+describe('dzTimePicker — APG combobox keyboard', () => {
+  /** Enabled option buttons of one named roll column, in DOM order. */
+  function columnOptions(wrapper: ReturnType<typeof mountPicker>, label: string) {
+    return wrapper
+      .get(`[role="listbox"][aria-label="${label}"]`)
+      .findAll('button:not([disabled])')
+  }
+
+  it('opens the list on ArrowDown from the trigger, and on ArrowUp', async () => {
+    const down = mountPicker()
+    await down.get('[role="combobox"]').trigger('keydown', { key: 'ArrowDown' })
+    await down.vm.$nextTick()
+    expect(down.emitted('open')).toBeTruthy()
+    expect(down.find('[role="listbox"][aria-label="Hours"]').exists()).toBe(true)
+
+    const up = mountPicker()
+    await up.get('[role="combobox"]').trigger('keydown', { key: 'ArrowUp' })
+    await up.vm.$nextTick()
+    expect(up.emitted('open')).toBeTruthy()
+  })
+
+  it('does not open a disabled picker from the keyboard', async () => {
+    const wrapper = mountPicker({ disabled: true })
+    const event = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true })
+    wrapper.get('[role="combobox"]').element.dispatchEvent(event)
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('open')).toBeUndefined()
+    expect(event.defaultPrevented).toBe(false)
+  })
+
+  it('moves the highlight down and up inside the hours column once open', async () => {
+    const wrapper = mountPicker()
+    await open(wrapper)
+    const hours = columnOptions(wrapper, 'Hours')
+    const column = wrapper.get('[role="listbox"][aria-label="Hours"]')
+    ;(hours[0]!.element as HTMLElement).focus()
+
+    await column.trigger('keydown', { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(hours[1]!.element)
+
+    await column.trigger('keydown', { key: 'ArrowUp' })
+    expect(document.activeElement).toBe(hours[0]!.element)
+  })
+
+  it('moves to the first and last option of the column on Home and End', async () => {
+    const wrapper = mountPicker()
+    await open(wrapper)
+    const hours = columnOptions(wrapper, 'Hours')
+    const column = wrapper.get('[role="listbox"][aria-label="Hours"]')
+
+    await column.trigger('keydown', { key: 'End' })
+    expect(document.activeElement).toBe(hours.at(-1)!.element)
+    expect((document.activeElement as HTMLElement).textContent?.trim()).toBe('23')
+
+    await column.trigger('keydown', { key: 'Home' })
+    expect(document.activeElement).toBe(hours[0]!.element)
+    expect((document.activeElement as HTMLElement).textContent?.trim()).toBe('00')
+  })
+
+  it('keeps each unit column separate — End in Hours does not land in Minutes', async () => {
+    const wrapper = mountPicker()
+    await open(wrapper)
+    const hoursColumn = wrapper.get('[role="listbox"][aria-label="Hours"]')
+    const minutesColumn = wrapper.get('[role="listbox"][aria-label="Minutes"]')
+
+    await hoursColumn.trigger('keydown', { key: 'End' })
+
+    expect(hoursColumn.element.contains(document.activeElement)).toBe(true)
+    expect(minutesColumn.element.contains(document.activeElement)).toBe(false)
+  })
+
+  it('does not wrap past the ends of a column', async () => {
+    const wrapper = mountPicker()
+    await open(wrapper)
+    const hours = columnOptions(wrapper, 'Hours')
+    const column = wrapper.get('[role="listbox"][aria-label="Hours"]')
+
+    await column.trigger('keydown', { key: 'End' })
+    await column.trigger('keydown', { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(hours.at(-1)!.element)
+
+    await column.trigger('keydown', { key: 'Home' })
+    await column.trigger('keydown', { key: 'ArrowUp' })
+    expect(document.activeElement).toBe(hours[0]!.element)
+  })
+
+  it('skips an out-of-range hour rather than parking focus on it', async () => {
+    const wrapper = mountPicker({ min: '09:00', max: '17:00' })
+    await open(wrapper)
+    const column = wrapper.get('[role="listbox"][aria-label="Hours"]')
+
+    await column.trigger('keydown', { key: 'Home' })
+
+    // 00 is out of bounds and rendered `disabled`; the first reachable hour is 09.
+    expect((document.activeElement as HTMLElement).textContent?.trim()).toBe('09')
+    expect((document.activeElement as HTMLElement).hasAttribute('disabled')).toBe(false)
+  })
+
+  it('consumes all four navigation keys inside a column', async () => {
+    const wrapper = mountPicker()
+    await open(wrapper)
+    const column = wrapper.get('[role="listbox"][aria-label="Hours"]')
+
+    for (const key of ['ArrowDown', 'ArrowUp', 'Home', 'End']) {
+      const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })
+      column.element.dispatchEvent(event)
+      expect(event.defaultPrevented, `\`${key}\` was not consumed`).toBe(true)
+    }
+  })
+
+  it('conforms to its declared keyboard contract with the panel open', async () => {
+    const wrapper = mountPicker()
+    await open(wrapper)
+    // `when: 'list open'` is two words, so it is read as free text rather than as
+    // a part name — no `conditions` to admit.
+    expectKeyboardContract(wrapper, timePickerAnatomy, {})
   })
 })

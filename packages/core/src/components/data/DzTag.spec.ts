@@ -99,6 +99,48 @@ describe('dzTag', () => {
     expect(wrapper.emitted('close')).toBeUndefined()
   })
 
+  /*
+   * RESIDUAL-12. `DzTag.anatomy.ts` declares Delete and Backspace and
+   * `DzTag.vue`'s `handleKeyDown` has always implemented both — and this spec
+   * asserted neither, so the capability matrix read `keyboard-spec: unrun` for a
+   * component whose entire keyboard contract is these two keys. The four tests
+   * below mirror `DzChip.spec.ts` line for line, which is the point: RESIDUAL-11
+   * §3.2 established that these two components are the same element, so they
+   * should be the same evidence too.
+   */
+  it('emits close on Delete keypress when closable', async () => {
+    const wrapper = mount(DzTag, {
+      props: { closable: true },
+      slots: { default: 'tag' },
+    })
+    await wrapper.trigger('keydown', { key: 'Delete' })
+    expect(wrapper.emitted('close')).toHaveLength(1)
+  })
+
+  it('emits close on Backspace keypress when closable', async () => {
+    const wrapper = mount(DzTag, {
+      props: { closable: true },
+      slots: { default: 'tag' },
+    })
+    await wrapper.trigger('keydown', { key: 'Backspace' })
+    expect(wrapper.emitted('close')).toHaveLength(1)
+  })
+
+  it('does NOT emit close on Delete when it is not closable', async () => {
+    const wrapper = mount(DzTag, { slots: { default: 'tag' } })
+    await wrapper.trigger('keydown', { key: 'Delete' })
+    expect(wrapper.emitted('close')).toBeUndefined()
+  })
+
+  it('does NOT emit close on Backspace when disabled', async () => {
+    const wrapper = mount(DzTag, {
+      props: { closable: true, disabled: true },
+      slots: { default: 'tag' },
+    })
+    await wrapper.trigger('keydown', { key: 'Backspace' })
+    expect(wrapper.emitted('close')).toBeUndefined()
+  })
+
   // ── Events ──
 
   it('emits focus event', async () => {

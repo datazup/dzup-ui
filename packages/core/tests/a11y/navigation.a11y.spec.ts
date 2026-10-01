@@ -7,9 +7,11 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
+import { nextTick } from 'vue'
 import DzBreadcrumb from '../../src/components/navigation/DzBreadcrumb.vue'
 import DzBreadcrumbItem from '../../src/components/navigation/DzBreadcrumbItem.vue'
 import DzBreadcrumbSeparator from '../../src/components/navigation/DzBreadcrumbSeparator.vue'
+import DzMegaMenu from '../../src/components/navigation/DzMegaMenu.vue'
 import DzMenu from '../../src/components/navigation/DzMenu.vue'
 import DzMenuItem from '../../src/components/navigation/DzMenuItem.vue'
 import DzPagination from '../../src/components/navigation/DzPagination.vue'
@@ -551,6 +553,87 @@ describe('navigation family — Accessibility', () => {
       })
       const results = await axe(container)
       expect(results).toHaveNoViolations()
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // DzMegaMenu — RESIDUAL-11, `D-RES10-2`
+  //
+  // The expanded top level is `nav > ul[role="menubar"] > li > a[role="menuitem"]`,
+  // and the `<li>` used to carry no role — so it kept its implicit `listitem`,
+  // which engages two ARIA structure rules at once. Both are read from the
+  // vendored `axe-core` role table: `menubar.requiredOwned` does not include
+  // `listitem` (`aria-required-children`), and `listitem.requiredContext` is
+  // `list`, which the `<ul>` stopped being when it was given `role="menubar"`
+  // (`aria-required-parent`).
+  //
+  // This family had NO entry in this file before now, which is half of why the
+  // defect survived. The other half is measured in RESIDUAL-10 §3.1: the browser
+  // lane does run both rules over this component, and cannot fail on them,
+  // because `stories/navigation/` has not opted into `a11yError`.
+  // ---------------------------------------------------------------------------
+
+  describe('dzMegaMenu', () => {
+    const template = `
+      <DzMegaMenu
+        aria-label="Main"
+        :items="[
+          { label: 'Products', href: '/products' },
+          { label: 'Docs', href: '/docs' },
+        ]"
+      />
+    `
+
+    it('has no a11y violations on the expanded menubar', async () => {
+      const { container } = render({ template, components: { DzMegaMenu } })
+      await nextTick()
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+
+    /**
+     * The axe result above is checked again here by rule id, in BOTH lists.
+     *
+     * RESIDUAL-06's `DzCarouselDots` finding was reported by axe as `incomplete`
+     * rather than as a violation, which `toHaveNoViolations()` cannot see — so
+     * that fix needed a structural assertion beside the axe run. Measured for
+     * this one (by removing the attribute and re-running): it lands in
+     * `violations`, because the required child is *present but wrapped* rather
+     * than absent. Three rules fire, not the two RESIDUAL-10 predicted:
+     * `aria-required-children` on the `<ul>`, `aria-required-parent` on each
+     * `<a role="menuitem">`, and `listitem` on each `<li>`. All three are named
+     * below and both lists are searched, so the assertion does not depend on
+     * which list a future axe version chooses.
+     */
+    it('puts no listitem between the menubar and its menu items', async () => {
+      const { container } = render({ template, components: { DzMegaMenu } })
+      await nextTick()
+
+      const menubar = container.querySelector('[role="menubar"]')
+      expect(menubar).not.toBeNull()
+
+      // Every element child of the menubar is presentational, so the menubar
+      // owns the `menuitem`s inside them rather than two `listitem`s.
+      const wrappers = [...menubar!.children]
+      expect(wrappers).toHaveLength(2)
+      for (const wrapper of wrappers) {
+        expect(wrapper.tagName).toBe('LI')
+        expect(wrapper.getAttribute('role')).toBe('none')
+        expect(wrapper.querySelectorAll('[role="menuitem"]')).toHaveLength(1)
+      }
+      // A presentational role is ignored by the browser if the element is
+      // focusable or carries a global ARIA attribute, so the fix only holds while
+      // neither is true of the wrapper.
+      for (const wrapper of wrappers) {
+        expect(wrapper.hasAttribute('tabindex')).toBe(false)
+        expect([...wrapper.attributes].filter(a => a.name.startsWith('aria-'))).toHaveLength(0)
+      }
+
+      const results = await axe(container)
+      const flagged = [...results.violations ?? [], ...results.incomplete ?? []]
+        .map(r => r.id)
+        .filter(id => ['aria-required-children', 'aria-required-parent', 'listitem'].includes(id))
+      expect(flagged).toEqual([])
     })
   })
 })

@@ -31,6 +31,45 @@ export interface MyButtonProps extends BaseAccessibilityProps {
 
 All components in `@dzup-ui/core` and `@dzup-ui-pro/pro` extend these types — do the same in third-party components for consistency.
 
+## Publishing a component-ownership manifest (second tier)
+
+`@dzup-ui/core`'s auto-import resolver and `@dzup-ui/nuxt`'s `includePro` option
+resolve a **second tier**'s components by exact name from an ownership manifest
+that tier publishes. This package is where that contract lives.
+
+| Fact | Value |
+|---|---|
+| Schema module | `@dzup-ui/contracts` → `ownership-manifest` |
+| Schema version | `OWNERSHIP_MANIFEST_SCHEMA_VERSION` = **`1.1.0`** |
+| Readable major | `OWNERSHIP_MANIFEST_SCHEMA_MAJOR` = **`1`** |
+| Where the manifest goes | `OWNERSHIP_MANIFEST_SUBPATH` = **`./manifests/component-ownership.manifest.json`**, declared in your `package.json` `exports` |
+
+```ts
+import type { OwnershipManifestDocument } from '@dzup-ui/contracts'
+import { readOwnershipManifest } from '@dzup-ui/contracts'
+
+// In your generator, before you write the file:
+const result = readOwnershipManifest(manifest)
+if (!result.ok)
+  throw new Error(result.problems.map(p => `${p.at} ${p.message}`).join('\n'))
+```
+
+Required per entry: `symbol`, `package`, `subpath`, `kind`. Optional:
+`subpaths`, `parentComponent` (required for `compound-part`), `aliasOf`
+(required for `compat-alias`), `status`, `family`, `since`, `deprecated`,
+`anatomy`, `evidence`. Only `public-component` and `compound-part` are mountable
+and therefore auto-importable.
+
+Three rules the consumers apply, so there are no surprises:
+
+- **Declare the subpath.** Shipping the file without exporting it is not
+  conformance — a consumer cannot reach past an `exports` map.
+- **Majors are refused, minors are not.** A higher *minor* of major 1 is read
+  (additive); any other *major* is refused with the version named, never parsed
+  best-effort.
+- **A name both tiers export is a collision.** The first tier's answer stands
+  and both packages are named in a build-time diagnostic. Nothing picks a winner.
+
 ## Versioning
 
 **[`VERSIONING.md`](./VERSIONING.md) is the versioning policy for every

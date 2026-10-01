@@ -4,7 +4,7 @@
  * Verifies prop surface, emit surface, slot overrides, variant tone mapping,
  * loading propagation, and accessibility attributes that sandbox callers depend on.
  */
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import DzConfirmDialog from './DzConfirmDialog.vue'
 
@@ -28,11 +28,14 @@ function mountConfirmDialog(
   })
 }
 
-describe('dzConfirmDialog -- Contract Spec v1', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). A `document.body` wipe
+ * left every dialog mounted over detached nodes; the size loop below used it
+ * as an in-test reset and now unmounts per iteration instead.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzConfirmDialog -- Contract Spec v1', () => {
   // ── Required props ──
 
   it('requires title prop and renders it', () => {
@@ -96,8 +99,11 @@ describe('dzConfirmDialog -- Contract Spec v1', () => {
     for (const size of sizes) {
       const wrapper = mountConfirmDialog({ size })
       expect(document.querySelector('[data-testid="confirm-dialog-confirm"]')).toBeTruthy()
+      // `unmount()` alone is the reset: it removes the element `attachTo` created,
+      // so the next iteration's `document.querySelector` cannot match the last one's
+      // dialog. The `document.body` wipe that used to follow was doing the same job
+      // twice, the second time by detaching whatever else the body held.
       wrapper.unmount()
-      document.body.innerHTML = ''
     }
   })
 
@@ -208,5 +214,8 @@ describe('dzConfirmDialog -- Contract Spec v1', () => {
     expect(dialog).toBeTruthy()
     expect(host.querySelectorAll('[data-dz-dialog-overlay]')).toHaveLength(1)
     wrapper.unmount()
+    // Hand-made host, so hand-removed: `attachTo` cleanup removes the element VTU
+    // created inside it, never the element the test brought.
+    host.remove()
   })
 })

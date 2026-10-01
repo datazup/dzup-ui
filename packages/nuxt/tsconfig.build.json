@@ -1,0 +1,20 @@
+{
+  "$comment": "BUILD view of packages/nuxt (TASK-S2-O1). Same shape and same reason as packages/contracts/tsconfig.build.json: tsconfig.json is the typecheck view, this is what `yarn build` compiles. Two overrides matter. (1) `rootDir: ./src` + emit, so the published layout stays dist/module.js and dist/module.d.ts -- unchanged from before this file existed. (2) `paths` drops the `@dzup-ui/contracts` -> source mapping that tsconfig.base.json installs. A BUILT package must compile against the same published declarations a consumer receives (`@dzup-ui/contracts` -> dist/index.d.ts via its own `exports`), not against sibling source: resolving to source both violates rootDir and emits stray .js/.d.ts into packages/contracts/src. Specs are excluded so none ships.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "paths": {
+      "@dzup-ui/tokens": ["../tokens/src/index.ts"],
+      "@dzup-ui/tokens/*": ["../tokens/src/*"],
+      "@dzup-ui/core": ["../core/src/index.ts"],
+      "@dzup-ui/core/*": ["../core/src/*", "../core/src/components/*"]
+    },
+    "allowImportingTsExtensions": false,
+    "declaration": true,
+    "declarationDir": "./dist",
+    "noEmit": false,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "src/**/*.spec.ts"]
+}

@@ -1,6 +1,6 @@
 import { payloadOf } from '@dzup-ui/testing/security-corpus'
 import { mount } from '@vue/test-utils'
-import { afterEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import DzAnchor from '../src/components/navigation/DzAnchor.vue'
 import { BINDINGS, CONTENT_COMPONENTS } from './boundary-bindings.ts'
@@ -43,10 +43,9 @@ describe('coverage', () => {
 })
 
 describe('containment, which is what an oversized value is actually held by', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
+  // Teardown through Vue, not through the DOM (RESIDUAL-18). The one case in this
+  // block unmounts its own wrapper; the `document.body` wipe that stood here detached
+  // whatever else the document held and unmounted nothing.
   it('bounds a 4 096-character label inside the component box', async () => {
     const fixture = (await import('../../testing/security-corpus/degenerate-input.corpus.json', {
       with: { type: 'json' },

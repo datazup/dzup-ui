@@ -1,9 +1,11 @@
+import { expectKeyboardContract } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
 /**
  * DzInfiniteScroll — Unit / behavior tests (mocked IntersectionObserver).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
+import { anatomy as infiniteScrollAnatomy } from './DzInfiniteScroll.anatomy.ts'
 import DzInfiniteScroll from './DzInfiniteScroll.vue'
 
 let ioCallback: ((entries: Array<{ isIntersecting: boolean }>) => void) | null = null
@@ -139,5 +141,46 @@ describe('dzInfiniteScroll', () => {
     disconnectSpy.mockClear()
     wrapper.unmount()
     expect(disconnectSpy).toHaveBeenCalled()
+  })
+
+  /**
+   * The declared `Tab` row — *"Move to the next focusable element inside the
+   * loaded items; the feed adds no keys of its own."* — asserted rather than
+   * assumed (RESIDUAL-15, closing the `Tab` half of RESIDUAL-14 §4.2).
+   *
+   * This is the row RESIDUAL-14 §2.2.2(c) caught being backed by the wrong node:
+   * it cited `DzButton` — the **error-state retry control** — for a sentence about
+   * the *loaded items*, which are the consumer's `<slot />` at
+   * `DzInfiniteScroll.vue:133`. The ledger rejects that citation, and the row's
+   * honest verdict became `undetermined`.
+   *
+   * Both halves of the sentence are asserted: every focusable node a consumer put
+   * in the feed is its own tab stop (`expect: 'each'`), and the feed adds no keys
+   * of its own — `tabStops` drives `Tab` and fails if the component consumed it,
+   * and the loop below shows it consumes nothing else either.
+   */
+  it('leaves the tab order of the loaded items alone, which is what the Tab row says', () => {
+    const wrapper = mountScroll({}, {
+      default: '<ul class="items">'
+        + '<li><a href="#a" data-testid="i1">A</a></li>'
+        + '<li><a href="#b" data-testid="i2">B</a></li>'
+        + '<li><a href="#c" data-testid="i3">C</a></li>'
+        + '</ul>',
+    })
+
+    expectKeyboardContract(wrapper, infiniteScrollAnatomy, {
+      tabStops: { of: '[data-part="content"] a[href]', expect: 'each' },
+    })
+
+    // "The feed adds no keys of its own", stated as the measurement rather than
+    // as prose: the region consumes nothing the APG `feed` pattern names either,
+    // which is what this anatomy's keyboard comment already says out loud.
+    for (const key of ['Tab', 'PageUp', 'PageDown', 'Home', 'End']) {
+      const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })
+      wrapper.get('[data-testid="i1"]').element.dispatchEvent(event)
+      expect(event.defaultPrevented, `\`${key}\` was consumed by the feed`).toBe(false)
+    }
+
+    wrapper.unmount()
   })
 })

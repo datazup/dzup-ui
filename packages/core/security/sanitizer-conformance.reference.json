@@ -1,0 +1,59 @@
+{
+  "$comment": "The reference conformance result for THIS repository's own sanitizer adapter, measured by @dzup-ui/testing/security-conformance over the versioned security corpus. Generated: run `yarn validate:security-conformance --write`, never hand-edit. `verdicts` is the authority — it is what the gate diffs, per fixture and sink. LOCALLY QUALIFIED ONLY: a green run here is not CI, release or production evidence. `sourceCommit` is provenance, not an assertion: the gate reports it and never compares it to HEAD, for the reason evidence-binding.json states.",
+  "runner": "@dzup-ui/testing/security-conformance",
+  "runnerVersion": "1.0.0",
+  "corpusVersion": "1.1.0",
+  "corpusSchemaVersion": "1.1.0",
+  "corpusFingerprint": "5c0f0b50ff53c648eb056848ecf9b3a2",
+  "adapter": "@dzup-ui/core:dzup-ui (seam-resolved escaping default, ADR-20 A6)",
+  "policyName": "dzup-ui",
+  "limits": {
+    "maxLength": 131072,
+    "maxDepth": 64
+  },
+  "sourceCommit": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
+  "recordedBy": "TASK-S3-O3",
+  "fixtures": 10,
+  "cells": 10,
+  "counts": {
+    "blocked": 1,
+    "escaped": 9,
+    "stripped": 0,
+    "passed-through": 0,
+    "unchanged": 0
+  },
+  "lossy": 9,
+  "nonConforming": 0,
+  "failClosed": {
+    "absentAdapter": "refused",
+    "throwingAdapter": "blocked",
+    "identityAdapter": "non-conforming",
+    "emptyApplicableSet": "refused"
+  },
+  "unasserted": [
+    {
+      "fixtureId": "markup-injection.markdown-reference-link.javascript-scheme",
+      "sink": "markdown",
+      "required": "stripped",
+      "reason": "the \"markdown\" sink's payload is renderer source, not the HTML the adapter receives; this run supplied no \"markdown\" renderer through options.renderers, so the cell is UNASSERTED — it is not passing"
+    },
+    {
+      "fixtureId": "markup-injection.foreign-content.xlink-href-javascript",
+      "sink": "mermaid-svg",
+      "required": "stripped",
+      "reason": "the \"mermaid-svg\" sink's payload is renderer source, not the HTML the adapter receives; this run supplied no \"mermaid-svg\" renderer through options.renderers, so the cell is UNASSERTED — it is not passing"
+    }
+  ],
+  "verdicts": {
+    "css-injection.style.close-tag:html": "escaped",
+    "degenerate-input.depth.element-nesting-bomb:html": "blocked",
+    "markup-injection.anchor.javascript-href:html": "escaped",
+    "markup-injection.comment.hidden-element:html": "escaped",
+    "markup-injection.entity.encoded-colon:html": "escaped",
+    "markup-injection.foreign-content.xlink-href-javascript:html": "escaped",
+    "markup-injection.img.onerror:html": "escaped",
+    "markup-injection.renderer-options.spread-event-attribute:html": "escaped",
+    "markup-injection.script.close-and-reopen:html": "escaped",
+    "markup-injection.svg.onload:html": "escaped"
+  }
+}

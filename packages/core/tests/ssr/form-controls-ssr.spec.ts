@@ -192,12 +192,19 @@ describe('sSR: selection controls render a provided value', () => {
     expect(html).toContain('Apple')
   })
 
-  it('dzCheckboxGroup renders its children', async () => {
+  it('dzCheckboxGroup renders its children, and the group model checks the right one', async () => {
     const DzCheckbox = await load('forms', 'DzCheckbox')
+    // Two children, one of them in the model. `toBeTruthy()` was the whole
+    // assertion here until RESIDUAL-19, and `renderToString` returns seven truthy
+    // bytes for a component that renders nothing. What can go wrong on the server
+    // is the group's model not reaching its children, so that is what is counted.
     const html = await ssrRender(await load('forms', 'DzCheckboxGroup'), { modelValue: ['a'] }, {
-      default: () => h(DzCheckbox, { value: 'a' }),
+      default: () => h('div', [h(DzCheckbox, { value: 'a' }), h(DzCheckbox, { value: 'b' })]),
     })
-    expect(html).toBeTruthy()
+    expect(html).toContain('role="group"')
+    expect(html.match(/role="checkbox"/g) ?? []).toHaveLength(2)
+    expect(html.match(/aria-checked="true"/g) ?? []).toHaveLength(1)
+    expect(html.match(/aria-checked="false"/g) ?? []).toHaveLength(1)
   })
 
   it('dzCascader renders the selected path', async () => {
@@ -221,8 +228,15 @@ describe('sSR: selection controls render a provided value', () => {
   it('dzTreeSelect renders on the server through either model', async () => {
     const DzTreeSelect = await load('forms', 'DzTreeSelect')
     const nodes = [{ key: 'a', label: 'Alpha' }]
-    expect(await ssrRender(DzTreeSelect, { nodes, value: 'a' })).toBeTruthy()
-    expect(await ssrRender(DzTreeSelect, { nodes, modelValue: 'a' })).toBeTruthy()
+    // The selected node's LABEL in the trigger, through both models — and absent
+    // with no model, so the assertion is about the selection and not about the
+    // word appearing somewhere (RESIDUAL-19; this was `toBeTruthy()` twice).
+    const trigger = (html: string) => /data-part="label"[^>]*>(.*?)<\/span><svg/.exec(html)?.[1] ?? ''
+    expect(trigger(await ssrRender(DzTreeSelect, { nodes, value: 'a' }))).toContain('Alpha')
+    expect(trigger(await ssrRender(DzTreeSelect, { nodes, modelValue: 'a' }))).toContain('Alpha')
+    const unselected = await ssrRender(DzTreeSelect, { nodes })
+    expect(unselected).toContain('role="combobox"')
+    expect(unselected).not.toContain('Alpha')
   })
 
   it('dzTransfer renders both panes', async () => {
@@ -238,7 +252,10 @@ describe('sSR: selection controls render a provided value', () => {
       personas: [{ id: 'p1', name: 'Ada Lovelace', role: 'Engineer' }],
       modelValue: 'p1',
     })
-    expect(html).toBeTruthy()
+    // The model is an id; the field must show the persona's NAME on the server,
+    // or hydration fills it in after the fact (RESIDUAL-19; was `toBeTruthy()`).
+    expect(html).toContain('value="Ada Lovelace"')
+    expect(html).toContain('data-component="DzPersonaSelector"')
   })
 })
 

@@ -7,7 +7,7 @@
  * document.body, so assertions query the body rather than the wrapper subtree.
  */
 import { expectFallthrough } from '@dzup-ui/testing'
-import { flushPromises, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { anatomy } from './DzPopconfirm.anatomy.ts'
 import DzPopconfirm from './DzPopconfirm.vue'
@@ -24,9 +24,13 @@ function mountPopconfirm(props: Record<string, unknown> = {}) {
   })
 }
 
-afterEach(() => {
-  document.body.innerHTML = ''
-})
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). The panel teleports to
+ * `document.body`, which made a `document.body` wipe look like the way to
+ * clear it; it left the component mounted instead. Unmounting removes the teleported
+ * panel, the trigger and the document-level listeners in one act.
+ */
+enableAutoUnmount(afterEach)
 
 function panel(): Element | null {
   return document.body.querySelector('[data-testid="dz-popconfirm-panel"]')

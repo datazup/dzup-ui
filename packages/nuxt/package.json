@@ -30,7 +30,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "yarn --cwd ../.. vitest run packages/nuxt/src",
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.build.json"
   },
   "peerDependencies": {
     "@dzup-ui/core": ">=0.1.0-alpha.0",
@@ -38,6 +38,7 @@
     "nuxt": ">=3.0.0"
   },
   "dependencies": {
+    "@dzup-ui/contracts": "workspace:*",
     "@nuxt/kit": "4.5.2"
   },
   "devDependencies": {

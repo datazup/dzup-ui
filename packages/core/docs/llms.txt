@@ -313,9 +313,9 @@ These hold for every component below, so they are stated once here:
   - props: `as`, `orientation`, `sticky`, `ui`, `wrap`
   - variant: `flat` `outlined` `elevated` · size: `icon` `xs` `sm` `md` `lg` `xl` · tone: `neutral` `primary` `success` `warning` `danger` `info`
   - parts (ADR-19): `group`, `root`
-- **DzGridItem** — a `DzGrid` child that says how many columns it occupies.
+- **DzGridItem** — a `DzGrid` child that says how many columns and rows it occupies.
   - part of `DzGrid`
-  - props: `as`, `span`
+  - props: `as`, `colSpan`, `rowSpan`, `span`
 - **DzResizableHandle** — Resize handle between panels, using Reka UI
   - part of `DzResizable`
   - props: `disabled`, `withHandle`

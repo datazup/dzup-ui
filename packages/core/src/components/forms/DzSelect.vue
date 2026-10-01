@@ -40,6 +40,15 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { selectVariants } from './DzSelect.variants.ts'
+import {
+  createRetryKeyboardRoute,
+  provideRetryKeyboardRoute,
+  retryFocusDestination,
+  retryRouteRowFocusIn,
+  retryRouteRowKeydown,
+  useRetryRowExit,
+  withRetryFocusReturn,
+} from './optionsStateFocus.ts'
 
 defineOptions({
   inheritAttrs: false,
@@ -101,6 +110,13 @@ const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
 const resolvedSearchPlaceholder = computed(() => props.searchPlaceholder ?? dzMessages.value.searchPlaceholder)
 const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 
+/**
+ * Reka's `SelectItem` **throws** on an empty `value` — *"A <SelectItem /> must have
+ * a value prop that is not an empty string. This is because the Select value can
+ * be set to an empty string to clear the selection and show the placeholder."* —
+ * so an item that legitimately carries `''` is mapped onto this marker instead.
+ * That much is load-bearing and stays.
+ */
 const EMPTY_VALUE_SENTINEL = '__DZ_SELECT_EMPTY__'
 
 /** Maps external value → internal reka-ui safe value (empty string → sentinel) */
@@ -191,6 +207,9 @@ const styles = computed(() =>
 
 const searchQuery = ref('')
 const searchInputRef = ref<HTMLInputElement | null>(null)
+/** The async-options row, and the retry inside it — C9.4's focus pair. */
+const optionsStateRef = ref<HTMLElement | null>(null)
+const optionsRetryRef = ref<HTMLButtonElement | null>(null)
 
 /** Default filter: case-insensitive label match */
 function defaultFilter(option: { label: string, value: string, disabled?: boolean }, query: string): boolean {
@@ -206,6 +225,38 @@ function defaultFilter(option: { label: string, value: string, disabled?: boolea
  */
 const selectedLabel = computed(
   () => props.items.find(item => item.value === model.value)?.label ?? '',
+)
+
+/**
+ * The value handed to `SelectRoot` — the model, and the sentinel only when an item
+ * actually claims the empty string (RESIDUAL-11, `D-RES10-5`).
+ *
+ * `toInternal(model)` used to be passed here unconditionally, so the unset state
+ * of **every** select reached Reka as `'__DZ_SELECT_EMPTY__'`, and `SelectRoot`
+ * spreads its `modelValue` straight onto the hidden native `<select>` it renders
+ * for form participation. The server HTML of every unset select therefore carried
+ * `value="__DZ_SELECT_EMPTY__"`: an internal marker in published output.
+ *
+ * The root does not need the mapping. Reka's own `SelectItem` error says the
+ * opposite — *"the Select value can be set to an empty string to clear the
+ * selection and show the placeholder"* — so `''` is the value it documents for
+ * "nothing chosen". It is the ITEM side that cannot take `''`, because
+ * `SelectItem` throws on it, and that mapping is untouched.
+ *
+ * The one case where the root still needs the sentinel is an item that declares
+ * `value: ''` (a *"— any —"* row). Its internal value is the sentinel, so the
+ * root's value has to match it for the panel to show that row as checked. Guarding
+ * on `items` rather than dropping the mapping keeps that behaviour exactly as it
+ * was, reactively — including when `items` arrive late through `optionsState`.
+ *
+ * `undefined` was considered for the unset case and rejected on measurement:
+ * `SelectRoot` computes `passive: props.modelValue === void 0`, so handing it
+ * `undefined` would make the root **uncontrolled**. `''` keeps it controlled.
+ */
+const hasEmptyValueItem = computed(() => props.items.some(item => item.value === ''))
+
+const internalModel = computed(() =>
+  model.value === '' && hasEmptyValueItem.value ? EMPTY_VALUE_SENTINEL : model.value,
 )
 
 /**
@@ -239,9 +290,86 @@ const {
   }),
 )
 
+/**
+ * `DzSelect` renders its **own** copy of the async-options row rather than the
+ * shared `DzOptionsState`, because it publishes an `options-state` slot the shared
+ * component does not have. So it has to keep renderer contract C9.4 itself — all
+ * three parts of it — and it keeps them by calling the same helpers the shared row
+ * calls, not by growing a second implementation of the rule
+ * (see `optionsStateFocus.ts`).
+ *
+ * Measured before any of it was wired, in real chromium: with the retry focused,
+ * `Enter` left `document.activeElement` on `document.body` (RESIDUAL-05), and
+ * **`Tab` from the open panel's trigger landed on the host page's next button with
+ * the panel still open** (RESIDUAL-06) — so the control was no more reachable here
+ * than anywhere else, and the modal focus trap people assumed was covering it does
+ * not contain the tab order. A mouse press was always safe, which is exactly why the
+ * copy was never noticed.
+ *
+ * This control owns both halves of the keyboard route, because it renders its own
+ * row: it builds the route and passes it straight in, where the other seven hosts let
+ * `DzOptionsState` register itself. A component cannot `inject` what it has just
+ * `provide`d, which is why the shared module takes the route as an argument at all.
+ *
+ * The owner handler is bound in **three** places, and they are not equivalent — read
+ * this before deleting one:
+ *
+ * 1. the **root**, which is the route every measured case takes. While the row is on
+ *    screen there are no items for Reka to focus, so the open panel leaves focus on
+ *    the trigger, which is inside the root. Proved by a seeded break: deleting this
+ *    one binding fails the shared contract walk on `DzSelect` **and on nothing else**.
+ * 2. the **search box**, which needs its own because it stops keydown propagation, so
+ *    nothing bubbles out of it to the root at all.
+ * 3. the **panel content**, for the one route the other two cannot serve: the list is
+ *    showing, the user has arrowed onto an item (so focus is inside the portal), and a
+ *    host-driven reload then replaces the list with this row — the focused item
+ *    unmounts and focus falls back inside the content, outside the root. That route is
+ *    **not driven by any test**, and RESIDUAL-06 says so rather than implying it is.
+ */
+const retryRoute = createRetryKeyboardRoute(() => optionsRetryRef.value, () => optionsStateRef.value)
+const handleAsyncOptionsKeydown = provideRetryKeyboardRoute(retryRoute)
+const focusDestination = retryFocusDestination(retryRoute)
+/**
+ * C9.4's **fourth** part on the copy: hand focus on when the row itself unmounts
+ * (`D-RES06-1`, RESIDUAL-07). The same exported function the shared row calls, on the
+ * same route object — not a second implementation of it.
+ *
+ * `null` for the host destination, and the reason is measured rather than assumed:
+ * this panel is portalled, so the keyboard route always arrives from the **trigger**,
+ * which outlives the row. Focus is therefore on the trigger — not on the row — when a
+ * successful retry unmounts the row, so the handoff has nothing to do on any route the
+ * contract walk drives. It is wired anyway because the hole it closes is the row
+ * unmounting with focus on it, and the one undriven route in this file (the third
+ * binding below: list showing, item focused, host-driven reload) is exactly a route
+ * that can end that way. Stated plainly instead of claiming a proof that does not
+ * exist: no seeded break can fail this call while the trigger keeps the focus.
+ */
+useRetryRowExit(retryRoute, null)
+
 function handleRetry(): void {
-  emit('retryOptions')
-  requestOptions('open', searchQuery.value)
+  withRetryFocusReturn(optionsRetryRef.value, focusDestination, () => {
+    emit('retryOptions')
+    requestOptions('open', searchQuery.value)
+  })
+}
+
+function handleOptionsRowKeydown(event: KeyboardEvent): void {
+  retryRouteRowKeydown(event, retryRoute)
+}
+
+function handleOptionsRowFocusIn(event: FocusEvent): void {
+  retryRouteRowFocusIn(event, retryRoute)
+}
+
+/**
+ * The search box keeps its existing contract exactly — the keydown still stops here,
+ * so Reka's typeahead never sees a query character. It just gets a look at the arrow
+ * keys first, on their way to nowhere. It needs its own binding precisely *because*
+ * it stops propagation: nothing bubbles out of it to the panel or the root.
+ */
+function handleSearchKeydown(event: KeyboardEvent): void {
+  handleAsyncOptionsKeydown(event)
+  event.stopPropagation()
 }
 
 const filteredItems = computed(() => {
@@ -320,7 +448,13 @@ const itemIndicatorClasses = computed(() => cn(
 const itemLabelClasses = computed(() => cn('ps-6', props.ui?.['item-label']))
 const noResultsClasses = computed(() => cn(styles.value.noResults(), props.ui?.empty))
 /** The async-options row reuses the `empty` part so a consumer styles one thing. */
-const optionsStateClasses = computed(() => cn(styles.value.optionsState(), props.ui?.empty))
+const optionsStateClasses = computed(() => cn(
+  styles.value.optionsState(),
+  // The row is C9.4's focus destination (see `handleRetry`), so the destination is
+  // visible. Inset, because a row's ring inside a popper must not overflow it.
+  'dz-focus-ring-control-inset',
+  props.ui?.empty,
+))
 const emptyClasses = computed(() => cn(
   'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center '
   + 'text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
@@ -336,10 +470,10 @@ const { testId: dzTestId } = useDzTestIds()
 </script>
 
 <template>
-  <div data-part="root" :class="rootClasses" v-bind="dzTestId('dz-select')">
+  <div data-part="root" :class="rootClasses" v-bind="dzTestId('dz-select')" @keydown="handleAsyncOptionsKeydown">
     <SelectRoot
       :dir="dzDirection"
-      :model-value="toInternal(model)"
+      :model-value="internalModel"
       :disabled="resolvedDisabled"
       :name="name"
       :required="resolvedRequired"
@@ -399,6 +533,7 @@ const { testId: dzTestId } = useDzTestIds()
           :class="contentClasses"
           position="popper"
           :side-offset="4"
+          @keydown="handleAsyncOptionsKeydown"
         >
           <SelectViewport data-part="viewport" :class="viewportClasses">
             <!-- TODO(remove-after: 0.3.0): `data-dz-search-input` and
@@ -421,7 +556,7 @@ const { testId: dzTestId } = useDzTestIds()
                 data-part="input"
                 data-dz-search-input
                 @input="handleSearchInput"
-                @keydown.stop
+                @keydown="handleSearchKeydown"
               >
             </div>
             <!--
@@ -446,11 +581,15 @@ const { testId: dzTestId } = useDzTestIds()
             -->
             <div
               v-if="optionsRow !== null"
+              ref="optionsStateRef"
               data-part="options-state"
               :data-options-state="resolvedOptionsState"
               :class="optionsStateClasses"
               role="status"
               aria-live="polite"
+              tabindex="-1"
+              @focusin="handleOptionsRowFocusIn"
+              @keydown="handleOptionsRowKeydown"
             >
               <slot
                 name="options-state"
@@ -462,9 +601,11 @@ const { testId: dzTestId } = useDzTestIds()
                 <span data-part="options-message">{{ optionsAnnouncement }}</span>
                 <button
                   v-if="canRetryOptions"
+                  ref="optionsRetryRef"
                   type="button"
                   data-part="options-retry"
                   :class="styles.optionsRetry()"
+                  @mousedown.prevent
                   @click="handleRetry"
                 >
                   {{ dzAsyncMessages.retry }}

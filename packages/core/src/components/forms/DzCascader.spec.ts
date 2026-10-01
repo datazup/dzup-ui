@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzCascader — Unit / behavior tests.
  *
@@ -61,11 +61,16 @@ function optionByLabel(wrapper: ReturnType<typeof mountCascader>, label: string)
     .find(b => b.text().trim().startsWith(label))
 }
 
-describe('dzCascader — columns', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). Eight of the nine `describe`
+ * blocks below used to carry their own `document.body` wipe — eight copies of a hook
+ * that detached the markup and left the cascader mounted, with its Reka dismissable
+ * layer and pointer-down listener still on the document. One `enableAutoUnmount`
+ * replaces all eight, covers the ninth block too, and actually unmounts.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzCascader — columns', () => {
   it('shows only the root column before any selection', async () => {
     const wrapper = mountCascader()
     await openPanel(wrapper)
@@ -110,10 +115,6 @@ describe('dzCascader — columns', () => {
 })
 
 describe('dzCascader — portal placement', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('renders real Reka content inline when portalDisabled is true', async () => {
     const wrapper = mount(DzCascader, {
       props: { options, portalDisabled: true },
@@ -157,10 +158,6 @@ describe('dzCascader — portal placement', () => {
 })
 
 describe('dzCascader — changeOnSelect', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('commits an intermediate node and keeps the panel open', async () => {
     const wrapper = mountCascader({ changeOnSelect: true })
     await openPanel(wrapper)
@@ -174,10 +171,6 @@ describe('dzCascader — changeOnSelect', () => {
 })
 
 describe('dzCascader — hover expand', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('expands a child column on hover without committing', async () => {
     const wrapper = mountCascader({ expandTrigger: 'hover' })
     await openPanel(wrapper)
@@ -190,10 +183,6 @@ describe('dzCascader — hover expand', () => {
 })
 
 describe('dzCascader — filter', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('renders a flat list of full paths matching the query', async () => {
     const wrapper = mountCascader({ filter: true })
     await openPanel(wrapper)
@@ -225,10 +214,6 @@ describe('dzCascader — filter', () => {
 })
 
 describe('dzCascader — keyboard column nav', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('arrowRight enters the child column and Enter selects within it', async () => {
     const wrapper = mountCascader()
     await openPanel(wrapper)
@@ -262,13 +247,60 @@ describe('dzCascader — keyboard column nav', () => {
     const activeBtn = wrapper.find('button[data-active="true"]')
     expect(activeBtn.attributes('data-col')).toBe('0')
   })
+
+  // RESIDUAL-13, closing RESIDUAL-12 §4 `F4`: both rows were declared as APG
+  // `combobox` and were absent from `onColumnsKeydown`'s switch.
+  it('end moves to the last option of the focused column and Home back to the first', async () => {
+    const wrapper = mountCascader()
+    await openPanel(wrapper)
+    const columns = wrapper.find('[role="listbox"]')
+
+    await columns.trigger('keydown', { key: 'End' })
+    await wrapper.vm.$nextTick()
+    let active = wrapper.find('button[data-active="true"]')
+    expect(active.attributes('data-col')).toBe('0')
+    expect(active.attributes('data-index')).toBe('1')
+    expect(active.text()).toContain('USA')
+
+    await columns.trigger('keydown', { key: 'Home' })
+    await wrapper.vm.$nextTick()
+    active = wrapper.find('button[data-active="true"]')
+    expect(active.attributes('data-index')).toBe('0')
+    expect(active.text()).toContain('China')
+  })
+
+  it('end stays inside the focused column rather than crossing to another one', async () => {
+    const wrapper = mountCascader()
+    await openPanel(wrapper)
+    const columns = wrapper.find('[role="listbox"]')
+
+    // Drill into China's children: Zhejiang (0), Jiangsu (1).
+    await columns.trigger('keydown', { key: 'ArrowRight' })
+    await wrapper.vm.$nextTick()
+
+    await columns.trigger('keydown', { key: 'End' })
+    await wrapper.vm.$nextTick()
+
+    const active = wrapper.find('button[data-active="true"]')
+    expect(active.attributes('data-col')).toBe('1')
+    expect(active.attributes('data-index')).toBe('1')
+    expect(active.text()).toContain('Jiangsu')
+  })
+
+  it('consumes Home and End rather than letting the page scroll to its ends', async () => {
+    const wrapper = mountCascader()
+    await openPanel(wrapper)
+    const columns = wrapper.find('[role="listbox"]')
+
+    for (const key of ['Home', 'End']) {
+      const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })
+      columns.element.dispatchEvent(event)
+      expect(event.defaultPrevented, `\`${key}\` was not consumed`).toBe(true)
+    }
+  })
 })
 
 describe('dzCascader — trigger combobox semantics', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('exposes role="combobox" on the trigger', () => {
     const wrapper = mountCascader()
     const trigger = wrapper.find('button')
@@ -320,10 +352,6 @@ describe('dzCascader — trigger combobox semantics', () => {
 })
 
 describe('dzCascader — clear', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('clears the value via the cleaner button', async () => {
     const wrapper = mountCascader({ value: ['cn', 'zj', 'hz'] })
     const clear = wrapper.find('[aria-label="Clear selection"]')

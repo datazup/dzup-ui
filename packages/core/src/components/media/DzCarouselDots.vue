@@ -41,7 +41,19 @@ const dzMessages = useComponentMessages('DzCarouselDots')
 </script>
 
 <template>
+  <!--
+    Nothing at all when there are no slides, rather than an empty tab list.
+
+    A `tablist` is required by ARIA to own at least one `tab`, and this one owns a
+    `tab` per registered slide — so a carousel whose slides come from an empty
+    collection used to publish a childless `tablist` with a name and no content.
+    Measured with axe in this state (RESIDUAL-06): `aria-required-children`,
+    "Expecting ARIA child role to be added: tab", and it persisted rather than being a
+    mount-order flicker. It also removed the transient empty list on first render,
+    because slides register in their mounted hooks, after this component first draws.
+  -->
   <div
+    v-if="slideIndices.length > 0"
     data-part="list"
     :class="dotsClasses"
     role="tablist"

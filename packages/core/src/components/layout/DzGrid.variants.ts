@@ -141,5 +141,80 @@ export const gridItemSpanMap = {
   },
 } as const
 
+/**
+ * Row-span classes for `DzGridItem`, per breakpoint (TASK-S3-O2, decision
+ * `D-S3O2-1`).
+ *
+ * The mirror image of {@link gridItemSpanMap}, and literal for the same reason:
+ * Tailwind's scanner cannot read `` `md:row-span-${n}` ``, so a template string
+ * would compile to nothing and the span would collapse silently.
+ *
+ * `row-span-*` is `grid-row: span N / span N` and `row-span-full` is `1 / -1`.
+ * Both are block-axis and therefore writing-mode relative, so — like the column
+ * table — every entry is correct under `dir="rtl"` with nothing to configure.
+ */
+export const gridItemRowSpanMap = {
+  base: {
+    1: 'row-span-1',
+    2: 'row-span-2',
+    3: 'row-span-3',
+    4: 'row-span-4',
+    5: 'row-span-5',
+    6: 'row-span-6',
+    7: 'row-span-7',
+    8: 'row-span-8',
+    9: 'row-span-9',
+    10: 'row-span-10',
+    11: 'row-span-11',
+    12: 'row-span-12',
+    full: 'row-span-full',
+  },
+  sm: {
+    1: 'sm:row-span-1',
+    2: 'sm:row-span-2',
+    3: 'sm:row-span-3',
+    4: 'sm:row-span-4',
+    5: 'sm:row-span-5',
+    6: 'sm:row-span-6',
+    7: 'sm:row-span-7',
+    8: 'sm:row-span-8',
+    9: 'sm:row-span-9',
+    10: 'sm:row-span-10',
+    11: 'sm:row-span-11',
+    12: 'sm:row-span-12',
+    full: 'sm:row-span-full',
+  },
+  md: {
+    1: 'md:row-span-1',
+    2: 'md:row-span-2',
+    3: 'md:row-span-3',
+    4: 'md:row-span-4',
+    5: 'md:row-span-5',
+    6: 'md:row-span-6',
+    7: 'md:row-span-7',
+    8: 'md:row-span-8',
+    9: 'md:row-span-9',
+    10: 'md:row-span-10',
+    11: 'md:row-span-11',
+    12: 'md:row-span-12',
+    full: 'md:row-span-full',
+  },
+  lg: {
+    1: 'lg:row-span-1',
+    2: 'lg:row-span-2',
+    3: 'lg:row-span-3',
+    4: 'lg:row-span-4',
+    5: 'lg:row-span-5',
+    6: 'lg:row-span-6',
+    7: 'lg:row-span-7',
+    8: 'lg:row-span-8',
+    9: 'lg:row-span-9',
+    10: 'lg:row-span-10',
+    11: 'lg:row-span-11',
+    12: 'lg:row-span-12',
+    full: 'lg:row-span-full',
+  },
+} as const
+
 /** Variant prop types extracted from the tv() definition */
 export type GridVariantProps = VariantProps<typeof gridVariants>

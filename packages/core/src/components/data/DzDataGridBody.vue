@@ -61,6 +61,17 @@ const styles = computed(() =>
   }),
 )
 
+/**
+ * How many cells precede the first data column — `1` when the selection cell
+ * renders, `0` otherwise.
+ *
+ * The cell address the roving `tabindex` is asked about is the position in the
+ * `<tr>`, because that is the address `useDataGridNavigation` computes from
+ * `HTMLTableRowElement.cells`. Adding the offset here rather than in the
+ * composable keeps the two halves reading the same coordinate.
+ */
+const selectionOffset = computed(() => (ctx!.selectable.value === 'multiple' ? 1 : 0))
+
 function getAlignClass(align?: 'left' | 'center' | 'right'): string {
   if (align === 'center')
     return 'text-center'
@@ -96,11 +107,20 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
       role="row"
       @click="handleRowClick(row, index)"
     >
+      <!--
+        The roving `tabindex` behind the six declared `apg: 'grid'` cell rows
+        (RESIDUAL-15, `D-RES14-1`): exactly one body cell is in the tab order and
+        it follows the user, every other cell is reachable by arrow. The selection
+        cell is index 0 when it renders, which is why `isActiveCell` is asked with
+        an offset column index on the data cells below.
+      -->
       <td
         v-if="ctx!.selectable.value === 'multiple'"
         data-part="cell"
         :class="cn(styles.cell(), 'w-[var(--dz-spacing-10)]')"
         role="gridcell"
+        :tabindex="ctx!.isActiveCell(index, 0) ? 0 : -1"
+        @keydown="ctx!.onCellKeydown"
       >
         <DzCheckbox
           :model-value="ctx!.isRowSelected(row)"
@@ -111,12 +131,14 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
         />
       </td>
       <td
-        v-for="col in ctx!.columns.value"
+        v-for="(col, colIndex) in ctx!.columns.value"
         :key="col.field"
         data-part="cell"
         :class="cn(styles.cell(), getAlignClass(col.align))"
         :style="getColumnStyle(col)"
         role="gridcell"
+        :tabindex="ctx!.isActiveCell(index, colIndex + selectionOffset) ? 0 : -1"
+        @keydown="ctx!.onCellKeydown"
       >
         <slot name="cell" :row="row" :column="col" :value="row[col.field]">
           {{ row[col.field] }}

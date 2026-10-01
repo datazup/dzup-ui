@@ -73,6 +73,24 @@ const {
   handleClearFilter,
 } = useDataGridHeader({ ctx: ctx! })
 
+/**
+ * Sort first, then cell navigation (RESIDUAL-15, `D-RES14-1`).
+ *
+ * One binding rather than two, because a `<th>` answers both: `Enter`, `Space` and
+ * `Shift`+`Enter` cycle the column sort — the three `when: 'header'` rows, and
+ * `handleHeaderKeyDown` prevents only those — and everything else falls through to
+ * the grid's arrows. The order matters in one direction only: a sortable column's
+ * `Enter` must reach the sort, and navigation names none of the keys sort uses, so
+ * the two cannot collide.
+ */
+function onHeaderCellKeydown(event: KeyboardEvent, col: { field: string, sortable?: boolean }): void {
+  if (ctx!.sortable.value && col.sortable !== false)
+    handleHeaderKeyDown(event, col.field)
+  if (event.defaultPrevented)
+    return
+  ctx!.onCellKeydown(event)
+}
+
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzDataGridHeader')
 </script>
@@ -80,11 +98,21 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
 <template>
   <thead data-part="header" :class="styles.header()" role="rowgroup">
     <tr data-part="row" :class="styles.headerRow()" role="row">
+      <!--
+        `tabindex="-1"` and the navigation handler make a header cell reachable by
+        ArrowUp from the first body row without adding a tab stop (RESIDUAL-15,
+        `D-RES14-1`). The sortable columns below keep the `tabindex="0"` they
+        already publish, which `DzDataGrid.contract.spec.ts:136`/`:158` and
+        `DzDataGrid.spec.ts:146` assert; see `useDataGridNavigation` for the
+        single-tab-stop variant that was rejected.
+      -->
       <th
         v-if="ctx!.selectable.value === 'multiple'"
         data-part="cell"
         :class="cn(styles.headerCell(), 'w-[var(--dz-spacing-10)]')"
         role="columnheader"
+        tabindex="-1"
+        @keydown="ctx!.onCellKeydown"
       >
         <DzCheckbox
           :model-value="ctx!.isAllSelected.value"
@@ -106,10 +134,10 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
             : ctx!.sortable.value && col.sortable !== false ? 'none'
               : undefined
         "
-        :tabindex="ctx!.sortable.value && col.sortable !== false ? 0 : undefined"
+        :tabindex="ctx!.sortable.value && col.sortable !== false ? 0 : -1"
         role="columnheader"
         @click="ctx!.sortable.value && col.sortable !== false ? handleHeaderClick($event, col.field) : undefined"
-        @keydown="ctx!.sortable.value && col.sortable !== false ? handleHeaderKeyDown($event, col.field) : undefined"
+        @keydown="onHeaderCellKeydown($event, col)"
       >
         <span class="inline-flex items-center gap-[var(--dz-spacing-1)]">
           {{ col.header }}

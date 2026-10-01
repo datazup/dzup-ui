@@ -251,3 +251,137 @@ describe('dzOrderList — drag handle label', () => {
     expect(handles(wrapper)).toHaveLength(0)
   })
 })
+
+// ---------------------------------------------------------------------------
+// APG `listbox` type-ahead — RESIDUAL-13, closing RESIDUAL-12 §4 `F10`.
+//
+// The `<character>` row promised "Move focus to the next option whose label
+// starts with that character." and RESIDUAL-12 found "a full roving-focus
+// grab/move implementation and no type-ahead of any kind". The rows are slotted,
+// so the gate could only say `undetermined`; the behaviour was absent either way.
+// ---------------------------------------------------------------------------
+
+describe('dzOrderList — type-ahead', () => {
+  /** Attached, so `document.activeElement` is real. */
+  function mountAttached(props = {}) {
+    return mount(DzOrderList, {
+      props: { value: makeItems(), dataKey: 'id', selectable: true, ...props },
+      slots: { item: `<template #item="{ item }"><span class="cell">{{ item.label }}</span></template>` },
+      attachTo: document.body,
+    })
+  }
+
+  /** The row elements, in DOM order. */
+  function rows(wrapper: ReturnType<typeof mountAttached>) {
+    return wrapper.findAll('[role="option"]')
+  }
+
+  it('moves focus to the next row whose label starts with the character', async () => {
+    const wrapper = mountAttached()
+    const items = rows(wrapper)
+
+    await items[0]!.trigger('keydown', { key: 'c' })
+    await nextTick()
+
+    // Alpha, Bravo, Charlie, Delta — `c` reaches Charlie.
+    expect(document.activeElement).toBe(items[2]!.element)
+    wrapper.unmount()
+  })
+
+  it('matches case-insensitively, because a key is not a label', async () => {
+    const wrapper = mountAttached()
+    const items = rows(wrapper)
+
+    await items[0]!.trigger('keydown', { key: 'D' })
+    await nextTick()
+
+    expect(document.activeElement).toBe(items[3]!.element)
+    wrapper.unmount()
+  })
+
+  it('searches from the row AFTER the focused one, and wraps', async () => {
+    const wrapper = mountAttached()
+    const items = rows(wrapper)
+
+    // From Charlie, `a` has to wrap past Delta to reach Alpha.
+    await items[2]!.trigger('keydown', { key: 'a' })
+    await nextTick()
+
+    expect(document.activeElement).toBe(items[0]!.element)
+    wrapper.unmount()
+  })
+
+  it('reads the label out of the consumer slot, not out of the item', async () => {
+    // The slot renders `item.label`; `String(item)` would be "[object Object]"
+    // and no character would ever match. This is the assertion that would fail if
+    // the implementation stopped reading the rendered row.
+    const wrapper = mount(DzOrderList, {
+      props: { value: makeItems(), dataKey: 'id', selectable: true },
+      slots: { item: `<template #item="{ item }"><span>Zebra {{ item.label }}</span></template>` },
+      attachTo: document.body,
+    })
+    const items = wrapper.findAll('[role="option"]')
+
+    await items[0]!.trigger('keydown', { key: 'z' })
+    await nextTick()
+
+    // Every label now starts with Z, so `z` steps to the NEXT one.
+    expect(document.activeElement).toBe(items[1]!.element)
+    wrapper.unmount()
+  })
+
+  it('consumes the character it acts on and leaves an unmatched one alone', async () => {
+    const wrapper = mountAttached()
+    const items = rows(wrapper)
+
+    const matched = new KeyboardEvent('keydown', { key: 'b', bubbles: true, cancelable: true })
+    items[0]!.element.dispatchEvent(matched)
+    expect(matched.defaultPrevented).toBe(true)
+
+    const unmatched = new KeyboardEvent('keydown', { key: 'q', bubbles: true, cancelable: true })
+    items[0]!.element.dispatchEvent(unmatched)
+    expect(unmatched.defaultPrevented).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('does not type-ahead while a row is GRABBED, because the arrows are moving the item', async () => {
+    const wrapper = mountAttached()
+    const items = rows(wrapper)
+
+    // Space grabs the row; from then on the keys belong to the reorder.
+    await items[0]!.trigger('keydown', { key: ' ' })
+    await nextTick()
+
+    const event = new KeyboardEvent('keydown', { key: 'c', bubbles: true, cancelable: true })
+    items[0]!.element.dispatchEvent(event)
+    await nextTick()
+
+    expect(event.defaultPrevented).toBe(false)
+    expect(wrapper.emitted('update:value')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('ignores a modified character, which belongs to the browser or the host', async () => {
+    const wrapper = mountAttached()
+    const items = rows(wrapper)
+
+    const event = new KeyboardEvent('keydown', { key: 'c', ctrlKey: true, bubbles: true, cancelable: true })
+    items[0]!.element.dispatchEvent(event)
+    await nextTick()
+
+    expect(event.defaultPrevented).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('does nothing on a disabled list', async () => {
+    const wrapper = mountAttached({ disabled: true })
+    const items = rows(wrapper)
+
+    const event = new KeyboardEvent('keydown', { key: 'c', bubbles: true, cancelable: true })
+    items[0]!.element.dispatchEvent(event)
+    await nextTick()
+
+    expect(event.defaultPrevented).toBe(false)
+    wrapper.unmount()
+  })
+})

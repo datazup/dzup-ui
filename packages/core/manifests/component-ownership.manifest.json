@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+  "sourceCommit": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -1059,6 +1059,16 @@
       "evidence": [
         "packages/core/src/components/data/DzTree.types.ts",
         "compound-component injection key: ownership schema 1.0.0 has no `injection-key` kind. Maintainer decision required — add the kind in 1.1.0 or fold these into `internal`."
+      ]
+    },
+    {
+      "symbol": "DataGridCellPosition",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts",
+        "type-only export not listed in public-api.manifest.json#exports.types"
       ]
     },
     {
@@ -3608,7 +3618,7 @@
           {
             "key": "Enter",
             "action": "Activate the focused previous or next control.",
-            "when": "control",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
@@ -3617,7 +3627,7 @@
           {
             "key": " ",
             "action": "Activate the focused previous or next control.",
-            "when": "control",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
@@ -4351,25 +4361,9 @@
         },
         "keyboard": [
           {
-            "key": "Enter",
-            "action": "Activate the chip.",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "button"
-          },
-          {
-            "key": " ",
-            "action": "Activate the chip.",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "button"
-          },
-          {
             "key": "Backspace",
             "action": "Remove the chip.",
-            "when": "removable",
+            "when": "closable",
             "wcag": [
               "2.1.1"
             ]
@@ -4377,7 +4371,7 @@
           {
             "key": "Delete",
             "action": "Remove the chip.",
-            "when": "removable",
+            "when": "closable",
             "wcag": [
               "2.1.1"
             ]
@@ -4826,54 +4820,56 @@
         },
         "keyboard": [
           {
-            "key": "ArrowRight",
-            "action": "Move the colour pointer one step along the saturation axis.",
+            "key": "Enter",
+            "action": "Open the colour panel.",
+            "when": "trigger",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "slider",
-            "rtl": "fixed"
+            "apg": "button"
           },
           {
-            "key": "ArrowLeft",
-            "action": "Move the colour pointer one step back along the saturation axis.",
+            "key": " ",
+            "action": "Open the colour panel.",
+            "when": "trigger",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "slider",
-            "rtl": "fixed"
+            "apg": "button"
           },
           {
-            "key": "ArrowUp",
-            "action": "Move the colour pointer one step up the value axis.",
+            "key": "Escape",
+            "action": "Close the colour panel without changing the value.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.1.2"
             ],
-            "apg": "slider"
+            "apg": "dialog"
           },
           {
-            "key": "ArrowDown",
-            "action": "Move the colour pointer one step down the value axis.",
+            "key": "Tab",
+            "action": "Move through the panel: the colour field, the hex field, then the presets.",
             "wcag": [
-              "2.1.1"
+              "2.1.2"
             ],
-            "apg": "slider"
+            "apg": "dialog"
           },
           {
-            "key": "Home",
-            "action": "Move the colour pointer to the start of the axis.",
+            "key": "Enter",
+            "action": "Select the focused preset colour.",
+            "when": "item",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "slider"
+            "apg": "button"
           },
           {
-            "key": "End",
-            "action": "Move the colour pointer to the end of the axis.",
+            "key": "<character>",
+            "action": "Type a hex value into the colour field.",
+            "when": "input",
             "wcag": [
               "2.1.1"
-            ],
-            "apg": "slider"
+            ]
           }
         ]
       },
@@ -6177,6 +6173,22 @@
             "apg": "grid"
           },
           {
+            "key": "PageDown",
+            "action": "Move focus down ten rows, or to the last row.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "PageUp",
+            "action": "Move focus up ten rows, or to the header row.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
             "key": "Enter",
             "action": "Cycle the focused column sort.",
             "when": "header",
@@ -6697,21 +6709,21 @@
           },
           {
             "key": "Home",
-            "action": "Move to the first option.",
-            "when": "list open",
+            "action": "Move to the first day of the focused week.",
+            "when": "calendar open",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "combobox"
+            "apg": "grid"
           },
           {
             "key": "End",
-            "action": "Move to the last option.",
-            "when": "list open",
+            "action": "Move to the last day of the focused week.",
+            "when": "calendar open",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "combobox"
+            "apg": "grid"
           },
           {
             "key": "Enter",
@@ -6892,21 +6904,21 @@
           },
           {
             "key": "Home",
-            "action": "Move to the first option.",
-            "when": "list open",
+            "action": "Move to the first day of the focused week.",
+            "when": "calendar open",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "combobox"
+            "apg": "grid"
           },
           {
             "key": "End",
-            "action": "Move to the last option.",
-            "when": "list open",
+            "action": "Move to the last day of the focused week.",
+            "when": "calendar open",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "combobox"
+            "apg": "grid"
           },
           {
             "key": "Enter",
@@ -11814,11 +11826,11 @@
           },
           {
             "key": " ",
-            "action": "Select the focused option.",
+            "action": "Grab the focused item for reordering, or drop it when it is already grabbed.",
             "wcag": [
-              "2.1.1"
-            ],
-            "apg": "listbox"
+              "2.1.1",
+              "2.5.7"
+            ]
           },
           {
             "key": "<character>",
@@ -11830,10 +11842,8 @@
           },
           {
             "key": "ArrowUp",
-            "action": "Move the selected item one position earlier.",
-            "modifiers": [
-              "Alt"
-            ],
+            "action": "Move the grabbed item one position earlier.",
+            "when": "grabbed",
             "wcag": [
               "2.1.1",
               "2.5.7"
@@ -11841,10 +11851,8 @@
           },
           {
             "key": "ArrowDown",
-            "action": "Move the selected item one position later.",
-            "modifiers": [
-              "Alt"
-            ],
+            "action": "Move the grabbed item one position later.",
+            "when": "grabbed",
             "wcag": [
               "2.1.1",
               "2.5.7"
@@ -13550,6 +13558,24 @@
               "2.1.1"
             ],
             "apg": "slider"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Increase the rating by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Decrease the rating by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
           },
           {
             "key": "Home",
@@ -15562,6 +15588,44 @@
             "apg": "menu-button"
           },
           {
+            "key": "ArrowDown",
+            "action": "Move focus to the next action in a vertical fan.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous action in a vertical fan.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Move focus to the next action in a horizontal fan.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu",
+            "rtl": "fixed"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move focus to the previous action in a horizontal fan.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu",
+            "rtl": "fixed"
+          },
+          {
             "key": "Home",
             "action": "Move focus to the first action.",
             "when": "open",
@@ -15754,7 +15818,7 @@
           {
             "key": "Enter",
             "action": "Activate the primary action.",
-            "when": "root",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
@@ -15763,39 +15827,20 @@
           {
             "key": " ",
             "action": "Activate the primary action.",
-            "when": "root",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
             "apg": "button"
           },
           {
-            "key": "ArrowDown",
-            "action": "Open the menu and focus its first item.",
-            "when": "trigger",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "menu-button"
-          },
-          {
             "key": "Enter",
-            "action": "Open the menu and focus its first item.",
+            "action": "Activate the disclosure; the menu composed into its slot is what opens.",
             "when": "trigger",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "menu-button"
-          },
-          {
-            "key": "Escape",
-            "action": "Close the menu and return focus to the trigger.",
-            "when": "menu open",
-            "wcag": [
-              "2.1.1",
-              "2.1.2"
-            ],
-            "apg": "menu-button"
+            "apg": "button"
           }
         ]
       },
@@ -16806,36 +16851,6 @@
             "apg": "table"
           },
           {
-            "key": "Enter",
-            "action": "Cycle the focused column sort.",
-            "when": "header sortable",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "table"
-          },
-          {
-            "key": " ",
-            "action": "Cycle the focused column sort.",
-            "when": "header sortable",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "table"
-          },
-          {
-            "key": "Enter",
-            "action": "Add the focused column to the existing sort rather than replacing it.",
-            "modifiers": [
-              "Shift"
-            ],
-            "when": "header sortable",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "table"
-          },
-          {
             "key": "ArrowRight",
             "action": "Widen the column by 8px, or 24px with Shift.",
             "when": "header resizable",
@@ -17257,6 +17272,22 @@
               "2.1.2"
             ],
             "apg": "tabs"
+          },
+          {
+            "key": "Delete",
+            "action": "Close the focused tab.",
+            "when": "closable",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Backspace",
+            "action": "Close the focused tab.",
+            "when": "closable",
+            "wcag": [
+              "2.1.1"
+            ]
           }
         ]
       },
@@ -17364,25 +17395,9 @@
         },
         "keyboard": [
           {
-            "key": "Enter",
-            "action": "Activate the tag.",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "button"
-          },
-          {
-            "key": " ",
-            "action": "Activate the tag.",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "button"
-          },
-          {
             "key": "Backspace",
             "action": "Remove the tag.",
-            "when": "removable",
+            "when": "closable",
             "wcag": [
               "2.1.1"
             ]
@@ -17390,7 +17405,7 @@
           {
             "key": "Delete",
             "action": "Remove the tag.",
-            "when": "removable",
+            "when": "closable",
             "wcag": [
               "2.1.1"
             ]
@@ -17866,6 +17881,7 @@
           {
             "key": "Enter",
             "action": "Select the highlighted option and close the time list.",
+            "when": "item",
             "wcag": [
               "2.1.1"
             ],
@@ -18443,6 +18459,24 @@
             "rtl": "mirrored"
           },
           {
+            "key": "ArrowDown",
+            "action": "Move focus to the next control in the toolbar.",
+            "when": "orientation vertical",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "toolbar"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous control in the toolbar.",
+            "when": "orientation vertical",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "toolbar"
+          },
+          {
             "key": "Home",
             "action": "Move focus to the first control.",
             "wcag": [
@@ -18957,7 +18991,7 @@
           {
             "key": "Enter",
             "action": "Move the selected items to the other list.",
-            "when": "transfer action",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
@@ -22043,6 +22077,16 @@
       ]
     },
     {
+      "symbol": "UseDataGridNavigationReturn",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts",
+        "type-only export not listed in public-api.manifest.json#exports.types"
+      ]
+    },
+    {
       "symbol": "UseDataGridOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
@@ -24717,6 +24761,16 @@
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDataGridHeader/useDataGridHeader.ts",
+        "packages/core/manifests/public-api.manifest.json#exports.composables"
+      ]
+    },
+    {
+      "symbol": "useDataGridNavigation",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "composable",
+      "evidence": [
+        "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts",
         "packages/core/manifests/public-api.manifest.json#exports.composables"
       ]
     },

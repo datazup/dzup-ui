@@ -136,6 +136,50 @@ function handleOpenChange(open: boolean): void {
   }
 }
 
+/**
+ * Home and End inside the calendar grid (RESIDUAL-13, closing RESIDUAL-12 §4
+ * `F5`).
+ *
+ * **The rows were corrected, not withdrawn, and not implemented as written.**
+ * They said `when: 'list open'` and *"Move to the first / last option"* — the
+ * combobox template's words — and the popover is a **calendar grid**: there is no
+ * option list, so as written there was nothing the keys could do. RESIDUAL-12
+ * measured that Reka's calendar primitives own the arrows and the page keys and
+ * not these two, which is correct and is also not the whole answer, because the
+ * APG `grid` pattern for a date-picker dialog *does* specify Home and End: the
+ * first and last day of the focused week. So the rows now say that, carry
+ * `apg: 'grid'` and `when: 'calendar open'` beside the two arrow rows they belong
+ * with, and this handler does it.
+ *
+ * Focus is moved in the DOM and Reka's `placeholder` is deliberately left alone,
+ * which is **consistent with the arrows this component already has** rather than a
+ * shortcut: `placeholder` is bound one-way from `useDatePicker`'s
+ * `placeholderDate`, so Reka's own `shiftFocus` already moves focus with
+ * `candidateDay.focus()` while `data-focused` stays where it was. Reka's per-cell
+ * arrow handler reads that cell's own `day` prop, so navigation continues
+ * correctly from wherever this lands.
+ */
+function onCalendarKeydown(event: KeyboardEvent): void {
+  if (event.key !== 'Home' && event.key !== 'End')
+    return
+  const target = event.target
+  if (!(target instanceof HTMLElement))
+    return
+  // Only from inside a day cell. Home/End pressed in the segmented field belong
+  // to the field, and the row is scoped `when: 'calendar open'`.
+  const row = target.closest('[data-part="item"]')?.closest('tr')
+  if (row === null || row === undefined)
+    return
+  const days = Array.from(
+    row.querySelectorAll<HTMLElement>('[data-part="item"]:not([data-outside-view]):not([data-disabled])'),
+  )
+  if (days.length === 0)
+    return
+  event.preventDefault()
+  const destination = event.key === 'Home' ? days[0] : days[days.length - 1]
+  destination?.focus()
+}
+
 function handleFocus(event: FocusEvent): void {
   emit('focus', event)
 }
@@ -235,7 +279,7 @@ const { testId: dzTestId } = useDzTestIds()
       </DatePickerAnchor>
 
       <DatePickerContent data-part="content" :class="[styles.content(), ui?.content]" :side-offset="4">
-        <DatePickerCalendar v-slot="{ weekDays, grid }" data-part="panel" :class="[styles.calendar(), ui?.panel]">
+        <DatePickerCalendar v-slot="{ weekDays, grid }" data-part="panel" :class="[styles.calendar(), ui?.panel]" @keydown="onCalendarKeydown">
           <DatePickerHeader data-part="header" :class="[styles.header(), ui?.header]">
             <DatePickerPrev data-part="action" :class="[styles.navButton(), ui?.action]">
               <ChevronLeft class="h-4 w-4" aria-hidden="true" />

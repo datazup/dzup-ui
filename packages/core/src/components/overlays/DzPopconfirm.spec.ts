@@ -1,4 +1,4 @@
-import { flushPromises, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzPopconfirm -- Behavior tests.
  *
@@ -49,8 +49,17 @@ function clickTestId(testId: string): void {
   el?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
 }
 
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). The panel teleports to
+ * `document.body`, so a `document.body` wipe looked like the way to clear it
+ * — but it left the host mounted with the document-level `mousedown` listener that
+ * drives the outside-click path still attached. Unmounting removes the teleported
+ * panel *and* that listener, which is what the outside-click tests below actually
+ * depend on being absent from the previous test.
+ */
+enableAutoUnmount(afterEach)
+
 afterEach(() => {
-  document.body.innerHTML = ''
   vi.restoreAllMocks()
 })
 
@@ -109,6 +118,8 @@ describe('dzPopconfirm -- behavior', () => {
 
     expect(onCancel).toHaveBeenCalledTimes(1)
     expect((wrapper.vm as unknown as { open: boolean }).open).toBe(false)
+    // Hand-made node, so hand-removed: unmounting the host cannot know about it.
+    outside.remove()
   })
 
   it('does not close when clicking inside the panel', async () => {

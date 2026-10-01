@@ -213,12 +213,28 @@ const dzMessages = useComponentMessages('DzDataView')
 // Count-bearing ones, on Intl.PluralRules (TASK-R5-O4).
 const dzFormat = useComponentMessageFormat('DzDataView')
 
-/** Live-region text announcing the rendered window */
+/**
+ * Live-region text announcing the rendered **window**.
+ *
+ * The zero case used to return `emptyTitle`, which is the same string `DzEmpty`
+ * renders three nodes below — and `DzEmpty`'s root is `role="status"`, itself a
+ * live region. So an empty data view put `No items` into TWO live regions in one
+ * render, and an AT announced it twice (RESIDUAL-11, `D-RES10-4`).
+ *
+ * The two regions exist for different messages, so they are given different
+ * messages rather than one of them being deleted: this one reports the window (a
+ * count), `DzEmpty` reports the empty state (a title, and optionally a
+ * description and an action). `showingAll` at `count: 0` is the existing
+ * count-bearing key — no new message, so no locale moves and
+ * `i18n/count-bearing.spec.ts` still covers it. The branch cannot simply fall
+ * through to the paginator arm, which would compute `start = 1`, `end = 0` and
+ * announce "Showing 1 to 0 of 0 items".
+ */
 const announcement = computed(() => {
   if (props.loading)
     return dzMessages.value.loading
   if (total.value === 0)
-    return props.emptyTitle
+    return dzFormat('showingAll', { count: 0 })
   if (!props.paginator)
     return dzFormat('showingAll', { count: total.value })
   const start = pageOffset.value + 1

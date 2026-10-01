@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzSheet — Unit / behavior tests.
  */
@@ -12,11 +12,15 @@ import DzSheetTitle from './DzSheetTitle.vue'
 /** Stub portal to render inline (Reka UI portals don't work in jsdom) */
 const InlinePortal = { template: '<div data-testid="portal"><slot /></div>' }
 
-describe('dzSheet — Unit Tests', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). This file used to end
+ * each test with a `document.body` wipe, which detaches the markup while
+ * leaving every component instance mounted and every watcher, listener and timer it
+ * owns still running against nodes nothing can reach.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzSheet — Unit Tests', () => {
   it('renders the component', () => {
     const wrapper = mount(DzSheet, {
       slots: { default: '<div>Content</div>' },

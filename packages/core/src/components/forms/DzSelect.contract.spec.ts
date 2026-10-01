@@ -5,7 +5,7 @@ import type { DzSelectItem } from './DzSelect.types.ts'
  * Verifies props, events, slots, data attributes, and ARIA compliance.
  */
 import { expectAnatomy } from '@dzup-ui/testing'
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { anatomy } from './DzSelect.anatomy.ts'
 import DzSelect from './DzSelect.vue'
@@ -226,14 +226,18 @@ describe('dzSelect — renderer contract C9 async options', () => {
   const ITEMS = [{ label: 'Apple', value: 'apple' }]
 
   /**
-   * Reka teleports the panel to the body, and an unmounted wrapper does not
-   * always take the teleported node with it — so each case starts from a clean
-   * document. Without this the first three assertions read rows left behind by
+   * Reka teleports the panel to the body, so each case has to start from a clean
+   * document: without a reset the first three assertions read rows left behind by
    * the case before them, which is how a passing suite can be measuring nothing.
+   *
+   * The reset used to be a `document.body` wipe, on the belief that "an unmounted
+   * wrapper does not always take the teleported node with it". Measured
+   * (RESIDUAL-18): the cases here never unmounted at all — nothing tracked the
+   * wrappers — so the teleported rows survived because the component was still
+   * mounted, not because unmounting fails to remove a Teleport's children. It does
+   * remove them, and `enableAutoUnmount` is the whole reset.
    */
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+  enableAutoUnmount(afterEach)
 
   /**
    * jsdom has no pointer-capture APIs, so Reka's trigger cannot be clicked

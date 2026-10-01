@@ -39,14 +39,26 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
-   * Keyboard contract (TASK-R5-O5). APG `button` for activation, plus the
-   * removal keys handled in `DzTag.vue`, only while `removable`.
+   * Keyboard contract (TASK-R5-O5), corrected 2026-09-28 (RESIDUAL-12, closing
+   * `D-RES11-2`).
+   *
+   * The Enter and `' '` rows, both `apg: 'button'` and both reading *"Activate
+   * the tag."*, were removed: `DzTag.vue`'s `handleKeyDown` tests only `Delete`
+   * and `Backspace`, the root carries no `@click`, and the component emits only
+   * `close`, `focus` and `blur`. There is no mouse activation for a key to
+   * mirror, so the rows promised an interaction that does not exist.
+   *
+   * This is not an incidental twin of the `DzChip` correction — it is the same
+   * correction. RESIDUAL-11 §3.2 established that these two roots are
+   * attribute-for-attribute identical, and a test in `DzChip.spec.ts` compares
+   * them so they cannot diverge again. Fixing one and not the other would have
+   * re-created exactly the divergence that test exists to prevent.
+   *
+   * `when: 'removable'` is now `when: 'closable'`, after the prop.
    */
   keyboard: [
-    { key: 'Enter', action: 'Activate the tag.', wcag: ['2.1.1'], apg: 'button' },
-    { key: ' ', action: 'Activate the tag.', wcag: ['2.1.1'], apg: 'button' },
-    { key: 'Backspace', when: 'removable', action: 'Remove the tag.', wcag: ['2.1.1'] },
-    { key: 'Delete', when: 'removable', action: 'Remove the tag.', wcag: ['2.1.1'] },
+    { key: 'Backspace', when: 'closable', action: 'Remove the tag.', wcag: ['2.1.1'] },
+    { key: 'Delete', when: 'closable', action: 'Remove the tag.', wcag: ['2.1.1'] },
   ],
 
   /** Tier B — a closable tag owns focus and keyboard removal. */

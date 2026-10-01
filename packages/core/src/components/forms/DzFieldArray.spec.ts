@@ -1,6 +1,8 @@
+import { expectKeyboardContract } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
+import { anatomy as fieldArrayAnatomy } from './DzFieldArray.anatomy.ts'
 import DzFieldArray from './DzFieldArray.vue'
 
 describe('dzFieldArray', () => {
@@ -140,5 +142,77 @@ describe('dzFieldArray', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.emitted('reorder')).toBeUndefined()
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// RESIDUAL-13, closing RESIDUAL-12 §4 `F11` for this component's two
+// `undetermined` rows.
+//
+// `DzFieldArray` is renderless — `parts: 'none'`, a `<template v-for>` over the
+// model and two `<slot>`s — so *every* element in its output is the consumer's,
+// including the add and remove controls the two rows are about. There is no node
+// for a source scan to look at, which is what `undetermined` records. A spec that
+// supplies the controls a consumer would supply is the mechanism that can.
+// ---------------------------------------------------------------------------
+
+/** A consumer-shaped array: one remove button per row, plus an add button. */
+function mountArray(modelValue: string[] = ['a', 'b']) {
+  return mount(DzFieldArray, {
+    props: { modelValue, 'onUpdate:modelValue': () => {} },
+    slots: {
+      default: ({ field, remove }: { field: unknown, remove: () => void }) =>
+        h('div', [
+          h('span', { 'data-testid': 'item' }, String(field)),
+          h('button', { 'type': 'button', 'data-testid': 'remove', 'onClick': remove }, 'Remove'),
+        ]),
+      // `append` takes an optional item, so the handler has to accept the same
+      // signature the slot declares — `() => void` narrows it and vue-tsc says so.
+      append: ({ append }: { append: (item?: unknown) => void }) =>
+        h('button', { 'type': 'button', 'data-testid': 'add', 'onClick': () => append() }, 'Add'),
+    },
+    attachTo: document.body,
+  })
+}
+
+describe('dzFieldArray — the declared action keys, asserted where source cannot reach', () => {
+  it('has a platform owner for both declared keys once the controls are supplied', () => {
+    const wrapper = mountArray()
+    // The rows say `when: 'action'` — two syllables, one word, and NOT a declared
+    // part, because this component declares `parts: 'none'`. It names the add or
+    // remove control, which is a node of the pattern rather than of the component,
+    // so it is admitted through `conditions` (RESIDUAL-12 §4 `F14`).
+    expectKeyboardContract(wrapper, fieldArrayAnatomy, {
+      platform: ['Enter', ' '],
+      conditions: ['action'],
+    })
+    wrapper.unmount()
+  })
+
+  it('removes a row through the activation the keys produce', async () => {
+    const wrapper = mountArray(['a', 'b'])
+    const remove = wrapper.findAll('[data-testid="remove"]')[0]!
+
+    for (const key of ['Enter', ' ']) {
+      const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })
+      remove.element.dispatchEvent(event)
+      expect(event.defaultPrevented, `\`${key}\` was intercepted`).toBe(false)
+    }
+
+    ;(remove.element as HTMLElement).click()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual(['b'])
+    wrapper.unmount()
+  })
+
+  it('appends a row through the activation the keys produce', async () => {
+    const wrapper = mountArray(['a'])
+
+    ;(wrapper.get('[data-testid="add"]').element as HTMLElement).click()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toHaveLength(2)
+    wrapper.unmount()
   })
 })

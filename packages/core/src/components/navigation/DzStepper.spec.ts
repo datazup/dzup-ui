@@ -1,9 +1,11 @@
+import { expectKeyboardContract } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
 /**
  * DzStepper — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
 import { h, nextTick } from 'vue'
+import { anatomy as stepperAnatomy } from './DzStepper.anatomy.ts'
 import DzStepper from './DzStepper.vue'
 import DzStepperItem from './DzStepperItem.vue'
 
@@ -231,5 +233,55 @@ describe('dzStepper — identity props', () => {
     expect(wrapper.attributes('aria-label')).toBe('Progress steps')
     expect(wrapper.attributes('aria-labelledby')).toBeUndefined()
     expect(wrapper.attributes('aria-describedby')).toBeUndefined()
+  })
+
+  /**
+   * The declared `Tab` row — *"Move to the next navigable step; each step is its
+   * own tab stop."* — asserted rather than assumed (RESIDUAL-15, closing the
+   * `Tab` half of RESIDUAL-14 §4.2).
+   *
+   * The steps are the consumer's `<slot />` content, so
+   * `validate:anatomy-keyboard` reported the row `undetermined` once docblock
+   * `@example` markup stopped counting as a closure. The mechanism is
+   * `DzStepperItem`'s `:role="isClickable ? 'button' : undefined"` and
+   * `:tabindex="isClickable ? 0 : undefined"`, which only a mounted tree with real
+   * children can show — and "each step is its own tab stop" is a claim about the
+   * **shape** of the order that no key list can make.
+   *
+   * `modelValue: 2` because `isClickable` also requires `status !== 'upcoming'`:
+   * with the third step active, all three are reachable and the row's "each" is
+   * a claim over three nodes rather than one.
+   */
+  it('gives every navigable step its own tab stop, which is what the Tab row says', () => {
+    const wrapper = mount(DzStepper, {
+      props: { modelValue: 2, clickable: true },
+      slots: {
+        default: () => [
+          h(DzStepperItem, { title: 'Account' }),
+          h(DzStepperItem, { title: 'Profile' }),
+          h(DzStepperItem, { title: 'Review' }),
+        ],
+      },
+    })
+    expect(wrapper.findAll('[role="button"]')).toHaveLength(3)
+    expectKeyboardContract(wrapper, stepperAnatomy, {
+      tabStops: { of: '[role="button"]', expect: 'each' },
+    })
+  })
+
+  it('takes an unreachable step out of the tab order, so the row is about NAVIGABLE steps', () => {
+    const wrapper = mount(DzStepper, {
+      props: { modelValue: 0, clickable: true },
+      slots: {
+        default: () => [
+          h(DzStepperItem, { title: 'Account' }),
+          h(DzStepperItem, { title: 'Profile' }),
+        ],
+      },
+    })
+    // Step 2 is `upcoming`, so it is not a `role="button"` and not focusable at
+    // all — which is why the row says "the next navigable step" and why the
+    // assertion above needs every step reachable to be a claim about "each".
+    expect(wrapper.findAll('[role="button"]')).toHaveLength(1)
   })
 })

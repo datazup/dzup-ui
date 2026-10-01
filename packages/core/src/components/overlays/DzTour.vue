@@ -7,6 +7,7 @@ import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
 import { useFloating } from '../../composables/useFloating/index.ts'
 import { useFocusTrap } from '../../composables/useFocusTrap/index.ts'
 import { cn } from '../../utilities/cn.ts'
+import { ownsItsOwnCaret } from '../../utilities/keyboardTargets.ts'
 import DzButton from '../buttons/DzButton.vue'
 import { tourTokens } from './DzTour.tokens.ts'
 import { tourVariants } from './DzTour.variants.ts'
@@ -224,6 +225,44 @@ function prev(): void {
   current.value = activeIndex.value - 1
 }
 
+/**
+ * ArrowRight advances a step and ArrowLeft goes back (RESIDUAL-13, closing
+ * RESIDUAL-12 §4 `F8`).
+ *
+ * Both rows have been published since TASK-R5-O5 while the panel bound nothing:
+ * `useFocusTrap` kept focus inside the step and `useEscapeKey` closed it, so
+ * Escape and Tab were real and the two step keys were not.
+ *
+ * **Not direction-aware, and that is the declared contract rather than an
+ * omission.** `DzTour`'s anatomy says `rtl: { keyboard: 'none' }` and neither row
+ * carries `rtl: 'mirrored'` — owner decision D36, recorded in the anatomy's own
+ * comment. A tour advances through a *sequence of steps*, which has no inline
+ * axis to mirror, so ArrowRight advances in every writing direction. Mirroring
+ * it would contradict the declaration, and `keyboard-contract.spec.ts` asserts
+ * that contradiction cannot be written down.
+ *
+ * `ArrowRight` on the last step does **not** finish the tour, unlike the Next
+ * button: `next()` calls `finish()` there, and closing a modal on an arrow key
+ * is not something a user pressing it to read the next step is asking for.
+ */
+function onPanelKeydown(event: KeyboardEvent): void {
+  // A field inside a step's slot content owns its own arrows.
+  if (ownsItsOwnCaret(event.target))
+    return
+  if (event.key === 'ArrowRight') {
+    if (isLast.value)
+      return
+    event.preventDefault()
+    next()
+  }
+  else if (event.key === 'ArrowLeft') {
+    if (isFirst.value)
+      return
+    event.preventDefault()
+    prev()
+  }
+}
+
 function finish(): void {
   emit('finish')
   open.value = false
@@ -311,6 +350,7 @@ const dzMotionAttr = useDzMotionAttribute()
       :style="panelStyle"
       data-testid="dz-tour-panel"
       v-bind="$attrs"
+      @keydown="onPanelKeydown"
     >
       <!-- Live region announcing step changes -->
       <div :id="liveId" :class="styles.liveRegion()" aria-live="polite" role="status">

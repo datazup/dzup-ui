@@ -58,6 +58,12 @@ export const anatomy = {
    * Keyboard contract (TASK-R5-O5). APG `carousel`: the previous and next
    * controls are buttons, and the arrows follow the writing direction
    * because the slides read along the inline axis.
+   *
+   * The two arrow rows were **implemented in RESIDUAL-13** (RESIDUAL-12 §4
+   * `F7`): they had been published since TASK-R5-O5 while `DzCarousel.vue` was a
+   * `role="region"` and a slot with no key handling, so the previous/next
+   * controls were reachable only by tabbing to them. `onKeydown` on the root now
+   * owns them; see its comment for why the region is still not a tab stop.
    */
   keyboard: [
     { key: 'ArrowRight', action: 'Show the next slide.', wcag: ['2.1.1'], apg: 'carousel', rtl: 'mirrored' },
@@ -68,16 +74,23 @@ export const anatomy = {
       apg: 'carousel',
       rtl: 'mirrored',
     },
+    // `when` names the declared part `action` rather than the loose word
+    // "control" it carried until RESIDUAL-13. A single-word `when` that is
+    // neither a part nor a state is what `checkKeyboardContract` calls "almost
+    // always a typo" (RESIDUAL-12 §4 `F14`) — and this one was: the previous and
+    // next buttons ARE the `action` part, so the row now scopes to the node it is
+    // about and `validate:anatomy-keyboard` resolves it against that node's own
+    // `<button>` rather than against whatever else the family happens to render.
     {
       key: 'Enter',
-      when: 'control',
+      when: 'action',
       action: 'Activate the focused previous or next control.',
       wcag: ['2.1.1'],
       apg: 'button',
     },
     {
       key: ' ',
-      when: 'control',
+      when: 'action',
       action: 'Activate the focused previous or next control.',
       wcag: ['2.1.1'],
       apg: 'button',

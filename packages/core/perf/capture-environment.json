@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0.0",
+  "task": "TASK-S1-O4",
+  "what": "The declared capture environment for packages/core/perf/baselines.json. A wall-clock threshold is only meaningful beside the host that produced it, and this file is where that host is DECLARED rather than inferred from whichever laptop ran the capture last. It is the perf analogue of e2e/visual/visual-baselines.json's `scope.authoritativePlatform` (TASK-S1-O3).",
+  "authoritative": {
+    "designated": false,
+    "profileId": null,
+    "decision": "D-S1O4-1",
+    "why": "No host has been designated as the perf measurement host, and no CI job runs `yarn test:perf` (grep -rn 'test:perf' .github/ is empty at 4e4e46f). Until an owner designates one, `yarn perf:capture` refuses to write packages/core/perf/baselines.json in place; `yarn perf:propose <path>` is always allowed, because measuring and proposing is a contributor act and adopting a budget is an owner act.",
+    "blockedOn": "An owner picks a profile below, sets `authoritative.designated` to true and `authoritative.profileId` to that profile, then runs the capture ON that host. Both halves are owner actions under docs/program-2026-09-22-architecture/README.md §5 <authority>."
+  },
+  "profiles": {
+    "win32-x64-16c-node24": {
+      "platform": "win32",
+      "arch": "x64",
+      "minCpus": 16,
+      "nodeMajor": 24,
+      "description": "The developer workstation class every committed baseline was measured on (2026-08-21, commit 4c9fb7a). Recorded so the existing numbers have a name, NOT because it has been chosen."
+    },
+    "linux-x64-ci": {
+      "platform": "linux",
+      "arch": "x64",
+      "minCpus": 2,
+      "nodeMajor": 24,
+      "description": "GitHub-hosted `ubuntu-latest`, the only runner class this repository has (18 of 18 jobs across 8 workflow files — measured in TASK-S1-O3 §2.2). Shared and burstable, so wall-clock timings on it are noisy; size metrics on it are exact."
+    },
+    "linux-x64-dedicated": {
+      "platform": "linux",
+      "arch": "x64",
+      "minCpus": 4,
+      "nodeMajor": 24,
+      "description": "A self-hosted or otherwise dedicated linux runner with no co-tenant workload. The profile the runtime lanes actually need, and the one this repository does not yet have."
+    }
+  },
+  "candidates": [
+    {
+      "profileId": "linux-x64-dedicated",
+      "rank": 1,
+      "recommended": true,
+      "for": "every metric kind",
+      "pro": "The only option under which a runtime, leak, long-task, memory or hydration threshold can both be trustworthy AND fail a CI run. Matches the runner platform the repository already standardises on, so a captured threshold is comparable with what CI would measure.",
+      "con": "The repository does not have such a runner today; designating this profile is a commitment to provision one."
+    },
+    {
+      "profileId": "win32-x64-16c-node24",
+      "rank": 2,
+      "recommended": false,
+      "for": "continuity with the 33 committed baselines",
+      "pro": "Zero provisioning. Every committed baseline is already on it, so a re-capture is a like-for-like comparison rather than a platform migration.",
+      "con": "No CI runner is win32, so a threshold captured here can never fail a CI run — the same trap TASK-S1-O3 found in the visual lane. It also keeps the measurement on a shared developer machine, which is exactly what `DZUP_PERF_GATE`'s doc comment says makes the number meaningless."
+    },
+    {
+      "profileId": "linux-x64-ci",
+      "rank": 3,
+      "recommended": false,
+      "for": "size metrics only",
+      "pro": "Free, already exists, and `size:*` is deterministic — a gzipped byte count does not vary with machine load, so a shared runner measures it exactly.",
+      "con": "Adopting it for the timing families would bake GitHub runner variance into 11 runtime and 179 lane thresholds. If this profile is chosen it should be scoped to `size` and the timing families left undesignated."
+    }
+  ],
+  "committed": {
+    "profileId": "win32-x64-16c-node24",
+    "derivedFrom": "packages/core/perf/baselines.json — all 33 baselines carry an identical `host` block {platform: win32, arch: x64, cpus: 16, node: v24.14.1}.",
+    "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+    "capturedOn": "2026-08-21",
+    "note": "Derived from the committed file, not asserted here. If a future capture writes a `capture` block into baselines.json, that block is authoritative over this one and this field becomes a cross-check."
+  },
+  "quiescence": {
+    "required": true,
+    "why": "A capture on a contended machine records a wide distribution, and a wide distribution earns a PERMISSIVE threshold under `median + max(3σ, 5 %)`. Because the ratchet is downward-only, a permissive threshold captured once cannot be tightened by a later quiet run without an owner decision — so a bad capture is not merely useless, it is durable damage. This is the single most important rule in this file.",
+    "rules": [
+      "Nothing else heavy on the machine: no build, no dev server, no browser lane, no second agent.",
+      "Mains power and no thermal throttling; a capture on battery or on a hot laptop is not a capture.",
+      "At least MINIMUM_RUNS (5) separate process runs, which `perf:capture` performs by default.",
+      "Any metric whose captured cv exceeds MEASURABLE_CV (0.25) is recorded `unmeasurable`, never given a number. That is already enforced by packages/tooling/src/perf/statistics.ts."
+    ],
+    "attestation": "`yarn perf:capture` requires `--quiet-host-attested-by \"<name>\"` for an in-place write. The tooling cannot measure thermal state or co-tenancy, so it asks for a signature instead of pretending to check. An unattested in-place capture is refused."
+  },
+  "policy": {
+    "inPlaceWrite": "Refused unless (a) `authoritative.designated` is true, (b) the running host matches `authoritative.profileId`, (c) quiescence is attested, and (d) no recorded threshold would move upward. Each refusal names itself; none of them is silenceable by an environment variable.",
+    "thresholdDirection": "downward-only",
+    "budgetIncrease": "Per 2026-08-11 doc 06: 'A budget increase needs a recorded user benefit and owner; it is not the default response to regression.' `perf:capture` therefore requires --raise-budget with --owner and --reason together before it will write a file that raises any threshold, and it prints every raised metric first.",
+    "propose": "`yarn perf:propose <path>` is never refused. Measuring and proposing is a contributor act; adopting the numbers as budgets is an owner act. This split is TASK-R2-O7's `--propose` flag, and these refusals are what make it the ONLY path open to an agent."
+  }
+}

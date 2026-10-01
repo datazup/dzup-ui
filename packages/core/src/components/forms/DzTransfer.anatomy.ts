@@ -107,9 +107,19 @@ export const anatomy = {
       wcag: ['2.1.1'],
       apg: 'listbox',
     },
+    /**
+     * RESIDUAL-14 re-scoped this row from the free text `'transfer action'` to the
+     * declared part `action`, and that is what made it checkable rather than merely
+     * readable. `yarn validate:anatomy-keyboard` honours a `when` only when it names
+     * a declared part; free text leaves the row unscoped, and an unscoped row is
+     * satisfied by the first matching node in the file — which for this one was an
+     * option's own `enter.prevent` binding in the source pane, a handler that selects
+     * an option rather than moving anything. Same words on the page, a node the gate
+     * can now point at.
+     */
     {
       key: 'Enter',
-      when: 'transfer action',
+      when: 'action',
       action: 'Move the selected items to the other list.',
       wcag: ['2.1.1'],
       apg: 'button',

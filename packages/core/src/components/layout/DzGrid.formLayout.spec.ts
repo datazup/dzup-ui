@@ -12,9 +12,10 @@
  */
 
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
-import { gridItemSpanMap } from './DzGrid.variants.ts'
+import { resetConflictingPropWarnings } from '../../utilities/warnConflictingProps.ts'
+import { gridItemRowSpanMap, gridItemSpanMap } from './DzGrid.variants.ts'
 import DzGrid from './DzGrid.vue'
 import DzGridItem from './DzGridItem.vue'
 import DzStack from './DzStack.vue'
@@ -132,6 +133,148 @@ describe('dzGridItem — how many columns a field occupies', () => {
         expect(gridItemSpanMap[bp][span]).toBe(expected)
       }
     }
+  })
+})
+
+/**
+ * The document spelling and the row axis (TASK-S3-O2, decision `D-S3O2-1`).
+ *
+ * D67 gave the column axis a typed prop and named it `span`. The Form document
+ * names its two layout fields `colSpan` and `rowSpan`
+ * (`dzup-form-document-v1alpha1.schema.json` `$defs.nodeLayout`, both
+ * `integer 1..12`), and only the first of them had anywhere to go — so a
+ * document carrying `rowSpan: 2` still had to be rendered with a raw
+ * `row-span-2`, which is the persisted-CSS violation doc 03 §3 forbids, moved
+ * into the component boundary rather than removed.
+ *
+ * These tests pin both halves: the document's names are accepted verbatim, and
+ * the row axis exists.
+ */
+describe('dzGridItem — the form document\'s own span vocabulary', () => {
+  it('accepts `colSpan`, the document field name, as well as `span`', () => {
+    // A renderer forwards `node.layout.colSpan` with no lookup table of its own.
+    expect(mount(DzGridItem, { props: { colSpan: 6 } }).classes()).toContain('col-span-6')
+    expect(mount(DzGridItem, { props: { span: 6 } }).classes()).toContain('col-span-6')
+  })
+
+  it('spans rows, which nothing in this repository could express before', () => {
+    expect(mount(DzGridItem, { props: { rowSpan: 2 } }).classes()).toContain('row-span-2')
+    expect(mount(DzGridItem, { props: { rowSpan: 'full' } }).classes()).toContain('row-span-full')
+  })
+
+  it('spans both axes at once, which is the two-column-plus-tall-textarea form', () => {
+    const wrapper = mount(DzGridItem, { props: { colSpan: 6, rowSpan: 2 } })
+    expect(wrapper.classes()).toEqual(expect.arrayContaining(['col-span-6', 'row-span-2']))
+  })
+
+  it('takes a row span per breakpoint, exactly as the column axis does', () => {
+    const wrapper = mount(DzGridItem, { props: { rowSpan: { base: 1, md: 2, lg: 3 } } })
+    expect(wrapper.classes()).toEqual(expect.arrayContaining(['row-span-1', 'md:row-span-2', 'lg:row-span-3']))
+  })
+
+  it('clamps a row span from an untyped document into 1–12', () => {
+    expect(mount(DzGridItem, { props: { rowSpan: 13 as 12 } }).classes()).toContain('row-span-12')
+    expect(mount(DzGridItem, { props: { rowSpan: 0 as 1 } }).classes()).toContain('row-span-1')
+    expect(mount(DzGridItem, { props: { rowSpan: 2.7 as 2 } }).classes()).toContain('row-span-2')
+  })
+
+  it('renders no row-span class when no row span is given — one row is the CSS default', () => {
+    expect(mount(DzGridItem, { props: { colSpan: 2 } }).classes()).not.toContain('row-span-1')
+    expect(mount(DzGridItem).attributes('class')).toBeUndefined()
+  })
+
+  it('prefers `colSpan` over `span` and says so, rather than resolving it silently', () => {
+    resetConflictingPropWarnings()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const wrapper = mount(DzGridItem, { props: { span: 3, colSpan: 8 } })
+    expect(wrapper.classes()).toContain('col-span-8')
+    expect(wrapper.classes()).not.toContain('col-span-3')
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn.mock.calls[0]?.[0]).toContain('both `span` and `colSpan`')
+    warn.mockRestore()
+  })
+
+  /** The gate is what stops a grid of 200 mis-authored items emitting 200 lines. */
+  it('warns once per session however many items are handed both spellings', () => {
+    resetConflictingPropWarnings()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    for (let i = 0; i < 20; i += 1)
+      mount(DzGridItem, { props: { span: 3, colSpan: 8 } })
+    expect(warn).toHaveBeenCalledTimes(1)
+    warn.mockRestore()
+  })
+
+  it('says nothing when only one spelling is given', () => {
+    resetConflictingPropWarnings()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    mount(DzGridItem, { props: { colSpan: 8 } })
+    mount(DzGridItem, { props: { span: 8 } })
+    mount(DzGridItem, { props: { rowSpan: 2 } })
+    expect(warn).not.toHaveBeenCalled()
+    warn.mockRestore()
+  })
+
+  it('has no physical direction on the row axis either, so it mirrors under dir="rtl"', () => {
+    // `grid-row: span N` is block-axis and writing-mode relative. What would
+    // break it is a physical `mt`/`mb` or a `row-start` computed from the top.
+    for (const rowSpan of [1, 6, 12, 'full'] as const) {
+      const wrapper = mount(DzGridItem, { props: { rowSpan: { base: rowSpan, sm: rowSpan, md: rowSpan, lg: rowSpan } } })
+      const classes = wrapper.classes().join(' ')
+      expect(classes, String(rowSpan)).not.toMatch(/(?:^|\s|:)-?(?:mt|mb|pt|pb|top|bottom|row-start|row-end)-/)
+    }
+  })
+
+  it('lets a consumer class win over the row span it computed', () => {
+    const wrapper = mount(DzGridItem, { props: { rowSpan: 2 }, attrs: { class: 'row-span-4' } })
+    expect(wrapper.classes()).toContain('row-span-4')
+    expect(wrapper.classes()).not.toContain('row-span-2')
+  })
+
+  it('emits a literal row-span class for every value at every breakpoint, so the scanner can see it', () => {
+    for (const bp of ['base', 'sm', 'md', 'lg'] as const) {
+      for (const span of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 'full'] as const) {
+        const expected = `${bp === 'base' ? '' : `${bp}:`}row-span-${span}`
+        expect(gridItemRowSpanMap[bp][span]).toBe(expected)
+      }
+    }
+  })
+
+  /**
+   * The point of the whole change: a form document's layout node is renderable
+   * with no class name anywhere in the renderer.
+   */
+  it('renders the schema\'s layout node verbatim, with no raw class', () => {
+    const node = { colSpan: 6, rowSpan: 2 } as const
+    const wrapper = mount(DzGrid, {
+      props: { cols: 12, rows: 2 },
+      slots: { default: () => h(DzGridItem, { ...node }, () => h('textarea', { id: 'notes' })) },
+    })
+    const item = wrapper.find('#notes').element.parentElement!
+    expect(item.className.split(/\s+/)).toEqual(expect.arrayContaining(['col-span-6', 'row-span-2']))
+  })
+})
+
+describe('dzStack — the form document\'s gap vocabulary', () => {
+  /**
+   * TASK-S3-O2 found this already complete and changed nothing; the test is the
+   * record. `LayoutGap` is `none|xs|sm|md|lg|xl` — the document's five
+   * (`DzupStackNode.gap`, `DzupGridNode.gap`) plus `xl`, every member mapped to
+   * a spacing token. A superset satisfies a document that only emits five, and
+   * narrowing it would be a breaking change for `DzFlex` and `DzDataView`, which
+   * share the type.
+   */
+  it('maps every gap the document can emit to a spacing token, on both primitives', () => {
+    for (const gap of ['none', 'xs', 'sm', 'md', 'lg'] as const) {
+      for (const component of [DzStack, DzGrid]) {
+        const classes = mount(component, { props: { gap } }).classes().join(' ')
+        expect(classes, `${component === DzStack ? 'DzStack' : 'DzGrid'} gap="${gap}"`)
+          .toMatch(/gap-\[var\(--dz-spacing-\d+\)\]/)
+      }
+    }
+  })
+
+  it('accepts `xl` too, which the document has no word for and a consumer does', () => {
+    expect(mount(DzStack, { props: { gap: 'xl' } }).classes().join(' ')).toMatch(/gap-\[var\(--dz-spacing-8\)\]/)
   })
 })
 

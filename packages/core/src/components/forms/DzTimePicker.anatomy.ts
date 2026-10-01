@@ -91,6 +91,15 @@ export const anatomy = {
   /**
    * Keyboard contract (TASK-R5-O5). APG `combobox` over a list of times;
    * the arrows move by the configured step.
+   *
+   * **The four navigation rows were implemented in RESIDUAL-13** (RESIDUAL-12 §4
+   * `F3`). `Enter` was already real, because the trigger is a native `<button>`,
+   * which is what made the gap precise: the list opened and nothing moved the
+   * highlight once it was open. `onTriggerKeydown` owns the "open the list when
+   * closed" clause and `onColumnKeydown` owns the movement — per **column**,
+   * because a time is chosen from two to four independent unit listboxes and "the
+   * next option" in an hours column is the next hour. The `select` layout needs
+   * none of it: a native `<select>` owns all four keys itself.
    */
   keyboard: [
     {
@@ -107,8 +116,22 @@ export const anatomy = {
     },
     { key: 'Home', when: 'list open', action: 'Move to the first option.', wcag: ['2.1.1'], apg: 'combobox' },
     { key: 'End', when: 'list open', action: 'Move to the last option.', wcag: ['2.1.1'], apg: 'combobox' },
+    /**
+     * RESIDUAL-14 scoped this row to the `item` part. The sentence was already right
+     * and nothing about the behaviour changed; what changed is that the gate can now
+     * check it. Unscoped, `yarn validate:anatomy-keyboard` satisfied it with the first
+     * activating node in document order, which is the popover **trigger** — whose
+     * Enter *opens* the list. The node the row is about is the option
+     * `<button type="button">` that calls `selectHour(h)` (and its minute, second and
+     * meridiem siblings), and scoping to the part it carries is what points the
+     * citation there. RESIDUAL-12 had already written the split down — *"the trigger
+     * is a real `<button>` … so the list opens; nothing moves the highlight once it is
+     * open"* — and RESIDUAL-13 built the movement half without re-reading where this
+     * row had been attributed.
+     */
     {
       key: 'Enter',
+      when: 'item',
       action: 'Select the highlighted option and close the time list.',
       wcag: ['2.1.1'],
       apg: 'combobox',

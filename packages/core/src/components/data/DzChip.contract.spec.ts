@@ -32,9 +32,12 @@ describe('dzChip — Contract Spec v1', () => {
     expect(wrapper.attributes('style')).toContain('contain: layout style')
   })
 
-  it('has role="status"', () => {
+  // RESIDUAL-11 `D-RES10-3`: the root carries no role. It used to declare
+  // `role="status"` — an ARIA live region on every chip. See DzChip.vue's
+  // NO ROLE ON THE ROOT note for the measurement and the rejected alternatives.
+  it('declares no role on the root', () => {
     const wrapper = mount(DzChip, { slots: { default: 'Vue 3' } })
-    expect(wrapper.attributes('role')).toBe('status')
+    expect(wrapper.attributes('role')).toBeUndefined()
   })
 
   it('renders close button when closable=true', () => {

@@ -44,6 +44,18 @@ export const anatomy = {
   /**
    * Keyboard contract (TASK-R5-O5). A list row is presentational until it
    * is interactive, and then it answers the button keys.
+   *
+   * **Both rows were implemented in RESIDUAL-13, not withdrawn.** RESIDUAL-12
+   * measured them as backed by nothing and called this *"the `DzChip` shape,
+   * with the opposite conclusion"*: unlike the chip, an interactive row takes
+   * `tabindex="0"` and already has an `@click` that emits, so there **is** a
+   * pointer action for a key to mirror. That makes the gap a genuine SC 2.1.1
+   * failure, and deleting the rows — which is what closed the chip's — would
+   * have hidden it. `DzListItem.vue`'s `handleKeydown` now activates the row by
+   * dispatching a real click, which is how the platform activates a `<button>`
+   * and is what keeps `DzListItemEmits.click: [event: MouseEvent]` true; see
+   * that function's own comment for the widened-signature alternative and why
+   * it was rejected.
    */
   keyboard: [
     { key: 'Enter', when: 'interactive', action: 'Activate the row.', wcag: ['2.1.1'], apg: 'button' },

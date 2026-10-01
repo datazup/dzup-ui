@@ -26,10 +26,15 @@
     "./security-corpus": {
       "types": "./dist/security-corpus.d.ts",
       "import": "./dist/security-corpus.js"
+    },
+    "./security-conformance": {
+      "types": "./dist/security-conformance.d.ts",
+      "import": "./dist/security-conformance.js"
     }
   },
   "files": [
     "LICENSE",
+    "README.md",
     "dist",
     "security-corpus"
   ],

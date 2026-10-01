@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "sourceCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+  "sourceCommit": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
     "packages/contracts/src/quality-tiers.ts",
@@ -835,6 +835,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It reports a `click` and scrolls the window; the scroll position belongs to the document, not to a prop. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -1055,6 +1058,9 @@
         "malicious-corpus",
         "url-policy"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It renders the `items` array it is handed and holds nothing a host could take over. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -1130,6 +1136,9 @@
         "malicious-corpus",
         "url-policy"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It forwards `click`, `focus` and `blur`; `disabled` and `loading` are one-way appearance props. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -1349,6 +1358,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It forwards `click`; every other prop is one-way appearance. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -1700,6 +1712,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It asks the host to remove it with `close` and never holds the removal. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -1908,6 +1923,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It emits `change` after the mode has been applied through the provider; the mode lives in the provider, not in a prop here. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -2387,6 +2405,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It emits `copied` after writing to the clipboard; no value is round-tripped. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -3199,6 +3220,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It forwards `click`, `focus` and `blur`; every other prop is one-way appearance. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -3269,6 +3293,7 @@
         "at-manual"
       ],
       "exceptions": {
+        "axe": "The axe row measures a scan of the component's own rendered output, and this component renders no element of its own — only the slot it is handed. A scan over it audits the HOST's markup and credits a component that contributed no node; the rule it would test is the host's to satisfy. (Same argument as the `token-contrast` exception already recorded here, one level up.)",
         "token-contrast": "Renderless: it supplies scoped slot props and ships no styles."
       },
       "evidenceOrigin": {
@@ -3673,6 +3698,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It forwards `click`, `focus` and `blur`; every other prop is one-way appearance. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -3912,6 +3940,9 @@
         "data-scenarios",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It asks the host for more rows with `loadMore`/`retry`; the collection stays the host's and is never mirrored here. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -4445,6 +4476,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It forwards `click`; selection belongs to the list that contains it. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -4632,6 +4666,9 @@
         "malicious-corpus",
         "url-policy"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Panel open/close is reported with `open`/`close` and never accepted back, and `collapsed` is a one-way layout override. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -4787,6 +4824,9 @@
         "malicious-corpus",
         "url-policy"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It renders host-supplied entries and reports activation; no entry state is bound. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -4979,6 +5019,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It reports `close` and `action`; whether it is on screen is the host's `v-if`. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -5757,6 +5800,8 @@
         "at-manual"
       ],
       "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It renders `<slot />` and nothing else, and publishes context — which is not a bound value. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)",
+        "axe": "The axe row measures a scan of the component's own rendered output, and this component renders no element of its own — only the slot it is handed. A scan over it audits the HOST's markup and credits a component that contributed no node; the rule it would test is the host's to satisfy. (Same argument as the `token-contrast` exception already recorded here, one level up.)",
         "keyboard-spec": "Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence.",
         "browser-play": "Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence.",
         "state-stories": "Declares no states: `parts` is `none` and it renders no element.",
@@ -5874,6 +5919,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. The bound value is `DzRadioGroup`'s; this renders one option of it. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -6188,6 +6236,9 @@
         "at-manual",
         "non-drag-alternative"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It reports the layout it settled on with `layoutChange` and does not accept one back. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -6337,6 +6388,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Scroll offset is the DOM element's; nothing is bound. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -7072,6 +7126,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It composes a button with a menu; the menu's open state belongs to `DzSplitButtonMenu`. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -7143,6 +7200,9 @@
         "at-manual",
         "non-drag-alternative"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Pane sizes are reported after a drag, never accepted as a bound prop. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -7356,6 +7416,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. The active step is `DzStepper`'s bound value; this renders one step of it. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -7496,6 +7559,9 @@
         "perf-baseline",
         "non-drag-alternative"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Its emits are the `rowExpand`/`rowCollapse` notifications; sort, selection and expansion are the host's to hold, and `DzDataGrid` is the component that binds them. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -7637,6 +7703,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It asks the host to remove it with `close` and never holds the removal. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -7877,6 +7946,8 @@
         "at-manual"
       ],
       "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It renders `DzProvider` around `<slot />`; `theme` is a one-way prop it resolves and republishes as context. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)",
+        "axe": "The axe row measures a scan of the component's own rendered output, and this component renders no element of its own — only the slot it is handed. A scan over it audits the HOST's markup and credits a component that contributed no node; the rule it would test is the host's to satisfy. (Same argument as the `token-contrast` exception already recorded here, one level up.)",
         "keyboard-spec": "Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence.",
         "browser-play": "Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence.",
         "state-stories": "Declares no states: `parts` is `none` and it renders no element.",
@@ -8109,6 +8180,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It reports `close` and `action`; the queue is the host's. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -8279,6 +8353,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. A grouping container for controls that each own their own value; it binds none itself. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -8646,6 +8723,9 @@
         "browser-matrix",
         "at-manual"
       ],
+      "exceptions": {
+        "controlled-uncontrolled": "No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Expansion and selection are `DzTree`'s bound values (`expandedKeys`, `selectedKeys`, `activeKey`); this renders one node of it. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)"
+      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",

@@ -315,11 +315,19 @@ function onGridKeydown(event: KeyboardEvent): void {
     case 'End':
       next = weekStartOf(cur).add({ days: 6 })
       break
+    // Shift is the YEAR step, which is the APG date-grid behaviour and the two
+    // `modifiers: ['Shift']` rows this anatomy has published since TASK-R5-O5
+    // (RESIDUAL-15, closing `D-RES14-3`). Before this the modifier was ignored
+    // and both page keys moved a month, so the two Shift rows were satisfied by
+    // the unmodified handler — RESIDUAL-14 §3.2 measured that and ejected them.
+    // `subtract({ years: 1 })` rather than `{ months: 12 }`: `@internationalized/date`
+    // clamps the day for the target month either way (ADR-13), and a year is what
+    // the row says.
     case 'PageUp':
-      next = cur.subtract({ months: 1 })
+      next = event.shiftKey ? cur.subtract({ years: 1 }) : cur.subtract({ months: 1 })
       break
     case 'PageDown':
-      next = cur.add({ months: 1 })
+      next = event.shiftKey ? cur.add({ years: 1 }) : cur.add({ months: 1 })
       break
     case 'Enter':
     case ' ': {

@@ -162,6 +162,37 @@ function handleOpenChange(open: boolean): void {
   }
 }
 
+/**
+ * Home and End inside the calendar grid (RESIDUAL-13, closing RESIDUAL-12 §4
+ * `F5`).
+ *
+ * Identical to `DzDatePicker`'s, deliberately: RESIDUAL-12 measured the same two
+ * rows on both pickers, both said `when: 'list open'` / "Move to the first
+ * option." in a popover that is a calendar GRID with no option list, and the two
+ * components render the same Reka calendar with the same part names. The full
+ * argument — why these are corrected rather than withdrawn, and why focus is
+ * moved in the DOM without touching Reka's `placeholder` — is in
+ * `DzDatePicker.vue` beside the same function.
+ */
+function onCalendarKeydown(event: KeyboardEvent): void {
+  if (event.key !== 'Home' && event.key !== 'End')
+    return
+  const target = event.target
+  if (!(target instanceof HTMLElement))
+    return
+  const row = target.closest('[data-part="item"]')?.closest('tr')
+  if (row === null || row === undefined)
+    return
+  const days = Array.from(
+    row.querySelectorAll<HTMLElement>('[data-part="item"]:not([data-outside-view]):not([data-disabled])'),
+  )
+  if (days.length === 0)
+    return
+  event.preventDefault()
+  const destination = event.key === 'Home' ? days[0] : days[days.length - 1]
+  destination?.focus()
+}
+
 function handleFocus(event: FocusEvent): void {
   emit('focus', event)
 }
@@ -267,7 +298,7 @@ const { testId: dzTestId } = useDzTestIds()
       </DateRangePickerAnchor>
 
       <DateRangePickerContent data-part="content" :class="[styles.content(), ui?.content]" :side-offset="4">
-        <DateRangePickerCalendar v-slot="{ weekDays, grid }" data-part="panel" :class="[styles.calendar(), ui?.panel]">
+        <DateRangePickerCalendar v-slot="{ weekDays, grid }" data-part="panel" :class="[styles.calendar(), ui?.panel]" @keydown="onCalendarKeydown">
           <DateRangePickerHeader data-part="header" :class="[styles.header(), ui?.header]">
             <DateRangePickerPrev data-part="action" :class="[styles.navButton(), ui?.action]">
               <ChevronLeft class="h-4 w-4" aria-hidden="true" />

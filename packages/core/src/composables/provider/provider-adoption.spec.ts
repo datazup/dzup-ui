@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 import DzButton from '../../components/buttons/DzButton.vue'
@@ -66,9 +66,17 @@ beforeEach(() => {
   })))
 })
 
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). This file is one of the
+ * three body-wipers that live OUTSIDE `components/`, so a rewrite scoped to a
+ * `components/**` glob would have missed it. The wipe detached the markup and left
+ * each `DzProvider` subtree mounted — provide/inject scopes, the countdown and
+ * animated-number intervals, and `DzScrollProgress`'s scroll listener included.
+ */
+enableAutoUnmount(afterEach)
+
 afterEach(() => {
   vi.unstubAllGlobals()
-  document.body.innerHTML = ''
 })
 
 /** Mount one component inside a real DzProvider configured with `provider`. */

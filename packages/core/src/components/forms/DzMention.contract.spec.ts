@@ -1,6 +1,6 @@
 import type { LoadOptionsRequest } from '@dzup-ui/contracts'
 import type { DzMentionOption, DzMentionTrigger } from './DzMention.types.ts'
-import { flushPromises, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzMention — Contract Spec v1 conformance tests.
  */
@@ -97,9 +97,10 @@ describe('dzMention — Contract Spec v1', () => {
  * form renderer could drive.
  */
 describe('dzMention — renderer contract C9 async options', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+  // Teardown through Vue, not through the DOM (RESIDUAL-18): the popover portals to
+  // the body, and unmounting takes it with it — a `document.body` wipe only detached
+  // it and left the loader running.
+  enableAutoUnmount(afterEach)
 
   const people: DzMentionOption[] = [
     { label: 'Alice', value: 'alice' },

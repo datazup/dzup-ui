@@ -176,11 +176,26 @@ A deprecation ships with a named replacement, a dev-mode console warning naming
 it, a changeset, and a working migration path — a codemod where the change is
 mechanical, written instructions where it is not.
 
-**There is no repository-wide ledger of deprecated symbols.** Three partial ones
-exist: `packages/tooling/scripts/retired-package-names.json` (package names, 1
-entry), `DEPRECATED_TOKENS` in `packages/tokens/src/dtcg.ts` (2 entries), and
-`@deprecated` JSDoc on the `compat` adapters. Nothing records a deprecated
-*prop*, *part* or *state*. That gap is recorded, not closed here.
+**The repository-wide ledger is `packages/contracts/deprecations.json`**
+(TASK-S2-O2, 2026-09-22). Every `@deprecated` symbol in `packages/*/src` has a
+record carrying a named replacement, `firstDeprecated` and `earliestRemoval`
+**each with the basis it was derived from**, a codemod id *or* written migration
+instructions, the dev-mode runtime warning's status, a rollback note and an
+owner. `yarn validate:deprecations` keeps it honest in **both** directions — it
+fails on an annotation with no record *and* on a record whose annotation has
+disappeared — and is chained in `validate:all`.
+
+Measured at `4e4e46f`: **16 annotated symbols, 16 with a record, 0 without**
+(`compat` 11 · `core` 2 · `tokens` 2 · `nuxt` 1).
+
+Two earlier partial registers remain and are **not** superseded, because they
+govern things a symbol ledger cannot:
+`packages/tooling/scripts/retired-package-names.json` (package *names*) and
+`DEPRECATED_TOKENS` in `packages/tokens/src/dtcg.ts` (design *tokens*).
+
+**Still open:** the ledger records deprecated *symbols*. A deprecated **prop,
+part or state** has no record and no gate — that narrower gap is recorded here,
+not closed.
 
 ---
 

@@ -63,10 +63,38 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
-   * Keyboard contract (TASK-R5-O5). APG `listbox` for selection, plus the
-   * reordering keys handled in `DzOrderList.vue`. Alt with an arrow moves
-   * the item rather than the focus, which is the keyboard alternative SC
-   * 2.1.1 requires of a drag-and-drop list.
+   * Keyboard contract (TASK-R5-O5, three rows corrected by RESIDUAL-14). APG
+   * `listbox` for selection, plus the reordering keys handled in `DzOrderList.vue`.
+   *
+   * **Reordering is a grab, not a modifier.** The table used to say `Alt`+`ArrowUp` /
+   * `Alt`+`ArrowDown` *"move the selected item"*, and `Space` *"select the focused
+   * option"*. Measured against `DzOrderList.vue`:
+   *
+   * - `case ' ': case 'Spacebar':` at `:501` calls `toggleGrab(index)`. Space **grabs
+   *   and drops**; it does not select. `Enter` at `:506` is what calls
+   *   `toggleSelection`, and it already said so.
+   * - the `ArrowUp` / `ArrowDown` arms at `:475` / `:482` move the item when
+   *   `grabbedIndex !== null` and move the focus otherwise. **`altKey` is read in
+   *   exactly one place in the file** — inside `typeAhead`, where it *rejects* the
+   *   key — so `Alt`+`ArrowUp` has never done anything `ArrowUp` does not, and the
+   *   precondition is the grab.
+   *
+   * So the three rows now name the grab, and `when: 'grabbed'` is the declared state
+   * that distinguishes them from the two focus-navigation rows carrying the same keys.
+   * The behaviour is unchanged and is still the SC 2.1.1 / 2.5.7 keyboard alternative
+   * to dragging — it is the *description* that was wrong.
+   *
+   * `yarn validate:anatomy-keyboard` read all three as `backed` because it keyed on
+   * `binding.key` and never on `binding.modifiers`, and because `keysNamedIn` records
+   * the first line a key appears on, which for `' '` is the type-ahead's exclusion of
+   * it. Both are fixed; these rows would have failed the first.
+   *
+   * **The rejected alternative was to implement `Alt`+arrow as declared** and keep the
+   * rows. It was rejected because the grab model is the one APG describes for a
+   * reorderable list, it is what the component's `grabbed` state, `itemGrabbed` style
+   * and `Escape`-cancels-the-reorder row are all built around, and adding a second
+   * way to do the same thing would double the surface to document and to test in
+   * order to make a sentence true that was simply mis-transcribed.
    */
   keyboard: [
     { key: 'ArrowDown', action: 'Move focus to the next option.', wcag: ['2.1.1'], apg: 'listbox' },
@@ -74,7 +102,11 @@ export const anatomy = {
     { key: 'Home', action: 'Move focus to the first option.', wcag: ['2.1.1'], apg: 'listbox' },
     { key: 'End', action: 'Move focus to the last option.', wcag: ['2.1.1'], apg: 'listbox' },
     { key: 'Enter', action: 'Select the focused option.', wcag: ['2.1.1'], apg: 'listbox' },
-    { key: ' ', action: 'Select the focused option.', wcag: ['2.1.1'], apg: 'listbox' },
+    {
+      key: ' ',
+      action: 'Grab the focused item for reordering, or drop it when it is already grabbed.',
+      wcag: ['2.1.1', '2.5.7'],
+    },
     {
       key: '<character>',
       action: 'Move focus to the next option whose label starts with that character.',
@@ -83,14 +115,14 @@ export const anatomy = {
     },
     {
       key: 'ArrowUp',
-      modifiers: ['Alt'],
-      action: 'Move the selected item one position earlier.',
+      when: 'grabbed',
+      action: 'Move the grabbed item one position earlier.',
       wcag: ['2.1.1', '2.5.7'],
     },
     {
       key: 'ArrowDown',
-      modifiers: ['Alt'],
-      action: 'Move the selected item one position later.',
+      when: 'grabbed',
+      action: 'Move the grabbed item one position later.',
       wcag: ['2.1.1', '2.5.7'],
     },
     {

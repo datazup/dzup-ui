@@ -28,6 +28,7 @@ import type {
 import { computed, provide, toRef, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDataGrid } from '../../composables/useDataGrid/useDataGrid.ts'
+import { useDataGridNavigation } from '../../composables/useDataGrid/useDataGridNavigation.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
@@ -88,6 +89,16 @@ const grid = useDataGrid<T>({
   },
 })
 
+/**
+ * APG `grid` cell navigation (RESIDUAL-15, closing `D-RES14-1`).
+ *
+ * Created here rather than in the sub-parts because both of them need the same
+ * answer: the header binds it to give a non-sortable column a way in, and the body
+ * binds it *and* reads `isActiveCell` for the roving `tabindex`. One state, one
+ * provider, the same shape as every other field on this context.
+ */
+const navigation = useDataGridNavigation()
+
 const context: DzDataGridContext = {
   columns: toRef(() => props.columns) as DzDataGridContext['columns'],
   data: toRef(() => grid.displayData.value) as DzDataGridContext['data'],
@@ -109,6 +120,8 @@ const context: DzDataGridContext = {
   isRowSelected: grid.isRowSelected as DzDataGridContext['isRowSelected'],
   isAllSelected: grid.isAllSelected,
   isSomeSelected: grid.isSomeSelected,
+  isActiveCell: navigation.isActiveCell,
+  onCellKeydown: navigation.onCellKeydown,
 }
 
 provide(DZ_DATA_GRID_KEY, context)

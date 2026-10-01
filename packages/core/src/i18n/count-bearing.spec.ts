@@ -1,6 +1,6 @@
 import type { DzMessages } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
-import { flushPromises, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 import DzCountdown from '../components/data/DzCountdown.vue'
@@ -46,9 +46,17 @@ beforeEach(() => {
   })))
 })
 
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). The third of the three
+ * body-wipers OUTSIDE `components/` — a `components/**` glob would miss it. It matters
+ * more here than most: `DzCountdown` runs a ticking interval, and a wipe left it
+ * mounted and ticking against detached nodes while the next case installed fake
+ * timers. Unmounting stops the interval.
+ */
+enableAutoUnmount(afterEach)
+
 afterEach(() => {
   vi.useRealTimers()
-  document.body.innerHTML = ''
 })
 
 describe('the catalog entries', () => {

@@ -56,6 +56,21 @@ export const anatomy = {
   /**
    * Keyboard contract (TASK-R5-O5). APG `toolbar` roving focus: the whole
    * bar is one tab stop and the arrows move within it.
+   *
+   * **Implemented in RESIDUAL-13, four rows after this table was published.**
+   * RESIDUAL-12 measured these four navigation rows as backed by nothing — no
+   * `keydown`, no composable, no primitive anywhere in `DzToolbar.vue` — and
+   * named it *"the worst of them"*: a declared `role="toolbar"` whose arrows do
+   * nothing is a WCAG 2.1.1 gap, not a stale table. `DzToolbar.vue` now owns the
+   * roving focus and the single tab stop, so the rows below are the same claim
+   * they always were and are now true.
+   *
+   * The two vertical rows are **new**, and they are an addition rather than a
+   * correction: `orientation: 'vertical'` has always been a supported prop and
+   * has always reached `aria-orientation="vertical"`, so an AT user was told the
+   * bar navigates on the block axis while only the inline arrows were declared.
+   * They are scoped with a two-word `when` on purpose — a single lowercase word
+   * is read as a part or state name, and `vertical` is neither.
    */
   keyboard: [
     {
@@ -71,6 +86,20 @@ export const anatomy = {
       wcag: ['2.1.1'],
       apg: 'toolbar',
       rtl: 'mirrored',
+    },
+    {
+      key: 'ArrowDown',
+      when: 'orientation vertical',
+      action: 'Move focus to the next control in the toolbar.',
+      wcag: ['2.1.1'],
+      apg: 'toolbar',
+    },
+    {
+      key: 'ArrowUp',
+      when: 'orientation vertical',
+      action: 'Move focus to the previous control in the toolbar.',
+      wcag: ['2.1.1'],
+      apg: 'toolbar',
     },
     { key: 'Home', action: 'Move focus to the first control.', wcag: ['2.1.1'], apg: 'toolbar' },
     { key: 'End', action: 'Move focus to the last control.', wcag: ['2.1.1'], apg: 'toolbar' },

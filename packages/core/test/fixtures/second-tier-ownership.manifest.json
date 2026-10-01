@@ -1,0 +1,71 @@
+{
+  "$comment": "SYNTHETIC FIXTURE — TASK-S3-O1. Not a real ownership manifest and not a record of any package's contents. It exists so the whole second-tier path (resolve, subpath join, prefix, collision, unknown name, non-mountable kind, absent tier) is unit-tested inside ui/dzup-ui with nothing installed. Every component name below is deliberately fictitious. It lives under test fixtures and must NEVER be moved under a manifests/ directory, where a generator or a validator would mistake it for real generated output.",
+  "fixture": true,
+  "schemaVersion": "1.1.0",
+  "tier": "pro",
+  "sourceCommit": "0000000000000000000000000000000000000000",
+  "generatedFrom": [
+    "packages/core/test/fixtures/second-tier-ownership.manifest.json"
+  ],
+  "entries": [
+    {
+      "symbol": "DzButton",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "public-component",
+      "family": "collision-probe",
+      "evidence": [
+        "deliberate collision with a real @dzup-ui/core component name, so the collision path is exercised"
+      ]
+    },
+    {
+      "symbol": "DzFixtureGizmo",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "subpaths": [".", "./gizmos"],
+      "kind": "public-component",
+      "family": "gizmos",
+      "status": "stable",
+      "since": "0.4.0",
+      "evidence": ["synthetic fixture entry"]
+    },
+    {
+      "symbol": "DzFixtureGizmoPanel",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": "./gizmos",
+      "kind": "compound-part",
+      "parentComponent": "DzFixtureGizmo",
+      "family": "gizmos",
+      "evidence": ["synthetic fixture entry; proves a subpath specifier is joined, not guessed"]
+    },
+    {
+      "symbol": "DzFixtureRetiredWidget",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "public-component",
+      "family": "gizmos",
+      "status": "deprecated",
+      "since": "0.1.0",
+      "deprecated": {
+        "since": "0.5.0",
+        "replacement": "DzFixtureGizmo",
+        "reason": "synthetic fixture entry; proves the deprecation field survives a round trip"
+      },
+      "evidence": ["synthetic fixture entry"]
+    },
+    {
+      "symbol": "DzFixtureGizmoProps",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": ["synthetic fixture entry; a type must never resolve as a component"]
+    },
+    {
+      "symbol": "useFixtureGizmo",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "composable",
+      "evidence": ["synthetic fixture entry; a composable must never resolve as a component"]
+    }
+  ]
+}

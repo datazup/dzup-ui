@@ -145,6 +145,25 @@ describe('dzDataView — empty + loading', () => {
     expect(wrapper.find('[role="list"]').exists()).toBe(false)
   })
 
+  /**
+   * RESIDUAL-11 `D-RES10-4`. `emptyTitle` was the text of the root's sr-only
+   * `aria-live` region AND of the `DzEmpty` below it, whose own root is
+   * `role="status"` — two live regions, one string, one render, announced twice.
+   *
+   * A custom `emptyTitle` is used deliberately: the default is "No items", which
+   * a substring count cannot distinguish from an incidental occurrence.
+   */
+  it('announces the empty state once, not in two live regions', () => {
+    const wrapper = mount(DzDataView, { props: { items: [], emptyTitle: 'Nothing here' } })
+    const live = wrapper.findAll('[aria-live], [role="status"], [role="alert"], [role="log"]')
+    expect(live).toHaveLength(2)
+    const carrying = live.filter(el => el.text().includes('Nothing here'))
+    expect(carrying).toHaveLength(1)
+    // The one that does NOT carry the title reports the window instead, so both
+    // regions still have a job.
+    expect(wrapper.find('[aria-live="polite"]').text()).toBe('Showing 0 items')
+  })
+
   it('renders a custom #empty slot', () => {
     const wrapper = mount(DzDataView, {
       props: { items: [] },

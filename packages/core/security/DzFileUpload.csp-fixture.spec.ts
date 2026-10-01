@@ -1,5 +1,5 @@
 import { loadSecurityCorpus, payloadOf } from '@dzup-ui/testing/security-corpus'
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { h, nextTick } from 'vue'
 import DzFileUpload from '../src/components/forms/DzFileUpload.vue'
@@ -122,9 +122,17 @@ async function drop(wrapper: ReturnType<typeof mount>, files: File[]): Promise<v
   await nextTick()
 }
 
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). The three blocks below each
+ * ended on a `document.body` wipe, which detached the control's markup and left it
+ * mounted with its drag listeners and object URLs alive. One `enableAutoUnmount`
+ * replaces all three; the `<style>` sweep of `document.head` stays, because that is
+ * not markup any component owns — it is what this fixture is watching for.
+ */
+enableAutoUnmount(afterEach)
+
 describe('emits nothing a strict CSP blocks', () => {
   afterEach(() => {
-    document.body.innerHTML = ''
     document.head.querySelectorAll('style').forEach(el => el.remove())
   })
 
@@ -178,10 +186,6 @@ describe('emits nothing a strict CSP blocks', () => {
 })
 
 describe('still functions under the policy', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('accepts, rejects, lists and removes with no blocked construct in any frame', async () => {
     // "Functions under a strict CSP" is a behaviour claim, so the behaviour is
     // driven and the DOM is re-checked after every step rather than only at the
@@ -235,7 +239,6 @@ describe('nonce propagation (ADR-20 §nonce)', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals()
-    document.body.innerHTML = ''
     for (const el of document.head.querySelectorAll('style'))
       el.remove()
   })

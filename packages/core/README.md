@@ -141,6 +141,38 @@ any Vue 3.6 **stable** release. See
 `docs/program-2026-09/reports/N5-03-toolchain-migration-memo.md` §5 for the
 trigger that promotes the lane from advisory to blocking.
 
+## Peer dependencies
+
+`@dzup-ui/core` declares two peers, and **both are required**:
+
+| Peer | Range | Optional? |
+|---|---|---|
+| `vue` | `^3.5.0` | no |
+| `reka-ui` | `^2.0.0` | **no** |
+
+`reka-ui` is the headless engine behind the interactive components (ADR-07). It
+is **not** declared in `peerDependenciesMeta` as optional, and that is a
+deliberate posture, not an oversight: marking a peer `optional` tells your
+package manager to stop warning about it while changing nothing about whether
+the code needs it, so the failure moves from install time to runtime and gets
+quieter on the way. See `docs/program-2026-09-04/reports/peer-hygiene-decisions-2026-09.md`
+item 2.
+
+The behaviour you should therefore expect — and which
+`yarn qualify:package` asserts on every run, against a real packed tarball in a
+workspace where the peer genuinely is missing:
+
+| State of `reka-ui` | What happens |
+|---|---|
+| installed, in range | `@dzup-ui/core` imports normally |
+| **absent** | the import **fails, and the error names `reka-ui`** |
+| **version out of range** | the mismatch is reported from the manifests at install time |
+
+The middle row is the contract that matters. dzup-ui **fails closed**: it will
+not import without its engine and pretend a subset of components still works.
+If you need a build that degrades instead, that is a request for a headless
+build, which is outside the support contract — use Reka UI directly.
+
 ## Package Entry Points
 
 - `@dzup-ui/core` — all components and composables

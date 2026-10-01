@@ -90,6 +90,53 @@
       },
       "rationale": "Included for the sanitizer sinks Pro owns rather than for anything in this catalog: a sanitizer that preserves comments and a downstream step that re-parses the output brings the element back. In a text sink the whole string is inert content and the outcome is the ordinary one.",
       "provenance": "cure53 DOMPurify comment-handling cases (mXSS class)."
+    },
+    {
+      "id": "markup-injection.option-label.template-interpolation",
+      "category": "markup-injection",
+      "title": "option label that is a template expression rather than markup",
+      "payload": "{{constructor.constructor('alert(1)')()}}",
+      "outcomes": {
+        "text": "escaped"
+      },
+      "rationale": "The Form System spec doc 06 §10 requires option labels, operation messages and validation text to be rendered as text, and control IDs never to be used as raw HTML. Every other fixture in this file contains a `<`, so a renderer that escapes markup and then hands the same string to a template compiler passes all of them. This one contains no markup at all: it is dangerous only where a document string reaches a compiler, which is precisely the path §10 closes. In a text sink the required outcome is the ordinary one — the value is data — and the assertion that matters is that no element and no handler appeared.",
+      "provenance": "Form System spec 2026-08-08 doc 06 §10 (UI/XSS safety); the client-side template-injection class in the AngularJS sandbox-escape literature, written with `constructor.constructor` because that is the form that survives a naive `eval` filter."
+    },
+    {
+      "id": "markup-injection.renderer-options.spread-event-attribute",
+      "category": "markup-injection",
+      "title": "renderer options spread onto an element, carrying two event attributes",
+      "payload": "<div data-label=\"x\" onclick=\"alert(1)\" onfocus=\"alert(2)\">label</div>",
+      "outcomes": {
+        "text": "escaped",
+        "html": "stripped"
+      },
+      "rationale": "Form System spec doc 06 §10: \"Renderer `options` pass an allowlist schema; never spread unknown options onto a DOM element.\" The shape a spread produces is an element whose attributes came from document data, so the fixture is that element. Two handlers rather than one, and a benign `data-label` beside them, so a pass cannot come from a filter that drops the first `on*` it meets or from one that drops every attribute it does not recognise. `html` is `stripped` and not `rejected` because a sanitizer's job here is to keep the element and drop what executes.",
+      "provenance": "Form System spec 2026-08-08 doc 06 §10 (UI/XSS safety); cure53 DOMPurify attribute cases."
+    },
+    {
+      "id": "markup-injection.markdown-reference-link.javascript-scheme",
+      "category": "markup-injection",
+      "title": "markdown reference-link definition pointing at a javascript: URL",
+      "payload": "[label]: javascript:alert(1)\n\n[label]",
+      "outcomes": {
+        "markdown": "stripped"
+      },
+      "rationale": "The first fixture for the `markdown` sink the format has carried since schema 1.1.0. Form System spec doc 06 §10 allows a future Markdown renderer only if it sanitizes with a maintained library, disallows active content and defines a link policy; a reference-link definition is the case that policy is easiest to miss, because the URL and the link that uses it are in different places in the source and a check on the visible link text sees nothing. It states no `text` or `html` outcome on purpose: as raw text or raw HTML this string builds nothing at all, so a fixture claiming an outcome there would be asserting a tautology.",
+      "provenance": "Form System spec 2026-08-08 doc 06 §10; CommonMark §4.7 link reference definitions; the reference-link arm of the cure53 markdown cases."
+    },
+    {
+      "id": "markup-injection.foreign-content.xlink-href-javascript",
+      "category": "markup-injection",
+      "title": "svg label carrying an xlink:href javascript URL",
+      "payload": "<svg xmlns=\"http://www.w3.org/2000/svg\"><a xlink:href=\"javascript:alert(1)\"><text x=\"0\" y=\"10\">label</text></a></svg>",
+      "outcomes": {
+        "text": "escaped",
+        "html": "stripped",
+        "mermaid-svg": "stripped"
+      },
+      "rationale": "Graph & Flow spec doc 06 §\"Security and trust boundary\" makes graph labels untrusted data, requires text rendering by default and never `v-html` for a label, and leaves URL protocols to trusted renderers. Graph and diagram labels land inside SVG, where `xlink:href` is a navigation attribute that an allowlist written against HTML's `href` does not cover — so a sanitizer can strip every HTML vector in this file and still ship a live `javascript:` link. Also the first fixture for the `mermaid-svg` sink, where a renderer builds the SVG and the same attribute survives one layer further down.",
+      "provenance": "Graph & Flow spec 2026-08-08 doc 06 §\"Security and trust boundary\"; SVG 1.1 §Linking (`xlink:href`); cure53 DOMPurify SVG/namespace cases."
     }
   ]
 }

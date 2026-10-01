@@ -152,6 +152,22 @@ export interface DzDataGridContext<T = Record<string, unknown>> {
   isAllSelected: Ref<boolean>
   /** Check if some rows are selected (indeterminate) */
   isSomeSelected: Ref<boolean>
+  /**
+   * Whether this body cell holds the body's single tab stop — the roving
+   * `tabindex` behind the six declared `apg: 'grid'` cell rows (RESIDUAL-15,
+   * closing `D-RES14-1`). `row` is `DzDataGridBody`'s `v-for` index and `col` is
+   * the cell index within the row, selection cell included. Always `false` for the
+   * header, which keeps the per-column tab stops it already publishes.
+   */
+  isActiveCell: (row: number, col: number) => boolean
+  /**
+   * Arrow / Home / End / PageUp / PageDown over the grid's cells. Bound on every
+   * `<th>` and `<td>` and safe on both; it acts only when the cell itself has
+   * focus, so a control inside a cell keeps its own keys. See
+   * `useDataGridNavigation` for the address space and for the single-tab-stop
+   * variant that was rejected.
+   */
+  onCellKeydown: (event: KeyboardEvent) => void
 }
 
 /** Typed injection key for DzDataGrid context (ADR-08, SCREAMING_SNAKE) */

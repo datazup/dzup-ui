@@ -1,5 +1,5 @@
 import type { TreeNode } from './DzTreeSelect.types.ts'
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzTreeSelect — Unit / behavior tests.
  *
@@ -57,9 +57,13 @@ function clickChevron(label: string): boolean {
   return false
 }
 
-afterEach(() => {
-  document.body.innerHTML = ''
-})
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). The panel portals to
+ * `document.body`, which made a `document.body` wipe look like the way to clear it;
+ * it detached the markup and left the control mounted. Unmounting removes the
+ * portalled panel too.
+ */
+enableAutoUnmount(afterEach)
 
 describe('dzTreeSelect — Trigger', () => {
   it('shows the placeholder when nothing is selected', () => {
@@ -204,8 +208,11 @@ describe('dzTreeSelect — Pointer-driven expansion', () => {
     clickChevron('Fruit')
     await pointer.vm.$nextTick()
     const pointerKeys = pointer.emitted('update:expandedKeys')?.at(-1)
+    // `unmount()` is the reset between the two halves of this test: it takes the
+    // portalled panel with it, so the keyboard half's document queries cannot match
+    // the pointer half's nodes. The `document.body` wipe that used to follow was the
+    // same job done a second time, blindly.
     pointer.unmount()
-    document.body.innerHTML = ''
 
     // Keyboard path.
     const keyboard = mount(DzTreeSelect, {

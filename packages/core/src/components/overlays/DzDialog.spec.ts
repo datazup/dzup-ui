@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzDialog -- Unit / behavior tests.
  *
@@ -42,11 +42,16 @@ function mountDialog(
   })
 }
 
-describe('dzDialog -- Unit Tests', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). This file used to end
+ * each test with a `document.body` wipe. That is not a teardown: the
+ * component stays mounted with its Reka focus scope, scroll lock and escape-key
+ * listeners live, over nodes the next test cannot see — and it also wipes the mount
+ * point every `attachTo: document.body` here depends on.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzDialog -- Unit Tests', () => {
   it('renders trigger button when open is false', () => {
     const wrapper = mount(DzDialog, {
       props: { open: false },

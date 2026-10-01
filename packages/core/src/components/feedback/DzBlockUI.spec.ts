@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzBlockUI — Unit / behavior tests.
  */
@@ -9,11 +9,14 @@ import DzBlockUI from './DzBlockUI.vue'
 const OVERLAY = '[data-testid="dz-block-ui-overlay"]'
 const CONTENT = '[data-testid="dz-block-ui-content"]'
 
-describe('dzBlockUI — Unit Tests', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). A `document.body` wipe
+ * detached the markup and left the overlay mounted — including the scroll lock and
+ * focus containment it installs while `blocked` is true.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzBlockUI — Unit Tests', () => {
   // ── Toggle ──
 
   it('shows the overlay when blocked becomes true and hides it again', async () => {

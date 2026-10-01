@@ -1,7 +1,8 @@
 # `@dzup-ui/nuxt`
 
-Nuxt 3 module for `@dzup-ui/core` — auto-imports every component and injects the
-FOUC-prevention theme script.
+Nuxt module for `@dzup-ui/core` — auto-imports every component and injects the
+FOUC-prevention theme script. It is built against `@nuxt/kit` v4 and supports
+**both Nuxt 3 and Nuxt 4**; see [Supported Nuxt versions](#supported-nuxt-versions).
 
 Every configuration snippet below is copied from a fixture under
 `packages/nuxt/test/fixtures/`, and `yarn validate:doc-snippets` fails if the two
@@ -83,6 +84,32 @@ A half-configured option should not cost you your application, and a cryptic
 bundler resolution error naming a package you never typed is not a diagnosis.
 The `pro-missing` fixture asserts both the successful build and the exact
 message.
+
+### What `includePro` actually resolves
+
+The second tier's component names come from an **ownership manifest that
+package publishes**, read at your build from your own `node_modules` — not from
+a list kept here, and not from a table baked in when `@dzup-ui/core` was built.
+The version you installed is the version whose components you can import.
+
+The contract is published from `@dzup-ui/contracts`: a conforming package
+exports `./manifests/component-ownership.manifest.json` at schema major `1`
+(this build reads `1.1.0`). See that package's README for the shape.
+
+Three things follow, and the module says each one out loud rather than going
+quiet:
+
+- **Package installed, no conforming manifest** → one line naming the subpath
+  to export, and Core continues. It is reported as a gap in *that* package, not
+  as something you failed to install.
+- **A manifest at a major this build cannot read** → refused with the version
+  named, never parsed best-effort. A resolver guessing at a changed field
+  misroutes imports silently.
+- **A name both tiers export** → the Core answer stands and both packages are
+  named. Nothing picks a winner for you; import the one you want explicitly.
+
+Non-mountable symbols in the manifest (types, composables) are never registered,
+and a name neither tier owns stays unregistered — so a typo stays a typo.
 
 ## Renaming the `Dz` prefix
 
@@ -196,7 +223,26 @@ const count = ref(0)
 
 ## Supported Nuxt versions
 
-`peerDependencies` says `nuxt >=3.0.0`. The fixtures build on **Nuxt 3.21.11**.
+`peerDependencies` says `nuxt >=3.0.0`, and the module's own dependency is
+`@nuxt/kit@4.5.2` — v4 kit, deliberately, because `@nuxt/kit` v4 declares
+`engines.node >=18.12.0` and its module API is the one both Nuxt majors load.
+
+**The two versions the fixtures actually build**, pinned exactly in the
+`nuxt-majors` matrix of [`.github/workflows/vue-next.yml`](../../.github/workflows/vue-next.yml):
+**`nuxt@3.19.0`** and **`nuxt@4.4.5`**. They are pinned rather than ranged for a
+measured reason — `nuxt` **≤ 4.4.5** declares `engines.node "^20.19.0 || >=22.12.0"`,
+which this repository's declared Node floor (ADR-18, `^20.19.0 || >=22.13.0`)
+satisfies, while `nuxt` **≥ 4.4.6** declares `"^22.12.0 || ^24.11.0 || >=26.0.0"`
+and `nuxt@4.5.2` declares `"^22.19.0 || ^24.11.0 || >=26.0.0"`. A consumer
+fixture on a bare `nuxt@^4` therefore **cannot install on the Node this
+repository declares**. That is a fact about the consumer's runtime, not about
+this module: `@nuxt/kit` is Node-18-safe at every 4.x.
+
+**Nuxt 3 is not dropped, and the floor is deliberately not narrowed.** The 3.x
+line is still shipping — `nuxt@3.21.11` was published on the same day as
+`nuxt@4.5.2` and is itself floor-compatible — so `>=3.0.0` is narrowed only when
+the Nuxt 3 leg of the matrix goes red, not on principle.
+
 On `nuxt@3.14.0` a clean consumer install **cannot build at all**: nitropack
 2.13.x nests copies of its own dependencies and Nuxt 3.14's `impound` plugin
 refuses every module under `node_modules/nitropack/node_modules/`. That is

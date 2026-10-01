@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 import DzBlockUI from '../src/components/feedback/DzBlockUI.vue'
@@ -50,10 +50,18 @@ beforeEach(() => {
   })))
 })
 
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). `target.remove()` already
+ * took the hand-made portal target with it; the `document.body` wipe that followed was
+ * there for the teleported content, and detached it while leaving every component
+ * mounted. Unmounting removes a Teleport's children, which is the same clearing done
+ * the right way round.
+ */
+enableAutoUnmount(afterEach)
+
 afterEach(() => {
   vi.restoreAllMocks()
   target.remove()
-  document.body.innerHTML = ''
 })
 
 /** Mount `component` under a provider, with an optional instance override. */

@@ -404,12 +404,23 @@ export const States: Story = {
       within(disabled).getByRole('button', { name: 'Go to next page' }),
     ).toBeDisabled()
 
-    // Empty: no list, the empty copy instead, and the live region names it.
+    // Empty: no list, the empty copy instead, and the two live regions saying
+    // DIFFERENT things.
+    //
+    // RESIDUAL-11 `D-RES10-4`: this assertion used to require the polite window
+    // region to read `No products found` — the same string the `DzEmpty` below it
+    // renders inside its own `role="status"`. Two live regions, one string, one
+    // render, announced twice. The window region now reports the count and the
+    // empty state reports the title, so the assertion checks that they differ
+    // rather than that they agree.
     await expect(within(empty).queryByRole('list')).toBeNull()
     await expect(
       within(empty).getByText('Try adjusting your filters to see more results.'),
     ).toBeVisible()
-    await expect(empty.querySelector('[aria-live="polite"]')).toHaveTextContent('No products found')
+    await expect(empty.querySelector('[aria-live="polite"]')).toHaveTextContent('Showing 0 items')
+    await expect(empty.querySelector('[aria-live="polite"]')).not.toHaveTextContent('No products found')
+    // The title is still announced — once, by the empty state's own status role.
+    await expect(within(empty).getByRole('status')).toHaveTextContent('No products found')
   },
 }
 

@@ -44,6 +44,7 @@ import DzPopoverContent from '../overlays/DzPopoverContent.vue'
 import DzPopoverTrigger from '../overlays/DzPopoverTrigger.vue'
 import DzOptionsState from './DzOptionsState.vue'
 import { treeSelectVariants } from './DzTreeSelect.variants.ts'
+import { provideRetryKeyboardRoute } from './optionsStateFocus.ts'
 
 defineOptions({
   inheritAttrs: false,
@@ -618,10 +619,19 @@ const triggerClasses = computed(() =>
 
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
 const { testId: dzTestId } = useDzTestIds()
+/**
+ * Renderer contract C9.4's keyboard **route** (RESIDUAL-06). The async-options row
+ * registers itself through the component tree; this binds the owner half to the
+ * control's root, so a bare `ArrowDown` from the element that owns this control's
+ * focus reaches the retry control the row renders — the only key that can, because
+ * `Tab` is the combobox pattern's way out of the popup. One definition of the rule,
+ * in `optionsStateFocus.ts`; the argument and the seven measured dead ends are there.
+ */
+const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
 </script>
 
 <template>
-  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-tree-select')">
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-tree-select')" @keydown="handleAsyncOptionsKeydown">
     <DzPopover v-model:open="isOpen">
       <DzPopoverTrigger>
         <button

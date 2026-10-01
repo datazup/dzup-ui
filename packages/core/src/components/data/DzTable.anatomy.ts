@@ -112,37 +112,40 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'swap-horizontal' },
 
   /**
-   * Keyboard contract (TASK-R5-O5). A static table takes no keyboard of
-   * its own; what it owns is the sort control on a sortable header,
-   * implemented by `useDataGridHeader`.
+   * Keyboard contract (TASK-R5-O5, corrected by RESIDUAL-14). A static table takes
+   * no keyboard of its own; what it owns is the column-resize handle.
+   *
+   * **Three rows were withdrawn here, and they were wrong rather than unimplemented.**
+   * The table used to declare `Enter`, `Space` and `Shift`+`Enter` scoped to
+   * "header sortable", each *"cycle the focused column sort"*, and the comment above
+   * them said they were *"implemented by `useDataGridHeader`"*. Measured:
+   *
+   * - `DzTable.types.ts:41` says, of this component, *"Column sorting (sort
+   *   indicators, sort-change emits) → DzDataGrid"*, and its header says sorting is
+   *   deliberately absent, in those words.
+   * - `sortable` appears in the `data` family only in `DzDataGrid.vue` and
+   *   `DzDataGridHeader.vue`. `DzTable.vue` contains no occurrence of it, and neither
+   *   does any of its five compound parts.
+   * - `useDataGridHeader` is imported by `DzDataGridHeader.vue` and by nothing in the
+   *   `DzTable` family, so the comment's own claim was the thing to check first.
+   *
+   * `yarn validate:anatomy-keyboard` read all three as `backed` because
+   * `DzTableCell.vue`'s root is a dynamic component whose `is=` can only be a `th` or
+   * a `td`, and the platform table credited any dynamic component with `<button>`
+   * activation. That rule now reads the expression; these rows would have failed it.
+   *
+   * **The rejected alternative was to keep the rows and implement sorting**, and it
+   * was rejected because it contradicts a decision this component already published:
+   * `DzTable` exists as the static table and `DzDataGrid` as the featured one, and
+   * `DzDataGrid`'s own anatomy carries the same three rows, correctly, against
+   * `useDataGridHeader.ts:110`. A consumer who needs a sortable header is told where
+   * to get one. Withdrawing here records that split instead of blurring it.
    */
   keyboard: [
     {
       key: 'Tab',
       action: 'Move to the next interactive cell or header control; the table itself is not a tab stop.',
       wcag: ['2.1.2'],
-      apg: 'table',
-    },
-    {
-      key: 'Enter',
-      when: 'header sortable',
-      action: 'Cycle the focused column sort.',
-      wcag: ['2.1.1'],
-      apg: 'table',
-    },
-    {
-      key: ' ',
-      when: 'header sortable',
-      action: 'Cycle the focused column sort.',
-      wcag: ['2.1.1'],
-      apg: 'table',
-    },
-    {
-      key: 'Enter',
-      modifiers: ['Shift'],
-      when: 'header sortable',
-      action: 'Add the focused column to the existing sort rather than replacing it.',
-      wcag: ['2.1.1'],
       apg: 'table',
     },
     // The column-resize handle. It has behaved this way since column resizing

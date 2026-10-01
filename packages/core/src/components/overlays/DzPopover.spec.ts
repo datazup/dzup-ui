@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzPopover -- Unit / behavior tests.
  *
@@ -32,11 +32,15 @@ function mountPopover(
   })
 }
 
-describe('dzPopover -- Unit Tests', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). This file used to end
+ * each test with a `document.body` wipe, which detaches the markup while
+ * leaving every component instance mounted; the popovers here `attachTo:
+ * document.body`, so the attached host is removed by the unmount too.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzPopover -- Unit Tests', () => {
   it('renders trigger button', () => {
     const wrapper = mountPopover()
     expect(wrapper.find('button').text()).toBe('Toggle')

@@ -1,6 +1,6 @@
 import type { SecurityCategory } from '@dzup-ui/testing'
 import { fixturesForSink, loadSecurityCorpus, payloadOf } from '@dzup-ui/testing/security-corpus'
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import DzFileUpload from '../src/components/forms/DzFileUpload.vue'
@@ -86,6 +86,14 @@ async function drop(wrapper: ReturnType<typeof mount>, files: File[]): Promise<v
   await nextTick()
 }
 
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). Both blocks below ended on
+ * a `document.body` wipe, which detached the control and left it mounted — holding, in
+ * the block that spies on `URL.createObjectURL`, references this file then deletes the
+ * spy out from under. Unmounting lets the control revoke and release first.
+ */
+enableAutoUnmount(afterEach)
+
 describe('the URL policy is an allowlist of zero schemes', () => {
   let createObjectURL: ReturnType<typeof vi.fn>
   let revokeObjectURL: ReturnType<typeof vi.fn>
@@ -105,7 +113,6 @@ describe('the URL policy is an allowlist of zero schemes', () => {
   afterEach(() => {
     Reflect.deleteProperty(URL, 'createObjectURL')
     Reflect.deleteProperty(URL, 'revokeObjectURL')
-    document.body.innerHTML = ''
   })
 
   it('renders no URL-bearing attribute at rest', () => {
@@ -159,10 +166,6 @@ describe('the URL policy is an allowlist of zero schemes', () => {
 })
 
 describe('the URL policy holds under the whole corpus', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   // A file NAME is the only channel a hostile URL can arrive on: there is no
   // URL prop. Every url-scheme case is therefore run as a name, because "the
   // component builds no URL" has to survive being handed one.

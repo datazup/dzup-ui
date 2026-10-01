@@ -52,6 +52,19 @@
       },
       "rationale": "Combining marks stack vertically without advancing the inline axis, so a short string paints far outside its own line box and over whatever is above it. The only defence a component has is containment, which is exactly what the four-kilobyte case also tests — in the other axis.",
       "provenance": "Unicode combining-mark rendering ('Zalgo'); standard text-rendering robustness case."
+    },
+    {
+      "id": "degenerate-input.depth.element-nesting-bomb",
+      "category": "degenerate-input",
+      "title": "two hundred nested div start tags",
+      "payload": "<div>",
+      "repeat": 200,
+      "outcomes": {
+        "text": "escaped",
+        "html": "rejected"
+      },
+      "rationale": "The depth half of the amplification pair the sanitizer seam bounds. `degenerate-input` had a length case and three encoding cases but nothing that nests, so `DzSanitizeLimits.maxDepth` (64 by default, ADR-20 amendment A6) had no fixture at all and `measureHtmlDepth` was exercised only by its own unit tests. Graph & Flow spec doc 06 requires size ceilings for data depth explicitly; Form System spec doc 06 §8 sets the same class of ceiling for documents. `html` is `rejected` — not `stripped` — because the ceiling is enforced by the seam before anything parses, so the value never reaches the sink: a run that reports `stripped` here has found an adapter installed without the seam's ceilings, which is the exact defect the wrapper in `resolveSanitizer` exists to prevent. 200 is over three times the default so a host that tightened `maxDepth` cannot make the fixture inert, and the payload is stored as a unit with `repeat` so the file stays reviewable.",
+      "provenance": "Graph & Flow spec 2026-08-08 doc 06 §\"Security and trust boundary\" (size ceilings for data depth); Form System spec doc 06 §8 (configurable ceilings); Pro's measured DEFAULT_SANITIZE_LIMITS, ported into Core by TASK-R3-O2."
     }
   ]
 }

@@ -44,6 +44,43 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/**
+ * MENUBAR WRAPPER ROLE — why the expanded `<li>` carries `role="none"`
+ * (RESIDUAL-11, `D-RES10-2`).
+ *
+ * The expanded top level is `nav > ul` + a menubar role `> li > a` + a menuitem
+ * role. The `<ul>` stopped being a list the moment it was given the menubar
+ * role, and an `<li>` still carries its implicit `listitem` role — which turns
+ * out to engage THREE axe rules, not the two RESIDUAL-10 predicted. Measured by
+ * removing this attribute and running axe over the rendered menubar:
+ *
+ *   - `aria-required-children` on the `<ul>`: `menubar.requiredOwned` is
+ *     `group | menuitemradio | menuitem | menuitemcheckbox | menu | separator`
+ *     and `listitem` is none of them — *"Element has children which are not
+ *     allowed"*;
+ *   - `aria-required-parent` on EACH `<a role="menuitem">` (not on the `<li>`),
+ *     reading *"Required ARIA parents role not present: menu, menubar, group"* —
+ *     the broken ownership leaves the menu item with no menubar above it;
+ *   - `listitem` on each `<li>`: *"List item parent element has a role that is
+ *     not role=list"* — `listitem.requiredContext` is `list`, and this parent
+ *     stopped being one.
+ *
+ * Marking the wrapper presentational makes axe descend through it to the menu
+ * item inside, which is what the menubar is meant to own. A presentational role
+ * is ignored by the browser if the element is focusable or carries a global ARIA
+ * attribute; this wrapper is neither and must not become either.
+ *
+ * The COLLAPSED branch deliberately does NOT carry it: that `<ul>` has no role,
+ * so there the `<li>` is a real `listitem` in a real `list`.
+ *
+ * This note lives in the script and not beside the element on purpose. Vue's
+ * server renderer ships template comments verbatim, so an explanation in the
+ * template would be bytes on every mega menu's wire — and, because it would
+ * quote attribute strings, it would also be counted by any assertion that
+ * matches them (RESIDUAL-10 §2.5 recorded the same trap on `DzNumberInput`;
+ * the first draft of this fix hit it, and the SSR block caught it).
+ */
+
 const props = withDefaults(defineProps<DzMegaMenuProps>(), {
   orientation: 'horizontal',
   size: 'md',
@@ -491,9 +528,11 @@ const { testId: dzTestId } = useDzTestIds()
       data-part="list"
       :class="cn(styles.menubar(), ui?.list)"
     >
+      <!-- Presentational wrapper — see MENUBAR WRAPPER ROLE in the script above. -->
       <li
         v-for="(item, index) in items"
         :key="itemKey(item, index)"
+        role="none"
         :class="styles.itemWrapper()"
         @mouseenter="onTriggerEnter(index, item)"
         @mouseleave="onWrapperLeave"

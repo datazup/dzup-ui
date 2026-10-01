@@ -10,6 +10,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
 import DzCombobox from '../../src/components/forms/DzCombobox.vue'
+import DzDatePicker from '../../src/components/forms/DzDatePicker.vue'
 import DzFileUpload from '../../src/components/forms/DzFileUpload.vue'
 import DzFormField from '../../src/components/forms/DzFormField.vue'
 import DzFormLabel from '../../src/components/forms/DzFormLabel.vue'
@@ -132,6 +133,52 @@ describe('forms family — Accessibility', () => {
           </DzFormField>
         `,
         components: { DzFormField, DzFormLabel },
+      })
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // DzDatePicker
+  //
+  // The sharpest case RESIDUAL-05 found: this file's header opens with "Tests
+  // DzDatePicker" and the file never imported it, so a Tier C component's entire
+  // accessibility evidence was one stale sentence in a docblock. The cell was moved
+  // to `unrun`; these renders earn it back (RESIDUAL-06, `D-RES05-2`).
+  //
+  // The closed trigger is rendered, not the open calendar. That is the honest scope:
+  // the panel is a portalled popover, so `container` would not contain it and an axe
+  // run over this container could not see it either way. The calendar grid's own
+  // evidence belongs with `DzCalendar`, and this is recorded rather than implied.
+  // ---------------------------------------------------------------------------
+
+  describe('dzDatePicker', () => {
+    it('has no a11y violations with aria-label', async () => {
+      const { container } = render(DzDatePicker, {
+        props: { ariaLabel: 'Due date' },
+      })
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+
+    it('has no a11y violations when invalid and required', async () => {
+      const { container } = render(DzDatePicker, {
+        props: { ariaLabel: 'Due date', invalid: true, required: true },
+      })
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+
+    it('has no a11y violations inside a labelled form field', async () => {
+      const { container } = render({
+        template: `
+          <DzFormField>
+            <DzFormLabel>Due date</DzFormLabel>
+            <DzDatePicker aria-label="Due date" />
+          </DzFormField>
+        `,
+        components: { DzFormField, DzFormLabel, DzDatePicker },
       })
       const results = await axe(container)
       expect(results).toHaveNoViolations()

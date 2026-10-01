@@ -21,7 +21,7 @@
  * overlay.
  */
 
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { h, nextTick } from 'vue'
 import { anatomy as commandPaletteAnatomy } from './DzCommandPalette.anatomy.ts'
@@ -53,9 +53,16 @@ const DECLARATIONS = {
   DzTour: tourAnatomy,
 } as const
 
-afterEach(() => {
-  document.body.innerHTML = ''
-})
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18).
+ *
+ * `partsInDocument()` below reads the WHOLE document, so leftovers from a previous
+ * test would be attributed to the component under test — which is why this file
+ * cleared the body between tests. A `document.body` wipe did clear the markup, but
+ * left every overlay mounted behind it. Unmounting removes the portalled
+ * content as well, so the document is just as empty and nothing is left running.
+ */
+enableAutoUnmount(afterEach)
 
 /**
  * Every `data-part` in the document that belongs to the component under test.

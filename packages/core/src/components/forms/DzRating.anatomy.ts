@@ -50,6 +50,17 @@ export const anatomy = {
   keyboard: [
     { key: 'ArrowUp', action: 'Increase the rating by one step.', wcag: ['2.1.1'], apg: 'slider' },
     { key: 'ArrowDown', action: 'Decrease the rating by one step.', wcag: ['2.1.1'], apg: 'slider' },
+    /*
+     * Added 2026-09-28 (RESIDUAL-12, `undeclared-handler`). `DzRating.vue` has
+     * always handled the horizontal pair, and handled it **direction-aware**:
+     * `const increaseKey = dzDirection.value === 'rtl' ? 'ArrowLeft' :
+     * 'ArrowRight'`. The table declared only the vertical pair, which left this
+     * anatomy in the odd position of declaring `rtl.keyboard: 'swap-horizontal'`
+     * — a claim that can only be about ArrowLeft and ArrowRight — while listing
+     * neither. `rtl: 'mirrored'` is what the code already does.
+     */
+    { key: 'ArrowRight', action: 'Increase the rating by one step.', wcag: ['2.1.1'], apg: 'slider', rtl: 'mirrored' },
+    { key: 'ArrowLeft', action: 'Decrease the rating by one step.', wcag: ['2.1.1'], apg: 'slider', rtl: 'mirrored' },
     { key: 'Home', action: 'Set the rating to its minimum.', wcag: ['2.1.1'], apg: 'slider' },
     { key: 'End', action: 'Set the rating to its maximum.', wcag: ['2.1.1'], apg: 'slider' },
   ],

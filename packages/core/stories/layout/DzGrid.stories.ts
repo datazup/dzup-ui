@@ -237,6 +237,102 @@ export const SpanningItems: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Form layout node (DzGridItem colSpan/rowSpan, TASK-S3-O2 / decision D-S3O2-1)
+// ---------------------------------------------------------------------------
+
+/**
+ * A schema-driven form layout, rendered with **no class name anywhere**.
+ *
+ * The Form document's layout node carries `colSpan` and `rowSpan`
+ * (`integer 1..12`), and `DzGridItem` now takes both under those exact names —
+ * so a renderer forwards `node.layout` and needs no lookup table of its own.
+ * `span` remains as an alias of `colSpan`; `colSpan` wins if both are passed and
+ * dev mode says so.
+ *
+ * The tall item is the case that had no API before this change: a notes field
+ * beside two stacked short fields is `rowSpan: 2`, and without the prop it could
+ * only be written as a raw `row-span-2` — the persisted CSS the document format
+ * forbids.
+ *
+ * The node order is what makes that shape: `notes` takes half the row and two
+ * rows, so auto-placement puts `email` beside it and `phone` under `email`. A
+ * `rowSpan` item that is the **sole** occupant of every track it spans is not
+ * taller than a one-row sibling — both implicit tracks are content-sized, so CSS
+ * grid distributes the item's own content across them — which is why the tall
+ * item needs neighbours to be observably tall (RESIDUAL-04, 2026-09-25).
+ */
+export const FormLayoutNode: Story = {
+  name: 'Form Layout Node (colSpan + rowSpan)',
+  render: () => ({
+    components: { DzGrid, DzGridItem },
+    setup() {
+      // Exactly the shape a form document hands a renderer.
+      const nodes = [
+        { id: 'first', label: 'First name', layout: { colSpan: 3 } },
+        { id: 'last', label: 'Last name', layout: { colSpan: 3 } },
+        // Rows 2–3, left half: the tall field, beside the two stacked short ones.
+        { id: 'notes', label: 'Notes (tall)', layout: { colSpan: 3, rowSpan: 2 } },
+        { id: 'email', label: 'Email', layout: { colSpan: 3 } },
+        { id: 'phone', label: 'Phone', layout: { colSpan: 3 } },
+        { id: 'summary', label: 'Summary (full width)', layout: { colSpan: 'full' as const } },
+        // `colSpan: 6` of a `cols=6` grid and `colSpan: 'full'` are the same row.
+        { id: 'total', label: 'Totals (colSpan 6 of 6)', layout: { colSpan: 6 } },
+      ]
+      return { nodes }
+    },
+    template: `
+      <DzGrid :cols="6" gap="md" data-testid="form-grid">
+        <DzGridItem
+          v-for="node in nodes"
+          :key="node.id"
+          :col-span="node.layout.colSpan"
+          :row-span="node.layout.rowSpan"
+          :data-testid="'node-' + node.id"
+          class="flex items-center justify-center rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] bg-[var(--dz-muted)] p-4 text-sm text-[var(--dz-muted-foreground)]"
+        >
+          {{ node.label }}
+        </DzGridItem>
+      </DzGrid>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const node = (id: string): HTMLElement => canvas.getByTestId(`node-${id}`)
+    const box = (id: string): DOMRect => node(id).getBoundingClientRect()
+    const notes = box('notes')
+    const first = box('first')
+    const email = box('email')
+    const phone = box('phone')
+    const summary = box('summary')
+    const total = box('total')
+
+    // `rowSpan: 2`, measured against siblings that share the tracks it spans.
+    // `email` and `phone` are stacked — one track each — which is the premise:
+    await expect(phone.top).toBeGreaterThanOrEqual(email.bottom)
+    // …so the tall field covers both of their tracks plus the gap between them.
+    await expect(notes.height).toBeGreaterThan(email.height * 1.5)
+    await expect(Math.round(notes.top)).toBe(Math.round(email.top))
+    await expect(Math.round(notes.bottom)).toBe(Math.round(phone.bottom))
+    // And the span is two tracks in the resolved style, not merely a class name
+    // in an attribute: a `row-span-2` the stylesheet never emitted reads `auto`.
+    await expect(getComputedStyle(node('notes')).gridRowEnd).toBe('span 2')
+
+    // colSpan — 3 of 6 is half the row; `6` of 6 and `'full'` are the whole row,
+    // to the pixel, and both are wider than a half-row field.
+    await expect(Math.round(notes.width)).toBe(Math.round(first.width))
+    await expect(summary.width).toBeGreaterThan(first.width * 1.5)
+    await expect(Math.round(total.width)).toBe(Math.round(summary.width))
+
+    // The component produced the span classes from the typed props, so the
+    // document never had to carry one.
+    await expect(node('notes').className).toContain('col-span-3')
+    await expect(node('notes').className).toContain('row-span-2')
+    await expect(node('summary').className).toContain('col-span-full')
+    await expect(node('total').className).toContain('col-span-6')
+  },
+}
+
+// ---------------------------------------------------------------------------
 // Explicit Rows
 // ---------------------------------------------------------------------------
 

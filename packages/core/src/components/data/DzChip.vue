@@ -90,6 +90,86 @@ function handleKeyDown(event: KeyboardEvent): void {
   }
 }
 
+/**
+ * A naming-capable role, and only when the root is actually named
+ * (RESIDUAL-12, closing `D-RES11-1`).
+ *
+ * An unnamed chip carries **no role**, which is the `D-RES10-3` position below and
+ * is unchanged: it is inline content, its own text names it, and `generic` is the
+ * honest answer. A **named** chip cannot stay `generic`, because ARIA 1.2
+ * prohibits `aria-label` and `aria-labelledby` on `generic` — so the author's name
+ * was both invalid and unreliable, and axe said so in a bucket no gate could see.
+ *
+ * `group` rather than any of the alternatives, and the choice is measured, not
+ * argued. All eleven combinations below were run through the vendored `axe-core`
+ * on both components (RESIDUAL-12 §3.1):
+ *
+ * | root | axe `violations` | axe `incomplete` |
+ * |---|---|---|
+ * | no name, no role | `[]` | `[]` |
+ * | `aria-label`, no role | `[]` | `['aria-prohibited-attr']` |
+ * | `aria-labelledby`, no role | `[]` | `['aria-prohibited-attr']` |
+ * | `aria-describedby`, no role | `[]` | `[]` — global, never prohibited |
+ * | `aria-label` + `role="group"` | `[]` | `[]` |
+ * | `aria-label` + `role="note"` | `[]` | `[]` |
+ * | `aria-label` + `role="button"` | `[]` | `[]` |
+ * | `aria-label` + `role="listitem"` | **`['aria-required-parent']`** | `[]` |
+ *
+ * `note` is clean and wrong — a chip is not an annotation. `button` is clean and
+ * was rejected on its own evidence below: activating this root does nothing.
+ * `listitem` is measurably **worse** than the problem, turning an `incomplete`
+ * into a real violation. `group` is clean, is accurate for a node that holds
+ * content plus an optional remove control, and is not a live region.
+ *
+ * The rejected alternative worth naming: **stop forwarding `ariaLabel` /
+ * `ariaLabelledby` to the root at all.** Also clean, and cheaper. Rejected because
+ * both props come from `BaseAccessibilityProps`, are documented on this
+ * component's page, and `ariaLabel` is already read by the remove button's own
+ * name — leaving a declared prop that silently does nothing is what
+ * VERSIONING.md §3 calls a promise-shaped lie, and it is the failure mode this
+ * programme keeps removing rather than adding.
+ *
+ * The cost is one a11y-tree node, and only on chips an author deliberately named.
+ * A filter bar of plain chips is untouched.
+ */
+const namingRole = computed<'group' | undefined>(() =>
+  props.ariaLabel !== undefined || props.ariaLabelledby !== undefined ? 'group' : undefined,
+)
+
+/**
+ * NO ROLE ON THE ROOT unless it is named (see `namingRole` above) — and it used
+ * to be `role="status"` on every chip (RESIDUAL-11, `D-RES10-3`).
+ *
+ * `status` is an ARIA **live region**. Declaring it unconditionally made every
+ * chip on the page one, so adding, relabelling or removing a chip in a filter bar
+ * announced itself over whatever the user was reading; and `status` is not a
+ * `nameFromContent` role, so the chip's own label stopped being read as content in
+ * its place in the document. With `closable` the root also takes `tabindex="0"`,
+ * which made it a focusable live region with no widget role.
+ *
+ * A chip is inline content. `DzTag` — the sibling in this family, with the same
+ * `<span>` root, the same props, the same `data-state`/`data-tone`/`tabindex`
+ * ladder and the same remove button — has never carried a role, and it is the one
+ * that was right. This component now matches it, and `DzChip.spec.ts` asserts
+ * that the two agree so they cannot diverge again.
+ *
+ * `role="button"` was considered and rejected: activating this element does
+ * nothing. The only keys it handles are Backspace/Delete, and the remove control
+ * is its own real `<button>`. `DzChip.anatomy.ts` used to claim Enter/Space
+ * "Activate the chip" with `apg: 'button'`, which this component never
+ * implemented; RESIDUAL-12 removed those two rows from this component and from
+ * `DzTag` together, on this same evidence, and built the gate that would have
+ * caught them (`yarn validate:anatomy-keyboard`, closing `D-RES11-2`).
+ *
+ * **The cost that used to be here is gone.** A `<span>` with no role is `generic`,
+ * and ARIA 1.2 prohibits `aria-label` on `generic`, so a named chip produced
+ * `aria-prohibited-attr` — in axe's `incomplete` bucket, which
+ * `toHaveNoViolations()` does not read. That was `D-RES11-1`. It is closed by
+ * `namingRole` above, and the assertion that keeps it closed reads
+ * `results.incomplete` directly (`packages/core/tests/a11y/prohibited-aria.ts`),
+ * because the bucket a matcher cannot see is the whole reason the defect survived.
+ */
+
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
 const { testId: dzTestId } = useDzTestIds()
 </script>
@@ -99,6 +179,7 @@ const { testId: dzTestId } = useDzTestIds()
     :id="id"
     data-part="root"
     :class="classes"
+    :role="namingRole"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
@@ -106,7 +187,6 @@ const { testId: dzTestId } = useDzTestIds()
     :data-tone="resolvedTone"
     :data-disabled="disabled ? '' : undefined"
     :tabindex="closable ? 0 : undefined"
-    role="status"
     style="contain: layout style"
     v-bind="{ ...dzTestId('dz-chip'), ...$attrs, class: undefined }"
     @focus="handleFocus"

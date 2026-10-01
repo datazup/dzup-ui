@@ -110,6 +110,21 @@ export function createMockOptionsHost<T>(
 /** Storybook's `step`, narrowed to what the walk uses. */
 type Step = (label: string, run: () => Promise<void>) => unknown
 
+/**
+ * Elements the browser's own `Tab` visits. Used only to pick a *starting point* for
+ * the in-canvas tab walk — the walk then presses the real key and reads the real
+ * `document.activeElement`, so this list never has to be exactly right.
+ */
+const TABBABLE = [
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  'button:not([disabled])',
+  'a[href]',
+  '[tabindex]:not([tabindex="-1"])',
+  '[contenteditable="true"]',
+].join(', ')
+
 export interface AsyncOptionsWalk {
   /** The mocked host the story binds (only its dataset-independent half is used). */
   host: Pick<MockOptionsHost<unknown>, 'requests' | 'retries' | 'resolve' | 'fail' | 'reload'>
@@ -127,12 +142,17 @@ export interface AsyncOptionsWalk {
 }
 
 /**
- * The `play()` every async-options story runs: loading → ready → error → retry,
- * against the mocked host.
+ * The `play()` every async-options story runs: loading → ready → error → retry →
+ * keyboard retry, against the mocked host.
  *
  * Phases are asserted on the shared row's own contract — `data-part` and
  * `data-options-state` from `DzOptionsState` — so the same walk proves the same
  * behaviour on every host of the `useAsyncOptions` seam.
+ *
+ * The final phase is renderer contract **C9.4**, and it is here rather than in one
+ * control's story for the same reason the row itself is shared: RESIDUAL-04 found
+ * that six of the seven hosts had never implemented the clause, and RESIDUAL-05
+ * measured the keyboard half failing on two of them. One walk, eight hosts.
  */
 export async function walkAsyncOptionsStates({ host, root, open, expectOptions, step }: AsyncOptionsWalk): Promise<void> {
   const row = (): HTMLElement | null => root.querySelector<HTMLElement>('[data-part="options-state"]')
@@ -171,5 +191,118 @@ export async function walkAsyncOptionsStates({ host, root, open, expectOptions, 
     host.resolve()
     await waitFor(() => expect(row()).toBeNull())
     await expectOptions()
+  })
+
+  await step('keyboard retry — C9.4: a keyboard user reaches it, runs it, and keeps the panel', async () => {
+    // Back to the error state, so the retry control exists to be reached.
+    host.reload()
+    await waitFor(() => expect(row()).toHaveAttribute('data-options-state', 'loading'))
+    host.fail('The directory did not answer')
+    await waitFor(() => expect(row()).toHaveAttribute('data-options-state', 'error'))
+
+    const current = row()!
+    const retry = current.querySelector<HTMLElement>('[data-part="options-retry"]')
+    await expect(retry).not.toBeNull()
+    const doc = retry!.ownerDocument
+    const before = host.requests.value
+    const retriesBefore = host.retries.value
+
+    // ---- 1. REACHABILITY (WCAG 2.1.1), driven rather than assumed ---------------
+    //
+    // Which route applies is decided by one measurable fact and not by the host's
+    // name: whether the row is inside the control's own root, or portalled out of it.
+    const controlRoot = current.closest('[data-part="root"]')
+    const tabbableOutsideRow = controlRoot === null
+      ? []
+      : [...controlRoot.querySelectorAll<HTMLElement>(TABBABLE)].filter(el => !current.contains(el))
+    if (controlRoot === null) {
+      // Portalled. `Tab` follows *document* order out of the panel and into the page,
+      // and the layer closes behind it — RESIDUAL-05 drove seven routes and none of
+      // them arrived. So the route is the popup's own navigable set, entered with the
+      // arrow keys the APG gives the textbox, with focus staying inside the widget.
+      const owner = doc.activeElement
+      await expect(owner).not.toBeNull()
+      await expect(owner).not.toBe(doc.body)
+      await expect(current.contains(owner)).toBe(false)
+      // A named part, so a control that had lost focus somewhere unnamed fails loudly
+      // instead of quietly proving the route on the wrong element.
+      await expect(owner!.getAttribute('data-part')).not.toBeNull()
+      await userEvent.keyboard('{ArrowDown}')
+      await waitFor(() => expect(doc.activeElement).toBe(retry))
+      // Two-way: a user who arrowed in can get back out to typing without dismissing.
+      await userEvent.keyboard('{ArrowUp}')
+      await waitFor(() => expect(doc.activeElement).toBe(owner))
+      await userEvent.keyboard('{ArrowDown}')
+      await waitFor(() => expect(doc.activeElement).toBe(retry))
+    }
+    else {
+      // In the canvas. The row is part of the control's own tab order and there is no
+      // layer to dismiss, so `Tab` is the route — and it has to be *driven*, because
+      // "it is a tabbable button" is the inference that hid this defect for a week.
+      if (tabbableOutsideRow.length > 0)
+        tabbableOutsideRow[0]!.focus()
+      else if (doc.activeElement instanceof HTMLElement)
+        doc.activeElement.blur()
+      let reached = doc.activeElement === retry
+      for (let press = 0; press < 12 && !reached; press++) {
+        await userEvent.tab()
+        reached = doc.activeElement === retry
+      }
+      await expect(reached).toBe(true)
+      await expect(row()).not.toBeNull()
+    }
+
+    // ---- 2. ACTIVATION, by keyboard, on the element the keyboard just reached ----
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(host.retries.value).toBe(retriesBefore + 1))
+    await waitFor(() => expect(host.requests.value).toBe(before + 1))
+
+    // ---- 3. The panel survives it, and focus lands somewhere named ---------------
+    //
+    // The retry control unmounts as it is pressed, and if that dropped focus on the
+    // document body the dismissable layer wrapping a portalled panel would read it as
+    // focus leaving and close under the user — so the row still being in the document
+    // IS the panel still being open, on every host, portalled or not.
+    //
+    // Focus lands on a *named, stable* element of the anatomy — never the body. Which
+    // name is the host's business: the input or trigger the keyboard route came from,
+    // or the state row when nothing came before it.
+    await waitFor(() => expect(row()).not.toBeNull())
+    const active = doc.activeElement
+    await expect(active).not.toBe(doc.body)
+    await expect(active).not.toBeNull()
+    await expect(active!.isConnected).toBe(true)
+    await expect(active!.getAttribute('data-part')).not.toBeNull()
+
+    // ---- 4. And it still holds when the retry SUCCEEDS ---------------------------
+    //
+    // The row unmounts when the answer arrives, so a destination that was only valid
+    // while loading drops focus on the body at the exact moment the user got what
+    // they asked for — measured, and the reason the destination is the control's own
+    // input rather than the row.
+    host.resolve()
+    await waitFor(() => expect(row()).toBeNull())
+    await expectOptions()
+
+    // There is **no exception any more**, and that is RESIDUAL-07's whole result.
+    //
+    // RESIDUAL-06 had to skip this clause when an in-canvas row was reached by a `Tab`
+    // that had wrapped past the end of the document: `relatedTarget` is then the body,
+    // which is indistinguishable from having lost focus and is refused as a place to
+    // hand focus back to, so focus was parked on the row and the row then unmounted
+    // with focus on it. Measured on `DzListbox` (start `viewport` → three host buttons
+    // → `BODY` → retry) and on `DzTransfer` (nothing tabbable outside the row at all,
+    // so the very first `Tab` arrives from `BODY`): `document.activeElement` was `BODY`
+    // at the instant the options appeared.
+    //
+    // The row cannot invent a destination, so the **host** supplies one and the shared
+    // row consumes it when it unmounts (`RetryRowExit` / `useRetryRowExit`). The clause
+    // is now unconditional: every host, portalled or not, must end on a named,
+    // connected element, and which half got it there is the host's business.
+    const settled = doc.activeElement
+    await expect(settled).not.toBe(doc.body)
+    await expect(settled).not.toBeNull()
+    await expect(settled!.isConnected).toBe(true)
+    await expect(settled!.getAttribute('data-part')).not.toBeNull()
   })
 }

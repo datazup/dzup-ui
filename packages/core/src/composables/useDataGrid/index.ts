@@ -10,6 +10,12 @@ export {
 } from './useDataGrid.ts'
 
 export {
+  type DataGridCellPosition,
+  useDataGridNavigation,
+  type UseDataGridNavigationReturn,
+} from './useDataGridNavigation.ts'
+
+export {
   useDataGridPagination,
   type UseDataGridPaginationOptions,
   type UseDataGridPaginationReturn,

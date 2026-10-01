@@ -8,5 +8,20 @@
     "outDir": "dist"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  // __fixtures__ holds deliberately unresolvable inputs and outputs for the
+  // transform tests -- the `.output.ts` files import the POST-swap icon module
+  // (`@lucide/vue`), which is installed nowhere on purpose, because emitting
+  // that specifier is exactly what `swap-icon-library` is asserted to do.
+  // Type-checking them reports the fixture as the bug (14 TS2307/TS7016/TS4058
+  // errors, red since 589be13) and compiling them ships fixture .js/.d.ts into
+  // the published `dist`. The tests read these files as TEXT
+  // (transforms/__tests__/swap-icon-library.spec.ts resolves them from src/),
+  // so they are never imported as modules and never need emitting. Same
+  // precedent and same reason as packages/tooling/tsconfig.json.
+  //
+  // src/**/__tests__/** is deliberately NOT excluded here: the specs are still
+  // worth type-checking. That they are also EMITTED into a published `dist`
+  // is a separate, real defect -- see the tarball-diff row of
+  // `yarn qualify:package`, which reports it rather than hiding it.
+  "exclude": ["node_modules", "dist", "src/**/__fixtures__/**"]
 }

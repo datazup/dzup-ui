@@ -332,8 +332,13 @@ function measure(
 async function withRender(
   binding: BoundaryBinding,
   payload: string,
+  live: VueWrapper<never>[],
 ): Promise<{ root: Element, extras: Element[], wrapper: VueWrapper<never> }> {
   const wrapper = await binding.render(payload)
+  // Registered before the awaits: a fixture that throws mid-render must still have
+  // its wrapper unmounted by the suite's `afterEach`, not left mounted for the next
+  // one to measure.
+  live.push(wrapper)
   await nextTick()
   await nextTick()
   const extras = binding.teleports === true ? [document.body] : []
@@ -355,8 +360,22 @@ export function runBoundarySuite(
   const fixtures = fixturesForSink(binding.sink, categories)
 
   describe(`${binding.component} — ${title} (${binding.sink} sink: ${binding.via})`, () => {
+    /**
+     * Teardown through Vue, not through the DOM (RESIDUAL-18). This hook used to be a
+     * `document.body` wipe, which detached whatever a case had rendered and left it
+     * mounted — for a teleporting binding, with its portalled content still live in
+     * the body that the next case's `measureBaseline` then scans.
+     *
+     * `enableAutoUnmount` cannot be used here: this function is called once per
+     * binding and a spec file declares several, and VTU refuses a second call. So the
+     * suite tracks its own wrappers instead, which also covers the case the wipe never
+     * did — a fixture that throws between render and its explicit `unmount()`.
+     */
+    const live: VueWrapper<never>[] = []
+
     afterEach(() => {
-      document.body.innerHTML = ''
+      for (const wrapper of live.splice(0))
+        wrapper.unmount()
     })
 
     it('has fixtures to run — an empty suite is not a passing one', () => {
@@ -376,12 +395,14 @@ export function runBoundarySuite(
         // the component renders anyway, so a component that legitimately
         // contains an <svg> icon is not reported as having been injected with
         // one.
-        const clean = await withRender(binding, 'safe-value')
+        const clean = await withRender(binding, 'safe-value', live)
         const baseline = measureBaseline([clean.root, ...(binding.teleports === true ? [document.body] : [])])
+        // The reset between the baseline render and the hostile one is the unmount
+        // itself: it takes a teleported subtree with it, so the payload render starts
+        // from the same document the baseline did.
         clean.wrapper.unmount()
-        document.body.innerHTML = ''
 
-        const { root, extras, wrapper } = await withRender(binding, payload)
+        const { root, extras, wrapper } = await withRender(binding, payload, live)
         const { outcome, detail } = measure(binding, root, extras, payload, baseline)
         wrapper.unmount()
 

@@ -356,3 +356,69 @@ describe('dzSelect — Accessible Name (axe button-name)', () => {
     wrapper.unmount()
   })
 })
+
+/**
+ * RESIDUAL-11 `D-RES10-5` — the internal empty-value marker, and the half of it
+ * that is load-bearing.
+ *
+ * Reka's `SelectItem` throws on an empty `value`, so an item that declares `''` has
+ * to be mapped onto a sentinel. `SelectRoot` needs no such mapping — its own error
+ * message documents `''` as the value that clears the selection — but the sentinel
+ * was passed there anyway, and `SelectRoot` spreads its `modelValue` onto the hidden
+ * native `<select>` it renders for form participation. So `value="__DZ_SELECT_EMPTY__"`
+ * shipped in the rendered output of every unset select, and Reka's
+ * `shouldShowPlaceholder` — which tests for `''` — returned false, withholding the
+ * trigger's `data-placeholder` and with it this component's own
+ * `data-[placeholder]:text-[var(--dz-muted-foreground)]` styling.
+ */
+describe('dzSelect — the internal empty-value marker', () => {
+  /** Reka renders the hidden native select for form participation. */
+  function nativeSelect(wrapper: ReturnType<typeof mount>): HTMLSelectElement {
+    const el = wrapper.element.querySelector('select')
+    expect(el, 'reka renders a hidden native <select>').not.toBeNull()
+    return el as HTMLSelectElement
+  }
+
+  it('keeps its internal marker out of the rendered output of an unset select', () => {
+    const wrapper = mount(DzSelect, { props: { items: mockItems, placeholder: 'Pick fruit' } })
+    expect(wrapper.html()).not.toContain('__DZ_SELECT_EMPTY__')
+    // Nothing that merely *looks* like an internal marker either — the assertion is
+    // about the class of thing, not about one string.
+    expect(wrapper.html()).not.toMatch(/__DZ_/)
+    expect(nativeSelect(wrapper).getAttribute('value')).toBe('')
+  })
+
+  it('marks the trigger as showing a placeholder, which the marker used to suppress', () => {
+    // Reka's `shouldShowPlaceholder` tests for `''`. The sentinel is not `''`, so
+    // the trigger never got `data-placeholder` and the muted-placeholder class in
+    // DzSelect.variants.ts could never apply to an unset select.
+    const wrapper = mount(DzSelect, { props: { items: mockItems, placeholder: 'Pick fruit' } })
+    const trigger = wrapper.get('[role="combobox"]').element
+    expect(trigger.hasAttribute('data-placeholder')).toBe(true)
+  })
+
+  it('drops the attribute once a value is chosen', () => {
+    const wrapper = mount(DzSelect, { props: { items: mockItems, modelValue: 'apple' } })
+    expect(wrapper.html()).not.toContain('__DZ_SELECT_EMPTY__')
+    expect(nativeSelect(wrapper).getAttribute('value')).toBe('apple')
+    expect(wrapper.get('[role="combobox"]').element.hasAttribute('data-placeholder')).toBe(false)
+  })
+
+  /**
+   * The behaviour the guard preserves. An item may legitimately declare `''` — an
+   * “— any —” row — and `SelectItem` cannot take that value, so its internal value
+   * IS the sentinel and the root's value has to match it. Dropping the mapping
+   * outright would have silently stopped that row resolving.
+   */
+  it('still uses the marker when an item actually claims the empty string', () => {
+    const wrapper = mount(DzSelect, {
+      props: {
+        items: [{ label: 'Any', value: '' }, ...mockItems],
+        placeholder: 'Pick fruit',
+      },
+    })
+    expect(nativeSelect(wrapper).getAttribute('value')).toBe('__DZ_SELECT_EMPTY__')
+    // …and the trigger reads that item's label rather than the placeholder.
+    expect(wrapper.get('[role="combobox"]').text()).toContain('Any')
+  })
+})

@@ -517,7 +517,7 @@ Text input component with v-model binding.
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
 | `type` | `"number" \| "search" \| "text" \| "email" \| "password" \| "url" \| "tel" \| "date" \| undefined` | no | `"text"` | HTML input type |
-| `ui` | `Partial<Record<"root" \| "clear" \| "error" \| "spinner" \| "control" \| "input" \| "suffix" \| "prefix", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzInput.anatomy.ts` (ADR-19). `class` keeps landing on the `control` part — the visual field — which is where it has always landed; `ui.root` reaches the outer node. |
+| `ui` | `Partial<Record<"root" \| "clear" \| "error" \| "spinner" \| "input" \| "control" \| "suffix" \| "prefix", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzInput.anatomy.ts` (ADR-19). `class` keeps landing on the `control` part — the visual field — which is where it has always landed; `ui.root` reaches the outer node. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (5):
@@ -626,7 +626,7 @@ format-masked text input.
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `slotChar` | `string \| undefined` | no | `"_"` | Character shown for unfilled token positions |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "error" \| "control" \| "input" \| "suffix" \| "prefix", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzInputMask.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
+| `ui` | `Partial<Record<"root" \| "error" \| "input" \| "control" \| "suffix" \| "prefix", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzInputMask.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (5):
@@ -709,7 +709,7 @@ Numeric input with increment/decrement buttons.
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `step` | `number \| undefined` | no | `1` | Step increment for +/- buttons and arrow keys |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "error" \| "control" \| "input" \| "prefix" \| "decrement" \| "increment", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzNumberInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
+| `ui` | `Partial<Record<"root" \| "error" \| "input" \| "control" \| "prefix" \| "decrement" \| "increment", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzNumberInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (6):
@@ -772,7 +772,7 @@ One-time password / PIN input using Reka UI PinInput (ADR-07).
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `type` | `"number" \| "text" \| undefined` | no | `"number"` | Input type: number-only or any text |
-| `ui` | `Partial<Record<"root" \| "error" \| "control" \| "input", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzOtpInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
+| `ui` | `Partial<Record<"root" \| "error" \| "input" \| "control", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzOtpInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
 
 **Events** (4):
 
@@ -829,7 +829,7 @@ Password input with visibility toggle.
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "error" \| "spinner" \| "control" \| "input" \| "prefix" \| "toggle", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzPasswordInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
+| `ui` | `Partial<Record<"root" \| "error" \| "spinner" \| "input" \| "control" \| "prefix" \| "toggle", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzPasswordInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (4):
@@ -893,7 +893,7 @@ Search input with search icon and clear button.
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"icon" \| "root" \| "clear" \| "error" \| "spinner" \| "control" \| "input", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzSearchInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "clear" \| "error" \| "spinner" \| "input" \| "control", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzSearchInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (6):
@@ -1091,7 +1091,7 @@ Checkbox component using Reka UI (ADR-07).
 | `name` | `string \| undefined` | no | `undefined` | Form field name |
 | `required` | `boolean \| undefined` | no | `false` | Whether the checkbox is required |
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
-| `ui` | `Partial<Record<"root" \| "indicator" \| "control" \| "label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzCheckbox.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; a key outside the declared parts is a type error, not a class that lands nowhere. |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "label" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzCheckbox.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; a key outside the declared parts is a type error, not a class that lands nowhere. |
 | `value` | `string \| undefined` | no | `undefined` | String value for checkbox groups |
 
 **Events** (4):
@@ -1270,7 +1270,7 @@ Searchable select using Reka UI Combobox (ADR-07).
 | `portalTo` | `string \| HTMLElement \| undefined` | no | `undefined` | Portal target. Defaults to `document.body` when omitted. |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzCombobox.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the field anchor, declared there as `control` — and the panel parts render into a portal, where `class` never reached them. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzCombobox.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the field anchor, declared there as `control` — and the panel parts render into a portal, where `class` never reached them. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (10):
@@ -1334,7 +1334,7 @@ Date selection using Reka UI DatePicker (ADR-07).
 | `placeholder` | `string \| undefined` | no | `undefined` | Placeholder text when no date is selected |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "title" \| "error" \| "header" \| "group" \| "row" \| "cell" \| "control" \| "panel" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the segment field, declared here as `control` — and the calendar parts render inside a popper where `class` never reached them. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "title" \| "error" \| "header" \| "group" \| "row" \| "cell" \| "panel" \| "input" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the segment field, declared here as `control` — and the calendar parts render inside a popper where `class` never reached them. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (8):
@@ -1393,7 +1393,7 @@ Date range selection using Reka UI (ADR-07).
 | `placeholder` | `string \| undefined` | no | `undefined` | Placeholder text when no range is selected |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "title" \| "error" \| "separator" \| "header" \| "group" \| "row" \| "cell" \| "control" \| "panel" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzDateRangePicker.anatomy.ts` (ADR-19 §5). `ui.input` reaches the segments on **both** ends of the range. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "title" \| "error" \| "separator" \| "header" \| "group" \| "row" \| "cell" \| "panel" \| "input" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzDateRangePicker.anatomy.ts` (ADR-19 §5). `ui.input` reaches the segments on **both** ends of the range. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (8):
@@ -1711,7 +1711,7 @@ rotary numeric input rendered as an SVG circular dial (ADR-16 defineModel).
 | `step` | `number \| undefined` | no | `1` | Step increment for keyboard/drag snapping (default 1) |
 | `strokeWidth` | `number \| undefined` | no | `8` | Arc stroke width, in the 0–100 SVG viewBox units (default 8) |
 | `tone` | `CanonicalTone \| undefined` | no | `"primary"` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "control" \| "label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzKnob.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target. |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "label" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzKnob.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target. |
 | `value` | `number \| undefined` | no | `0` | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. |
 | `valueTemplate` | `string \| undefined` | no | `"{value}"` | Template for the centered value label and `aria-valuetext`. `{value}` is replaced with the current value. e.g. `'{value}%'`. |
 | `variant` | `undefined` | no | — | Visual style variant |
@@ -1792,7 +1792,7 @@ Always-visible single/multi-select list using Reka UI Listbox
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | — | Semantic color tone |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "error" \| "item-label" \| "group" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "group-label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzListbox.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the listbox box, declared there as `control`. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "error" \| "item-label" \| "group" \| "viewport" \| "item-indicator" \| "empty" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "control" \| "group-label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzListbox.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the listbox box, declared there as `control`. |
 | `variant` | `undefined` | no | — | Visual style variant |
 
 **Events** (9):
@@ -1872,7 +1872,7 @@ a textarea/input that surfaces a suggestion dropdown when a
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
 | `triggers` | `DzMentionTrigger[]` | yes | — | Configured triggers — each maps a char to its (sync or async) options |
-| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "list" \| "error" \| "item-label" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMention.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the text control, declared there as `input` — so `ui.root` is the route to the wrapper. |
+| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "list" \| "error" \| "item-label" \| "empty" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "control" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMention.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the text control, declared there as `input` — so `ui.root` is the route to the wrapper. |
 | `value` | `string \| undefined` | no | `""` | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
@@ -1952,7 +1952,7 @@ Multi-value select using Reka UI Combobox (ADR-07).
 | `portalTo` | `string \| HTMLElement \| undefined` | no | `undefined` | Portal target. Defaults to `document.body` when omitted. |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMultiSelect.anatomy.ts` (ADR-19 §5). The selected-value chips are **not** among them: they are the vocabulary stop that declaration records, and `ui.control` plus a descendant selector is the route to them until the word exists. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMultiSelect.anatomy.ts` (ADR-19 §5). The selected-value chips are **not** among them: they are the vocabulary stop that declaration records, and `ui.control` plus a descendant selector is the route to them until the word exists. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 **Events** (10):
@@ -2006,7 +2006,7 @@ Searchable persona picker.
 | `optionsState` | `AsyncOptionsState \| undefined` | no | `undefined` | Where the option set is. Omitted means the options are static and the control renders no state rows at all. |
 | `personas` | `Persona[]` | yes | — | Available personas |
 | `placeholder` | `string \| undefined` | no | `"Select persona"` | Placeholder text for the search input |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzPersonaSelector.anatomy.ts` (ADR-19 §5). This component renders no element of its own, so the map is forwarded whole to the `DzCombobox` that is* its root — one map still reaches every part the declaration names. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "clear" \| "error" \| "item-label" \| "viewport" \| "item-indicator" \| "empty" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzPersonaSelector.anatomy.ts` (ADR-19 §5). This component renders no element of its own, so the map is forwarded whole to the `DzCombobox` that is* its root — one map still reaches every part the declaration names. |
 
 **Events** (4):
 
@@ -2051,7 +2051,7 @@ Radio option using Reka UI (ADR-07).
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `ui` | `Partial<Record<"root" \| "indicator" \| "control" \| "label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzRadio.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target. |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "label" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzRadio.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target. |
 | `value` | `string` | yes | — | The value of this radio option (required) |
 
 **Slots** (1):
@@ -2156,7 +2156,7 @@ Dual-thumb range slider using Reka UI Slider (ADR-07).
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `step` | `number \| undefined` | no | `1` | Step increment |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "control" \| "label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzRangeSlider.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`, declared here as `control`; `ui.indicator` reaches **both** thumbs. |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "label" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzRangeSlider.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`, declared here as `control`; `ui.indicator` reaches **both** thumbs. |
 
 **Events** (4):
 
@@ -2363,7 +2363,7 @@ Range slider using Reka UI Slider (ADR-07).
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `step` | `number \| undefined` | no | `1` | Step increment |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "control" \| "label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzSlider.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`, declared here as `control` — so `ui.root` is the only route to the wrapper element. |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "label" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzSlider.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`, declared here as `control` — so `ui.root` is the only route to the wrapper element. |
 
 **Events** (4):
 
@@ -2417,7 +2417,7 @@ Toggle switch using Reka UI (ADR-07).
 | `name` | `string \| undefined` | no | `undefined` | Form field name |
 | `required` | `boolean \| undefined` | no | `false` | Whether the switch is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `ui` | `Partial<Record<"root" \| "indicator" \| "control" \| "label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzSwitch.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target. |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "label" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzSwitch.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target. |
 
 **Events** (4):
 
@@ -2477,7 +2477,7 @@ free-text token / chips input.
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "error" \| "control" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTagsInput.anatomy.ts` (ADR-19 §5). The committed tokens are `DzChip`s and therefore their own anatomy boundary; restyle them through `chipVariant` / `chipTone` or `DzChip`'s own parts. |
+| `ui` | `Partial<Record<"root" \| "error" \| "input" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTagsInput.anatomy.ts` (ADR-19 §5). The committed tokens are `DzChip`s and therefore their own anatomy boundary; restyle them through `chipVariant` / `chipTone` or `DzChip`'s own parts. |
 | `validate` | `((token: string) => boolean) \| undefined` | no | `undefined` | Per-token validation predicate. Return `false` to reject the token, triggering a brief `danger` flash on the field. Runs after the dedupe and max checks. |
 | `value` | `string[] \| undefined` | no | `[]` | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
@@ -2550,7 +2550,7 @@ dropdown time picker (CoreUI-style) built on Reka UI Popover.
 | `selection` | `TimePickerSelection \| undefined` | no | `"roll"` | Popover selection layout: scrollable wheel (`roll`) or native dropdowns (`select`) |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `step` | `number \| undefined` | no | `1` | Minute step interval (e.g. 15 → :00, :15, :30, :45) |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "clear" \| "list" \| "error" \| "footer" \| "separator" \| "group" \| "control" \| "label" \| "panel" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTimePicker.anatomy.ts` (ADR-19 §5). `ui.list` names the region of choices in **both** the roll and the select layout, so a theme does not have to branch on `selection`. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "clear" \| "list" \| "error" \| "footer" \| "separator" \| "group" \| "label" \| "panel" \| "input" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTimePicker.anatomy.ts` (ADR-19 §5). `ui.list` names the region of choices in **both** the roll and the select layout, so a theme does not have to branch on `selection`. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant of the trigger |
 
 **Events** (8):
@@ -2611,7 +2611,7 @@ Dual-list transfer component.
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `source` | `TransferItem[]` | yes | — | All available source items |
 | `target` | `TransferItem[] \| undefined` | no | `undefined` | Pre-populated target items (alternative to modelValue) |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "action" \| "list" \| "error" \| "item-label" \| "header" \| "group" \| "body" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "hint", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTransfer.anatomy.ts` (ADR-19 §5). Every pane-level key reaches **both** panes — the source and the target are one declaration, not two. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "action" \| "list" \| "error" \| "item-label" \| "header" \| "group" \| "body" \| "item-indicator" \| "empty" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "control" \| "hint", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTransfer.anatomy.ts` (ADR-19 §5). Every pane-level key reaches **both** panes — the source and the target are one declaration, not two. |
 
 **Events** (6):
 
@@ -3860,18 +3860,20 @@ export const Default: Story = {
 
 ### DzGridItem
 
-a `DzGrid` child that says how many columns it occupies.
+a `DzGrid` child that says how many columns and rows it occupies.
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzGridItem } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Compound part of:** `DzGrid`
 
-**Props** (2):
+**Props** (4):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
-| `span` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Columns this item occupies, fixed or per breakpoint. Omitted means one column, the CSS default. A numeric span outside 1–12 is clamped into that range; a span wider than the grid's own column count creates implicit columns, exactly as the CSS it compiles to would — clamp to your grid. |
+| `colSpan` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Columns this item occupies, fixed or per breakpoint. Omitted means one column, the CSS default. A numeric span outside 1–12 is clamped into that range; a span wider than the grid's own column count creates implicit columns, exactly as the CSS it compiles to would — clamp to your grid. This is the name a Form document uses, so a renderer forwards `node.layout.colSpan` with no lookup table of its own. |
+| `rowSpan` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Rows this item occupies, fixed or per breakpoint. Omitted means one row. Clamped and mirrored on exactly the same terms as `colSpan`: `grid-row: span N` is writing-mode relative on the block axis, so it needs no RTL handling either. Without this prop a document carrying `layout.rowSpan` has to be rendered with a raw `row-span-*` class — the persisted-CSS violation doc 03 §3 forbids, relocated into the component boundary rather than removed. A row span is meaningful whether or not the parent `DzGrid` declares `rows`: with `rows` it spans explicit tracks, without it the item creates implicit ones, exactly as the CSS does. |
+| `span` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Columns this item occupies — the original spelling, an alias of {@link DzGridItemProps.colSpan}. Kept because it reads better than `colSpan` on a grid with no row spans, and because removing it would be a breaking change for the API D67 shipped. When both are given, `colSpan` wins and dev mode warns. |
 
 **Slots** (1):
 
@@ -4931,7 +4933,7 @@ A combined command palette with search, items, and groups.
 | `portalDefer` | `boolean \| undefined` | no | `false` | Defer target resolution until the application has mounted. |
 | `portalDisabled` | `boolean \| undefined` | no | `false` | Render inline instead of teleporting to the portal target. |
 | `portalTo` | `string \| HTMLElement \| undefined` | no | `undefined` | Portal target. Defaults to `document.body` when omitted. |
-| `ui` | `Partial<Record<"icon" \| "item" \| "content" \| "list" \| "overlay" \| "item-label" \| "group" \| "empty" \| "control" \| "input" \| "group-label" \| "suffix", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzCommandPalette.anatomy.ts` (ADR-19 §5). `class` keeps its existing target (the portalled dialog content); `ui.item` and `ui.icon` land on every row and every row icon. |
+| `ui` | `Partial<Record<"icon" \| "item" \| "content" \| "list" \| "overlay" \| "item-label" \| "group" \| "empty" \| "input" \| "control" \| "group-label" \| "suffix", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzCommandPalette.anatomy.ts` (ADR-19 §5). `class` keeps its existing target (the portalled dialog content); `ui.item` and `ui.icon` land on every row and every row icon. |
 
 **Events** (3):
 
@@ -8360,7 +8362,7 @@ draggable before/after image reveal slider (ADR-16 defineModel).
 | `orientation` | `Orientation \| undefined` | no | `"horizontal"` | Axis the divider travels along (default 'horizontal'). |
 | `position` | `number \| undefined` | no | `50` | Divider position along the active axis as a percentage, clamped to 0-100; defaults to `50`, the midpoint. |
 | `step` | `number \| undefined` | no | `1` | Keyboard nudge increment for Arrow keys (default 1). Shift+Arrow jumps by 10. |
-| `ui` | `Partial<Record<"root" \| "separator" \| "control" \| "label" \| "panel", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzImageComparison.anatomy.ts` (ADR-19 §5). `ui.panel` lands on **both** image layers — they share a part name. |
+| `ui` | `Partial<Record<"root" \| "separator" \| "label" \| "panel" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzImageComparison.anatomy.ts` (ADR-19 §5). `ui.panel` lands on **both** image layers — they share a part name. |
 
 **Events** (2):
 

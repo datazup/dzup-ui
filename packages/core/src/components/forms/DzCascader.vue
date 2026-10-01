@@ -37,6 +37,7 @@ import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { cascaderVariants } from './DzCascader.variants.ts'
 import DzOptionsState from './DzOptionsState.vue'
+import { provideRetryKeyboardRoute } from './optionsStateFocus.ts'
 
 defineOptions({
   inheritAttrs: false,
@@ -430,6 +431,20 @@ function onColumnsKeydown(event: KeyboardEvent): void {
       }
       break
     }
+    // Home/End were declared as APG `combobox` rows and were simply absent from
+    // this switch — RESIDUAL-12 §4 `F4`, the smallest of the ten gaps it
+    // measured. They move within the focused column, which is the listbox the
+    // row is about; crossing columns is what the inline arrows above do.
+    case 'Home':
+      event.preventDefault()
+      active.value = { col: a.col, index: firstEnabledIndex(a.col) }
+      focusActive()
+      break
+    case 'End':
+      event.preventDefault()
+      active.value = { col: a.col, index: lastEnabledIndex(a.col) }
+      focusActive()
+      break
     case 'Enter':
     case ' ': {
       event.preventDefault()
@@ -528,6 +543,15 @@ const showCleaner = computed(
 
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
 const { testId: dzTestId } = useDzTestIds()
+/**
+ * Renderer contract C9.4's keyboard **route** (RESIDUAL-06). The async-options row
+ * registers itself through the component tree; this binds the owner half to the
+ * control's root, so a bare `ArrowDown` from the element that owns this control's
+ * focus reaches the retry control the row renders — the only key that can, because
+ * `Tab` is the combobox pattern's way out of the popup. One definition of the rule,
+ * in `optionsStateFocus.ts`; the argument and the seven measured dead ends are there.
+ */
+const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
 </script>
 
 <template>
@@ -543,6 +567,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-busy="loading || undefined"
     style="contain: layout style"
     v-bind="{ ...dzTestId('dz-cascader'), ...$attrs, class: undefined }"
+    @keydown="handleAsyncOptionsKeydown"
   >
     <PopoverRoot v-model:open="open">
       <PopoverTrigger

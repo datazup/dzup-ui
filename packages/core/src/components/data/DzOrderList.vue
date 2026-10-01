@@ -427,6 +427,47 @@ function cancelGrab(): void {
   nextTick(() => itemEls.value[activeIndex.value]?.focus())
 }
 
+/**
+ * APG `listbox` type-ahead (RESIDUAL-13, closing RESIDUAL-12 §4 `F10`).
+ *
+ * The `<character>` row — "Move focus to the next option whose label starts with
+ * that character." — has been published since TASK-R5-O5 and RESIDUAL-12 found
+ * "a full roving-focus grab/move implementation and no type-ahead of any kind".
+ * It reported the row as `undetermined` rather than `unbacked` only because the
+ * rows are slotted, so a source scan could not see the labels; the behaviour was
+ * absent either way.
+ *
+ * The label is read from the **rendered row**, not from the item. `itemEls`
+ * already holds every row's element for roving focus, and a row's accessible name
+ * is its text content — the component renders `{{ item }}` by default and the
+ * consumer's `#item` slot otherwise, so reading the DOM is the only way to match
+ * what a screen reader announces. Matching `String(item)` instead would have
+ * worked for the default and silently stopped working for every consumer who
+ * filled the slot, which is the larger half of real use.
+ *
+ * Search starts at the row **after** the focused one and wraps, which is what
+ * makes repeating a character cycle through same-initial options rather than
+ * sticking on the first.
+ *
+ * @returns whether a row was found, so the caller knows whether to consume the key.
+ */
+function typeAhead(event: KeyboardEvent, index: number): boolean {
+  const printable = event.key.length === 1 && event.key !== ' '
+  if (!printable || event.altKey || event.ctrlKey || event.metaKey)
+    return false
+  const needle = event.key.toLowerCase()
+  const count = model.value.length
+  for (let step = 1; step <= count; step++) {
+    const candidate = (index + step) % count
+    const label = itemEls.value[candidate]?.textContent?.trim().toLowerCase() ?? ''
+    if (label.startsWith(needle)) {
+      focusItem(candidate)
+      return true
+    }
+  }
+  return false
+}
+
 function handleItemKeydown(event: KeyboardEvent, index: number): void {
   if (props.disabled)
     return
@@ -473,6 +514,13 @@ function handleItemKeydown(event: KeyboardEvent, index: number): void {
         event.preventDefault()
         cancelGrab()
       }
+      break
+    default:
+      // Type-ahead, and only while nothing is grabbed: during a reorder the
+      // arrows move the ITEM, so moving focus off it mid-move would abandon the
+      // grab without cancelling it.
+      if (grabbedIndex.value === null && typeAhead(event, index))
+        event.preventDefault()
       break
   }
 }

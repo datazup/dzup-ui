@@ -1,4 +1,4 @@
-# Security fixture corpus (schema v1.1.0)
+# Security fixture corpus (schema v1.1.0 · content v1.1.0)
 
 **The corpus is shared on purpose between `ui/dzup-ui` (TASK-N1-O5, TASK-R3-O4) and
 `ui/dzup-ui-pro` (QUAL-04, TASK-N1-P1, TASK-R2-P9).** Both repositories use one
@@ -195,6 +195,19 @@ them with `assertCorpusFile(JSON.parse(text), name)` or
 `assertPeerCompatibilityFile(…)`, and points each file's `$schema` at
 `node_modules/@dzup-ui/testing/security-corpus/<schema>.json`.
 
+**For the sanitizer sinks (`html`, `markdown`, `mermaid-svg`) there is a runner,
+so nobody has to write the loop above.** `@dzup-ui/testing/security-conformance`
+takes any `DzSanitizerAdapter`-shaped object plus these fixtures and returns a
+per-fixture verdict report, refusing rather than reporting a pass when the adapter
+is absent or when no cell could be asserted. It is documented in
+[`../README.md`](../README.md) and gated here by
+`yarn validate:security-conformance`, which diffs the recorded reference in
+[`packages/core/security/sanitizer-conformance.reference.json`](../../core/security/sanitizer-conformance.reference.json)
+cell by cell. The corpus's **content** version — `SECURITY_CORPUS_VERSION`, which
+is not the `schemaVersion` in these files — is what a consumer's recorded result
+is pinned to; adding a fixture bumps it as a minor, changing an outcome as a
+major.
+
 When a component does **not** meet a required outcome, do not weaken the
 fixture. Record the measurement in a deviation register and assert the recorded
 value. Then a regression fails, and so does a fix whose entry nobody removed.
@@ -213,14 +226,25 @@ OSS's register is
    explains every `inert` and names the policy behind every `admitted`.
    Consumer-only data goes under `extensions`. With `$schema` set, your editor
    flags most mistakes as you type.
-3. **Run the gate:** `yarn validate:security-corpus`. It checks every file against
+3. **Bump the corpus content version.** A fixture addition is a **minor** bump of
+   `SECURITY_CORPUS_VERSION` in [`../src/security-conformance.ts`](../src/security-conformance.ts),
+   with its new digest recorded in `CORPUS_VERSION_FINGERPRINTS`. This is not the
+   `schemaVersion` in these files — that versions the record shape and does not
+   move when the data does. Changing an existing fixture's `outcomes` is a
+   **major** bump, because every recorded conformance result for the old version
+   is now answering a different question.
+4. **Run the gates:** `yarn validate:security-corpus` checks every file against
    the JSON Schema and the checker, and rejects a JSON file in this directory
    that is not a category file, the peer file or a schema.
-4. **Run the consumers:**
-   `yarn vitest run packages/testing/src/security-corpus.spec.ts packages/core/security`.
-   A new fixture reaches every OSS component bound to its sinks. If a component
-   does not meet the outcome, record a deviation (§4). Do not change the fixture.
-5. **Add a changeset** for `@dzup-ui/testing` (§7).
+   `yarn validate:security-conformance` re-measures OSS's own adapter against the
+   corpus and fails on any verdict that moved; re-record its reference with
+   `--write` only when the move was intended (an owner action).
+5. **Run the consumers:**
+   `yarn vitest run packages/testing/src packages/core/security`.
+   A new fixture reaches every OSS component bound to its sinks, and every
+   sanitizer-sink outcome reaches the conformance runner. If a component does not
+   meet the outcome, record a deviation (§4). Do not change the fixture.
+6. **Add a changeset** for `@dzup-ui/testing` (§7).
 
 ## 6. Scope: defensive only
 

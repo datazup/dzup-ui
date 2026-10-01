@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * useScrollSpy — Unit tests (mocked IntersectionObserver).
  */
@@ -46,6 +46,9 @@ function mountSpy(ids: string[], offsetTop = 0) {
   return { wrapper, onActiveChange }
 }
 
+/** The scroll targets this file appends by hand, removed by hand in `afterEach`. */
+const targets: Element[] = []
+
 beforeEach(() => {
   ioCallback = null
   lastOptions = undefined
@@ -54,11 +57,22 @@ beforeEach(() => {
     const el = document.createElement('div')
     el.id = id
     document.body.appendChild(el)
+    targets.push(el)
   }
 })
 
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). This file is one of the
+ * three body-wipers OUTSIDE `components/`, which a `components/**` glob would miss.
+ * The wipe removed the targets and the host's markup together, while leaving the host
+ * mounted — so the composable's `onScopeDispose` never ran and its observer was never
+ * disconnected. Unmounting runs it; the hand-made targets are removed by hand.
+ */
+enableAutoUnmount(afterEach)
+
 afterEach(() => {
-  document.body.innerHTML = ''
+  for (const target of targets.splice(0))
+    target.remove()
   vi.unstubAllGlobals()
 })
 

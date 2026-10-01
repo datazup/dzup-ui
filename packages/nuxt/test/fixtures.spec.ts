@@ -27,6 +27,12 @@ import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import {
+  OWNERSHIP_MANIFEST_SCHEMA_MAJOR,
+  OWNERSHIP_MANIFEST_SCHEMA_VERSION,
+  OWNERSHIP_MANIFEST_SUBPATH,
+  readOwnershipManifest,
+} from '../../contracts/src/ownership-manifest.ts'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const STAGE_MANIFEST = resolve(HERE, '.tarballs/stage.json')
@@ -327,7 +333,72 @@ describe('optional-peer', () => {
   })
 })
 
+/**
+ * What the installed second-tier package publishes, checked against the schema
+ * `@dzup-ui/contracts` publishes (TASK-S3-O1).
+ *
+ * Imported from contracts' SOURCE rather than by its package specifier: this
+ * config has no workspace aliases, so `@dzup-ui/contracts` would resolve to
+ * `packages/contracts/dist/`, which a fresh clone has not built. The same
+ * reason `validators/ownership-manifest.ts` reaches into the source.
+ *
+ * Checked here rather than at pack time because a `.tgz` would have to be
+ * un-tarred to read; after `:install` the package is already unpacked on disk.
+ */
+function secondTierManifestState(fixtureDir: string): { ok: boolean, detail: string } {
+  const pkgDir = join(fixtureDir, 'node_modules/@dzup-ui-pro/pro')
+  const pkgJson = join(pkgDir, 'package.json')
+  if (!existsSync(pkgJson))
+    return { ok: false, detail: '@dzup-ui-pro/pro is not installed in the fixture' }
+
+  const exports = (JSON.parse(readFileSync(pkgJson, 'utf8')) as { exports?: Record<string, unknown> }).exports
+  if (exports !== undefined && exports[OWNERSHIP_MANIFEST_SUBPATH] === undefined) {
+    return {
+      ok: false,
+      detail: `its package.json exports map does not declare "${OWNERSHIP_MANIFEST_SUBPATH}". `
+        + 'Shipping the file without exporting it is not conformance — a consumer cannot reach '
+        + 'past an exports map.',
+    }
+  }
+
+  const manifestPath = join(pkgDir, OWNERSHIP_MANIFEST_SUBPATH.slice(2))
+  if (!existsSync(manifestPath))
+    return { ok: false, detail: `no file at ${OWNERSHIP_MANIFEST_SUBPATH}` }
+
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(readFileSync(manifestPath, 'utf8'))
+  }
+  catch (error) {
+    return { ok: false, detail: `${OWNERSHIP_MANIFEST_SUBPATH} is not JSON: ${String(error)}` }
+  }
+
+  const result = readOwnershipManifest(parsed)
+  if (!result.ok) {
+    return {
+      ok: false,
+      detail: `${OWNERSHIP_MANIFEST_SUBPATH} does not conform (${result.rejection}, declared `
+        + `schemaVersion ${result.schemaVersion ?? '<absent>'}): ${
+          result.problems.map(problem => `${problem.at} ${problem.message}`).join('; ')}`,
+    }
+  }
+
+  return { ok: true, detail: `schemaVersion ${result.schemaVersion}, ${result.manifest!.entries.length} entries` }
+}
+
 describe('core-pro', () => {
+  it.runIf(isRunnable('core-pro'))('publishes a conforming ownership manifest', () => {
+    // The SECOND precondition, and the one that was unnameable until this
+    // repository published the schema. A tarball can install perfectly and
+    // still register nothing, because `includePro` resolves components from a
+    // conforming manifest — not from the package's mere presence. Asserted
+    // before the build so the failure names the cause instead of surfacing as
+    // "DzDataGridPro is not a component".
+    const state = secondTierManifestState(dirOf('core-pro'))
+    expect(state.ok, `core-pro: ${state.detail}`).toBe(true)
+    console.warn(`· core-pro: second-tier manifest ${state.detail}`)
+  })
+
   it.runIf(isRunnable('core-pro'))('auto-imports a Pro component from its tarball', async () => {
     const { html } = await generate(dirOf('core-pro'))
 
@@ -336,12 +407,21 @@ describe('core-pro', () => {
   }, BUILD_TIMEOUT_MS)
 
   it.skipIf(isRunnable('core-pro'))('is unrun without a Pro tarball', () => {
-    // Not a skip for convenience. Pro publishes no tarball and no ownership
-    // manifest, so this cell is genuinely unmeasured, and P1's exit criterion
-    // ("representative Pro components import by Nuxt auto-import") is unmet.
+    // Not a skip for convenience. This cell is genuinely unmeasured, and P1's
+    // exit criterion ("representative Pro components import by Nuxt
+    // auto-import") is unmet until it runs.
+    //
+    // TWO preconditions, both named. The second one could not be stated before
+    // TASK-S3-O1: a tarball that installs but publishes no conforming
+    // `manifests/component-ownership.manifest.json` would stage green, build,
+    // and register nothing — so naming only the tarball would send whoever
+    // unblocks this down the wrong path.
     console.warn(
-      `· core-pro: unrun — set DZUP_PRO_TARBALL to a tarball from a Pro checkout, `
-      + 'then re-run `yarn test:nuxt-fixtures:pack` and `:install`.',
+      '· core-pro: unrun — needs BOTH (1) DZUP_PRO_TARBALL set to a tarball from a second-tier '
+      + `checkout, then \`yarn test:nuxt-fixtures:pack\` and \`:install\`; and (2) that tarball `
+      + `exporting "${OWNERSHIP_MANIFEST_SUBPATH}" at schema major `
+      + `${OWNERSHIP_MANIFEST_SCHEMA_MAJOR} (this build reads `
+      + `${OWNERSHIP_MANIFEST_SCHEMA_VERSION}), per the schema published from @dzup-ui/contracts.`,
     )
     expect(process.env.DZUP_PRO_TARBALL ?? '').toBe('')
   })

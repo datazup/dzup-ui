@@ -1,4 +1,4 @@
-import { flushPromises, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzMention — Unit / behavior tests.
  *
@@ -57,11 +57,15 @@ function options(wrapper: ReturnType<typeof mountMention>) {
   return wrapper.findAll('[data-mention-option]')
 }
 
-describe('dzMention — trigger detection', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). Seven of the nine `describe`
+ * blocks below used to carry their own `document.body` wipe — seven copies of a hook
+ * that detached the markup and left the mention popover mounted, listeners and all. One
+ * `enableAutoUnmount` replaces all seven, covers the other two, and actually unmounts.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzMention — trigger detection', () => {
   it('opens the menu when a trigger char is typed', async () => {
     const wrapper = mountMention()
     expect(menu(wrapper).exists()).toBe(false)
@@ -93,10 +97,6 @@ describe('dzMention — trigger detection', () => {
 })
 
 describe('dzMention — filtering + search', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('filters static options by the typed query', async () => {
     const wrapper = mountMention()
     await typeInto(wrapper, '@al')
@@ -124,10 +124,6 @@ describe('dzMention — filtering + search', () => {
 })
 
 describe('dzMention — async resolution', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('shows a loading state then renders resolved options', async () => {
     let resolve!: (v: { label: string, value: string }[]) => void
     const resolver = vi.fn(
@@ -150,10 +146,6 @@ describe('dzMention — async resolution', () => {
 })
 
 describe('dzMention — keyboard insertion', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('inserts the highlighted option on Enter and closes', async () => {
     const wrapper = mountMention()
     await typeInto(wrapper, 'hi @al')
@@ -198,10 +190,6 @@ describe('dzMention — keyboard insertion', () => {
 })
 
 describe('dzMention — multiple triggers', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('activates the # trigger with its own option set', async () => {
     const wrapper = mountMention()
     await typeInto(wrapper, 'fixing #')
@@ -219,10 +207,6 @@ describe('dzMention — multiple triggers', () => {
 })
 
 describe('dzMention — dismiss', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('closes the menu on Escape and emits close', async () => {
     const wrapper = mountMention()
     await typeInto(wrapper, '@al')
@@ -246,10 +230,6 @@ describe('dzMention — dismiss', () => {
 })
 
 describe('dzMention — single-line mode', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('detects and inserts in input mode', async () => {
     const wrapper = mountMention({ multiline: false })
     await typeInto(wrapper, '@bo')

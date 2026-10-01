@@ -25,6 +25,7 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cachedDateTimeFormat } from '../../i18n/intl-cache.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
+import { focusedIndexIn } from '../../utilities/keyboardTargets.ts'
 import { timePickerVariants } from './DzTimePicker.variants.ts'
 
 defineOptions({
@@ -426,6 +427,81 @@ function scrollSelectedIntoView(): void {
 }
 
 // ---------------------------------------------------------------------------
+// APG `combobox` keyboard (RESIDUAL-13, closing RESIDUAL-12 §4 `F3`)
+// ---------------------------------------------------------------------------
+
+/**
+ * The four rows RESIDUAL-12 measured as backed by nothing.
+ *
+ * `Enter` was already real — the trigger is a `<button>`, so the platform opens
+ * the popover — which is what made the gap precise rather than general: *"the
+ * list opens; nothing moves the highlight once it is open."* The declared
+ * `combobox` contract is two halves, and only the first existed.
+ *
+ * - **On the trigger**, ArrowDown / ArrowUp open the list. That is literally the
+ *   first clause of both rows' action text.
+ * - **Inside a roll column**, ArrowDown / ArrowUp / Home / End move focus among
+ *   that column's enabled options.
+ *
+ * Scoped to the **column**, not to the panel, and that is the shape of the
+ * widget rather than a shortcut: a time is chosen from two to four independent
+ * unit lists (hours, minutes, seconds, meridiem), each its own
+ * `role="listbox"`. "The next option" in an hours column is the next hour, and a
+ * handler that walked the panel would step from `23` to `00 minutes`.
+ *
+ * The `select` layout needs none of this: it is native `<select>` elements,
+ * which own all four keys themselves.
+ */
+function onTriggerKeydown(event: KeyboardEvent): void {
+  if (resolvedDisabled.value || open.value)
+    return
+  if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp')
+    return
+  event.preventDefault()
+  open.value = true
+}
+
+/** Enabled options of one roll column, in DOM order. */
+function columnOptions(column: HTMLElement): HTMLElement[] {
+  return Array.from(column.querySelectorAll<HTMLElement>('button:not([disabled])'))
+}
+
+function onColumnKeydown(event: KeyboardEvent): void {
+  const column = event.currentTarget
+  if (!(column instanceof HTMLElement))
+    return
+  const options = columnOptions(column)
+  if (options.length === 0)
+    return
+
+  const current = focusedIndexIn(options, event)
+  let next: number | null = null
+  switch (event.key) {
+    case 'ArrowDown':
+      next = current + 1
+      break
+    case 'ArrowUp':
+      next = current === -1 ? options.length - 1 : current - 1
+      break
+    case 'Home':
+      next = 0
+      break
+    case 'End':
+      next = options.length - 1
+      break
+    default:
+      break
+  }
+
+  if (next === null)
+    return
+  // A listbox stops at its ends; wrapping from 23:00 to 00:00 on one arrow press
+  // is the `roll` metaphor's visual suggestion, not the APG pattern's behaviour.
+  event.preventDefault()
+  options[Math.max(0, Math.min(next, options.length - 1))]?.focus()
+}
+
+// ---------------------------------------------------------------------------
 // Open/close lifecycle
 // ---------------------------------------------------------------------------
 
@@ -504,6 +580,7 @@ const { testId: dzTestId } = useDzTestIds()
             :disabled="resolvedDisabled || undefined"
             @focus="handleFocus"
             @blur="handleBlur"
+            @keydown="onTriggerKeydown"
           >
             <slot name="trigger" :value="model" :display="displayValue">
               <span v-if="displayValue" data-part="label" :class="[styles.valueText(), ui?.label]">{{ displayValue }}</span>
@@ -554,6 +631,7 @@ const { testId: dzTestId } = useDzTestIds()
                 data-roll-column
                 role="listbox"
                 :aria-label="dzMessages.hours"
+                @keydown="onColumnKeydown"
               >
                 <button
                   v-for="h in hourValues"
@@ -577,6 +655,7 @@ const { testId: dzTestId } = useDzTestIds()
                 data-roll-column
                 role="listbox"
                 :aria-label="dzMessages.minutes"
+                @keydown="onColumnKeydown"
               >
                 <button
                   v-for="m in minuteValues"
@@ -601,6 +680,7 @@ const { testId: dzTestId } = useDzTestIds()
                 data-roll-column
                 role="listbox"
                 :aria-label="dzMessages.seconds"
+                @keydown="onColumnKeydown"
               >
                 <button
                   v-for="s in secondValues"
@@ -625,6 +705,7 @@ const { testId: dzTestId } = useDzTestIds()
                 data-roll-column
                 role="listbox"
                 :aria-label="dzMessages.dayPeriod"
+                @keydown="onColumnKeydown"
               >
                 <button
                   v-for="mer in (['AM', 'PM'] as const)"

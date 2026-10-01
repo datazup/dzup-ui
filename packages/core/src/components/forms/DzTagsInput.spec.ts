@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzTagsInput — Unit / behavior tests.
  */
@@ -27,11 +27,15 @@ async function typeAndKey(
   await input.trigger('keydown', { key })
 }
 
-describe('dzTagsInput — add tokens', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). Eight of the nine `describe`
+ * blocks below used to carry their own `document.body` wipe — eight copies of a hook
+ * that detached the markup and left the control mounted. One `enableAutoUnmount`
+ * replaces all eight, covers the ninth, and actually unmounts.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzTagsInput — add tokens', () => {
   it('commits a token on Enter', async () => {
     const wrapper = mountTags()
     await typeAndKey(wrapper, 'apple', 'Enter')
@@ -63,10 +67,6 @@ describe('dzTagsInput — add tokens', () => {
 })
 
 describe('dzTagsInput — remove tokens', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('removes a token via its chip close button', async () => {
     const wrapper = mountTags({ value: ['x', 'y'] })
     const closeBtn = wrapper.findAll('[data-dz-tag] button')[0]!
@@ -93,10 +93,6 @@ describe('dzTagsInput — remove tokens', () => {
 })
 
 describe('dzTagsInput — duplicates & max', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('rejects duplicates by default', async () => {
     const wrapper = mountTags({ value: ['dup'] })
     await typeAndKey(wrapper, 'dup', 'Enter')
@@ -119,10 +115,6 @@ describe('dzTagsInput — duplicates & max', () => {
 })
 
 describe('dzTagsInput — validation', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   const isEmail = (t: string) => /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(t)
 
   it('rejects tokens failing the validate predicate', async () => {
@@ -140,10 +132,6 @@ describe('dzTagsInput — validation', () => {
 })
 
 describe('dzTagsInput — paste', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   function paste(wrapper: ReturnType<typeof mountTags>, text: string) {
     return field(wrapper).trigger('paste', {
       clipboardData: { getData: () => text },
@@ -171,10 +159,6 @@ describe('dzTagsInput — paste', () => {
 })
 
 describe('dzTagsInput — addOnBlur', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('commits the draft on blur when enabled', async () => {
     const wrapper = mountTags({ addOnBlur: true })
     const input = field(wrapper)
@@ -193,10 +177,6 @@ describe('dzTagsInput — addOnBlur', () => {
 })
 
 describe('dzTagsInput — disabled & readonly', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('does not add tokens when disabled', async () => {
     const wrapper = mountTags({ disabled: true })
     await typeAndKey(wrapper, 'nope', 'Enter')
@@ -216,10 +196,6 @@ describe('dzTagsInput — disabled & readonly', () => {
 })
 
 describe('dzTagsInput — emits', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('forwards focus and blur events', async () => {
     const wrapper = mountTags()
     const input = field(wrapper)

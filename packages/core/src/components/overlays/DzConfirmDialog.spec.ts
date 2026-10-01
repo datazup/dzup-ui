@@ -4,7 +4,7 @@
  * Tests rendering, confirm/cancel interactions, loading state,
  * variant styling, and slot overrides.
  */
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import DzConfirmDialog from './DzConfirmDialog.vue'
 
@@ -30,11 +30,15 @@ function mountConfirmDialog(
   })
 }
 
-describe('dzConfirmDialog -- Unit Tests', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). A `document.body` wipe
+ * detached the markup and left the dialog mounted — focus scope, scroll lock
+ * and escape listener all still live over unreachable nodes. The one host element
+ * this file creates by hand is removed by hand, below.
+ */
+enableAutoUnmount(afterEach)
 
+describe('dzConfirmDialog -- Unit Tests', () => {
   it('renders title text', () => {
     const wrapper = mountConfirmDialog({ title: 'Delete Item?' })
     expect(document.body.textContent).toContain('Delete Item?')
@@ -248,5 +252,8 @@ describe('dzConfirmDialog -- Unit Tests', () => {
     expect(dialog).toBeTruthy()
     expect(host.contains(dialog)).toBe(false)
     wrapper.unmount()
+    // Hand-made host, so hand-removed: `attachTo` cleanup removes the element VTU
+    // created inside it, never the element the test brought.
+    host.remove()
   })
 })

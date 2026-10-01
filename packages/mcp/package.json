@@ -43,8 +43,9 @@
   "bin": {
     "dzup-ui-mcp": "./dist/index.js"
   },
-  "//files": "TASK-N2-A1. `docs` was added so docs/mcp-tool-surface.json reaches the tarball: the published README links to it, and the file is the machine-readable form of this package's own tool surface -- per-tool JSON Schema, observed data source and evidence state. For an AI-facing package that is payload, not metadata. `yarn validate:mcp` fails when a relative README link points at something `files` does not ship.",
+  "//files": "TASK-N2-A1. `docs` was added so docs/mcp-tool-surface.json reaches the tarball: the published README links to it, and the file is the machine-readable form of this package's own tool surface -- per-tool JSON Schema, observed data source and evidence state. For an AI-facing package that is payload, not metadata. `yarn validate:mcp` fails when a relative README link points at something `files` does not ship. RESIDUAL-01 (D-S2O1-2) added `LICENSE`: this package declared MIT and was the only published package shipping no licence text. npm/yarn pack include a root LICENSE by default, but the other seven packages under packages/ all name it explicitly and a default is not a declaration -- the entry is what makes the inclusion a property of the manifest rather than of the packer's version.",
   "files": [
+    "LICENSE",
     "README.md",
     "dist",
     "docs",

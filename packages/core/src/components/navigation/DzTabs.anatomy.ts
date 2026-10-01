@@ -100,6 +100,20 @@ export const anatomy = {
       wcag: ['2.1.2'],
       apg: 'tabs',
     },
+    /*
+     * Added 2026-09-28 (RESIDUAL-12, `undeclared-handler`). `DzTabTrigger.vue`'s
+     * `handleKeydown` has always closed a `closable` tab on Delete or Backspace
+     * — it is the only way to reach the `close` part from the keyboard — and
+     * neither key was in this table. The family anatomy is declared here
+     * (`DzTabTrigger` is a `compound-part` of `DzTabs`), so this is where they
+     * belong; there is no other table for a reader to find them in.
+     *
+     * No `apg`: the APG `tabs` pattern has no dismiss key, so this is a
+     * component-specific affordance, which the contract says to publish as one
+     * rather than to dress as a pattern it is not.
+     */
+    { key: 'Delete', when: 'closable', action: 'Close the focused tab.', wcag: ['2.1.1'] },
+    { key: 'Backspace', when: 'closable', action: 'Close the focused tab.', wcag: ['2.1.1'] },
   ],
 
   /** Tier B — focus management, keyboard activation and a controlled value. */

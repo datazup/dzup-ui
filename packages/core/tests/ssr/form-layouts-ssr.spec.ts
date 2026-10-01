@@ -19,7 +19,7 @@
 
 import type { Component } from 'vue'
 import { renderToString } from '@vue/server-renderer'
-import { createSSRApp, h } from 'vue'
+import { createSSRApp, h, nextTick } from 'vue'
 
 vi.setConfig({ testTimeout: 15000 })
 
@@ -129,6 +129,59 @@ describe('sSR: form layouts render their preselected panel', () => {
 
     expect(html).toContain('Account')
     expect(html).toContain('Profile')
+    // RESIDUAL-11 `D-RES10-1`. "Renders the active step" was the title and the
+    // titles were the whole assertion — which two blank steps would also have
+    // satisfied. `DzStepperItem` claimed its index in `onMounted`, so on the
+    // server every step was `completed` and none was current: this component's
+    // progress state did not survive SSR at all. The index is claimed in `setup`
+    // now, so the second step is the current one *in the server HTML*.
+    expect(html).toMatch(/data-state="completed"[\s\S]*data-state="active"/)
+    expect((html.match(/aria-current="step"/g) ?? []).length).toBe(1)
+  })
+
+  /**
+   * RESIDUAL-11 `D-RES10-1`, the half an SSR string cannot show.
+   *
+   * The old defect produced **no** Vue hydration warning, and that is why it
+   * survived: the client's *first* render agreed with the server (both had
+   * `stepIndex === -1`), so hydration matched, and the correction arrived
+   * afterwards in `onMounted` as an ordinary reactive patch. Measured on the
+   * defective tree: 2,706 bytes of server HTML became 2,317 bytes of DOM, three
+   * `completed` states became `completed`/`active`/`upcoming`, three check marks
+   * became one, and `aria-current` appeared from nowhere — silently, with zero
+   * console output.
+   *
+   * So the assertion that holds the fix is not "no warning" (there never was
+   * one). It is that hydrating the server HTML changes **nothing**.
+   */
+  it('dzStepper hydrates its server HTML without rewriting a single byte', async () => {
+    const DzStepper = await load('navigation', 'DzStepper')
+    const DzStepperItem = await load('navigation', 'DzStepperItem')
+    const root = (): Component => ({
+      render() {
+        return h(DzStepper, { modelValue: 1 }, {
+          default: () => [
+            h(DzStepperItem, { title: 'Account' }),
+            h(DzStepperItem, { title: 'Profile' }),
+            h(DzStepperItem, { title: 'Review' }),
+          ],
+        })
+      },
+    })
+
+    const html = await renderToString(createSSRApp(root()))
+    const container = document.createElement('div')
+    container.innerHTML = html
+    document.body.appendChild(container)
+
+    const app = createSSRApp(root())
+    app.mount(container)
+    await nextTick()
+
+    expect(container.innerHTML).toBe(html)
+
+    app.unmount()
+    container.remove()
   })
 
   it('renders the same output twice for the same input', async () => {

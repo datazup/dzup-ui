@@ -90,6 +90,33 @@ function handleKeyDown(event: KeyboardEvent): void {
   }
 }
 
+/**
+ * A naming-capable role, and only when the root is actually named
+ * (RESIDUAL-12, closing `D-RES11-1`).
+ *
+ * An unnamed tag carries **no role** — it is inline content, its own text names
+ * it, and `generic` is the honest answer. This component has never carried a role
+ * and that was always right; `DzChip` came round to it in RESIDUAL-11.
+ *
+ * A **named** tag cannot stay `generic`: ARIA 1.2 prohibits `aria-label` and
+ * `aria-labelledby` on `generic`, so the author's name was invalid and unreliable,
+ * and axe reported `aria-prohibited-attr` in its **`incomplete`** bucket — which
+ * `toHaveNoViolations()` does not read, which is why this survived in `DzTag` from
+ * the day it was written until RESIDUAL-11 measured it (§3.3) and RESIDUAL-12
+ * fixed it.
+ *
+ * `group` was chosen over `note`, `button` and `listitem` on measured axe output;
+ * the table, and the rejected alternative of simply not forwarding the two props,
+ * are recorded once in `DzChip.vue` beside the identical computed. **The two
+ * components are kept identical on purpose** — RESIDUAL-11 §3.2 established that
+ * these roots are attribute-for-attribute the same element, and `DzChip.spec.ts`
+ * asserts they agree about the root role, so fixing one alone would have
+ * re-created exactly the divergence that test exists to prevent.
+ */
+const namingRole = computed<'group' | undefined>(() =>
+  props.ariaLabel !== undefined || props.ariaLabelledby !== undefined ? 'group' : undefined,
+)
+
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
 const { testId: dzTestId } = useDzTestIds()
 </script>
@@ -99,6 +126,7 @@ const { testId: dzTestId } = useDzTestIds()
     :id="id"
     data-part="root"
     :class="classes"
+    :role="namingRole"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"

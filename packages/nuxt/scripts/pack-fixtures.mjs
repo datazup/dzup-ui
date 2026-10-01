@@ -371,7 +371,11 @@ if (isMain) {
   if (tarballs['@dzup-ui-pro/pro'] === undefined) {
     console.warn(
       '\n· DZUP_PRO_TARBALL is not set. Fixtures that need the Pro package are marked unrun; '
-      + 'they are not skipped silently.',
+      + 'they are not skipped silently.'
+      + '\n  Note the SECOND precondition (TASK-S3-O1): the tarball must also export '
+      + '"./manifests/component-ownership.manifest.json" conforming to the schema published from '
+      + '@dzup-ui/contracts. A tarball without it installs and builds, and registers no '
+      + 'second-tier component — fixtures.spec.ts asserts that before it asserts the render.',
     )
   }
 

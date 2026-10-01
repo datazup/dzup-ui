@@ -152,6 +152,34 @@ export function installDzupUiDomTestEnvironment(): () => void {
 }
 
 /**
+ * The security-corpus **conformance runner** (TASK-S3-O3).
+ *
+ * **Types only from this barrel**, for the same reason as the corpus block below: the
+ * runner loads fixture JSON from disk. Import the runtime from the subpath:
+ *
+ * ```ts
+ * import { expectSecurityConformance, runSecurityConformance } from '@dzup-ui/testing/security-conformance'
+ * ```
+ *
+ * The corpus says what each sink owes; this says whether a given
+ * `DzSanitizerAdapter` delivers it. Any adapter satisfies
+ * {@link ConformanceAdapter} structurally, so a host's own adapter and this
+ * repository's escaping default are measured by the same code, and the result is
+ * pinned to a corpus *content* version rather than only a schema version.
+ */
+export type {
+  ConformanceAdapter,
+  ConformanceCell,
+  ConformanceSanitizeContext,
+  ConformanceVerdict,
+  FailClosedRecord,
+  SecurityConformanceOptions,
+  SecurityConformanceReport,
+  UnassertedCell,
+  VerdictClassification,
+} from './security-conformance.js'
+
+/**
  * The security-fixture corpus schema (TASK-N1-O5).
  *
  * **Types only from this barrel.** The loader reads JSON from disk with

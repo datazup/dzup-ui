@@ -156,9 +156,43 @@ describe('dzChip', () => {
 
   // ── Accessibility ──
 
-  it('has role="status"', () => {
+  /**
+   * RESIDUAL-11 `D-RES10-3`. This block asserted `role="status"`, which is an
+   * ARIA **live region** — so every chip on the page was one, and adding,
+   * relabelling or removing a chip announced itself over whatever the user was
+   * reading. A chip is inline content. The assertion is inverted rather than
+   * deleted, because "no role" is the claim and a claim needs a test.
+   */
+  it('declares no role on the root, and is not a live region', () => {
     const wrapper = mount(DzChip, { slots: { default: 'chip' } })
-    expect(wrapper.attributes('role')).toBe('status')
+    expect(wrapper.attributes('role')).toBeUndefined()
+    expect(wrapper.attributes('aria-live')).toBeUndefined()
+    expect(wrapper.attributes('aria-atomic')).toBeUndefined()
+  })
+
+  it('is not a live region when closable either — the state that also takes focus', () => {
+    // `closable` adds `tabindex="0"`. With the old role that made the chip a
+    // FOCUSABLE live region with no widget role; the remove control is the widget
+    // and it is a real `<button>`.
+    const wrapper = mount(DzChip, { props: { closable: true }, slots: { default: 'chip' } })
+    expect(wrapper.attributes('role')).toBeUndefined()
+    expect(wrapper.attributes('tabindex')).toBe('0')
+    expect(wrapper.find('button[data-part="close"]').exists()).toBe(true)
+  })
+
+  /**
+   * `DzTag` is this component's sibling: same `<span>` root, same props, same
+   * `data-state`/`data-tone`/`tabindex` ladder, same remove button. It has never
+   * carried a role, and it was the one that was right. Comparing the two rather
+   * than restating a literal is what stops them diverging again — the divergence
+   * is how `D-RES10-3` existed at all.
+   */
+  it('agrees with DzTag about the root role', async () => {
+    const DzTag = (await import('./DzTag.vue')).default
+    const chip = mount(DzChip, { slots: { default: 'x' } })
+    const tag = mount(DzTag, { slots: { default: 'x' } })
+    expect(chip.attributes('role')).toBe(tag.attributes('role'))
+    expect(chip.element.tagName).toBe(tag.element.tagName)
   })
 
   it('forwards aria-label', () => {

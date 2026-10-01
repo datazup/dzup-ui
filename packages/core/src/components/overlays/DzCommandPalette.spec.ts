@@ -2,7 +2,7 @@ import type { CommandItem } from './DzCommandPalette.types'
 /**
  * DzCommandPalette — Unit / behavior tests.
  */
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 import { mountWithDialogStubs } from '../../../test-utils/dialog'
@@ -16,9 +16,14 @@ beforeEach(() => {
   Element.prototype.scrollIntoView = vi.fn()
 })
 
-afterEach(() => {
-  document.body.innerHTML = ''
-})
+/**
+ * Teardown through Vue, not through the DOM (RESIDUAL-18). A `document.body` wipe
+ * left each palette mounted with its document-level keydown listener attached,
+ * over a subtree nothing could reach — and this file dispatches Escape on `document`,
+ * so a surviving listener from a previous test is exactly the wrong kind of company.
+ * `mountWithDialogStubs` mounts through VTU, so auto-unmount tracks it too.
+ */
+enableAutoUnmount(afterEach)
 
 const sampleItems: CommandItem[] = [
   { id: 'edit', label: 'Edit File', shortcut: 'Ctrl+E', group: 'actions' },

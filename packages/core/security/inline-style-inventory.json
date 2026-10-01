@@ -117,14 +117,14 @@
     },
     {
       "file": "packages/core/src/components/data/DzCalendar.vue",
-      "line": 372,
+      "line": 380,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/data/DzChip.vue",
-      "line": 110,
+      "line": 190,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -152,28 +152,28 @@
     },
     {
       "file": "packages/core/src/components/data/DzDataGrid.vue",
-      "line": 150,
+      "line": 163,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/data/DzDataGridBody.vue",
-      "line": 118,
+      "line": 138,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"getColumnStyle(col)\""
     },
     {
       "file": "packages/core/src/components/data/DzDataGridHeader.vue",
-      "line": 102,
+      "line": 130,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"getColumnStyle(col)\""
     },
     {
       "file": "packages/core/src/components/data/DzDataView.vue",
-      "line": 244,
+      "line": 260,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -215,7 +215,7 @@
     },
     {
       "file": "packages/core/src/components/data/DzOrderList.vue",
-      "line": 499,
+      "line": 547,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -264,7 +264,7 @@
     },
     {
       "file": "packages/core/src/components/data/DzTag.vue",
-      "line": 109,
+      "line": 137,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -418,7 +418,7 @@
     },
     {
       "file": "packages/core/src/components/forms/DzCascader.vue",
-      "line": 544,
+      "line": 568,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -481,21 +481,21 @@
     },
     {
       "file": "packages/core/src/components/forms/DzCombobox.vue",
-      "line": 376,
+      "line": 386,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/forms/DzDatePicker.vue",
-      "line": 184,
+      "line": 228,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/forms/DzDateRangePicker.vue",
-      "line": 210,
+      "line": 241,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -523,28 +523,28 @@
     },
     {
       "file": "packages/core/src/components/forms/DzListbox.vue",
-      "line": 398,
+      "line": 429,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/forms/DzMention.vue",
-      "line": 751,
+      "line": 761,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/forms/DzMention.vue",
-      "line": 830,
+      "line": 841,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"menuStyle\""
     },
     {
       "file": "packages/core/src/components/forms/DzMultiSelect.vue",
-      "line": 270,
+      "line": 280,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -579,7 +579,7 @@
     },
     {
       "file": "packages/core/src/components/forms/DzSelect.vue",
-      "line": 363,
+      "line": 497,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -607,21 +607,21 @@
     },
     {
       "file": "packages/core/src/components/forms/DzTimePicker.vue",
-      "line": 481,
+      "line": 557,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/forms/DzTransfer.vue",
-      "line": 227,
+      "line": 388,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/forms/DzTreeSelect.vue",
-      "line": 650,
+      "line": 660,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
@@ -747,14 +747,14 @@
     },
     {
       "file": "packages/core/src/components/media/DzCarousel.vue",
-      "line": 158,
+      "line": 197,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/media/DzCarousel.vue",
-      "line": 167,
+      "line": 207,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ transform: orientation === 'horizontal' ? `translateX(-${model * 100}%)` : `translateY(-${model * 100}%)`, }\""
@@ -831,14 +831,14 @@
     },
     {
       "file": "packages/core/src/components/navigation/DzMegaMenu.vue",
-      "line": 403,
+      "line": 440,
       "kind": "static",
       "disposition": "recipe-movable",
       "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/navigation/DzMegaMenu.vue",
-      "line": 559,
+      "line": 598,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ gridTemplateColumns: `repeat(${item.items!.length}, minmax(0, 1fr))` }\""
@@ -936,14 +936,14 @@
     },
     {
       "file": "packages/core/src/components/overlays/DzTour.vue",
-      "line": 295,
+      "line": 334,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"cutoutStyle\""
     },
     {
       "file": "packages/core/src/components/overlays/DzTour.vue",
-      "line": 311,
+      "line": 350,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"panelStyle\""

@@ -56,6 +56,27 @@ export const anatomy = {
       wcag: ['2.1.1'],
       apg: 'menu-button',
     },
+    /*
+     * Added 2026-09-28 (RESIDUAL-12, `undeclared-handler`). `onMenuKeydown` in
+     * `DzSpeedDial.vue` has always moved the roving focus along the fan with
+     * these four keys — `nextKey = isVertical ? 'ArrowDown' : 'ArrowRight'` —
+     * and the table declared only Home, End and Escape, so a reader of the
+     * published keyboard section learned that the fan has ends and not that it
+     * has steps. The comment above this contract already said *"the roving focus
+     * moves with ArrowUp/ArrowDown along the fan"*: the behaviour was known, and
+     * only the declaration was missing.
+     *
+     * `rtl: 'fixed'` on the horizontal pair, and it agrees with this anatomy's
+     * `rtl.keyboard: 'none'`: the fan is laid out from a physical corner the
+     * user can see, the handler reads `isVertical` and never the document
+     * direction, so ArrowRight means "further along the fan" in both writing
+     * directions. Declaring `mirrored` here would contradict the rtl contract
+     * and `quality/keyboard-contract.spec.ts` would say so.
+     */
+    { key: 'ArrowDown', when: 'open', action: 'Move focus to the next action in a vertical fan.', wcag: ['2.1.1'], apg: 'menu' },
+    { key: 'ArrowUp', when: 'open', action: 'Move focus to the previous action in a vertical fan.', wcag: ['2.1.1'], apg: 'menu' },
+    { key: 'ArrowRight', when: 'open', action: 'Move focus to the next action in a horizontal fan.', wcag: ['2.1.1'], apg: 'menu', rtl: 'fixed' },
+    { key: 'ArrowLeft', when: 'open', action: 'Move focus to the previous action in a horizontal fan.', wcag: ['2.1.1'], apg: 'menu', rtl: 'fixed' },
     { key: 'Home', when: 'open', action: 'Move focus to the first action.', wcag: ['2.1.1'], apg: 'menu' },
     { key: 'End', when: 'open', action: 'Move focus to the last action.', wcag: ['2.1.1'], apg: 'menu' },
     {

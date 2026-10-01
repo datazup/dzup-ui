@@ -108,6 +108,39 @@ describe('dzCalendar — keyboard grid navigation', () => {
     expect(wrapper.emitted('panelChange')?.at(-1)).toEqual([{ focusedDate: '2026-07-15', view: 'month' }])
   })
 
+  // `D-RES14-3`, closed by RESIDUAL-15. The two `modifiers: ['Shift']` page rows
+  // have been published since TASK-R5-O5 and nothing read `shiftKey`, so
+  // RESIDUAL-14 §3.2 ejected them once a declared modifier became part of the
+  // contract. Both tests drive the key WITH the modifier and assert the year the
+  // panel lands on — not that a `PageUp` arm exists, which the month rows above
+  // already prove.
+  it('shift+PageUp moves focus back one year and emits panelChange', async () => {
+    const wrapper = mountCal()
+    const grid = wrapper.get('[role="grid"]')
+    grid.element.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'PageUp', shiftKey: true, bubbles: true, cancelable: true }),
+    )
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2025-06-15'])
+    expect(wrapper.emitted('panelChange')?.at(-1)).toEqual([{ focusedDate: '2025-06-15', view: 'month' }])
+  })
+
+  it('shift+PageDown moves focus forward one year, and the unmodified key still moves a month', async () => {
+    const wrapper = mountCal()
+    const grid = wrapper.get('[role="grid"]')
+    grid.element.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'PageDown', shiftKey: true, bubbles: true, cancelable: true }),
+    )
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2027-06-15'])
+
+    // The same arm serves both rows, so the unmodified behaviour is asserted here
+    // too: a ternary that ignored `shiftKey` in the other direction would pass the
+    // test above and break the month row.
+    await grid.trigger('keydown', { key: 'PageDown' })
+    expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2027-07-15'])
+  })
+
   it('home/End jump to week edges', async () => {
     const wrapper = mountCal({ firstDayOfWeek: 0 }) // Sunday-start
     const grid = wrapper.get('[role="grid"]')

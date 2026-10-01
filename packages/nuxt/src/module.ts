@@ -1,6 +1,13 @@
+import type { OwnershipManifestConsumption, OwnershipManifestResolution } from '@dzup-ui/contracts'
+import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import {
+  consumeOwnershipManifest,
+  ownershipCollisionDiagnostic,
+  ownershipManifestDiagnostic,
+} from '@dzup-ui/contracts'
 import { COMPONENT_OWNERSHIP, OWNERSHIP_TIERS } from '@dzup-ui/core/ownership'
 import { addComponent, defineNuxtModule, useLogger } from '@nuxt/kit'
 
@@ -114,9 +121,76 @@ export function proMissingMessage(): string {
 }
 
 /**
+ * Read the second tier's ownership manifest **as data** (TASK-S3-O1).
+ *
+ * This module imports no second-tier runtime source: it resolves a declared
+ * JSON subpath from the consumer's project and parses it. The package is never
+ * `import()`ed, so nothing in it executes during a consumer's build.
+ *
+ * Only the filesystem work lives here. Which failure happened, and what may be
+ * done with the result, is `consumeOwnershipManifest` in `@dzup-ui/contracts`,
+ * shared verbatim with `@dzup-ui/core`'s resolver — the two consumers of one
+ * published contract must not develop two accounts of it, which is precisely
+ * how this module's handwritten Pro list and the resolver's handwritten Pro
+ * list came to disagree with each other and with both packages.
+ *
+ * `projectRoot` is a DIRECTORY, anchored the same way `canResolvePro` anchors
+ * it and for the same reason.
+ */
+export function loadSecondTierOwnership(projectRoot?: string): OwnershipManifestConsumption {
+  const resolveFrom = projectRoot === undefined
+    ? import.meta.url
+    : pathToFileURL(join(projectRoot, 'package.json')).href
+  const resolver = createRequire(resolveFrom)
+
+  return consumeOwnershipManifest(PRO_PACKAGE, {
+    resolve: (specifier) => {
+      try {
+        return resolver.resolve(specifier)
+      }
+      catch {
+        return undefined
+      }
+    },
+    readText: path => readFileSync(path, 'utf8'),
+  })
+}
+
+/**
+ * The message a consumer sees when `includePro` is on and no conforming
+ * ownership manifest could be consumed from the second-tier package.
+ *
+ * Built from the shared diagnostic in `@dzup-ui/contracts`, so this module and
+ * `@dzup-ui/core`'s resolver say the same thing about the same situation, in
+ * each case naming the off switch *that* tool actually has.
+ */
+export function secondTierMissingMessage(load: OwnershipManifestConsumption): string {
+  if (load.availability === 'loaded')
+    throw new Error('secondTierMissingMessage called for a manifest that loaded')
+
+  return ownershipManifestDiagnostic(load.availability, {
+    consumer: '@dzup-ui/nuxt',
+    packageName: PRO_PACKAGE,
+    option: 'dzupUi.includePro to false',
+    detail: load.detail,
+  })
+}
+
+/**
  * The message a consumer sees when Pro is installed but the ownership table
  * this module was built against has no Pro tier — so there are no Pro names to
  * register even though the package is present.
+ *
+ * @deprecated since TASK-S3-O1. It described the only second-tier route that
+ * existed when it was written — a table baked in at this library's build time —
+ * and that is no longer the only one: the installed package's own published
+ * manifest is now read at `setup` time, and it is the route that matters,
+ * because the version a consumer installed is the version whose components they
+ * can import. A build-time-only table is a claim about a package on *our*
+ * machine. `setup` therefore emits {@link secondTierMissingMessage}, which
+ * names which of the three failures occurred. This is kept exported because
+ * removing a published export is a breaking change, and its text is still a
+ * true statement about the baked-in table.
  */
 export function proTierMissingMessage(): string {
   return `[@dzup-ui/nuxt] includePro is true and "${PRO_PACKAGE}" resolves, but the ownership `
@@ -153,11 +227,63 @@ export function proAvailability(
  * named Pro components (`DzScheduler`, `DzComment`, `DzVirtualTable`) that Pro
  * does not export. The table is generated from the packages themselves.
  */
-export function componentsToRegister(includePro: boolean): { name: string, from: string }[] {
-  return Object.entries(COMPONENT_OWNERSHIP)
+export function componentsToRegister(
+  includePro: boolean,
+  secondTier: Record<string, OwnershipManifestResolution> = {},
+): { name: string, from: string }[] {
+  // Annotated, not inferred. Inference narrows `from` to the generated table's
+  // `OwningPackage` union, and the second-tier rows below carry the manifest's
+  // own specifier — which may be `pkg/sub`, a string the generated union cannot
+  // express. The annotation is the function's own declared return type.
+  const rows: { name: string, from: string }[] = Object.entries(COMPONENT_OWNERSHIP)
     .filter(([, owned]) => includePro || owned.from !== PRO_PACKAGE)
     .map(([name, owned]) => ({ name, from: owned.from }))
-    .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+
+  if (includePro) {
+    for (const [name, resolution] of Object.entries(secondTier)) {
+      if (COMPONENT_OWNERSHIP[name] !== undefined)
+        continue
+      // `from` is the manifest's own specifier — `pkg` for a root-barrel
+      // symbol, `pkg/sub` for one the second tier exposes on a narrower
+      // subpath. The generated table can only ever say `pkg`; the published
+      // schema is what makes the narrower answer expressible at all.
+      rows.push({ name, from: resolution.from })
+    }
+  }
+
+  return rows.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+}
+
+/**
+ * Second-tier names that do not collide with a name the first tier already owns.
+ *
+ * A collision keeps the **first-tier** answer and reports both packages. That
+ * is not a precedence rule chosen here: choosing a winner between two tiers is
+ * an owner decision recorded in this repository's collision policy. What is
+ * decided here is that a package installed downstream must not be able to take
+ * a first-tier component away from a consumer by shipping a colliding name —
+ * a downstream package breaking an upstream one at a consumer's build time is
+ * a failure mode nobody has authorised. The consumer is told which two packages
+ * disagree, so the silence that made 08-11 finding H1 expensive does not recur.
+ */
+export function withoutCollisions(
+  symbols: Record<string, OwnershipManifestResolution>,
+  report: (message: string) => void,
+): Record<string, OwnershipManifestResolution> {
+  const kept: Record<string, OwnershipManifestResolution> = {}
+  for (const [name, resolution] of Object.entries(symbols)) {
+    const owned = COMPONENT_OWNERSHIP[name]
+    if (owned !== undefined) {
+      report(ownershipCollisionDiagnostic(name, {
+        consumer: '@dzup-ui/nuxt',
+        firstTier: owned.from,
+        secondTier: resolution.from,
+      }))
+      continue
+    }
+    kept[name] = resolution
+  }
+  return kept
 }
 
 export default defineNuxtModule<DzupUiModuleOptions>({
@@ -190,25 +316,52 @@ export default defineNuxtModule<DzupUiModuleOptions>({
     nuxt.options.build.transpile.push(CORE_PACKAGE, TOKENS_PACKAGE)
 
     // `includePro` is honoured only as far as the project can actually support
-    // it. A missing Pro package is a consumer-fixable mistake; a Core-only
-    // ownership table is ours. Both continue with Core rather than failing the
+    // it. A missing Pro package is a consumer-fixable mistake; a package that
+    // ships no conforming manifest is that package's; a Core-only baked-in
+    // table is ours. All three continue with Core rather than failing the
     // build, because a half-configured option should not cost a consumer their
     // whole app.
+    //
+    // Two routes to the second tier, and they compose. The baked-in table
+    // (`OWNERSHIP_TIERS` includes `pro`) is what a build generated with
+    // DZUP_PRO_OWNERSHIP_MANIFEST carries. The installed package's own
+    // published manifest is read here, at the consumer's build — and that is
+    // the route that matters, because the version they installed is the
+    // version whose components they can import (TASK-S3-O1).
+    //
+    // ONE diagnostic, never two: a project missing both routes has one problem.
     let registerPro = false
+    let secondTier: Record<string, OwnershipManifestResolution> = {}
     if (options.includePro === true) {
       const availability = proAvailability(canResolvePro(nuxt.options.rootDir))
-      if (availability === 'not-installed')
+      if (availability === 'not-installed') {
         logger.error(proMissingMessage())
-      else if (availability === 'no-ownership-tier')
-        logger.error(proTierMissingMessage())
-      else
-        registerPro = true
+      }
+      else {
+        const load = loadSecondTierOwnership(nuxt.options.rootDir)
+        if (load.availability === 'loaded') {
+          secondTier = withoutCollisions(load.symbols, message => logger.warn(message))
+          registerPro = true
+        }
+        else if (availability === 'available') {
+          // The baked-in table already carries the tier, so registration works;
+          // the installed package simply publishes no manifest of its own.
+          // Reported at `warn`, not `error`: nothing is broken for this
+          // consumer, but the two sources of truth disagree and somebody should
+          // know before the baked-in table goes stale.
+          logger.warn(secondTierMissingMessage(load))
+          registerPro = true
+        }
+        else {
+          logger.error(secondTierMissingMessage(load))
+        }
+      }
     }
 
     if (registerPro)
       nuxt.options.build.transpile.push(PRO_PACKAGE)
 
-    for (const { name, from } of componentsToRegister(registerPro)) {
+    for (const { name, from } of componentsToRegister(registerPro, secondTier)) {
       addComponent({
         name: applyPrefix(name, options.prefix ?? ''),
         export: name,
