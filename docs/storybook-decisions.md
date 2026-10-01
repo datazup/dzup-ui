@@ -791,3 +791,66 @@ real regression. The StackBlitz launcher already loads its SDK on click.
 compound (`DzTable`), one form control (`DzSelect`): it opens each docs page, expands
 the playground, and asserts the derived snippet actually mounts in the sandbox
 (compile-validation proves a snippet parses; this proves it runs).
+
+## How to run the browser test lane — and the one way that hangs
+
+*Recorded 2026-09-25 (RESIDUAL-03, closing `D-S5O2-1`).*
+
+`apps/storybook`'s Vitest project is the **only browser-qualified lane in this
+repository**: every story's `play()` plus the `@storybook/addon-a11y` axe pass, in
+real chromium. Measured on `4e4e46f`: **170 files, 1,462 tests, 103.8 s**, and CI
+gates it (`.github/workflows/ci.yml`, job `storybook-test`, `ubuntu-latest`, no
+`continue-on-error`).
+
+**Run it one of these two ways:**
+
+```bash
+yarn storybook:test                                   # the shipped entry point
+# or
+cd apps/storybook && node node_modules/vitest/vitest.mjs run --project=storybook
+```
+
+**Never this:**
+
+```bash
+cd apps/storybook && node ../../node_modules/vitest/vitest.mjs run --project=storybook
+#                         ^^^^^^ the ROOT binary — this hangs
+```
+
+`apps/storybook/package.json` declares `installConfig.hoistingLimits: "workspaces"`,
+so the app owns its `node_modules`: its own `vitest`, its own `@vitest/browser`, and
+**`vite` 6** beside the root's **`vite` 7**. Driving the app's config with the root
+binary puts the Node-side orchestrator in one install while the Vite server, the
+`storybookTest` plugin and the browser-side client resolve out of the other. The
+browser *does* launch and *does* connect, so nothing looks wrong — then the
+handshake fails, `[vitest] Browser connection was closed while running tests` is
+printed, **nothing is ever collected** (`collect 0ms`), and the run never returns.
+
+Measured both ways on the same story file, same config, same chromium:
+app-local binary **19.4 s, 16/16 passed, exit 0**; root binary **still hung at a
+200 s cap with no output** (`SIGKILL`).
+
+This matters more here than it looks, because the repository's agent guidance
+teaches `node node_modules/vitest/vitest.mjs` on purpose (`npx` fetches
+dependency-confusion placeholders that exit 0 without running). That instruction is
+correct for the **root** workspace and is a trap for this one — the only workspace
+with `hoistingLimits`. Three agents lost ~45 minutes to the silence and it was filed
+as a 🔴 regression (`D-S5O2-1`) that never existed.
+
+Two things now prevent a repeat:
+
+1. `apps/storybook/vitest.config.ts` calls `assertAppLocalRunner()`, which refuses
+   the cross-install shape in ~1 s with the correct command in the message. It is
+   fail-**open**: it judges only an entry point it can positively identify as
+   `…/vitest/vitest.mjs`, so workers and IDE integrations are untouched.
+2. `yarn validate:browser-lane` (the last link of `validate:all`) fails if that
+   guard is deleted, if the app stops declaring its own
+   `vitest`/`@vitest/browser`/`vite`/`playwright`, if the config stops configuring
+   browser mode — the suite would still pass, in jsdom, having quietly stopped being
+   browser evidence — or if the CI job stops invoking the lane or gains
+   `continue-on-error`. It never runs the lane: no browser is downloaded and nothing
+   is measured, because a gate that needed a chromium download would be switched off
+   within the week, and a browser result is host-sensitive besides.
+
+Full evidence, including the four-run controlled experiment and the failure triage:
+`docs/program-2026-09-22-architecture/reports/RESIDUAL-03-browser-lane-handoff.md`.

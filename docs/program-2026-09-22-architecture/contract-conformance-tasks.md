@@ -35,7 +35,21 @@
 
 ## 🔴 The seam that has been open since P1-02
 
-### [ ] TASK-S3-O1 — Publish the second-tier ownership schema and wire the resolver's second tier 🔴
+> **Executed 2026-09-22 at `4e4e46f`** — see
+> [`./reports/TASK-S3-O1-handoff.md`](./reports/TASK-S3-O1-handoff.md) and the
+> row in [`./EXECUTION-STATUS.md`](./EXECUTION-STATUS.md). Three corrections to
+> the gap note below, kept here because the note stays as the historical record:
+> the schema **existed** but only inside the **private** `@dzup-ui/tooling`, so
+> it was unpublishable rather than unknown; the consumption path added is a
+> **second** route (TASK-R3-O1 F1 proved the build-time `DZUP_PRO_OWNERSHIP_MANIFEST`
+> merge already worked — it just cannot answer for the version a *consumer*
+> installed); and step 4 was **already done** (`fixtures.spec.ts:338` has named
+> its reason since TASK-OSS-P1-03 — what it did not name was the second
+> precondition, which only exists now that the schema does). `<done_check>`
+> clause 4 is **defective**: the path `validators/ownership.ts` does not exist
+> and `npx` is unsafe here.
+
+### [x] TASK-S3-O1 — Publish the second-tier ownership schema and wire the resolver's second tier 🔴
 
 _Gap: `@dzup-ui/core`'s resolver and `@dzup-ui/nuxt`'s `includePro` both
 advertise a second tier that resolves nothing, because **this repository has
@@ -196,7 +210,20 @@ doc 04 §4; `../program-2026-09-04/reports/TASK-R3-O3-handoff.md`,
 
 ---
 
-### [ ] TASK-S3-O3 — Security-corpus conformance runner in `@dzup-ui/testing` 🟢
+### [x] TASK-S3-O3 — Security-corpus conformance runner in `@dzup-ui/testing` 🟢
+
+> **Executed 2026-09-23 at `4e4e46f`** — see
+> [`./reports/TASK-S3-O3-handoff.md`](./reports/TASK-S3-O3-handoff.md) and the row
+> in [`./EXECUTION-STATUS.md`](./EXECUTION-STATUS.md). The done_check scored
+> **1 of 4 and 0 of 4 decisive** — clause 1 is a false pass (it greps for the bare
+> word `conformance`, which `anatomy.ts` already contains), clause 2 names a
+> corpus path that does not exist and a field the real files do not carry, and
+> clause 4 runs the validator through `npx`, which here exits 0 without running.
+> Three premises were corrected: the corpus and its versioning already existed
+> (R3-O4), the conformance *pattern* already existed (`anatomy.ts`), and Form §10’s
+> “file names are untrusted text” was already covered by four `file-metadata`
+> fixtures. Two spec classes the payload-keyed format **cannot** express were
+> recorded as decisions rather than faked into fixtures (D-S3O3-1, D-S3O3-2).
 
 _Gap: 08-11 finding M4 — "rich-content security is strong locally but lacks a
 system contract" — was the most severe item the reassessment left fully open,
@@ -277,7 +304,30 @@ text and URL paths those documents produce. Sources: 08-11 doc 01 M4 and doc 06
 
 ## 🟠 Spec conformance residue
 
-### [ ] TASK-S5-O1 — i18n completeness: the second locale, the contribution path, the Arabic typeface 🟠 `[!owner]`
+### [x] TASK-S5-O1 — i18n completeness: the second locale, the contribution path, the Arabic typeface 🟠 `[!owner]`
+
+> **Executed 2026-09-24 at `4e4e46f`** — see
+> [`./reports/TASK-S5-O1-handoff.md`](./reports/TASK-S5-O1-handoff.md), the two
+> decision sheets beside it, and the row in
+> [`./EXECUTION-STATUS.md`](./EXECUTION-STATUS.md). The done_check scored
+> **2 of 4** — clause 2 names a validator path that did not exist *and* invokes it
+> through `npx`, which here exits 0 without running (14th recurrence), and clause 3
+> is satisfiable by a no-op and cannot see that the scaffold capability already
+> shipped in R5-O4 under a different name. **Three corrections to the gap note
+> below, which stays as the historical record:** (1) "no landing route renders
+> RTL" is **stale** — R5-O4 closed it on 2026-09-17 (`apps/landing/e2e/rtl.spec.ts`,
+> 2 tests, decision D62), so step 4 was cited, not rebuilt; (2) step 3's
+> plural/select proof against a non-English rule set **already existed** at the
+> *formatter* level (`message-format.spec.ts` — Bosnian `few`, French zero,
+> Arabic's six categories), and the real gap was one level down, in the *packs*:
+> nothing checked that a translated plural supplies every category **the locale**
+> requires, so a Polish pack with only `one`/`other` passed every existing rule and
+> silently rendered `other` for `few` and `many`; (3) `validate:i18n-packs` already
+> owned four of the six checks the "completeness gate" asks for, so the new gate
+> **imports** its `checkPack`/`flattenCatalog`/`catalogKeys` rather than
+> re-implementing them. **No translation was written and no font was vendored** —
+> `de` stays a 0 % scaffold, declared under D59, and the Arabic typeface absence is
+> now printed by a gate on every `validate:all` run instead of only by a document.
 
 _Gap: 08-11 doc 06 §"Internationalization contract" requires BCP 47 resolution,
 a typed catalog with predictable fallback, escaped and type-checked

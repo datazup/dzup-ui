@@ -94,12 +94,13 @@ Reference:
 
 ### Translations
 
-A translation is a locale pack: JSON under `packages/core/src/i18n/locales/`, validated by `yarn validate:i18n-packs`. The full guide — message syntax, the fallback rule, how to publish a pack — is [`packages/core/docs/i18n.md` §5](packages/core/docs/i18n.md#5-contributing-a-locale-pack). In short:
+A translation is a locale pack: JSON under `packages/core/src/i18n/locales/`, validated by `yarn i18n:check`. **116 keys**, most of them two or three words; ten of them carry a count and need your language's plural branches. The full guide — message syntax, the fallback rule, the plural rule, how to publish a pack — is [`packages/core/docs/i18n.md` §5](packages/core/docs/i18n.md#5-contributing-a-locale-pack). In short:
 
-1. `yarn generate:i18n-packs --scaffold <locale>` (or open the existing scaffold, e.g. `de.json`).
-2. Translate from `locales/en.json`: add each key under `messages` and remove it from `fallback`. Keep argument names; write the plural branches your language needs.
-3. **No machine translation.** Name the person who reads the language in the pull request.
-4. `yarn validate:i18n-packs`, then add the pack's `./i18n/locales/<locale>.json` export and a `patch` changeset for `@dzup-ui/core`.
+1. `yarn i18n:new <bcp47-tag>` (or open the existing scaffold, e.g. `de.json`).
+2. **Before translating anything**, run `yarn storybook` and flip the two toolbar controls — **Pseudo-locale** (every string accented and padded +30 %) and **Direction: RTL**. Both work with no translation, and a layout that only fits English is far cheaper to find now than after 116 strings.
+3. Translate from `locales/en.json`: add each key under `messages` and remove it from `fallback`. Keep argument names; write the plural branches **your** language needs — English has two categories, Polish four, Arabic six. `yarn i18n:check` names the missing ones from CLDR, so you do not have to know the rule set by heart.
+4. **No machine translation.** Name the person who reads the language in the pull request. A value identical to its English source is not counted as translated, and the gate prints it as such.
+5. `yarn i18n:check` — it prints your pack's completeness percentage. Then add the pack's `./i18n/locales/<locale>.json` export and a `patch` changeset for `@dzup-ui/core`.
 
 ### Commit Messages
 

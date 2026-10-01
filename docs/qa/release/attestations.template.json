@@ -1,0 +1,24 @@
+{
+  "$comment": "TEMPLATE for the human-attested release stop conditions (TASK-S2-O2). Copy this file to docs/qa/release/<candidate>/attestations.json and sign it. `yarn validate:stop-conditions` reads it; an UNSIGNED or ABSENT file makes every attested condition `unattested`, which is a RED. That is deliberate -- doc 08 lists these conditions precisely because no tool can decide them, and a gate that passed them silently would be asserting something it cannot see.",
+  "$whoMaySign": "The release owner, and only a person. An agent must never fill `attestedBy`, `date` or `decision` in a real candidate's attestations.json -- a fabricated signature is worse than an empty one, for the same reason an agent never fills a manual AT result cell.",
+  "$howToUse": [
+    "1. cp docs/qa/release/attestations.template.json docs/qa/release/<candidate>/attestations.json",
+    "2. set `candidate` and `sourceCommit` to the candidate being released",
+    "3. for each row: read the statement, verify it yourself, then set `attestedBy`, `date` (ISO) and `decision`",
+    "4. `decision` is `clear` (the statement holds) or `fired` (it does not -- the release stops)",
+    "5. re-run `yarn validate:stop-conditions --candidate docs/qa/release/<candidate>`"
+  ],
+  "candidate": "<candidate directory name, e.g. 2026-09-22-4e4e46f>",
+  "sourceCommit": "<full sha of the commit being released>",
+  "rows": [
+    {
+      "condition": 11,
+      "wording": "credentials, registry mutation, publication, signing, deployment, entitlement, or production action lacks explicit authority",
+      "statement": "No credential was used, no registry was mutated, nothing was published, signed, deployed or promoted, no entitlement was changed and no production action was taken without explicit authority from the release owner.",
+      "whatTheRepositoryCanShow": "It can show that an action did NOT happen: `git tag --list` is empty, provenance.json records `signed: false` and states in its own body that trusted publishing has never been exercised, and no @dzup-ui/* name resolves on the registry. It cannot show that an action which DID happen was authorised.",
+      "attestedBy": "",
+      "date": "",
+      "decision": ""
+    }
+  ]
+}

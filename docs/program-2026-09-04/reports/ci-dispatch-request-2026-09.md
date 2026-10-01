@@ -146,3 +146,124 @@ schema with nothing in it. Handoff decision **D162** proposes the shape.
 - **`landing-token-fallbacks.spec.ts`'s `globSync` was not fixed.** This task's
   own `<stop_conditions>` say a lane failing on the declared floor is an ADR-18
   amendment input, not a fix here. **D160.**
+
+---
+
+## 5. Addendum — local evidence and go/no-go, 2026-09-24 at `4e4e46f` (TASK-S2-O4)
+
+*Appended, not rewritten, so §0–§4 above stay readable as what was known on
+2026-09-21 at `527dbd1`. Full record:
+[`../../program-2026-09-22-architecture/reports/TASK-S2-O4-lane-evidence.md`](../../program-2026-09-22-architecture/reports/TASK-S2-O4-lane-evidence.md);
+reasoning and deviations:
+[`../../program-2026-09-22-architecture/reports/TASK-S2-O4-handoff.md`](../../program-2026-09-22-architecture/reports/TASK-S2-O4-handoff.md).
+Nothing was dispatched.*
+
+### 5.1 §0.A is discharged — the tree is pushed and all four lanes are dispatchable
+
+`git ls-files .github/workflows/` lists all **eight** files; every lane
+definition landed in **`589be13`**; `4e4e46f` is an **ancestor** of the remote
+default branch (`gh api …/compare/4e4e46f...main` → `ahead_by: 11,
+behind_by: 0`). The blocking precondition this request opened with no longer
+applies.
+
+### 5.2 `main` has moved 11 commits, three of them CI fixes, and none touches `.github/`
+
+`e528fd9` · `8b46ab4` · `bc02789` (2026-09-24, 12:44–12:59 UTC) address exactly
+the failure classes §1 and the R1-O4 handoff §6 catalogue. Run
+**`36004699830`** (head `3147432`) is the first `ci.yml` run after them:
+
+| Job | Then (2026-09-20) | Now (`3147432`) |
+|---|---|---|
+| Typecheck · Lint | red | **success** |
+| Validate (boundaries + tokens) | red — `tooling` → `@dzup-ui/contracts` | **success** |
+| Unit Tests (Node 20.19.0) | red — config load, nothing built (**D161**) | **red for a different reason: `TypeError: globSync is not a function`, 1 failed / 553 passed.** D161 is discharged; **D160 is confirmed on CI** |
+| Unit Tests (Node 22.13.0) | — | cancelled by fail-fast — the upper half of the range is **still unmeasured** |
+| validate-min-runtime | red — generator drift misread as the floor (F2) | **red at `validate:capability-matrix`: `[freshness] packages/core/docs/capability-matrix.json is stale`** |
+| Storybook Build · E2E · Landing E2E · Storybook Tests | red | red, pre-existing |
+
+**`ci.yml` still has not been green since 2026-07-03** — re-measured over the last
+100 runs: **82 failure · 13 cancelled · 4 success**, newest success `974019d`,
+2026-07-03. The 83 → 82 move is one in-flight run entering the window.
+
+### 5.3 Two of §1's expectations are falsified, and the reasons matter
+
+1. **The `lucide-vue-next` dual version is fixed on `main`.** All three
+   declarants (`apps/landing`, `apps/sandbox`, `packages/core`) read `^0.477.0`
+   on `main`. Locally at `4e4e46f` they do not, which is why a local
+   `validate:all` still fails at link 51.
+2. **`validate-min-runtime` cannot reach the floor question from `main`**, because
+   `packages/core/docs/capability-matrix.json` is stale there. The fresh matrix is
+   one of the **269 uncommitted paths** in the working tree (TASK-S1-O2's
+   regeneration; `validate:capability-matrix` is exit 0 locally). **Commit the
+   tree before dispatching this lane, or its red says nothing about Node.**
+
+### 5.4 The measured local evidence §3's scaffold was waiting for
+
+Obtained for this: **Node v20.19.0** (`node-v20.19.0-win-x64`, scratchpad, never
+installed) driving yarn 4.16.0. **win32, not `ubuntu-latest`** — every exit code
+below is locally qualified and nothing more.
+
+| Lane | What ran under the declared Node 20.19.0 | Exit |
+|---|---|---|
+| `validate-min-runtime` | `validate:engines` · `generate:ownership:core --check` · `generate:exports:core` | **0 · 0 · 0** — every generator and validator **starts** at the floor; the H4 class is clear |
+| " | `yarn validate:all` (58 links at `4e4e46f`) | **1** at link 51 — `validate:icon-duplicates`, **identical under v24.14.1**, so not a floor failure |
+| " | links 52–58 individually | **0 each** — their first execution in any context |
+| " | `vitest run …/landing-token-fallbacks.spec.ts` | **1**, `TypeError: globSync is not a function`, `Tests: no tests`. Same command under v24.14.1: **0, 9 passed.** §0.C.1 is now measured, not inferred |
+| `min-peer` | `min-peer-lane.mjs --plan`; then the **full lane in a throwaway `git worktree`** | see §5.5 |
+| `vue-next` | `vue-next-lane.mjs --plan` with an empty input (the `schedule` shape) and with `3.6.0-rc.9` (the dispatch shape) | **0 · 0** — F1's fix holds: the empty string falls through to the config pin instead of pinning `""` |
+| `nuxt-majors` | `pack-fixtures.mjs` → `install-fixtures.mjs` → `yarn test:nuxt-fixtures`, `DZUP_FIXTURE_NUXT=4.4.5` | **0 · 0 · 0** — **12 passed, 8 skipped (20)**, all six staged fixtures build and assert. `tar -tzf` confirms `dzup-ui-core.tgz` carries **1,454 `package/dist/` entries**: the tarball-without-dist root cause is fixed at the artifact level |
+
+Registry drift, not repinned: `vue@3.6.0-rc.6` still resolves but the `rc`
+dist-tag is **`3.6.0-rc.9`**; `vue@latest` is still `3.5.43`, so the Vue 3.6
+lane's "becomes blocking" trigger has not fired. `nuxt@latest` is **4.5.2** and
+`nuxt@4.4.6`+ requires Node ≥ 22.12 — **the `nuxt-majors` matrix cannot pin a
+current Nuxt while the floor is 20.19.0.**
+
+### 5.5 The four go/no-go recommendations
+
+| Lane | Call | Blocking vs reporting | Why |
+|---|---|---|---|
+| **`min-peer`** | **GO — first** | blocking **after** its first green run (one line in `ci.yml`) | The only lane whose answer is news, and the only one with **no schedule**, so nobody ever gets it for free. See §5.6 for the local result |
+| **`vue-next`** + **`nuxt-majors`** (one dispatch) | **GO — second**, or wait for the schedule | `suite` **reporting** (3.6 is still an RC); `nuxt-majors` **blocking once green** (both its majors are released — **N5-03-D6 / D164**) | First real run the lane will ever have had. **The `schedule` fires Monday 2026-09-28 04:00 UTC and runs the fixed lane for free** — dispatch now only if the answer is wanted sooner |
+| **`validate-min-runtime`** | **NO-GO as a separate dispatch** | already blocking: `ci.yml` calls it on every push | Its answer is known and measured three ways (local Node 20, CI's `Unit Tests (Node 20.19.0)`, and the `@types/node` `@since`). From `main` it cannot even reach the floor step (§5.3.2). Every push re-runs it at no extra cost |
+| **`ci.yml`** | **NO-GO — already answered** | — | `3147432` is that run. Read it (§5.2) instead of spending another 15 minutes |
+
+### 5.6 `min-peer`, the full lane, run locally
+
+The runner pins, installs, asserts, runs and restores — and then leaves
+`node_modules` on the floor versions, so it cannot be run against a shared tree.
+It was run in a **throwaway `git worktree` at `4e4e46f`** under Node 20.19.0,
+outside the repository, removed afterwards. The main checkout's `yarn.lock` hash
+and its resolved `vue 3.5.31` / `reka-ui 2.9.2` are unchanged, verified after.
+
+**Result — exit 1 at `typecheck`, and the finding the lane was built for.** The
+pinned install succeeded and the runner asserted all seven packages landed
+(`vue 3.5.0`, the five-package Vue lockstep set, `reka-ui 2.0.0`), so this is
+**not** an `exit 2`. Then:
+
+- **`typecheck`: 622 errors in 127 files across 11 of 11 families.** Root cause
+  measured to the patch release: Vue widened `ComponentTypeEmits` from
+  `Record<string, any[]>` to `Record<string, any>` at **exactly 3.5.13**, and
+  every `Dz*Emits` here is an `interface`, which has no implicit index signature
+  (isolated in a nine-line `tsc --strict` probe). **`vue: ^3.5.0` admits thirteen
+  releases the library has never worked on**, and the root manifest already
+  depends on `^3.5.13`.
+- **the suite (run directly, because the runner stops at the first failure):
+  exit 1, 9 of 373 files and 32 of 5,705 tests.** 31 of 32 trace to **`reka-ui@2.0.0`** — the
+  combobox option list does not open (which is also why 20 `DzPersonaSelector`
+  security assertions measured the *stricter* `rejected` instead of
+  `inert`/`escaped`, so **no security regression**) and `useDialog` does not
+  release its scroll lock. The 32nd is a load flake, named as such.
+- **`git diff --exit-code -- package.json yarn.lock`** — the workflow's own
+  restore check — **exit 0**.
+
+**Both published peer ranges are false.** That is decision **D-S2O4-5** (`vue`,
+narrow to `^3.5.13`) and **D-S2O4-6** (`reka-ui`, bisect then narrow), and it is
+an **A4-D1 precondition**: free today, a breaking 0.x `minor` after first
+publication.
+
+### 5.7 Recording scaffold — still yours to fill
+
+§3's table stands. Add a column for **which ref** was dispatched: a sha, not
+`main`, and say whether that sha carries the 269 working-tree paths, because
+§5.3.2 makes the difference decide what a red means.

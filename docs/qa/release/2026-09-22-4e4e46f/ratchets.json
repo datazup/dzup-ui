@@ -1,0 +1,173 @@
+{
+  "candidate": "2026-09-22-4e4e46f",
+  "sourceCommit": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
+  "recordedAt": "2026-09-22T19:11:40.161Z",
+  "ceilings": [
+    {
+      "key": "packages/core/docs/wcag-deviations.json.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/core/security/security-deviations.json.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/scripts/adr-registry.json.maxProposedCitedFromCode",
+      "value": 3,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/scripts/adr-registry.json.maxUndocumented",
+      "value": 14,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/anatomy-parts-ceilings.json.maxHeldPartNames",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/anatomy-parts-ceilings.json.maxStatesWithoutAnatomy",
+      "value": 17,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/anatomy-parts-ceilings.json.maxUndeclaredEmissions",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/anatomy-parts-ceilings.json.maxUndeclaredStates",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/anatomy-parts-ceilings.json.maxUnemittedDeclarations",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/anatomy-parts-ceilings.json.maxUnreviewedPartNames",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/capability-matrix-ceilings.json.staleCells.ceiling",
+      "value": 22,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.componentsWithoutStaticTemplate.ceiling",
+      "value": 80,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.descriptionsWithBareHtml.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.eventsWithoutDescription.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.exposedWithoutDescription.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.propsWithoutDescription.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.publicComponentsWithoutExample.ceiling",
+      "value": 1,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.publicComponentsWithoutRecord.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.slotsWithoutDescription.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.unclassifiable.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/component-meta-ceilings.json.unresolvedTypes.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/docs-size-ceilings.json.docsDist.ceilingBytes",
+      "value": 36000000,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/docs-size-ceilings.json.storybookStatic.ceilingBytes",
+      "value": 27262976,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/llms-ceilings.json.componentsWithoutDescription.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/llms-ceilings.json.publicComponentsUnreachableFromLlms.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/llms-ceilings.json.publicComponentsWithNoMembers.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/llms-ceilings.json.publicComponentsWithoutExampleInLlms.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/mcp-surface-ceilings.json.catalogVisibilityUnreachable.ceiling",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/mcp-surface-ceilings.json.toolsWithoutE2eSmoke.ceiling",
+      "value": 5,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/src/validators/provider-defaults-ceilings.json.residual.ceiling",
+      "value": 76,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/scripts/licence-exceptions.json#length",
+      "value": 0,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/scripts/retired-package-names.json#length",
+      "value": 3,
+      "direction": "max"
+    },
+    {
+      "key": "packages/tooling/scripts/tracked-build-output-allowlist.json#length",
+      "value": 1,
+      "direction": "max"
+    }
+  ],
+  "justifications": []
+}

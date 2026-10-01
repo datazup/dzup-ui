@@ -161,7 +161,7 @@ Buttons · Cards · Data · Feedback · Forms · Inputs · Layout · Media · Na
 
 <!-- facts:catalog:start -->
 
-**144 public components** across **11 families**, plus 65 compound parts, documented by 181 story files.
+**144 public components** across **11 families**, plus 65 compound parts, documented by 182 story files.
 
 <!-- facts:catalog:end -->
 

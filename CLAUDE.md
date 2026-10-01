@@ -253,6 +253,42 @@ All PRs must pass:
 - Contract Spec v1 conformance (`.contract.spec.ts`)
 - WCAG AA accessibility
 
+### Regenerating generated artifacts — the order, and what obliges each step
+
+*Recorded 2026-09-25 (RESIDUAL-07). The order alone was documented before this and the
+omissions broke three agents' validation runs in one programme. Each step below names
+what makes it necessary, because that is the part that was missing.*
+
+| # | Command | Owed when |
+|---|---|---|
+| 1 | `yarn generate:ownership` | a component is added, renamed or re-owned |
+| 2 | `yarn generate:quality-matrix` | tier or story-DoD evidence changed |
+| 3 | `yarn generate:capability-matrix` | any evidence cell changed |
+| 4 | `yarn generate:component-meta` | **(a)** any *capability* change — it carries a **join** of `capability-matrix.json`, and `packages/tooling/src/docs/evidence.spec.ts` fails on the mismatch; **(b)** any *story* edit — it records each story's example **line range** |
+| 5 | `yarn generate:llms` | any of 1–4 moved |
+| 6 | `yarn generate:docs-pages` | **every** `component-meta.json` change — `apps/docs/.vitepress/generated/nav.json`'s `artifactSha256` **is** the sha256 of `component-meta.json` |
+| 7 | **`yarn csp:inline-style-inventory`** | **any edit to a `.vue` that carries an inline `style=`** — `packages/core/security/inline-style-inventory.json` records the **line number** of every site, so a one-line insertion makes it stale with nothing added or removed |
+
+**Step 7 is not part of the six-link order and `validate:all` does not check it at all.**
+Measured 2026-09-25: steps 1–6 ran end to end, all exit 0, and the inventory was still
+stale afterwards. The only gate that fails is the **unit suite** —
+`packages/core/security/inline-style-inventory.spec.ts` › *"is fresh — the artifact and
+the source agree, site for site"*. Two consecutive batches lost a red suite to this.
+
+> **Run `yarn regenerate:all` rather than copying the column.** Added 2026-09-28
+> (RESIDUAL-09, closing `D-RES07-2`): it runs exactly these seven steps in this order,
+> **refuses to start** if any step names a script `package.json` no longer declares, and
+> **stops at the first failure** — printing the step, its exit code and the steps that did
+> **not** run, because a chain that continues produces artifacts derived from a stale
+> predecessor. `yarn regenerate:all --list` prints the order and each trigger without
+> running anything.
+>
+> **The table above is not redundant and is not to be deleted.** The script guarantees
+> *what* runs when several artifacts are stale; the table is how you decide *which* steps
+> are owed when only one is — and `packages/tooling/src/regenerate-all.spec.ts` asserts
+> that the table and the script name the same seven commands in the same order, so neither
+> can drift from the other.
+
 ## Quick Rules for Agents
 
 1. **Never use raw colors** -- always `var(--dz-*)` tokens inside Tailwind classes
