@@ -270,6 +270,7 @@ then the component's own default.**
 
 | Reader | What the provider supplies through it |
 | --- | --- |
+| `useDzDirection` | the document writing direction |
 | `useDzTestIds` | the test-id attribute name and prefix |
 
 ## Locale, direction and formats
@@ -280,7 +281,7 @@ then the component's own default.**
 | `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
 | `icons` | — | No icon on this component carries direction, so none is mirrored. |
 
-**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+**Locale and formats.** Reads `useDzDirection` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is `present` — `packages/core/src/components/media/DzCarousel.anatomy.ts`.
 
@@ -288,7 +289,7 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `unrun`. No SSR spec server-renders this component in a test that runs. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
@@ -328,8 +329,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -382,14 +383,14 @@ differ, the difference is the point.
 | --- | --- | --- | --- | --- | --- |
 | `ArrowRight` | — | Show the next slide. | `2.1.1` | [`carousel`](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/) | swaps with the writing direction |
 | `ArrowLeft` | — | Show the previous slide. | `2.1.1` | [`carousel`](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/) | swaps with the writing direction |
-| `Enter` | `control` | Activate the focused previous or next control. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | — |
-| `Space` | `control` | Activate the focused previous or next control. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | — |
+| `Enter` | `action` | Activate the focused previous or next control. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | — |
+| `Space` | `action` | Activate the focused previous or next control. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | — |
 
 Declared in `packages/core/src/components/media/DzCarousel.anatomy.ts`.
 
 - **Pattern:** [APG — `carousel`](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 4 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 4 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -417,13 +418,13 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/media/DzCarousel.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/media/DzCarousel.contract.spec.ts` — The contract spec exists and does not touch `events` — a surface this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/media/DzCarousel.spec.ts` |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/media.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/media/DzCarousel.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | **`unrun`** | No SSR spec server-renders this component in a test that runs. |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/media/DzCarousel.spec.ts` — The component declares 4 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/media/DzCarousel.spec.ts` — The component declares 4 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/media/DzCarousel.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/media/DzCarousel.stories.ts` |
@@ -432,7 +433,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/media/DzCarousel.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzCarousel.md` — 6 AT/browser pairs, none executed. |
 
-**5 unrun:** `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

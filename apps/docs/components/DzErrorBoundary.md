@@ -129,7 +129,7 @@ others for no stated reason.
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `unrun`. No SSR spec server-renders this component in a test that runs. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Not a dataset component; no baseline is owed. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
@@ -166,8 +166,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -231,9 +231,9 @@ Every kind of evidence required of this component — by Tier A — and what was
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/feedback/DzErrorBoundary.contract.spec.ts` |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/feedback/DzErrorBoundary.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/feedback/DzErrorBoundary.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | **`unrun`** | No SSR spec server-renders this component in a test that runs. |
 | `token-contrast` | tier A | `excepted` | Renders only the slot it is given; it ships no colour pair of its own. |
 
 **2 unrun:** `axe`, `ssr-sample` · **1 excepted:** `token-contrast`. They are named rather than counted, because a total tells a reader nothing about what is missing.

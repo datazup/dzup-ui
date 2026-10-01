@@ -213,8 +213,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -225,6 +225,13 @@ production evidence, and it must not be read as a conformance claim.
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
 - **Component last changed at:** `a01965fa`
+
+::: warning Recorded exceptions
+A requirement this component provably cannot meet. The row stays in the matrix and the reason
+travels with it — an exception is visible, not deleted.
+
+- `controlled-uncontrolled` — No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It asks the host to remove it with `close` and never holds the removal. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)
+:::
 
 ### WCAG 2.2 criteria in scope (18)
 
@@ -255,22 +262,22 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**4 declared bindings.** Rendered from the
+**2 declared bindings.** Rendered from the
 component's own keyboard contract, not from the APG pattern it is held to — where the two
 differ, the difference is the point.
 
 | Key | Where | Action | WCAG | Pattern |
 | --- | --- | --- | --- | --- |
-| `Enter` | — | Activate the chip. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
-| `Space` | — | Activate the chip. | `2.1.1` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) |
-| `Backspace` | `removable` | Remove the chip. | `2.1.1` | — *(component-specific)* |
-| `Delete` | `removable` | Remove the chip. | `2.1.1` | — *(component-specific)* |
+| `Backspace` | `closable` | Remove the chip. | `2.1.1` | — *(component-specific)* |
+| `Delete` | `closable` | Remove the chip. | `2.1.1` | — *(component-specific)* |
 
 Declared in `packages/core/src/components/data/DzChip.anatomy.ts`.
 
 - **Pattern:** [APG — `button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 4 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
+  sequence in `packages/core/src/components/data/DzChip.spec.ts`.
+  That is a presence measurement, not a table: it does not say which keys, or what they do.
 
 ### Assistive technology
 
@@ -304,15 +311,15 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzChip.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzChip.spec.ts` — The component declares 4 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/data/DzChip.spec.ts` — All 2 declared binding(s) are exercised by the unit spec. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzChip.stories.ts` |
-| `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
+| `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It asks the host to remove it with `close` and never holds the removal. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzChip.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzChip.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzChip.md` — 6 AT/browser pairs, none executed. |
 
-**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**1 unrun:** `at-manual` · **1 excepted:** `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

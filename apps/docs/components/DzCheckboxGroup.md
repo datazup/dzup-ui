@@ -224,8 +224,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -281,7 +281,9 @@ Declared in `packages/core/src/components/forms/DzCheckboxGroup.anatomy.ts`.
 
 - **Pattern:** [APG — `checkbox`](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 2 binding(s); the unit spec asserts no key event for `Tab`, `Space`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
+  sequence in `packages/core/src/components/forms/DzCheckboxGroup.spec.ts`.
+  That is a presence measurement, not a table: it does not say which keys, or what they do.
 
 ### Assistive technology
 
@@ -309,13 +311,13 @@ Every kind of evidence required of this component — by Tier B — and what was
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzCheckboxGroup.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzCheckboxGroup.contract.spec.ts` — The contract spec exists and does not touch `events` — a surface this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzCheckboxGroup.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzCheckboxGroup.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzCheckboxGroup.spec.ts` — The component declares 2 binding(s); the unit spec asserts no key event for `Tab`, `Space`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzCheckboxGroup.spec.ts` — All 2 declared binding(s) are exercised by the unit spec. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzCheckboxGroup.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzCheckboxGroup.stories.ts` |
@@ -323,7 +325,7 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzCheckboxGroup.md` — 6 AT/browser pairs, none executed. |
 
-**4 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `contract-spec`, `axe`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

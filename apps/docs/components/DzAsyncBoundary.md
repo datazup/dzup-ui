@@ -130,7 +130,7 @@ others for no stated reason.
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `unrun`. No SSR spec server-renders this component in a test that runs. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Not a dataset component; no baseline is owed. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
@@ -167,8 +167,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -231,10 +231,10 @@ Every kind of evidence required of this component — by Tier A — and what was
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/feedback/DzAsyncBoundary.contract.spec.ts` |
-| `unit-spec` | tier A | `present` | `packages/core/src/components/feedback/DzAsyncBoundary.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `unit-spec` | tier A | **`unrun`** | `packages/core/src/components/feedback/DzAsyncBoundary.spec.ts` — The unit spec exists and renders the component, and no live test drives it: the component calls `defineEmits`/`defineModel`, and nothing here triggers an event, sets a value, changes a prop or reads what was emitted. `unit-spec` is "render and behaviour units" (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/feedback/DzAsyncBoundary.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | **`unrun`** | No SSR spec server-renders this component in a test that runs. |
 | `token-contrast` | tier A | `excepted` | Renders only the slot it is given; it ships no colour pair of its own. |
 
-**2 unrun:** `axe`, `ssr-sample` · **1 excepted:** `token-contrast`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `unit-spec`, `axe`, `ssr-sample` · **1 excepted:** `token-contrast`. They are named rather than counted, because a total tells a reader nothing about what is missing.

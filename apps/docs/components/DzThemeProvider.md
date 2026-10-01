@@ -168,8 +168,8 @@ No Storybook story exists for this component, so no usage snippet is shown. This
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -185,6 +185,8 @@ production evidence, and it must not be read as a conformance claim.
 A requirement this component provably cannot meet. The row stays in the matrix and the reason
 travels with it — an exception is visible, not deleted.
 
+- `controlled-uncontrolled` — No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It renders `DzProvider` around `<slot />`; `theme` is a one-way prop it resolves and republishes as context. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)
+- `axe` — The axe row measures a scan of the component's own rendered output, and this component renders no element of its own — only the slot it is handed. A scan over it audits the HOST's markup and credits a component that contributed no node; the rule it would test is the host's to satisfy. (Same argument as the `token-contrast` exception already recorded here, one level up.)
 - `keyboard-spec` — Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence.
 - `browser-play` — Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence.
 - `state-stories` — Declares no states: `parts` is `none` and it renders no element.
@@ -256,19 +258,19 @@ Every kind of evidence required of this component — by Tier B — and what was
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/providers/DzThemeProvider.contract.spec.ts` |
 | `unit-spec` | tier A | `present` | `packages/core/src/providers/DzThemeProvider.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | `excepted` | The axe row measures a scan of the component's own rendered output, and this component renders no element of its own — only the slot it is handed. A scan over it audits the HOST's markup and credits a component that contributed no node; the rule it would test is the host's to satisfy. (Same argument as the `token-contrast` exception already recorded here, one level up.) |
 | `story-light-dark` | tier A | **`unrun`** | — |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/dz-provider-ssr.spec.ts` |
 | `token-contrast` | tier A | `excepted` | Resolves the theme that decides every other component’s pairs; it ships none of its own. |
 | `keyboard-spec` | tier B | `excepted` | Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence. |
 | `state-stories` | tier B | `excepted` | Declares no states: `parts` is `none` and it renders no element. |
-| `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
+| `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It renders `DzProvider` around `<slot />`; `theme` is a one-way prop it resolves and republishes as context. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `excepted` | Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence. |
 | `rtl-contract` | tier B | `present` | `packages/core/src/providers/DzThemeProvider.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | **`unrun`** | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 0/24 projects measured green at 589be13 (worktree dirty). 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzThemeProvider.md` — 6 AT/browser pairs, none executed. |
 
-**5 unrun:** `axe`, `story-light-dark`, `controlled-uncontrolled`, `browser-matrix`, `at-manual` · **4 excepted:** `token-contrast`, `keyboard-spec`, `state-stories`, `browser-play`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `story-light-dark`, `browser-matrix`, `at-manual` · **6 excepted:** `axe`, `token-contrast`, `keyboard-spec`, `state-stories`, `controlled-uncontrolled`, `browser-play`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

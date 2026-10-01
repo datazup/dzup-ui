@@ -62,10 +62,13 @@ beforeEach(() => {
   }
 })
 
+// Teardown through Vue, not through the DOM (RESIDUAL-18). `cleanup()` already
+// unmounts every rendered page and removes its container, so the `document.body` wipe
+// that followed it — here and at the three mid-test resets below — was doing nothing
+// `cleanup()` had not already done, by a route that cannot unmount anything.
 afterEach(() => {
   cleanup()
   vi.unstubAllGlobals()
-  document.body.innerHTML = ''
   // The designer is a module singleton — never leak a test's palette edits
   // (or motion preference) into the next mount.
   const designer = useThemeDesigner()
@@ -170,7 +173,6 @@ describe('/themes v2 — THV2-03 mixing desk', () => {
     await nextTick()
     expect(document.querySelector('.ramp-shimmer')).not.toBeNull()
     cleanup()
-    document.body.innerHTML = ''
 
     designer.reset()
     designer.motion.value = 'reduced'
@@ -294,7 +296,6 @@ describe('/themes v2 — THV2-04 easel', () => {
     for (const sweep of sweeps)
       expect(sweep.getAttribute('aria-hidden')).toBe('true')
     cleanup()
-    document.body.innerHTML = ''
 
     const designer = useThemeDesigner()
     designer.reset()
@@ -360,7 +361,6 @@ describe('/themes v2 — THV2-04 easel', () => {
     await mountPage()
     expect(document.querySelector('.themes-page')?.classList.contains('thv2-still')).toBe(true)
     cleanup()
-    document.body.innerHTML = ''
 
     designer.reset()
     await mountPage()

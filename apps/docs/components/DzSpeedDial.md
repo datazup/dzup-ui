@@ -208,8 +208,8 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
-| **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
+| **Server rendering** | `unrun`. No SSR spec server-renders this component in a test that runs. |
+| **Portal / teleport** | `unrun`. No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
@@ -245,8 +245,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -289,23 +289,27 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**5 declared bindings.** Rendered from the
+**9 declared bindings.** Rendered from the
 component's own keyboard contract, not from the APG pattern it is held to — where the two
 differ, the difference is the point.
 
-| Key | Where | Action | WCAG | Pattern |
-| --- | --- | --- | --- | --- |
-| `Enter` | `trigger` | Open or close the action list. | `2.1.1` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) |
-| `Space` | `trigger` | Open or close the action list. | `2.1.1` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) |
-| `Home` | `open` | Move focus to the first action. | `2.1.1` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) |
-| `End` | `open` | Move focus to the last action. | `2.1.1` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) |
-| `Escape` | — | Close the action list and return focus to the trigger. | `2.1.1`, `2.1.2` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) |
+| Key | Where | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- | --- |
+| `Enter` | `trigger` | Open or close the action list. | `2.1.1` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) | — |
+| `Space` | `trigger` | Open or close the action list. | `2.1.1` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) | — |
+| `ArrowDown` | `open` | Move focus to the next action in a vertical fan. | `2.1.1` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) | — |
+| `ArrowUp` | `open` | Move focus to the previous action in a vertical fan. | `2.1.1` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) | — |
+| `ArrowRight` | `open` | Move focus to the next action in a horizontal fan. | `2.1.1` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) | fixed — maps to a visible direction |
+| `ArrowLeft` | `open` | Move focus to the previous action in a horizontal fan. | `2.1.1` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) | fixed — maps to a visible direction |
+| `Home` | `open` | Move focus to the first action. | `2.1.1` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) | — |
+| `End` | `open` | Move focus to the last action. | `2.1.1` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) | — |
+| `Escape` | — | Close the action list and return focus to the trigger. | `2.1.1`, `2.1.2` | [`menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) | — |
 
 Declared in `packages/core/src/components/buttons/DzSpeedDial.anatomy.ts`.
 
 - **Pattern:** [APG — `menu-button`](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 5 binding(s); the unit spec asserts no key event for `Enter`, `Space`, `Home`, `End`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 9 binding(s); the unit spec asserts no key event for `Enter`, `Space`, `ArrowDown`, `ArrowUp`, `ArrowRight`, `ArrowLeft`, `Home`, `End`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -333,23 +337,23 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/buttons/DzSpeedDial.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/buttons/DzSpeedDial.contract.spec.ts` — The contract spec exists and does not touch `events` — a surface this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/buttons/DzSpeedDial.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/buttons/DzSpeedDial.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | **`unrun`** | No SSR spec server-renders this component in a test that runs. |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/buttons/DzSpeedDial.spec.ts` — The component declares 5 binding(s); the unit spec asserts no key event for `Enter`, `Space`, `Home`, `End`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/buttons/DzSpeedDial.spec.ts` — The component declares 9 binding(s); the unit spec asserts no key event for `Enter`, `Space`, `ArrowDown`, `ArrowUp`, `ArrowRight`, `ArrowLeft`, `Home`, `End`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/buttons/DzSpeedDial.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/buttons/DzSpeedDial.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/buttons/DzSpeedDial.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
-| `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
+| `portal-hydration` | trait teleports | **`unrun`** | No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/buttons/DzSpeedDial.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSpeedDial.md` — 6 AT/browser pairs, none executed. |
 
-**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**8 unrun:** `contract-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

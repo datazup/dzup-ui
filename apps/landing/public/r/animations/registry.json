@@ -1964,6 +1964,11 @@
           "target": "components/animations/auto-animate-list.vue"
         },
         {
+          "path": "motion/autoAnimate.ts",
+          "type": "registry:file",
+          "target": "components/motion/autoAnimate.ts"
+        },
+        {
           "path": "motion/useReducedMotion.ts",
           "type": "registry:file",
           "target": "components/motion/useReducedMotion.ts"

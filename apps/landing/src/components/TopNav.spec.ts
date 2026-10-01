@@ -57,9 +57,12 @@ beforeEach(() => {
   vi.stubGlobal('scrollY', 0)
 })
 
+// Teardown through Vue, not through the DOM (RESIDUAL-18). `cleanup()` already
+// unmounts every rendered tree — taking the Reka menus teleported to the body with it —
+// and removes its container; the `document.body` wipe that followed added nothing but
+// the chance to detach something still mounted.
 afterEach(() => {
   cleanup()
-  document.body.innerHTML = ''
 })
 
 describe('topNav — desktop', () => {

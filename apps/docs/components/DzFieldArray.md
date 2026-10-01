@@ -218,8 +218,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -237,6 +237,7 @@ production evidence, and it must not be read as a conformance claim.
 A requirement this component provably cannot meet. The row stays in the matrix and the reason
 travels with it — an exception is visible, not deleted.
 
+- `axe` — The axe row measures a scan of the component's own rendered output, and this component renders no element of its own — only the slot it is handed. A scan over it audits the HOST's markup and credits a component that contributed no node; the rule it would test is the host's to satisfy. (Same argument as the `token-contrast` exception already recorded here, one level up.)
 - `token-contrast` — Renderless: it supplies scoped slot props and ships no styles.
 :::
 
@@ -284,7 +285,9 @@ Declared in `packages/core/src/components/forms/DzFieldArray.anatomy.ts`.
 
 - **Pattern:** `custom` — **no APG pattern applies**, so there is no external
   keyboard contract to link. The recorded reason is quoted above.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 2 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
+  sequence in `packages/core/src/components/forms/DzFieldArray.spec.ts`.
+  That is a presence measurement, not a table: it does not say which keys, or what they do.
 
 ### Assistive technology
 
@@ -314,12 +317,12 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzFieldArray.contract.spec.ts` |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzFieldArray.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | `excepted` | The axe row measures a scan of the component's own rendered output, and this component renders no element of its own — only the slot it is handed. A scan over it audits the HOST's markup and credits a component that contributed no node; the rule it would test is the host's to satisfy. (Same argument as the `token-contrast` exception already recorded here, one level up.) |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzFieldArray.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A | `excepted` | Renderless: it supplies scoped slot props and ships no styles. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzFieldArray.spec.ts` — The component declares 2 binding(s); the unit spec asserts no key event for `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
-| `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzFieldArray.stories.ts` |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzFieldArray.spec.ts` — All 2 declared binding(s) are exercised by the unit spec. |
+| `state-stories` | tier B | `excepted` | `packages/core/src/components/forms/DzFieldArray.types.ts` — The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too. |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzFieldArray.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzFieldArray.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
@@ -327,7 +330,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzFieldArray.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzFieldArray.md` — 6 AT/browser pairs, none executed. |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 excepted:** `token-contrast`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **3 excepted:** `axe`, `token-contrast`, `state-stories`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

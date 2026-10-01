@@ -78,7 +78,7 @@ never as asserted.
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "error" \| "control" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTagsInput.anatomy.ts` (ADR-19 §5). The committed tokens are `DzChip`s and therefore their own anatomy boundary; restyle them through `chipVariant` / `chipTone` or `DzChip`'s own parts. |
+| `ui` | `Partial<Record<"root" \| "error" \| "input" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTagsInput.anatomy.ts` (ADR-19 §5). The committed tokens are `DzChip`s and therefore their own anatomy boundary; restyle them through `chipVariant` / `chipTone` or `DzChip`'s own parts. |
 | `validate` | `((token: string) => boolean) \| undefined` | no | `undefined` | Per-token validation predicate. Return `false` to reject the token, triggering a brief `danger` flash on the field. Runs after the dedupe and max checks. |
 | `value` | `string[] \| undefined` | no | `[]` | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
@@ -240,7 +240,7 @@ summarised wrongly.
 `disabled`, `invalid`, `loading`, `readonly`, `required`. Each is emitted as `data-state` or as a
 presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
 
-**Published examples:** `state-stories` is `pass` — `packages/core/stories/forms/DzTagsInput.stories.ts`.
+**Published examples:** `state-stories` is `excepted` — `packages/core/src/components/forms/DzTagsInput.types.ts`. The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too.
 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
@@ -263,8 +263,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -353,14 +353,14 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzTagsInput.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzTagsInput.contract.spec.ts` — The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzTagsInput.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzTagsInput.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzTagsInput.spec.ts` — All 3 declared binding(s) are exercised by the unit spec. |
-| `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzTagsInput.stories.ts` |
+| `state-stories` | tier B | `excepted` | `packages/core/src/components/forms/DzTagsInput.types.ts` — The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too. |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzTagsInput.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzTagsInput.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
@@ -368,7 +368,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzTagsInput.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTagsInput.md` — 6 AT/browser pairs, none executed. |
 
-**4 unrun:** `axe`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `contract-spec`, `axe`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 excepted:** `state-stories`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

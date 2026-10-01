@@ -97,18 +97,20 @@ Editable, running the **Column Gallery** story from `packages/core/stories/layou
 
 ### DzGridItem
 
-a `DzGrid` child that says how many columns it occupies.
+a `DzGrid` child that says how many columns and rows it occupies.
 
 - **Install:** `npm i @dzup-ui/core` — then `import { DzGridItem } from '@dzup-ui/core'`
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/layout`
 - **Compound part of:** `DzGrid`
 
-#### Props (2)
+#### Props (4)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
-| `span` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Columns this item occupies, fixed or per breakpoint. Omitted means one column, the CSS default. A numeric span outside 1–12 is clamped into that range; a span wider than the grid's own column count creates implicit columns, exactly as the CSS it compiles to would — clamp to your grid. |
+| `colSpan` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Columns this item occupies, fixed or per breakpoint. Omitted means one column, the CSS default. A numeric span outside 1–12 is clamped into that range; a span wider than the grid's own column count creates implicit columns, exactly as the CSS it compiles to would — clamp to your grid. This is the name a Form document uses, so a renderer forwards `node.layout.colSpan` with no lookup table of its own. |
+| `rowSpan` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Rows this item occupies, fixed or per breakpoint. Omitted means one row. Clamped and mirrored on exactly the same terms as `colSpan`: `grid-row: span N` is writing-mode relative on the block axis, so it needs no RTL handling either. Without this prop a document carrying `layout.rowSpan` has to be rendered with a raw `row-span-*` class — the persisted-CSS violation doc 03 §3 forbids, relocated into the component boundary rather than removed. A row span is meaningful whether or not the parent `DzGrid` declares `rows`: with `rows` it spans explicit tracks, without it the item creates implicit ones, exactly as the CSS does. |
+| `span` | `GridSpan \| ResponsiveSpan \| undefined` | no | `undefined` | Columns this item occupies — the original spelling, an alias of {@link DzGridItemProps.colSpan}. Kept because it reads better than `colSpan` on a grid with no row spans, and because removing it would be a breaking change for the API D67 shipped. When both are given, `colSpan` wins and dev mode warns. |
 
 #### Slots (1)
 
@@ -196,8 +198,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

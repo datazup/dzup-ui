@@ -190,7 +190,7 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
@@ -237,8 +237,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -251,6 +251,13 @@ production evidence, and it must not be read as a conformance claim.
 - **Component last changed at:** `527dbd15`
 
 **Why this pattern:** A menubar whose panels are multi-column compositions rather than item lists, so the menu keyboard contract has to survive content APG does not model.
+
+::: warning Recorded exceptions
+A requirement this component provably cannot meet. The row stays in the matrix and the reason
+travels with it — an exception is visible, not deleted.
+
+- `controlled-uncontrolled` — No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Panel open/close is reported with `open`/`close` and never accepted back, and `collapsed` is a one-way layout override. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)
+:::
 
 ### WCAG 2.2 criteria in scope (20)
 
@@ -332,15 +339,15 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/navigation/DzMegaMenu.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/navigation/DzMegaMenu.contract.spec.ts` — The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/navigation/DzMegaMenu.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | `present` | `packages/core/tests/a11y/navigation.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzMegaMenu.spec.ts` — The component declares 10 binding(s); the unit spec asserts no key event for `Space`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
-| `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
+| `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Panel open/close is reported with `open`/`close` and never accepted back, and `collapsed` is a one-way layout override. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
@@ -353,7 +360,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `contract-spec`, `keyboard-spec`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline` · **1 excepted:** `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

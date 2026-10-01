@@ -72,7 +72,7 @@ never as asserted.
 | `placeholder` | `string \| undefined` | no | `undefined` | Placeholder text when no date is selected |
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "title" \| "error" \| "header" \| "group" \| "row" \| "cell" \| "control" \| "panel" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the segment field, declared here as `control` — and the calendar parts render inside a popper where `class` never reached them. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "title" \| "error" \| "header" \| "group" \| "row" \| "cell" \| "panel" \| "input" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the segment field, declared here as `control` — and the calendar parts render inside a popper where `class` never reached them. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 ## Events (8)
@@ -261,8 +261,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -317,8 +317,8 @@ differ, the difference is the point.
 | --- | --- | --- | --- | --- | --- |
 | `ArrowDown` | — | Open the calendar when closed, otherwise move to the next option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | — |
 | `ArrowUp` | — | Open the calendar when closed, otherwise move to the previous option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | — |
-| `Home` | `list open` | Move to the first option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | — |
-| `End` | `list open` | Move to the last option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | — |
+| `Home` | `calendar open` | Move to the first day of the focused week. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
+| `End` | `calendar open` | Move to the last day of the focused week. | `2.1.1` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | — |
 | `Enter` | — | Select the highlighted option and close the calendar. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | — |
 | `Escape` | — | Close the calendar without changing the value. | `2.1.1`, `2.1.2` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | — |
 | `Tab` | — | Move out of the control, closing the calendar. | `2.1.2` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | — |
@@ -329,7 +329,7 @@ Declared in `packages/core/src/components/forms/DzDatePicker.anatomy.ts`.
 
 - **Pattern:** [APG — `combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Enter`, `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -357,13 +357,13 @@ Every kind of evidence required of this component — by Tier C — and what was
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzDatePicker.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzDatePicker.contract.spec.ts` — The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzDatePicker.spec.ts` |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/forms.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzDatePicker.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzDatePicker.spec.ts` — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzDatePicker.spec.ts` — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Enter`, `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzDatePicker.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzDatePicker.stories.ts` |
@@ -374,7 +374,7 @@ Every kind of evidence required of this component — by Tier C — and what was
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzDatePicker.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `contract-spec`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

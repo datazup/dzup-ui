@@ -371,8 +371,8 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
-| **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/portal-hydration.spec.ts`. |
+| **Portal / teleport** | `present` — `packages/core/tests/ssr/portal-hydration.spec.ts`. Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
 | **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
 
@@ -418,8 +418,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -508,11 +508,11 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/navigation/DzSidebar.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/navigation/DzSidebar.contract.spec.ts` — The contract spec exists and does not touch `events`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/navigation/DzSidebar.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/portal-hydration.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzSidebar.spec.ts` — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
@@ -520,7 +520,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzSidebar.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
-| `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
+| `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/portal-hydration.spec.ts` — Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
@@ -530,7 +530,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -337,8 +337,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -381,7 +381,7 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**9 declared bindings.** Rendered from the
+**11 declared bindings.** Rendered from the
 component's own keyboard contract, not from the APG pattern it is held to — where the two
 differ, the difference is the point.
 
@@ -396,12 +396,14 @@ differ, the difference is the point.
 | `Enter` | `activationMode manual` | Activate the focused tab. | `2.1.1` | [`tabs`](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) | — |
 | `Space` | `activationMode manual` | Activate the focused tab. | `2.1.1` | [`tabs`](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) | — |
 | `Tab` | — | Move out of the tab list to the active panel; the list is one tab stop. | `2.1.2` | [`tabs`](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) | — |
+| `Delete` | `closable` | Close the focused tab. | `2.1.1` | — *(component-specific)* | — |
+| `Backspace` | `closable` | Close the focused tab. | `2.1.1` | — *(component-specific)* | — |
 
 Declared in `packages/core/src/components/navigation/DzTabs.anatomy.ts`.
 
 - **Pattern:** [APG — `tabs`](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Space`, `Tab`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 11 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Space`, `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -435,7 +437,7 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzTabs.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-layouts-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzTabs.spec.ts` — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Space`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzTabs.spec.ts` — The component declares 11 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Space`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzTabs.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzTabs.stories.ts` |

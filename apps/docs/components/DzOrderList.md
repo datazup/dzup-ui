@@ -266,8 +266,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -327,18 +327,18 @@ DzOrderList drags (reorder an item by dragging its grip), so SC 2.5.7 applies an
 component's own keyboard contract, not from the APG pattern it is held to — where the two
 differ, the difference is the point.
 
-| Key | Action | WCAG | Pattern |
-| --- | --- | --- | --- |
-| `ArrowDown` | Move focus to the next option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
-| `ArrowUp` | Move focus to the previous option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
-| `Home` | Move focus to the first option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
-| `End` | Move focus to the last option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
-| `Enter` | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
-| `Space` | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
-| any character key | Move focus to the next option whose label starts with that character. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
-| `Alt` + `ArrowUp` | Move the selected item one position earlier. | `2.1.1`, `2.5.7` | — *(component-specific)* |
-| `Alt` + `ArrowDown` | Move the selected item one position later. | `2.1.1`, `2.5.7` | — *(component-specific)* |
-| `Escape` | Cancel the reorder and restore the original position. | `2.1.1`, `2.1.2` | — *(component-specific)* |
+| Key | Where | Action | WCAG | Pattern |
+| --- | --- | --- | --- | --- |
+| `ArrowDown` | — | Move focus to the next option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `ArrowUp` | — | Move focus to the previous option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Home` | — | Move focus to the first option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `End` | — | Move focus to the last option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Enter` | — | Select the focused option. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `Space` | — | Grab the focused item for reordering, or drop it when it is already grabbed. | `2.1.1`, `2.5.7` | — *(component-specific)* |
+| any character key | — | Move focus to the next option whose label starts with that character. | `2.1.1` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) |
+| `ArrowUp` | `grabbed` | Move the grabbed item one position earlier. | `2.1.1`, `2.5.7` | — *(component-specific)* |
+| `ArrowDown` | `grabbed` | Move the grabbed item one position later. | `2.1.1`, `2.5.7` | — *(component-specific)* |
+| `Escape` | — | Cancel the reorder and restore the original position. | `2.1.1`, `2.1.2` | — *(component-specific)* |
 
 Declared in `packages/core/src/components/data/DzOrderList.anatomy.ts`.
 
@@ -372,9 +372,9 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/data/DzOrderList.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/data/DzOrderList.contract.spec.ts` — The contract spec exists and does not touch `events` — a surface this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/data/DzOrderList.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzOrderList.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
@@ -391,7 +391,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/data/DzOrderList.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

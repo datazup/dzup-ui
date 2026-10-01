@@ -188,6 +188,7 @@ then the component's own default.**
 
 | Reader | What the provider supplies through it |
 | --- | --- |
+| `useDzDirection` | the document writing direction |
 | `useDzTestIds` | the test-id attribute name and prefix |
 
 ## Locale, direction and formats
@@ -198,7 +199,7 @@ then the component's own default.**
 | `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
 | `icons` | — | No icon on this component carries direction, so none is mirrored. |
 
-**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+**Locale and formats.** Reads `useDzDirection` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is `present` — `packages/core/src/components/layout/DzToolbar.anatomy.ts`.
 
@@ -243,8 +244,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -255,6 +256,13 @@ production evidence, and it must not be read as a conformance claim.
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
 - **Component last changed at:** `a01965fa`
+
+::: warning Recorded exceptions
+A requirement this component provably cannot meet. The row stays in the matrix and the reason
+travels with it — an exception is visible, not deleted.
+
+- `controlled-uncontrolled` — No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. A grouping container for controls that each own their own value; it binds none itself. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)
+:::
 
 ### WCAG 2.2 criteria in scope (18)
 
@@ -285,23 +293,27 @@ has been verified. What has been verified, and by which lane, is the evidence ta
 
 ### Keyboard interaction
 
-**5 declared bindings.** Rendered from the
+**7 declared bindings.** Rendered from the
 component's own keyboard contract, not from the APG pattern it is held to — where the two
 differ, the difference is the point.
 
-| Key | Action | WCAG | Pattern | RTL |
-| --- | --- | --- | --- | --- |
-| `ArrowRight` | Move focus to the next control in the toolbar. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | swaps with the writing direction |
-| `ArrowLeft` | Move focus to the previous control in the toolbar. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | swaps with the writing direction |
-| `Home` | Move focus to the first control. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
-| `End` | Move focus to the last control. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
-| `Tab` | Move out of the toolbar; the toolbar is one tab stop. | `2.1.2` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
+| Key | Where | Action | WCAG | Pattern | RTL |
+| --- | --- | --- | --- | --- | --- |
+| `ArrowRight` | — | Move focus to the next control in the toolbar. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | swaps with the writing direction |
+| `ArrowLeft` | — | Move focus to the previous control in the toolbar. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | swaps with the writing direction |
+| `ArrowDown` | `orientation vertical` | Move focus to the next control in the toolbar. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
+| `ArrowUp` | `orientation vertical` | Move focus to the previous control in the toolbar. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
+| `Home` | — | Move focus to the first control. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
+| `End` | — | Move focus to the last control. | `2.1.1` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
+| `Tab` | — | Move out of the toolbar; the toolbar is one tab stop. | `2.1.2` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | — |
 
 Declared in `packages/core/src/components/layout/DzToolbar.anatomy.ts`.
 
 - **Pattern:** [APG — `toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 5 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
+  sequence in `packages/core/src/components/layout/DzToolbar.spec.ts`.
+  That is a presence measurement, not a table: it does not say which keys, or what they do.
 
 ### Assistive technology
 
@@ -331,19 +343,19 @@ Every kind of evidence required of this component — by Tier B — and what was
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/layout/DzToolbar.contract.spec.ts` |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/layout/DzToolbar.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/layout/DzToolbar.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/layout/DzToolbar.spec.ts` — The component declares 5 binding(s); the unit spec asserts no key event for `ArrowRight`, `ArrowLeft`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
-| `state-stories` | tier B | `pass` | `packages/core/stories/layout/DzToolbar.stories.ts` |
-| `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/layout/DzToolbar.spec.ts` — All 7 declared binding(s) are exercised by the unit spec. |
+| `state-stories` | tier B | `excepted` | `packages/core/src/components/layout/DzToolbar.types.ts` — The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too. |
+| `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. A grouping container for controls that each own their own value; it binds none itself. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/layout/DzToolbar.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/layout/DzToolbar.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzToolbar.md` — 6 AT/browser pairs, none executed. |
 
-**4 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**2 unrun:** `axe`, `at-manual` · **2 excepted:** `state-stories`, `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

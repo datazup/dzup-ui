@@ -242,8 +242,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -322,7 +322,7 @@ Every kind of evidence required of this component — by Tier B — and what was
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/inputs/DzTextarea.contract.spec.ts` |
-| `unit-spec` | tier A | `present` | `packages/core/src/components/inputs/DzTextarea.spec.ts` |
+| `unit-spec` | tier A | **`unrun`** | `packages/core/src/components/inputs/DzTextarea.spec.ts` — The unit spec exists and renders the component, and no live test drives it: the component calls `defineEmits`/`defineModel`, and nothing here triggers an event, sets a value, changes a prop or reads what was emitted. `unit-spec` is "render and behaviour units" (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/inputs.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/inputs/DzTextarea.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
@@ -335,7 +335,7 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTextarea.md` — 6 AT/browser pairs, none executed. |
 
-**2 unrun:** `controlled-uncontrolled`, `at-manual` · **1 excepted:** `keyboard-spec`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `unit-spec`, `controlled-uncontrolled`, `at-manual` · **1 excepted:** `keyboard-spec`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

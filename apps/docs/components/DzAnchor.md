@@ -187,7 +187,7 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `unrun`. No SSR spec server-renders this component in a test that runs. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
 | **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
@@ -234,8 +234,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -318,11 +318,11 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/navigation/DzAnchor.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/navigation/DzAnchor.contract.spec.ts` — The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/navigation/DzAnchor.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzAnchor.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | **`unrun`** | No SSR spec server-renders this component in a test that runs. |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzAnchor.spec.ts` — The component declares 1 binding(s); the unit spec asserts no key event for `Enter`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzAnchor.stories.ts` |
@@ -336,7 +336,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**7 unrun:** `contract-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -75,7 +75,7 @@ never as asserted.
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `step` | `number \| undefined` | no | `1` | Step increment for +/- buttons and arrow keys |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "error" \| "control" \| "input" \| "prefix" \| "decrement" \| "increment", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzNumberInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
+| `ui` | `Partial<Record<"root" \| "error" \| "input" \| "control" \| "prefix" \| "decrement" \| "increment", DzClassValue>> \| undefined` | no | `undefined` | Per-part class overrides, keyed by the names in `DzNumberInput.anatomy.ts` (ADR-19 §5). `class` keeps its existing meaning and its existing target; `ui` addresses the other parts by name, and a typo is a type error. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
 ## Events (6)
@@ -251,8 +251,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -340,7 +340,7 @@ Every kind of evidence required of this component — by Tier B — and what was
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/inputs/DzNumberInput.contract.spec.ts` |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/inputs/DzNumberInput.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/inputs/DzNumberInput.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |

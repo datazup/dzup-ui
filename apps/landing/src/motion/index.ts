@@ -9,6 +9,14 @@
  * wired from `src/main.ts`, not re-exported here.
  */
 
+// AutoAnimate — NOT a bare re-export from npm. `autoAnimate.ts` wraps
+// @formkit/auto-animate so its two-stage cold-poll timers are cancellable on
+// unmount: the library's own `destroy()` can reach neither stage, which leaks a 2 s
+// polling interval per node on every unmount. Invisible in a browser, and the cause
+// of the `requestAnimationFrame is not defined` unhandled errors that made
+// `yarn test`'s exit code depend on machine load (RESIDUAL-18 — see that file's
+// docstring, and `autoAnimate.spec.ts` for the contract).
+export { autoAnimate, useAutoAnimate, vAutoAnimate } from './autoAnimate.ts'
 // Backgrounds & hero family (docs/animations.md §6.4) — aurora drift (15) and
 // the cursor-follow spotlight (17) are components; animated grid/dots (16) and
 // gradient border glow (18) are the `.dz-anim-grid` / `.dz-anim-border-glow` CSS
@@ -187,4 +195,3 @@ export {
   supportsStartingStyle,
   supportsViewTransitions,
 } from './useViewTransition.ts'
-export { useAutoAnimate, vAutoAnimate } from '@formkit/auto-animate/vue'

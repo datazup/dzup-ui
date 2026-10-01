@@ -35,9 +35,11 @@ async function mountFooter() {
   return render(Footer, { global: { plugins: [router] } })
 }
 
+// Teardown through Vue, not through the DOM (RESIDUAL-18). `cleanup()` already
+// unmounts every rendered tree and removes its container; the `document.body` wipe
+// that followed it could only remove markup `cleanup()` does not own.
 afterEach(() => {
   cleanup()
-  document.body.innerHTML = ''
 })
 
 /** Every anchor in the footer's link columns (excludes the badge images). */

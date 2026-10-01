@@ -209,7 +209,7 @@ summarised wrongly.
 `ready`. Each is emitted as `data-state` or as a
 presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
 
-**Published examples:** `state-stories` is `pass` — `packages/core/stories/navigation/DzStepper.stories.ts`.
+**Published examples:** `state-stories` is `excepted` — `packages/core/src/components/navigation/DzStepper.types.ts`. The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too.
 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
@@ -232,8 +232,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -317,21 +317,21 @@ Every kind of evidence required of this component — by Tier B — and what was
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/navigation/DzStepper.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/navigation/DzStepper.contract.spec.ts` — The contract spec exists and does not touch `events` — a surface this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/navigation/DzStepper.spec.ts` |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/navigation.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzStepper.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-layouts-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzStepper.spec.ts` — The component declares 1 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all. |
-| `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzStepper.stories.ts` |
+| `state-stories` | tier B | `excepted` | `packages/core/src/components/navigation/DzStepper.types.ts` — The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too. |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzStepper.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzStepper.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzStepper.md` — 6 AT/browser pairs, none executed. |
 
-**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `contract-spec`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 excepted:** `state-stories`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

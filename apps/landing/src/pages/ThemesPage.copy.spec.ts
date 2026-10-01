@@ -77,10 +77,12 @@ beforeEach(() => {
   }
 })
 
+// Teardown through Vue, not through the DOM (RESIDUAL-18). `cleanup()` already
+// unmounts every rendered page and removes its container; the `document.body` wipe that
+// followed could only detach markup nothing had unmounted.
 afterEach(() => {
   cleanup()
   vi.unstubAllGlobals()
-  document.body.innerHTML = ''
 })
 
 /** The page's single polite live region. */

@@ -239,8 +239,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -338,7 +338,7 @@ Every kind of evidence required of this component — by Tier D, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzFileUpload.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzFileUpload.contract.spec.ts` — The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzFileUpload.spec.ts` |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/forms.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
@@ -360,7 +360,7 @@ Every kind of evidence required of this component — by Tier D, by its traits (
 | `url-policy` | tier D | `present` | `packages/core/security/DzFileUpload.url-policy.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `csp-fixture` | tier D | `present` | `packages/core/security/DzFileUpload.csp-fixture.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**1 unrun:** `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**2 unrun:** `contract-spec`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

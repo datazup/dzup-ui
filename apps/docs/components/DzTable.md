@@ -379,8 +379,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -395,6 +395,13 @@ production evidence, and it must not be read as a conformance claim.
 **Why this pattern:** Several primitives share one sort and selection state, and column resize is a drag interaction; at realistic row counts correctness and speed stop being separable.
 
 **Compound sub-parts are not matrix rows.** `DzTableBody`, `DzTableCell`, `DzTableFooter`, `DzTableHeader`, `DzTableRow` are documented on this page and carry no evidence row of its own. Everything below describes `DzTable`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
+
+::: warning Recorded exceptions
+A requirement this component provably cannot meet. The row stays in the matrix and the reason
+travels with it — an exception is visible, not deleted.
+
+- `controlled-uncontrolled` — No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Its emits are the `rowExpand`/`rowCollapse` notifications; sort, selection and expansion are the host's to hold, and `DzDataGrid` is the component that binds them. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)
+:::
 
 ### WCAG 2.2 criteria in scope (22)
 
@@ -438,16 +445,13 @@ DzTable drags (drag the column-resize handle), so SC 2.5.7 applies and was audit
 
 ### Keyboard interaction
 
-**6 declared bindings.** Rendered from the
+**3 declared bindings.** Rendered from the
 component's own keyboard contract, not from the APG pattern it is held to — where the two
 differ, the difference is the point.
 
 | Key | Where | Action | WCAG | Pattern | RTL |
 | --- | --- | --- | --- | --- | --- |
 | `Tab` | — | Move to the next interactive cell or header control; the table itself is not a tab stop. | `2.1.2` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | — |
-| `Enter` | `header sortable` | Cycle the focused column sort. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | — |
-| `Space` | `header sortable` | Cycle the focused column sort. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | — |
-| `Shift` + `Enter` | `header sortable` | Add the focused column to the existing sort rather than replacing it. | `2.1.1` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | — |
 | `ArrowRight` | `header resizable` | Widen the column by 8px, or 24px with Shift. | `2.1.1`, `2.5.7` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | swaps with the writing direction |
 | `ArrowLeft` | `header resizable` | Narrow the column by 8px, or 24px with Shift, never below its minimum width. | `2.1.1`, `2.5.7` | [`table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) | swaps with the writing direction |
 
@@ -455,7 +459,7 @@ Declared in `packages/core/src/components/data/DzTable.anatomy.ts`.
 
 - **Pattern:** [APG — `table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 6 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -489,9 +493,9 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzTable.spec.ts` — The component declares 6 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzTable.spec.ts` — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
-| `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
+| `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Its emits are the `rowExpand`/`rowCollapse` notifications; sort, selection and expansion are the host's to hold, and `DzDataGrid` is the component that binds them. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzTable.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
@@ -502,7 +506,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/4 metric(s) have a derived threshold |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/data/DzTable.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 
-**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**2 unrun:** `keyboard-spec`, `at-manual` · **1 stale:** `perf-baseline` · **1 excepted:** `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

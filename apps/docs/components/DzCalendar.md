@@ -231,7 +231,7 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
@@ -271,8 +271,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -340,7 +340,7 @@ Declared in `packages/core/src/components/data/DzCalendar.anatomy.ts`.
 
 - **Pattern:** [APG — `grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 12 binding(s); the unit spec asserts no key event for `ArrowLeft`, `ArrowUp`, `PageUp`, `Space`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 12 binding(s); the unit spec asserts no key event for `ArrowLeft`, `ArrowUp`, `Space`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -368,13 +368,13 @@ Every kind of evidence required of this component — by Tier C — and what was
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/data/DzCalendar.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/data/DzCalendar.contract.spec.ts` — The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/data/DzCalendar.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzCalendar.spec.ts` — The component declares 12 binding(s); the unit spec asserts no key event for `ArrowLeft`, `ArrowUp`, `PageUp`, `Space`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzCalendar.spec.ts` — The component declares 12 binding(s); the unit spec asserts no key event for `ArrowLeft`, `ArrowUp`, `Space`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzCalendar.stories.ts` |
@@ -385,7 +385,7 @@ Every kind of evidence required of this component — by Tier C — and what was
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzCalendar.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**5 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

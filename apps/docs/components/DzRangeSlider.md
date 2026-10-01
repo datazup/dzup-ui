@@ -73,7 +73,7 @@ never as asserted.
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
 | `step` | `number \| undefined` | no | `1` | Step increment |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
-| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "control" \| "label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzRangeSlider.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`, declared here as `control`; `ui.indicator` reaches **both** thumbs. |
+| `ui` | `Partial<Record<"root" \| "indicator" \| "error" \| "label" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzRangeSlider.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`, declared here as `control`; `ui.indicator` reaches **both** thumbs. |
 
 ## Events (4)
 
@@ -253,8 +253,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -353,9 +353,9 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzRangeSlider.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzRangeSlider.contract.spec.ts` — The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzRangeSlider.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzRangeSlider.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
@@ -368,7 +368,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzRangeSlider.md` — 6 AT/browser pairs, none executed. |
 | `non-drag-alternative` | trait drags | **`unrun`** | The component drags and its spec asserts no keyboard equivalent (WCAG 2.5.7). |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`, `non-drag-alternative`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`, `non-drag-alternative`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

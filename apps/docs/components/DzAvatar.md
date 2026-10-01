@@ -171,8 +171,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -226,8 +226,8 @@ Every kind of evidence required of this component — by Tier A, by its `url` se
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/media/DzAvatar.contract.spec.ts` |
-| `unit-spec` | tier A | `present` | `packages/core/src/components/media/DzAvatar.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/media/DzAvatar.contract.spec.ts` — The contract spec exists and does not touch `events`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
+| `unit-spec` | tier A | **`unrun`** | `packages/core/src/components/media/DzAvatar.spec.ts` — The unit spec exists and renders the component, and no live test drives it: the component calls `defineEmits`/`defineModel`, and nothing here triggers an event, sets a value, changes a prop or reads what was emitted. `unit-spec` is "render and behaviour units" (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/media.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/media/DzAvatar.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
@@ -236,4 +236,4 @@ Every kind of evidence required of this component — by Tier A, by its `url` se
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-No cell on this component is unrun, stale or excepted.
+**2 unrun:** `contract-spec`, `unit-spec`. They are named rather than counted, because a total tells a reader nothing about what is missing.

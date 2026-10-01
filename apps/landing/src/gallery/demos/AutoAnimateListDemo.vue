@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { AnimationController } from '@formkit/auto-animate'
 import { DzAvatar, DzBadge, DzButton, DzListItem } from '@dzup-ui/core'
-import autoAnimate from '@formkit/auto-animate'
 import { Plus, Shuffle, X } from 'lucide-vue-next'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useReducedMotion } from '../../motion/index.ts'
+// `autoAnimate` through the motion barrel, not from npm directly: the barrel's
+// wrapper is the one whose `destroy()` can cancel AutoAnimate's cold-poll timers
+// (RESIDUAL-18 — see motion/autoAnimate.ts). Importing the library here instead
+// would reintroduce one leaked 2 s interval per row on every unmount.
+import { autoAnimate, useReducedMotion } from '../../motion/index.ts'
 
 /**
  * Auto-animate list demo (catalog `auto-animate-list`, effect via AutoAnimate —

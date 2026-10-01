@@ -84,7 +84,7 @@ never as asserted.
 | `required` | `boolean \| undefined` | no | `false` | Whether the field is required |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | — | Semantic color tone |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "error" \| "item-label" \| "group" \| "viewport" \| "item-indicator" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "group-label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzListbox.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the listbox box, declared there as `control`. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "error" \| "item-label" \| "group" \| "viewport" \| "item-indicator" \| "empty" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "control" \| "group-label", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzListbox.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the listbox box, declared there as `control`. |
 | `variant` | `undefined` | no | — | Visual style variant |
 
 ## Events (9)
@@ -283,8 +283,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -374,9 +374,9 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzListbox.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzListbox.contract.spec.ts` — The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzListbox.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzListbox.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
@@ -389,7 +389,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzListbox.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzListbox.md` — 6 AT/browser pairs, none executed. |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

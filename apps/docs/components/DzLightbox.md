@@ -195,8 +195,8 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
-| **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
+| **Server rendering** | `unrun`. No SSR spec server-renders this component in a test that runs. |
+| **Portal / teleport** | `unrun`. No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | **Performance baseline** | Not a dataset component; no baseline is owed. |
 | **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
 
@@ -219,7 +219,7 @@ summarised wrongly.
 `closed`, `open`. Each is emitted as `data-state` or as a
 presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
 
-**Published examples:** `state-stories` is `pass` — `packages/core/stories/media/DzLightbox.stories.ts`.
+**Published examples:** `state-stories` is `excepted` — `packages/core/src/components/media/DzLightbox.types.ts`. The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too.
 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
@@ -242,8 +242,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -328,25 +328,25 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/media/DzLightbox.contract.spec.ts` |
-| `unit-spec` | tier A | `present` | `packages/core/src/components/media/DzLightbox.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/media/DzLightbox.contract.spec.ts` — The contract spec exists and does not touch `events`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
+| `unit-spec` | tier A | **`unrun`** | `packages/core/src/components/media/DzLightbox.spec.ts` — The unit spec exists and renders the component, and no live test drives it: the component calls `defineEmits`/`defineModel`, and nothing here triggers an event, sets a value, changes a prop or reads what was emitted. `unit-spec` is "render and behaviour units" (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/media/DzLightbox.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | **`unrun`** | No SSR spec server-renders this component in a test that runs. |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/media/DzLightbox.spec.ts` — The component declares 5 binding(s); the unit spec asserts no key event for `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all. |
-| `state-stories` | tier B | `pass` | `packages/core/stories/media/DzLightbox.stories.ts` |
+| `state-stories` | tier B | `excepted` | `packages/core/src/components/media/DzLightbox.types.ts` — The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too. |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/media/DzLightbox.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/media/DzLightbox.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
-| `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
+| `portal-hydration` | trait teleports | **`unrun`** | No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzLightbox.md` — 6 AT/browser pairs, none executed. |
 | `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**6 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**8 unrun:** `contract-spec`, `unit-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual` · **1 excepted:** `state-stories`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

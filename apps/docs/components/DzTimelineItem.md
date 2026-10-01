@@ -123,7 +123,7 @@ others for no stated reason.
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/ssr-smoke.spec.ts`. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Not a dataset component; no baseline is owed. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
@@ -160,8 +160,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -219,7 +219,7 @@ Every kind of evidence required of this component — by Tier A — and what was
 | `unit-spec` | tier A | **`unrun`** | — |
 | `axe` | tier A | `present` | `packages/core/tests/a11y/data.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzTimelineItem.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 
-**3 unrun:** `contract-spec`, `unit-spec`, `ssr-sample`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**2 unrun:** `contract-spec`, `unit-spec`. They are named rather than counted, because a total tells a reader nothing about what is missing.

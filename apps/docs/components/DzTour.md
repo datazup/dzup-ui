@@ -216,8 +216,8 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
-| **Portal / teleport** | `unrun`. This component renders teleported content and no SSR/hydration spec names it. |
+| **Server rendering** | `present` — `packages/core/tests/ssr/portal-hydration.spec.ts`. |
+| **Portal / teleport** | `present` — `packages/core/tests/ssr/portal-hydration.spec.ts`. Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
 | **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
@@ -253,8 +253,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -316,7 +316,7 @@ Declared in `packages/core/src/components/overlays/DzTour.anatomy.ts`.
 
 - **Pattern:** [APG — `dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 5 binding(s); the unit spec asserts no key event for `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 5 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -344,26 +344,26 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/overlays/DzTour.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/overlays/DzTour.contract.spec.ts` — The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/overlays/DzTour.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/portal-hydration.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/overlays/DzTour.spec.ts` — The component declares 5 binding(s); the unit spec asserts no key event for `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all. |
-| `state-stories` | tier B | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/overlays/DzTour.spec.ts` — The component declares 5 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all. |
+| `state-stories` | tier B | `excepted` | `packages/core/src/components/overlays/DzTour.types.ts` — The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too. |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/overlays/DzTour.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
-| `portal-hydration` | trait teleports | **`unrun`** | This component renders teleported content and no SSR/hydration spec names it. |
+| `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/portal-hydration.spec.ts` — Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTour.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**7 unrun:** `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline` · **1 excepted:** `state-stories`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

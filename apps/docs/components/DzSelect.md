@@ -230,7 +230,7 @@ then the component's own default.**
 | Concern | State |
 | --- | --- |
 | **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
-| **Portal / teleport** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | `unrun`. No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | **Performance baseline** | Declared `dataset`, but no `perf-baseline` cell exists for it. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
@@ -269,8 +269,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -363,9 +363,9 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzSelect.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzSelect.contract.spec.ts` — The contract spec exists and does not touch `slots` — a surface this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzSelect.spec.ts` |
-| `axe` | tier A | `present` | `packages/core/tests/a11y/forms.a11y.spec.ts` · `packages/core/tests/a11y/inputs.a11y.spec.ts` |
+| `axe` | tier A | `present` | `packages/core/tests/a11y/inputs.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzSelect.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
@@ -375,11 +375,11 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzSelect.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzSelect.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
-| `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
+| `portal-hydration` | trait teleports | **`unrun`** | No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzSelect.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSelect.md` — 6 AT/browser pairs, none executed. |
 
-**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

@@ -85,7 +85,7 @@ never as asserted.
 | `selection` | `TimePickerSelection \| undefined` | no | `"roll"` | Popover selection layout: scrollable wheel (`roll`) or native dropdowns (`select`) |
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `step` | `number \| undefined` | no | `1` | Minute step interval (e.g. 15 → :00, :15, :30, :45) |
-| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "clear" \| "list" \| "error" \| "footer" \| "separator" \| "group" \| "control" \| "label" \| "panel" \| "input", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTimePicker.anatomy.ts` (ADR-19 §5). `ui.list` names the region of choices in **both** the roll and the select layout, so a theme does not have to branch on `selection`. |
+| `ui` | `Partial<Record<"icon" \| "root" \| "item" \| "trigger" \| "content" \| "action" \| "clear" \| "list" \| "error" \| "footer" \| "separator" \| "group" \| "label" \| "panel" \| "input" \| "control", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTimePicker.anatomy.ts` (ADR-19 §5). `ui.list` names the region of choices in **both** the roll and the select layout, so a theme does not have to branch on `selection`. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant of the trigger |
 
 ## Events (8)
@@ -230,7 +230,7 @@ then the component's own default.**
 | Concern | State |
 | --- | --- |
 | **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
-| **Portal / teleport** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
+| **Portal / teleport** | `unrun`. No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
@@ -269,8 +269,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -326,7 +326,7 @@ differ, the difference is the point.
 | `ArrowUp` | — | Open the time list when closed, otherwise move to the previous option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
 | `Home` | `list open` | Move to the first option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
 | `End` | `list open` | Move to the last option. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
-| `Enter` | — | Select the highlighted option and close the time list. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
+| `Enter` | `item` | Select the highlighted option and close the time list. | `2.1.1` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
 | `Escape` | — | Close the time list without changing the value. | `2.1.1`, `2.1.2` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
 | `Tab` | — | Move out of the control, closing the time list. | `2.1.2` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) |
 
@@ -334,7 +334,7 @@ Declared in `packages/core/src/components/forms/DzTimePicker.anatomy.ts`.
 
 - **Pattern:** [APG — `combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Escape`, `Tab`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 7 binding(s); the unit spec asserts no key event for `Enter`, `Escape`, `Tab`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -362,25 +362,25 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzTimePicker.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzTimePicker.contract.spec.ts` — The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzTimePicker.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzTimePicker.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzTimePicker.spec.ts` — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Escape`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzTimePicker.spec.ts` — The component declares 7 binding(s); the unit spec asserts no key event for `Enter`, `Escape`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzTimePicker.stories.ts` |
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzTimePicker.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzTimePicker.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
-| `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
+| `portal-hydration` | trait teleports | **`unrun`** | No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzTimePicker.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzTimePicker.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTimePicker.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**4 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

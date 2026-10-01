@@ -160,7 +160,7 @@ then the component's own default.**
 
 | Concern | State |
 | --- | --- |
-| **Server rendering** | `unrun`. |
+| **Server rendering** | `unrun`. No SSR spec server-renders this component in a test that runs. |
 | **Portal / teleport** | Does not teleport: it renders in place, so there is no portal to hydrate. |
 | **Performance baseline** | Not a dataset component; no baseline is owed. |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
@@ -177,7 +177,7 @@ summarised wrongly.
 `checked`, `closed`, `disabled`, `open`, `unchecked`. Each is emitted as `data-state` or as a
 presence-only boolean attribute, so it is selectable in CSS and assertable in a test.
 
-**Published examples:** `state-stories` is `pass` — `packages/core/stories/data/DzTreeItem.stories.ts`.
+**Published examples:** `state-stories` is `excepted`. The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too.
 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
@@ -200,8 +200,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -212,6 +212,13 @@ production evidence, and it must not be read as a conformance claim.
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
 - **Component last changed at:** `527dbd15`
+
+::: warning Recorded exceptions
+A requirement this component provably cannot meet. The row stays in the matrix and the reason
+travels with it — an exception is visible, not deleted.
+
+- `controlled-uncontrolled` — No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Expansion and selection are `DzTree`'s bound values (`expandedKeys`, `selectedKeys`, `activeKey`); this renders one node of it. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.)
+:::
 
 ### WCAG 2.2 criteria in scope (18)
 
@@ -291,19 +298,19 @@ Every kind of evidence required of this component — by Tier B — and what was
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/data/DzTreeItem.contract.spec.ts` |
 | `unit-spec` | tier A | **`unrun`** | — |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzTreeItem.stories.ts` |
-| `ssr-sample` | tier A | **`unrun`** | — |
+| `ssr-sample` | tier A | **`unrun`** | No SSR spec server-renders this component in a test that runs. |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
 | `keyboard-spec` | tier B | **`unrun`** | — |
-| `state-stories` | tier B | `pass` | `packages/core/stories/data/DzTreeItem.stories.ts` |
-| `controlled-uncontrolled` | tier B | **`unrun`** | — |
+| `state-stories` | tier B | `excepted` | The `states` story check does not apply to this component — `packages/tooling/src/validators/story-dod.ts` derives applicability from the component's own `.types.ts`, and there is nothing here for the story to show. This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as "passed", and a check that was never asked is absent from it too. |
+| `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Expansion and selection are `DzTree`'s bound values (`expandedKeys`, `selectedKeys`, `activeKey`); this renders one node of it. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzTreeItem.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzTreeItem.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
 | `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTreeItem.md` — 6 AT/browser pairs, none executed. |
 
-**6 unrun:** `unit-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `unit-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `at-manual` · **2 excepted:** `state-stories`, `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

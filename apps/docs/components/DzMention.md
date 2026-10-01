@@ -84,7 +84,7 @@ never as asserted.
 | `size` | `CanonicalSize \| undefined` | no | `"md"` | Component size |
 | `tone` | `CanonicalTone \| undefined` | no | `undefined` | Semantic color tone |
 | `triggers` | `DzMentionTrigger[]` | yes | — | Configured triggers — each maps a char to its (sync or async) options |
-| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "list" \| "error" \| "item-label" \| "empty" \| "control" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMention.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the text control, declared there as `input` — so `ui.root` is the route to the wrapper. |
+| `ui` | `Partial<Record<"root" \| "item" \| "content" \| "list" \| "error" \| "item-label" \| "empty" \| "input" \| "options-state" \| "options-message" \| "options-retry" \| "control" \| "loader", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzMention.anatomy.ts` (ADR-19 §5). `class` keeps its existing target — the text control, declared there as `input` — so `ui.root` is the route to the wrapper. |
 | `value` | `string \| undefined` | no | `""` | Both `v-model` and `v-model:value` (renderer contract C1). `v-model:value` keeps working unchanged; `v-model` is the binding every other control in the catalog takes, and until now it silently did nothing here. |
 | `variant` | `InputVariant \| undefined` | no | `"outline"` | Visual style variant |
 
@@ -302,8 +302,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `589be135` for the capability matrix,
-`527dbd15` for the quality matrix. It is **locally qualified**:
+artifact records — `4e4e46f6` for the capability matrix,
+`4e4e46f6` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -394,9 +394,9 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
-| `contract-spec` | tier A | `present` | `packages/core/src/components/forms/DzMention.contract.spec.ts` |
+| `contract-spec` | tier A | **`unrun`** | `packages/core/src/components/forms/DzMention.contract.spec.ts` — The contract spec exists and does not touch `slots` — a surface this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/forms/DzMention.spec.ts` |
-| `axe` | tier A | **`unrun`** | — |
+| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzMention.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
@@ -412,7 +412,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzMention.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**6 unrun:** `contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records
