@@ -26,7 +26,7 @@ import {
   Settings,
   UserPlus,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 const open = ref(false)

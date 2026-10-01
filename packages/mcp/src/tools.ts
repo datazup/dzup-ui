@@ -77,6 +77,14 @@ function matches(q: string | undefined, ...haystack: Array<string | undefined>):
   return haystack.some(h => (h ?? '').toLowerCase().includes(needle))
 }
 
+export function isNotFoundError(err: unknown): boolean {
+  if (err instanceof Error) {
+    const msg = err.message.toLowerCase()
+    return msg.includes('404') || msg.includes('not found') || msg.includes('no such')
+  }
+  return false
+}
+
 function itemComponents(item: RegistryIndexItem): string[] {
   return item.meta?.components ?? []
 }
@@ -226,8 +234,10 @@ export async function getBlock(
     const item = await client.block(args.name)
     return renderItem(item, client.blockUrl(args.name), 'block')
   }
-  catch {
-    return { text: `Block "${args.name}" not found. Use list_blocks to browse available blocks.`, isError: true }
+  catch (err) {
+    if (isNotFoundError(err))
+      return { text: `Block "${args.name}" not found. Use list_blocks to browse available blocks.`, isError: true }
+    throw err
   }
 }
 
@@ -242,8 +252,10 @@ export async function getTemplate(
     const item = await client.template(args.name)
     return renderItem(item, client.templateUrl(args.name), 'template')
   }
-  catch {
-    return { text: `Template "${args.name}" not found. Use list_templates to browse available templates.`, isError: true }
+  catch (err) {
+    if (isNotFoundError(err))
+      return { text: `Template "${args.name}" not found. Use list_templates to browse available templates.`, isError: true }
+    throw err
   }
 }
 
@@ -418,9 +430,9 @@ export async function searchComponents(
         c.kind,
         c.parentComponent,
         c.status,
-        ...c.props.map(p => `${p.name} ${p.description}`),
-        ...c.slots.map(s => `${s.name} ${s.description}`),
-        ...c.events.map(e => `${e.name} ${e.description}`),
+        ...(c.props ?? []).map(p => `${p.name} ${p.description}`),
+        ...(c.slots ?? []).map(s => `${s.name} ${s.description}`),
+        ...(c.events ?? []).map(e => `${e.name} ${e.description}`),
       ),
   )
   if (!rows.length) {
@@ -455,8 +467,8 @@ export async function searchComponents(
       ].filter(Boolean)
       parts.push(
         `- **${c.name}**${bits.length ? ` _(${bits.join(' · ')})_` : ''} — `
-        + `${c.props.length} props, ${c.events.length} events, ${c.slots.length} slots`
-        + `${c.stories.primary ? '' : ' · no published example'}`,
+        + `${(c.props ?? []).length} props, ${(c.events ?? []).length} events, ${(c.slots ?? []).length} slots`
+        + `${c.stories?.primary ? '' : ' · no published example'}`,
       )
     }
     parts.push('')

@@ -67,9 +67,9 @@ export interface DzDropdownMenuContentProps extends BaseAccessibilityProps, Base
 /** Events emitted by DzDropdownMenuContent */
 export interface DzDropdownMenuContentEmits {
   /** Escape key pressed */
-  escapeKeyDown: [event: KeyboardEvent]
+  escapeKeyDown: [e: KeyboardEvent]
   /** Pointer down outside content */
-  pointerDownOutside: [event: Event]
+  pointerDownOutside: [e: Event]
 }
 
 /** Slot definitions for DzDropdownMenuContent */
@@ -98,7 +98,7 @@ export interface DzDropdownMenuItemProps {
 /** Events emitted by DzDropdownMenuItem */
 export interface DzDropdownMenuItemEmits {
   /** Item selected (clicked or Enter key) */
-  select: [event: Event]
+  select: [e: Event]
 }
 
 /** Slot definitions for DzDropdownMenuItem */

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzText } from '@dzup-ui/core'
-import { CreditCard } from 'lucide-vue-next'
+import { CreditCard } from '@lucide/vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { DzSuccessCheck } from '../../motion/index.ts'
 

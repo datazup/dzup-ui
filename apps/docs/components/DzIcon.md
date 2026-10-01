@@ -54,7 +54,7 @@ never as asserted.
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label. When provided, the icon is treated as meaningful (not decorative). |
-| `icon` | `Component` | yes | — | Icon component to render (e.g. from lucide-vue-next) |
+| `icon` | `Component` | yes | — | Icon component to render (e.g. from |
 | `id` | `string \| undefined` | no | — | Accessible identifier |
 | `size` | `IconSize \| undefined` | no | `"md"` | Icon size |
 | `strokeWidth` | `number \| undefined` | no | — | SVG stroke width override |
@@ -147,8 +147,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `4e4e46f6` for the capability matrix,
-`4e4e46f6` for the quality matrix. It is **locally qualified**:
+artifact records — `e6980361` for the capability matrix,
+`e6980361` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

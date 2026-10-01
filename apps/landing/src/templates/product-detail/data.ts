@@ -8,7 +8,7 @@
  * studio shot even re-tints when the shopper picks a different colourway.
  */
 import type { Component } from 'vue'
-import { BatteryCharging, Bluetooth, Feather, ShieldCheck, Sparkles, Waves } from 'lucide-vue-next'
+import { BatteryCharging, Bluetooth, Feather, ShieldCheck, Sparkles, Waves } from '@lucide/vue'
 
 // ---------------------------------------------------------------------------
 // Studio product shots (asset-free, token-themed)

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
+  "sourceCommit": "e69803612cec1be7e392643555f37c514c367cc7",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -38,7 +38,7 @@
       "path": "packages/core/perf/baselines.json",
       "note": "33 metric(s) recorded, 24 with a derived threshold and 9 \"not yet measurable\" (variance exceeds signal). 4 declared metric famil(ies) have NO baseline at all — leak, longtask, memory, hydration — so those lanes run, report, and cannot fail. The capture host is **not declared**: see packages/core/perf/capture-environment.json. No CI workflow runs `yarn test:perf`, so no perf threshold gates anything today.",
       "gate": {
-        "platform": "win32/x64",
+        "platform": "mixed (linux/x64, win32/x64)",
         "authoritative": "undesignated",
         "ciGate": false,
         "blockedOn": "two owner actions: designate an authoritative capture host in packages/core/perf/capture-environment.json (D-S1O4-1), then add a CI job that runs `DZUP_PERF_GATE=1 yarn test:perf` on it (D-S1O4-3)."
@@ -47,23 +47,22 @@
     "browser-matrix": {
       "available": true,
       "path": "e2e/matrix/browser-evidence.json",
-      "note": "24/24 projects (chromium, firefox, webkit × 8 conditions) projected over 89 Tier B–D components: 2112 pass, 0 fail, 24 unrun. At least one run was measured on a DIRTY worktree — locally qualified only, not release or CI evidence. Each run carries its own worktreeDirty/dirtyPathCount.",
+      "note": "24/24 projects (chromium, firefox, webkit × 8 conditions) projected over 89 Tier B–D components: 2112 pass, 0 fail, 24 unrun. Every run was measured on a clean worktree at its stated commit; still a developer machine, not CI.",
       "gate": {
-        "platform": "win32 — node v24.14.1",
+        "platform": "linux — node v24.20.0",
         "authoritative": "linux",
         "ciGate": false,
-        "blockedOn": "two acts, in this order. (1) A CI job that runs the Playwright matrix lane on `ubuntu-latest` and projects its JSON report through `yarn generate:browser-evidence` — measured 2026-09-28, NO workflow in .github/ invokes `yarn test:e2e:matrix` or `yarn generate:browser-evidence`, and the only `continue-on-error: true` in ci.yml is on the visual e2e step. (2) One sweep on a CLEAN worktree — every run committed here carries worktreeDirty: true, which this ledger's own admissibility field calls locally qualified only. Until (1), these rows are developer-local evidence and cannot fail anything."
+        "blockedOn": "two acts, in this order. (1) A CI job that runs the Playwright matrix lane on `ubuntu-latest` and projects its JSON report through `yarn generate:browser-evidence` — measured 2026-09-28, NO workflow in .github/ invokes `yarn test:e2e:matrix` or `yarn generate:browser-evidence`, and the only `continue-on-error: true` in ci.yml is on the visual e2e step. (2) One sweep on a CLEAN worktree. Until (1), these rows are developer-local evidence and cannot fail anything."
       }
     },
     "visual-baselines": {
       "available": true,
       "path": "e2e/visual/visual-baselines.json",
-      "note": "Per-component baselines for families [buttons]: 8 component(s), light + dark, chromium/win32, ltr. 4 stress fixture(s) also carry baselines over these families; a fixture is not a component and changes no row's `visual` state. Every component outside those families reads `not-covered`, never `unknown`. The authoritative platform is `linux` (every CI runner is that platform) and these baselines are `win32`. Baselines are platform-locked, so this lane is developer-local evidence and CANNOT fail a CI run until one accept pass is made on linux. Lanes: gallery (linux, gate); theme-recipe (linux, gate); component-baselines (win32, developer-local).",
+      "note": "Per-component baselines for families [buttons]: 9 component(s), light + dark, chromium/linux, ltr. 4 stress fixture(s) also carry baselines over these families; a fixture is not a component and changes no row's `visual` state. Every component outside those families reads `not-covered`, never `unknown`. The gating platform is the authoritative one (linux). Lanes: gallery (linux, gate); theme-recipe (linux, gate); component-baselines (win32, developer-local).",
       "gate": {
-        "platform": "win32",
+        "platform": "linux",
         "authoritative": "linux",
-        "ciGate": false,
-        "blockedOn": "one `yarn visual:accept` pass per snapshot on linux, then `lanes[component-baselines].capturedOn` → \"linux\". Baseline capture is an owner action (e2e/visual/README.md)."
+        "ciGate": true
       }
     },
     "browser-engine-ratchets": {
@@ -88,18 +87,18 @@
       "excepted": 4
     },
     "B": {
-      "pass": 300,
+      "pass": 292,
       "fail": 0,
       "present": 264,
-      "stale": 0,
+      "stale": 8,
       "unrun": 287,
       "excepted": 66
     },
     "C": {
-      "pass": 145,
+      "pass": 135,
       "fail": 0,
       "present": 92,
-      "stale": 21,
+      "stale": 31,
       "unrun": 112,
       "excepted": 4
     },
@@ -240,7 +239,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -260,7 +259,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -338,7 +337,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -418,7 +417,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -547,7 +546,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -609,7 +608,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -687,7 +686,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -765,7 +764,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -843,7 +842,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -919,7 +918,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1033,7 +1032,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1155,7 +1154,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1282,7 +1281,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -1302,7 +1301,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1380,7 +1379,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1511,7 +1510,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -1541,7 +1540,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1620,7 +1619,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1751,7 +1750,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -1813,7 +1812,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -1942,7 +1941,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -1989,7 +1988,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -1998,10 +1997,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (527dbd15) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -2073,7 +2072,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -2082,10 +2081,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButtonGroup-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButtonGroup-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButtonGroup-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzButtonGroup-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -2099,7 +2098,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzCalendar.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2206,14 +2205,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -2261,7 +2260,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2340,7 +2339,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2470,7 +2469,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -2490,7 +2489,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2506,7 +2505,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/media/DzCarousel.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2613,14 +2612,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -2649,7 +2648,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2666,7 +2665,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzCascader.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2773,14 +2772,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -2845,7 +2844,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -2975,7 +2974,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -2995,7 +2994,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3123,7 +3122,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3143,7 +3142,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3157,7 +3156,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzChip.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -3264,14 +3263,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3291,7 +3290,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3370,7 +3369,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3448,7 +3447,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3577,7 +3576,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3597,7 +3596,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3725,7 +3724,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3745,7 +3744,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3875,7 +3874,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -3917,7 +3916,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -3931,7 +3930,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -3948,7 +3947,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzCombobox.vue",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -4056,14 +4055,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4128,7 +4127,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4260,7 +4259,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4311,7 +4310,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -4325,7 +4324,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4453,7 +4452,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4481,7 +4480,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4560,7 +4559,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4690,7 +4689,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4718,7 +4717,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4845,7 +4844,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -4859,7 +4858,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -4868,10 +4867,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -4949,7 +4948,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -4966,7 +4965,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzDataGrid.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5073,14 +5072,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -5145,7 +5144,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5161,7 +5160,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzDataView.vue",
-      "componentCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5268,14 +5267,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -5332,7 +5331,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5346,7 +5345,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5454,14 +5453,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -5509,7 +5508,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5523,7 +5522,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5630,14 +5629,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -5685,7 +5684,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5763,7 +5762,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5852,7 +5851,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -5984,7 +5983,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -6012,7 +6011,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6091,7 +6090,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6221,7 +6220,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -6249,7 +6248,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6326,7 +6325,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6405,7 +6404,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6480,7 +6479,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6608,7 +6607,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -6622,7 +6621,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -6631,10 +6630,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzFab-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzFab-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzFab-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzFab-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -6762,7 +6761,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -6791,7 +6790,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -6924,7 +6923,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -7026,7 +7025,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7105,7 +7104,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7183,7 +7182,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7263,7 +7262,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7343,7 +7342,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7422,7 +7421,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7501,7 +7500,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7630,7 +7629,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -7644,7 +7643,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -7653,10 +7652,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzIconButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzIconButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzIconButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzIconButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -7770,7 +7769,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -7881,7 +7880,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8010,7 +8009,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8073,7 +8072,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8202,7 +8201,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -8231,7 +8230,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8358,7 +8357,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8378,7 +8377,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8508,7 +8507,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8528,7 +8527,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8606,7 +8605,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8734,7 +8733,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8754,7 +8753,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8832,7 +8831,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -8963,7 +8962,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8993,7 +8992,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9124,7 +9123,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -9185,7 +9184,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9277,7 +9276,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9291,7 +9290,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzListItem.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -9397,14 +9396,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -9424,7 +9423,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9440,7 +9439,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzListbox.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -9547,14 +9546,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -9583,7 +9582,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9660,7 +9659,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9676,7 +9675,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/navigation/DzMegaMenu.vue",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -9784,14 +9783,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -9881,7 +9880,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -9897,7 +9896,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzMention.vue",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10004,14 +10003,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10068,7 +10067,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10197,7 +10196,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10259,7 +10258,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10337,7 +10336,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10354,7 +10353,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10462,14 +10461,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -10534,7 +10533,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10662,7 +10661,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -10682,7 +10681,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10810,7 +10809,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -10830,7 +10829,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -10847,7 +10846,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzOrderList.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10954,14 +10953,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -11028,7 +11027,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11156,7 +11155,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11176,7 +11175,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11253,7 +11252,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11383,7 +11382,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11403,7 +11402,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11531,7 +11530,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11551,7 +11550,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11680,7 +11679,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11700,7 +11699,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -11831,7 +11830,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -11882,7 +11881,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -11929,7 +11928,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12058,7 +12057,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12088,7 +12087,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12220,7 +12219,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12248,7 +12247,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12329,7 +12328,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12450,7 +12449,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12470,7 +12469,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12582,7 +12581,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12711,7 +12710,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12731,7 +12730,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -12861,7 +12860,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12881,7 +12880,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13011,7 +13010,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13039,7 +13038,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13168,7 +13167,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13188,7 +13187,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13276,7 +13275,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13405,7 +13404,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13435,7 +13434,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13513,7 +13512,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13591,7 +13590,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13720,7 +13719,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13740,7 +13739,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13818,7 +13817,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -13947,7 +13946,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13967,7 +13966,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14096,7 +14095,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -14116,7 +14115,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14133,7 +14132,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzSelect.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -14242,14 +14241,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14286,7 +14285,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14418,7 +14417,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14446,7 +14445,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14578,7 +14577,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14631,7 +14630,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -14678,7 +14677,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14756,7 +14755,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14888,7 +14887,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -14916,7 +14915,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -14994,7 +14993,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15124,7 +15123,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -15155,7 +15154,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -15164,10 +15163,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSpeedDial-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSpeedDial-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSpeedDial-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSpeedDial-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -15246,7 +15245,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15373,7 +15372,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15387,7 +15386,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -15396,10 +15395,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSplitButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSplitButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSplitButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzSplitButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -15529,7 +15528,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15559,7 +15558,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15639,7 +15638,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15718,7 +15717,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `cards` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15849,7 +15848,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15869,7 +15868,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -15883,7 +15882,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/navigation/DzStepperItem.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -15983,14 +15982,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16010,7 +16009,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16140,7 +16139,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16160,7 +16159,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16291,7 +16290,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -16358,7 +16357,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16487,7 +16486,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16507,7 +16506,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16521,7 +16520,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzTag.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -16629,14 +16628,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16656,7 +16655,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16787,7 +16786,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -16816,7 +16815,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -16895,7 +16894,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17025,7 +17024,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17045,7 +17044,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `inputs` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17164,7 +17163,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "0/24 projects measured green at 589be13 (worktree dirty). 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "0/24 projects measured green at 3ee3d5f. 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17184,7 +17183,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `providers` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17200,7 +17199,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzTimePicker.vue",
-      "componentCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -17307,14 +17306,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -17370,7 +17369,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17460,7 +17459,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17535,7 +17534,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17664,7 +17663,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17684,7 +17683,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17810,7 +17809,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17824,7 +17823,7 @@
         }
       ],
       "visual": {
-        "state": "stale",
+        "state": "covered",
         "baselines": 2,
         "themes": [
           "dark",
@@ -17833,10 +17832,10 @@
         "artifacts": [
           "e2e/visual/component-baselines.spec.ts",
           "e2e/visual/visual-baselines.json",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzToggleButton-dark-chromium-win32.png",
-          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzToggleButton-light-chromium-win32.png"
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzToggleButton-dark-chromium-linux.png",
+          "e2e/visual/component-baselines.spec.ts-snapshots/component-DzToggleButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (a01965fa) — a pass about different code."
+        "note": "2 accepted baseline(s), dark + light, chromium/linux, ltr. Gating platform matches CI."
       }
     },
     {
@@ -17914,7 +17913,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -17928,7 +17927,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/layout/DzToolbar.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -18035,14 +18034,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -18062,7 +18061,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `layout` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18194,7 +18193,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -18222,7 +18221,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18239,7 +18238,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/overlays/DzTour.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -18348,14 +18347,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -18422,7 +18421,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18438,7 +18437,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzTransfer.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -18545,14 +18544,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -18609,7 +18608,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18740,7 +18739,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -18783,7 +18782,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -18797,7 +18796,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18917,7 +18916,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -18937,7 +18936,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -18954,7 +18953,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzTreeSelect.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -19062,14 +19061,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 3ee3d5f. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -19134,7 +19133,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -19208,7 +19207,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `typography` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -19285,7 +19284,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `media` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -19363,7 +19362,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     },
     {
@@ -19441,7 +19440,7 @@
         "artifacts": [
           "e2e/visual/visual-baselines.json"
         ],
-        "note": "The per-component visual lane covers families [buttons] on win32; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
+        "note": "The per-component visual lane covers families [buttons] on linux; `feedback` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md."
       }
     }
   ]

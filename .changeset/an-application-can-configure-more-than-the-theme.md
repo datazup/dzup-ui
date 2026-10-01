@@ -1,6 +1,6 @@
 ---
-"@dzup-ui/contracts": minor
-"@dzup-ui/core": minor
+"@dzup-ui/contracts": patch
+"@dzup-ui/core": patch
 ---
 
 **An application can now read locale, direction, messages, formats, portal target, motion, defaults, CSP nonce and test ids from one contract — and every component still works with none of them set.**

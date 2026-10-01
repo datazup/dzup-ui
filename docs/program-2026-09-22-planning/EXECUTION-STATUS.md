@@ -32,12 +32,12 @@
 
 | Residual (planning source) | Owning row | State on 2026-09-22 |
 |---|---|---|
-| `apps/sandbox` retired-but-present (08-08 owner decision 4) | `TASK-R1-O6` (D174–D178) | `[!]` owner |
-| Firefox / WebKit evidence for the recovery (08-25 §7) | `TASK-R2-O1` | `[~]` |
-| Remote CI state unknown (08-25 §7, 08-10 oss-coverage) | `TASK-R1-O4` | `[!]` owner dispatch |
+| `apps/sandbox` retired-but-present (08-08 owner decision 4) | `TASK-R1-O6` (D174–D178) | `[x]` removed in `cc13194` (D177, owner 2026-09-26) |
+| Firefox / WebKit evidence for the recovery (08-25 §7) | `TASK-R2-O1` | `[x]` COMPLETE 2026-09-22; re-run at clean `3ee3d5f`, 1431 passed per engine (`6cbc6f1`, `843ffad`) |
+| Remote CI state unknown (08-25 §7, 08-10 oss-coverage) | `TASK-R1-O4` | `[x]` known: push CI runs on GitHub, green on `bce1312` (run 36268407552). The dispatch half stays `[!]` on `TASK-R1-O4`: `min-peer.yml` has never run (2026-09-27) |
 | Landing RTL routes (APP-1 finding) | `TASK-R5-O4` (D62) | `[x]` |
 | OSS 321 lint findings (ThemeRecipe ledger "separately tracked debt") | `TASK-R1-O1` | `[x]` |
-| Visual-baseline rollout (Packet 6 OSS half) | `TASK-R2-O6` | `[~]` capture half blocked |
+| Visual-baseline rollout (Packet 6 OSS half) | `TASK-R2-O6` | `[~]` unblocked 2026-09-26: the lane runs in the pinned container (O6-D2 b) with linux baselines. The gate flipped to blocking 2026-09-27 after three green CI runs (`docs/qa/visual-gate-flip-2026-09-27/`); waves 0–4 remain (`docs/qa/visual-lane-container-2026-09-26/`) |
 
 ## Owner decisions raised by this program
 

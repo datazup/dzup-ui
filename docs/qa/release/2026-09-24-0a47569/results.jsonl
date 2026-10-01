@@ -1,0 +1,15 @@
+{"n":1,"name":"install-immutable","command":"yarn install --immutable","exit":0,"seconds":3,"log":"01-install-immutable.txt","startedAt":"2026-09-24T20:35:13Z"}
+{"n":2,"name":"typecheck-all","command":"yarn typecheck:all","exit":0,"seconds":24,"log":"02-typecheck-all.txt","startedAt":"2026-09-24T20:35:16Z"}
+{"n":3,"name":"typecheck-tooling","command":"yarn typecheck:tooling","exit":0,"seconds":2,"log":"03-typecheck-tooling.txt","startedAt":"2026-09-24T20:35:40Z"}
+{"n":4,"name":"lint","command":"yarn lint","exit":0,"seconds":37,"log":"04-lint.txt","startedAt":"2026-09-24T20:35:42Z"}
+{"n":5,"name":"test","command":"yarn test","exit":0,"seconds":65,"log":"05-test.txt","startedAt":"2026-09-24T20:36:19Z"}
+{"n":6,"name":"test-contracts","command":"yarn test:contracts","exit":0,"seconds":12,"log":"06-test-contracts.txt","startedAt":"2026-09-24T20:37:24Z"}
+{"n":7,"name":"test-a11y","command":"yarn test:a11y","exit":0,"seconds":2,"log":"07-test-a11y.txt","startedAt":"2026-09-24T20:37:36Z"}
+{"n":8,"name":"build","command":"yarn build","exit":0,"seconds":22,"log":"08-build.txt","startedAt":"2026-09-24T20:37:38Z"}
+{"n":9,"name":"validate-all","command":"yarn validate:all","exit":0,"seconds":78,"log":"09-validate-all.txt","startedAt":"2026-09-24T20:38:00Z"}
+{"n":10,"name":"dist-artifacts","command":"bash scripts/release-checks/dist-artifacts.sh","exit":0,"seconds":0,"log":"10-dist-artifacts.txt","startedAt":"2026-09-24T20:39:18Z"}
+{"n":11,"name":"esm-only","command":"bash scripts/release-checks/esm-only.sh","exit":0,"seconds":0,"log":"11-esm-only.txt","startedAt":"2026-09-24T20:39:18Z"}
+{"n":12,"name":"published-imports","command":"yarn validate:published-imports --built","exit":0,"seconds":3,"log":"12-published-imports.txt","startedAt":"2026-09-24T20:39:18Z"}
+{"n":13,"name":"nuxt-fixtures","command":"yarn test:nuxt-fixtures:pack","exit":0,"seconds":2,"log":"13-nuxt-fixtures.txt","startedAt":"2026-09-24T20:39:21Z"}
+{"n":14,"name":"api-diff","command":"yarn release:api-diff --out docs/qa/release/2026-09-24-0a47569","exit":0,"seconds":4,"log":"14-api-diff.txt","startedAt":"2026-09-24T20:39:23Z"}
+{"n":15,"name":"evidence","command":"yarn release:evidence --out docs/qa/release/2026-09-24-0a47569","exit":0,"seconds":3,"log":"15-evidence.txt","startedAt":"2026-09-24T20:39:27Z"}

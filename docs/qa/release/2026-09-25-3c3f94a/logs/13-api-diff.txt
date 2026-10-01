@@ -1,0 +1,23 @@
+fatal: no upstream configured for branch 'chore/release-decisions-20260925'
+packing the published packages… 6 tarball(s)
+  @dzup-ui/contracts@0.1.0: 167 symbol(s) · 34 const · 54 interface · 58 type · 1 class · 20 function
+  @dzup-ui/core@0.2.0: 1325 symbol(s) · 245 type · 640 interface · 50 const · 204 component · 186 function
+  @dzup-ui/mcp@0.2.0: 27 symbol(s) · 5 const · 12 interface · 1 type · 1 class · 8 function
+  @dzup-ui/nuxt@0.1.0-alpha.0: 9 symbol(s) · 1 interface · 1 type · 7 function
+  @dzup-ui/testing@0.1.0: 79 symbol(s) · 19 interface · 10 type · 15 const · 35 function
+  @dzup-ui/tokens@0.2.0: 4 symbol(s) · 4 const
+
+  @dzup-ui/contracts   +0 −0 ~0  requires none  declared minor (none)
+  @dzup-ui/core        +436 −0 ~0  requires patch declared minor (manifest-only)
+  @dzup-ui/mcp         +0 −0 ~0  requires none  declared patch (none)
+  @dzup-ui/nuxt        +0 −0 ~0  requires none  declared minor (none)
+  @dzup-ui/testing     +0 −0 ~0  requires none  declared minor (none)
+  @dzup-ui/tokens      +0 −0 ~0  requires none  declared patch (none)
+
+  generate:exports drift @dzup-ui/core: clean
+  manifest reconciliation @dzup-ui/core: 436 exported-and-undocumented, 0 documented-and-undelivered
+
+  1 STOP CONDITION(S) — reported, not blocked:
+    [manifest-omission] @dzup-ui/core: 436 symbol(s) reach a consumer through the root barrel and are absent from public-api.manifest.json's documented name lists. Not a generator action (the barrel star-re-exports); a stale document other tooling has already been moved off (TASK-N2-A1).
+
+written → docs/qa/release/2026-09-25-3c3f94a/api-diff.{json,md}

@@ -12,7 +12,7 @@ import {
   LifeBuoy,
   Settings,
   Users,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { DzBadge } from '../../../src/components/feedback'
 import { DzAvatar } from '../../../src/components/media'
 import {

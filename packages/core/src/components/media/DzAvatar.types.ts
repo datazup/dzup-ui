@@ -51,7 +51,7 @@ export interface DzAvatarProps extends BaseAccessibilityProps {
 /** Events emitted by DzAvatar */
 export interface DzAvatarEmits {
   /** Emitted when the avatar image fails to load */
-  error: [event: Event]
+  error: [e: Event]
 }
 
 // ---------------------------------------------------------------------------

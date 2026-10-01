@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DzSelectEmits, DzSelectProps, DzSelectSlots } from './DzSelect.types.ts'
-import { Check, ChevronDown } from 'lucide-vue-next'
+import { Check, ChevronDown } from '@lucide/vue'
 import {
   SelectContent,
   SelectIcon,

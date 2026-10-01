@@ -95,15 +95,15 @@ export interface DzDialogContentProps extends BaseAccessibilityProps, BasePortal
 /** Events emitted by DzDialogContent */
 export interface DzDialogContentEmits {
   /** Escape key pressed while dialog is open */
-  escapeKeyDown: [event: KeyboardEvent]
+  escapeKeyDown: [e: KeyboardEvent]
   /** Pointer down outside dialog content */
-  pointerDownOutside: [event: Event]
+  pointerDownOutside: [e: Event]
   /** Any interaction outside dialog content */
-  interactOutside: [event: Event]
+  interactOutside: [e: Event]
   /** Focus event when dialog opens -- call event.preventDefault() to prevent auto-focus */
-  openAutoFocus: [event: Event]
+  openAutoFocus: [e: Event]
   /** Focus event when dialog closes -- call event.preventDefault() to prevent focus return */
-  closeAutoFocus: [event: Event]
+  closeAutoFocus: [e: Event]
 }
 
 // ---------------------------------------------------------------------------

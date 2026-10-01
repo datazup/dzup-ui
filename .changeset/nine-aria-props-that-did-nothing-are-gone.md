@@ -1,4 +1,5 @@
 ---
+"@dzup-ui/codemods": minor
 "@dzup-ui/core": minor
 ---
 
@@ -54,13 +55,14 @@ what to do instead, and the fall-through. Production builds drop the check.
 | `<DzFloatLabel :aria-label="…">` etc. | put all four on the control you wrap, or use `DzFormField` |
 
 `@dzup-ui/codemods`' `rename-props` transform strips all nine, in every binding
-form a Vue template or JSX can write. **That transform has no delivery path**:
-`@dzup-ui/codemods` is public and publishable but sits on the changesets `ignore`
-list, so no changeset can release it and this changeset is forbidden from naming
-it alongside a published package. The codemod exists in the repository and
-cannot currently reach you (owner decision N5-01-D2,
-`packages/tooling/scripts/release-policy.json`). Until that is resolved, the
-table above is the migration.
+form a Vue template or JSX can write:
+
+```sh
+npx @dzup-ui/codemods rename-props src/
+```
+
+`@dzup-ui/codemods` is released alongside this change (owner decision N5-01-D2,
+2026-09-26). The table above is the same migration, by hand.
 
 **Three sibling props were kept and implemented rather than removed** —
 `DzInplace.ariaLabelledby`, `DzStepper.ariaLabelledby` and

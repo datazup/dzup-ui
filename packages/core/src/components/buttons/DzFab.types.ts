@@ -86,11 +86,11 @@ export interface DzFabProps extends BaseAccessibilityProps {
 /** Events emitted by DzFab */
 export interface DzFabEmits {
   /** Native click event (suppressed when disabled or loading) */
-  click: [event: MouseEvent]
+  click: [e: MouseEvent]
   /** Focus gained */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus lost */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

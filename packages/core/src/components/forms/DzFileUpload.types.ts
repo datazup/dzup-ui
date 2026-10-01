@@ -96,9 +96,9 @@ export interface DzFileUploadEmits {
    */
   uploadRequest: [request: UploadRequest]
   /** Focus gained */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus lost */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

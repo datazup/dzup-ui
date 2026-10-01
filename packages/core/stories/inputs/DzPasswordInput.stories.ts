@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { Lock, Shield } from 'lucide-vue-next'
+import { Lock, Shield } from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzPasswordInput } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'

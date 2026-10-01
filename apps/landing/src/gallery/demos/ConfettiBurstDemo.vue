@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzText } from '@dzup-ui/core'
-import { PartyPopper, Rocket } from 'lucide-vue-next'
+import { PartyPopper, Rocket } from '@lucide/vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { DzConfetti, useReducedMotion } from '../../motion/index.ts'
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowLeftRight } from 'lucide-vue-next'
+import { ArrowLeftRight } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { useReducedMotion } from '../../motion/index.ts'
 

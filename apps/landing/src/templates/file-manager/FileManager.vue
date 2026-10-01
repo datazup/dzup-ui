@@ -39,7 +39,7 @@ import {
   DzText,
   DzTree,
 } from '@dzup-ui/core'
-import { Boxes, FolderPlus, MoreHorizontal, Upload } from 'lucide-vue-next'
+import { Boxes, FolderPlus, MoreHorizontal, Upload } from '@lucide/vue'
 import { computed, reactive, ref } from 'vue'
 import {
   CONTENTS,

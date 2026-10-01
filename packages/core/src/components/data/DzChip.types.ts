@@ -48,9 +48,9 @@ export interface DzChipEmits {
   /** Emitted when the close button is clicked */
   close: []
   /** Focus gained */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus lost */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

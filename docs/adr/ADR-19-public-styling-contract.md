@@ -1,6 +1,6 @@
 # ADR-19 — Public styling contract: layers, parts, states, and typed overrides
 
-- **Status:** Proposed (TASK-OSS-P3-01, 2026-08-20)
+- **Status:** Accepted (owner, 2026-09-26; proposed by TASK-OSS-P3-01, 2026-08-20)
 - **Extends:** ADR-04 (token-only styling), ADR-17 (token source of truth)
 - **Depended on by:** TASK-OSS-P3-02 (anatomy metadata), P3-03 (five pilots),
   P3-04 (styling cookbook), and every Pro styling slice
@@ -450,8 +450,9 @@ not generalise.
 
 ## Rollout
 
-1. This ADR is **Proposed** until a maintainer approves it. P3-02 may build the
-   schema against it; P3-03 must not ship pilots on an unapproved contract.
+1. This ADR was **Proposed** until the owner accepted it on 2026-09-26. P3-02
+   could build the schema against it; P3-03 could not ship pilots on an
+   unapproved contract.
 2. P3-02 adds `ComponentAnatomy`, the conformance helper, the manifest field, and
    the validator that reports how many public components still lack anatomy.
 3. P3-03 applies it to DzButton, DzInput, DzSelect, DzDialog, DzDataTable with
@@ -564,6 +565,8 @@ from D19-8's finding: **3 rules / 6 declarations** in
 not.** See A4.
 
 ### A4 — Status *(TASK-R0-O2, 2026-09-22)*
+
+> **Superseded 2026-09-26.** The owner accepted ADR-18, ADR-19 and ADR-20 together (the `Status:` line at the top; `maxProposedCitedFromCode` lowered to **0**). The section below is the status as it stood when it was written.
 
 This ADR remains **`Proposed`**. TASK-R0-O2 searched every ledger, handoff and
 decision register in `docs/program-2026-08/`, `docs/program-2026-09/` and

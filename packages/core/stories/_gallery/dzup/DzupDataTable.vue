@@ -3,7 +3,7 @@
 
 import type { CanonicalTone } from '@dzup-ui/contracts'
 import type { DzSelectItem } from '../../../src/components/forms'
-import { ArrowUpDown, ChevronUp, MoreHorizontal, Search, SlidersHorizontal } from 'lucide-vue-next'
+import { ArrowUpDown, ChevronUp, MoreHorizontal, Search, SlidersHorizontal } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { DzButton, DzIconButton } from '../../../src/components/buttons'
 import { DzCard } from '../../../src/components/cards'

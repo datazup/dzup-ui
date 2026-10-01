@@ -36,7 +36,7 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { Check, Headphones, Heart, RotateCcw, ShoppingBag, Truck } from 'lucide-vue-next'
+import { Check, Headphones, Heart, RotateCcw, ShoppingBag, Truck } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   buildShot,

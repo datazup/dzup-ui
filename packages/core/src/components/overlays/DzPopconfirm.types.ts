@@ -53,7 +53,7 @@ export interface DzPopconfirmProps extends BaseAccessibilityProps {
    * Defaults to `danger` since the common case is a destructive action.
    */
   tone?: CanonicalTone
-  /** Optional leading icon component (e.g. from lucide-vue-next). */
+  /** Optional leading icon component (e.g. from @lucide/vue). */
   icon?: Component
   /** Placement of the popover relative to the trigger. Defaults to `top`. */
   placement?: PopconfirmPlacement

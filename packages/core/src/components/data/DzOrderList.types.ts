@@ -113,9 +113,9 @@ export interface DzOrderListEmits {
   /** The selected key set changed (only fired when `selectable`) */
   selectionChange: [keys: OrderListKey[]]
   /** Focus entered the list */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus left the list */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

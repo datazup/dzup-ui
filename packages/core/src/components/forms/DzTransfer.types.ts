@@ -74,9 +74,9 @@ export interface DzTransferEmits extends AsyncOptionsEmits {
   /** Selection changed (keys that are in the target list) */
   change: [payload: TransferChangePayload]
   /** Focus gained */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus lost */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

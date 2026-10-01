@@ -21,6 +21,7 @@ import {
   findRegistryIndexes,
   installabilityViolations,
   loadAllRegistries,
+  NON_ITEM_PAYLOADS,
   publishedPackages,
   readNpmResolution,
   resolutionLedger,
@@ -43,8 +44,13 @@ describe('the committed registries', () => {
 
   it('publishes only known item types', () => {
     for (const reg of registries) {
-      for (const [file, item] of reg.payloads)
+      for (const [file, item] of reg.payloads) {
+        // Declared non-item payloads (component-meta.json, copied by every
+        // build:registry) are exempt here exactly as the validator exempts them.
+        if (NON_ITEM_PAYLOADS.has(file))
+          continue
         expect(ALLOWED_ITEM_TYPES.has(item.type ?? ''), `${reg.indexPath} ${file}`).toBe(true)
+      }
     }
   })
 

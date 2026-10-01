@@ -151,6 +151,7 @@ describe('the gate inventory is release-policy.json, not a hand-kept list', () =
   it('resolves every `published` package to a workspace directory', () => {
     const packages = publishedPackages()
     expect(packages.map(p => p.name)).toEqual([
+      '@dzup-ui/codemods',
       '@dzup-ui/contracts',
       '@dzup-ui/core',
       '@dzup-ui/mcp',

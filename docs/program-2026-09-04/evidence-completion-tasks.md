@@ -416,6 +416,27 @@ G5, `N2-D2-evidence-pages-handoff.md` F-2._
 
 ### [~] TASK-R2-O6 — Visual-regression rollout and the CI gate 🟢
 
+> **2026-09-26 — the blocker is discharged. The task is still `[~]`.**
+> The owner picked **O6-D2 (b)** and **O6-D6 (a)**
+> (DZUP-UI-VISUAL-LANE-CONTAINER-20260926-R1,
+> [`../qa/visual-lane-container-2026-09-26/ADMISSION.md`](../qa/visual-lane-container-2026-09-26/ADMISSION.md)).
+> A dedicated `visual` CI job now runs in the Playwright image pinned by digest.
+> Every baseline was captured or re-verified in that image:
+> - 24 per-component images are recaptured, and `scope.platform` is `linux`.
+> - Of the 34 screen images, 8 reproduced and 26 are recaptured.
+>
+> Re-verification found that the Storybook toolbar's theme was being
+> overwritten by the OS preference. `DzProvider` decorators owned the theme,
+> and 12 dark screens failed on it; this is fixed in `preview.ts`.
+>
+> Still open:
+> - ~~removing `continue-on-error` once the lane is green three times in CI~~ —
+>   done 2026-09-27 after runs 36268407552, 36269511350 and 36301560614
+>   (58 passed each); the `visual` job now fails CI
+>   (`docs/qa/visual-gate-flip-2026-09-27/ADMISSION.md`);
+> - waves 0–4, which is coverage 8 → 89 of 144 with the owner accepting per family;
+> - O6-D1, O6-D3, O6-D4 and O6-D5.
+
 > **2026-09-19 — `[~]`, with a measured blocker.** `<done_check>` **0 of 4 by
 > intent**; clause 2 can never fail (**D136**) and clause 4 can never pass
 > (**D137**). Every platform-independent deliverable landed: the

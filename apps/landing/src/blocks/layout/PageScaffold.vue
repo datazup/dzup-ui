@@ -29,7 +29,7 @@ import {
   DzStack,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, Gauge, Layers, ShieldCheck } from 'lucide-vue-next'
+import { Boxes, Gauge, Layers, ShieldCheck } from '@lucide/vue'
 
 const nav: string[] = ['Product', 'Pricing', 'Docs']
 

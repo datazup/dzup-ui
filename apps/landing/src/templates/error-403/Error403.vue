@@ -13,7 +13,7 @@
  * reflows cleanly 390px → up.
  */
 import { DzAlert, DzButton, DzCard, DzResult, DzText } from '@dzup-ui/core'
-import { Boxes, LockKeyhole, LogIn, ShieldCheck } from 'lucide-vue-next'
+import { Boxes, LockKeyhole, LogIn, ShieldCheck } from '@lucide/vue'
 import { ref } from 'vue'
 
 /** The signed-in identity and the resource they tried to reach — realistic detail. */

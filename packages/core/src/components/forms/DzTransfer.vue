@@ -4,7 +4,7 @@ import type {
   DzTransferProps,
   DzTransferSlots,
 } from './DzTransfer.types.ts'
-import { Check } from 'lucide-vue-next'
+import { Check } from '@lucide/vue'
 /**
  * DzTransfer — Dual-list transfer component.
  *

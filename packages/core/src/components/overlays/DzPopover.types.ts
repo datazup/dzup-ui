@@ -64,15 +64,15 @@ export interface DzPopoverContentProps extends BasePortalProps {
 /** Events emitted by DzPopoverContent */
 export interface DzPopoverContentEmits {
   /** Escape key pressed while popover is open */
-  escapeKeyDown: [event: KeyboardEvent]
+  escapeKeyDown: [e: KeyboardEvent]
   /** Pointer down outside popover content */
-  pointerDownOutside: [event: Event]
+  pointerDownOutside: [e: Event]
   /** Any interaction outside popover content */
-  interactOutside: [event: Event]
+  interactOutside: [e: Event]
   /** Focus event when popover opens */
-  openAutoFocus: [event: Event]
+  openAutoFocus: [e: Event]
   /** Focus event when popover closes */
-  closeAutoFocus: [event: Event]
+  closeAutoFocus: [e: Event]
 }
 
 // ---------------------------------------------------------------------------

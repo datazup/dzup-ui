@@ -65,9 +65,9 @@ export interface DzListProps extends BaseAccessibilityProps {
 /** Events emitted by DzList */
 export interface DzListEmits {
   /** Focus gained */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus lost */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------
@@ -110,7 +110,7 @@ export interface DzListItemProps extends BaseAccessibilityProps {
 /** Events emitted by DzListItem */
 export interface DzListItemEmits {
   /** Emitted when an interactive item is clicked */
-  click: [event: MouseEvent]
+  click: [e: MouseEvent]
 }
 
 // ---------------------------------------------------------------------------

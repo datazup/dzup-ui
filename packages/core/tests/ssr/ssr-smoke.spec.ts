@@ -1,4 +1,5 @@
 import type { Component } from 'vue'
+import { X } from '@lucide/vue'
 /**
  * SSR Smoke Tests — Core Components
  *
@@ -83,7 +84,6 @@ import type { Component } from 'vue'
  * block would be coverage that does not exist. It is left as it is, on purpose.
  */
 import { renderToString } from '@vue/server-renderer'
-import { X } from 'lucide-vue-next'
 import { createSSRApp, h } from 'vue'
 
 // Reka UI primitives can be slow during SSR in jsdom — allow generous timeout

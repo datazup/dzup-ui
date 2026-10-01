@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzText } from '@dzup-ui/core'
-import { Pause, Play, SkipBack, SkipForward } from 'lucide-vue-next'
+import { Pause, Play, SkipBack, SkipForward } from '@lucide/vue'
 import { ref } from 'vue'
 import { DzIsland, useReducedMotion } from '../../motion/index.ts'
 

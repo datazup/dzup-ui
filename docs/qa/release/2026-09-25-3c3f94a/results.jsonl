@@ -1,0 +1,14 @@
+{"n":1,"name":"typecheck-all","command":"yarn typecheck:all","exit":0,"seconds":24,"log":"01-typecheck-all.txt","startedAt":"2026-09-25T06:41:05Z"}
+{"n":2,"name":"typecheck-tooling","command":"yarn typecheck:tooling","exit":0,"seconds":2,"log":"02-typecheck-tooling.txt","startedAt":"2026-09-25T06:41:29Z"}
+{"n":3,"name":"lint","command":"yarn lint","exit":0,"seconds":29,"log":"03-lint.txt","startedAt":"2026-09-25T06:41:31Z"}
+{"n":4,"name":"test","command":"yarn test","exit":0,"seconds":38,"log":"04-test.txt","startedAt":"2026-09-25T06:42:00Z"}
+{"n":5,"name":"test-contracts","command":"yarn test:contracts","exit":0,"seconds":8,"log":"05-test-contracts.txt","startedAt":"2026-09-25T06:42:38Z"}
+{"n":6,"name":"test-a11y","command":"yarn test:a11y","exit":0,"seconds":2,"log":"06-test-a11y.txt","startedAt":"2026-09-25T06:42:46Z"}
+{"n":7,"name":"build","command":"yarn build","exit":0,"seconds":21,"log":"07-build.txt","startedAt":"2026-09-25T06:42:48Z"}
+{"n":8,"name":"validate-all","command":"yarn validate:all","exit":0,"seconds":77,"log":"08-validate-all.txt","startedAt":"2026-09-25T06:43:09Z"}
+{"n":9,"name":"dist-artifacts","command":"bash scripts/release-checks/dist-artifacts.sh","exit":0,"seconds":0,"log":"09-dist-artifacts.txt","startedAt":"2026-09-25T06:44:26Z"}
+{"n":10,"name":"esm-only","command":"bash scripts/release-checks/esm-only.sh","exit":0,"seconds":0,"log":"10-esm-only.txt","startedAt":"2026-09-25T06:44:26Z"}
+{"n":11,"name":"published-imports","command":"yarn validate:published-imports --built","exit":0,"seconds":4,"log":"11-published-imports.txt","startedAt":"2026-09-25T06:44:26Z"}
+{"n":12,"name":"nuxt-fixtures","command":"yarn test:nuxt-fixtures:pack","exit":0,"seconds":1,"log":"12-nuxt-fixtures.txt","startedAt":"2026-09-25T06:44:30Z"}
+{"n":13,"name":"api-diff","command":"yarn release:api-diff --out docs/qa/release/2026-09-25-3c3f94a","exit":0,"seconds":4,"log":"13-api-diff.txt","startedAt":"2026-09-25T06:44:31Z"}
+{"n":14,"name":"evidence","command":"yarn release:evidence --out docs/qa/release/2026-09-25-3c3f94a","exit":0,"seconds":3,"log":"14-evidence.txt","startedAt":"2026-09-25T06:44:35Z"}

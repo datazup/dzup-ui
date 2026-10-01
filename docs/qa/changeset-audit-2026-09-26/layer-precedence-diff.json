@@ -1,0 +1,4846 @@
+{
+  "generatedAt": "2026-09-26T12:10:18.011Z",
+  "engines": {
+    "chromium": {
+      "before": [
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        }
+      ],
+      "after": [
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        }
+      ]
+    },
+    "firefox": {
+      "before": [
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        }
+      ],
+      "after": [
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "tokens>core",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "0.25",
+          "libraryValue": "0",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "component-opacity",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0",
+          "libraryValue": "0",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "content-box",
+          "libraryValue": "border-box",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-box-sizing",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "border-box",
+          "libraryValue": "border-box",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "7px",
+          "libraryValue": "0px",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "reset-body-margin",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0px",
+          "libraryValue": "0px",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "unlayered",
+          "position": "before",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "after",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-reset",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-tokens",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-base",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-components",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-utilities",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "dz-overrides",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "after",
+          "value": "9px",
+          "libraryValue": "0.75rem",
+          "winner": "consumer"
+        },
+        {
+          "libraryOrder": "core>tokens",
+          "property": "token-text-xs",
+          "consumerLayer": "app",
+          "position": "before",
+          "value": "0.75rem",
+          "libraryValue": "0.75rem",
+          "winner": "library"
+        }
+      ]
+    }
+  },
+  "differences": [
+    {
+      "engine": "chromium",
+      "libraryOrder": "tokens>core",
+      "property": "component-opacity",
+      "consumerLayer": "dz-reset",
+      "position": "after",
+      "before": "consumer (0.25)",
+      "after": "library (0)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "tokens>core",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-reset",
+      "position": "before",
+      "before": "library (border-box)",
+      "after": "consumer (content-box)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "tokens>core",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-tokens",
+      "position": "after",
+      "before": "library (border-box)",
+      "after": "consumer (content-box)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "tokens>core",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-base",
+      "position": "before",
+      "before": "consumer (content-box)",
+      "after": "library (border-box)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "tokens>core",
+      "property": "reset-body-margin",
+      "consumerLayer": "dz-tokens",
+      "position": "after",
+      "before": "library (0px)",
+      "after": "consumer (7px)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "tokens>core",
+      "property": "token-text-xs",
+      "consumerLayer": "dz-reset",
+      "position": "after",
+      "before": "consumer (9px)",
+      "after": "library (0.75rem)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "core>tokens",
+      "property": "component-opacity",
+      "consumerLayer": "dz-reset",
+      "position": "after",
+      "before": "consumer (0.25)",
+      "after": "library (0)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "core>tokens",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-reset",
+      "position": "before",
+      "before": "library (border-box)",
+      "after": "consumer (content-box)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "core>tokens",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-tokens",
+      "position": "after",
+      "before": "library (border-box)",
+      "after": "consumer (content-box)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "core>tokens",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-base",
+      "position": "before",
+      "before": "consumer (content-box)",
+      "after": "library (border-box)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "core>tokens",
+      "property": "reset-body-margin",
+      "consumerLayer": "dz-tokens",
+      "position": "after",
+      "before": "library (0px)",
+      "after": "consumer (7px)"
+    },
+    {
+      "engine": "chromium",
+      "libraryOrder": "core>tokens",
+      "property": "token-text-xs",
+      "consumerLayer": "dz-reset",
+      "position": "after",
+      "before": "consumer (9px)",
+      "after": "library (0.75rem)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "tokens>core",
+      "property": "component-opacity",
+      "consumerLayer": "dz-reset",
+      "position": "after",
+      "before": "consumer (0.25)",
+      "after": "library (0)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "tokens>core",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-reset",
+      "position": "before",
+      "before": "library (border-box)",
+      "after": "consumer (content-box)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "tokens>core",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-tokens",
+      "position": "after",
+      "before": "library (border-box)",
+      "after": "consumer (content-box)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "tokens>core",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-base",
+      "position": "before",
+      "before": "consumer (content-box)",
+      "after": "library (border-box)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "tokens>core",
+      "property": "reset-body-margin",
+      "consumerLayer": "dz-tokens",
+      "position": "after",
+      "before": "library (0px)",
+      "after": "consumer (7px)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "tokens>core",
+      "property": "token-text-xs",
+      "consumerLayer": "dz-reset",
+      "position": "after",
+      "before": "consumer (9px)",
+      "after": "library (0.75rem)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "core>tokens",
+      "property": "component-opacity",
+      "consumerLayer": "dz-reset",
+      "position": "after",
+      "before": "consumer (0.25)",
+      "after": "library (0)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "core>tokens",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-reset",
+      "position": "before",
+      "before": "library (border-box)",
+      "after": "consumer (content-box)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "core>tokens",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-tokens",
+      "position": "after",
+      "before": "library (border-box)",
+      "after": "consumer (content-box)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "core>tokens",
+      "property": "reset-box-sizing",
+      "consumerLayer": "dz-base",
+      "position": "before",
+      "before": "consumer (content-box)",
+      "after": "library (border-box)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "core>tokens",
+      "property": "reset-body-margin",
+      "consumerLayer": "dz-tokens",
+      "position": "after",
+      "before": "library (0px)",
+      "after": "consumer (7px)"
+    },
+    {
+      "engine": "firefox",
+      "libraryOrder": "core>tokens",
+      "property": "token-text-xs",
+      "consumerLayer": "dz-reset",
+      "position": "after",
+      "before": "consumer (9px)",
+      "after": "library (0.75rem)"
+    }
+  ],
+  "unavailable": {
+    "webkit": "browserType.launch: "
+  }
+}

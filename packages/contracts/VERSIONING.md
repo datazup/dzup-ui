@@ -159,10 +159,19 @@ consumer source, and removal stops that source compiling.
 Every such removal ships with all four of:
 
 1. the type removed from the component's `.types.ts`;
-2. a dev-mode runtime warning (`warnDeprecated` in `@dzup-ui/compat`, the
-   existing utility — it is in `compat`, not `codemods`);
-3. a codemod entry in `@dzup-ui/codemods` where the change is mechanical;
+2. written migration notes in the changeset: for each removed prop, what to
+   write instead;
+3. a codemod entry in `@dzup-ui/codemods` where the change is mechanical,
+   named in the changeset's frontmatter so it is released with the removal;
 4. a changeset at **minor**, naming the removal in its first line.
+
+> **Amended 2026-09-26 (owner decision D182, with N5-01 D2).** Clause 2 used to
+> require *"a dev-mode runtime warning (`warnDeprecated` in `@dzup-ui/compat`,
+> the existing utility — it is in `compat`, not `codemods`)"*, and clause 3 did
+> not say the codemod must be released. `@dzup-ui/compat` is withheld from
+> release, so clause 2 named an artifact no consumer could install. The owner
+> released `@dzup-ui/codemods` and kept `compat` withheld; the clauses now name
+> only what ships. `DZUP-UI-OWNER-DECISIONS-20260926-R1`.
 
 ---
 

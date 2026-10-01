@@ -6,7 +6,7 @@ import type {
   DzComboboxResolvedItem,
   DzComboboxSlots,
 } from './DzCombobox.types.ts'
-import { Check, ChevronDown, X } from 'lucide-vue-next'
+import { Check, ChevronDown, X } from '@lucide/vue'
 import {
   ComboboxAnchor,
   ComboboxCancel,
@@ -463,12 +463,17 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
               One row instead of the list while the host is loading, has nothing, or
               failed (renderer contract C9). `optionsRow` is null whenever the control
               is static, so a control with a plain option array renders none of this.
+              Mousedown is prevented so a pointer retry keeps focus in the input
+              (C9.4, as DzMention does): the retry button unmounts the moment the
+              state leaves `error`, and a focused node that vanishes drops focus to
+              <body>, which the combobox reads as focus leaving and closes on.
             -->
             <DzOptionsState
               v-if="optionsRow !== null"
               :state="resolvedOptionsState"
               :message="optionsAnnouncement"
               :can-retry="canRetryOptions"
+              @mousedown.prevent
               @retry="handleRetryOptions"
             />
             <template v-else-if="loading">

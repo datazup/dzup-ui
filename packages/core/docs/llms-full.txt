@@ -57,9 +57,9 @@ Primary button component.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
-| `click` | `[event: MouseEvent]` | Native click event (suppressed when disabled or loading) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `blur` | `[e: FocusEvent]` | Focus lost |
+| `click` | `[e: MouseEvent]` | Native click event (suppressed when disabled or loading) |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 
 **Slots** (3):
 
@@ -192,9 +192,9 @@ Floating action button.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
-| `click` | `[event: MouseEvent]` | Native click event (suppressed when disabled or loading) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `blur` | `[e: FocusEvent]` | Focus lost |
+| `click` | `[e: MouseEvent]` | Native click event (suppressed when disabled or loading) |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 
 **Slots** (1):
 
@@ -226,7 +226,7 @@ Icon-only button component.
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label -- REQUIRED since there is no visible text |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state -- prevents interaction |
-| `icon` | `Component` | yes | — | Icon component to render (from lucide-vue-next or similar) |
+| `icon` | `Component` | yes | — | Icon component to render (from |
 | `id` | `string \| undefined` | no | — | Unique element ID |
 | `loading` | `boolean \| undefined` | no | `false` | Loading state -- shows spinner and sets aria-busy |
 | `size` | `CanonicalSize \| undefined` | no | `undefined` | Component size |
@@ -239,9 +239,9 @@ Icon-only button component.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
-| `click` | `[event: MouseEvent]` | Native click event (suppressed when disabled or loading) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `blur` | `[e: FocusEvent]` | Focus lost |
+| `click` | `[e: MouseEvent]` | Native click event (suppressed when disabled or loading) |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 
 **Usage** (verbatim story source from `packages/core/stories/buttons/DzIconButton.stories.ts`, story `Default`):
 
@@ -402,9 +402,9 @@ Toggleable button with pressed state.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[pressed: boolean]` | Pressed state changed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: boolean]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (3):
@@ -444,7 +444,7 @@ Primary action button within DzSplitButton.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent]` | Primary action clicked |
+| `click` | `[e: MouseEvent]` | Primary action clicked |
 
 **Slots** (1):
 
@@ -524,10 +524,10 @@ Text input component with v-model binding.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value cleared via the clear button |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (2):
@@ -633,9 +633,9 @@ format-masked text input.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `complete` | `[unmasked: string]` | Emitted once every token position has been filled |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 | `update:unmasked` | `[value: string]` | Emitted with formatting characters (literals + slot chars) stripped |
 
@@ -716,10 +716,10 @@ Numeric input with increment/decrement buttons.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: number \| undefined, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `decrement` | `[]` | Value decremented via - button or arrow key |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `increment` | `[]` | Value incremented via + button or arrow key |
 | `update:modelValue` | `[value: number \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
@@ -778,9 +778,9 @@ One-time password / PIN input using Reka UI PinInput (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `complete` | `[value: string]` | All digits filled |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (1):
@@ -836,9 +836,9 @@ Password input with visibility toggle.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (1):
@@ -900,10 +900,10 @@ Search input with search icon and clear button.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value cleared |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `search` | `[value: string]` | Search submitted (Enter key) |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
@@ -968,9 +968,9 @@ Multiline text input with optional auto-resize.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Exposed on `ref`** (1):
@@ -1040,11 +1040,11 @@ cascading multi-level select built on Reka UI Popover.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: DzCascaderValue, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value was cleared/reset |
 | `close` | `[]` | Popup/overlay closed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Popup/overlay opened |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
@@ -1098,9 +1098,9 @@ Checkbox component using Reka UI (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[checked: boolean]` | Value changed after user interaction |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: boolean]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (1):
@@ -1204,9 +1204,9 @@ Color selection component with popover panel.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (2):
@@ -1277,11 +1277,11 @@ Searchable select using Reka UI Combobox (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value was cleared/reset |
 | `close` | `[]` | Popup/overlay closed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Popup/overlay opened |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
@@ -1341,11 +1341,11 @@ Date selection using Reka UI DatePicker (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value was cleared/reset |
 | `close` | `[]` | Popup/overlay closed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `open` | `[]` | Popup/overlay opened |
 | `select` | `[value: string]` | An item was selected from a list/collection |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -1400,11 +1400,11 @@ Date range selection using Reka UI (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: DateRangeValue, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value was cleared/reset |
 | `close` | `[]` | Popup/overlay closed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `open` | `[]` | Popup/overlay opened |
 | `select` | `[value: DateRangeValue]` | An item was selected from a list/collection |
 | `update:modelValue` | `[value: DateRangeValue]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -1518,9 +1518,9 @@ File upload with drag-and-drop support.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `error` | `[error: FileUploadError]` | A file failed validation |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `remove` | `[file: File]` | A file was removed from the list |
 | `update:modelValue` | `[value: DzFileUploadValue]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 | `upload` | `[files: File[]]` | Files were uploaded (added to the model) |
@@ -1720,9 +1720,9 @@ rotary numeric input rendered as an SVG circular dial (ADR-16 defineModel).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: number, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: number \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 | `update:value` | `[value: number]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
 
@@ -1799,11 +1799,11 @@ Always-visible single/multi-select list using Reka UI Listbox
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: DzListboxModelValue, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value was cleared/reset |
 | `filter` | `[query: string]` | The filter query changed (only when `filter` is enabled) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
 | `select` | `[value: DzListboxModelValue]` | An item was selected from a list/collection |
@@ -1880,10 +1880,10 @@ a textarea/input that surfaces a suggestion dropdown when a
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Raw text value changed |
 | `close` | `[]` | Popup/overlay closed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Popup/overlay opened |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
@@ -1959,11 +1959,11 @@ Multi-value select using Reka UI Combobox (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string[], metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value was cleared/reset |
 | `close` | `[]` | Popup/overlay closed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Popup/overlay opened |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
@@ -2101,9 +2101,9 @@ Radio group using Reka UI RadioGroupRoot (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string]` | Value changed after user interaction |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (1):
@@ -2162,9 +2162,9 @@ Dual-thumb range slider using Reka UI Slider (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: [number, number], metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: [number, number]]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (1):
@@ -2228,9 +2228,9 @@ star/icon rating input (ADR-16 defineModel).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: number, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: number \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 | `update:value` | `[value: number]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
 
@@ -2305,11 +2305,11 @@ Select dropdown using Reka UI (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value was cleared/reset |
 | `close` | `[]` | Popup/overlay closed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Popup/overlay opened |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
@@ -2369,9 +2369,9 @@ Range slider using Reka UI Slider (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: number, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: number]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (1):
@@ -2423,9 +2423,9 @@ Toggle switch using Reka UI (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[checked: boolean]` | Value changed after user interaction |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: boolean]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (1):
@@ -2487,8 +2487,8 @@ free-text token / chips input.
 | Event | Payload | Description |
 | --- | --- | --- |
 | `add` | `[token: string]` | Emitted after a token is committed, with the token text. |
-| `blur` | `[event: FocusEvent]` | Emitted when the text field loses focus, after any `addOnBlur` commit. |
-| `focus` | `[event: FocusEvent]` | Emitted when the text field takes focus. |
+| `blur` | `[e: FocusEvent]` | Emitted when the text field loses focus, after any `addOnBlur` commit. |
+| `focus` | `[e: FocusEvent]` | Emitted when the text field takes focus. |
 | `invalid` | `[token: string, reason: DzTagsInputRejectReason]` | Emitted when a token is rejected instead of committed, with the text and why. |
 | `remove` | `[token: string, index: number]` | Emitted after a token is detached, with the token text and the index it held. |
 | `update:modelValue` | `[value: string[] \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -2557,11 +2557,11 @@ dropdown time picker (CoreUI-style) built on Reka UI Popover.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[value: string, metadata?: ChangeMetadata \| undefined]` | Value committed (after user finishes editing, not during typing) |
 | `clear` | `[]` | Value was cleared/reset |
 | `close` | `[]` | Popup/overlay closed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `open` | `[]` | Popup/overlay opened |
 | `select` | `[value: string]` | An item was selected from a list/collection |
 | `update:modelValue` | `[value: string]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -2617,9 +2617,9 @@ Dual-list transfer component.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[payload: TransferChangePayload]` | Selection changed (keys that are in the target list) |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
 | `update:modelValue` | `[value: string[]]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -2688,10 +2688,10 @@ a form select whose overlay panel is a DzTree (TASK-NF-04).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Emitted when the trigger loses focus |
+| `blur` | `[e: FocusEvent]` | Emitted when the trigger loses focus |
 | `change` | `[value: TreeSelectValue]` | Emitted when the selected value changes |
 | `close` | `[]` | Emitted when the panel closes |
-| `focus` | `[event: FocusEvent]` | Emitted when the trigger receives focus |
+| `focus` | `[e: FocusEvent]` | Emitted when the trigger receives focus |
 | `loadOptions` | `[request: LoadOptionsRequest]` | The control needs options. See {@link LoadOptionsRequest}. |
 | `open` | `[]` | Emitted when the panel opens |
 | `retryOptions` | `[]` | The user asked to try again after an error. |
@@ -2805,7 +2805,7 @@ A surface container component.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent \| KeyboardEvent]` | Emitted when a clickable card is clicked (mouse or keyboard) |
+| `click` | `[e: MouseEvent \| KeyboardEvent]` | Emitted when a clickable card is clicked (mouse or keyboard) |
 
 **Slots** (5):
 
@@ -4024,7 +4024,7 @@ Scrollspy section navigation (in-page table of contents).
 | Event | Payload | Description |
 | --- | --- | --- |
 | `change` | `[href: string]` | Active link changed (via scroll or click). Payload is the item `href`. |
-| `click` | `[event: MouseEvent, item: DzAnchorItem]` | A link was clicked. |
+| `click` | `[e: MouseEvent, item: DzAnchorItem]` | A link was clicked. |
 | `update:active` | `[value: string]` | Emitted when the `v-model:active` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:active` consumes it for you. |
 
 **Slots** (1):
@@ -4074,7 +4074,7 @@ Scroll-to-top button.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent]` | Native click event, fired after the scroll-to-top action is triggered. |
+| `click` | `[e: MouseEvent]` | Native click event, fired after the scroll-to-top action is triggered. |
 
 **Slots** (1):
 
@@ -4316,9 +4316,9 @@ Page navigation using Reka UI Pagination primitives (ADR-07).
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `change` | `[page: number]` | Page value changed |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 | `update:modelValue` | `[value: number]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
 
 **Slots** (4):
@@ -4697,7 +4697,7 @@ A single item within DzMenu.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent]` | Item clicked |
+| `click` | `[e: MouseEvent]` | Item clicked |
 
 **Slots** (2):
 
@@ -4787,7 +4787,7 @@ Individual navigation item within a sidebar.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent]` | Item was clicked |
+| `click` | `[e: MouseEvent]` | Item was clicked |
 
 **Slots** (3):
 
@@ -5206,7 +5206,7 @@ An inline confirmation popover anchored to its trigger.
 | `cancelText` | `string \| undefined` | no | `undefined` | Label for the cancel action button. Defaults to `Cancel`. |
 | `confirmText` | `string \| undefined` | no | `undefined` | Label for the confirm action button. Defaults to `Confirm`. |
 | `description` | `string \| undefined` | no | `undefined` | Optional supporting description rendered below the title. |
-| `icon` | `Component \| undefined` | no | `undefined` | Optional leading icon component (e.g. from lucide-vue-next). |
+| `icon` | `Component \| undefined` | no | `undefined` | Optional leading icon component (e.g. from |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `loading` | `boolean \| undefined` | no | `false` | Whether the confirm action is in progress. While truthy the popover stays open, the confirm button shows a spinner, and the cancel button is disabled. Drive this from an async `@confirm` handler to keep the popover open until the work settles. |
 | `open` | `boolean \| undefined` | no | `false` | Whether the confirmation bubble is open; `false` keeps it closed. |
@@ -5485,8 +5485,8 @@ Content panel for DzContextMenu.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `escapeKeyDown` | `[event: KeyboardEvent]` | Escape key pressed |
-| `pointerDownOutside` | `[event: Event]` | Pointer down outside content |
+| `escapeKeyDown` | `[e: KeyboardEvent]` | Escape key pressed |
+| `pointerDownOutside` | `[e: Event]` | Pointer down outside content |
 
 **Slots** (1):
 
@@ -5517,7 +5517,7 @@ A single item within DzContextMenuContent.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `select` | `[event: Event]` | Item selected (clicked or Enter key) |
+| `select` | `[e: Event]` | Item selected (clicked or Enter key) |
 
 **Slots** (3):
 
@@ -5616,11 +5616,11 @@ Content panel for DzDialog compound.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `closeAutoFocus` | `[event: Event]` | Focus event when dialog closes -- call event.preventDefault() to prevent focus return |
-| `escapeKeyDown` | `[event: KeyboardEvent]` | Escape key pressed while dialog is open |
-| `interactOutside` | `[event: Event]` | Any interaction outside dialog content |
-| `openAutoFocus` | `[event: Event]` | Focus event when dialog opens -- call event.preventDefault() to prevent auto-focus |
-| `pointerDownOutside` | `[event: Event]` | Pointer down outside dialog content |
+| `closeAutoFocus` | `[e: Event]` | Focus event when dialog closes -- call event.preventDefault() to prevent focus return |
+| `escapeKeyDown` | `[e: KeyboardEvent]` | Escape key pressed while dialog is open |
+| `interactOutside` | `[e: Event]` | Any interaction outside dialog content |
+| `openAutoFocus` | `[e: Event]` | Focus event when dialog opens -- call event.preventDefault() to prevent auto-focus |
+| `pointerDownOutside` | `[e: Event]` | Pointer down outside dialog content |
 
 **Slots** (3):
 
@@ -5733,8 +5733,8 @@ Content panel for DzDropdownMenu.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `escapeKeyDown` | `[event: KeyboardEvent]` | Escape key pressed |
-| `pointerDownOutside` | `[event: Event]` | Pointer down outside content |
+| `escapeKeyDown` | `[e: KeyboardEvent]` | Escape key pressed |
+| `pointerDownOutside` | `[e: Event]` | Pointer down outside content |
 
 **Slots** (1):
 
@@ -5765,7 +5765,7 @@ A single item within DzDropdownMenuContent.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `select` | `[event: Event]` | Item selected (clicked or Enter key) |
+| `select` | `[e: Event]` | Item selected (clicked or Enter key) |
 
 **Slots** (3):
 
@@ -5837,11 +5837,11 @@ Content panel for DzPopover compound.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `closeAutoFocus` | `[event: Event]` | Focus event when popover closes |
-| `escapeKeyDown` | `[event: KeyboardEvent]` | Escape key pressed while popover is open |
-| `interactOutside` | `[event: Event]` | Any interaction outside popover content |
-| `openAutoFocus` | `[event: Event]` | Focus event when popover opens |
-| `pointerDownOutside` | `[event: Event]` | Pointer down outside popover content |
+| `closeAutoFocus` | `[e: Event]` | Focus event when popover closes |
+| `escapeKeyDown` | `[e: KeyboardEvent]` | Escape key pressed while popover is open |
+| `interactOutside` | `[e: Event]` | Any interaction outside popover content |
+| `openAutoFocus` | `[e: Event]` | Focus event when popover opens |
+| `pointerDownOutside` | `[e: Event]` | Pointer down outside popover content |
 
 **Slots** (1):
 
@@ -5915,9 +5915,9 @@ Content panel for DzSheet compound.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `escapeKeyDown` | `[event: KeyboardEvent]` | Escape key pressed |
-| `interactOutside` | `[event: Event]` | Any interaction outside sheet content |
-| `pointerDownOutside` | `[event: Event]` | Pointer down outside sheet content |
+| `escapeKeyDown` | `[e: KeyboardEvent]` | Escape key pressed |
+| `interactOutside` | `[e: Event]` | Any interaction outside sheet content |
+| `pointerDownOutside` | `[e: Event]` | Pointer down outside sheet content |
 
 **Slots** (1):
 
@@ -6992,9 +6992,9 @@ Closable chip component with tone/variant styling.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `close` | `[]` | Emitted when the close button is clicked |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 
 **Slots** (2):
 
@@ -7377,8 +7377,8 @@ Compound list root component.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `blur` | `[e: FocusEvent]` | Focus lost |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 
 **Slots** (2):
 
@@ -7427,7 +7427,7 @@ Child item within a DzList compound component.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `click` | `[event: MouseEvent]` | Emitted when an interactive item is clicked |
+| `click` | `[e: MouseEvent]` | Emitted when an interactive item is clicked |
 
 **Slots** (3):
 
@@ -7482,8 +7482,8 @@ reorderable list with drag, control-button, and keyboard reorder.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus left the list |
-| `focus` | `[event: FocusEvent]` | Focus entered the list |
+| `blur` | `[e: FocusEvent]` | Focus left the list |
+| `focus` | `[e: FocusEvent]` | Focus entered the list |
 | `reorder` | `[payload: OrderListReorderPayload]` | A reorder completed (drag, control button, or keyboard drop) |
 | `selectionChange` | `[keys: OrderListKey[]]` | The selected key set changed (only fired when `selectable`) |
 | `update:value` | `[value: T[]]` | Emitted when the `v-model:value` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model:value` consumes it for you. |
@@ -7615,9 +7615,9 @@ Categorization tag component with tone/variant styling.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `blur` | `[event: FocusEvent]` | Focus lost |
+| `blur` | `[e: FocusEvent]` | Focus lost |
 | `close` | `[]` | Emitted when the close button is clicked |
-| `focus` | `[event: FocusEvent]` | Focus gained |
+| `focus` | `[e: FocusEvent]` | Focus gained |
 
 **Slots** (2):
 
@@ -8124,7 +8124,7 @@ User avatar component with image and fallback support.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `error` | `[event: Event]` | Emitted when the avatar image fails to load |
+| `error` | `[e: Event]` | Emitted when the avatar image fails to load |
 
 **Slots** (1):
 
@@ -8280,7 +8280,7 @@ Icon wrapper component with consistent sizing and accessibility.
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label. When provided, the icon is treated as meaningful (not decorative). |
-| `icon` | `Component` | yes | — | Icon component to render (e.g. from lucide-vue-next) |
+| `icon` | `Component` | yes | — | Icon component to render (e.g. from |
 | `id` | `string \| undefined` | no | — | Accessible identifier |
 | `size` | `IconSize \| undefined` | no | `"md"` | Icon size |
 | `strokeWidth` | `number \| undefined` | no | — | SVG stroke width override |
@@ -8318,8 +8318,8 @@ Enhanced image component with loading and error states.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `error` | `[event: Event]` | Image failed to load |
-| `load` | `[event: Event]` | Image loaded successfully |
+| `error` | `[e: Event]` | Image failed to load |
+| `load` | `[e: Event]` | Image loaded successfully |
 
 **Slots** (2):
 

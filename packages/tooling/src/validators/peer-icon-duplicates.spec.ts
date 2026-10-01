@@ -9,18 +9,10 @@
  * over a stale artifact for three packets (S1-F10).
  *
  * The second block asserts the state of the real repository. It is written to
- * describe reality rather than to demand a particular outcome.
- *
- * The duplication it used to pin is GONE (2026-09-28): RESIDUAL-01 aligned the
- * three app declarants to `^0.477.0` and the owner's `yarn install` refreshed
- * the lock, so `versions.length` is 1 and the aggregate is green. As this header
- * predicted, one assertion had to change — it was inverted, not removed, so the
- * settled state is now pinned and a regression to two versions turns red. The
- * "names every declarer" case moved to a synthetic lock to keep that coverage,
- * since the real repository can no longer produce the diagnostic.
- *
- * What remains open is the OTHER half of TASK-R1-O6 item 1 (D174): `lucide-vue-next`
- * is deprecated upstream in favour of `@lucide/vue`. That is reported, never failed.
+ * describe reality rather than to demand a particular outcome. The version
+ * duplication closed on 2026-09-24 (landing and sandbox moved to core's
+ * ^0.477.0); the swap away from the deprecated `lucide-vue-next` was decided
+ * (D174) and landed on 2026-09-26, and is not asserted here.
  */
 
 import { describe, expect, it } from 'vitest'
@@ -225,19 +217,15 @@ describe('the real repository', () => {
     expect(collectDeclarations(manifests).undeclaredFamily).toEqual([])
   })
 
-  it('holds the single version the range alignment settled (was D174 item 1)', () => {
+  it('resolves exactly one version of the icon library', () => {
     const report = checkRepository()
-    // Resolved 2026-09-28 (RESIDUAL-01 aligned the three app declarants to
-    // ^0.477.0; the owner's `yarn install` refreshed the lock). The assertion is
-    // INVERTED rather than deleted: it now pins the settled state, so a second
-    // version cannot be re-introduced quietly — which is the failure this file
-    // exists to catch. `versions.length` going back to 2 must turn this red.
-    expect(report.versions).toEqual(['0.477.0'])
-    expect(report.idents).toEqual(['lucide-vue-next'])
-    expect(report.violations.filter(v => v.level === 'error')).toEqual([])
-    // The ident's own deprecation is a SEPARATE open decision (the swap to
-    // @lucide/vue, TASK-R1-O6 item 1's remaining half) and is reported, not failed.
-    expect(report.violations.map(v => v.rule)).toContain('deprecated-ident')
+    // The single-version clause is green. A second version reintroduced by any
+    // declarer fails here, not only in the gate.
+    // D174 (2026-09-26) swapped to `@lucide/vue`; the old name must be gone.
+    expect(report.versions).toHaveLength(1)
+    expect(report.versions[0]).toMatch(/^1\./)
+    expect(report.idents).toEqual(['@lucide/vue'])
+    expect(report.violations.filter(v => v.level === 'error').map(v => v.rule)).toEqual([])
   })
 
   it('names every declarer in the diagnostic a human reads', () => {
@@ -272,7 +260,7 @@ describe('the real repository', () => {
     expect(SHIPPED_MANIFESTS).toEqual(['apps/landing/playground-template/package.json'])
     const shipped = collectShippedDeclarations()
     expect(shipped).toHaveLength(1)
-    expect(shipped[0]?.ident).toBe('lucide-vue-next')
+    expect(shipped[0]?.ident).toBe('@lucide/vue')
     // It is NOT among the workspace manifests, which is the whole point.
     expect(workspaceManifests().some(m => m.replace(/\\/g, '/').includes('playground-template'))).toBe(false)
   })
@@ -282,6 +270,7 @@ describe('the real repository', () => {
     // Build output: absent on a fresh clone, and an absence must not fabricate a finding.
     if (counts.size === 0)
       return
-    expect(counts.get('lucide-vue-next')).toBeGreaterThan(0)
+    expect(counts.get('@lucide/vue')).toBeGreaterThan(0)
+    expect(counts.has('lucide-vue-next')).toBe(false)
   })
 })

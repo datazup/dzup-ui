@@ -235,10 +235,10 @@ export const BLOCK_DEPENDENCIES = ['@dzup-ui/core', '@dzup-ui/tokens'] as const
  * (`@dzup-ui/core` + `@dzup-ui/tokens`). Detected from the SFC source so the
  * emitted registry item's `dependencies[]` lists EVERYTHING the copied file needs
  * to build in a fresh project — otherwise `shadcn add`-ing a block that imports,
- * say, `lucide-vue-next` would drop in a `.vue` that fails to resolve its icons.
+ * say, `@lucide/vue` would drop in a `.vue` that fails to resolve its icons.
  * `vue` is a peer every Vue project already has, so it is intentionally omitted.
  */
-export const OPTIONAL_DEPENDENCIES = ['lucide-vue-next', '@formkit/auto-animate'] as const
+export const OPTIONAL_DEPENDENCIES = ['@lucide/vue', '@formkit/auto-animate'] as const
 
 /**
  * The npm `dependencies[]` for a given SFC source: the base packages plus any

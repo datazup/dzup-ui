@@ -12,13 +12,13 @@ import {
   Trash2,
   Upload,
   User,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { expect, within } from 'storybook/test'
 import { DzIcon } from '../../src/components/media'
 import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
- * DzIcon wraps icon components (e.g. from lucide-vue-next) with consistent sizing
+ * DzIcon wraps icon components (e.g. from @lucide/vue) with consistent sizing
  * and accessibility attributes.
  *
  * Decorative by default (`aria-hidden="true"`). Provide `ariaLabel` to make it meaningful
@@ -35,7 +35,7 @@ const meta = {
   argTypes: {
     // Appearance
     icon: {
-      description: 'Icon component to render (e.g. from lucide-vue-next)',
+      description: 'Icon component to render (e.g. from @lucide/vue)',
       table: { category: 'Appearance' },
     },
     size: {

@@ -269,6 +269,13 @@ describe('readStatus', () => {
     expect(readStatus('- **Status:** Accepted (2026-09-30, A. Owner)')).toBe('Accepted')
   })
 
+  it('takes the first status word, so an accepted line may keep its proposal history', () => {
+    expect(readStatus('- **Status:** Accepted (owner, 2026-09-26; proposed by TASK-OSS-P2-01, 2026-08-20)'))
+      .toBe('Accepted')
+    expect(readStatus('- **Status:** Superseded by ADR-21 (proposed 2026-08-20, accepted 2026-09-26)'))
+      .toBe('Superseded')
+  })
+
   it('returns undefined when the document declares no status', () => {
     expect(readStatus('# ADR-42\n\nSome prose with no status line.\n')).toBeUndefined()
   })

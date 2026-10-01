@@ -28,7 +28,7 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowRight, Boxes, Check, Sparkles } from 'lucide-vue-next'
+import { ArrowRight, Boxes, Check, Sparkles } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   buildShot,

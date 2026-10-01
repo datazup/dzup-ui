@@ -75,7 +75,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -112,7 +112,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -143,7 +143,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -171,7 +171,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -292,7 +292,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -322,7 +322,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -366,7 +366,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -397,7 +397,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -461,7 +461,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -527,7 +527,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -561,7 +561,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -662,7 +662,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -698,7 +698,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -735,7 +735,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1054,7 +1054,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1180,7 +1180,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1210,7 +1210,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1366,7 +1366,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1396,7 +1396,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1432,7 +1432,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1467,7 +1467,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1503,7 +1503,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1537,7 +1537,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1578,7 +1578,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1612,7 +1612,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1650,7 +1650,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1682,7 +1682,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1710,7 +1710,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1743,7 +1743,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1772,7 +1772,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1801,7 +1801,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1830,7 +1830,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1901,7 +1901,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1968,7 +1968,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -1998,7 +1998,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -2032,7 +2032,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -2100,7 +2100,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -2248,7 +2248,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -2285,7 +2285,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [
@@ -2390,7 +2390,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
-        "lucide-vue-next"
+        "@lucide/vue"
       ],
       "meta": {
         "components": [

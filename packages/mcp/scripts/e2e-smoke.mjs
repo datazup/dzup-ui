@@ -9,8 +9,9 @@
  * Run: node scripts/e2e-smoke.mjs   (after `yarn build`)
  */
 import { spawn } from 'node:child_process'
-import { readFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import { existsSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
@@ -29,7 +30,44 @@ const PKG = JSON.parse(readFileSync(resolve(HERE, '..', 'package.json'), 'utf8')
 const SURFACE = JSON.parse(readFileSync(resolve(HERE, '..', 'docs', 'mcp-tool-surface.json'), 'utf8'))
 const EXPECTED_TOOLS = SURFACE.tools.map(t => t.name).sort()
 
-const child = spawn('node', [SERVER], {
+/**
+ * Spawn the server the way a CLIENT does — through the installed `bin`, not
+ * through `dist/index.js` (TASK-N2-A4).
+ *
+ * `node dist/index.js` puts `index.js` in `process.argv[1]`, so it satisfied the
+ * name-based guard this script was written against while the path clients
+ * actually run — the `node_modules/.bin/dzup-ui-mcp` symlink npm installs, which
+ * `npx -y @dzup-ui/mcp` executes — was reporting the file as `dzup-ui-mcp` and
+ * exiting without starting. This lane asserted the whole protocol surface and
+ * still could not see that the shipped entry point was dead; now it goes through
+ * the entry point, so a regression here fails here.
+ *
+ * The bin name comes from `package.json`, and the symlink is created if the
+ * workspace install does not provide one, so the layout is exercised from a bare
+ * checkout too. `node <symlink>` rather than executing it directly: argv[1] being
+ * the symlink path is the thing under test, and that does not depend on the
+ * target's mode bits.
+ */
+const BIN_NAME = Object.keys(PKG.bin ?? {})[0]
+if (BIN_NAME === undefined)
+  throw new Error('package.json declares no bin — the published entry point is missing')
+
+const installed = [
+  resolve(HERE, '..', 'node_modules', '.bin', BIN_NAME),
+  resolve(REPO_ROOT, 'node_modules', '.bin', BIN_NAME),
+].find(path => existsSync(path))
+
+let ENTRY = installed
+let cleanupEntry = () => {}
+if (ENTRY === undefined) {
+  const dir = mkdtempSync(join(tmpdir(), 'dzup-ui-mcp-bin-'))
+  ENTRY = join(dir, BIN_NAME)
+  symlinkSync(SERVER, ENTRY)
+  cleanupEntry = () => rmSync(dir, { recursive: true, force: true })
+}
+console.error(`· entry: ${ENTRY}${installed === undefined ? ' (symlinked for this run)' : ''}`)
+
+const child = spawn('node', [ENTRY], {
   env: { ...process.env, DZUP_UI_REGISTRY_URL: REPO_ROOT },
   stdio: ['pipe', 'pipe', 'inherit'],
 })
@@ -53,11 +91,30 @@ child.stdout.on('data', (chunk) => {
   }
 })
 
+/**
+ * A server that dies instead of answering must FAIL this run, not hang it
+ * (TASK-N2-A4). Every `rpc()` here waits for a reply, so a `main()` that never
+ * runs — the exact regression this lane now covers — used to leave the script
+ * waiting on a closed pipe with no diagnostic. One JSON-RPC line the server
+ * cannot answer still proves it is alive, so this records the first reply.
+ */
+let answered = false
+child.on('exit', (code) => {
+  if (answered)
+    return
+  console.error(`✗ the bin entry exited (code ${code}) without answering JSON-RPC — the stdio server did not start`)
+  cleanupEntry()
+  process.exit(1)
+})
+
 let id = 0
 function rpc(method, params) {
   const reqId = ++id
   return new Promise((res) => {
-    pending.set(reqId, res)
+    pending.set(reqId, (msg) => {
+      answered = true
+      res(msg)
+    })
     child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id: reqId, method, params })}\n`)
   })
 }
@@ -68,6 +125,8 @@ function notify(method, params) {
 function assert(cond, label) {
   if (!cond) {
     console.error(`✗ ${label}`)
+    answered = true
+    cleanupEntry()
     child.kill()
     process.exit(1)
   }
@@ -79,7 +138,10 @@ const init = await rpc('initialize', {
   capabilities: {},
   clientInfo: { name: 'e2e-smoke', version: '0.0.0' },
 })
-assert(init.result?.serverInfo?.name === 'dzup-ui', `initialize → serverInfo.name = dzup-ui`)
+assert(
+  init.result?.serverInfo?.name === 'dzup-ui',
+  `initialize → serverInfo.name = dzup-ui (answered through ${BIN_NAME}, the installed entry point)`,
+)
 assert(
   init.result?.serverInfo?.version === PKG.version,
   `initialize → serverInfo.version = ${init.result?.serverInfo?.version} (package.json says ${PKG.version})`,
@@ -161,5 +223,7 @@ assert(
 )
 
 console.error('\nAll end-to-end MCP checks passed.')
+answered = true
+cleanupEntry()
 child.kill()
 process.exit(0)

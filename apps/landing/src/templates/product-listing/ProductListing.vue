@@ -24,7 +24,7 @@ import {
   DzSelect,
   DzText,
 } from '@dzup-ui/core'
-import { Headphones, SearchX, ShoppingBag, SlidersHorizontal } from 'lucide-vue-next'
+import { Headphones, SearchX, ShoppingBag, SlidersHorizontal } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import {
   BADGE_LABEL,

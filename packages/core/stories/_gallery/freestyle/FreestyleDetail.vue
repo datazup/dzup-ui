@@ -10,7 +10,7 @@ import {
   Pencil,
   Rocket,
   UserPlus,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { ref } from 'vue'
 
 const activeTab = ref<'overview' | 'activity' | 'settings'>('overview')

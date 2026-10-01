@@ -1,9 +1,11 @@
 /**
  * The icon-library duplication gate — TASK-R1-O6, closes N5-04-F4.
  *
- * `packages/core` declares `lucide-vue-next@^0.477.0`; `apps/landing` and
- * `apps/sandbox` declare `^0.475.0`. A caret on a `0.x` version pins the minor,
- * so the two ranges can **never** unify and `yarn.lock` carries both. Two copies
+ * Before 2026-09-24, `packages/core` declared `lucide-vue-next@^0.477.0` while
+ * `apps/landing` and the since-removed `apps/sandbox` declared `^0.475.0`. A
+ * caret on a `0.x` version pins the minor, so the two ranges could **never**
+ * unify and `yarn.lock` carried both. (Since the icon swap, D174 on 2026-09-26,
+ * every workspace declares `@lucide/vue ^1.47.0`.) Two copies
  * of the same icon library have been installed in this repository since at least
  * 2026-09-03 and **nothing in `validate:all` could see it**: `validate:peers`
  * reads `peerDependencies` only, and `validate:externals` checks that what

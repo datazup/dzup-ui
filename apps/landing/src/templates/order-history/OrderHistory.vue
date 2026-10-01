@@ -30,7 +30,7 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { Eye, Leaf, Receipt, RotateCcw } from 'lucide-vue-next'
+import { Eye, Leaf, Receipt, RotateCcw } from '@lucide/vue'
 import { computed, ref, watch } from 'vue'
 import {
   ACCOUNT,

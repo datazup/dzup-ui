@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DzTimePickerEmits, DzTimePickerProps, DzTimePickerSlots } from './DzTimePicker.types.ts'
-import { Clock, X } from 'lucide-vue-next'
+import { Clock, X } from '@lucide/vue'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 /**
  * DzTimePicker — dropdown time picker (CoreUI-style) built on Reka UI Popover.

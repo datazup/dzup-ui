@@ -315,6 +315,12 @@ jobs:
         run: npx tsx packages/tooling/src/bundle-budget-check.ts --ci
       - name: Per-component size report
         run: npx tsx packages/tooling/src/component-size-report.ts --top=30
+      # D140 / D135 (a). The report above cannot fail; this can. It rebuilds the
+      # one-export fixture behind each `size:*` budget in
+      # packages/core/perf/baselines.json and fails naming every export over its
+      # threshold. Sizes are deterministic, so it does not wait on DZUP_PERF_GATE.
+      - name: Per-export size gate (blocking)
+        run: yarn perf:size-gate
       - name: Pack smoke test (all publishable packages)
         run: |
           for pkg in contracts tokens core compat codemods nuxt; do
@@ -377,6 +383,15 @@ jobs:
           git diff --exit-code apps/storybook/stories/_data/playgroundSnippets.generated.ts
       - name: Build Storybook
         run: yarn storybook:build
+      # The storybook-static byte ceiling in docs-size-ceilings.json, enforced on
+      # the build it governs (TASK-R4). It used to run only inside `validate:all`
+      # in the min-runtime job, which builds no Storybook, so under `CI` it could
+      # only fail on the missing artifact and never measured anything. Runs before
+      # the metric step below writes size-badge.json into storybook-static.
+      # `--allow-missing-dist` because this job does not build the VitePress docs
+      # site: that budget stays enforced by `apps/docs`'s own `build` script.
+      - name: Storybook size budget (enforced)
+        run: yarn validate:docs-size --allow-missing-dist
       # `storybook:build` runs build:llms; these files are consumed by machines,
       # so validate the generated structure (balanced fences, non-ragged tables,
       # single H1) rather than trusting the generator.
@@ -509,17 +524,66 @@ jobs:
       - name: Run functional E2E tests (Chromium)
         timeout-minutes: 20
         run: yarn test:e2e:functional --project=chromium
-      - name: Run visual snapshot tests (Chromium, report-only)
-        id: visual
-        timeout-minutes: 20
-        continue-on-error: true
-        run: yarn test:e2e:visual --project=chromium --retries=0
       - name: Upload Playwright report
-        if: failure() || steps.visual.outcome == 'failure'
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 7
+
+  # The visual lane, in the image its baselines were captured in (TASK-R2-O6,
+  # owner decision O6-D2 option b, 2026-09-26). Pixels depend on the installed
+  # font set: adding two apt font packages to one image changed 20 of 24
+  # baselines, 10 of them in SIZE. A bare ubuntu-latest runner can therefore
+  # never reproduce a baseline, so this job runs in the Playwright image pinned
+  # by digest, and every baseline in e2e/visual was captured or re-verified in
+  # it. The browsers ship in the image, so there is no `playwright install`
+  # step. Bump the tag and the digest together with @playwright/test, then
+  # re-capture: a new image is environment drift, not a product change.
+  #
+  # Blocking since 2026-09-27 (DZUP-UI-VISUAL-GATE-FLIP-20260927-R1). The
+  # <ci_gate> rule in the TASK-R2-O6 prompt kept it report-only until the lane
+  # was green three times in a row here: runs 36268407552 (bce1312),
+  # 36269511350 (bf8d5bd) and 36301560614 (e473e64), 58 passed each.
+  # A red here is a pixel change: look at the uploaded diff, then either fix
+  # the regression or re-accept with `yarn visual:accept` inside this image.
+  visual:
+    name: Visual Snapshots (pinned container)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [typecheck]
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.19.0'
+      - name: Enable Corepack
+        run: corepack enable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
+          key: yarn-visual-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-visual-${{ runner.os }}-
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Run visual snapshot tests (Chromium)
+        id: visual
+        timeout-minutes: 20
+        run: yarn test:e2e:visual --project=chromium --retries=0
+      - name: Upload visual report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-report
+          path: |
+            playwright-report/
+            test-results/
           retention-days: 7
 
   # The landing's own browser suite (TASK-FREE3-06). Until this job existed, 1,953
@@ -693,11 +757,16 @@ jobs:
           configPath: ./apps/landing/lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
-      - name: Lighthouse CI — mobile (LCP < 2.5s, CLS < 0.1, a11y >= 0.9)
+      # The mobile LCP ceiling is 4s, not 2.5s: lighthouserc.mobile.json explains why.
+      - name: Lighthouse CI — mobile (LCP < 4s, CLS < 0.1, a11y >= 0.9)
         uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: ./apps/landing/lighthouserc.mobile.json
           uploadArtifacts: true
+          # Both runs upload an artifact, and the action's default name is shared, so
+          # the second upload fails with 409 Conflict even when every assertion
+          # passes. It first showed on 7057f01, the first run where mobile passed.
+          artifactName: lighthouse-results-mobile
           temporaryPublicStorage: true
       # Publish the perf badge + Lighthouse results as a downloadable artifact so
       # the score is inspectable from the run even when an assertion fails.

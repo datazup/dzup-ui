@@ -10,7 +10,7 @@ import {
   Star,
   Trash2,
   X,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzIconButton } from '../../src/components/buttons'
 import { a11yError, darkModeDecorator } from '../_shared'
@@ -32,7 +32,7 @@ const meta = {
   argTypes: {
     // Appearance
     icon: {
-      description: 'Icon component to render (from lucide-vue-next or similar)',
+      description: 'Icon component to render (from @lucide/vue or similar)',
       table: { category: 'Appearance' },
     },
     variant: {

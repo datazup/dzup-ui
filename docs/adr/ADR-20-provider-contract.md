@@ -1,6 +1,6 @@
 # ADR-20 — Provider contract: locale, direction, messages, formats, portals, motion, defaults, nonce, test ids
 
-- **Status:** Proposed (TASK-OSS-P4-01, 2026-08-21; amended by TASK-OSS-P4-02 and P4-03, 2026-08-21, TASK-R3-O2 2026-09-04, TASK-R2-O4 2026-09-18 and TASK-R0-O2 2026-09-22 — see *Amendments*)
+- **Status:** Accepted (owner, 2026-09-26; proposed by TASK-OSS-P4-01, 2026-08-21; amended by TASK-OSS-P4-02 and P4-03, 2026-08-21, TASK-R3-O2 2026-09-04, TASK-R2-O4 2026-09-18 and TASK-R0-O2 2026-09-22 — see *Amendments*)
 - **Extends:** ADR-09 (theme context), ADR-08 (compound context by provide/inject)
 - **Depended on by:** TASK-OSS-P4-02 (`DzProvider`), P4-03 (message catalogs),
   P4-04 (portal migration), P4-05 (RTL matrices), and every Pro slice that needs
@@ -212,7 +212,7 @@ ancestor's per-component map.
 
 ## Rollout
 
-1. This ADR is **Proposed** until a maintainer approves it. The composables are
+1. This ADR was **Proposed** until the owner accepted it on 2026-09-26. The composables are
    additive and safe to land either way; nothing consumes them yet.
 2. ~~**P4-02** builds `DzProvider` on the `provideDz*` half, keeping
    `DzThemeProvider` working.~~ **Done.** `DzProvider` ships in
@@ -663,6 +663,8 @@ hand-typed-facts class N2-S1 §11.3 records five prior sightings of.
 
 #### A8.7 Status — and what is still open
 
+> **Superseded 2026-09-26.** The owner accepted ADR-18, ADR-19 and ADR-20 together (the `Status:` line at the top; `maxProposedCitedFromCode` lowered to **0**). The section below is the status as it stood when it was written.
+
 This ADR remains **`Proposed`**. TASK-R0-O2 found **no recorded owner
 acceptance** for ADR-18, ADR-19 or ADR-20 in any ledger, handoff or decision
 register, and will not invent an owner name or a date. Since 2026-09-22 the
@@ -691,3 +693,21 @@ it** — every divergence was either the document under-claiming what shipped or
 over-claiming adoption, and A8 corrects both directions. What is missing is a
 signature and five genuinely open questions, four of which (`D-L`, `D-M`, `D-P`,
 `D6`) the packet itself marks non-blocking.
+
+### A9. D181 decided; the Node floor is settled *(DZUP-UI-ADR-PREP-20260926-R1, 2026-09-26)*
+
+The owner took **D181** option (a) on 2026-09-26: the §4 correction is carried
+by this ADR's acceptance review. **A8.1 is that correction**, so D181 is
+discharged and no separate amendment packet is owed.
+
+The owner also decided the Node floor, **D176**: it stays
+`^20.19.0 || >=22.13.0` (ADR-18 amendment A6). A8.1's reading is unchanged by
+that. `getTextInfo()` needs Node 24.0.0, which is above the kept floor, so the
+checked-in RTL list stays the mechanism.
+
+**Status.** The open questions in A8.7 (`D-L`, `D-M`, `D-P`, `D6`) are unchanged,
+and A8.7 already records that none of them blocks acceptance. This ADR remains
+`Proposed` until the owner accepts it; `docs/qa/adr-prep-2026-09-26/ACCEPTANCE.md`
+lists the exact edit.
+
+> **Superseded 2026-09-26.** The owner accepted ADR-18, ADR-19 and ADR-20 together (the `Status:` line at the top; `maxProposedCitedFromCode` lowered to **0**). The passage above is the status as it stood when it was written.

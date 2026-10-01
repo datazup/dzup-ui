@@ -7,7 +7,7 @@ import type {
   DzMegaMenuProps,
   DzMegaMenuSlots,
 } from './DzMegaMenu.types.ts'
-import { ChevronDown } from 'lucide-vue-next'
+import { ChevronDown } from '@lucide/vue'
 /**
  * DzMegaMenu — horizontal (or vertical) navigation menubar whose top-level
  * items open wide, multi-column dropdown panels.

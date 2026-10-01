@@ -10,7 +10,7 @@
  */
 import type { DzSelectItem } from '@dzup-ui/core'
 import type { Component } from 'vue'
-import { Citrus, Coffee, Croissant } from 'lucide-vue-next'
+import { Citrus, Coffee, Croissant } from '@lucide/vue'
 
 // ---------------------------------------------------------------------------
 // Cart line items

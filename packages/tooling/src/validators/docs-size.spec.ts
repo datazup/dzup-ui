@@ -144,6 +144,17 @@ describe('shouldRequireDist — the fail-closed decision (finding S6, 2026-09-22
     expect(shouldRequireDist(['--allow-missing-dist'], { CI: 'true' })).toBe(false)
     expect(shouldRequireDist(['--require-dist', '--allow-missing-dist'], {})).toBe(false)
   })
+
+  it('lets DOCS_SIZE_ALLOW_MISSING_DIST=1 opt out where no flag reaches it (validate:all under CI)', () => {
+    expect(shouldRequireDist([], { CI: 'true', DOCS_SIZE_ALLOW_MISSING_DIST: '1' })).toBe(false)
+    expect(shouldRequireDist(['--require-dist'], { DOCS_SIZE_ALLOW_MISSING_DIST: '1' })).toBe(false)
+  })
+
+  it('accepts only the exact value 1, so a stray or empty variable cannot switch the gate off', () => {
+    expect(shouldRequireDist([], { CI: 'true', DOCS_SIZE_ALLOW_MISSING_DIST: '' })).toBe(true)
+    expect(shouldRequireDist([], { CI: 'true', DOCS_SIZE_ALLOW_MISSING_DIST: 'true' })).toBe(true)
+    expect(shouldRequireDist([], { CI: 'true', DOCS_SIZE_ALLOW_MISSING_DIST: '0' })).toBe(true)
+  })
 })
 
 describe('the committed ceilings', () => {

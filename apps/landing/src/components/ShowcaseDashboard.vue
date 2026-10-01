@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzSegmented } from '@dzup-ui/core'
-import { Moon, Sun } from 'lucide-vue-next'
+import { Moon, Sun } from '@lucide/vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useLazyMount } from '../composables/useLazyMount.ts'
 import Section from './Section.vue'

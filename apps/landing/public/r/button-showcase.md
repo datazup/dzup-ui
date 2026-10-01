@@ -9,7 +9,7 @@ A labelled specimen sheet of every DzButton variant, tone and size, plus icon an
 ```vue
 <script setup lang="ts">
 import { DzButton, DzText } from '@dzup-ui/core'
-import { ArrowRight, Download, Trash2 } from 'lucide-vue-next'
+import { ArrowRight, Download, Trash2 } from '@lucide/vue'
 
 /**
  * Button gallery — a labelled specimen sheet of the whole DzButton surface:

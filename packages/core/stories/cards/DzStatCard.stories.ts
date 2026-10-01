@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { Activity, DollarSign, Package, ShoppingCart, TrendingUp, Users } from 'lucide-vue-next'
+import { Activity, DollarSign, Package, ShoppingCart, TrendingUp, Users } from '@lucide/vue'
 import { expect, within } from 'storybook/test'
 import { DzStatCard } from '../../src/components/cards'
 import { a11yError, darkModeDecorator } from '../_shared'

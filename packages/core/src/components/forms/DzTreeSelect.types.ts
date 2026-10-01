@@ -94,9 +94,9 @@ export interface DzTreeSelectEmits extends AsyncOptionsEmits {
   /** Emitted when the panel closes */
   'close': []
   /** Emitted when the trigger receives focus */
-  'focus': [event: FocusEvent]
+  'focus': [e: FocusEvent]
   /** Emitted when the trigger loses focus */
-  'blur': [event: FocusEvent]
+  'blur': [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

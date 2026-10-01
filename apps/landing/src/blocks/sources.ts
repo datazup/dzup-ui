@@ -14,6 +14,11 @@
  * Metadata is ~22 kB and legitimately belongs in the entry; the source text does not.
  * Splitting them is the whole point of this module.
  *
+ * **Browser components on the block-detail route use `sourceLoader.ts` instead**,
+ * which fetches one block's source on demand. Importing this module there put
+ * all 87 sources back on the preview's render path, costing mobile LCP ~700 ms
+ * (TASK-DZUP-UI-CI-GREEN-R3).
+ *
  * **Import rule: only from code that is already lazy.** Every consumer is reached
  * exclusively from a lazy route chunk (`BlockCard`, `BlockManifest`, `BlockPreview`
  * under `/blocks*`) or from a build script running in Node (`registryItem.ts`,

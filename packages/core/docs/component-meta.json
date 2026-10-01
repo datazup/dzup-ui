@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
+  "sourceCommit": "e69803612cec1be7e392643555f37c514c367cc7",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -1598,8 +1598,8 @@
         },
         {
           "name": "click",
-          "type": "[event: MouseEvent, item: DzAnchorItem]",
-          "signature": "(event: \"click\", event: MouseEvent, item: DzAnchorItem): void",
+          "type": "[e: MouseEvent, item: DzAnchorItem]",
+          "signature": "(event: \"click\", e: MouseEvent, item: DzAnchorItem): void",
           "description": "A link was clicked.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -2766,8 +2766,8 @@
       "events": [
         {
           "name": "error",
-          "type": "[event: Event]",
-          "signature": "(event: \"error\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"error\", e: Event): void",
           "description": "Emitted when the avatar image fails to load",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -3303,8 +3303,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Native click event, fired after the scroll-to-top action is triggered.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -4768,24 +4768,24 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Native click event (suppressed when disabled or loading)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -5276,7 +5276,7 @@
       ],
       "source": "packages/core/src/components/data/DzCalendar.vue",
       "typesSource": "packages/core/src/components/data/DzCalendar.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -5451,9 +5451,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 3,
-          "stale": 1,
+          "stale": 2,
           "unrun": 5
         },
         "unrun": [
@@ -5464,6 +5464,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -6139,7 +6140,7 @@
           "type": "DzCardUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzCard.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\n`ui.root` addresses the surface by name, and a typo is a type error.\r\n\r\n`header`, `body` and `footer` are separate components at the call site and\r\nalready take `class`, so they are not keys here.",
+          "description": "Per-part class overrides, keyed by the names in `DzCard.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\n`ui.root` addresses the surface by name, and a typo is a type error.\n\n`header`, `body` and `footer` are separate components at the call site and\nalready take `class`, so they are not keys here.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzCard.types.ts"
         },
@@ -6157,8 +6158,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent | KeyboardEvent]",
-          "signature": "(event: \"click\", event: MouseEvent | KeyboardEvent): void",
+          "type": "[e: MouseEvent | KeyboardEvent]",
+          "signature": "(event: \"click\", e: MouseEvent | KeyboardEvent): void",
           "description": "Emitted when a clickable card is clicked (mouse or keyboard)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -6483,7 +6484,7 @@
           "type": "DzCardHeaderUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the actions region (ADR-19 §5). The header's\r\nown element takes `class` at the call site; its inner actions wrapper is\r\nthe one node in the card family nothing else can reach.",
+          "description": "Per-part class override for the actions region (ADR-19 §5). The header's\nown element takes `class` at the call site; its inner actions wrapper is\nthe one node in the card family nothing else can reach.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzCard.types.ts"
         }
@@ -6538,7 +6539,7 @@
       ],
       "source": "packages/core/src/components/media/DzCarousel.vue",
       "typesSource": "packages/core/src/components/media/DzCarousel.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -6625,8 +6626,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 3,
+          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -6637,7 +6639,9 @@
           "keyboard-spec",
           "ssr-sample"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -7135,7 +7139,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCascader.vue",
       "typesSource": "packages/core/src/components/forms/DzCascader.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -7306,9 +7310,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 3,
-          "stale": 1,
+          "stale": 2,
           "unrun": 7
         },
         "unrun": [
@@ -7321,6 +7325,7 @@
           "portal-hydration"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -7625,8 +7630,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -7657,8 +7662,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -8042,7 +8047,7 @@
           "type": "Partial<Record<\"root\" | \"indicator\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzCheckbox.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\na key outside the declared parts is a type error, not a class that lands\r\nnowhere.",
+          "description": "Per-part class overrides, keyed by the names in `DzCheckbox.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\na key outside the declared parts is a type error, not a class that lands\nnowhere.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzCheckbox.types.ts"
         },
@@ -8060,8 +8065,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -8076,8 +8081,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -8521,7 +8526,7 @@
       ],
       "source": "packages/core/src/components/data/DzChip.vue",
       "typesSource": "packages/core/src/components/data/DzChip.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -8580,14 +8585,17 @@
         "traits": [],
         "cells": {
           "excepted": 1,
-          "pass": 5,
+          "pass": 4,
           "present": 6,
+          "stale": 1,
           "unrun": 1
         },
         "unrun": [
           "at-manual"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -8667,7 +8675,7 @@
           "type": "Partial<Record<\"root\" | \"close\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzChip.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\na key outside the declared parts is a type error, not a class that lands\r\nnowhere.",
+          "description": "Per-part class overrides, keyed by the names in `DzChip.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\na key outside the declared parts is a type error, not a class that lands\nnowhere.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzChip.types.ts"
         },
@@ -8685,8 +8693,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -8701,8 +8709,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -10021,9 +10029,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 4,
-          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -10033,9 +10040,7 @@
           "controlled-uncontrolled",
           "portal-hydration"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -10213,8 +10218,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -10229,8 +10234,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -10397,7 +10402,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCombobox.vue",
       "typesSource": "packages/core/src/components/forms/DzCombobox.types.ts",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -10536,9 +10541,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 5,
-          "stale": 1,
+          "stale": 2,
           "unrun": 5
         },
         "unrun": [
@@ -10549,6 +10554,7 @@
           "portal-hydration"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -10872,8 +10878,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -10904,8 +10910,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -11270,9 +11276,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 3,
-          "stale": 1,
           "unrun": 7
         },
         "unrun": [
@@ -11284,9 +11289,7 @@
           "keyboard-spec",
           "portal-hydration"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -12629,16 +12632,16 @@
       "events": [
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -12715,8 +12718,8 @@
       "events": [
         {
           "name": "select",
-          "type": "[event: Event]",
-          "signature": "(event: \"select\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"select\", e: Event): void",
           "description": "Item selected (clicked or Enter key)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -13482,7 +13485,7 @@
       ],
       "source": "packages/core/src/components/data/DzDataGrid.vue",
       "typesSource": "packages/core/src/components/data/DzDataGrid.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -13653,9 +13656,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 5,
-          "stale": 1,
+          "stale": 2,
           "unrun": 5
         },
         "unrun": [
@@ -13666,6 +13669,7 @@
           "portal-hydration"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -14335,7 +14339,7 @@
       ],
       "source": "packages/core/src/components/data/DzDataView.vue",
       "typesSource": "packages/core/src/components/data/DzDataView.types.ts",
-      "componentCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -14399,9 +14403,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 4,
-          "stale": 1,
+          "stale": 2,
           "unrun": 5
         },
         "unrun": [
@@ -14412,6 +14416,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -14838,7 +14843,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDatePicker.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -14992,9 +14997,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 4,
-          "stale": 1,
+          "stale": 2,
           "unrun": 4
         },
         "unrun": [
@@ -15004,6 +15009,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -15156,7 +15162,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"title\" | \"error\" | \"header\" | \"group\" | \"row\" | \"cell\" | \"panel\" | \"input\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing target — the segment field,\r\ndeclared here as `control` — and the calendar parts render inside a popper\r\nwhere `class` never reached them.",
+          "description": "Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the segment field,\ndeclared here as `control` — and the calendar parts render inside a popper\nwhere `class` never reached them.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzDatePicker.types.ts"
         },
@@ -15174,8 +15180,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -15206,8 +15212,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -15391,7 +15397,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDateRangePicker.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -15546,9 +15552,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 3,
-          "stale": 1,
+          "stale": 2,
           "unrun": 5
         },
         "unrun": [
@@ -15559,6 +15565,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -15711,7 +15718,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"title\" | \"error\" | \"separator\" | \"header\" | \"group\" | \"row\" | \"cell\" | \"panel\" | \"input\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in\r\n`DzDateRangePicker.anatomy.ts` (ADR-19 §5). `ui.input` reaches the segments\r\non **both** ends of the range.",
+          "description": "Per-part class overrides, keyed by the names in\n`DzDateRangePicker.anatomy.ts` (ADR-19 §5). `ui.input` reaches the segments\non **both** ends of the range.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzDateRangePicker.types.ts"
         },
@@ -15729,8 +15736,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -15761,8 +15768,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -16970,40 +16977,40 @@
       "events": [
         {
           "name": "closeAutoFocus",
-          "type": "[event: Event]",
-          "signature": "(event: \"closeAutoFocus\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"closeAutoFocus\", e: Event): void",
           "description": "Focus event when dialog closes -- call event.preventDefault() to prevent focus return",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed while dialog is open",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "interactOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"interactOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"interactOutside\", e: Event): void",
           "description": "Any interaction outside dialog content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "openAutoFocus",
-          "type": "[event: Event]",
-          "signature": "(event: \"openAutoFocus\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"openAutoFocus\", e: Event): void",
           "description": "Focus event when dialog opens -- call event.preventDefault() to prevent auto-focus",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside dialog content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -17872,16 +17879,16 @@
       "events": [
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -17958,8 +17965,8 @@
       "events": [
         {
           "name": "select",
-          "type": "[event: Event]",
-          "signature": "(event: \"select\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"select\", e: Event): void",
           "description": "Item selected (clicked or Enter key)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -18857,24 +18864,24 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Native click event (suppressed when disabled or loading)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -19470,8 +19477,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -19486,8 +19493,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -19992,7 +19999,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Explicit filled state. When provided, it overrides automatic detection —\r\nuseful for non-native controls (e.g. a combobox button) whose value cannot\r\nbe read from a native `input`/`select`/`textarea` element.",
+          "description": "Explicit filled state. When provided, it overrides automatic detection —\nuseful for non-native controls (e.g. a combobox button) whose value cannot\nbe read from a native `input`/`select`/`textarea` element.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzFloatLabel.types.ts"
         },
@@ -20799,7 +20806,7 @@
           "type": "GridSpan | ResponsiveSpan | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Columns this item occupies, fixed or per breakpoint. Omitted means one\r\ncolumn, the CSS default. A numeric span outside 1–12 is clamped into that\r\nrange; a span wider than the grid's own column count creates implicit\r\ncolumns, exactly as the CSS it compiles to would — clamp to your grid.\r\n\r\nThis is the name a Form document uses, so a renderer forwards\r\n`node.layout.colSpan` with no lookup table of its own.",
+          "description": "Columns this item occupies, fixed or per breakpoint. Omitted means one\ncolumn, the CSS default. A numeric span outside 1–12 is clamped into that\nrange; a span wider than the grid's own column count creates implicit\ncolumns, exactly as the CSS it compiles to would — clamp to your grid.\n\nThis is the name a Form document uses, so a renderer forwards\n`node.layout.colSpan` with no lookup table of its own.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
         },
@@ -20808,7 +20815,7 @@
           "type": "GridSpan | ResponsiveSpan | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Rows this item occupies, fixed or per breakpoint. Omitted means one row.\r\n\r\nClamped and mirrored on exactly the same terms as `colSpan`: `grid-row: span\r\nN` is writing-mode relative on the block axis, so it needs no RTL handling\r\neither. Without this prop a document carrying `layout.rowSpan` has to be\r\nrendered with a raw `row-span-*` class — the persisted-CSS violation doc 03\r\n§3 forbids, relocated into the component boundary rather than removed.\r\n\r\nA row span is meaningful whether or not the parent `DzGrid` declares `rows`:\r\nwith `rows` it spans explicit tracks, without it the item creates implicit\r\nones, exactly as the CSS does.",
+          "description": "Rows this item occupies, fixed or per breakpoint. Omitted means one row.\n\nClamped and mirrored on exactly the same terms as `colSpan`: `grid-row: span\nN` is writing-mode relative on the block axis, so it needs no RTL handling\neither. Without this prop a document carrying `layout.rowSpan` has to be\nrendered with a raw `row-span-*` class — the persisted-CSS violation doc 03\n§3 forbids, relocated into the component boundary rather than removed.\n\nA row span is meaningful whether or not the parent `DzGrid` declares `rows`:\nwith `rows` it spans explicit tracks, without it the item creates implicit\nones, exactly as the CSS does.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
         },
@@ -20817,7 +20824,7 @@
           "type": "GridSpan | ResponsiveSpan | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Columns this item occupies — the original spelling, an alias of\r\n{@link DzGridItemProps.colSpan}.\r\n\r\nKept because it reads better than `colSpan` on a grid with no row spans, and\r\nbecause removing it would be a breaking change for the API D67 shipped. When\r\nboth are given, `colSpan` wins and dev mode warns.",
+          "description": "Columns this item occupies — the original spelling, an alias of\n{@link DzGridItemProps.colSpan}.\n\nKept because it reads better than `colSpan` on a grid with no row spans, and\nbecause removing it would be a breaking change for the API D67 shipped. When\nboth are given, `colSpan` wins and dev mode warns.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
         }
@@ -21155,7 +21162,7 @@
           "type": "Component",
           "required": true,
           "default": null,
-          "description": "Icon component to render (e.g. from lucide-vue-next)",
+          "description": "Icon component to render (e.g. from",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/media/DzIcon.types.ts"
         },
@@ -21399,7 +21406,7 @@
           "type": "Component",
           "required": true,
           "default": null,
-          "description": "Icon component to render (from lucide-vue-next or similar)",
+          "description": "Icon component to render (from",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/buttons/DzIconButton.types.ts"
         },
@@ -21474,24 +21481,24 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Native click event (suppressed when disabled or loading)",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -21772,16 +21779,16 @@
       "events": [
         {
           "name": "error",
-          "type": "[event: Event]",
-          "signature": "(event: \"error\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"error\", e: Event): void",
           "description": "Image failed to load",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "load",
-          "type": "[event: Event]",
-          "signature": "(event: \"load\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"load\", e: Event): void",
           "description": "Image loaded successfully",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -22042,7 +22049,7 @@
           "type": "\"lazy\" | \"eager\" | undefined",
           "required": false,
           "default": "\"lazy\"",
-          "description": "Native image loading strategy. Defaults to `'lazy'`; set to `'eager'`\r\nfor above-the-fold / LCP images.",
+          "description": "Native image loading strategy. Defaults to `'lazy'`; set to `'eager'`\nfor above-the-fold / LCP images.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzImageCard.types.ts"
         },
@@ -22060,7 +22067,7 @@
           "type": "Partial<Record<\"root\" | \"footer\" | \"overlay\" | \"header\" | \"body\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzImageCard.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing target (the root surface); `ui`\r\naddresses the other parts by name, and a typo is a type error.",
+          "description": "Per-part class overrides, keyed by the names in `DzImageCard.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target (the root surface); `ui`\naddresses the other parts by name, and a typo is a type error.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzImageCard.types.ts"
         },
@@ -23135,7 +23142,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"trigger\" | \"content\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzInplace.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\nthe built-in `DzInput` editor is its own anatomy boundary and is reached\r\nthrough the `#edit` slot, not through this map.",
+          "description": "Per-part class overrides, keyed by the names in `DzInplace.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\nthe built-in `DzInput` editor is its own anatomy boundary and is reached\nthrough the `#edit` slot, not through this map.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzInplace.types.ts"
         },
@@ -23592,8 +23599,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -23616,8 +23623,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -24433,8 +24440,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -24449,8 +24456,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -25224,8 +25231,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -25240,8 +25247,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -25898,16 +25905,16 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -26107,7 +26114,7 @@
       ],
       "source": "packages/core/src/components/forms/DzListbox.vue",
       "typesSource": "packages/core/src/components/forms/DzListbox.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -26245,8 +26252,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 3,
+          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -26257,7 +26265,9 @@
           "data-scenarios",
           "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -26534,8 +26544,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -26566,8 +26576,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -26750,7 +26760,7 @@
         "./data"
       ],
       "source": "packages/core/src/components/data/DzListItem.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -26805,14 +26815,17 @@
         "traits": [],
         "cells": {
           "excepted": 2,
-          "pass": 4,
+          "pass": 3,
           "present": 6,
+          "stale": 1,
           "unrun": 1
         },
         "unrun": [
           "at-manual"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -26892,8 +26905,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Emitted when an interactive item is clicked",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -27230,7 +27243,7 @@
       ],
       "source": "packages/core/src/components/navigation/DzMegaMenu.vue",
       "typesSource": "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -27379,9 +27392,9 @@
         ],
         "cells": {
           "excepted": 1,
-          "pass": 7,
+          "pass": 6,
           "present": 7,
-          "stale": 1,
+          "stale": 2,
           "unrun": 4
         },
         "unrun": [
@@ -27391,6 +27404,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -27661,7 +27675,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMention.vue",
       "typesSource": "packages/core/src/components/forms/DzMention.types.ts",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -27785,9 +27799,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 3,
-          "stale": 1,
+          "stale": 2,
           "unrun": 6
         },
         "unrun": [
@@ -27799,6 +27813,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -28085,8 +28100,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -28109,8 +28124,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -28700,8 +28715,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Item clicked",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -29048,7 +29063,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzMultiSelect.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -29185,9 +29200,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 4,
-          "stale": 1,
+          "stale": 2,
           "unrun": 6
         },
         "unrun": [
@@ -29199,6 +29214,7 @@
           "portal-hydration"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -29414,8 +29430,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -29446,8 +29462,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -29844,7 +29860,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"content\" | \"action\" | \"title\" | \"close\" | \"description\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in\r\n`DzNotification.anatomy.ts` (ADR-19 §5). `class` keeps its existing target\r\n(the surface); `ui` addresses the other parts by name, and a typo is a\r\ntype error.",
+          "description": "Per-part class overrides, keyed by the names in\n`DzNotification.anatomy.ts` (ADR-19 §5). `class` keeps its existing target\n(the surface); `ui` addresses the other parts by name, and a typo is a\ntype error.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/feedback/DzNotification.types.ts"
         }
@@ -30295,8 +30311,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -30319,8 +30335,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -30518,7 +30534,7 @@
       ],
       "source": "packages/core/src/components/data/DzOrderList.vue",
       "typesSource": "packages/core/src/components/data/DzOrderList.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -30674,9 +30690,9 @@
           "drags"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 4,
-          "stale": 1,
+          "stale": 2,
           "unrun": 6
         },
         "unrun": [
@@ -30688,6 +30704,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -30733,7 +30750,7 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Property name used to derive a stable key from each item (e.g. `'id'`).\r\nFalls back to the item's index when omitted — note that index-based keys do\r\nnot survive reordering, so provide `dataKey` when using `selectable`.",
+          "description": "Property name used to derive a stable key from each item (e.g. `'id'`).\nFalls back to the item's index when omitted — note that index-based keys do\nnot survive reordering, so provide `dataKey` when using `selectable`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzOrderList.types.ts"
         },
@@ -30760,7 +30777,7 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Label for each row's drag handle, rendered as the handle's `title`.\r\n\r\nThe handle is a **pointer-only** affordance and stays `aria-hidden=\"true\"`:\r\nits function is already reachable from the keyboard through the Move\r\ncontrols and the row's own space-to-grab, and giving it an accessible name\r\nwould fold that name into every row's accessible name under `selectable`\r\n(where each row is `role=\"option\"`, a name-from-content role). So this is a\r\ntooltip for the audience the handle actually serves, not an ARIA label —\r\nwhich is what the prop had always claimed to be and never was.",
+          "description": "Label for each row's drag handle, rendered as the handle's `title`.\n\nThe handle is a **pointer-only** affordance and stays `aria-hidden=\"true\"`:\nits function is already reachable from the keyboard through the Move\ncontrols and the row's own space-to-grab, and giving it an accessible name\nwould fold that name into every row's accessible name under `selectable`\n(where each row is `role=\"option\"`, a name-from-content role). So this is a\ntooltip for the audience the handle actually serves, not an ARIA label —\nwhich is what the prop had always claimed to be and never was.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzOrderList.types.ts"
         },
@@ -30841,7 +30858,7 @@
           "type": "Partial<Record<\"root\" | \"item\" | \"list\" | \"item-label\" | \"group\" | \"empty\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzOrderList.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing target on the wrapper; the\r\ntoolbar, the list, the rows, the drag handle and the placeholder are all\r\nrendered by this component.",
+          "description": "Per-part class overrides, keyed by the names in `DzOrderList.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target on the wrapper; the\ntoolbar, the list, the rows, the drag handle and the placeholder are all\nrendered by this component.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzOrderList.types.ts"
         },
@@ -30867,16 +30884,16 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(evt: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(evt: \"blur\", e: FocusEvent): void",
           "description": "Focus left the list",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(evt: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(evt: \"focus\", e: FocusEvent): void",
           "description": "Focus entered the list",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -31276,8 +31293,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -31292,8 +31309,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -31809,7 +31826,7 @@
           "type": "Partial<Record<\"root\" | \"item\" | \"action\" | \"list\" | \"separator\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzPagination.anatomy.ts`\r\n(ADR-19 §5). Every node but the `<nav>` is generated from `total` and\r\n`pageSize`, so `ui` is the only route to the list, the page buttons, the\r\nedge controls and the ellipsis.",
+          "description": "Per-part class overrides, keyed by the names in `DzPagination.anatomy.ts`\n(ADR-19 §5). Every node but the `<nav>` is generated from `total` and\n`pageSize`, so `ui` is the only route to the list, the page buttons, the\nedge controls and the ellipsis.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzPagination.types.ts"
         }
@@ -31818,8 +31835,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -31834,8 +31851,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -32631,8 +32648,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -32647,8 +32664,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -32966,9 +32983,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 7,
-          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -32979,9 +32995,7 @@
           "keyboard-spec",
           "portal-hydration"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -33399,7 +33413,7 @@
           "type": "Component | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Optional leading icon component (e.g. from lucide-vue-next).",
+          "description": "Optional leading icon component (e.g. from",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/overlays/DzPopconfirm.types.ts"
         },
@@ -33979,40 +33993,40 @@
       "events": [
         {
           "name": "closeAutoFocus",
-          "type": "[event: Event]",
-          "signature": "(event: \"closeAutoFocus\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"closeAutoFocus\", e: Event): void",
           "description": "Focus event when popover closes",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed while popover is open",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "interactOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"interactOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"interactOutside\", e: Event): void",
           "description": "Any interaction outside popover content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "openAutoFocus",
-          "type": "[event: Event]",
-          "signature": "(event: \"openAutoFocus\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"openAutoFocus\", e: Event): void",
           "description": "Focus event when popover opens",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside popover content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -35047,7 +35061,7 @@
           "type": "Partial<Record<\"root\" | \"indicator\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzRadio.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
+          "description": "Per-part class overrides, keyed by the names in `DzRadio.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzRadio.types.ts"
         },
@@ -35373,8 +35387,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -35389,8 +35403,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -35846,8 +35860,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -35862,8 +35876,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -36366,8 +36380,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -36382,8 +36396,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -38492,8 +38506,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -38516,8 +38530,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -38899,7 +38913,7 @@
           "type": "Partial<Record<\"root\" | \"item\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzSegmented.anatomy.ts`\r\n(ADR-19 §5). `class` lands on the track, so `ui.item` is the only way to\r\nreach a segment without a descendant selector.",
+          "description": "Per-part class overrides, keyed by the names in `DzSegmented.anatomy.ts`\n(ADR-19 §5). `class` lands on the track, so `ui.item` is the only way to\nreach a segment without a descendant selector.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzSegmented.types.ts"
         }
@@ -39077,7 +39091,7 @@
       ],
       "source": "packages/core/src/components/forms/DzSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzSelect.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -39229,8 +39243,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 5,
+          "pass": 4,
           "present": 4,
+          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -39241,7 +39256,9 @@
           "keyboard-spec",
           "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -39494,8 +39511,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -39526,8 +39543,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -40136,24 +40153,24 @@
       "events": [
         {
           "name": "escapeKeyDown",
-          "type": "[event: KeyboardEvent]",
-          "signature": "(event: \"escapeKeyDown\", event: KeyboardEvent): void",
+          "type": "[e: KeyboardEvent]",
+          "signature": "(event: \"escapeKeyDown\", e: KeyboardEvent): void",
           "description": "Escape key pressed",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "interactOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"interactOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"interactOutside\", e: Event): void",
           "description": "Any interaction outside sheet content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "pointerDownOutside",
-          "type": "[event: Event]",
-          "signature": "(event: \"pointerDownOutside\", event: Event): void",
+          "type": "[e: Event]",
+          "signature": "(event: \"pointerDownOutside\", e: Event): void",
           "description": "Pointer down outside sheet content",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -40467,9 +40484,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 7,
-          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -40480,9 +40496,7 @@
           "data-scenarios",
           "keyboard-spec"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -40983,8 +40997,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Item was clicked",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -41648,8 +41662,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -41664,8 +41678,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -42997,8 +43011,8 @@
       "events": [
         {
           "name": "click",
-          "type": "[event: MouseEvent]",
-          "signature": "(event: \"click\", event: MouseEvent): void",
+          "type": "[e: MouseEvent]",
+          "signature": "(event: \"click\", e: MouseEvent): void",
           "description": "Primary action clicked",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -43692,7 +43706,7 @@
           "type": "StackDirection | undefined",
           "required": false,
           "default": "\"vertical\"",
-          "description": "Stack direction. `vertical` (default) and `column` stack along the block\r\naxis; `horizontal` and `row` lay out along the inline axis, which follows\r\n`dir`.",
+          "description": "Stack direction. `vertical` (default) and `column` stack along the block\naxis; `horizontal` and `row` lay out along the inline axis, which follows\n`dir`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/layout/DzStack.types.ts"
         },
@@ -43956,7 +43970,7 @@
           "type": "Partial<Record<\"icon\" | \"root\" | \"title\" | \"description\" | \"header\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzStatCard.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing target (the root surface); `ui`\r\naddresses the other parts by name, and a typo is a type error.",
+          "description": "Per-part class overrides, keyed by the names in `DzStatCard.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target (the root surface); `ui`\naddresses the other parts by name, and a typo is a type error.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/cards/DzStatCard.types.ts"
         },
@@ -44321,7 +44335,7 @@
         {
           "name": "revealItem",
           "type": "(id: number) => Promise<void>",
-          "description": "Activate the step at `id`, emitting `change` when it was not already\r\nactive, and resolve once its panel has rendered and `revealed` has\r\nfired. Deliberately bypasses `beforeChange`.",
+          "description": "Activate the step at `id`, emitting `change` when it was not already\nactive, and resolve once its panel has rendered and `revealed` has\nfired. Deliberately bypasses `beforeChange`.",
           "descriptionSource": "vue-component-meta"
         }
       ],
@@ -44462,7 +44476,7 @@
         "./navigation"
       ],
       "source": "packages/core/src/components/navigation/DzStepperItem.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -44522,8 +44536,9 @@
         "traits": [],
         "cells": {
           "excepted": 2,
-          "pass": 4,
+          "pass": 3,
           "present": 3,
+          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -44532,7 +44547,9 @@
           "keyboard-spec",
           "unit-spec"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -44885,7 +44902,7 @@
           "type": "Partial<Record<\"root\" | \"indicator\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzSwitch.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
+          "description": "Per-part class overrides, keyed by the names in `DzSwitch.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzSwitch.types.ts"
         }
@@ -44894,8 +44911,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -44910,8 +44927,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -46292,7 +46309,7 @@
           "type": "DzTabsUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the tabs root (ADR-19 §5). The list, the\r\ntriggers and the panels are sub-components the consumer writes, where\r\n`class` at the call site already lands.",
+          "description": "Per-part class override for the tabs root (ADR-19 §5). The list, the\ntriggers and the panels are sub-components the consumer writes, where\n`class` at the call site already lands.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzTabs.types.ts"
         },
@@ -46354,7 +46371,7 @@
         {
           "name": "revealItem",
           "type": "(id: string) => Promise<void>",
-          "description": "Activate the tab whose value is `id` and resolve once its panel has\r\nrendered and `revealed` has fired.",
+          "description": "Activate the tab whose value is `id` and resolve once its panel has\nrendered and `revealed` has fired.",
           "descriptionSource": "vue-component-meta"
         }
       ],
@@ -46527,7 +46544,7 @@
           "type": "DzTabTriggerUi | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class override for the dismiss button (ADR-19 §5). The trigger's\r\nown element takes `class` at the call site; the button rendered under\r\n`closable` has no call site of its own.",
+          "description": "Per-part class override for the dismiss button (ADR-19 §5). The trigger's\nown element takes `class` at the call site; the button rendered under\n`closable` has no call site of its own.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzTabs.types.ts"
         },
@@ -46584,7 +46601,7 @@
       ],
       "source": "packages/core/src/components/data/DzTag.vue",
       "typesSource": "packages/core/src/components/data/DzTag.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -46643,15 +46660,18 @@
         "traits": [],
         "cells": {
           "excepted": 1,
-          "pass": 5,
+          "pass": 4,
           "present": 5,
+          "stale": 1,
           "unrun": 2
         },
         "unrun": [
           "at-manual",
           "contract-spec"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -46731,7 +46751,7 @@
           "type": "Partial<Record<\"root\" | \"close\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
-          "description": "Per-part class overrides, keyed by the names in `DzTag.anatomy.ts`\r\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\r\na key outside the declared parts is a type error, not a class that lands\r\nnowhere.",
+          "description": "Per-part class overrides, keyed by the names in `DzTag.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\na key outside the declared parts is a type error, not a class that lands\nnowhere.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzTag.types.ts"
         },
@@ -46749,8 +46769,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -46765,8 +46785,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -47265,16 +47285,16 @@
         },
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Emitted when the text field loses focus, after any `addOnBlur` commit.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Emitted when the text field takes focus.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -47996,8 +48016,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -48012,8 +48032,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -48761,7 +48781,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTimePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzTimePicker.types.ts",
-      "componentCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -48899,9 +48919,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 3,
-          "stale": 1,
+          "stale": 2,
           "unrun": 6
         },
         "unrun": [
@@ -48913,6 +48933,7 @@
           "portal-hydration"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -49200,8 +49221,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -49232,8 +49253,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -50069,8 +50090,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -50085,8 +50106,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -50461,7 +50482,7 @@
       ],
       "source": "packages/core/src/components/layout/DzToolbar.vue",
       "typesSource": "packages/core/src/components/layout/DzToolbar.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -50570,15 +50591,18 @@
         "traits": [],
         "cells": {
           "excepted": 2,
-          "pass": 4,
+          "pass": 3,
           "present": 5,
+          "stale": 1,
           "unrun": 2
         },
         "unrun": [
           "at-manual",
           "axe"
         ],
-        "stale": []
+        "stale": [
+          "browser-matrix"
+        ]
       },
       "props": [
         {
@@ -51226,7 +51250,7 @@
       ],
       "source": "packages/core/src/components/overlays/DzTour.vue",
       "typesSource": "packages/core/src/components/overlays/DzTour.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -51324,9 +51348,9 @@
         ],
         "cells": {
           "excepted": 1,
-          "pass": 6,
+          "pass": 5,
           "present": 4,
-          "stale": 1,
+          "stale": 2,
           "unrun": 6
         },
         "unrun": [
@@ -51338,6 +51362,7 @@
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -51607,7 +51632,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTransfer.vue",
       "typesSource": "packages/core/src/components/forms/DzTransfer.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -51749,9 +51774,9 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 6,
           "present": 4,
-          "stale": 1,
+          "stale": 2,
           "unrun": 5
         },
         "unrun": [
@@ -51762,6 +51787,7 @@
           "data-scenarios"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -51941,8 +51967,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Focus lost",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -51957,8 +51983,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Focus gained",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -52278,9 +52304,8 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 5,
-          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -52289,9 +52314,7 @@
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -52943,7 +52966,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTreeSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzTreeSelect.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -53100,9 +53123,9 @@
         ],
         "cells": {
           "excepted": 1,
-          "pass": 6,
+          "pass": 5,
           "present": 3,
-          "stale": 1,
+          "stale": 2,
           "unrun": 7
         },
         "unrun": [
@@ -53115,6 +53138,7 @@
           "portal-hydration"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -53383,8 +53407,8 @@
       "events": [
         {
           "name": "blur",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"blur\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"blur\", e: FocusEvent): void",
           "description": "Emitted when the trigger loses focus",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -53407,8 +53431,8 @@
         },
         {
           "name": "focus",
-          "type": "[event: FocusEvent]",
-          "signature": "(event: \"focus\", event: FocusEvent): void",
+          "type": "[e: FocusEvent]",
+          "signature": "(event: \"focus\", e: FocusEvent): void",
           "description": "Emitted when the trigger receives focus",
           "descriptionSource": "emits-interface",
           "modelDerived": false

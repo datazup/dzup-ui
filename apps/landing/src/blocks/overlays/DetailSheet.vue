@@ -25,7 +25,7 @@ import {
   DzSheetTitle,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowRight, X } from 'lucide-vue-next'
+import { ArrowRight, X } from '@lucide/vue'
 import { ref } from 'vue'
 
 interface Order {

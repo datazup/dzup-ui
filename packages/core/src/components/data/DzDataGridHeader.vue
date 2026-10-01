@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DzSelectItem } from '../forms/DzSelect.types.ts'
 import type { FilterOperator } from './DzDataGrid.types.ts'
-import { Filter } from 'lucide-vue-next'
+import { Filter } from '@lucide/vue'
 /**
  * DzDataGridHeader — Internal header sub-part for DzDataGrid.
  *

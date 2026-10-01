@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { BlockDef } from '../../blocks/registry.ts'
-import { LayoutTemplate } from 'lucide-vue-next'
+import { LayoutTemplate } from '@lucide/vue'
 import { onBeforeUnmount, ref, watch } from 'vue'
 import { useLazyMount } from '../../composables/useLazyMount.ts'
 

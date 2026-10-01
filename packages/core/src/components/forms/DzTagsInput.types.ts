@@ -93,9 +93,9 @@ export interface DzTagsInputEmits {
   /** Emitted when a token is rejected instead of committed, with the text and why. */
   invalid: [token: string, reason: DzTagsInputRejectReason]
   /** Emitted when the text field takes focus. */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Emitted when the text field loses focus, after any `addOnBlur` commit. */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

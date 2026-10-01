@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Pin, Star, Underline } from 'lucide-vue-next'
+import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Pin, Star, Underline } from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzToggleButton } from '../../src/components/buttons'

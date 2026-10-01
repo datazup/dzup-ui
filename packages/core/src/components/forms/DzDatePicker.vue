@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DateValue } from '@internationalized/date'
 import type { DzDatePickerEmits, DzDatePickerProps, DzDatePickerSlots } from './DzDatePicker.types.ts'
-import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { CalendarIcon, ChevronLeft, ChevronRight } from '@lucide/vue'
 import {
   DatePickerAnchor,
   DatePickerCalendar,

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzCard, DzText } from '@dzup-ui/core'
-import { Activity, Boxes, Gauge, Layers, Sparkles } from 'lucide-vue-next'
+import { Activity, Boxes, Gauge, Layers, Sparkles } from '@lucide/vue'
 import { DzBentoReveal } from '../../motion/index.ts'
 
 /**

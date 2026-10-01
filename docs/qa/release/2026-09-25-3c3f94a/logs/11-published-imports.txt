@@ -1,0 +1,16 @@
+validate:published-imports — 6 published packages (packages/tooling/scripts/release-policy.json)
+
+  PASS  @dzup-ui/contracts@0.1.0: 1 probes
+  PASS  @dzup-ui/core@0.2.0: 18 probes
+  PASS  @dzup-ui/mcp@0.2.0: 2 probes
+  PASS  @dzup-ui/nuxt@0.1.0-alpha.0: 1 probes
+  PASS  @dzup-ui/testing@0.1.0: 3 probes
+  PASS  @dzup-ui/tokens@0.2.0: 6 probes
+
+  62 exports leaves · 31 runtime entries · 26 types entries · 3.2s
+  types probe: PASS (consumer tsconfig: moduleResolution bundler, skipLibCheck, no allowImportingTsExtensions)
+  DzMessageCatalog reachable from `import '@dzup-ui/core'` alone: YES (isolated program — N5-04 D4/F9)
+
+validate:published-imports PASSED
+  31 entries verified: 26 imported under Node · 2 imported as JSON · 3 assets present in the tarball (not importable under Node)
+  tarballs: (removed — pass --keep to inspect)

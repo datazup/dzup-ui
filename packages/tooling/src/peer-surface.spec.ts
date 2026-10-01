@@ -46,7 +46,7 @@ function fixture(): string {
 
   writeFileSync(join(dir, 'dist', 'components', 'heavy.js'), [
     `import { Primitive } from 'reka-ui'`,
-    `import { Check, ChevronDown as Down } from 'lucide-vue-next'`,
+    `import { Check, ChevronDown as Down } from '@lucide/vue'`,
     `import { Sub } from '@scope/pkg/sub'`,
     `import fs from 'node:fs'`,
     `export const Heavy = [Primitive, Check, Down, Sub, fs]`,
@@ -86,7 +86,7 @@ describe('walkFrom', () => {
     const { externals, modules } = walkFrom(join(dir, 'dist', 'index.js'))
 
     expect(modules.size).toBe(4)
-    expect([...externals.keys()].sort()).toEqual(['@scope/pkg', 'lucide-vue-next', 'reka-ui', 'vue'])
+    expect([...externals.keys()].sort()).toEqual(['@lucide/vue', '@scope/pkg', 'reka-ui', 'vue'])
     expect([...(externals.get('reka-ui') ?? [])].join()).toContain('heavy.js')
   })
 
@@ -117,7 +117,7 @@ describe('collectEntrySurfaces', () => {
     const barrel = surfaces.find(surface => surface.subpath === '.')
     const leaf = surfaces.find(surface => surface.subpath === './leaf')
 
-    expect(Object.keys(barrel?.externals ?? {})).toEqual(['@scope/pkg', 'lucide-vue-next', 'reka-ui', 'vue'])
+    expect(Object.keys(barrel?.externals ?? {})).toEqual(['@lucide/vue', '@scope/pkg', 'reka-ui', 'vue'])
     expect(Object.keys(leaf?.externals ?? {})).toEqual(['vue'])
     expect(leaf?.modules).toBe(2)
   })

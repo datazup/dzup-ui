@@ -18,7 +18,7 @@ import {
   FileText,
   FileVideo,
   Folder,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 /** A folder node for the sidebar DzTree (structurally a `TreeNode`). */
 export interface FolderNode {

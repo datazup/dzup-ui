@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowRight, ArrowUp } from 'lucide-vue-next'
+import { ArrowRight, ArrowUp } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { LINKS } from '../../config.ts'
 import { CATALOG } from '../../gallery/catalog.ts'

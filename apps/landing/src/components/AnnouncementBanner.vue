@@ -13,7 +13,7 @@
  * (router-link for in-app paths, `<a>` for external); the dismiss control is a
  * real `<button>` (keyboard- and screen-reader-operable) with an explicit label.
  */
-import { X } from 'lucide-vue-next'
+import { X } from '@lucide/vue'
 import { ref } from 'vue'
 import { ANNOUNCEMENT } from '../config.ts'
 

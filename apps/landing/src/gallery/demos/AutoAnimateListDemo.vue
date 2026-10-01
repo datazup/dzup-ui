@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { AnimationController } from '@formkit/auto-animate'
 import { DzAvatar, DzBadge, DzButton, DzListItem } from '@dzup-ui/core'
-import { Plus, Shuffle, X } from 'lucide-vue-next'
+import { Plus, Shuffle, X } from '@lucide/vue'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 // `autoAnimate` through the motion barrel, not from npm directly: the barrel's
 // wrapper is the one whose `destroy()` can cancel AutoAnimate's cold-poll timers

@@ -35,7 +35,7 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { Boxes, MoreHorizontal, Plus, Star } from 'lucide-vue-next'
+import { Boxes, MoreHorizontal, Plus, Star } from '@lucide/vue'
 import { computed, reactive, ref } from 'vue'
 import { NAV, PRIORITY_TONE, TASKS, TODAY_LABEL } from './data.ts'
 

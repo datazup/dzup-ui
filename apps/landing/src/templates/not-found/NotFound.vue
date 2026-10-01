@@ -10,7 +10,7 @@ import type { Component } from 'vue'
  * reflows cleanly 390px → up.
  */
 import { DzButton, DzCard, DzDivider, DzResult, DzText } from '@dzup-ui/core'
-import { ArrowRight, Boxes, Compass, Home, LifeBuoy, Search } from 'lucide-vue-next'
+import { ArrowRight, Boxes, Compass, Home, LifeBuoy, Search } from '@lucide/vue'
 
 interface QuickLink {
   icon: Component

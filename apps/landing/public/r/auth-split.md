@@ -18,7 +18,7 @@ import {
   DzPasswordInput,
   DzText,
 } from '@dzup-ui/core'
-import { Globe, ShieldCheck, Zap } from 'lucide-vue-next'
+import { Globe, ShieldCheck, Zap } from '@lucide/vue'
 import { ref } from 'vue'
 
 /**

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzAlert, DzBadge, DzButton, DzInput, DzProgress, DzRating, DzSwitch } from '@dzup-ui/core'
-import { Check, Copy } from 'lucide-vue-next'
+import { Check, Copy } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { LINKS } from '../config.ts'
 import Section from './Section.vue'

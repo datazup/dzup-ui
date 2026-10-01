@@ -40,11 +40,13 @@
  *   R8  No `.changeset/pre.json`. Pre-mode residue silently changes what every
  *       subsequent command does; entering it is a decision, not a state to find.
  *   R9  Ratchet: how many PUBLISHED packages carry a newest CHANGELOG heading
- *       that `validate:changelog` would reject. See the note on the ceiling in
- *       release-policy.json — this is a ratchet on an open defect, not a pass.
+ *       that `validate:changelog` would reject. Owner decision N5-01-D1
+ *       (2026-09-25) made the gate accept the `## x.y.z` heading `changeset
+ *       version` writes, so the ceiling is 0: a collision now means the two
+ *       have drifted apart again.
  *   R10 Every published package is covered by `validate:changelog`'s hand-typed
- *       list, or is listed as exempt with a reason. `@dzup-ui/mcp` is neither
- *       covered nor coverable today; the exemption records why.
+ *       list, or is listed as exempt with a reason. The list may only shrink;
+ *       `@dzup-ui/mcp` left it when N5-01-D1 removed the collision.
  *
  * It does not decide whether a change is breaking. Nothing can. It checks the
  * shape of the claim and proves the plan assembles.
@@ -184,8 +186,9 @@ export function isZeroVersion(version: string): boolean {
 /**
  * Whether `validate:changelog` would accept this file's newest version heading.
  *
- * Mirrors `validate-changelog.ts` exactly — heading matches `^##\s+\[?x.y.z`
- * and carries an ISO date on the same line. Duplicated on purpose: importing it
+ * Mirrors `validate-changelog.ts` exactly — heading matches `^##\s+\[?x.y.z`;
+ * a date is optional (N5-01-D1), but a date that is written must be ISO.
+ * Duplicated on purpose: importing it
  * would couple the ratchet to a script that may be rewritten when N5-01-D1 is
  * decided, and the ratchet has to keep measuring the same thing across that
  * rewrite.
@@ -194,7 +197,8 @@ export function changelogHeadingWouldPass(changelog: string): boolean | undefine
   const headings = changelog.split(/\r?\n/).filter(line => /^##\s+\[?\d+\.\d+\.\d+/.test(line))
   if (headings.length === 0)
     return undefined
-  return /\d{4}-\d{2}-\d{2}/.test(headings[0])
+  const rest = headings[0].replace(/^##\s+\[?\d+\.\d+\.\d[^\s\]]*\]?/, '')
+  return !/\d{1,4}[/.-]\d{1,2}[/.-]\d{1,4}/.test(rest) || /\d{4}-\d{2}-\d{2}/.test(rest)
 }
 
 /** The hand-typed list inside validate-changelog.ts, read as data. */
@@ -364,9 +368,9 @@ export function checkReleasePolicy(root: string = ROOT): Violation[] {
   if (colliding > policy.changelogFormatCollisionCeiling) {
     add('R9', `${colliding} published package(s) carry a newest CHANGELOG heading that `
     + `validate:changelog rejects (${collidingNames.join(', ')}); the recorded ceiling is `
-    + `${policy.changelogFormatCollisionCeiling}. That heading shape — \`## x.y.z\` with no `
-    + 'ISO date — is exactly what `changeset version` writes, so this number growing means the '
-    + 'release path and the changelog gate have drifted further apart. Owner decision N5-01-D1.')
+    + `${policy.changelogFormatCollisionCeiling}. \`changeset version\` writes the headings, so `
+    + 'a collision means the release path and the changelog gate have drifted apart again. '
+    + 'Owner decision N5-01-D1: the gate follows the tool.')
   }
   if (colliding < policy.changelogFormatCollisionCeiling) {
     add('R9', `Only ${colliding} published package(s) now collide with validate:changelog, below `

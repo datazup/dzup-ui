@@ -15,7 +15,7 @@
  *      consumer's install therefore depends on the barrel, not on the
  *      component. This report makes that distinction measurable.
  *
- *   2. **What is the real icon surface?** `lucide-vue-next` is a hard
+ *   2. **What is the real icon surface?** `@lucide/vue` is a hard
  *      dependency, and "icon lock-in" is usually argued in the abstract. The
  *      inventory below is the concrete version: how many modules import it,
  *      which glyph identifiers, and how often each is used — which is what
@@ -55,9 +55,9 @@ export interface EntrySurface {
   externals: Record<string, string[]>
 }
 
-/** The `lucide-vue-next` import inventory of a dist tree. */
+/** The {@link ICON_PACKAGE} import inventory of a dist tree. */
 export interface IconSurface {
-  /** Modules with at least one `lucide-vue-next` import. */
+  /** Modules with at least one {@link ICON_PACKAGE} import. */
   files: string[]
   /** Glyph identifier → the modules importing it. */
   glyphs: Record<string, string[]>
@@ -81,8 +81,14 @@ const SPECIFIER_PATTERNS = [
   /(?:^|[;\s])import\s*["']([^"']+)["']/g,
 ]
 
-/** `import { A, B as C } from 'lucide-vue-next'` → the imported identifiers. */
-const LUCIDE_RE = /import\s*\{([^}]*)\}\s*from\s*["']lucide-vue-next["']/g
+/**
+ * The icon library `@dzup-ui/core` ships. `lucide-vue-next` until the icon swap
+ * (D174, 2026-09-26); matching the old name afterwards reported 0 glyphs.
+ */
+export const ICON_PACKAGE = '@lucide/vue'
+
+/** `import { A, B as C } from '@lucide/vue'` → the imported identifiers. */
+const LUCIDE_RE = /import\s*\{([^}]*)\}\s*from\s*["']@lucide\/vue["']/g
 
 const ROOT = resolve(import.meta.dirname, '..', '..', '..')
 
@@ -261,7 +267,7 @@ function main(): void {
   }
 
   console.log('\n  Reachability of the peer and the icon dependency, per entry:\n')
-  for (const dep of ['reka-ui', 'lucide-vue-next']) {
+  for (const dep of ['reka-ui', ICON_PACKAGE]) {
     console.log(`  ${dep}`)
     for (const entry of surfaces) {
       const importers = entry.externals[dep]
@@ -271,7 +277,7 @@ function main(): void {
   }
 
   const glyphNames = Object.keys(icons.glyphs)
-  console.log(`\n  lucide-vue-next: ${icons.files.length} module(s), ${glyphNames.length} distinct glyph(s)\n`)
+  console.log(`\n  ${ICON_PACKAGE}: ${icons.files.length} module(s), ${glyphNames.length} distinct glyph(s)\n`)
   for (const glyph of glyphNames.sort((a, b) => (icons.glyphs[b]?.length ?? 0) - (icons.glyphs[a]?.length ?? 0) || a.localeCompare(b)))
     console.log(`    ${glyph.padEnd(20)} ${icons.glyphs[glyph]?.length ?? 0}`)
 

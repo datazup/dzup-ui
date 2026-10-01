@@ -25,9 +25,9 @@ export interface ChangeMetadata {
 /** Focus/blur events -- required for all interactive components */
 export interface BaseEvents {
   /** Focus gained */
-  focus: [event: FocusEvent]
+  focus: [e: FocusEvent]
   /** Focus lost */
-  blur: [event: FocusEvent]
+  blur: [e: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

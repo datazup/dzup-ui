@@ -152,7 +152,13 @@ export function readStatus(source: string): AdrStatus | undefined {
     .find(text => /^[-\s]{0,4}\*{0,2}Status\*{0,2}\s?:/i.test(text))
   if (line === undefined)
     return undefined
-  return ADR_STATUSES.find(status => new RegExp(`\\b${status}\\b`, 'i').test(line))
+  // The FIRST status word on the line wins, by position. Checking the list in
+  // declaration order instead let `Proposed` win on an accepted line that keeps
+  // its history — `Accepted (owner, …; proposed by TASK-…)`, the shape
+  // docs/qa/adr-prep-2026-09-26/ACCEPTANCE.md prescribes — so signing an ADR
+  // left it counted as Proposed.
+  const word = new RegExp(`\\b(?:${ADR_STATUSES.join('|')})\\b`, 'i').exec(line)?.[0]
+  return ADR_STATUSES.find(status => status.toLowerCase() === word?.toLowerCase())
 }
 
 /**

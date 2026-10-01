@@ -141,7 +141,7 @@ export interface DzSidebarItemProps extends BaseAccessibilityProps {
 /** Events emitted by DzSidebarItem */
 export interface DzSidebarItemEmits {
   /** Item was clicked */
-  click: [event: MouseEvent]
+  click: [e: MouseEvent]
 }
 
 /** Slot definitions for DzSidebarItem */

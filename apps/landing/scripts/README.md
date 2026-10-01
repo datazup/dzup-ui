@@ -130,7 +130,7 @@ buildable file rather than a schema-valid-but-broken one:
    primitives as a versioned package (`@dzup-ui/core`), so a bare `DzButton` there
    would make the CLI resolve `<registry>/DzButton.json` and **404**. We therefore
    emit `registryDependencies: []`, list `@dzup-ui/core` + `@dzup-ui/tokens` (and
-   any `lucide-vue-next` the source imports — detected via `sourceDependencies`) in
+   any `@lucide/vue` the source imports — detected via `sourceDependencies`) in
    `dependencies`, and keep the human-facing component list in `meta.components`.
 2. **Files are `registry:file` with an explicit `target`.** A block lands at
    `components/blocks/<id>.vue` (templates under `components/templates/<slug>/`)

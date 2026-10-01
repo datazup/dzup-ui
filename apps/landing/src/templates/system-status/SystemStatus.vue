@@ -34,7 +34,7 @@ import {
   Globe,
   Server,
   Webhook,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 type ServiceStatus = 'operational' | 'degraded' | 'maintenance'
 

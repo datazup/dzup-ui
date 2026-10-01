@@ -17,7 +17,7 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { Search } from 'lucide-vue-next'
+import { Search } from '@lucide/vue'
 import { ref } from 'vue'
 
 // A small, real component cluster per family. Rendered purely as a visual

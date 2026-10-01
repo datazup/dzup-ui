@@ -53,7 +53,7 @@ import {
   Trash2,
   Upload,
   UserRound,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, reactive, ref, watch } from 'vue'
 import {
   INVOICES,

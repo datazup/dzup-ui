@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { DollarSign, Hash } from 'lucide-vue-next'
+import { DollarSign, Hash } from '@lucide/vue'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzNumberInput } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'

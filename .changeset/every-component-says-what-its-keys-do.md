@@ -1,7 +1,7 @@
 ---
-"@dzup-ui/contracts": minor
-"@dzup-ui/testing": minor
-"@dzup-ui/core": minor
+"@dzup-ui/contracts": patch
+"@dzup-ui/testing": patch
+"@dzup-ui/core": patch
 ---
 
 **Components now declare what their keys do, and the documentation renders the table from that declaration instead of saying it has not been derived.**

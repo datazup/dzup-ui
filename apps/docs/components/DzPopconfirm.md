@@ -62,7 +62,7 @@ never as asserted.
 | `cancelText` | `string \| undefined` | no | `undefined` | Label for the cancel action button. Defaults to `Cancel`. |
 | `confirmText` | `string \| undefined` | no | `undefined` | Label for the confirm action button. Defaults to `Confirm`. |
 | `description` | `string \| undefined` | no | `undefined` | Optional supporting description rendered below the title. |
-| `icon` | `Component \| undefined` | no | `undefined` | Optional leading icon component (e.g. from lucide-vue-next). |
+| `icon` | `Component \| undefined` | no | `undefined` | Optional leading icon component (e.g. from |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `loading` | `boolean \| undefined` | no | `false` | Whether the confirm action is in progress. While truthy the popover stays open, the confirm button shows a spinner, and the cancel button is disabled. Drive this from an async `@confirm` handler to keep the popover open until the work settles. |
 | `open` | `boolean \| undefined` | no | `false` | Whether the confirmation bubble is open; `false` keeps it closed. |
@@ -251,8 +251,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `4e4e46f6` for the capability matrix,
-`4e4e46f6` for the quality matrix. It is **locally qualified**:
+artifact records — `e6980361` for the capability matrix,
+`e6980361` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -346,7 +346,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/overlays/DzPopconfirm.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/overlays/DzPopconfirm.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/portal-hydration.spec.ts` — Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzPopconfirm.md` — 6 AT/browser pairs, none executed. |
 

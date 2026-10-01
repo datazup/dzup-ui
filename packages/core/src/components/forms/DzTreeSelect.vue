@@ -6,7 +6,7 @@ import type {
   TreeNode,
   TreeSelectValue,
 } from './DzTreeSelect.types.ts'
-import { Check, ChevronDown, Minus, X } from 'lucide-vue-next'
+import { Check, ChevronDown, Minus, X } from '@lucide/vue'
 /**
  * DzTreeSelect -- a form select whose overlay panel is a DzTree (TASK-NF-04).
  *

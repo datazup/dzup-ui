@@ -19,11 +19,11 @@
  * guaranteed here; we still guard defensively for type-safety.
  */
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight, Zap } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, Zap } from '@lucide/vue'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { BLOCKS, CATEGORIES, getBlock } from '../blocks/registry.ts'
-import { getBlockSource } from '../blocks/sources.ts'
+import { loadBlockSource, useBlockSource } from '../blocks/sourceLoader.ts'
 import BlockManifest from '../components/blocks/BlockManifest.vue'
 import BlockPreview from '../components/blocks/BlockPreview.vue'
 import Section from '../components/Section.vue'
@@ -89,15 +89,24 @@ function showBlocksUsing(name: string): void {
  * Vite + Vue 3 + @dzup-ui/core starter, so a visitor goes from "I like this" to
  * "it runs in my editor" in one click.
  */
+const blockSource = useBlockSource(() => block.value?.path ?? null)
+
 function openStackblitz(): void {
   const b = block.value
   if (!b)
     return
-  openInStackblitz({
+  const open = (source: string): void => openInStackblitz({
     title: `${b.title} — dzup-ui block`,
     description: b.description,
-    files: { 'src/App.vue': getBlockSource(b.path) },
+    files: { 'src/App.vue': source },
   })
+  // The preview has already fetched the source by the time anyone can click.
+  // Opening synchronously keeps the `_blank` form post inside the click's user
+  // activation, which a popup blocker would otherwise refuse after an await.
+  if (blockSource.value !== '')
+    open(blockSource.value)
+  else
+    void loadBlockSource(b.path).then(open)
 }
 </script>
 
@@ -411,6 +420,18 @@ function openStackblitz(): void {
 
   .bd-pager-name {
     display: none;
+  }
+
+  /* Prev and next share the first row; "Browse all blocks" takes the second.
+     Three unwrapped items only fit 358px while the fallback font is narrow —
+     with a wider one the next link ran ~9px past the viewport. */
+  .bd-pager {
+    flex-wrap: wrap;
+  }
+
+  .bd-pager > :nth-child(2) {
+    order: 1;
+    flex-basis: 100%;
   }
 }
 </style>

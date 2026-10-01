@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DzSelectItem } from '../forms/DzSelect.types.ts'
 import type { DzDataGridPaginationEmits, DzDataGridPaginationProps } from './DzDataGrid.types.ts'
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight } from '@lucide/vue'
 /**
  * DzDataGridPagination — Internal pagination sub-part for DzDataGrid.
  *

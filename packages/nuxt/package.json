@@ -4,6 +4,11 @@
   "version": "0.1.0-alpha.0",
   "description": "Nuxt module for dzup-ui — registers every component from the generated ownership table as a Nuxt auto-import",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datazup/dzup-ui.git",
+    "directory": "packages/nuxt"
+  },
   "browserslist": [
     "chrome >= 111",
     "edge >= 111",

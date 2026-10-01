@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { BarChart3, Bell, FileText, Home, LogOut, Settings, Shield, Users } from 'lucide-vue-next'
+import { BarChart3, Bell, FileText, Home, LogOut, Settings, Shield, Users } from '@lucide/vue'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import {
   DzMenu,

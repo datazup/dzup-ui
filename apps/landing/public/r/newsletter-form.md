@@ -9,7 +9,7 @@ A focused subscribe card — an email DzInput with a mail-icon prefix and inline
 ```vue
 <script setup lang="ts">
 import { DzButton, DzCheckbox, DzHeading, DzInput, DzText } from '@dzup-ui/core'
-import { CheckCircle2, Mail, Sparkles } from 'lucide-vue-next'
+import { CheckCircle2, Mail, Sparkles } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 /**

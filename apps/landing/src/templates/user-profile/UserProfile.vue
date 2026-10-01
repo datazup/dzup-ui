@@ -24,7 +24,7 @@ import {
   DzTimeline,
   DzTimelineItem,
 } from '@dzup-ui/core'
-import { BadgeCheck, MapPin, MessageSquare, Pencil } from 'lucide-vue-next'
+import { BadgeCheck, MapPin, MessageSquare, Pencil } from '@lucide/vue'
 import { ref } from 'vue'
 import { ACTIVITY, FACTS, STATS } from './data.ts'
 

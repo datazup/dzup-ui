@@ -7,7 +7,7 @@ import type {
   DzCascaderSlots,
   DzCascaderValue,
 } from './DzCascader.types.ts'
-import { ChevronDown, ChevronRight, X } from 'lucide-vue-next'
+import { ChevronDown, ChevronRight, X } from '@lucide/vue'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 /**
  * DzCascader — cascading multi-level select built on Reka UI Popover.

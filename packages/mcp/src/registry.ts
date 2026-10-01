@@ -38,6 +38,9 @@ import process from 'node:process'
 /** Default public origin serving the generated registry (registry.json `homepage`). */
 export const DEFAULT_REGISTRY_URL = 'https://dzup-ui.com'
 
+/** HTTP fetch timeout in milliseconds. A hanging registry call must not block the MCP session forever. */
+const FETCH_TIMEOUT_MS = 15_000
+
 /**
  * Site path of the generated component-metadata artifact (TASK-N2-A2).
  *
@@ -238,7 +241,7 @@ export function createReader(base: string): Reader {
     const origin = base.replace(/\/+$/, '')
     return async (sitePath) => {
       const url = `${origin}${sitePath}`
-      const res = await fetch(url)
+      const res = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
       if (!res.ok)
         throw new Error(`GET ${url} → ${res.status} ${res.statusText}`)
       return res.text()

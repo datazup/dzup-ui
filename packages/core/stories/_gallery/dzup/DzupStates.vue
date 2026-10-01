@@ -3,7 +3,7 @@
 // ONLY @dzup-ui/core components + --dz-* tokens + plain divs.
 // A modern dashboard's async-UI states at reference quality.
 
-import { Inbox, PackageOpen, Plus, RefreshCw } from 'lucide-vue-next'
+import { Inbox, PackageOpen, Plus, RefreshCw } from '@lucide/vue'
 import { DzButton } from '../../../src/components/buttons'
 import { DzCard } from '../../../src/components/cards'
 import { DzAlert, DzEmpty, DzSkeleton, DzSpinner } from '../../../src/components/feedback'

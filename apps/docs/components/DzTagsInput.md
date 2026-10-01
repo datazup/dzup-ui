@@ -88,8 +88,8 @@ never as asserted.
 | Event | Payload | Description |
 | --- | --- | --- |
 | `add` | `[token: string]` | Emitted after a token is committed, with the token text. |
-| `blur` | `[event: FocusEvent]` | Emitted when the text field loses focus, after any `addOnBlur` commit. |
-| `focus` | `[event: FocusEvent]` | Emitted when the text field takes focus. |
+| `blur` | `[e: FocusEvent]` | Emitted when the text field loses focus, after any `addOnBlur` commit. |
+| `focus` | `[e: FocusEvent]` | Emitted when the text field takes focus. |
 | `invalid` | `[token: string, reason: DzTagsInputRejectReason]` | Emitted when a token is rejected instead of committed, with the text and why. |
 | `remove` | `[token: string, index: number]` | Emitted after a token is detached, with the token text and the index it held. |
 | `update:modelValue` | `[value: string[] \| undefined]` | Emitted when the `v-model` binding changes, with the new value. Synthesised by `defineModel` (ADR-16); `v-model` consumes it for you. |
@@ -263,8 +263,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `4e4e46f6` for the capability matrix,
-`4e4e46f6` for the quality matrix. It is **locally qualified**:
+artifact records — `e6980361` for the capability matrix,
+`e6980361` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -364,7 +364,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzTagsInput.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzTagsInput.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 589be13 (worktree dirty). chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/forms/DzTagsInput.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTagsInput.md` — 6 AT/browser pairs, none executed. |
 
