@@ -35,25 +35,7 @@
   "recorded": "2026-09-24",
   "recordedAt": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
   "packet": "docs/program-2026-09-22-architecture/reports/TASK-S0-O3-ratification-packet.md",
-  "maxGrandfathered": 3,
-  "entries": [
-    {
-      "id": "ADR-18",
-      "recorded": "2026-09-24",
-      "reason": "Runtime floor and validator runner. Cited from 1 shipped-source file (packages/tooling/src/validators/stop-conditions.ts:438). Its Decision 1 — the floor itself — is under revision: amendment A1 records three reports recommending three different answers and A2 measures the declared floor false on its own ^20.19.0 branch. NOT ready to sign; see the packet's per-ADR verdict.",
-      "exit": "An owner answers the Node floor decision (owner-decision-register-2026-09-22.md row 19), then flips this ADR's Status line. Delete this entry and lower maxGrandfathered in the same change."
-    },
-    {
-      "id": "ADR-19",
-      "recorded": "2026-09-24",
-      "reason": "Public styling contract: cascade layers, parts, states, typed `ui` overrides. Cited from 250 shipped-source files; 104 .anatomy.ts files, all six cascade layers and 90 `ui?:`-declaring .types.ts build on it. Every divergence the acceptance packet raised is closed (amendment A3) and every figure in amendment A1 reproduces at 4e4e46f. Ready to sign.",
-      "exit": "An owner flips this ADR's Status line to Accepted. Delete this entry and lower maxGrandfathered in the same change."
-    },
-    {
-      "id": "ADR-20",
-      "recorded": "2026-09-24",
-      "reason": "Provider contract. Cited from 163 shipped-source files; ten provider composables, nine injection keys in @dzup-ui/contracts and DZ_PROVIDER_DEFAULTS build on it. Amendment A8.7 records no clause whose code contradicts it. Ready to sign; its five open questions are non-blocking by the packet's own analysis, and A8.3's adoption counts drift by 1-3 at 4e4e46f (a record drift, not a code divergence).",
-      "exit": "An owner flips this ADR's Status line to Accepted. Delete this entry and lower maxGrandfathered in the same change."
-    }
-  ]
+  "discharged": "2026-10-01, at the merge of origin/main: the owner accepted ADR-18, ADR-19 and ADR-20 on 2026-09-26 (upstream 4885d0e5), so all three entries recorded on 2026-09-24 were deleted and maxGrandfathered lowered 3 -> 0 in the same change, as each entry's `exit` clause required.",
+  "maxGrandfathered": 0,
+  "entries": []
 }

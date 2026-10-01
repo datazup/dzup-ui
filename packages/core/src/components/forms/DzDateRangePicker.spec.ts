@@ -114,10 +114,30 @@ describe('dzDateRangePicker — calendar grid Home/End', () => {
   // picker mounted with its focus management still live.
   enableAutoUnmount(afterEach)
 
+  // The calendar opens on TODAY's month — `useDatePicker`'s placeholder is
+  // `today()`, whatever the value is — so a selected day in any other month is
+  // not rendered at all. These tests were first written against 2026-09-16 and
+  // went red on 2026-10-01 for that reason alone. A Wednesday in the second
+  // week of the current month keeps the focused row fully inside the month,
+  // with a row before it and rows after it, in every month.
+  function wednesdayInWeekTwo(): Date {
+    const now = new Date()
+    const day = new Date(now.getFullYear(), now.getMonth(), 8)
+    while (day.getDay() !== 3)
+      day.setDate(day.getDate() + 1)
+    return day
+  }
+  function iso(date: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0')
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+  }
+  const WEDNESDAY = iso(wednesdayInWeekTwo())
+  const FRIDAY = iso(new Date(wednesdayInWeekTwo().getTime() + 2 * 86_400_000))
+
   /** Open the calendar and return the day cells of the week holding the start. */
   async function openWeekOfStart() {
     const wrapper = mount(DzDateRangePicker, {
-      props: { modelValue: { start: '2026-09-16', end: '2026-09-18' } },
+      props: { modelValue: { start: WEDNESDAY, end: FRIDAY } },
       attachTo: document.body,
     })
     await wrapper.find('[data-part="trigger"]').trigger('click')

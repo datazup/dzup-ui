@@ -781,6 +781,11 @@ export function resolutionLedger(
   const deps = new Set<string>()
   for (const reg of registries) {
     for (const [file, item] of reg.payloads) {
+      // Declared non-item payloads (`component-meta.json`, copied beside the
+      // index by every `build:registry` since 2026-09-26) are not units a
+      // consumer installs, so they are no row here either.
+      if (NON_ITEM_PAYLOADS.has(file))
+        continue
       const name = item.name ?? file.replace(/\.json$/, '')
       const d = (item.dependencies ?? []).filter(
         (x): x is string => typeof x === 'string' && x.startsWith('@dzup-ui/'),

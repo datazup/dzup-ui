@@ -431,15 +431,17 @@ describe('the live repository', () => {
     expect(checkBrowserLane(readBrowserLaneInputs())).toEqual([])
   })
 
-  it('story-dod is the ONLY input whose lane a CI job enforces today', () => {
+  it('story-dod and visual-baselines are the only inputs whose lanes a CI job enforces today', () => {
     // Re-derived from the workflows on every run, not quoted from a report. If
     // this ever reads differently, one of the six `gate` blocks is out of date
-    // and the clause above will already have said which.
+    // and the clause above will already have said which. `visual-baselines`
+    // joined on 2026-09-26, when upstream's `visual` CI job started running the
+    // gate lanes inside the pinned Playwright image (merged 2026-10-01).
     const inputs = readBrowserLaneInputs()
     const jobs = inputs.workflowFiles.flatMap(f => parseWorkflowJobs(f.path, f.source))
     const enforced = CI_GATE_LANES
       .filter(lane => findEnforcingJob(jobs, lane.laneCommands, inputs.rootScripts) !== undefined)
       .map(lane => lane.input)
-    expect(enforced).toEqual(['story-dod'])
+    expect(enforced).toEqual(['story-dod', 'visual-baselines'])
   })
 })

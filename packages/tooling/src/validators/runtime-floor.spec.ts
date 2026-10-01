@@ -217,9 +217,11 @@ describe('the repository at HEAD', () => {
     expect(report.violations).toEqual([])
     expect(report.floor).toBe('20.19.0')
     expect(report.filesScanned).toBeGreaterThan(1000)
+    // One site since the merge of origin/main (2026-10-01): upstream replaced the
+    // landing-token-fallbacks.spec.ts globSync call, and its ceilings entry went
+    // with it.
     expect(report.breaches.map(breach => breach.file).sort()).toEqual([
       'packages/codemods/scripts/run-story-color-tokens.ts',
-      'packages/tooling/src/token-checks/landing-token-fallbacks.spec.ts',
     ])
   })
 })

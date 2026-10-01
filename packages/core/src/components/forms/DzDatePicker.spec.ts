@@ -141,6 +141,25 @@ describe('dzDatePicker — calendar grid Home/End', () => {
   // picker mounted with its focus management still live.
   enableAutoUnmount(afterEach)
 
+  // The calendar opens on TODAY's month — `useDatePicker`'s placeholder is
+  // `today()`, whatever the value is — so a selected day in any other month is
+  // not rendered at all. These tests were first written against 2026-09-16 and
+  // went red on 2026-10-01 for that reason alone. A Wednesday in the second
+  // week of the current month keeps the focused row fully inside the month,
+  // with a row before it and rows after it, in every month.
+  function wednesdayInWeekTwo(): Date {
+    const now = new Date()
+    const day = new Date(now.getFullYear(), now.getMonth(), 8)
+    while (day.getDay() !== 3)
+      day.setDate(day.getDate() + 1)
+    return day
+  }
+  function iso(date: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0')
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+  }
+  const WEDNESDAY = iso(wednesdayInWeekTwo())
+
   /** Open the calendar and return the day cells of the week holding `iso`. */
   async function openWeekOf(iso: string) {
     const wrapper = mount(DzDatePicker, {
@@ -160,7 +179,7 @@ describe('dzDatePicker — calendar grid Home/End', () => {
   }
 
   it('moves focus to the first day of the focused week on Home', async () => {
-    const { wrapper, selected, days } = await openWeekOf('2026-09-16')
+    const { wrapper, selected, days } = await openWeekOf(WEDNESDAY)
     selected.focus()
     expect(days.length).toBeGreaterThan(1)
 
@@ -173,7 +192,7 @@ describe('dzDatePicker — calendar grid Home/End', () => {
   })
 
   it('moves focus to the last day of the focused week on End', async () => {
-    const { wrapper, selected, days } = await openWeekOf('2026-09-16')
+    const { wrapper, selected, days } = await openWeekOf(WEDNESDAY)
     selected.focus()
 
     const event = new KeyboardEvent('keydown', { key: 'End', bubbles: true, cancelable: true })
@@ -185,7 +204,7 @@ describe('dzDatePicker — calendar grid Home/End', () => {
   })
 
   it('stays inside the focused week rather than jumping to the month\'s ends', async () => {
-    const { wrapper, selected, row, days } = await openWeekOf('2026-09-16')
+    const { wrapper, selected, row, days } = await openWeekOf(WEDNESDAY)
     selected.focus()
 
     selected.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true, cancelable: true }))
@@ -200,7 +219,7 @@ describe('dzDatePicker — calendar grid Home/End', () => {
 
   it('leaves Home and End to the field when focus is not in the grid', async () => {
     const wrapper = mount(DzDatePicker, {
-      props: { modelValue: '2026-09-16' },
+      props: { modelValue: WEDNESDAY },
       attachTo: document.body,
     })
     const segment = wrapper.findAll('[data-part="input"]')[0]!
@@ -222,7 +241,7 @@ describe('dzDatePicker — calendar grid Home/End', () => {
 
   it('skips a day the min bound disables rather than parking focus on it', async () => {
     const wrapper = mount(DzDatePicker, {
-      props: { modelValue: '2026-09-16', min: '2026-09-16' },
+      props: { modelValue: WEDNESDAY, min: WEDNESDAY },
       attachTo: document.body,
     })
     await wrapper.find('[data-part="trigger"]').trigger('click')
@@ -232,15 +251,15 @@ describe('dzDatePicker — calendar grid Home/End', () => {
     selected.focus()
     selected.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true, cancelable: true }))
 
-    // 2026-09-16 is a Wednesday; the days before it in that week are all below
-    // the minimum, so the first REACHABLE day of the week is the 16th itself.
+    // The value is a Wednesday; the days before it in that week are all below
+    // the minimum, so the first REACHABLE day of the week is the Wednesday itself.
     expect((document.activeElement as HTMLElement).hasAttribute('data-disabled')).toBe(false)
     expect(document.activeElement).toBe(selected)
     wrapper.unmount()
   })
 
   it('conforms to its declared keyboard contract with the calendar open', async () => {
-    const { wrapper } = await openWeekOf('2026-09-16')
+    const { wrapper } = await openWeekOf(WEDNESDAY)
     // `when` values here are all two-word free text (`calendar open`), so there is
     // no single-word prop condition to admit.
     expectKeyboardContract(wrapper, datePickerAnatomy, {})

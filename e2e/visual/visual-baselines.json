@@ -75,7 +75,7 @@
       "ratifies": "TASK-R2-O1 scope.platformDecision (2026-09-19), which recorded the same answer and left it unenforced.",
       "evidence": [
         "18 of 18 jobs across the 8 files in .github/workflows/ are `runs-on: ubuntu-latest`. No Windows or macOS runner is configured anywhere in this repository.",
-        "34 of the 58 accepted baselines already carry the `-chromium-linux` suffix (gallery 16, theme-recipe 18); only the 24 per-component pilot images are `-chromium-win32`.",
+        "At the decision, 34 of the 58 accepted baselines carried the `-chromium-linux` suffix (gallery 16, theme-recipe 18) and the 24 per-component pilot images were `-chromium-win32`. Since the 2026-09-26 recapture all 58 are `-chromium-linux`.",
         "Playwright writes `{arg}-{project}-{platform}.png`, so a linux image and a win32 image are different files and are never compared. The suffix is the path the comparison resolves, not editable metadata."
       ],
       "rationale": "The authoritative platform is the one the gate runs on. Only linux has a runner, and the majority of the committed evidence is already linux. Font rasterisation, subpixel antialiasing and scrollbar metrics differ enough between platforms that a cross-platform comparison is a diff storm, not a signal — so exactly one platform is authoritative and every other platform refuses rather than diffing.",
@@ -125,12 +125,12 @@
       "id": "component-baselines",
       "spec": "e2e/visual/component-baselines.spec.ts",
       "snapshotDir": "e2e/visual/component-baselines.spec.ts-snapshots",
-      "capturedOn": "win32",
-      "role": "developer-local",
+      "capturedOn": "linux",
+      "role": "gate",
       "scope": "Every component in an opted-in family (today: buttons → 8 components) × light/dark, plus 4 declared stress fixtures. maxDiffPixels: 0.",
       "excludes": "Every family outside scope.families reads `not-covered` in the capability matrix — 136 of 144 components today. LTR only; one viewport; chromium only.",
       "requires": "A built apps/storybook/storybook-static. Does NOT need DZUP_GALLERY=1.",
-      "notGating": "capturedOn (win32) is not the authoritative platform (linux), so this lane is developer-local evidence and cannot fail a CI run. Promoting it is an OWNER capture pass on linux — see scope.platformAuthority and e2e/visual/README.md §\"Promoting the per-component lane\"."
+      "promoted": "Promoted 2026-10-01 at the merge of origin/main: upstream recaptured all 24 images inside the pinned Playwright image on 2026-09-26 (owner decision O6-D2 b, accepted on the owner's behalf), deleting the win32 set, so capturedOn is linux and the lane gates like the other two."
     }
   ],
   "baselines": [

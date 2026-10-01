@@ -30,6 +30,13 @@
       "minCpus": 4,
       "nodeMajor": 24,
       "description": "A self-hosted or otherwise dedicated linux runner with no co-tenant workload. The profile the runtime lanes actually need, and the one this repository does not yet have."
+    },
+    "linux-x64-agent-session": {
+      "platform": "linux",
+      "arch": "x64",
+      "minCpus": 16,
+      "nodeMajor": 24,
+      "description": "The cloud agent session host that captured the 22 `size` baselines on 2026-09-29 (D135 / O7-D1, upstream commits 7c23198 and 70647fb): linux x64, 32 CPUs, node v24.20.0. Recorded so those numbers have a name. Adequate for `size` only -- a gzipped byte count does not vary with the host -- and NOT a candidate for the timing families, for the same reasons as linux-x64-ci."
     }
   },
   "candidates": [
@@ -60,10 +67,13 @@
   ],
   "committed": {
     "profileId": "win32-x64-16c-node24",
-    "derivedFrom": "packages/core/perf/baselines.json — all 33 baselines carry an identical `host` block {platform: win32, arch: x64, cpus: 16, node: v24.14.1}.",
+    "derivedFrom": "packages/core/perf/baselines.json. Two host blocks since the merge of origin/main on 2026-10-01: the 11 `runtime` baselines carry {platform: win32, arch: x64, cpus: 16, node: v24.14.1} from the 2026-08-21 capture (4c9fb7a), and the 22 `size` baselines carry {platform: linux, arch: x64, cpus: 32, node: v24.20.0} from the 2026-09-29 recapture (7c23198, 70647fb). `profileId` names the runtime set; `byKind` names the size set.",
     "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
     "capturedOn": "2026-08-21",
-    "note": "Derived from the committed file, not asserted here. If a future capture writes a `capture` block into baselines.json, that block is authoritative over this one and this field becomes a cross-check."
+    "note": "Derived from the committed file, not asserted here. If a future capture writes a `capture` block into baselines.json, that block is authoritative over this one and this field becomes a cross-check.",
+    "byKind": {
+      "size": "linux-x64-agent-session"
+    }
   },
   "quiescence": {
     "required": true,

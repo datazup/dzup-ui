@@ -95,6 +95,13 @@ export interface CaptureEnvironment {
   readonly candidates?: readonly unknown[]
   readonly committed?: {
     readonly profileId: string | null
+    /**
+     * Per-kind overrides of `profileId`. Since 2026-09-29 the 22 `size` baselines
+     * are captured on linux (D135 / O7-D1) while the 11 `runtime` baselines are
+     * still the 2026-08-21 win32 set, so one profile cannot describe the file.
+     * A kind absent here falls back to `profileId`.
+     */
+    readonly byKind?: Readonly<Record<string, string>>
     readonly derivedFrom?: string
     readonly sourceCommit?: string
     readonly capturedOn?: string
@@ -426,9 +433,11 @@ export function checkPerfBaselines(
   const profileIds = Object.keys(environment.profiles).sort()
 
   // --- the declared profiles resolve -------------------------------------
+  const byKind = environment.committed?.byKind ?? {}
   for (const [field, id] of [
     ['authoritative.profileId', environment.authoritative.profileId],
     ['committed.profileId', environment.committed?.profileId ?? null],
+    ...Object.entries(byKind).map(([kind, id]) => [`committed.byKind.${kind}`, id] as const),
   ] as const) {
     if (id !== null && environment.profiles[id] === undefined) {
       violations.push({
@@ -444,7 +453,11 @@ export function checkPerfBaselines(
   if (committedProfile !== undefined) {
     const drifted = new Map<string, string[]>()
     for (const baseline of file.baselines) {
-      const verdict = hostMatchesProfile(committedProfile, {
+      const kindId = byKind[baseline.kind]
+      const profileForKind = kindId === undefined ? committedProfile : environment.profiles[kindId]
+      if (profileForKind === undefined)
+        continue // already reported by the `profile` rule above
+      const verdict = hostMatchesProfile(profileForKind, {
         platform: baseline.host.platform,
         arch: baseline.host.arch,
         cpus: baseline.host.cpus,
@@ -457,7 +470,9 @@ export function checkPerfBaselines(
       violations.push({
         rule: 'host-drift',
         message: `${ids.length} baseline(s) were captured on a host that is not `
-          + `committed.profileId "${committedId}" — ${reason}. First: ${ids.slice(0, 3).join(', ')}. `
+          + `the committed profile for their kind ("${committedId}"`
+          + `${Object.keys(byKind).length > 0 ? `, byKind ${JSON.stringify(byKind)}` : ''}) — `
+          + `${reason}. First: ${ids.slice(0, 3).join(', ')}. `
           + 'A file whose entries disagree about the measuring host cannot be compared against '
           + 'as one budget.',
       })
