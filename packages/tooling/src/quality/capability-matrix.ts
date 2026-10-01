@@ -158,17 +158,45 @@ export interface CapabilityMatrix {
    * to tell "nobody has run the browser matrix" from "the browser matrix ran
    * and everything failed". Recording the inputs is the difference.
    */
-  readonly inputs: Readonly<Record<string, { available: boolean, path: string, note?: string }>>
+  readonly inputs: Readonly<Record<string, {
+    available: boolean
+    path: string
+    note?: string
+    /**
+     * Where this input's evidence is qualified, and whether it can fail CI
+     * (TASK-S1-O3).
+     *
+     * `available: true` says an artifact was read. It does not say the artifact
+     * can gate anything, and for a platform-locked input those are different
+     * questions: the visual lane's per-component baselines exist, are digested
+     * and are accepted — and are for `win32`, while every runner is `linux`, so
+     * no CI run can ever compare against them. Without this field a reader of
+     * the matrix sees `visual: covered` and reasonably concludes CI is
+     * watching those pixels. It is not.
+     */
+    gate?: {
+      /** The platform this input's evidence was captured on. */
+      platform: string
+      /** The platform a gate must run on for this input. */
+      authoritative: string
+      /** True only when the evidence can actually fail a CI run today. */
+      ciGate: boolean
+      /** When `ciGate` is false: what would make it true. */
+      blockedOn?: string
+    }
+  }>>
   /** tier → state → count. Never reduced to one number. */
   readonly totals: Readonly<Record<RiskTier, Record<CellState, number>>>
   readonly rows: readonly CapabilityRow[]
 }
 
 /**
- * `1.1.0` — TASK-N1-O6 added the per-row `visual` field. Additive: every 1.0.0
- * reader still finds every field it knew about.
+ * `1.1.0` — TASK-N1-O6 added the per-row `visual` field.
+ * `1.2.0` — TASK-S1-O3 added `inputs[].gate`, which separates "this artifact
+ * was read" from "this artifact can fail a CI run". Both bumps are additive:
+ * every earlier reader still finds every field it knew about.
  */
-export const CAPABILITY_SCHEMA_VERSION = '1.1.0'
+export const CAPABILITY_SCHEMA_VERSION = '1.2.0'
 
 /** An empty per-state tally. */
 export function emptyTally(): Record<CellState, number> {

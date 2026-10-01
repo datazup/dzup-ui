@@ -21,12 +21,14 @@ import type { AtMatrixIndex } from './at-matrix.ts'
 import type { BrowserEvidenceLedger } from './browser-evidence.ts'
 import type { CapabilityMatrix, CapabilityRow, CellState, EvidenceCell, VisualEvidence } from './capability-matrix.ts'
 import type { QualityMatrixRow } from './generate-quality-matrix.ts'
+import type { ComponentDeclaration } from './spec-contract-surfaces.ts'
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { parseAnatomySource } from '../ownership/anatomy-source.ts'
 import { ROOT } from '../ownership/generate-ownership-manifest.ts'
+import { perfInputGate, perfInputNote, readCaptureEnvironment } from '../perf/capture-environment.ts'
 import { readBaselineFile } from '../perf/read-baselines.ts'
 import { checkStoryDod } from '../validators/story-dod.ts'
 import { resolveAtManual } from './at-matrix.ts'
@@ -36,6 +38,8 @@ import { renderCapabilityData } from './emit-capability-data.ts'
 import { AT_MATRIX_INDEX } from './generate-at-matrix.ts'
 import { readCommittedMatrix } from './generate-quality-matrix.ts'
 import { evidenceIsCurrent, headCommit, lastCommitFor } from './git.ts'
+import { filesExercising } from './spec-capability-refs.ts'
+import { missingContractSurfaces, unitSpecGap } from './spec-contract-surfaces.ts'
 
 export const CAPABILITY_MATRIX_PATH = resolve(ROOT, 'packages/core/docs/capability-matrix.json')
 
@@ -115,6 +119,34 @@ interface EngineRatchets {
     notReproducing: { component: string, condition: string }[]
     engineOnly: { component: string, condition: string }[]
   }>
+  /**
+   * The host the divergences were measured on, and the commit and cleanliness of
+   * the tree at the time.
+   *
+   * Declared in the file since TASK-N1-O2 and never read here until RESIDUAL-09
+   * needed it for this input's `gate.platform`. Optional because a ledger written
+   * before the field existed is still readable.
+   */
+  platform?: string
+  measuredAt?: string
+  sourceCommit?: string
+  worktreeDirty?: boolean
+}
+
+/**
+ * The `gate` block an input may declare: where its evidence was produced, where a
+ * gate for it would have to run, and whether it can fail CI **today**
+ * (TASK-S1-O3).
+ *
+ * Restated as a named type by RESIDUAL-09, when four more inputs needed it. The
+ * two functions that predate it (`perfInputGate`, `visualInputGate`) keep their
+ * inline structural return types, which are identical.
+ */
+interface InputGate {
+  platform: string
+  authoritative: string
+  ciGate: boolean
+  blockedOn?: string
 }
 
 // ---------------------------------------------------------------------------
@@ -141,10 +173,44 @@ function rel(path: string): string {
   return path.replace(ROOT, '').replaceAll('\\', '/').replace(/^\//, '')
 }
 
-/** Files under `dir` whose contents name the component. */
-function filesMentioning(files: readonly { path: string, source: string }[], component: string) {
-  const word = new RegExp(`\\b${component}\\b`)
-  return files.filter(f => word.test(f.source)).map(f => rel(f.path))
+/**
+ * Files under `dir` that **exercise `kind`** for the component — not merely name
+ * it, and no longer merely load it either.
+ *
+ * Two corrections, in two packets, to one helper:
+ *
+ *  - It used to be `filesMentioning`, a word-boundary substring match over the
+ *    whole file text, and it was wrong in a way no gate could see: a component
+ *    named in a header comment, or in a sentence saying it is tested *somewhere
+ *    else*, acquired a published evidence citation. RESIDUAL-02 discovered it by
+ *    writing such a comment and watching a citation appear; RESIDUAL-05 measured
+ *    the standing damage (**8 of 201** citations) and made the rule structural —
+ *    the module must be **loaded**.
+ *  - It then became `filesLoading`, which RESIDUAL-05's own docblock said proved
+ *    nothing about what the spec *asserts*. RESIDUAL-16 censused all 1,634
+ *    published citations and measured that gap: **`portal-hydration` called this
+ *    with the same arguments as `ssr-sample`**, so 16 of its 19 citations named a
+ *    spec that never reaches a teleport, and `DzAccordion`'s `ssr-sample` cited an
+ *    `it.skip`. Loading is now the floor and not the ceiling: a **live** test block
+ *    must also do the thing the cell claims. The per-kind rule is in
+ *    `spec-capability-refs.ts`.
+ *  - RESIDUAL-17 then wrote the missing harness
+ *    (`packages/core/tests/ssr/portal-hydration.spec.ts`) and tightened
+ *    `portal-hydration` to require a **hydration** as well, plus the anchor pair in
+ *    the asserted output — because `open: true` in a call turned out not to mean the
+ *    branch was taken at all: `DzCommandPalette` opened emits 27 bytes with a false
+ *    `v-if` and an empty `ctx.teleports`, since Reka UI's `*Portal` does not render
+ *    on the server.
+ *
+ * `rel` is passed in rather than imported there, so the path-shortening stays a
+ * property of this generator.
+ */
+function filesExercisingCapability(
+  files: readonly { path: string, source: string }[],
+  component: string,
+  kind: Parameters<typeof filesExercising>[2],
+) {
+  return filesExercising(files, component, kind, rel)
 }
 
 // ---------------------------------------------------------------------------
@@ -156,6 +222,10 @@ interface Sources {
   a11ySpecs: { path: string, source: string }[]
   ssrSpecs: { path: string, source: string }[]
   storyDod: Map<string, Set<string>>
+  /** story check id → the components the check was ASKED of (RESIDUAL-16). */
+  storyApplicable: Map<string, Set<string>>
+  /** story check id → the components whose story SATISFIES it (RESIDUAL-16). */
+  storyPassing: Map<string, Set<string>>
   storyFile: Map<string, string>
   // The real type, not a structural restatement of it (TASK-R2-O2). The inline
   // shape this replaces named four fields and omitted `tasks`, `tier` and the
@@ -164,6 +234,8 @@ interface Sources {
   // scaffold field a compile error here rather than a silent no-op.
   atIndex?: AtMatrixIndex
   baselines?: ReturnType<typeof readBaselineFile>
+  /** The declared perf capture host (TASK-S1-O4) — what makes `perf-baselines.gate` answerable. */
+  captureEnvironment?: ReturnType<typeof readCaptureEnvironment>
   /** The tracked browser ledger (TASK-R2-O1), replacing the git-ignored report. */
   browserEvidence?: BrowserEvidenceLedger
   knownFailures: Set<string>
@@ -231,15 +303,29 @@ function loadSources(): Sources {
 
   const read = (paths: string[]) => paths.map(path => ({ path, source: readFileSync(path, 'utf8') }))
 
-  // story check id → set of components that FAIL it. Inverted at lookup: a
-  // component absent from the failing set passed the check.
+  // story check id → set of components that FAIL it, and set of components it was
+  // ASKED of at all.
+  //
+  // The second map is RESIDUAL-16's correction. This used to invert `violations`
+  // alone — "a component absent from the failing set passed the check" — and that
+  // is true of a component the check passed AND of a component it does not apply
+  // to. `states` derives applicability from the component's own `.types.ts`
+  // (`applies: ctx => ctx.stateProps.length > 0`, which is how the DoD's "as
+  // applicable" clause was finally made to mean something), so 27 components with
+  // no state prop, no `States` story and nothing to put in one published
+  // `state-stories: pass` with their story file printed beside it as evidence.
   const storyDod = new Map<string, Set<string>>()
+  const storyApplicable = new Map<string, Set<string>>()
+  const storyPassing = new Map<string, Set<string>>()
   const storyFile = new Map<string, string>()
+  const componentOf = (file: string) => basename(file.replaceAll('\\', '/'), '.stories.ts')
   for (const result of checkStoryDod()) {
     const failing = new Set<string>()
     for (const violation of result.violations)
-      failing.add(basename(violation.file.replaceAll('\\', '/'), '.stories.ts'))
+      failing.add(componentOf(violation.file))
     storyDod.set(result.id, failing)
+    storyApplicable.set(result.id, new Set(result.applicableFiles.map(componentOf)))
+    storyPassing.set(result.id, new Set(result.passingFiles.map(componentOf)))
   }
   for (const path of collect(resolve(ROOT, 'packages/core/stories'), '.stories.ts'))
     storyFile.set(basename(path, '.stories.ts'), rel(path))
@@ -258,11 +344,14 @@ function loadSources(): Sources {
     a11ySpecs: read(collect(resolve(ROOT, 'packages/core/tests/a11y'), '.spec.ts')),
     ssrSpecs: read(collect(resolve(ROOT, 'packages/core/tests/ssr'), '.spec.ts')),
     storyDod,
+    storyApplicable,
+    storyPassing,
     storyFile,
     atIndex: existsSync(AT_MATRIX_INDEX)
       ? JSON.parse(readFileSync(AT_MATRIX_INDEX, 'utf8'))
       : undefined,
     baselines: readBaselineFile(),
+    captureEnvironment: readCaptureEnvironment(),
     browserEvidence: readBrowserEvidence(),
     knownFailures,
     engineRatchets: existsSync(ENGINE_RATCHETS)
@@ -372,11 +461,135 @@ function sidecar(sources: Sources, row: QualityMatrixRow, suffix: string): strin
   return sources.componentFiles.has(path) ? path : undefined
 }
 
-/** Whether a story-dod check passed for this component's story file. */
-function storyCheck(sources: Sources, component: string, check: string): CellState {
+/**
+ * Whether a story-dod check passed for this component's story file.
+ *
+ * Four answers, not two (RESIDUAL-16), and the order matters:
+ *
+ *  1. no story file at all → `unrun`;
+ *  2. **the story satisfies the check** → `pass`, whatever applicability says. This
+ *     arm is first on purpose. `states` derives applicability from the props a
+ *     component's own `.types.ts` spells, so nine components that inherit
+ *     `disabled`/`readonly` from `BaseFormControlProps` are never asked — and nine
+ *     of them export a `States` story anyway. Asking applicability first would
+ *     demote `DzInput`'s real `States` story to "nothing to demonstrate";
+ *  3. it does not, and the check **does not apply** → `excepted`, with the reason.
+ *     A component declaring none of `disabled`, `loading`, `readonly`, `invalid`,
+ *     `error`, `required` has no state to demonstrate, which is what the DoD's "as
+ *     applicable" has always meant. An exception a reader can check, not a pass;
+ *  4. it does not, and the check **did** apply → `unrun`.
+ *
+ * Arms 2 and 3 are what RESIDUAL-16 added. Both used to be `pass`, because the
+ * only question asked was "is this component absent from the failing set?" — and a
+ * component the check never asked is absent from it too.
+ *
+ * Exported so a regression spec can drive it with fabricated maps. The `at-manual`
+ * resolution was inline for a year and shipped a defect a test could not reach
+ * (TASK-R2-O2); this one published 27 false `pass` cells for four packets, and the
+ * reason nobody caught it is the same reason.
+ */
+export function storyCheck(
+  sources: Pick<Sources, 'storyFile' | 'storyPassing' | 'storyApplicable' | 'storyDod'>,
+  component: string,
+  check: string,
+): { state: CellState, note?: string } {
   if (!sources.storyFile.has(component))
-    return 'unrun'
-  return sources.storyDod.get(check)?.has(component) === true ? 'unrun' : 'pass'
+    return { state: 'unrun' }
+  if (sources.storyPassing.get(check)?.has(component) === true)
+    return { state: 'pass' }
+  const applicable = sources.storyApplicable.get(check)
+  if (applicable !== undefined && !applicable.has(component)) {
+    return {
+      state: 'excepted',
+      note: `The \`${check}\` story check does not apply to this component — `
+        + '`packages/tooling/src/validators/story-dod.ts` derives applicability from the '
+        + 'component\'s own `.types.ts`, and there is nothing here for the story to show. '
+        + 'This read `pass` until RESIDUAL-16: "absent from the failing set" was inverted as '
+        + '"passed", and a check that was never asked is absent from it too.',
+    }
+  }
+  return { state: 'unrun' }
+}
+
+/**
+ * One story-derived cell, with the citation the state actually supports.
+ *
+ * A story file is evidence that the story exists. Where the check does not apply
+ * it is evidence of nothing, so the cell cites the component's **`.types.ts`**
+ * instead — the file `story-dod.ts` reads to decide applicability, and therefore
+ * the one a reader has to open to check the exception.
+ */
+function storyCell(
+  kind: EvidenceKind,
+  origin: string,
+  sources: Sources,
+  row: QualityMatrixRow,
+  check: string,
+  story: string | undefined,
+): EvidenceCell {
+  const { state, note } = storyCheck(sources, row.component, check)
+  const types = sidecar(sources, row, '.types.ts')
+  const artifacts = state === 'excepted'
+    ? (types === undefined ? [] : [types])
+    : (story === undefined ? [] : [story])
+  return cell(kind, origin, { state, artifacts, note })
+}
+
+/**
+ * A `contract-spec` / `unit-spec` cell for a sidecar spec that exists (RESIDUAL-19).
+ *
+ * Both kinds were `present` on **file existence** until this packet. The cell names
+ * what it claims — `@dzup-ui/contracts` documents `contract-spec` as *"Contract
+ * Spec v1 props/events/slots/ARIA"* and `unit-spec` as *"render and behaviour
+ * units"* — and a census of all 283 citations at `4e4e46f` found 80 contract specs
+ * that never touch a surface the component itself declares, and 14 unit specs that
+ * never drive a component that emits. The rule, its terms and its stated limits are
+ * in `spec-contract-surfaces.ts`.
+ *
+ * A spec that falls short is `unrun` **with the spec still cited**. That is the
+ * shape the Tier D gate already reads as "a gap somebody has made a place for",
+ * and it is the truth: the file is there, and the note names what it does not yet
+ * do. It is never `present` with a caveat — a caveat on a credited cell is how
+ * this column came to mean "a file exists".
+ *
+ * Exported, and pure over its four arguments, so a regression spec can drive it
+ * with fabricated sources — the reason `storyCheck` is exported, for the reason
+ * written there.
+ */
+export function sidecarSpecCell(
+  kind: 'contract-spec' | 'unit-spec',
+  declaration: ComponentDeclaration,
+  path: string,
+  specSource: string,
+): { state: CellState, artifacts: string[], note?: string } {
+  if (kind === 'contract-spec') {
+    const missing = missingContractSurfaces(declaration, specSource)
+    if (missing.length === 0)
+      return { state: 'present', artifacts: [path] }
+    return {
+      state: 'unrun',
+      artifacts: [path],
+      note: `The contract spec exists and does not touch ${missing.map(s => `\`${s}\``).join(', ')} — `
+        + `${missing.length === 1 ? 'a surface' : 'surfaces'} this component declares. Contract Spec v1 is `
+        + 'props/events/slots/ARIA; a surface is owed only when the component\'s own `.types.ts` or '
+        + 'template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). '
+        + 'This read `present` until RESIDUAL-19, on the file existing.',
+    }
+  }
+  const gap = unitSpecGap(declaration, specSource)
+  if (gap === undefined)
+    return { state: 'present', artifacts: [path] }
+  return {
+    state: 'unrun',
+    artifacts: [path],
+    note: gap === 'no-behaviour'
+      ? 'The unit spec exists and renders the component, and no live test drives it: the component '
+      + 'calls `defineEmits`/`defineModel`, and nothing here triggers an event, sets a value, changes a '
+      + 'prop or reads what was emitted. `unit-spec` is "render and behaviour units" '
+      + '(`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until '
+      + 'RESIDUAL-19, on the file existing.'
+      : 'The unit spec exists and holds no live test with an assertion.',
+  }
 }
 
 function cell(
@@ -409,46 +622,74 @@ function resolveCell(
   const story = sources.storyFile.get(row.component)
 
   switch (kind) {
-    case 'contract-spec': {
-      const path = sidecar(sources, row, '.contract.spec.ts')
-      return cell(kind, origin, {
-        state: path === undefined ? 'unrun' : 'present',
-        artifacts: path === undefined ? [] : [path],
-      })
-    }
-
+    case 'contract-spec':
     case 'unit-spec': {
-      const path = sidecar(sources, row, '.spec.ts')
-      return cell(kind, origin, {
-        state: path === undefined ? 'unrun' : 'present',
-        artifacts: path === undefined ? [] : [path],
-      })
+      const path = sidecar(sources, row, kind === 'contract-spec' ? '.contract.spec.ts' : '.spec.ts')
+      if (path === undefined)
+        return cell(kind, origin, { state: 'unrun' })
+      const types = sidecar(sources, row, '.types.ts')
+      return cell(kind, origin, sidecarSpecCell(
+        kind,
+        {
+          component: row.component,
+          types: types === undefined ? '' : readFileSync(resolve(ROOT, types), 'utf8'),
+          vue: readFileSync(resolve(ROOT, row.source), 'utf8'),
+        },
+        path,
+        readFileSync(resolve(ROOT, path), 'utf8'),
+      ))
     }
 
     case 'axe': {
-      const hits = filesMentioning(sources.a11ySpecs, row.component)
-      return cell(kind, origin, {
-        state: hits.length === 0 ? 'unrun' : 'present',
-        artifacts: hits,
-      })
-    }
-
-    case 'ssr-sample': {
-      const hits = filesMentioning(sources.ssrSpecs, row.component)
-      return cell(kind, origin, {
-        state: hits.length === 0 ? 'unrun' : 'present',
-        artifacts: hits,
-      })
-    }
-
-    case 'portal-hydration': {
-      const hits = filesMentioning(sources.ssrSpecs, row.component)
+      const hits = filesExercisingCapability(sources.a11ySpecs, row.component, 'axe')
       return cell(kind, origin, {
         state: hits.length === 0 ? 'unrun' : 'present',
         artifacts: hits,
         note: hits.length === 0
-          ? 'This component renders teleported content and no SSR/hydration spec names it.'
+          ? 'No a11y spec runs axe over a tree containing this component in a test that runs.'
           : undefined,
+      })
+    }
+
+    case 'ssr-sample': {
+      const hits = filesExercisingCapability(sources.ssrSpecs, row.component, 'ssr-sample')
+      return cell(kind, origin, {
+        state: hits.length === 0 ? 'unrun' : 'present',
+        artifacts: hits,
+        note: hits.length === 0
+          ? 'No SSR spec server-renders this component in a test that runs.'
+          : undefined,
+      })
+    }
+
+    case 'portal-hydration': {
+      const hits = filesExercisingCapability(sources.ssrSpecs, row.component, 'portal-hydration')
+      return cell(kind, origin, {
+        state: hits.length === 0 ? 'unrun' : 'present',
+        artifacts: hits,
+        // Both notes name exactly what is and is not evidenced. RESIDUAL-16
+        // censused all 19 citations this cell used to publish: three took the
+        // portal branch and NONE hydrated. RESIDUAL-17 wrote the harness
+        // (`packages/core/tests/ssr/portal-hydration.spec.ts`), so the kind now
+        // requires the server render, the anchor pair in the ASSERTED OUTPUT and
+        // a hydration — and measured that 20 of the 24 components cannot meet it
+        // for a structural reason, which the `unrun` note names.
+        note: hits.length === 0
+          ? 'No spec server-renders this component with its portal branch taken AND hydrates the '
+          + 'result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` '
+          + 'primitive, which renders NOTHING on the server — `renderToString` emits a false '
+          + '`v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to '
+          + 'preserve and none for hydration to match. `open: true` in a test call is not '
+          + 'evidence the branch was taken; the anchor pair in the output is. Asserted in '
+          + '`packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day '
+          + 'it stops being true.'
+          : 'Server-rendered with the portal branch taken (the teleport anchor pair asserted), '
+            + 'the teleported markup read from `renderToString`\'s SSR context, then hydrated with '
+            + 'ZERO bytes of the component\'s own output rewritten. What is NOT evidenced is '
+            + 'whether hydration CLAIMS server-rendered content sitting in the teleport target '
+            + 'rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the '
+            + 'same way under a hand-placed target in jsdom, so that half needs a real SSR '
+            + 'document in a real engine — owner decision `D-RES17-1`.',
       })
     }
 
@@ -464,34 +705,19 @@ function resolveCell(
     }
 
     case 'story-light-dark':
-      return cell(kind, origin, {
-        state: storyCheck(sources, row.component, 'dark-mode'),
-        artifacts: story === undefined ? [] : [story],
-      })
+      return storyCell(kind, origin, sources, row, 'dark-mode', story)
 
     case 'state-stories':
-      return cell(kind, origin, {
-        state: storyCheck(sources, row.component, 'states'),
-        artifacts: story === undefined ? [] : [story],
-      })
+      return storyCell(kind, origin, sources, row, 'states', story)
 
     case 'a11y-narrative':
-      return cell(kind, origin, {
-        state: storyCheck(sources, row.component, 'accessibility'),
-        artifacts: story === undefined ? [] : [story],
-      })
+      return storyCell(kind, origin, sources, row, 'accessibility', story)
 
     case 'real-world-story':
-      return cell(kind, origin, {
-        state: storyCheck(sources, row.component, 'real-world'),
-        artifacts: story === undefined ? [] : [story],
-      })
+      return storyCell(kind, origin, sources, row, 'real-world', story)
 
     case 'browser-play':
-      return cell(kind, origin, {
-        state: storyCheck(sources, row.component, 'play'),
-        artifacts: story === undefined ? [] : [story],
-      })
+      return storyCell(kind, origin, sources, row, 'play', story)
 
     case 'data-scenarios': {
       if (story === undefined)
@@ -896,6 +1122,183 @@ function browserInputNote(ledger: BrowserEvidenceLedger | undefined): string {
     + `components: ${t.pass} pass, ${t.fail} fail, ${t.unrun} unrun. ${admissibility}`
 }
 
+/**
+ * Whether the visual input can fail a CI run today (TASK-S1-O3).
+ *
+ * `available: true` on an input says an artifact was read. For a
+ * platform-locked input that is not the same question as "can this gate", and
+ * conflating them is how the matrix came to read `visual: covered` for eight
+ * components whose baselines no runner can ever compare against. So the answer
+ * is recorded as data next to the note, and it is `false` until the images and
+ * the runner are on the same platform.
+ */
+function visualInputGate(ledger: VisualLedger | undefined): {
+  platform: string
+  authoritative: string
+  ciGate: boolean
+  blockedOn?: string
+} | undefined {
+  if (ledger === undefined)
+    return undefined
+  const authoritative = ledger.scope.authoritativePlatform ?? ledger.scope.ciPlatform
+  const ciGate = ledger.scope.platform === authoritative
+  return {
+    platform: ledger.scope.platform,
+    authoritative,
+    ciGate,
+    ...(ciGate
+      ? {}
+      : {
+          blockedOn: `one \`yarn visual:accept\` pass per snapshot on ${authoritative}, then `
+            + `\`lanes[component-baselines].capturedOn\` → "${authoritative}". Baseline capture `
+            + `is an owner action (e2e/visual/README.md).`,
+        }),
+  }
+}
+
+/**
+ * Whether the story-DoD input can fail a CI run today (RESIDUAL-09, closing
+ * RESIDUAL-03 items 3–4 for this input).
+ *
+ * **The only one of the six inputs whose answer is `true`**, and it is measured
+ * rather than reasoned. `.github/workflows/ci.yml` job `validate`
+ * (`runs-on: ubuntu-latest`) runs `yarn validate:story-dod` at line 163 on every
+ * push and pull request, and the job carries **no** `continue-on-error` — the
+ * only `continue-on-error: true` in that file is at line 515, on the visual e2e
+ * step. `validate:story-dod-tiers` is link 21 of `validate:all`, which
+ * `.github/workflows/validate-min-runtime.yml` runs at line 120 as a reusable
+ * workflow `ci.yml` calls on the same trigger, also `ubuntu-latest`, also without
+ * `continue-on-error`.
+ *
+ * `platform` is `any`, and that is a real difference rather than a hedge: this
+ * input is static analysis over the committed `.stories.ts` text. No browser, no
+ * AT, no timing, no rendered pixel — so unlike the other five it has no host to
+ * be locked to, and `authoritative` is the same `any`.
+ *
+ * **The honest limit, measured 2026-09-28.** Five checks feed cells here:
+ * `dark-mode`, `states`, `accessibility`, `real-world`, `play`. `dark-mode` is
+ * `level: 'error'` and stands at 170/170, so a regression fails outright.
+ * `states`, `accessibility` and `real-world` are `level: 'report'` but are
+ * tier-required in `validate:story-dod-tiers` and sit at `0 / 0` ceilings, so a
+ * new violation on a component whose tier requires the check is over its ceiling
+ * and red. `play` is reported and **no tier requires it** (158/170), so a `play`
+ * regression alone fails nothing. `ciGate: true` with that edge recorded here is
+ * the accurate answer; `false` would be the wrong one, because four of the five
+ * checks can and do turn a CI run red.
+ */
+function storyDodInputGate(): InputGate {
+  return { platform: 'any', authoritative: 'any', ciGate: true }
+}
+
+/**
+ * Whether the AT matrix can fail a CI run today (RESIDUAL-09).
+ *
+ * **It cannot, and it never will be able to.** This is the input where
+ * `available: true` was most misleading: the artifact is read, its 534 rows are
+ * joined into every `at-manual` cell, and **not one of them has been executed**.
+ * The blocker is not a wiring gap that CI could close — a screen-reader result is
+ * produced by a person listening to an AT, `yarn at:ingest` transcribes a record
+ * a *named* person wrote, and an agent may never write one.
+ *
+ * What CI does run is the **shape** of the record, not its evidence:
+ * `validate:at-matrix` (link 23) and `validate:at-runs` (link 57) are both inside
+ * `validate:all`, on `ubuntu-latest`, without `continue-on-error` — and both exit
+ * 0 over an empty directory, by design, because every row in a new matrix starts
+ * `unrun` and a gate that failed on that would be switched off the day it landed.
+ */
+function atMatrixInputGate(index: AtMatrixIndex | undefined): InputGate | undefined {
+  if (index === undefined)
+    return undefined
+  const rows = index.entries.flatMap(e => [...e.rows])
+  const executed = rows.filter(r => r.result !== 'unrun').length
+  const platforms = [...new Set(index.pairs.map(p => p.platform))]
+  return {
+    platform: executed === 0
+      ? `none — ${executed} of ${rows.length} cells executed, so no host has produced evidence `
+      + 'for this input at all'
+      : `the recorded testers' hosts (${executed} of ${rows.length} cells executed)`,
+    authoritative: `the AT pairing's own platform (${platforms.join(', ')}) — a screen-reader `
+      + 'result is only valid on the AT and OS that produced it, and no single runner can hold '
+      + 'all six',
+    ciGate: false,
+    blockedOn: `a NAMED HUMAN TESTER and a date (register D112): ${rows.length} cells, `
+      + `${executed} executed. No CI job can ever make this true — \`yarn at:ingest\` `
+      + 'transcribes a session record a named person produced, and an agent may never write '
+      + 'one. `validate:at-matrix` and `validate:at-runs` DO run in CI without '
+      + '`continue-on-error`, but they check the SHAPE of a record and exit 0 over an empty '
+      + 'directory. Wave 1 is 44 cells / 20.6 tester-hours on one Windows 11 machine '
+      + '(TASK-S1-O1 wave-1 schedule).',
+  }
+}
+
+/**
+ * Whether the Playwright browser matrix can fail a CI run today (RESIDUAL-09,
+ * closing RESIDUAL-03 ranked item 3).
+ *
+ * RESIDUAL-03 recorded the answer as prose in this exact shape and deliberately
+ * did not write it here, on the ground that a win32 packet should not rewrite the
+ * artifact that records browser results. This declares the same measurement
+ * without touching one cell.
+ *
+ * **`ciGate` is false for a reason no platform comparison would reveal: no
+ * workflow runs the lane at all.** Measured 2026-09-28 over all eight files in
+ * `.github/workflows/`: `grep -rn 'e2e:matrix|browser-evidence|engine-ratchets|e2e/matrix'`
+ * returns **zero** matches. `ci.yml`'s `e2e` job runs `test:e2e:functional`
+ * (chromium) and `test:e2e:visual` — and that second step is the one
+ * `continue-on-error: true` in the file, so even the visual lane cannot fail a
+ * run. Nothing anywhere invokes `yarn test:e2e:matrix` or
+ * `yarn generate:browser-evidence`.
+ *
+ * `authoritative` is `linux` by measurement too: all **19** `runs-on:` values
+ * across the eight workflow files are `ubuntu-latest`, so if a job existed, linux
+ * is the platform whose result could block a merge — and every committed run here
+ * is `win32`.
+ */
+function browserMatrixInputGate(ledger: BrowserEvidenceLedger | undefined): InputGate | undefined {
+  if (ledger === undefined)
+    return undefined
+  const hosts = [...new Set(ledger.runs.map(r => r.platform ?? 'undeclared'))].sort()
+  const dirty = ledger.runs.some(r => r.worktreeDirty === true)
+  return {
+    platform: hosts.length === 0 ? 'none — no run recorded' : hosts.join('; '),
+    authoritative: 'linux',
+    ciGate: false,
+    blockedOn: 'two acts, in this order. (1) A CI job that runs the Playwright matrix lane on '
+      + '`ubuntu-latest` and projects its JSON report through `yarn generate:browser-evidence` '
+      + '— measured 2026-09-28, NO workflow in .github/ invokes `yarn test:e2e:matrix` or '
+      + '`yarn generate:browser-evidence`, and the only `continue-on-error: true` in ci.yml is '
+      + `on the visual e2e step. (2) One sweep on a CLEAN worktree${dirty
+        ? ' — every run committed here carries worktreeDirty: true, which this ledger\'s own '
+        + 'admissibility field calls locally qualified only'
+        : ''}. Until (1), these rows are developer-local evidence and cannot fail anything.`,
+  }
+}
+
+/**
+ * Whether the per-engine ratchet ledger can fail a CI run today (RESIDUAL-09,
+ * closing RESIDUAL-03 ranked item 4).
+ *
+ * The same lane as `browser-matrix`, so the same answer, and it is recorded
+ * separately rather than by reference because this input is read on its own: it is
+ * what lets a `browser-matrix` cell say *which* of the 24 projects ran, and a
+ * reader who trusts that sentence is trusting an ungated ledger.
+ */
+function engineRatchetsInputGate(file: EngineRatchets | undefined): InputGate | undefined {
+  if (file === undefined)
+    return undefined
+  return {
+    platform: file.platform ?? 'undeclared',
+    authoritative: 'linux',
+    ciGate: false,
+    blockedOn: 'the same two acts as `browser-matrix` — no workflow in .github/ runs the '
+      + 'Playwright matrix lane, and all 19 CI jobs are `ubuntu-latest` while this ledger is '
+      + `win32. Measured ${file.measuredAt ?? 'at an undeclared date'} at `
+      + `\`${file.sourceCommit ?? 'an undeclared commit'}\``
+      + `${file.worktreeDirty === true ? ' on a DIRTY worktree' : ''}, so it is locally `
+      + 'qualified only.',
+  }
+}
+
 /** The sentence the docs page prints above the matrix for the visual input. */
 function visualInputNote(ledger: VisualLedger | undefined): string {
   if (ledger === undefined) {
@@ -919,10 +1322,21 @@ function visualInputNote(ledger: VisualLedger | undefined): string {
       .filter(b => b.platform === ledger.scope.platform && b.component.startsWith('fixture:'))
       .map(b => b.component),
   )
-  const platform = ledger.scope.platform === ledger.scope.ciPlatform
-    ? 'The gating platform matches CI.'
-    : `Baselines are platform-locked and CI runs ${ledger.scope.ciPlatform}, so this lane is `
-      + `developer-local evidence until one accept pass is made there.`
+  // TASK-S1-O3: the authoritative platform is a declared decision, not an
+  // inference from `ciPlatform`. Say which platform is authoritative and which
+  // lanes are on it, because "developer-local" without the target named is a
+  // status nobody can act on.
+  const authoritative = ledger.scope.authoritativePlatform ?? ledger.scope.ciPlatform
+  const lanes = (ledger.lanes ?? [])
+    .map(l => `${l.id} (${l.capturedOn}, ${l.role})`)
+    .join('; ')
+  const laneNote = lanes === '' ? '' : ` Lanes: ${lanes}.`
+  const platform = ledger.scope.platform === authoritative
+    ? `The gating platform is the authoritative one (${authoritative}).${laneNote}`
+    : `The authoritative platform is \`${authoritative}\` (every CI runner is that platform) and `
+      + `these baselines are \`${ledger.scope.platform}\`. Baselines are platform-locked, so this `
+      + `lane is developer-local evidence and CANNOT fail a CI run until one accept pass is made `
+      + `on ${authoritative}.${laneNote}`
 
   const fixtureNote = fixtures.size === 0
     ? ''
@@ -980,30 +1394,52 @@ export function buildCapabilityMatrix(
       'packages/tooling/src/validators/story-dod.ts (report)',
       'e2e/at-matrix/index.json',
       'packages/core/perf/baselines.json',
+      'packages/core/perf/capture-environment.json',
       'e2e/matrix/known-failures.json',
       'e2e/matrix/engine-ratchets.json',
       'e2e/matrix/browser-evidence.json',
       'e2e/visual/visual-baselines.json',
     ],
+    // RESIDUAL-09. Four of the six inputs declared `available` and no `gate`,
+    // which the rendered evidence page printed as a `—` in its "Can fail CI"
+    // column — indistinguishable from "not asked". They are now all six
+    // answered. The four added here are a DECLARATION of existing truth: no cell
+    // resolver reads `gate`, so `pass`/`fail`/`present`/`stale`/`unrun`/`excepted`
+    // cannot move, and RESIDUAL-09 proved the totals byte-for-byte unchanged.
     inputs: {
-      'story-dod': { available: true, path: 'packages/tooling/src/validators/story-dod.ts' },
+      'story-dod': {
+        available: true,
+        path: 'packages/tooling/src/validators/story-dod.ts',
+        gate: storyDodInputGate(),
+      },
       'at-matrix': {
         available: sources.atIndex !== undefined,
         path: 'e2e/at-matrix/index.json',
+        gate: atMatrixInputGate(sources.atIndex),
       },
+      // TASK-S1-O4. `available: true` said an artifact was read; it could not
+      // say whether that artifact can fail anything. For perf the gap is wider
+      // than it was for pixels: 4 of the 6 declared metric families have no
+      // baseline at all, 9 of the 33 that exist are `unmeasurable`, and no
+      // workflow in .github/ runs `yarn test:perf`, so `ciGate` is false for a
+      // reason no platform comparison would have revealed.
       'perf-baselines': {
         available: sources.baselines !== undefined,
         path: 'packages/core/perf/baselines.json',
+        note: perfInputNote(sources.baselines, sources.captureEnvironment),
+        gate: perfInputGate(sources.baselines, sources.captureEnvironment),
       },
       'browser-matrix': {
         available: sources.browserEvidence !== undefined,
         path: rel(BROWSER_EVIDENCE_PATH),
         note: browserInputNote(sources.browserEvidence),
+        gate: browserMatrixInputGate(sources.browserEvidence),
       },
       'visual-baselines': {
         available: sources.visual !== undefined,
         path: 'e2e/visual/visual-baselines.json',
         note: visualInputNote(sources.visual),
+        gate: visualInputGate(sources.visual),
       },
       'browser-engine-ratchets': {
         available: sources.engineRatchets !== undefined,
@@ -1016,6 +1452,7 @@ export function buildCapabilityMatrix(
               .map(([engine, s]) => `${engine} ${s.conditionsRun.length}/${MATRIX_CONDITIONS.length}`)
               .join(', ')
           }.`,
+        gate: engineRatchetsInputGate(sources.engineRatchets),
       },
     },
     totals,

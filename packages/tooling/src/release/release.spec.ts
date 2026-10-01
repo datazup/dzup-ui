@@ -17,7 +17,7 @@
 
 import type { PackageSurface, SurfaceSymbol } from './api-surface.ts'
 import { Buffer } from 'node:buffer'
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -46,7 +46,7 @@ import {
   unresolvedProtocols,
 } from './evidence.ts'
 import { releasePolicy } from './pack.ts'
-import { atCounts, readJsonl, renderReport } from './report.ts'
+import { atCounts, EVIDENCE_DIR, readJsonl, renderReport, REQUIRED_SECTIONS, topLevelSections, verifySections } from './report.ts'
 
 const scratches: string[] = []
 function scratch(): string {
@@ -691,6 +691,11 @@ describe('renderReport', () => {
     chainLinks: 48,
     versions: {},
     tags: [],
+    // TASK-S2-O2 inputs. `null` on purpose: these assertions check that the
+    // renderer states an ABSENCE in words rather than dropping the section.
+    qualification: null,
+    stopConditions: null,
+    deprecations: null,
   }
 
   it('renders all eight sections doc 08 §Required release report names', () => {
@@ -787,5 +792,66 @@ describe('aNY_SIGNATURE_CEILING', () => {
     // surface is nothing but .d.ts files.
     expect(ANY_SIGNATURE_CEILING).toBeLessThanOrEqual(0.1)
     expect(ANY_SIGNATURE_CEILING).toBeGreaterThan(0)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// The eight-section invariant (TASK-S2-O2)
+// ---------------------------------------------------------------------------
+
+describe('the eight doc-08 report sections', () => {
+  it('names exactly eight, in doc 08\'s order', () => {
+    expect(REQUIRED_SECTIONS).toHaveLength(8)
+    expect(REQUIRED_SECTIONS[0]).toContain('Implemented scope and source commit')
+    expect(REQUIRED_SECTIONS[7]).toContain('Known gaps')
+  })
+
+  it('reads only `##` headings — `#` and `###` are not sections', () => {
+    const md = '# Title\n\n## 1. A\n\n### not a section\n\n## 2. B\n'
+    expect(topLevelSections(md)).toEqual(['1. A', '2. B'])
+  })
+
+  it('accepts the eight, in order', () => {
+    const md = `# t\n\n${REQUIRED_SECTIONS.map(s => `## ${s}\n\nbody\n`).join('\n')}`
+    expect(verifySections(md).ok).toBe(true)
+  })
+
+  it('rEFUSES a document that dropped an empty section', () => {
+    // The failure this invariant exists to prevent: a renderer that omits
+    // section 6 because there is no canary collapses two rungs of the maturity
+    // ladder into one. doc 08 requires the absence to be STATED.
+    const md = `# t\n\n${REQUIRED_SECTIONS.filter(s => !s.startsWith('6.')).map(s => `## ${s}\n\nbody\n`).join('\n')}`
+    const check = verifySections(md)
+    expect(check.ok).toBe(false)
+    expect(check.missing).toEqual([REQUIRED_SECTIONS[5] as string])
+  })
+
+  it('rEFUSES a document that reordered them', () => {
+    const swapped: string[] = [...REQUIRED_SECTIONS]
+    const third = swapped[2] as string
+    swapped[2] = swapped[3] as string
+    swapped[3] = third
+    const md = `# t\n\n${swapped.map(s => `## ${s}\n\nbody\n`).join('\n')}`
+    expect(verifySections(md).ok).toBe(false)
+  })
+
+  it('rEFUSES a ninth top-level section', () => {
+    const md = `# t\n\n${REQUIRED_SECTIONS.map(s => `## ${s}\n`).join('\n')}\n## 9. Something extra\n`
+    const check = verifySections(md)
+    expect(check.ok).toBe(false)
+    expect(check.extra).toEqual(['9. Something extra'])
+  })
+
+  it('the report actually written into the newest bundle carries all eight', () => {
+    // The generator is a projection; this asserts the projection's SHAPE, which
+    // is the one thing that must hold whatever the evidence says.
+    const bundles = readdirSync(EVIDENCE_DIR).filter(d => /^\d{4}-\d{2}-\d{2}-[0-9a-f]{7,}$/.test(d)).sort()
+    const newest = bundles[bundles.length - 1]
+    if (newest === undefined)
+      return
+    const path = join(EVIDENCE_DIR, newest, 'report.md')
+    if (!existsSync(path))
+      return
+    expect(verifySections(readFileSync(path, 'utf8')).ok).toBe(true)
   })
 })

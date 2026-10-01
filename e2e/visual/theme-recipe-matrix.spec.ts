@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { loadStoryCanvas } from '../utils/storybook.ts'
+import { guardVisualLane } from './platform-guard.ts'
 
 const SCREENS = [
   { name: 'appshell', id: 'visual-refresh-app-shell--dzup-ui' },
@@ -21,34 +22,36 @@ const CASES = [
   { id: 'desktop-light-spacious-ltr-normal-os-light', theme: 'light', density: 'spacious', direction: 'ltr', motion: 'normal', viewport: { width: 1440, height: 900 }, colorScheme: 'light' },
 ] as const
 
-for (const screen of SCREENS) {
-  for (const item of CASES) {
-    test(`ThemeRecipe matrix ${screen.name} ${item.id}`, async ({ page, browserName }) => {
-      test.skip(browserName !== 'chromium', 'Pixel baselines are qualified on Chromium/Linux.')
-      await page.setViewportSize(item.viewport)
-      await page.emulateMedia({ colorScheme: item.colorScheme })
-      const globals = `theme:${item.theme};density:${item.density};direction:${item.direction};motion:${item.motion}`
-      const canvas = await loadStoryCanvas(page, screen.id, globals, { waitForMainClass: false })
-      const html = canvas.locator('html')
-      const expectedTheme = item.theme === 'system' ? item.colorScheme : item.theme
-      await expect(html).toHaveAttribute('data-theme', expectedTheme)
-      await expect(html).toHaveAttribute('data-theme-mode', item.theme)
-      await expect(html).toHaveAttribute('data-density', item.density)
-      await expect(html).toHaveAttribute('dir', item.direction)
-      await expect(html).toHaveAttribute('data-motion-preview', item.motion)
+if (guardVisualLane('theme-recipe', SCREENS.length * CASES.length)) {
+  for (const screen of SCREENS) {
+    for (const item of CASES) {
+      test(`ThemeRecipe matrix ${screen.name} ${item.id}`, async ({ page, browserName }) => {
+        test.skip(browserName !== 'chromium', 'Pixel baselines are qualified on Chromium/Linux.')
+        await page.setViewportSize(item.viewport)
+        await page.emulateMedia({ colorScheme: item.colorScheme })
+        const globals = `theme:${item.theme};density:${item.density};direction:${item.direction};motion:${item.motion}`
+        const canvas = await loadStoryCanvas(page, screen.id, globals, { waitForMainClass: false })
+        const html = canvas.locator('html')
+        const expectedTheme = item.theme === 'system' ? item.colorScheme : item.theme
+        await expect(html).toHaveAttribute('data-theme', expectedTheme)
+        await expect(html).toHaveAttribute('data-theme-mode', item.theme)
+        await expect(html).toHaveAttribute('data-density', item.density)
+        await expect(html).toHaveAttribute('dir', item.direction)
+        await expect(html).toHaveAttribute('data-motion-preview', item.motion)
 
-      const root = canvas.locator('#storybook-root')
-      await expect(root).toBeVisible({ timeout: 60_000 })
-      const dimensions = await canvas.evaluate(() => ({
-        documentWidth: document.documentElement.scrollWidth,
-        viewportWidth: window.innerWidth,
-      }))
-      expect(dimensions.documentWidth, 'horizontal overflow').toBeLessThanOrEqual(dimensions.viewportWidth + 1)
-      await expect(root).toHaveScreenshot(`theme-recipe-${screen.name}-${item.id}.png`, {
-        maxDiffPixelRatio: 0.01,
-        animations: 'disabled',
-        timeout: 30_000,
+        const root = canvas.locator('#storybook-root')
+        await expect(root).toBeVisible({ timeout: 60_000 })
+        const dimensions = await canvas.evaluate(() => ({
+          documentWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+        }))
+        expect(dimensions.documentWidth, 'horizontal overflow').toBeLessThanOrEqual(dimensions.viewportWidth + 1)
+        await expect(root).toHaveScreenshot(`theme-recipe-${screen.name}-${item.id}.png`, {
+          maxDiffPixelRatio: 0.01,
+          animations: 'disabled',
+          timeout: 30_000,
+        })
       })
-    })
+    }
   }
 }

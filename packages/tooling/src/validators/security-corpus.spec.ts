@@ -89,7 +89,10 @@ describe('the real corpus', () => {
     const report = checkSecurityCorpus()
     expect(report.violations).toEqual([])
     expect(report.corpusFiles).toBe(6)
-    expect(report.fixtures).toBe(34)
+    // 34 at TASK-R3-O4; 39 since TASK-S3-O3 added five fixtures for the Form
+    // System and Graph & Flow specs. The number is asserted rather than derived
+    // so a fixture file that stops being loaded cannot pass as a smaller corpus.
+    expect(report.fixtures).toBe(39)
     expect(report.peerFixtures).toBe(2)
     // Both peer records carry a validate-stage diagnostic, so both executed.
     expect(report.executedDiagnostics).toBe(2)

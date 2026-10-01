@@ -124,6 +124,24 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
+  // TASK-S1-O3. Playwright's default is `missing`, which answers "there is no
+  // baseline for this platform" by *writing one* and failing the test. That
+  // makes `yarn test:e2e:visual` on a machine the baselines were not captured
+  // on an unattributed capture of the whole lane wearing the costume of a
+  // verification run — and the resulting PNGs then fail
+  // `validate:visual-baselines` as orphans, one per image, after the damage.
+  //
+  // `none` makes a missing baseline a plain failure with nothing written. It is
+  // the config-level floor under the two platform guards (`e2e/visual/
+  // preflight-platform.ts` before the run, `platform-guard.ts` inside it), and
+  // it is here rather than in a visual-only config because the same hole exists
+  // for any future `toHaveScreenshot` in this project list.
+  //
+  // `yarn visual:accept` is unaffected: it passes `--update-snapshots=all` on
+  // the command line, which overrides this, and the in-run authority guard
+  // still refuses any snapshot but the one it named. apps/landing has its own
+  // config and is not governed by this value.
+  updateSnapshots: 'none',
   // Set PLAYWRIGHT_JSON_OUTPUT to also emit the machine-readable report the
   // capability matrix reads (TASK-OSS-P5-06).
   //

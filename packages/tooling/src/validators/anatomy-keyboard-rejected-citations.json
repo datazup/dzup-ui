@@ -1,0 +1,160 @@
+{
+  "$comment": "Citations an audit read against the row's own action text and judged do NOT support it. Consumed by `yarn validate:anatomy-keyboard` (see `RejectedCitation` in anatomy-keyboard.ts). A rejected citation is skipped and the walk keeps going -- to the next line of the same file, then the next route -- so the row lands on a better owner or on none. This file can therefore only ever make `backed` FALL, never rise, which is what makes it safe to check in. RULE, and it is a ceiling's rule: an entry may be ADDED by any audit; an entry may be REMOVED only when the row is re-cited to a site that is not the rejected one, or the row is withdrawn. Deleting an entry to recover a `backed` count is the same act as raising a ceiling. Seeded by RESIDUAL-14, whose census adjudicated all 404 rows against their 220 citation sites: 352 genuine, 52 naming a real file for the wrong claim, 0 undecidable. 31 of the 52 are caught structurally instead -- comment-stripping, the `modifiers` rule, the dynamic-component rule, the boundary-free handler token -- or are fixed by correcting a wrong row, and are NOT listed here. What is listed is the residue: a real handler or a real element, correctly reached, doing something other than what the row's sentence says. That is the one thing a checker cannot decide for itself, and RESIDUAL-05 drew the same line when it said an import proves a component is loaded and not that the spec asserts anything about it.",
+  "rejected": [
+    {
+      "component": "DzCombobox",
+      "key": "ArrowUp",
+      "citations": ["packages/core/src/components/forms/optionsStateFocus.ts:*"],
+      "why": "RESIDUAL-13 §3.4's finding, on three more components than it checked. Every line of this file that names an arrow is inside `retryRouteOwnerKeydown`, whose own docblock says it moves focus onto the RETRY CONTROL of the async error state -- not to the previous option. `:*` rather than a line, because `isPlainArrow(event, 'ArrowUp')` appears twice in the same handler and naming one line only moves the citation to the other. The row is TRUE and belongs to Reka's combobox primitives, which is where it lands once this is refused."
+    },
+    {
+      "component": "DzCombobox",
+      "key": "ArrowDown",
+      "citations": ["packages/core/src/components/forms/optionsStateFocus.ts:*"],
+      "why": "As `DzCombobox` `ArrowUp`. Before comment-stripping this row cited line 294, which is a docblock sentence quoting a Vue modifier chain -- prose, in the same handler that is about the retry control."
+    },
+    {
+      "component": "DzMultiSelect",
+      "key": "ArrowUp",
+      "citations": ["packages/core/src/components/forms/optionsStateFocus.ts:*"],
+      "why": "As `DzCombobox` `ArrowUp`."
+    },
+    {
+      "component": "DzMultiSelect",
+      "key": "ArrowDown",
+      "citations": ["packages/core/src/components/forms/optionsStateFocus.ts:*"],
+      "why": "As `DzCombobox` `ArrowDown`."
+    },
+    {
+      "component": "DzSelect",
+      "key": "ArrowUp",
+      "citations": ["packages/core/src/components/forms/optionsStateFocus.ts:*"],
+      "why": "As `DzCombobox` `ArrowUp`. RESIDUAL-11 §9.3's component, and the row is real: `Select/SelectContentImpl.js` is the owner."
+    },
+    {
+      "component": "DzSelect",
+      "key": "ArrowDown",
+      "citations": ["packages/core/src/components/forms/optionsStateFocus.ts:*"],
+      "why": "As `DzCombobox` `ArrowDown`."
+    },
+    {
+      "component": "DzListbox",
+      "key": "ArrowUp",
+      "citations": ["packages/core/src/components/forms/DzListbox.vue:336", "packages/core/src/components/forms/optionsStateFocus.ts:*"],
+      "why": "Line 336 is `const NAV_KEYS = ['ArrowUp', 'ArrowDown', 'Home', 'End']`, under the section header \"Range-select interactions\" and the comment \"Capture Shift+Arrow/Home/End before Reka navigates\". It is consulted only inside `if (event.shiftKey && NAV_KEYS.includes(event.key))`, so it is the range-SELECTION capture and not the navigation. The row is true and Reka's `ListboxRoot` owns it."
+    },
+    {
+      "component": "DzListbox",
+      "key": "ArrowDown",
+      "citations": ["packages/core/src/components/forms/DzListbox.vue:336", "packages/core/src/components/forms/optionsStateFocus.ts:*"],
+      "why": "As `DzListbox` `ArrowUp`."
+    },
+    {
+      "component": "DzListbox",
+      "key": "Home",
+      "citations": ["packages/core/src/components/forms/DzListbox.vue:336"],
+      "why": "As `DzListbox` `ArrowUp`."
+    },
+    {
+      "component": "DzListbox",
+      "key": "End",
+      "citations": ["packages/core/src/components/forms/DzListbox.vue:336"],
+      "why": "As `DzListbox` `ArrowUp`."
+    },
+    {
+      "component": "DzSplitButton",
+      "key": "Enter",
+      "when": "action",
+      "citations": ["node_modules/reka-ui/dist/Menu/**"],
+      "why": "`DzSplitButton.vue` is a `role=\"group\"` div and a slot; `DzSplitButtonMenu.vue` is a div and a bare `<button data-part=\"trigger\" aria-haspopup>` inside a slot fallback, with no `reka-ui` import and no key handling anywhere. Every menu primitive in this component's closure arrived through a `<DzDropdownMenu>` in its own docblock example -- the consumer's markup, not its own. The primary action is the `<button>` at `DzSplitButtonAction.vue:59`, which RESIDUAL-14 re-scoped the row to."
+    },
+    {
+      "component": "DzSplitButton",
+      "key": " ",
+      "when": "action",
+      "citations": ["node_modules/reka-ui/dist/Menu/**"],
+      "why": "As `DzSplitButton` `Enter` (when action)."
+    },
+    {
+      "component": "DzSearchInput",
+      "key": "Enter",
+      "when": "clear",
+      "citations": ["packages/core/src/components/inputs/DzSearchInput.vue:168"],
+      "why": "Line 168 is `if (event.key === 'Enter') { cancelDebounce(); emit('search', …) }` -- the SUBMIT, which is the unscoped `Enter` row of the same table and keeps this citation. `when` is honoured only by the platform route, so a row scoped to a part was satisfied by a handler on a different node. The clear control is a real `<button>`; the platform route reaches it for the Space row of the same part and reaches it for this row once the submit handler is refused."
+    },
+    {
+      "component": "DzTransfer",
+      "key": "Enter",
+      "when": "action",
+      "citations": ["packages/core/src/components/forms/DzTransfer.vue:385"],
+      "why": "Line 385 is the option's own `enter.prevent` binding calling `selectSourceItem(item)` -- it SELECTS an option in the source pane, and is the correct citation for the unscoped `Enter` row of the same table. This row is about the transfer buttons between the panes."
+    },
+    {
+      "component": "DzTimePicker",
+      "key": "Enter",
+      "when": "item",
+      "citations": ["node_modules/reka-ui/dist/Popover/PopoverTrigger.js"],
+      "why": "`PopoverTrigger`'s `as` resolves to a `<button>`, and activating the TRIGGER opens the list. The row says \"Select the highlighted option and close the time list\", which is the option `<button type=\"button\" @click=\"selectHour(h)\">` at `DzTimePicker.vue:636`. The trigger was cited only because it appears first in document order. RESIDUAL-12 named this exact split -- \"the trigger is a real <button> … so the list opens; nothing moves the highlight once it is open\" -- and RESIDUAL-13 implemented the movement half without re-reading which node this row was attributed to."
+    },
+    {
+      "component": "DzInfiniteScroll",
+      "key": "Tab",
+      "citations": ["packages/core/src/components/buttons/DzButton.vue:*"],
+      "why": "The row is \"Move to the next focusable element INSIDE THE LOADED ITEMS; the feed adds no keys of its own\". The cited `DzButton` is the error-state RETRY control at `DzInfiniteScroll.vue:145`; the loaded items are the consumer's slot at `:133`. Refusing it makes the row `undetermined` for the slot reason, which is the honest verdict -- the runtime `spec` route settles it, and RESIDUAL-13 §10 already scheduled a `'Tab'` assertion for two sibling components."
+    },
+    {
+      "component": "DzDataView",
+      "key": "Tab",
+      "citations": ["node_modules/reka-ui/dist/RovingFocus/RovingFocusItem.js:*"],
+      "why": "`DzDataView.vue` has no `keydown`, no `tabindex` and no `reka-ui` import; a roving-focus item entered its closure through a `<Dz…>` inside its docblock example. The row -- \"Move between the layout controls and the rendered items\" -- is the document's plain focus order, which is what the validator's own `Tab` rule is for, and roving focus is the mechanism that REMOVES nodes from that order."
+    },
+    {
+      "component": "DzDataGrid",
+      "key": "ArrowUp",
+      "citations": ["node_modules/reka-ui/dist/**"],
+      "why": "D-RES14-1. The whole `DzDataGrid` family handles keys in the HEADER only -- sort at `useDataGridHeader.ts:110` and the filter popover's Escape. `DzDataGridBody.vue` emits a grid-cell role twice and handles no key; no file in the family imports `reka-ui`, sets a roving `tabindex` or moves a cell. The citation is `RovingFocus/utils.js` reached through the row-selection CHECKBOX, and a one-dimensional roving-focus group cannot implement a two-dimensional grid pattern. Six published `apg: 'grid'` rows with nothing behind them."
+    },
+    {
+      "component": "DzDataGrid",
+      "key": "ArrowDown",
+      "citations": ["node_modules/reka-ui/dist/**"],
+      "why": "D-RES14-1, as `DzDataGrid` `ArrowUp`."
+    },
+    {
+      "component": "DzDataGrid",
+      "key": "ArrowLeft",
+      "citations": ["node_modules/reka-ui/dist/**"],
+      "why": "D-RES14-1, as `DzDataGrid` `ArrowUp`."
+    },
+    {
+      "component": "DzDataGrid",
+      "key": "ArrowRight",
+      "citations": ["node_modules/reka-ui/dist/**"],
+      "why": "D-RES14-1, as `DzDataGrid` `ArrowUp`."
+    },
+    {
+      "component": "DzDataGrid",
+      "key": "Home",
+      "citations": ["node_modules/reka-ui/dist/**"],
+      "why": "D-RES14-1, as `DzDataGrid` `ArrowUp`."
+    },
+    {
+      "component": "DzDataGrid",
+      "key": "End",
+      "citations": ["node_modules/reka-ui/dist/**"],
+      "why": "D-RES14-1, as `DzDataGrid` `ArrowUp`."
+    },
+    {
+      "component": "DzOrderList",
+      "key": " ",
+      "citations": ["packages/core/src/components/data/DzOrderList.vue:455"],
+      "why": "Line 455 is `const printable = event.key.length === 1 && event.key !== ' '`, inside `typeAhead` -- the type-ahead's EXCLUSION of the space bar, which is the opposite of handling it. `keysNamedIn` records the first line a key appears on and this is it; the real site is `case ' ': case 'Spacebar': toggleGrab(index)` at :501, which the walk reaches once this line is refused. The row itself was also wrong and RESIDUAL-14 corrected it in the anatomy: Space grabs and drops, `Enter` selects."
+    },
+    {
+      "component": "DzTransfer",
+      "key": "<character>",
+      "citations": ["packages/core/src/components/forms/DzTransfer.vue:414", "packages/core/src/components/forms/DzTransfer.vue:530"],
+      "why": "D-RES14-2, IMPLEMENTED by RESIDUAL-15 -- this entry was WIDENED-then-NARROWED rather than deleted. RESIDUAL-14 wrote it as `DzTransfer.vue:*` (every line) because the only thing in the file that named a printable character was the pane's `searchable` text `<input>`, a field that FILTERS rather than moving focus among options, and `templateNodesIn` printed a template-body offset for it so no single line could be named. RESIDUAL-15 gave the pane a real `typeAheadIndex` reading each rendered option's own `textContent`, so the row is now owned by `onPaneKeydown`'s `default:` arm under route `own`. The entry stays, narrowed to the two lines the source and target panes' search `<input>` elements sit on (`:414`, `:530`), because those nodes still do not back this row and the ledger ratchets: removing the `:*` widening is what the re-citation earns, and deleting the entry is not. Route `own` is asked before `platform`, so the entry is now inert -- which is the point: it is a guard against the citation coming back, not a subtraction."
+    }
+  ]
+}

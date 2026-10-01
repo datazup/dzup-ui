@@ -79,6 +79,49 @@ const NO_FOCUSABLE_NODE = 'Renders no focusable node of its own; its browser evi
   + 'SSR/hydration fixture rather than a keyboard sequence.'
 
 /**
+ * `controlled-uncontrolled` — the reason a component with no bound value cannot
+ * exhibit the row (TASK-S1-O2, 2026-09-22).
+ *
+ * The row measures one thing: does the unit spec drive the SAME value through a
+ * host-owned path (`v-model` / `update:<name>`) and through a component-owned
+ * one? A component that exposes no two-way binding cannot exhibit the pair —
+ * there is no value for a host to take ownership of, so there is no second path
+ * to compare the first against, and an `unrun` cell there reads as work nobody
+ * has got to rather than work nobody owes.
+ *
+ * The universal half of every reason below was **measured**, not asserted: at
+ * `4e4e46f`, over each component's SFC and its `.types.ts`, no `defineModel()`
+ * and no `update:<name>` emit paired with a prop of the same name. The day one
+ * of them gains a `defineModel`, this reason becomes false and the cell it
+ * covers becomes a real gap — which is exactly what an exception with a
+ * falsifiable reason is for, and why the row is still printed rather than
+ * deleted.
+ */
+function noValueToControl(surface: string): string {
+  return 'No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired '
+    + 'with a prop of the same name, so a host cannot take ownership of a value from it. '
+    + `${surface} (Measured 2026-09-22 at \`4e4e46f\`; a \`defineModel\` added here invalidates `
+    + 'this exception.)'
+}
+
+/**
+ * `axe` — the reason a component that renders no element of its own cannot
+ * exhibit the row (TASK-S1-O2, 2026-09-22).
+ *
+ * The row measures an axe scan of the component's OWN rendered output. A
+ * renderless component contributes no node, so a scan over it audits the host's
+ * markup and attributes the result to something that produced none of it — the
+ * rule it would test is the host's to satisfy. This is the same argument the
+ * `token-contrast` exception already recorded for these three components makes
+ * about colour pairs, one level up.
+ */
+const RENDERS_NO_DOM = 'The axe row measures a scan of the component\'s own rendered output, and '
+  + 'this component renders no element of its own — only the slot it is handed. A scan over it '
+  + 'audits the HOST\'s markup and credits a component that contributed no node; the rule it '
+  + 'would test is the host\'s to satisfy. (Same argument as the `token-contrast` exception '
+  + 'already recorded here, one level up.)'
+
+/**
  * Component → assignment.
  *
  * Grouped by family, alphabetical within each, so a reviewer reads it in the
@@ -95,6 +138,12 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     boundaryWhy: 'An `href` prop renders an anchor, so a host-supplied URL becomes a navigation. '
       + '`javascript:` and `data:` are the sinks a URL policy has to close.',
     wcag: ['2.5.3', '3.2.6'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'It forwards `click`, `focus` and `blur`; `disabled` and `loading` are one-way '
+        + 'appearance props.',
+      ),
+    },
   },
   DzButtonGroup: { tier: 'A', pattern: 'none' },
   DzCopyButton: {
@@ -104,9 +153,25 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     // outward rather than accepting it, so it is not a boundary in the sense
     // `SecurityBoundary` means.
     wcag: ['4.1.3'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It emits `copied` after writing to the clipboard; no value is round-tripped.'),
+    },
   },
-  DzFab: { tier: 'B', pattern: 'button' },
-  DzIconButton: { tier: 'B', pattern: 'button', wcag: ['2.5.3'] },
+  DzFab: {
+    tier: 'B',
+    pattern: 'button',
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It forwards `click`, `focus` and `blur`; every other prop is one-way appearance.'),
+    },
+  },
+  DzIconButton: {
+    tier: 'B',
+    pattern: 'button',
+    wcag: ['2.5.3'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It forwards `click`, `focus` and `blur`; every other prop is one-way appearance.'),
+    },
+  },
   DzSpeedDial: {
     tier: 'B',
     pattern: 'menu-button',
@@ -115,7 +180,16 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     traits: ['dataset', 'teleports'],
     wcag: ['2.1.4'],
   },
-  DzSplitButton: { tier: 'B', pattern: 'menu-button' },
+  DzSplitButton: {
+    tier: 'B',
+    pattern: 'menu-button',
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'It composes a button with a menu; the menu\'s open state belongs to '
+        + '`DzSplitButtonMenu`.',
+      ),
+    },
+  },
   DzToggleButton: { tier: 'B', pattern: 'button' },
 
   // -------------------------------------------------------------------------
@@ -127,6 +201,9 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     why: 'A clickable card takes `role="button"` and a tabindex, which APG has no pattern for '
       + 'because the pattern it would resemble — button — is about a control, not a region that '
       + 'happens to activate. Tiered B for the focusable form; the static form is the same code.',
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It forwards `click`; every other prop is one-way appearance.'),
+    },
   },
   DzImageCard: {
     tier: 'A',
@@ -148,7 +225,14 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
       + 'the composite case APG models as a grid rather than as a set of buttons.',
     wcag: ['1.3.5', '2.1.4'],
   },
-  DzChip: { tier: 'B', pattern: 'button', wcag: ['2.5.8'] },
+  DzChip: {
+    tier: 'B',
+    pattern: 'button',
+    wcag: ['2.5.8'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It asks the host to remove it with `close` and never holds the removal.'),
+    },
+  },
   DzCodeBlock: {
     tier: 'A',
     pattern: 'none',
@@ -180,11 +264,21 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     pattern: 'feed',
     traits: ['dataset'],
     wcag: ['2.2.2', '4.1.3'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'It asks the host for more rows with `loadMore`/`retry`; the collection stays the '
+        + 'host\'s and is never mirrored here.',
+      ),
+    },
   },
   DzList: { tier: 'A', pattern: 'none', traits: ['dataset'] },
   DzListItem: { tier: 'B', pattern: 'custom', why: 'A list row that becomes focusable when the '
     + 'consumer makes it actionable; APG has a listbox option and a menu item, and this is '
-    + 'neither — it stays a `listitem` and takes a tabindex.' },
+    + 'neither — it stays a `listitem` and takes a tabindex.', exceptions: {
+    'controlled-uncontrolled': noValueToControl(
+      'It forwards `click`; selection belongs to the list that contains it.',
+    ),
+  } },
   DzOrderList: {
     tier: 'C',
     pattern: 'listbox',
@@ -200,8 +294,21 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
       + 'interaction; at realistic row counts correctness and speed stop being separable.',
     traits: ['dataset', 'drags'],
     wcag: ['1.3.2', '4.1.3'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'Its emits are the `rowExpand`/`rowCollapse` notifications; sort, selection and '
+        + 'expansion are the host\'s to hold, and `DzDataGrid` is the component that binds them.',
+      ),
+    },
   },
-  DzTag: { tier: 'B', pattern: 'button', wcag: ['2.5.8'] },
+  DzTag: {
+    tier: 'B',
+    pattern: 'button',
+    wcag: ['2.5.8'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It asks the host to remove it with `close` and never holds the removal.'),
+    },
+  },
   DzTimeline: { tier: 'A', pattern: 'none', traits: ['dataset'] },
   DzTimelineItem: { tier: 'A', pattern: 'none' },
   DzTree: {
@@ -212,7 +319,16 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     traits: ['dataset'],
     wcag: ['2.1.4'],
   },
-  DzTreeItem: { tier: 'B', pattern: 'treeview' },
+  DzTreeItem: {
+    tier: 'B',
+    pattern: 'treeview',
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'Expansion and selection are `DzTree`\'s bound values (`expandedKeys`, `selectedKeys`, '
+        + '`activeKey`); this renders one node of it.',
+      ),
+    },
+  },
 
   // -------------------------------------------------------------------------
   // feedback
@@ -245,14 +361,28 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     },
   },
   DzMeterGroup: { tier: 'A', pattern: 'meter', wcag: ['1.4.1'] },
-  DzNotification: { tier: 'B', pattern: 'alert', wcag: ['2.2.1', '4.1.3'] },
+  DzNotification: {
+    tier: 'B',
+    pattern: 'alert',
+    wcag: ['2.2.1', '4.1.3'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It reports `close` and `action`; whether it is on screen is the host\'s `v-if`.'),
+    },
+  },
   DzProgress: { tier: 'A', pattern: 'none', wcag: ['4.1.3'] },
   DzResult: { tier: 'A', pattern: 'none', wcag: ['4.1.3'] },
   DzRunStatusBadge: { tier: 'A', pattern: 'none', wcag: ['1.4.1', '4.1.3'] },
   DzScrollProgress: { tier: 'A', pattern: 'none' },
   DzSkeleton: { tier: 'A', pattern: 'none', wcag: ['2.2.2'] },
   DzSpinner: { tier: 'A', pattern: 'none', wcag: ['2.2.2', '4.1.3'] },
-  DzToast: { tier: 'B', pattern: 'alertdialog', wcag: ['2.2.1', '4.1.3'] },
+  DzToast: {
+    tier: 'B',
+    pattern: 'alertdialog',
+    wcag: ['2.2.1', '4.1.3'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It reports `close` and `action`; the queue is the host\'s.'),
+    },
+  },
   DzTokenProgressBar: { tier: 'A', pattern: 'none', wcag: ['1.4.1', '4.1.3'] },
   GovernanceBadge: { tier: 'A', pattern: 'none', wcag: ['1.4.1'] },
   TeamMemberBadge: { tier: 'A', pattern: 'none', wcag: ['1.4.1'] },
@@ -308,6 +438,7 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     traits: ['dataset'],
     wcag: ['3.3.1', '4.1.3'],
     exceptions: {
+      'axe': RENDERS_NO_DOM,
       'token-contrast': 'Renderless: it supplies scoped slot props and ships no styles.',
     },
   },
@@ -380,7 +511,14 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     traits: ['dataset', 'teleports'],
     wcag: ['3.3.2'],
   },
-  DzRadio: { tier: 'B', pattern: 'radio-group', wcag: ['3.3.2'] },
+  DzRadio: {
+    tier: 'B',
+    pattern: 'radio-group',
+    wcag: ['3.3.2'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('The bound value is `DzRadioGroup`\'s; this renders one option of it.'),
+    },
+  },
   DzRadioGroup: { tier: 'B', pattern: 'radio-group', wcag: ['3.3.1', '3.3.2'] },
   DzRangeSlider: {
     tier: 'B',
@@ -483,17 +621,37 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     pattern: 'window-splitter',
     traits: ['drags'],
     wcag: ['1.4.10'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It reports the layout it settled on with `layoutChange` and does not accept one back.'),
+    },
   },
-  DzScrollArea: { tier: 'B', pattern: 'none', wcag: ['1.4.10', '2.1.1'] },
+  DzScrollArea: {
+    tier: 'B',
+    pattern: 'none',
+    wcag: ['1.4.10', '2.1.1'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('Scroll offset is the DOM element\'s; nothing is bound.'),
+    },
+  },
   DzSpacer: { tier: 'A', pattern: 'none' },
   DzSplitter: {
     tier: 'B',
     pattern: 'window-splitter',
     traits: ['drags'],
     wcag: ['1.4.10'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('Pane sizes are reported after a drag, never accepted as a bound prop.'),
+    },
   },
   DzStack: { tier: 'A', pattern: 'none', wcag: ['1.4.10'] },
-  DzToolbar: { tier: 'B', pattern: 'toolbar', wcag: ['1.4.10'] },
+  DzToolbar: {
+    tier: 'B',
+    pattern: 'toolbar',
+    wcag: ['1.4.10'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('A grouping container for controls that each own their own value; it binds none itself.'),
+    },
+  },
 
   // -------------------------------------------------------------------------
   // media
@@ -572,15 +730,37 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     traits: ['dataset'],
     wcag: ['2.4.6'],
   },
-  DzBackTop: { tier: 'B', pattern: 'button' },
+  DzBackTop: {
+    tier: 'B',
+    pattern: 'button',
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'It reports a `click` and scrolls the window; the scroll position belongs to the '
+        + 'document, not to a prop.',
+      ),
+    },
+  },
   DzBreadcrumb: {
     tier: 'B',
     pattern: 'breadcrumb',
     boundary: 'url',
     boundaryWhy: 'Crumbs carry a host-supplied `href` that becomes a navigation.',
     traits: ['dataset'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It renders the `items` array it is handed and holds nothing a host could take over.'),
+    },
   },
-  DzColorModeToggle: { tier: 'B', pattern: 'button', wcag: ['4.1.3'] },
+  DzColorModeToggle: {
+    tier: 'B',
+    pattern: 'button',
+    wcag: ['4.1.3'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'It emits `change` after the mode has been applied through the provider; the mode lives '
+        + 'in the provider, not in a prop here.',
+      ),
+    },
+  },
   DzMegaMenu: {
     tier: 'C',
     pattern: 'menubar',
@@ -590,6 +770,12 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     boundaryWhy: 'Menu entries carry a host-supplied `href` that becomes a navigation.',
     traits: ['dataset'],
     wcag: ['2.1.4'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'Panel open/close is reported with `open`/`close` and never accepted back, and '
+        + '`collapsed` is a one-way layout override.',
+      ),
+    },
   },
   DzMenu: {
     tier: 'B',
@@ -597,6 +783,9 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     boundary: 'url',
     boundaryWhy: 'Menu entries carry a host-supplied `href` that becomes a navigation.',
     traits: ['dataset'],
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('It renders host-supplied entries and reports activation; no entry state is bound.'),
+    },
   },
   DzPagination: { tier: 'B', pattern: 'none', wcag: ['2.4.6', '4.1.3'] },
   DzSegmented: { tier: 'B', pattern: 'radio-group' },
@@ -630,7 +819,14 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
       + 'automatic activation.',
     wcag: ['1.4.1', '4.1.3'],
   },
-  DzStepperItem: { tier: 'B', pattern: 'custom', why: 'A single step of `DzStepper`; see there.' },
+  DzStepperItem: {
+    tier: 'B',
+    pattern: 'custom',
+    why: 'A single step of `DzStepper`; see there.',
+    exceptions: {
+      'controlled-uncontrolled': noValueToControl('The active step is `DzStepper`\'s bound value; this renders one step of it.'),
+    },
+  },
   DzTabs: { tier: 'B', pattern: 'tabs' },
 
   // -------------------------------------------------------------------------
@@ -672,6 +868,11 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     // matters — declaring the trait here would have claimed portal/hydration
     // evidence for the one component that has no teleported output to check.
     exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'It renders `<slot />` and nothing else, and publishes context — which is not a bound '
+        + 'value.',
+      ),
+      'axe': RENDERS_NO_DOM,
       'keyboard-spec': NO_FOCUSABLE_NODE,
       'browser-play': NO_FOCUSABLE_NODE,
       'state-stories': 'Declares no states: `parts` is `none` and it renders no element.',
@@ -682,6 +883,11 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
     tier: 'B',
     pattern: 'none',
     exceptions: {
+      'controlled-uncontrolled': noValueToControl(
+        'It renders `DzProvider` around `<slot />`; `theme` is a one-way prop it resolves and '
+        + 'republishes as context.',
+      ),
+      'axe': RENDERS_NO_DOM,
       'keyboard-spec': NO_FOCUSABLE_NODE,
       'browser-play': NO_FOCUSABLE_NODE,
       'state-stories': 'Declares no states: `parts` is `none` and it renders no element.',

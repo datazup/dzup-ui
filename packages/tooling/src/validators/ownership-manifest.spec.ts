@@ -4,6 +4,11 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import {
+  OWNERSHIP_MANIFEST_KINDS,
+  OWNERSHIP_MANIFEST_STATUSES,
+  OWNERSHIP_MANIFEST_SCHEMA_VERSION as PUBLISHED_SCHEMA_VERSION,
+} from '../../../contracts/src/ownership-manifest.ts'
 import { readManifest } from '../ownership/build-ownership-map.ts'
 import {
   buildOwnershipManifest,
@@ -12,10 +17,17 @@ import {
   serializeManifest,
 } from '../ownership/generate-ownership-manifest.ts'
 import {
+  OWNERSHIP_KINDS,
+  OWNERSHIP_SCHEMA_VERSION,
+  OWNERSHIP_STATUSES,
+} from '../ownership/ownership-manifest.types.ts'
+import {
   checkEntry,
   checkReferences,
   checkRuntimeLookup,
+  checkSecondTierManifest,
   componentsWithoutAnatomy,
+  formatSecondTier,
   partsOutsideVocabulary,
   readCeiling,
   validateOwnershipManifest,
@@ -392,5 +404,96 @@ describe('checkRuntimeLookup and the cross-tier collision gate (TASK-R3-O1 F3)',
 
     expect(violations).toHaveLength(1)
     expect(violations[0]?.message).toContain('missing input, not drift')
+  })
+})
+
+describe('checkSecondTierManifest (TASK-S3-O1)', () => {
+  const fixtureDir = mkdtempSync(join(tmpdir(), 'dzup-second-tier-validator-'))
+
+  /** The synthetic second-tier manifest, shared with both consumer suites. */
+  const FIXTURE = resolve(
+    dirname(fileURLToPath(import.meta.url)),
+    '../../../core/test/fixtures/second-tier-ownership.manifest.json',
+  )
+
+  function write(name: string, contents: unknown): string {
+    const path = join(fixtureDir, name)
+    writeFileSync(path, typeof contents === 'string' ? contents : JSON.stringify(contents), 'utf8')
+    return path
+  }
+
+  it('states ABSENCE explicitly rather than passing quietly', () => {
+    // The point of the whole gate. Before this, "no second tier anywhere" and
+    // "second tier fine" printed the same green line.
+    const { report, violations } = checkSecondTierManifest(undefined)
+
+    expect(violations).toEqual([])
+    expect(report.source).toBe('none')
+    expect(report.availability).toBe('not-installed')
+    expect(formatSecondTier(report)).toContain('ABSENT')
+    expect(formatSecondTier(report)).toContain('Reported, not a failure')
+  })
+
+  it('accepts the env-supplied manifest and names its schema version', () => {
+    const { report, violations } = checkSecondTierManifest(FIXTURE)
+
+    expect(violations).toEqual([])
+    expect(report.source).toBe('env')
+    expect(report.availability).toBe('loaded')
+    expect(report.schemaVersion).toBe('1.1.0')
+    expect(formatSecondTier(report)).toContain('PRESENT')
+  })
+
+  it('fails when the env path does not exist', () => {
+    const { violations } = checkSecondTierManifest(join(fixtureDir, 'nope.json'))
+    expect(violations).toHaveLength(1)
+    expect(violations[0]?.message).toContain('does not exist')
+  })
+
+  it('fails on unreadable JSON rather than treating it as absent', () => {
+    const { report, violations } = checkSecondTierManifest(write('broken.json', '{ not json'))
+
+    expect(violations).toHaveLength(1)
+    expect(report.availability).toBe('unreadable')
+  })
+
+  it('fails closed on a schema major it cannot read, naming the version', () => {
+    const fixture = JSON.parse(readFileSync(FIXTURE, 'utf8')) as Record<string, unknown>
+    const { report, violations } = checkSecondTierManifest(
+      write('future.json', { ...fixture, schemaVersion: '2.0.0' }),
+    )
+
+    expect(violations).toHaveLength(1)
+    expect(violations[0]?.message).toContain('2.0.0')
+    expect(report.availability).toBe('non-conforming')
+  })
+
+  it('checks the same manifest a consumer would, by the same reader', () => {
+    // A validator with its own opinion of "conforming" is how a manifest passes
+    // here and is refused in a consumer's build.
+    const fixture = JSON.parse(readFileSync(FIXTURE, 'utf8')) as Record<string, unknown>
+    const { violations } = checkSecondTierManifest(
+      write('no-parent.json', {
+        ...fixture,
+        entries: [{ symbol: 'DzOrphan', package: '@x/y', subpath: '.', kind: 'compound-part' }],
+      }),
+    )
+
+    expect(violations).toHaveLength(1)
+    expect(violations[0]?.message).toContain('parentComponent')
+  })
+})
+
+describe('the published contract and the generator agree', () => {
+  it('emits the same schema version from both files', () => {
+    // Two files, and nothing else compares them. If they drift, a downstream
+    // package conforming to the published contract produces a manifest this
+    // repository refuses — which is the defect this packet closed, inverted.
+    expect(PUBLISHED_SCHEMA_VERSION).toBe(OWNERSHIP_SCHEMA_VERSION)
+  })
+
+  it('publishes the same kind and status vocabularies the generator emits', () => {
+    expect([...OWNERSHIP_MANIFEST_KINDS]).toEqual([...OWNERSHIP_KINDS])
+    expect([...OWNERSHIP_MANIFEST_STATUSES]).toEqual([...OWNERSHIP_STATUSES])
   })
 })

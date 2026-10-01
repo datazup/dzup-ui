@@ -67,6 +67,50 @@ export interface VisualBaselineRecord {
   replaces: string | null
 }
 
+/**
+ * One visual lane (schema 1.2.0, TASK-S1-O3).
+ *
+ * A lane is a spec, the directory its committed images live in, the platform
+ * those images were captured on, and whether it is a CI gate. The platform lives
+ * here and not in `scope` because the three lanes do not agree: the two
+ * screen-level lanes are `linux` and the per-component pilot is `win32`. One
+ * global could only describe one of them, which is how `yarn test:e2e:visual`
+ * came to be a command that would have written 34 new baselines on a
+ * developer's machine and called it a verification run.
+ */
+export interface VisualLane {
+  id: string
+  spec: string
+  snapshotDir: string
+  /** The platform this lane's committed images were captured on. */
+  capturedOn: string
+  /** `gate` must be captured on the authoritative platform; `developer-local` never gates. */
+  role: 'gate' | 'developer-local'
+  scope: string
+  /** What the lane does NOT cover. An unwritten scope is how this lane became unowned. */
+  excludes: string
+  requires?: string
+  notGating?: string
+}
+
+/** The one-way ratchet over lanes that are not yet gates (TASK-S1-O3). */
+export interface VisualCeilings {
+  developerLocalLanes: {
+    ceiling: number
+    blockedOn?: string
+    lanes: string[]
+  }
+}
+
+export const VISUAL_CEILINGS_PATH = resolve(
+  ROOT,
+  'packages/tooling/src/validators/visual-baselines-ceilings.json',
+)
+
+export function readVisualCeilings(path: string = VISUAL_CEILINGS_PATH): VisualCeilings {
+  return JSON.parse(readFileSync(path, 'utf8')) as VisualCeilings
+}
+
 /** A stress fixture over a covered family (TASK-R5-O4, schema 1.1.0). See `e2e/visual/coverage.ts`. */
 export interface VisualFixture {
   id: string
@@ -91,6 +135,16 @@ export interface VisualLedger {
     /** The platform CI runs on. `platform !== ciPlatform` is reported, not failed. */
     ciPlatform: string
     /**
+     * The ONE platform the gate runs on (schema 1.2.0, TASK-S1-O3).
+     *
+     * Distinct from `platform` (what the per-component coverage join gates on
+     * today) and from `ciPlatform` (an observation about the workflows). This is
+     * the decision. Every lane with `role: "gate"` must be captured here, and
+     * `e2e/visual/platform.ts` refuses a run on any other platform rather than
+     * letting Playwright answer a missing baseline by writing one.
+     */
+    authoritativePlatform?: string
+    /**
      * The recorded answer to "which platform is authoritative" (TASK-R2-O1).
      *
      * Separate from `platform` on purpose: `platform` is what there are images
@@ -113,13 +167,30 @@ export interface VisualLedger {
     note: string
   }
   snapshotDirs: string[]
+  /** Per-lane platform + role declarations (schema 1.2.0). Absent in 1.1.0 ledgers. */
+  lanes?: VisualLane[]
   baselines: VisualBaselineRecord[]
 }
 
 export interface VisualViolation {
-  rule: 'changed' | 'orphan' | 'missing' | 'unattributed' | 'coverage' | 'stale' | 'platform'
+  rule: 'changed' | 'orphan' | 'missing' | 'unattributed' | 'coverage' | 'stale' | 'platform' | 'lane' | 'authority'
   level: 'error' | 'report'
   message: string
+}
+
+/**
+ * The engine and platform Playwright encoded into a baseline's file name.
+ *
+ * `…-chromium-win32.png` → `{ engine: 'chromium', platform: 'win32' }`. This is
+ * not metadata anybody can edit into agreement: it is the path the comparison
+ * resolves, so it is the only statement about a baseline's platform that cannot
+ * be wrong while the file is where it is.
+ */
+export function platformSuffixOf(file: string): { engine: string, platform: string } | undefined {
+  const match = /-([^-/]+)-([^-/]+)\.png$/.exec(file)
+  if (match === null)
+    return undefined
+  return { engine: match[1]!, platform: match[2]! }
 }
 
 /** SHA-256 of a file, lowercase hex. */
@@ -163,6 +234,221 @@ export function coveredComponents(ledger: VisualLedger): { component: string, so
 }
 
 /**
+ * The platform-authority gates (TASK-S1-O3).
+ *
+ * These are the half of the platform rule that needs no browser, and they exist
+ * because the in-run guard can only refuse a run that someone started. These
+ * refuse a *repository state* — a lane declared as a gate for a platform no
+ * runner has, a lane whose images are for a platform its declaration does not
+ * claim, a lane with nothing in it at all. Each one is a way for the visual
+ * lane to be green while proving nothing, which is the failure mode the whole
+ * ledger exists to prevent.
+ *
+ * `files` is passed in rather than re-read so the caller reads the directory
+ * once.
+ */
+export function checkLaneAuthority(ledger: VisualLedger, files: string[]): VisualViolation[] {
+  const violations: VisualViolation[] = []
+  const authoritative = ledger.scope.authoritativePlatform
+
+  if (authoritative === undefined || authoritative.trim() === '') {
+    violations.push({
+      rule: 'authority',
+      level: 'error',
+      message: 'e2e/visual/visual-baselines.json declares no `scope.authoritativePlatform`. '
+        + 'A visual lane with no declared platform compares a render against whichever images '
+        + 'happen to be on disk and writes one when there are none — a green run that means '
+        + 'nothing. Declare the one platform the gate runs on (owner action).',
+    })
+    return violations
+  }
+
+  const lanes = ledger.lanes ?? []
+  if (lanes.length === 0) {
+    violations.push({
+      rule: 'lane',
+      level: 'error',
+      message: 'e2e/visual/visual-baselines.json declares no `lanes`. Every snapshot directory '
+        + 'must belong to a lane that states the platform its images were captured on and '
+        + 'whether it gates; without that the harness cannot tell a refusal from a first capture.',
+    })
+    return violations
+  }
+
+  const declaredDirs = new Set(lanes.map(l => l.snapshotDir))
+  for (const dir of ledger.snapshotDirs) {
+    if (declaredDirs.has(dir))
+      continue
+    violations.push({
+      rule: 'lane',
+      level: 'error',
+      message: `\`${dir}\` is in \`snapshotDirs\` with no entry in \`lanes\`. An undeclared `
+        + `snapshot directory runs unguarded: e2e/visual/platform.ts has no platform to check `
+        + `it against, so it would compare — or capture — on any machine.`,
+    })
+  }
+
+  const knownDirs = new Set(ledger.snapshotDirs)
+  for (const lane of lanes) {
+    if (!knownDirs.has(lane.snapshotDir)) {
+      violations.push({
+        rule: 'lane',
+        level: 'error',
+        message: `lane \`${lane.id}\` names \`${lane.snapshotDir}\`, which is not in `
+          + `\`snapshotDirs\`. The digest gate never reads that directory, so the lane's images `
+          + `are ungoverned.`,
+      })
+    }
+
+    if (lane.role === 'gate' && lane.capturedOn !== authoritative) {
+      violations.push({
+        rule: 'lane',
+        level: 'error',
+        message: `lane \`${lane.id}\` is \`role: "gate"\` with \`capturedOn: `
+          + `"${lane.capturedOn}"\`, but the authoritative platform is "${authoritative}". `
+          + `A gate whose images are for another platform can never pass — it has nothing to `
+          + `compare against wherever it runs. Either capture it on ${authoritative} `
+          + `(owner action) or demote it to \`role: "developer-local"\` and say so.`,
+      })
+    }
+
+    if (lane.excludes.trim() === '') {
+      violations.push({
+        rule: 'lane',
+        level: 'error',
+        message: `lane \`${lane.id}\` declares no \`excludes\`. A scope with no stated gap is `
+          + `how this lane became unowned the first time: every reader assumed it covered `
+          + `whatever they cared about.`,
+      })
+    }
+
+    // A lane with no accepted baselines on its own platform is the "nothing to
+    // compare" case, caught here with no browser. A run would either register
+    // zero snapshot tests and exit 0, or capture the lot.
+    const mine = ledger.baselines.filter(
+      b => b.file.startsWith(`${lane.snapshotDir}/`) && b.platform === lane.capturedOn,
+    )
+    if (mine.length === 0) {
+      violations.push({
+        rule: 'lane',
+        level: 'error',
+        message: `lane \`${lane.id}\` has 0 accepted baselines on its declared platform `
+          + `"${lane.capturedOn}". A visual lane with nothing to compare exits 0 and reports `
+          + `"no visual regressions" about no pixels — the one outcome worse than a red. `
+          + `Capture it, or remove the lane and its snapshotDirs entry.`,
+      })
+    }
+
+    // The file name is the only unforgeable statement of a baseline's platform.
+    for (const record of ledger.baselines) {
+      if (!record.file.startsWith(`${lane.snapshotDir}/`))
+        continue
+      const suffix = platformSuffixOf(record.file)
+      if (suffix === undefined) {
+        violations.push({
+          rule: 'lane',
+          level: 'error',
+          message: `\`${record.file}\` has no \`-<engine>-<platform>.png\` suffix. Playwright `
+            + `writes one for every snapshot; a file without it was not written by the lane.`,
+        })
+        continue
+      }
+      if (suffix.platform !== record.platform) {
+        violations.push({
+          rule: 'lane',
+          level: 'error',
+          message: `\`${record.file}\` is recorded as \`platform: "${record.platform}"\` and its `
+            + `file name says "${suffix.platform}". The file name is what the comparison `
+            + `resolves, so the ledger entry is the one that is wrong.`,
+        })
+      }
+      if (suffix.platform !== lane.capturedOn) {
+        violations.push({
+          rule: 'lane',
+          level: 'error',
+          message: `\`${record.file}\` is a "${suffix.platform}" image in lane \`${lane.id}\`, `
+            + `which declares \`capturedOn: "${lane.capturedOn}"\`. This is what a half-finished `
+            + `platform migration looks like: finish it by deleting the ${lane.capturedOn} `
+            + `images and setting \`capturedOn\` to "${suffix.platform}", or revert the capture. `
+            + `A lane never holds two platforms — cross-platform baselines are not attempted.`,
+        })
+      }
+    }
+  }
+
+  // An image on disk in a lane directory whose suffix does not match the lane.
+  // The `orphan` rule catches one nobody accepted; this catches one that WAS
+  // accepted into the wrong lane.
+  for (const file of files) {
+    const lane = lanes.find(l => file.startsWith(`${l.snapshotDir}/`))
+    if (lane === undefined) {
+      violations.push({
+        rule: 'lane',
+        level: 'error',
+        message: `\`${file}\` is a baseline in no declared lane. Add the lane, or delete it.`,
+      })
+      continue
+    }
+    const suffix = platformSuffixOf(file)
+    if (suffix !== undefined && suffix.platform !== lane.capturedOn) {
+      violations.push({
+        rule: 'lane',
+        level: 'error',
+        message: `\`${file}\` is on disk as a "${suffix.platform}" image in lane \`${lane.id}\`, `
+          + `which is declared for "${lane.capturedOn}".`,
+      })
+    }
+  }
+
+  return violations
+}
+
+/**
+ * The one-way ratchet over lanes that are not gates yet (TASK-S1-O3).
+ *
+ * The same two-way handshake `capability-matrix-ceilings.json` uses: the number
+ * may not rise, and it may not fall without the ceiling being lowered in the
+ * same change. A visual lane that is honest about being developer-local is
+ * fine; a repository that quietly grows a second one is how "we have visual
+ * regression testing" becomes true in the README and false in CI.
+ */
+export function checkDeveloperLocalRatchet(
+  ledger: VisualLedger,
+  ceilings: VisualCeilings,
+): VisualViolation[] {
+  const actual = (ledger.lanes ?? []).filter(l => l.role === 'developer-local')
+  const { ceiling, blockedOn } = ceilings.developerLocalLanes
+  const names = actual.map(l => l.id).sort()
+
+  if (actual.length > ceiling) {
+    return [{
+      rule: 'lane',
+      level: 'error',
+      message: `${actual.length} developer-local visual lane(s) (${names.join(', ')}), ceiling `
+        + `${ceiling}${blockedOn === undefined ? '' : ` — blocked on ${blockedOn}`}. A lane that `
+        + `is not captured on the authoritative platform cannot fail a CI run, so adding one `
+        + `adds a lane the gate does not have. Capture it on `
+        + `${ledger.scope.authoritativePlatform ?? '<authoritative>'} instead, or raise the `
+        + `ceiling in packages/tooling/src/validators/visual-baselines-ceilings.json WITH the `
+        + `reason it cannot be.`,
+    }]
+  }
+
+  if (actual.length < ceiling) {
+    return [{
+      rule: 'lane',
+      level: 'error',
+      message: `${actual.length} developer-local visual lane(s), ceiling ${ceiling}. Progress is `
+        + `recorded, not absorbed: lower \`developerLocalLanes.ceiling\` to ${actual.length} in `
+        + `packages/tooling/src/validators/visual-baselines-ceilings.json in the same change, so `
+        + `the next lane to slip is visible.`,
+    }]
+  }
+
+  return []
+}
+
+/**
  * Run the gates. Pure apart from reading the PNGs it is gating.
  *
  * `commitFor` is injected so the unit test can drive staleness without a git
@@ -171,10 +457,17 @@ export function coveredComponents(ledger: VisualLedger): { component: string, so
 export function checkVisualBaselines(
   ledger: VisualLedger,
   commitFor: (path: string) => string = lastCommitFor,
+  ceilings: VisualCeilings = readVisualCeilings(),
 ): VisualViolation[] {
   const violations: VisualViolation[] = []
   const byFile = new Map(ledger.baselines.map(b => [b.file, b]))
-  const onDisk = new Set(baselineFiles(ledger))
+  const files = baselineFiles(ledger)
+  const onDisk = new Set(files)
+
+  // TASK-S1-O3. Platform authority first: every later gate reasons about images
+  // whose platform this one is what establishes.
+  violations.push(...checkLaneAuthority(ledger, files))
+  violations.push(...checkDeveloperLocalRatchet(ledger, ceilings))
 
   for (const record of ledger.baselines) {
     const full = resolve(ROOT, record.file)
@@ -310,13 +603,17 @@ export function checkVisualBaselines(
   }
 
   if (ledger.scope.platform !== ledger.scope.ciPlatform) {
+    const local = (ledger.lanes ?? []).filter(l => l.role === 'developer-local').map(l => l.id)
     violations.push({
       rule: 'platform',
       level: 'report',
-      message: `this ledger gates on \`${ledger.scope.platform}\` and CI runs `
-        + `\`${ledger.scope.ciPlatform}\`. Baselines are platform-locked, so the per-component `
-        + `lane is developer-local evidence and cannot fail a CI run until one accept pass is `
-        + `made on ${ledger.scope.ciPlatform}.`,
+      message: `the per-component coverage join gates on \`${ledger.scope.platform}\` and CI runs `
+        + `\`${ledger.scope.ciPlatform}\`. Baselines are platform-locked, so `
+        + `${local.length === 0 ? 'that lane' : `lane(s) ${local.join(', ')}`} `
+        + `are developer-local evidence and cannot fail a CI run until one accept pass is `
+        + `made on ${ledger.scope.authoritativePlatform ?? ledger.scope.ciPlatform}. `
+        + `This is REPORTED, not failed: it is an honest declaration, and `
+        + `\`developerLocalLanes\` in visual-baselines-ceilings.json is what stops it growing.`,
     })
   }
 
@@ -341,6 +638,12 @@ if (isMain) {
     + `${ledger.scope.engine} · ${ledger.scope.themes.join('+')} · ${ledger.scope.direction} · `
     + `${ledger.scope.platform}`)
   console.warn(`  baselines  ${files.length} on disk, ${ledger.baselines.length} accepted`)
+  console.warn(`  authority  ${ledger.scope.authoritativePlatform ?? '(undeclared)'} `
+    + `— the one platform a gate lane runs on (TASK-S1-O3)`)
+  for (const lane of ledger.lanes ?? []) {
+    const n = ledger.baselines.filter(b => b.file.startsWith(`${lane.snapshotDir}/`)).length
+    console.warn(`    ${lane.id.padEnd(20)} ${String(n).padStart(2)} on ${lane.capturedOn.padEnd(7)} · ${lane.role}`)
+  }
 
   for (const v of reports.filter(v => v.rule === 'platform'))
     console.warn(`\n  ! ${v.message}`)

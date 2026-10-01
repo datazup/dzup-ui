@@ -1,0 +1,45 @@
+{
+  "//": "TASK-S5-O1 2026-09-24 — read by `yarn validate:i18n-completeness` (packages/tooling/src/validators/i18n-completeness.ts). Everything here is DERIVED-checked: the gate measures every number from packages/core/src/i18n/locales/*.json and enMessages and never from a hand-kept list. This file holds only the two things a measurement cannot supply — the floor a locale count may not fall below, and the register of packs that are deliberately incomplete, each with the decision that made them so. Measured at 4e4e46f with the uncommitted working tree, over 116 catalog keys and 2 packs.",
+
+  "supported": {
+    "//": "A locale is SUPPORTED when its completeness reaches `minCompletenessPercent`. Completeness = (translated keys that are NOT byte-identical to English) / catalog keys. `minSupportedLocales` may only RISE: the gate fails when the measured count falls below it, and raising it is how a newly translated locale records its arrival. It is NOT a knob that can be turned to make a red gate green — turning it up makes the gate stricter. `validate:stop-conditions` SC-7 watches it as a `min`-direction ceiling, so lowering it without a reviewed justification is itself a stop condition.",
+    "minSupportedLocales": 1,
+    "minCompletenessPercent": 95,
+    "$whyNot100": "95, not 100, because some values are LEGITIMATELY identical to English — `OK`, `Email`, `PDF`, a proper noun — and the gate deliberately refuses to hold an allowlist of them (an allowlist of 'this English word is really German' is exactly the evidence-laundering surface this programme keeps finding). Subtracting every identical value costs an honest pack a few tenths of a percent and costs a pack that copied English wholesale all of it. The 5 % headroom absorbs the former; nothing absorbs the latter."
+  },
+
+  "scaffolds": [
+    {
+      "locale": "de",
+      "decision": "D59",
+      "reason": "Declared incomplete on purpose. R5-O4 created de.json as a scaffold (every key an explicit `fallback`, nothing translated) and refused machine translation: a German string written by a process that does not read German is fabricated evidence of a supported locale. It stays at 0 % — visible in this gate, in packages/core/docs/i18n.md §4 and in `validate:i18n-packs` — until an owner names a human translator. The build does not publish it and `packages/core/package.json` has no `exports` entry for it, so no consumer can import English dressed as German.",
+      "blockedOn": "owner: name a translator (TASK-S5-O1 decision 1, carries R5-O4 D59)"
+    }
+  ],
+
+  "$scaffoldRegisterComment": "A pack below `minCompletenessPercent` that is NOT listed here fails the gate (`undeclared-scaffold`). That is the rule which stops a 0 % pack from reading as a supported locale: an incomplete locale must be incomplete ON THE RECORD, with a decision id. The converse also fails (`stale-declaration`): a pack listed here that has reached the threshold must be removed from the register, so the register cannot outlive the gap it describes.",
+
+  "scriptSupport": {
+    "//": "Typeface provisioning, by script, for the scripts this repository's packs can render. AR-2 measured ZERO font binaries tracked anywhere in the repository (`git ls-files` over woff/woff2/ttf/otf) and the gate re-measures that on every run rather than trusting this note. `provisionedBy` names the mechanism that guarantees a face; `none` means the host supplies it. This block exists so a locale can never print `100 % complete` while the script it is written in has no typeface guarantee — the completeness of a catalog and the renderability of a script are two different claims and the gate prints both.",
+    "latin": {
+      "provisionedBy": "token-stack",
+      "detail": "packages/tokens/src/primitives/typography.ts `sans` = 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif. Inter is NAMED, not vendored; the system fallbacks are Latin-complete on every supported platform.",
+      "decision": null
+    },
+    "arabic": {
+      "provisionedBy": "none",
+      "detail": "Inter, Geist and Nunito contain no Arabic glyphs, so Arabic text falls through to whatever the platform substitutes. No licence obligation today and no guarantee of line height, numeral style, weight axis or kashida behaviour. Recommendation on the table is C (host obligation, documented) now, B (`--dz-font-family-arabic` opt-in token) next, A (vendor an OFL face) never inside core.css.",
+      "decision": "D63",
+      "sheet": "docs/program-2026-09-22-architecture/reports/TASK-S5-O1-typeface-decision.md",
+      "wouldBeProvisionedBy": "a `--dz-font-family-arabic` token in packages/tokens (option B) — the gate reports `token-provisioned` the moment that token exists, with no change here"
+    },
+    "hebrew": {
+      "provisionedBy": "none",
+      "detail": "Same shape as Arabic and the same decision (D63) covers it; kept separate because a face that covers Arabic usually does not cover Hebrew. No pack exists for a Hebrew locale, so this is a forward declaration, reported `unasserted` rather than passing.",
+      "decision": "D63",
+      "wouldBeProvisionedBy": "a `--dz-font-family-hebrew` token, or a face named in the `sans` stack that covers the Hebrew block"
+    }
+  },
+
+  "$scriptSupportIsReportOnly": "`script-support` findings NEVER fail the gate. Option C — the host supplies its script's typeface — is a deliberate, recommended position (D63), not a defect, and failing on it would force either a purchase or a silent degradation. What the gate refuses to do is let the absence disappear: every pack's row carries its script's provisioning status, and a supported locale whose script is unprovisioned is annotated on the supported-locale line."
+}

@@ -294,6 +294,50 @@ describe('checkStoryDod (whole repo)', () => {
     const report = violations.map(v => `${v.file} [${v.check}]: ${v.message}`).join('\n')
     expect(report).toBe('')
   })
+
+  it('names the files it applied to, and `applicable` counts exactly those', () => {
+    // RESIDUAL-16. `applicable` was a count, so its one consumer could not tell
+    // "passed" from "never asked" and published 27 `state-stories` cells as `pass`
+    // for components with no `States` story. The count and the list must agree, or
+    // the consumer has swapped one unreadable number for another.
+    for (const r of results) {
+      expect(r.applicableFiles).toHaveLength(r.applicable)
+      expect(new Set(r.applicableFiles).size).toBe(r.applicable)
+    }
+  })
+
+  it('`states` applies to strictly fewer files than exist, and that is the whole point', () => {
+    const states = results.find(r => r.id === 'states')!
+    const darkMode = results.find(r => r.id === 'dark-mode')!
+
+    // `applies: ctx => ctx.stateProps.length > 0` against `applies: () => true`.
+    expect(states.applicableFiles.length).toBeLessThan(darkMode.applicableFiles.length)
+  })
+
+  it('a violation is always a file the check applied to', () => {
+    for (const r of results) {
+      const applicable = new Set(r.applicableFiles)
+      for (const v of r.violations)
+        expect(applicable.has(v.file)).toBe(true)
+    }
+  })
+
+  it('`passingFiles` and `applicableFiles` disagree in both directions, by design', () => {
+    const states = results.find(r => r.id === 'states')!
+    const applicable = new Set(states.applicableFiles)
+    const passing = new Set(states.passingFiles)
+
+    // Shows the thing without being asked: nine components inherit their state
+    // props from `BaseFormControlProps`, so `states` never asks them — and they
+    // export a `States` story anyway. Reading applicability alone would demote a
+    // real story to "nothing to demonstrate".
+    const showsWithoutBeingAsked = [...passing].filter(f => !applicable.has(f))
+    expect(showsWithoutBeingAsked.length).toBeGreaterThan(0)
+
+    // Asked and does not show it: the check's actual violations.
+    const askedAndMissing = [...applicable].filter(f => !passing.has(f))
+    expect(askedAndMissing).toEqual(states.violations.map(v => v.file))
+  })
 })
 
 describe('indexComponentTypes', () => {

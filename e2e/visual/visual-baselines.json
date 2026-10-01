@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "scope": {
     "families": [
       "buttons"
@@ -66,6 +66,22 @@
     },
     "platform": "win32",
     "ciPlatform": "linux",
+    "authoritativePlatform": "linux",
+    "platformAuthority": {
+      "authoritative": "linux",
+      "decidedBy": "TASK-S1-O3",
+      "decidedAt": "2026-09-23",
+      "decidedAtCommit": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
+      "ratifies": "TASK-R2-O1 scope.platformDecision (2026-09-19), which recorded the same answer and left it unenforced.",
+      "evidence": [
+        "18 of 18 jobs across the 8 files in .github/workflows/ are `runs-on: ubuntu-latest`. No Windows or macOS runner is configured anywhere in this repository.",
+        "34 of the 58 accepted baselines already carry the `-chromium-linux` suffix (gallery 16, theme-recipe 18); only the 24 per-component pilot images are `-chromium-win32`.",
+        "Playwright writes `{arg}-{project}-{platform}.png`, so a linux image and a win32 image are different files and are never compared. The suffix is the path the comparison resolves, not editable metadata."
+      ],
+      "rationale": "The authoritative platform is the one the gate runs on. Only linux has a runner, and the majority of the committed evidence is already linux. Font rasterisation, subpixel antialiasing and scrollbar metrics differ enough between platforms that a cross-platform comparison is a diff storm, not a signal — so exactly one platform is authoritative and every other platform refuses rather than diffing.",
+      "enforcement": "e2e/visual/platform.ts compares process.platform against this value for every lane whose role is `gate`, before a browser is launched. `yarn visual:platform` is the same check as a standalone preflight, wired as the first step of `test:e2e:visual` and `test:e2e:visual:pilot`.",
+      "thisIsNotTheAuthoritativePlatform": "win32 — the machine this decision was recorded on. The refusal path was proved here; see docs/program-2026-09-22-architecture/reports/TASK-S1-O3-handoff.md."
+    },
     "platformDecision": {
       "decidedBy": "TASK-R2-O1",
       "decidedAt": "2026-09-19",
@@ -83,6 +99,39 @@
     "e2e/visual/gallery.spec.ts-snapshots",
     "e2e/visual/theme-recipe-matrix.spec.ts-snapshots",
     "e2e/visual/component-baselines.spec.ts-snapshots"
+  ],
+  "lanes": [
+    {
+      "id": "gallery",
+      "spec": "e2e/visual/gallery.spec.ts",
+      "snapshotDir": "e2e/visual/gallery.spec.ts-snapshots",
+      "capturedOn": "linux",
+      "role": "gate",
+      "scope": "8 demo screens × light/dark — \"does the composition still look right\".",
+      "excludes": "Says nothing about WHICH component moved when a screen changes. That is the per-component lane.",
+      "requires": "DZUP_GALLERY=1 at Storybook build time."
+    },
+    {
+      "id": "theme-recipe",
+      "spec": "e2e/visual/theme-recipe-matrix.spec.ts",
+      "snapshotDir": "e2e/visual/theme-recipe-matrix.spec.ts-snapshots",
+      "capturedOn": "linux",
+      "role": "gate",
+      "scope": "2 screens × the 9-case theme/density/direction/motion covering array.",
+      "excludes": "Two screens only; a provider regression on a screen outside those two is invisible here.",
+      "requires": "DZUP_GALLERY=1 at Storybook build time."
+    },
+    {
+      "id": "component-baselines",
+      "spec": "e2e/visual/component-baselines.spec.ts",
+      "snapshotDir": "e2e/visual/component-baselines.spec.ts-snapshots",
+      "capturedOn": "win32",
+      "role": "developer-local",
+      "scope": "Every component in an opted-in family (today: buttons → 8 components) × light/dark, plus 4 declared stress fixtures. maxDiffPixels: 0.",
+      "excludes": "Every family outside scope.families reads `not-covered` in the capability matrix — 136 of 144 components today. LTR only; one viewport; chromium only.",
+      "requires": "A built apps/storybook/storybook-static. Does NOT need DZUP_GALLERY=1.",
+      "notGating": "capturedOn (win32) is not the authoritative platform (linux), so this lane is developer-local evidence and cannot fail a CI run. Promoting it is an OWNER capture pass on linux — see scope.platformAuthority and e2e/visual/README.md §\"Promoting the per-component lane\"."
+    }
   ],
   "baselines": [
     {

@@ -24,6 +24,15 @@
  *      as drift. An unresolved cross-tier collision fails this gate too: the
  *      merged table omits the colliding name, so freshness alone would pass —
  *      both files agree, because both dropped it (TASK-R3-O1 F3).
+ *   6. **second-tier manifest** — stated on every run, present or absent
+ *      (TASK-S3-O1). Absence is reported, never failed: an OSS-only checkout is
+ *      the normal case. A manifest that IS there and does not conform to the
+ *      schema published from `@dzup-ui/contracts` **is** failed, because a
+ *      consumer's build would refuse it too and discovering that downstream is
+ *      the whole failure mode 08-11 finding H1 recorded. It also fails if the
+ *      published contract's schema version and the generator's own drift apart:
+ *      one reader must serve both tiers, and nothing else compares those two
+ *      files.
  *
  * Usage:
  *   tsx packages/tooling/src/validators/ownership-manifest.ts
@@ -31,17 +40,26 @@
  * Exit code 1 if violations found.
  */
 
+import type { OwnershipManifestAvailability } from '../../../contracts/src/ownership-manifest.ts'
 import type { OwnershipEntry, OwnershipManifest } from '../ownership/ownership-manifest.types.ts'
 import { existsSync, readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 // Relative into contracts' SOURCE, not the `@dzup-ui/contracts` specifier: this
 // validator runs under `tsx` with no build step, and the package specifier
 // resolves through node to `packages/contracts/dist/`, which a fresh clone has
 // not built. Every other tooling reference to contracts is type-only and so
 // erases; this one is a runtime value.
 import { ANATOMY_PART_VOCABULARY } from '../../../contracts/src/anatomy.types.ts'
+import {
+  consumeOwnershipManifest,
+  OWNERSHIP_MANIFEST_SCHEMA_MAJOR,
+  OWNERSHIP_MANIFEST_SUBPATH,
+  OWNERSHIP_MANIFEST_SCHEMA_VERSION as PUBLISHED_SCHEMA_VERSION,
+  readOwnershipManifest,
+} from '../../../contracts/src/ownership-manifest.ts'
 import { referencedComponentTokens } from '../ownership/anatomy-source.ts'
 import { unresolvedCollisions } from '../ownership/build-ownership-map.ts'
 import { renderAnatomyData } from '../ownership/emit-anatomy-data.ts'
@@ -63,6 +81,15 @@ import {
 } from '../ownership/ownership-manifest.types.ts'
 
 export const CEILING_PATH = resolve(ROOT, 'packages/tooling/src/ownership/unclassified-ceiling.json')
+
+/**
+ * The second-tier package this repository's resolver and Nuxt module consume.
+ *
+ * retired-name-ok: stated as a literal for the same reason `resolver.ts` states
+ * it as one — the resolver once emitted `@dzup-ui/pro`, a package that has never
+ * existed, and the spec asserted the same wrong string.
+ */
+const PRO_PACKAGE = '@dzup-ui-pro/pro'
 
 export interface OwnershipViolation {
   rule: string
@@ -337,6 +364,151 @@ export function componentsWithoutAnatomy(manifest: OwnershipManifest): Ownership
   )
 }
 
+/** Where a second-tier manifest was looked for. */
+export type SecondTierSource = 'env' | 'installed-package' | 'none'
+
+/**
+ * What this checkout can say about a second-tier ownership manifest.
+ *
+ * Reported **always**, present or absent. Before TASK-S3-O1 the validator said
+ * nothing at all about the second tier unless the committed runtime lookup
+ * happened to claim one — so "no second tier anywhere" and "second tier fine"
+ * printed the same green line, which is the shape of silence this programme
+ * exists to remove.
+ */
+export interface SecondTierReport {
+  source: SecondTierSource
+  availability: OwnershipManifestAvailability
+  path?: string
+  /** As the manifest declares it, whenever one could be read at all. */
+  schemaVersion?: string
+  entries?: number
+  detail?: string
+}
+
+/**
+ * Look for a second-tier ownership manifest and check it against the published
+ * contract (TASK-S3-O1, step 5).
+ *
+ * Two places, in priority order, because there are two ways a second tier
+ * reaches this repository and both must be checked with the **same reader** a
+ * consumer uses — a validator with its own opinion of "conforming" is how a
+ * manifest passes here and is refused in a consumer's build:
+ *
+ * 1. `DZUP_PRO_OWNERSHIP_MANIFEST` — the build-time merge input. If it is set,
+ *    it is what `yarn generate:ownership` would bake in, so it is what must be
+ *    conforming.
+ * 2. The installed package — what a consumer of *this* checkout would resolve.
+ *
+ * **Absence is not a failure**, and is stated explicitly. A non-conforming
+ * manifest that is present **is** a failure: quietly merging half of one is the
+ * behaviour 08-11 finding H1 recorded.
+ */
+export function checkSecondTierManifest(
+  env: string | undefined = process.env[PRO_MANIFEST_ENV],
+): { report: SecondTierReport, violations: OwnershipViolation[] } {
+  const violations: OwnershipViolation[] = []
+
+  // The published contract and the generator's own copy of the shape must not
+  // drift. They are two files, and nothing else compares them.
+  if (PUBLISHED_SCHEMA_VERSION !== OWNERSHIP_SCHEMA_VERSION) {
+    violations.push({
+      rule: 'schema-contract',
+      message: `@dzup-ui/contracts publishes ownership schema ${PUBLISHED_SCHEMA_VERSION} while `
+        + `the generator emits ${OWNERSHIP_SCHEMA_VERSION}. One reader must serve both tiers: `
+        + 'a downstream package conforming to the published contract would produce a manifest '
+        + 'this repository refuses. Move both, in one change.',
+    })
+  }
+
+  if (env !== undefined && env !== '') {
+    if (!existsSync(env)) {
+      violations.push({
+        rule: 'second-tier',
+        message: `${PRO_MANIFEST_ENV} is set to ${env}, which does not exist.`,
+      })
+      return { report: { source: 'env', availability: 'not-installed', path: env }, violations }
+    }
+
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(readFileSync(env, 'utf8'))
+    }
+    catch (error) {
+      violations.push({
+        rule: 'second-tier',
+        message: `${PRO_MANIFEST_ENV} names ${env}, which is not readable JSON: ${String(error)}`,
+      })
+      return { report: { source: 'env', availability: 'unreadable', path: env }, violations }
+    }
+
+    const result = readOwnershipManifest(parsed)
+    if (!result.ok || result.manifest === undefined) {
+      violations.push({
+        rule: 'second-tier',
+        message: `${PRO_MANIFEST_ENV} names a manifest that does not conform to the schema `
+          + `published from @dzup-ui/contracts (${result.rejection}, declared schemaVersion `
+          + `${result.schemaVersion ?? '<absent>'}, this build reads major `
+          + `${OWNERSHIP_MANIFEST_SCHEMA_MAJOR}): ${
+            result.problems.map(problem => `${problem.at} ${problem.message}`).join('; ')}`,
+      })
+      return {
+        report: { source: 'env', availability: 'non-conforming', path: env, schemaVersion: result.schemaVersion },
+        violations,
+      }
+    }
+
+    return {
+      report: {
+        source: 'env',
+        availability: 'loaded',
+        path: env,
+        schemaVersion: result.schemaVersion,
+        entries: result.manifest.entries.length,
+      },
+      violations,
+    }
+  }
+
+  const require_ = createRequire(pathToFileURL(resolve(ROOT, 'package.json')).href)
+  const consumed = consumeOwnershipManifest(PRO_PACKAGE, {
+    resolve: (specifier) => {
+      try {
+        return require_.resolve(specifier)
+      }
+      catch {
+        return undefined
+      }
+    },
+    readText: path => readFileSync(path, 'utf8'),
+  })
+
+  // A package that is installed and publishes something unusable is a defect
+  // somebody must fix. A package that is simply not here is this repository's
+  // normal state and is reported, not failed.
+  if (consumed.availability === 'unreadable' || consumed.availability === 'non-conforming') {
+    violations.push({
+      rule: 'second-tier',
+      message: `the installed "${PRO_PACKAGE}" publishes a manifest at `
+        + `${OWNERSHIP_MANIFEST_SUBPATH} that cannot be used (${consumed.availability}). `
+        + `${consumed.detail ?? ''} A consumer's build would refuse it too, so it is failed here `
+        + 'rather than left to be discovered downstream.',
+    })
+  }
+
+  return {
+    report: {
+      source: consumed.availability === 'not-installed' ? 'none' : 'installed-package',
+      availability: consumed.availability,
+      path: consumed.path,
+      schemaVersion: consumed.schemaVersion,
+      entries: consumed.availability === 'loaded' ? Object.keys(consumed.symbols).length : undefined,
+      detail: consumed.detail,
+    },
+    violations,
+  }
+}
+
 export interface OwnershipReport {
   violations: OwnershipViolation[]
   unclassified: OwnershipEntry[]
@@ -349,6 +521,8 @@ export interface OwnershipReport {
   vocabularyExtensions: { symbol: string, parts: string[] }[]
   /** Component tokens a component reads without declaring them as override points. */
   undeclaredTokens: { symbol: string, tokens: string[] }[]
+  /** Second-tier ownership manifest: always reported, present or absent. */
+  secondTier: SecondTierReport
 }
 
 /**
@@ -360,6 +534,12 @@ export function validateOwnershipManifest(
 ): OwnershipReport {
   const violations: OwnershipViolation[] = []
   const { manifest: regenerated } = buildOwnershipManifest()
+
+  // Run first and reported on every path, including the early returns: a
+  // validator that only mentions the second tier when everything else is fine
+  // is silent exactly when someone is looking.
+  const secondTier = checkSecondTierManifest()
+  violations.push(...secondTier.violations)
 
   if (!existsSync(manifestPath)) {
     violations.push({
@@ -376,6 +556,7 @@ export function validateOwnershipManifest(
       anatomyCeiling: readCeiling().maxWithoutAnatomy,
       vocabularyExtensions: [],
       undeclaredTokens: [],
+      secondTier: secondTier.report,
     }
   }
 
@@ -398,6 +579,7 @@ export function validateOwnershipManifest(
       anatomyCeiling: readCeiling().maxWithoutAnatomy,
       vocabularyExtensions: [],
       undeclaredTokens: [],
+      secondTier: secondTier.report,
     }
   }
 
@@ -462,7 +644,40 @@ export function validateOwnershipManifest(
     anatomyCeiling: maxWithoutAnatomy,
     vocabularyExtensions: partsOutsideVocabulary(committed),
     undeclaredTokens: undeclaredComponentTokens(committed),
+    secondTier: secondTier.report,
   }
+}
+
+/**
+ * One line stating where a second-tier manifest was looked for and what was
+ * found — printed whether one exists or not.
+ *
+ * "Absent" and "fine" printed the same nothing before TASK-S3-O1, which is part
+ * of why this seam could sit open for two programmes while every gate stayed
+ * green. An unmeasured cell and a passing cell must not look the same.
+ */
+export function formatSecondTier(report: SecondTierReport): string {
+  const where = report.source === 'env'
+    ? `${PRO_MANIFEST_ENV}=${report.path}`
+    : report.source === 'installed-package'
+      ? `installed "${PRO_PACKAGE}"`
+      : `"${PRO_PACKAGE}" (not installed in this checkout)`
+
+  if (report.availability === 'loaded') {
+    return `second tier: PRESENT via ${where} — schema ${report.schemaVersion}, `
+      + `${report.entries} mountable name(s); conforms to the contract published from `
+      + `@dzup-ui/contracts (${PUBLISHED_SCHEMA_VERSION}).`
+  }
+
+  if (report.availability === 'not-installed') {
+    return `second tier: ABSENT — ${where}. Expected in an OSS-only checkout; a conforming `
+      + `manifest at ${OWNERSHIP_MANIFEST_SUBPATH} would be consumed if one were installed. `
+      + 'Reported, not a failure.'
+  }
+
+  return `second tier: ${report.availability.toUpperCase()} via ${where}${
+    report.schemaVersion === undefined ? '' : ` (declared schema ${report.schemaVersion})`}. `
+    + `${report.detail ?? ''}`
 }
 
 /* c8 ignore start -- CLI entry point, exercised via `tsx`, not the unit tests. */
@@ -478,6 +693,7 @@ if (isMain) {
       + `runtime lookup in sync; ${report.unclassified.length}/${report.ceiling} unclassified; `
       + `${report.withoutAnatomy.length}/${report.anatomyCeiling} public components without anatomy`,
     )
+    console.warn(`  ${formatSecondTier(report.secondTier)}`)
     if (report.vocabularyExtensions.length > 0) {
       console.warn('  part names outside the shared vocabulary (reported, not a failure):')
       for (const entry of report.vocabularyExtensions)
@@ -496,6 +712,7 @@ if (isMain) {
     process.exit(0)
   }
 
+  console.error(`  ${formatSecondTier(report.secondTier)}`)
   for (const violation of report.violations)
     console.error(`✗ [${violation.rule}] ${violation.message}`)
   console.error(`\n${report.violations.length} ownership-manifest violation(s).`)

@@ -1,0 +1,27 @@
+{
+  "//": "TASK-S2-O4 (2026-09-24). The Node built-ins whose availability window starts ABOVE this repository's declared floor, as DATA rather than as a literal table inside runtime-floor.ts. That is not a style choice: the scanner matches literal substrings, so a table written in the validator's own source makes the validator its own worst offender -- the first run reported 15 violations, every one of them a row of its own table. `adr-status.ts` hit the identical trap one task earlier and solved it with per-line markers; a JSON file the scanner does not read is the cheaper half of the same fix, and it is the shape min-peer-lane.json and vue-next-lane.json already use.",
+
+  "//curation": "Deliberately SHORT. A row earns its place by three tests: (1) the availability window starts above 20.19.0; (2) it is reached by importing or calling a name that can be matched textually, with no type checker; (3) its absence is a hard `TypeError` or `ERR_UNKNOWN_BUILTIN_MODULE`, not a quiet behaviour change. This is a floor on the floor -- it catches the class of break that has actually happened in this repository twice. It is NOT a complete Node compatibility analysis and must not be read as one.",
+
+  "//excluded-on-purpose": "`Set.prototype.union`, `.intersection` and `.difference` are all @since v22.0.0 and all three are omitted, because `.union(`, `.intersection(` and `.difference(` are ordinary method names in ordinary user code and a gate with a false positive earns an allowlist entry and then gets switched off. The four Set methods below are kept because no plausible user-defined method is called `symmetricDifference`, `isSubsetOf`, `isSupersetOf` or `isDisjointFrom`.",
+
+  "//kinds": "`module` = an import of the built-in module itself. `named-import` = the name must appear in the same statement as the module specifier. `member` = a literal property-access substring, matched anywhere.",
+
+  "apis": [
+    { "api": "fs.globSync", "kind": "named-import", "module": "fs", "name": "globSync", "since": "22.0.0" },
+    { "api": "fs.glob", "kind": "named-import", "module": "fs", "name": "glob", "since": "22.0.0" },
+    { "api": "node:sqlite", "kind": "module", "module": "sqlite", "since": "22.5.0" },
+    { "api": "assert.partialDeepStrictEqual", "kind": "member", "match": ".partialDeepStrictEqual(", "since": "22.13.0" },
+    { "api": "process.getBuiltinModule", "kind": "member", "match": "process.getBuiltinModule(", "since": "22.3.0" },
+    { "api": "Promise.withResolvers", "kind": "member", "match": "Promise.withResolvers(", "since": "22.0.0" },
+    { "api": "Array.fromAsync", "kind": "member", "match": "Array.fromAsync(", "since": "22.0.0" },
+    { "api": "Object.groupBy", "kind": "member", "match": "Object.groupBy(", "since": "21.0.0" },
+    { "api": "Map.groupBy", "kind": "member", "match": "Map.groupBy(", "since": "21.0.0" },
+    { "api": "RegExp.escape", "kind": "member", "match": "RegExp.escape(", "since": "24.0.0" },
+    { "api": "Error.isError", "kind": "member", "match": "Error.isError(", "since": "24.0.0" },
+    { "api": "Set.prototype.symmetricDifference", "kind": "member", "match": ".symmetricDifference(", "since": "22.0.0" },
+    { "api": "Set.prototype.isSubsetOf", "kind": "member", "match": ".isSubsetOf(", "since": "22.0.0" },
+    { "api": "Set.prototype.isSupersetOf", "kind": "member", "match": ".isSupersetOf(", "since": "22.0.0" },
+    { "api": "Set.prototype.isDisjointFrom", "kind": "member", "match": ".isDisjointFrom(", "since": "22.0.0" }
+  ]
+}

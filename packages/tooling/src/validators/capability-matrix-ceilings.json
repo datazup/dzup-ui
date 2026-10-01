@@ -1,0 +1,88 @@
+{
+  "//": "TASK-S1-O2 (2026-09-22). The staleness ratchet for packages/core/docs/capability-matrix.json. `validate:capability-matrix` gate 7 fails when `staleCells` RISES above the ceiling, and fails when it FALLS without the ceiling being lowered in the same change -- the same two-way handshake component-meta-ceilings.json uses, so progress is recorded rather than absorbed. Measured at 4e4e46f over 144 rows. Gate 3 still REPORTS every stale cell by name; this file is what makes the number refuse to grow.",
+
+  "staleCells": {
+    "//": "Cells whose evidence artifact predates the component's last change. 22 at 4e4e46f, and every one of them is `perf-baseline` -- 21 Tier C plus DzFileUpload (Tier D), which is every component that owes the row. The cause is single and proven: packages/core/perf/baselines.json holds 33 baselines over 26 components and ALL of them stamp sourceCommit 4c9fb7a (2026-08-21), while the 22 components last changed at a01965f (2026-09-17), 2d51eec (2026-09-18) and 527dbd1 (2026-09-20) -- git ancestry, not a validator artifact. Clearing it means REWRITING baselines.json from a fresh >=5-run capture, which is a baseline replacement: an owner action, explicitly withheld from every agent in this programme, and the property of TASK-S1-O4. Lower this to 0 in the same change that lands the recapture.",
+    "ceiling": 22,
+    "blockedOn": "owner decisions D-S1O4-1 (designate the authoritative perf capture host) then D-S1O4-2 (adopt a capture and lower this ceiling to 0 in the same change). TASK-S1-O4 ran on 2026-09-23 and confirmed it cannot clear these cells: the only action that does is a baseline replacement, which is withheld from every agent. See docs/program-2026-09-22-architecture/reports/TASK-S1-O4-handoff.md.",
+    "components": [
+      "DzCalendar",
+      "DzCascader",
+      "DzColorPicker",
+      "DzCombobox",
+      "DzCommandPalette",
+      "DzDataGrid",
+      "DzDataView",
+      "DzDatePicker",
+      "DzDateRangePicker",
+      "DzFileUpload",
+      "DzMegaMenu",
+      "DzMention",
+      "DzMultiSelect",
+      "DzOrderList",
+      "DzPersonaSelector",
+      "DzSidebar",
+      "DzTable",
+      "DzTimePicker",
+      "DzTour",
+      "DzTransfer",
+      "DzTree",
+      "DzTreeSelect"
+    ]
+  },
+
+  "staleCellKinds": {
+    "//": "The ONLY evidence kinds allowed to be stale, and the half of this gate that a bare count cannot give. A count alone is satisfied by swapping one stale cell for another: clear a perf cell, let a browser-matrix cell go stale, and 22 is still 22 while the matrix now hides a lane that quietly stopped running. A stale cell of any kind not named here is an ERROR whatever the count says, and the message names the component and the kind. Add a kind here only with the reason it cannot be re-run, never to make a red run green.",
+    "kinds": ["perf-baseline"]
+  },
+
+  "evidenceCells": {
+    "//": "RESIDUAL-17, closing D-RES16-3 option (a). The TWO-WAY, PER-KIND record of every `pass` and `present` cell -- the numbers this repository quotes as its evidence. `validate:capability-matrix` gate 8 fails when a kind's count RISES and when it FALLS, because unlike a ceiling neither direction is free here: a rise can be a loosened predicate crediting cells nothing exercised (RESIDUAL-16 measured exactly that -- `storyCheck` published 27 `state-stories` cells as `pass` because a component the check never ASKED was absent from the failing set), and a fall can be a regression quietly dropping real evidence. RESIDUAL-16 removed 42 false cells, 27 of them `pass`, and `yarn validate:all` exited 0 with 53 green links and no red one, because nothing in this repository held either number. Per KIND rather than in total, for the reason `staleCellKinds` exists: 558 is also satisfied by trading 27 real passes for 27 invented ones in another column.",
+
+    "//declaring-a-move": "A legitimate move is ONE edit to the kind's entry below, in the same change that moves the number -- the same handshake `staleCells.ceiling` uses. It is deliberately cheap, because an honest audit must not be expensive: RESIDUAL-16 rightly LOWERED `pass` by 27 and future audits will do the same. So the gate does the arithmetic for you -- it names the kind, the state, the direction and the delta, and prints the corrected `kinds` block ready to paste. What it will not do is move the number itself; the record is the place a reader looks to see that a withdrawal was declared rather than absorbed. Write WHY in the `//moves` log below when you change one, never to make a red run green.",
+
+    "//moves": [
+      "2026-09-29 RESIDUAL-17 seeded the baseline at the working tree measured after RESIDUAL-16's correction: pass 558, present 608 over 1,662 cells. NOT at the pre-audit 585/623, which were the inflated figures.",
+      "2026-09-29 RESIDUAL-17 `portal-hydration` present 3 -> 4 (+1) and `ssr-sample` present 94 -> 96 (+2). The hydration harness landed -- packages/core/tests/ssr/portal-hydration.spec.ts -- and the kind's predicate now requires a server render, the teleport anchor pair in the ASSERTED OUTPUT, and an actual hydration. DzBlockUI and DzPopconfirm GAINED the portal cell (native `<Teleport>`, the branch taken on the server, hydration rewrites 0 bytes) and gained `ssr-sample` with it, since the harness is the first spec that server-renders either. DzSidebar and DzTour KEPT the portal cell through the new harness. DzCommandPalette LOST it: measured, its server output is `<!--[--><!--v-if--><!--]-->` with an EMPTY ctx.teleports, because Reka UI's *Portal primitives render nothing on the server, and hydration then replaces those 27 bytes with an anchor pair -- so `open: true` in its citation was never proof the branch had been taken. This is the first move declared through gate 8, by the packet that built gate 8.",
+      "2026-09-30 RESIDUAL-19 `contract-spec` present 142 -> 62 (-80) and `unit-spec` present 141 -> 127 (-14). Both kinds were credited on the sidecar file EXISTING. @dzup-ui/contracts documents `contract-spec` as 'Contract Spec v1 props/events/slots/ARIA' and `unit-spec` as 'render and behaviour units', and a census of all 283 citations at 4e4e46f found 80 contract specs that never touch a surface the component itself declares (41 miss events, 44 slots, 34 ARIA; 36 miss more than one) and 14 unit specs that never drive a component calling defineEmits/defineModel -- DzCheckbox.contract.spec.ts has nine tests and none mentions `change`; DzInput.spec.ts has 23 and never types into the input. The rule is packages/tooling/src/quality/spec-contract-surfaces.ts: a surface is owed only when the component's own .types.ts or template declares it, and it is a surface-TOUCHED predicate, not a conformance proof. The 94 cells are `unrun` WITH the spec still cited and a note naming what is missing; no spec was written to win a cell back in the same change. `pass` is unmoved at 558; total present 611 -> 517."
+    ],
+
+    "totals": {
+      "//": "Derived, and checked against the sum of `kinds` by gate 8 -- so the headline a report quotes cannot drift from the per-kind table underneath it. This is `runtime-floor-ceilings.json`'s device (`maxBreaches` must EQUAL the list) applied to a tally.",
+      "pass": 558,
+      "present": 517
+    },
+
+    "kinds": {
+      "a11y-narrative": { "pass": 22, "present": 0 },
+      "at-manual": { "pass": 0, "present": 0 },
+      "axe": { "pass": 0, "present": 61 },
+      "browser-matrix": { "pass": 88, "present": 0 },
+      "browser-play": { "pass": 86, "present": 0 },
+      "contract-spec": { "pass": 0, "present": 62 },
+      "controlled-uncontrolled": { "pass": 0, "present": 1 },
+      "csp-fixture": { "pass": 0, "present": 1 },
+      "data-scenarios": { "pass": 0, "present": 8 },
+      "keyboard-spec": { "pass": 0, "present": 16 },
+      "malicious-corpus": { "pass": 0, "present": 15 },
+      "non-drag-alternative": { "pass": 0, "present": 7 },
+      "perf-baseline": { "pass": 0, "present": 0 },
+      "portal-hydration": { "pass": 0, "present": 4 },
+      "real-world-story": { "pass": 22, "present": 0 },
+      "rtl-contract": { "pass": 0, "present": 89 },
+      "ssr-sample": { "pass": 0, "present": 96 },
+      "state-stories": { "pass": 60, "present": 0 },
+      "story-light-dark": { "pass": 142, "present": 0 },
+      "threat-model": { "pass": 0, "present": 15 },
+      "token-contrast": { "pass": 138, "present": 0 },
+      "unit-spec": { "pass": 0, "present": 127 },
+      "url-policy": { "pass": 0, "present": 15 }
+    }
+  },
+
+  "unrunCells": {
+    "//": "REPORT ONLY -- a recorded baseline, not a gate, and deliberately so. 400 at 4e4e46f, down from 441 before this task (30 moved to `excepted` with a reason in component-tiers.ts, 11 to `present` by pointing the existing SSR harness at the seven Tier C components it had never named). An unrun cell is a gap the page exists to SHOW; failing on it is how a matrix becomes a thing people delete. It is recorded here so a fall is attributable and a rise is visible in the same output as the stale gate. Per tier at 4e4e46f: A 65 / B 247 / C 87 / D 1. See docs/program-2026-09-22-architecture/reports/TASK-S1-O2-matrix-state.md for the per-column three-bucket split.",
+    "baseline": 400,
+    "perTier": { "A": 65, "B": 247, "C": 87, "D": 1 }
+  }
+}

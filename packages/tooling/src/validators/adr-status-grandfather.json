@@ -1,0 +1,59 @@
+{
+  "$comment": [
+    "The dated, finite grandfather list for `validate:adr-status` (TASK-S0-O3, 2026-09-24).",
+    "",
+    "`validate:adr-status` fails when an ADR whose own document says `Proposed` is cited",
+    "from SHIPPED SOURCE — a non-Markdown, non-spec file under `packages/*/src/`. On the day",
+    "the gate landed, three ADRs were in exactly that state, and they are the three listed",
+    "below. Shipping the gate without them would have meant either a permanently red",
+    "`validate:all` or no gate at all.",
+    "",
+    "THIS LIST IS NOT A PERMISSION LIST AND IT CANNOT GROW BY ACCIDENT.",
+    "`maxGrandfathered` must EQUAL `entries.length`, so a fourth entry is a visible,",
+    "reviewable edit that a reader can refuse — and a fourth entry means a fourth decision",
+    "has become load-bearing while unsigned, which is a decision to raise, not a line to add.",
+    "",
+    "IT EMPTIES ITSELF. Rule `grandfather-discharged` fails when an entry's ADR is no longer",
+    "`Proposed`, or is no longer cited from shipped source. So the day an owner flips a",
+    "`Status:` line the gate goes RED until the entry is deleted and `maxGrandfathered`",
+    "lowered in the same change — the same one-way ratchet shape as `maxUndocumented` and",
+    "`maxProposedCitedFromCode` in packages/tooling/scripts/adr-registry.json.",
+    "",
+    "STATUS IS DELIBERATELY NOT MIRRORED HERE. The validator reads each document's own",
+    "`Status:` line, exactly as `validate:adr-references` does and for the same reason:",
+    "a second copy of the same fact is a second place for it to be wrong. See the",
+    "$comment in adr-registry.json.",
+    "",
+    "WHY THIS GATE EXISTS BESIDE `maxProposedCitedFromCode`, which counts the same debt.",
+    "The registry's ceiling is a NUMBER and this list is a set of NAMES, and the difference",
+    "is load-bearing. With the ceiling at 3, accepting one ADR and letting one new unsigned",
+    "decision become load-bearing in the same release leaves the arithmetic at 3 — equal to",
+    "the ceiling, silently green. Naming the three closes that hole: a Proposed ADR that is",
+    "not on this list fails whatever the arithmetic says. Proven by seeded fixture in",
+    "adr-status.spec.ts ('a swap that keeps the arithmetic ceiling intact still fails')."
+  ],
+  "recorded": "2026-09-24",
+  "recordedAt": "4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a",
+  "packet": "docs/program-2026-09-22-architecture/reports/TASK-S0-O3-ratification-packet.md",
+  "maxGrandfathered": 3,
+  "entries": [
+    {
+      "id": "ADR-18",
+      "recorded": "2026-09-24",
+      "reason": "Runtime floor and validator runner. Cited from 1 shipped-source file (packages/tooling/src/validators/stop-conditions.ts:438). Its Decision 1 — the floor itself — is under revision: amendment A1 records three reports recommending three different answers and A2 measures the declared floor false on its own ^20.19.0 branch. NOT ready to sign; see the packet's per-ADR verdict.",
+      "exit": "An owner answers the Node floor decision (owner-decision-register-2026-09-22.md row 19), then flips this ADR's Status line. Delete this entry and lower maxGrandfathered in the same change."
+    },
+    {
+      "id": "ADR-19",
+      "recorded": "2026-09-24",
+      "reason": "Public styling contract: cascade layers, parts, states, typed `ui` overrides. Cited from 250 shipped-source files; 104 .anatomy.ts files, all six cascade layers and 90 `ui?:`-declaring .types.ts build on it. Every divergence the acceptance packet raised is closed (amendment A3) and every figure in amendment A1 reproduces at 4e4e46f. Ready to sign.",
+      "exit": "An owner flips this ADR's Status line to Accepted. Delete this entry and lower maxGrandfathered in the same change."
+    },
+    {
+      "id": "ADR-20",
+      "recorded": "2026-09-24",
+      "reason": "Provider contract. Cited from 163 shipped-source files; ten provider composables, nine injection keys in @dzup-ui/contracts and DZ_PROVIDER_DEFAULTS build on it. Amendment A8.7 records no clause whose code contradicts it. Ready to sign; its five open questions are non-blocking by the packet's own analysis, and A8.3's adoption counts drift by 1-3 at 4e4e46f (a record drift, not a code divergence).",
+      "exit": "An owner flips this ADR's Status line to Accepted. Delete this entry and lower maxGrandfathered in the same change."
+    }
+  ]
+}

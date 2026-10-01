@@ -5,6 +5,7 @@ import { expect, test } from '@playwright/test'
 import { loadStoryCanvas } from '../utils/storybook.ts'
 import { assertBaselineAuthority } from './authority.ts'
 import { readVisualLedger, visualShots, visualTargetsWithoutStory } from './coverage.ts'
+import { guardVisualLane } from './platform-guard.ts'
 
 /**
  * Per-component visual baselines (TASK-N1-O6).
@@ -51,62 +52,64 @@ for (const component of visualTargetsWithoutStory(ledger)) {
   })
 }
 
-for (const shot of SHOTS) {
-  test(shot.title, async ({ page, browserName }) => {
-    test.skip(
-      browserName !== ledger.scope.engine,
-      `Baselines are qualified on ${ledger.scope.engine} only; see e2e/visual/README.md.`,
-    )
+if (guardVisualLane('component-baselines', SHOTS.length)) {
+  for (const shot of SHOTS) {
+    test(shot.title, async ({ page, browserName }) => {
+      test.skip(
+        browserName !== ledger.scope.engine,
+        `Baselines are qualified on ${ledger.scope.engine} only; see e2e/visual/README.md.`,
+      )
 
-    await page.setViewportSize(ledger.scope.viewport)
-    // The OS-level preference as well as the Storybook global: `theme:system`
-    // stories resolve against the media query, and a lane that set only the
-    // global would snapshot a component in light mode under a dark label.
-    await page.emulateMedia({ colorScheme: shot.theme, reducedMotion: 'reduce' })
+      await page.setViewportSize(ledger.scope.viewport)
+      // The OS-level preference as well as the Storybook global: `theme:system`
+      // stories resolve against the media query, and a lane that set only the
+      // global would snapshot a component in light mode under a dark label.
+      await page.emulateMedia({ colorScheme: shot.theme, reducedMotion: 'reduce' })
 
-    const globals = `theme:${shot.theme};direction:${ledger.scope.direction}`
-    const canvas = await loadStoryCanvas(page, shot.story, globals, { waitForMainClass: false })
+      const globals = `theme:${shot.theme};direction:${ledger.scope.direction}`
+      const canvas = await loadStoryCanvas(page, shot.story, globals, { waitForMainClass: false })
 
-    await expect(canvas.locator('html')).toHaveAttribute('data-theme', shot.theme)
-    const root = canvas.locator('#storybook-root')
-    await expect(root).toBeVisible({ timeout: 60_000 })
-    await expect(root.locator('> *')).not.toHaveCount(0)
+      await expect(canvas.locator('html')).toHaveAttribute('data-theme', shot.theme)
+      const root = canvas.locator('#storybook-root')
+      await expect(root).toBeVisible({ timeout: 60_000 })
+      await expect(root.locator('> *')).not.toHaveCount(0)
 
-    // Web fonts: the story paints once with the fallback face and again with
-    // Nunito Sans. Without this the first run of a cold build and every run
-    // after it disagree on every glyph, which reads as component drift.
-    await page.evaluate(async () => {
-      await document.fonts.ready
-    })
+      // Web fonts: the story paints once with the fallback face and again with
+      // Nunito Sans. Without this the first run of a cold build and every run
+      // after it disagree on every glyph, which reads as component drift.
+      await page.evaluate(async () => {
+        await document.fonts.ready
+      })
 
-    if (PROBE_DIR !== undefined && PROBE_DIR !== '') {
-      // Byte-stability probe: capture, write, compare digests outside the run.
-      // Deliberately not `toHaveScreenshot` — that hides the bytes behind a
-      // comparison, and the question here is whether the bytes are stable.
-      const target = resolve(PROBE_DIR, `${shot.arg}.png`)
-      mkdirSync(dirname(target), { recursive: true })
-      writeFileSync(target, await root.screenshot({
+      if (PROBE_DIR !== undefined && PROBE_DIR !== '') {
+        // Byte-stability probe: capture, write, compare digests outside the run.
+        // Deliberately not `toHaveScreenshot` — that hides the bytes behind a
+        // comparison, and the question here is whether the bytes are stable.
+        const target = resolve(PROBE_DIR, `${shot.arg}.png`)
+        mkdirSync(dirname(target), { recursive: true })
+        writeFileSync(target, await root.screenshot({
+          animations: 'disabled',
+          caret: 'hide',
+          scale: 'css',
+          timeout: 30_000,
+        }))
+        return
+      }
+
+      assertBaselineAuthority(test.info(), shot.arg)
+
+      await expect(root).toHaveScreenshot(`${shot.arg}.png`, {
+        // Zero tolerance. The two screen-level specs run at
+        // `maxDiffPixelRatio: 0.01`, which on a 200x60 button canvas is 120 px —
+        // enough to lose a whole glyph. A component canvas is small enough that
+        // the honest threshold is "not one pixel", and the probe in this file is
+        // what proved that threshold is reachable on this host.
+        maxDiffPixels: 0,
         animations: 'disabled',
         caret: 'hide',
         scale: 'css',
         timeout: 30_000,
-      }))
-      return
-    }
-
-    assertBaselineAuthority(test.info(), shot.arg)
-
-    await expect(root).toHaveScreenshot(`${shot.arg}.png`, {
-      // Zero tolerance. The two screen-level specs run at
-      // `maxDiffPixelRatio: 0.01`, which on a 200x60 button canvas is 120 px —
-      // enough to lose a whole glyph. A component canvas is small enough that
-      // the honest threshold is "not one pixel", and the probe in this file is
-      // what proved that threshold is reachable on this host.
-      maxDiffPixels: 0,
-      animations: 'disabled',
-      caret: 'hide',
-      scale: 'css',
-      timeout: 30_000,
+      })
     })
-  })
+  }
 }

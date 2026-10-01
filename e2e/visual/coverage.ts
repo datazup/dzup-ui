@@ -79,6 +79,34 @@ export interface VisualFixture {
   readonly note: string
 }
 
+/**
+ * One visual lane — a spec, the directory its committed images live in, the
+ * platform those images were captured on, and whether it gates (schema 1.2.0,
+ * TASK-S1-O3).
+ *
+ * The platform lives here rather than in `scope` because the three lanes do not
+ * agree: the two screen-level lanes are `linux` and the per-component pilot is
+ * `win32`. One global `scope.platform` could only describe one of them, which is
+ * how `yarn test:e2e:visual` came to be a command that would silently capture 34
+ * new baselines on a developer's machine. See `e2e/visual/platform.ts`.
+ */
+export interface VisualLane {
+  readonly id: string
+  readonly spec: string
+  readonly snapshotDir: string
+  /** The platform this lane's committed images were captured on. */
+  readonly capturedOn: string
+  /** `gate` must run on the authoritative platform; `developer-local` never gates. */
+  readonly role: 'gate' | 'developer-local'
+  /** What this lane covers, in a sentence. */
+  readonly scope: string
+  /** What it does NOT cover. An unwritten scope is how this lane became unowned. */
+  readonly excludes: string
+  readonly requires?: string
+  /** Present only on a `developer-local` lane: why it is not a gate, and what would promote it. */
+  readonly notGating?: string
+}
+
 export interface VisualLedger {
   readonly schemaVersion: string
   readonly scope: {
@@ -101,9 +129,23 @@ export interface VisualLedger {
     readonly platform: string
     /** The platform CI runs. When it differs from `platform`, the lane is not a CI gate. */
     readonly ciPlatform: string
+    /**
+     * The ONE platform the gate runs on (schema 1.2.0, TASK-S1-O3).
+     *
+     * Distinct from `platform`, which is the platform the per-component
+     * coverage join gates on today, and from `ciPlatform`, which is an
+     * observation about the workflows. This is the decision: every lane with
+     * `role: "gate"` must be captured here, and a run on any other platform
+     * refuses instead of comparing. Absent → `platform.ts` refuses to run at
+     * all, because a lane with no declared authority compares against whatever
+     * images happen to be on disk.
+     */
+    readonly authoritativePlatform?: string
     readonly note: string
   }
   readonly snapshotDirs: readonly string[]
+  /** Per-lane platform + role declarations (schema 1.2.0). Absent in 1.1.0 ledgers. */
+  readonly lanes?: readonly VisualLane[]
   readonly baselines: readonly VisualBaselineRecord[]
 }
 

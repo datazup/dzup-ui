@@ -1,0 +1,42 @@
+{
+  "$comment": "The generated artifacts whose commit-binding is gated, and the rule that makes that binding CHECKABLE (TASK-S0-O1). Data, not code: governing one more artifact is an edit here. Read `evidence-binding.ts` first -- it states why `sourceCommit === HEAD` is the wrong invariant and what replaces it.",
+  "$whyNotEqualsHead": "An artifact is written into the working tree at HEAD = X; the commit that lands it is X+1. A committed artifact therefore ALWAYS stamps its own parent, and no generator can do better -- the commit it 'should' name does not exist while the file is being written. `packages/tooling/src/quality/git.ts` says so in `headCommit()`'s own doc comment and routes it to the owner as D1. A gate spelled `sourceCommit === HEAD` is red on every commit that lands a regeneration, which is the one commit where the artifact is most correct, so it trains people to ignore it. The question that actually matters is ORDERING: did anything the artifact is generated FROM change after the artifact was stamped? That is what this gate asks.",
+  "$howInputsAreMatched": "Each artifact declares its own `generatedFrom` globs. They are handed to `git log <sourceCommit>..HEAD -- :(glob)<pattern>` unchanged, so git does the pathspec matching and this repository gains no second glob implementation. A `#fragment` suffix (`package.json#exports`) and a trailing ` (report)` annotation are stripped first; both name a file, not a path pattern.",
+  "artifacts": [
+    {
+      "path": "packages/core/manifests/component-ownership.manifest.json",
+      "generator": "yarn generate:ownership",
+      "order": 1
+    },
+    {
+      "path": "packages/core/docs/quality-matrix.json",
+      "generator": "yarn generate:quality-matrix",
+      "order": 2
+    },
+    {
+      "path": "packages/core/docs/capability-matrix.json",
+      "generator": "yarn generate:capability-matrix",
+      "order": 3
+    },
+    {
+      "path": "packages/core/docs/component-meta.json",
+      "generator": "yarn generate:component-meta",
+      "order": 4
+    }
+  ],
+  "$generatedOutputsComment": "Paths that are OUTPUTS of the same regeneration cycle. A commit that lands a regeneration touches all of them at once, so a later stamp on one of them is not evidence that an earlier one is stale -- they are compared by stamp (rule 3) or, where they carry no stamp, deliberately not compared at all. Listing a genuine SOURCE here would blind the gate, so every entry must be something a generator writes.",
+  "generatedOutputs": [
+    "packages/core/manifests/component-ownership.manifest.json",
+    "packages/core/docs/quality-matrix.json",
+    "packages/core/docs/capability-matrix.json",
+    "packages/core/docs/component-meta.json",
+    "packages/core/docs/llms.txt",
+    "packages/core/docs/llms-full.txt",
+    "packages/core/docs/rtl-matrix.md",
+    "apps/docs/components/**",
+    "apps/docs/evidence/**",
+    "apps/docs/.vitepress/generated/**",
+    "apps/docs/public/playground/seeds.json",
+    "apps/storybook/stories/_data/*.generated.ts"
+  ]
+}

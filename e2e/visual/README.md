@@ -60,14 +60,106 @@ nor truncate, so CJK, combining-mark and 4,096-character labels overflow a
 
 Playwright writes `{arg}-{project}-{platform}.png`. A Linux baseline and a
 Windows baseline are **different files** and are never compared to each other,
-because font rasterisation genuinely differs between them. So "which platform is
-authoritative" is a decision somebody makes, and it is recorded as
-`scope.platform`.
+because font rasterisation, subpixel antialiasing and scrollbar metrics
+genuinely differ between them. So "which platform is authoritative" is a
+decision somebody makes.
 
-Right now `scope.platform` is `win32` and `scope.ciPlatform` is `linux`. They
-disagree, and `validate:visual-baselines` says so on every run. Until one accept
-pass is made on Linux, **the per-component lane is developer-local evidence and
-cannot fail a CI run.**
+### The decision: `linux` (TASK-S1-O3)
+
+`scope.authoritativePlatform` is **`linux`**, and the reasoning, evidence and
+owner action sit next to it in `scope.platformAuthority`. Short version: 18 of
+18 jobs across `.github/workflows/` are `runs-on: ubuntu-latest`, there is no
+Windows or macOS runner anywhere, and 34 of the 58 accepted baselines are
+already `chromium-linux`. A baseline captured for a platform no runner has
+cannot gate anything.
+
+### One authority, three lanes
+
+The platform is declared **per lane**, in `lanes[]`, because the three lanes do
+not agree and one global could only ever describe one of them:
+
+| lane | `capturedOn` | `role` | can fail CI? |
+|---|---|---|---|
+| `gallery` | `linux` | `gate` | yes |
+| `theme-recipe` | `linux` | `gate` | yes |
+| `component-baselines` | `win32` | `developer-local` | **no** — blocked on an owner capture |
+
+A `gate` lane whose `capturedOn` is not `scope.authoritativePlatform` is a hard
+`validate:visual-baselines` error: it could never pass wherever it ran.
+
+### What happens on the wrong platform
+
+**It refuses. Once, by name — it does not diff and it does not capture.**
+
+```
+$ yarn test:e2e:visual            # on win32
+✗ visual:platform — 2 lane(s) refused: gallery, theme-recipe
+
+visual: baselines for lane `gallery` are authoritative on "linux"; this run is
+on "win32". Re-run on linux, or re-declare the authoritative platform in
+e2e/visual/visual-baselines.json (owner action).
+```
+
+This matters more than it looks. Playwright's default answer to a missing
+baseline is to **write** one — so before TASK-S1-O3, one `yarn test:e2e:visual`
+on a developer's Windows machine would have written 34 new unattributed
+baselines and called itself a verification run. Three things now prevent it:
+
+1. **`yarn visual:platform`** (`e2e/visual/preflight-platform.ts`) runs first in
+   both lane scripts, before the tokens build, the Storybook build and the
+   browser. Exit 1 with one message, ~1 second.
+2. **`guardVisualLane`** (`e2e/visual/platform-guard.ts`) is the backstop for
+   `playwright test e2e/visual` invoked directly. A refusing lane registers
+   **no snapshot tests at all**, and a process-scope singleton registers exactly
+   **one** refusal however many lanes refuse.
+3. **`updateSnapshots: 'none'`** in `playwright.config.ts` — a missing baseline
+   fails, writing nothing, even on the right platform.
+
+Run `yarn visual:platform` on its own any time to see where you are.
+
+## Promoting the per-component lane to a CI gate — an OWNER action
+
+The per-component lane's 24 images are `win32`. Promoting it is a **baseline
+capture**, which no agent in any programme may perform. On a **linux** host:
+
+```bash
+yarn workspace @dzup-ui/tokens build && yarn storybook:build
+
+# 24 invocations: 8 components × {light,dark}, then 4 fixtures × {light,dark}
+for c in DzButton DzButtonGroup DzCopyButton DzFab DzIconButton DzSpeedDial DzSplitButton DzToggleButton; do
+  for t in light dark; do
+    yarn visual:accept --component "$c" --theme "$t" \
+      --by "<your name>" \
+      --reason "First per-component baseline on linux, the authoritative platform. Promotes the lane from developer-local evidence to a CI gate; supersedes the win32 image captured by TASK-N1-O6."
+  done
+done
+for f in text-stress-cjk text-stress-combining-marks text-stress-long-run-4096 text-stress-pseudo-expansion-40; do
+  for t in light dark; do
+    yarn visual:accept --fixture "$f" --theme "$t" \
+      --by "<your name>" \
+      --reason "First stress-fixture baseline on linux, the authoritative platform. Records current overflow behaviour, not desired behaviour."
+  done
+done
+```
+
+Then, in the same change:
+
+1. `lanes[component-baselines].capturedOn` → `"linux"`, `role` → `"gate"`,
+   drop `notGating`.
+2. `scope.platform` → `"linux"`.
+3. Delete the 24 `*-chromium-win32.png` images and their ledger entries.
+4. Lower `developerLocalLanes.ceiling` to `0` in
+   `packages/tooling/src/validators/visual-baselines-ceilings.json`.
+5. Add `e2e/visual/component-baselines.spec.ts` to the `test:e2e:visual` script
+   and `component-baselines` to its `visual:platform` argument list — that
+   script names the **gate** lanes, which is why a developer-local lane is not
+   in it today.
+6. `yarn generate:capability-matrix && yarn validate:visual-baselines`.
+
+Steps 1–5 are not optional bookkeeping: while a lane holds images for two
+platforms, `validate:visual-baselines` fails and names the half-finished
+migration. `visual:accept` itself refuses to capture on any platform that is
+neither the lane's own nor the authoritative one.
 
 ## The authority rule
 
@@ -146,6 +238,22 @@ re-accept one whose digest already disagrees, so it cannot launder a change.
 yarn generate:capability-matrix
 yarn validate:visual-baselines
 ```
+
+### Who may accept, and where the acceptance is recorded
+
+| question | answer |
+|---|---|
+| **who may accept** | The repository owner, or a maintainer the owner has named. **No agent, in any programme, may capture or replace a baseline** — it is withheld by the `<authority>` block every prompt carries. An agent may build the mechanism, prove the refusal, and write the command down. |
+| **where it is recorded** | `e2e/visual/visual-baselines.json` → the baseline's entry: `acceptedBy`, `acceptedAt`, `reason` (24+ chars, no placeholder words), `sourceCommit`, `worktreeDirty`, and `replaces` (the digest this image superseded). The ledger is the record; there is no second place to look. |
+| **what a reviewer sees** | The `-expected` / `-actual` / `-diff` PNGs in the Playwright output directory, all three named in the failure. Then the ledger entry that explains why the new image is correct. |
+| **how it is enforced** | `authority.ts` in-run (one snapshot per invocation, `--by` and `--reason` required, no bulk path), `validate:visual-baselines` out-of-run (digest, orphan, attribution, coverage, lane-platform), and `updateSnapshots: 'none'` under both. |
+
+**Known gap:** `yarn visual:accept` addresses `--component` and `--fixture` in
+the **per-component lane only**. The 34 screen-level baselines predate the
+authority rule and were committed by hand, so they have no per-snapshot
+acceptance path — their digests are gated, but a change to one is accepted by
+committing the file. That asymmetry is raised as owner decision **D-S1O3-2** in
+`docs/program-2026-09-22-architecture/reports/TASK-S1-O3-handoff.md`.
 
 ## Threshold
 

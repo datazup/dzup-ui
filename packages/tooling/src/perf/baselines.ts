@@ -112,6 +112,51 @@ export interface HarnessIdentity {
   readonly vitest: string
 }
 
+/**
+ * The capture session itself (TASK-S1-O4).
+ *
+ * Every field here is **per file** and every one of them already existed
+ * per-baseline — `sourceCommit` and `host` are stamped on all 33 entries. What
+ * did not exist was a place to say "this file is one capture session, taken
+ * here, then, on that declared host profile, with this many process runs, and
+ * somebody signed for the machine being quiet". A reader had to infer the
+ * session by checking that 33 `host` blocks agreed, and a tool had nowhere to
+ * record the attestation the quiescence rule asks for.
+ *
+ * Written **only** by `perf:capture`. A hand-edited block is a finding, not a
+ * fix: it would claim provenance for numbers it did not measure.
+ */
+export interface CaptureStamp {
+  /** Repository HEAD when the capture ran. Identical to every entry's own stamp. */
+  readonly sourceCommit: string
+  /** ISO 8601, UTC. */
+  readonly capturedAt: string
+  /** How many separate process runs produced the samples. */
+  readonly runs: number
+  /**
+   * The declared host profile this capture claims, and the machine it was
+   * actually taken on. The `<done_check>` for TASK-S1-O4 calls this a
+   * "hardware profile"; it is both halves, because a profile without the host
+   * it resolved to is a claim, and a host without the profile it satisfies is
+   * an observation.
+   */
+  readonly hardwareProfile: {
+    readonly profileId: string | null
+    readonly platform: string
+    readonly arch: string
+    readonly cpus: number
+    readonly node: string
+  }
+  /** Who signed for the machine being quiet, per `capture-environment.json`. */
+  readonly quiescenceAttestedBy: string | null
+  /** Set when an owner deliberately raised at least one budget. */
+  readonly budgetRaise?: {
+    readonly owner: string
+    readonly reason: string
+    readonly raisedMetrics: readonly string[]
+  }
+}
+
 export interface BaselineFile {
   readonly schemaVersion: string
   readonly policy: {
@@ -122,6 +167,8 @@ export interface BaselineFile {
   }
   /** Absent in files captured before schema 1.1.0 — see {@link HarnessIdentity}. */
   readonly harness?: HarnessIdentity
+  /** Absent in files captured before schema 1.2.0 — see {@link CaptureStamp}. */
+  readonly capture?: CaptureStamp
   readonly baselines: readonly Baseline[]
 }
 
@@ -129,7 +176,12 @@ export interface BaselineFile {
  * 1.1.0 (TASK-R2-O7): adds the `leak`, `longtask`, `memory` and `hydration`
  * metric kinds, the `count` unit, and the {@link HarnessIdentity} block.
  *
- * Additive: every 1.0.0 file is a valid 1.1.0 file with `harness` absent, and
- * readers treat an absent block as "captured before the instrument had a name".
+ * 1.2.0 (TASK-S1-O4): adds the {@link CaptureStamp} block, so a file can be
+ * bound to a commit, a date and a declared host profile the way every other
+ * generated artifact in this repository is.
+ *
+ * Additive throughout: every 1.0.0 file is a valid 1.2.0 file with `harness`
+ * and `capture` absent, and readers treat an absent block as "captured before
+ * the instrument had a name".
  */
-export const BASELINE_SCHEMA_VERSION = '1.1.0'
+export const BASELINE_SCHEMA_VERSION = '1.2.0'

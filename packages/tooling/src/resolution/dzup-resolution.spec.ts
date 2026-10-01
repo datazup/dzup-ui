@@ -280,6 +280,7 @@ describe('the real repository', () => {
         "@dzup-ui/mcp/registry",
         "@dzup-ui/nuxt",
         "@dzup-ui/testing",
+        "@dzup-ui/testing/security-conformance",
         "@dzup-ui/testing/security-corpus",
         "@dzup-ui/testing/vitest",
         "@dzup-ui/tokens",

@@ -1,0 +1,16 @@
+{
+  "$comment": "TASK-S1-O4. One-way ratchets over the committed perf evidence, in the same shape and with the same two-way handshake as capability-matrix-ceilings.json and visual-baselines-ceilings.json: a RISE fails the gate, and a FALL also fails it unless the ceiling is lowered in the same change, so an improvement cannot be silently re-spent. NEVER edit a ceiling upward to make a red run green — a threshold and a ceiling both move one way only. Measured at 4e4e46f67ff06ce5fb8aa2a32fe9f7f9dc42410a.",
+  "metricFamiliesWithoutBaseline": {
+    "ceiling": 4,
+    "families": ["hydration", "leak", "longtask", "memory"],
+    "measured": "DZUP_PERF_GATE=1 yarn test:perf at 4e4e46f: 179 of 190 metric observations printed `no baseline`. TASK-R2-O7 built all four of these lanes and captured them only into a PROPOSAL (docs/program-2026-09-04/reports/TASK-R2-O7-baseline/baselines.proposed.json); the committed file is still schema 1.0.0 and contains only `size` (22) and `runtime` (11).",
+    "why": "A lane that runs against no baseline reports and can never fail, whatever DZUP_PERF_GATE says. Counting the families rather than the metrics keeps the number stable when a fixture is added or removed — the question is whether a family can gate at all, not how many rows it has.",
+    "blockedOn": "An owner adopts the four lane families from a capture taken on a designated host (D-S1O4-1, D-S1O4-2), and lowers this ceiling to 0 in the same change."
+  },
+  "unmeasurableMetrics": {
+    "ceiling": 9,
+    "measured": "9 of 33 committed baselines carry `threshold: null` with `unmeasurable: \"variance-exceeds-signal\"` — every one of them a `runtime` metric. All 22 `size` metrics are measurable because a gzipped byte count is deterministic.",
+    "why": "`unmeasurable` is the honest outcome when a distribution's spread swamps its signal, and P5-05's stop condition asks for exactly it. It is still a gap: a metric with no threshold protects nothing. Letting the count rise would let a noisier capture quietly retire budgets.",
+    "blockedOn": "A capture on a quiet, designated host. The 9 are runtime timings on a shared developer workstation with 562 live processes; their variance is the machine, not the components."
+  }
+}

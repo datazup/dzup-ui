@@ -72,10 +72,23 @@
  * because it is the reason the whole surface resolves nothing, and it is an
  * owner decision, not a defect this gate may fail on.
  *
+ * An eleventh, `resolution` (report; **error** under `--require-installable`),
+ * was added by **TASK-S2-O3**. It prints the **resolution ledger**: how many
+ * listed items resolve per tier — (1) payload and `files[]` present in this
+ * workspace, (2) every `@dzup-ui/*` dependency is a package the release policy
+ * publishes, (3) a consumer could actually install it. Tiers 1 and 2 were the
+ * only things this gate ever measured, and its green line read as tier 3. At
+ * `4e4e46f` tier 3 is **0 of 191** and nothing had ever said so as a number.
+ * `--require-installable` makes tier 3 an error, and is what the deploy lane
+ * passes: the machine about to publish a site whose every install command is
+ * unverified must not exit 0. See `readNpmResolution` for the one artifact that
+ * can satisfy it, and why an agent may not write it.
+ *
  * Usage:
  *   tsx packages/tooling/src/validators/registry.ts
  *   tsx packages/tooling/src/validators/registry.ts --all        # list every report
  *   tsx packages/tooling/src/validators/registry.ts --self-test  # seeded failures
+ *   tsx packages/tooling/src/validators/registry.ts --require-installable  # fail closed on tier 3
  *
  * `--self-test` is the proof the gate fires: it mutates an in-memory copy of
  * the real registry once per clause and asserts that clause — and only that
@@ -208,6 +221,7 @@ export interface RegistryViolation {
     | 'dependency'
     | 'docs'
     | 'unpublished'
+    | 'resolution'
   level: 'error' | 'report'
   message: string
 }
@@ -654,6 +668,204 @@ export function unpublishedReport(registries: readonly LoadedRegistry[]): Regist
   }]
 }
 
+// ── The resolution ledger (TASK-S2-O3) ─────────────────────────────────────
+
+/**
+ * Where a recorded npm-resolution probe lives, if the owner has taken one.
+ *
+ * TASK-S2-O3 added this because the gate as R1-O5 shipped it answered a
+ * narrower question than its green line implied. Re-read the output at
+ * `4e4e46f`: *"191 listed items · 191 payloads · 401 installable files"* and
+ * "✓ every listed item resolves"*. Both sentences are true and neither means
+ * what a reader takes them to mean — **"installable files" are files present in
+ * this workspace**, and "resolves" is "the payload is beside its index entry".
+ * A consumer's `shadcn add` does two more things the gate never looked at: it
+ * fetches the item over HTTP from an origin that is NXDOMAIN (A4-D2/D166), then
+ * runs `npm install @dzup-ui/core`, which 404s (A4-D1). So **0 of 191 items are
+ * installable today** and the gate printed a ✓ over it.
+ *
+ * The A4-D1 report line said so in prose. This ledger makes it a **count**, and
+ * `--require-installable` makes it **fail closed**: a gate that cannot tell
+ * whether the thing it governs works must not exit 0 on the machine that is
+ * about to publish it.
+ */
+export const NPM_RESOLUTION_DIR = resolve(ROOT, 'docs/qa/release')
+
+/** The recorded probe's shape. Written by the owner, never by an agent. */
+export interface NpmResolutionRecord {
+  sourceCommit?: string
+  probedAt?: string
+  registry?: string
+  /** `@dzup-ui/core` → the version the registry served, or `null` for a 404. */
+  packages?: Record<string, string | null>
+  path?: string
+}
+
+/**
+ * The newest `npm-resolution.json` under `docs/qa/release/<candidate>/`, or
+ * `undefined` when nobody has probed. **Never performs the probe** — this gate
+ * touches no network by construction, and an agent may not manufacture the
+ * record either: it is evidence of an owner action.
+ */
+export function readNpmResolution(dir: string = NPM_RESOLUTION_DIR): NpmResolutionRecord | undefined {
+  if (!existsSync(dir))
+    return undefined
+  const candidates = readdirSync(dir, { withFileTypes: true })
+    .filter(e => e.isDirectory())
+    .map(e => join(dir, e.name, 'npm-resolution.json'))
+    .filter(p => existsSync(p))
+    .sort()
+  const newest = candidates.at(-1)
+  if (newest === undefined)
+    return undefined
+  try {
+    const parsed = JSON.parse(readFileSync(newest, 'utf8')) as NpmResolutionRecord
+    return { ...parsed, path: relative(ROOT, newest).replaceAll('\\', '/') }
+  }
+  catch {
+    return { path: relative(ROOT, newest).replaceAll('\\', '/') }
+  }
+}
+
+export interface ResolutionLedger {
+  /** Items listed across all indexes. */
+  listed: number
+  /** Items with no `resolves`/`files` violation — their payload and files exist HERE. */
+  filesResolved: number
+  /** Items whose `files[]` or payload could not be resolved in this workspace. */
+  filesUnresolved: number
+  /** Items whose every `@dzup-ui/*` dependency is a package the release policy publishes. */
+  depsDeclared: number
+  /** Items naming a withheld or private `@dzup-ui/*` package. */
+  depsUndeclared: number
+  /** The distinct `@dzup-ui/*` packages the whole surface depends on. */
+  deps: string[]
+  /** Deps a recorded probe says the registry serves. */
+  depsServed: string[]
+  /** Deps a recorded probe says 404, or that no probe covers. */
+  depsUnserved: string[]
+  /**
+   * Items a consumer could install end to end today. It is `filesResolved` when
+   * every dep is served and **0** otherwise — one unserved dependency fails the
+   * whole `npm install`, so there is no partial credit.
+   */
+  installable: number
+  /** Why `installable` is what it is, in one sentence. */
+  installableReason: string
+  /** The probe that was read, if any. */
+  probe?: NpmResolutionRecord
+}
+
+/**
+ * The three tiers of "resolves", counted and named.
+ *
+ * Derived from the violations the gate already produced rather than
+ * re-implementing the file walk, so the ledger cannot drift from the clauses it
+ * summarises.
+ */
+export function resolutionLedger(
+  registries: readonly LoadedRegistry[],
+  violations: readonly RegistryViolation[],
+  probe: NpmResolutionRecord | undefined = readNpmResolution(),
+): ResolutionLedger {
+  const listed = registries.reduce((n, r) => n + (r.index.items?.length ?? 0), 0)
+
+  // An item is unresolved in THIS workspace when a `resolves` or `files` clause
+  // named it. The clauses prefix their message with the item id, so a name match
+  // is exact enough and stays correct if a clause's wording changes.
+  // Keyed by registry AND name, never by name alone: three item names are shared
+  // across the three indexes at `4e4e46f` (a name-keyed Set counted 188 of 191 and
+  // read as "three unresolved", which is not what it measured). An index entry is
+  // the unit a consumer installs, so the unit is (index, name).
+  const items: Array<{ key: string, name: string, deps: string[] }> = []
+  const deps = new Set<string>()
+  for (const reg of registries) {
+    for (const [file, item] of reg.payloads) {
+      const name = item.name ?? file.replace(/\.json$/, '')
+      const d = (item.dependencies ?? []).filter(
+        (x): x is string => typeof x === 'string' && x.startsWith('@dzup-ui/'),
+      )
+      items.push({ key: `${reg.indexPath}::${name}`, name, deps: d })
+      for (const x of d)
+        deps.add(x)
+    }
+  }
+  const broken = new Set<string>()
+  for (const v of violations) {
+    if (v.level !== 'error' || (v.rule !== 'resolves' && v.rule !== 'files'))
+      continue
+    for (const it of items) {
+      if (v.message.includes(it.name))
+        broken.add(it.key)
+    }
+  }
+  const published = publishedPackages()
+  const depsUndeclared = items.filter(it => it.deps.some(x => !published.has(x))).length
+
+  const served = new Set<string>()
+  const unserved: string[] = []
+  for (const dep of [...deps].sort()) {
+    const v = probe?.packages?.[dep]
+    if (typeof v === 'string' && v.length > 0)
+      served.add(dep)
+    else
+      unserved.push(dep)
+  }
+
+  const filesResolved = items.length - broken.size
+  const installable = unserved.length === 0 ? filesResolved : 0
+  const installableReason = unserved.length === 0
+    ? `every dependency is served by ${probe?.registry ?? 'the recorded registry'} `
+    + `per ${probe?.path ?? 'a recorded probe'}`
+    : probe === undefined
+      ? `NO npm-resolution probe has been recorded under docs/qa/release/<candidate>/, so this `
+      + `gate CANNOT TELL whether ${unserved.join(', ')} can be installed. Unknown is reported `
+      + 'as unresolved, never as resolved (A4-D1).'
+      : `the recorded probe ${probe.path} does not show ${unserved.join(', ')} being served, so `
+        + 'no item installs — one unserved dependency fails the whole `npm install` (A4-D1).'
+
+  return {
+    listed,
+    filesResolved,
+    filesUnresolved: broken.size,
+    depsDeclared: items.length - depsUndeclared,
+    depsUndeclared,
+    deps: [...deps].sort(),
+    depsServed: [...served].sort(),
+    depsUnserved: unserved,
+    installable,
+    installableReason,
+    probe,
+  }
+}
+
+/**
+ * The fail-closed clause. Report-level by default — the registry surface is
+ * correct and the *decision* not to publish is the owner's — and an **error**
+ * under `--require-installable`, which is the flag the deploy lane passes. The
+ * deploy is the moment where "we cannot tell whether our own install command
+ * works" stops being a note and becomes a reason not to upload.
+ */
+export function installabilityViolations(
+  ledger: ResolutionLedger,
+  requireInstallable: boolean,
+): RegistryViolation[] {
+  if (ledger.installable === ledger.listed && ledger.filesUnresolved === 0)
+    return []
+  return [{
+    rule: 'resolution',
+    level: requireInstallable ? 'error' : 'report',
+    message: `${ledger.installable} of ${ledger.listed} listed items are installable end to end. `
+      + `${ledger.filesResolved} resolve inside this workspace and `
+      + `${ledger.depsDeclared} name only packages the release policy publishes, but neither of `
+      + `those is an install. ${ledger.installableReason}${
+        requireInstallable
+          ? ' Record a probe (see TASK-S2-O3-deploy-runbook.md §4 step 2) or do not publish a '
+          + 'site whose every install command is unverified.'
+          : ' Pass --require-installable (the deploy lane does) to make this an error.'}`,
+  }]
+}
+
 /** Every violation across every registry under the root. */
 export function checkAllRegistries(root: string = REGISTRY_ROOT): RegistryViolation[] {
   const { registries, violations } = loadAllRegistries(root)
@@ -828,6 +1040,13 @@ if (isMain) {
 
   const { registries } = loadAllRegistries()
   const violations = checkAllRegistries()
+  // TASK-S2-O3: the resolution ledger, and the flag that makes "cannot tell" a
+  // failure rather than a footnote. Default stays report-level so link 40 of
+  // `validate:all` keeps measuring the registry's correctness, which is a
+  // different question from whether the owner has published anything.
+  const requireInstallable = process.argv.includes('--require-installable')
+  const ledger = resolutionLedger(registries, violations)
+  violations.push(...installabilityViolations(ledger, requireInstallable))
   const errors = violations.filter(x => x.level === 'error')
   const reports = violations.filter(x => x.level === 'report')
 
@@ -844,6 +1063,22 @@ if (isMain) {
   for (const r of registries) {
     console.warn(`    ${r.indexPath.padEnd(46)} ${String(r.index.items?.length ?? 0).padStart(3)} items`)
   }
+
+  // The resolution ledger (TASK-S2-O3). Printed on EVERY run, before the clause
+  // summary, because "191 items resolve" and "0 items install" are both true and
+  // only the second one answers what a consumer asked.
+  console.warn('\n  resolution ledger — what "resolves" means, per tier')
+  console.warn(`    tier 1  payload + files present in THIS workspace   `
+    + `${String(ledger.filesResolved).padStart(3)} of ${ledger.listed}`
+    + `${ledger.filesUnresolved > 0 ? `  (${ledger.filesUnresolved} unresolved)` : ''}`)
+  console.warn(`    tier 2  every @dzup-ui/* dep is a PUBLISHED-policy pkg  `
+    + `${String(ledger.depsDeclared).padStart(3)} of ${ledger.listed}`)
+  console.warn(`    tier 3  a consumer could actually install it today     `
+    + `${String(ledger.installable).padStart(3)} of ${ledger.listed}`)
+  console.warn(`            deps: ${ledger.deps.join(', ') || '(none)'}`)
+  console.warn(`            served: ${ledger.depsServed.join(', ') || 'NONE'} · `
+    + `unserved/unknown: ${ledger.depsUnserved.join(', ') || 'none'}`)
+  console.warn(`            probe: ${ledger.probe?.path ?? 'NONE RECORDED'}`)
 
   for (const r of reports.filter(x => x.rule === 'unpublished'))
     console.warn(`\n  ! ${r.message}`)

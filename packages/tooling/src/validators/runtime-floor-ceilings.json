@@ -1,0 +1,30 @@
+{
+  "//": "TASK-S2-O4 (2026-09-24, measured at 4e4e46f). A one-way ratchet over source sites that use a Node API newer than the repository's OWN declared floor. `engines.node` is `^20.19.0 || >=22.13.0` and `.nvmrc` is `20.19.0`, so the floor a consumer's engine check reads is 20.19.0 -- and two files use `fs.globSync`, which is `@since v22.0.0`. On the declared floor those files do not run at all: `node -e \"console.log(typeof require('node:fs').globSync)\"` prints `undefined` under v20.19.0 and `function` under v24.14.1, measured on both. That is the 08-11 finding H4 verbatim -- a documented gate that cannot start under the repository's own declared runtime -- and it is the reason the `validate-min-runtime` CI lane cannot be green while the floor says 20.",
+
+  "//why-not-fixed-here": "The floor itself is OPEN OWNER DECISION D160 / D176 / `N5-04 D3` (register row 19): either raise `engines.node` to `>=22.13.0`, or keep the range and replace both `globSync` imports. TASK-R1-O4's `<stop_conditions>` named it an ADR-18 amendment rather than a fix, and this task inherits that boundary. What is in scope is stopping the breach set from GROWING while the decision is open, and making the next one visible in review instead of discovered by a red CI lane.",
+
+  "//how-it-ratchets": "`maxBreaches` must EQUAL `breaches.length`, the same two-way handshake capability-matrix-ceilings.json and visual-baselines-ceilings.json use. A new site fails because it is unlisted. A repaired site fails because its entry is discharged and the ceiling must be lowered in the same change. Neither direction can be absorbed silently.",
+
+  "maxBreaches": 2,
+
+  "breaches": [
+    {
+      "file": "packages/tooling/src/token-checks/landing-token-fallbacks.spec.ts",
+      "api": "fs.globSync",
+      "since": "22.0.0",
+      "recorded": "2026-09-24",
+      "reachableFrom": "yarn test (link: the `Test at the floor` step of .github/workflows/validate-min-runtime.yml)",
+      "reason": "The only globbing call in the landing token-fallback check. Under Node 20.19.0 the whole spec file fails to collect with `TypeError: globSync is not a function` and reports ZERO tests -- reproduced locally at 4e4e46f under v20.19.0 (exit 1, `Tests: no tests`) against exit 0 / 9 passed under v24.14.1, same tree, same node_modules, one variable changed. CI recorded the same TypeError in the `Release` run 35511985926 on 2026-09-20.",
+      "exit": "Discharged when owner decision D160/D176 is taken: either `engines.node` becomes `>=22.13.0` (and `.nvmrc` follows), or this import is replaced with `tinyglobby`/`glob`, which the repository already depends on and which `packages/codemods/src/runner.ts` already uses. Delete this entry and lower `maxBreaches` in the same change."
+    },
+    {
+      "file": "packages/codemods/scripts/run-story-color-tokens.ts",
+      "api": "fs.globSync",
+      "since": "22.0.0",
+      "recorded": "2026-09-24",
+      "reachableFrom": "yarn codemod:story-colors (a root package.json script; NOT reached by any CI lane, validate:all link or test project)",
+      "reason": "Two call sites (lines 33 and 53) behind one `node:fs` import at line 15. This is the second of the two sites TASK-S0-O3 found while D160 records only one, and its reachability is different in a way that matters: no lane runs it, so no lane will ever report it, and a contributor on the declared floor discovers it by running the codemod.",
+      "exit": "Same condition as the entry above. Whichever way D160/D176 is taken, both sites are discharged by the same act; the two entries exist separately because their reachability, and therefore who finds them, differs."
+    }
+  ]
+}

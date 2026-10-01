@@ -34,13 +34,26 @@
  *      source strings;
  *   8. **tree-shaking** — no source module outside `locales/` imports a pack,
  *      so a consumer who never imports `de.json` never ships it (`imported`);
- *   9. **exported iff published** — every pack with at least one translation
- *      has its own `./i18n/locales/<locale>.json` entry in
+ *   9. **exported iff published** — every pack with at least one **effective**
+ *      translation has its own `./i18n/locales/<locale>.json` entry in
  *      `packages/core/package.json`, and no entry names a scaffold or a missing
  *      pack (`export`). One explicit entry per locale rather than a `*`
  *      pattern: the build does not publish scaffolds, so a pattern would
  *      advertise files that do not exist, and `createDzupResolution` derives
  *      every in-repo alias from these keys.
+ *
+ * **"Effective" is the word rule 9 turns on, and it was a raw count until
+ * RESIDUAL-02 (2026-09-25).** A value copied verbatim from `en.json` under a
+ * translated key is not a translation, and `validate:i18n-completeness` has said
+ * so since TASK-S5-O1 — it excludes such values from its percentage. Rule 9 did
+ * not: one English-copied value made a pack "have translations", so the gate
+ * demanded publication of a pack that the *other* gate read as 0 % complete
+ * (TASK-S5-O1 finding F1, measured on a seeded `pl.json`). It failed closed, so
+ * nothing ever shipped — but it pressured toward shipping an untranslated
+ * scaffold as a locale. `isUntranslated` now lives here, is the one definition
+ * both gates use, and `PackCoverage.effective` is what `status` and rule 9 read.
+ * The source pack (`en.json`) is exempt by construction: its values *are* the
+ * source text, so every one of them counts.
  *
  * **The pseudo-locale is checked too**, by rules 3 and 4. It is generated from
  * English, so it is the pack that exists before any human translation does —
@@ -86,11 +99,45 @@ export interface PackViolation {
 
 export interface PackCoverage {
   readonly locale: string
+  /** Catalog keys carrying a string in `messages`, whatever that string says. */
   readonly translated: number
+  /**
+   * Of those, the ones that are **not** the English source value copied verbatim
+   * — the count rule 9 and `status` read, and the numerator
+   * `validate:i18n-completeness` divides by `total`. `en` counts all of its own.
+   */
+  readonly effective: number
   readonly fallback: number
   readonly total: number
-  /** `scaffold`: nothing translated. Scaffolds are not published by the build. */
+  /**
+   * `scaffold`: nothing **effectively** translated — no translated value, or every
+   * translated value copied from English. Scaffolds are not published by the
+   * build. `complete`: every key carries a translation. `partial`: in between.
+   */
   readonly status: 'complete' | 'partial' | 'scaffold'
+}
+
+/**
+ * The locale `enMessages` is written in — the pack every other pack is measured
+ * against, and the one pack whose values are the source rather than copies of it.
+ */
+export const SOURCE_LOCALE = 'en'
+
+/**
+ * `true` when a "translation" is the English string.
+ *
+ * Whitespace is normalised so a reflowed JSON value does not read as translated;
+ * case is **not**, because a case change is not a translation either.
+ *
+ * It lives in this file, the lower of the two i18n gates, so that
+ * `validate:i18n-completeness` (which already imports `checkPack`,
+ * `flattenCatalog` and `catalogKeys` from here) and rule 9 cannot hold two
+ * different opinions about what a translation is. `i18n-completeness.ts`
+ * re-exports it, so its own name for it still resolves.
+ */
+export function isUntranslated(english: string, translated: string): boolean {
+  const normalise = (value: string): string => value.replaceAll(/\s+/g, ' ').trim()
+  return normalise(english) === normalise(translated)
 }
 
 /** Flatten a catalog to `Group.key → message`, in declaration order. */
@@ -219,13 +266,24 @@ export function checkPack(file: string, raw: unknown): { violations: PackViolati
     violations.push(...checkMessage(file, key, english.get(key) as string, value))
   }
 
+  const isSource = pack.locale === SOURCE_LOCALE
   let translatedCount = 0
+  let effectiveCount = 0
   for (const key of english.keys()) {
-    const has = typeof translated.get(key) === 'string'
-    if (has)
+    const value = translated.get(key)
+    if (typeof value === 'string') {
       translatedCount += 1
-    else if (!fallbackSet.has(key))
+      // A value byte-identical (whitespace-normalised) to its English source is
+      // not a translation. `en.json` is exempt: its values ARE the source. A
+      // non-string source cannot be compared, and `shape` already owns that, so
+      // it counts rather than silently deflating the number.
+      const source = english.get(key)
+      if (isSource || typeof source !== 'string' || !isUntranslated(source, value))
+        effectiveCount += 1
+    }
+    else if (!fallbackSet.has(key)) {
       violations.push({ file, rule: 'missing', key, message: 'neither translated nor listed as an explicit fallback' })
+    }
   }
 
   const total = english.size
@@ -234,9 +292,15 @@ export function checkPack(file: string, raw: unknown): { violations: PackViolati
     coverage: {
       locale: pack.locale,
       translated: translatedCount,
+      effective: effectiveCount,
       fallback: total - translatedCount,
       total,
-      status: translatedCount === 0 ? 'scaffold' : translatedCount === total ? 'complete' : 'partial',
+      // `scaffold` turns on `effective`, so a pack whose only "translations" are
+      // copied English is a scaffold and rule 9 does not demand its publication.
+      // `complete` stays on `translated`: a pack where every key carries a
+      // translation IS complete, even though a handful of words legitimately
+      // coincide with English (`OK`, `Email`, `PDF`).
+      status: effectiveCount === 0 ? 'scaffold' : translatedCount === total ? 'complete' : 'partial',
     },
   }
 }
@@ -286,6 +350,16 @@ const PACK_EXPORT = /^\.\/i18n\/locales\/(.+)\.json$/
 /**
  * Rule 9 — `exports` names exactly the published packs.
  *
+ * "Published" is `status !== 'scaffold'`, and since RESIDUAL-02 `status` turns on
+ * `coverage.effective` rather than `coverage.translated`. So a pack whose only
+ * values are English copied verbatim is a scaffold here, exactly as
+ * `validate:i18n-completeness` reads it at 0 %, and this rule no longer demands
+ * the publication of a locale nothing has been translated into. A pack holding one
+ * genuine translation is still publishable and still demands its export — R5-O4
+ * deliberately supports shipping a partial pack that falls back to English, and
+ * TASK-S5-O1 chose that option (B) over moving publication behind the 95 %
+ * supported threshold (C) for exactly that reason.
+ *
  * @param exportKeys the `exports` keys of `packages/core/package.json`
  * @param coverage   every pack's coverage; a `scaffold` is unpublished
  */
@@ -295,8 +369,15 @@ export function checkPackExports(exportKeys: readonly string[], coverage: readon
   const exported = new Set(exportKeys.flatMap(key => PACK_EXPORT.exec(key)?.[1] ?? []))
   for (const pack of coverage) {
     const published = pack.status !== 'scaffold'
-    if (published && !exported.has(pack.locale))
-      out.push({ file, rule: 'export', key: pack.locale, message: `"${pack.locale}" has translations but no "./i18n/locales/${pack.locale}.json" export` })
+    if (published && !exported.has(pack.locale)) {
+      out.push({
+        file,
+        rule: 'export',
+        key: pack.locale,
+        message: `"${pack.locale}" has ${pack.effective} effective translation(s) but no `
+          + `"./i18n/locales/${pack.locale}.json" export`,
+      })
+    }
     if (!published && exported.has(pack.locale))
       out.push({ file, rule: 'export', key: pack.locale, message: `exports "${pack.locale}", a scaffold the build does not publish` })
   }
@@ -404,9 +485,15 @@ function main(): void {
 
   console.warn(`i18n packs — ${catalogKeys().length} catalog keys, ${coverage.length} pack(s) + the pseudo-locale`)
   for (const pack of coverage) {
+    // A gap between `translated` and `effective` is English copied under a
+    // translated key. It is the reason rule 9 reads `effective`, so the line says
+    // it out loud rather than leaving a reader to subtract.
+    const copied = pack.translated === pack.effective
+      ? ''
+      : ` (${pack.translated - pack.effective} copied from ${SOURCE_LOCALE})`
     console.warn(
       `  ${pack.locale.padEnd(8)} ${pack.status.padEnd(9)} ${pack.translated}/${pack.total} translated, `
-      + `${pack.fallback} explicit fallback`,
+      + `${pack.effective} effective, ${pack.fallback} explicit fallback${copied}`,
     )
   }
 

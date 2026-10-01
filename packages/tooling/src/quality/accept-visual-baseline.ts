@@ -248,6 +248,28 @@ if (isMain) {
   const title = fixture === undefined ? `visual ${component} ${theme}` : `visual fixture ${fixture.id} ${theme}`
 
   if (!process.argv.includes('--record-only')) {
+    // TASK-S1-O3. A capture is legal on the lane's own platform or on the
+    // authoritative one — nowhere else.
+    //
+    // The second opening is what makes the migration possible: the
+    // per-component lane's images are `win32` and the authoritative platform is
+    // `linux`, so an owner capturing on linux must be allowed even though the
+    // lane does not yet claim linux. A third platform is refused, because an
+    // image captured somewhere nobody else can reach is one nobody can
+    // reproduce or review — and Playwright would happily write it, since the
+    // snapshot path it resolves simply does not exist there yet.
+    const lane = (ledger.lanes ?? []).find(l => l.id === 'component-baselines')
+    const authoritative = ledger.scope.authoritativePlatform
+    if (lane !== undefined && authoritative !== undefined
+      && process.platform !== lane.capturedOn && process.platform !== authoritative) {
+      die(
+        `refusing to capture \`${snapshotArg}\` on "${process.platform}".\n`
+        + `      A baseline may be captured on this lane's own platform ("${lane.capturedOn}") `
+        + `or on the\n      authoritative platform ("${authoritative}"). This machine is neither, and a `
+        + `baseline\n      captured on a third platform is one nobody can reproduce or review.\n`
+        + `      See e2e/visual/platform.ts and \`yarn visual:platform\`.`,
+      )
+    }
     console.warn(`visual:accept: capturing \`${snapshotArg}\` …`)
     try {
       // `node node_modules/@playwright/test/cli.js` rather than the `playwright`

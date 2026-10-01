@@ -237,10 +237,18 @@ export function renderCapabilityMatrixPage(ev: EvidenceSources): string {
     'The matrix is a join, and a missing input silently turns cells into `unrun` rather than failing.',
     'So the inputs are published with it.',
     '',
-    '| Input | Path | Available |',
-    '| --- | --- | --- |',
+    // TASK-S1-O4: `Can fail CI` is a separate column because it is a separate
+    // fact. `inputs[].gate` has existed since TASK-S1-O3 and this page rendered
+    // only `available`, so both host-locked inputs printed "Available: yes"
+    // beside a note explaining that they gate nothing — which is the precise
+    // misreading the field was added to prevent, reproduced in the rendering of
+    // it. `—` means the input has not declared a gate either way.
+    '| Input | Path | Available | Can fail CI |',
+    '| --- | --- | --- | --- |',
     ...Object.entries(ev.capability.inputs).map(
-      ([key, v]) => `| \`${key}\` | \`${v.path}\` | ${v.available ? 'yes' : '**no**'} |`,
+      ([key, v]) => `| \`${key}\` | \`${v.path}\` | ${v.available ? 'yes' : '**no**'} | ${
+        v.gate === undefined ? '—' : v.gate.ciGate ? 'yes' : '**no**'
+      } |`,
     ),
     '',
   ]

@@ -64,6 +64,36 @@ export interface DodCheckResult {
   level: DodLevel
   applicable: number
   passing: number
+  /**
+   * The story files the check **applied to** — not just how many (RESIDUAL-16).
+   *
+   * A count cannot distinguish *passed* from *never asked*, and one consumer was
+   * reading it as if it could: `generate-capability-matrix.ts` inverted
+   * `violations` into "a component absent from the failing set passed the check",
+   * which is true for a component the check passed **and** for a component it does
+   * not apply to. With `states` (`applies: stateProps.length > 0`) that published
+   * **27 `state-stories` cells as `pass`** for components with no `States` story
+   * and no state to put in one, citing the story file as the evidence.
+   *
+   * Paths are repo-relative with forward slashes, exactly as `violations[].file`
+   * spells them, so the two can be compared without normalising either.
+   */
+  applicableFiles: string[]
+  /**
+   * The story files whose content **satisfies** the check, applicability aside.
+   *
+   * Applicability narrows who is *asked*; this says who *shows the thing*, and the
+   * two disagree in both directions. `states` derives applicability from the props
+   * a component's own `.types.ts` spells, so nine components that inherit
+   * `disabled`/`readonly` from `BaseFormControlProps` are never asked — and nine of
+   * them export a `States` story anyway. Reading applicability alone would have
+   * demoted `DzInput`'s real `States` story to "nothing to demonstrate".
+   *
+   * A consumer wanting a three-way answer (shown / not asked / asked and missing)
+   * needs both lists: `passingFiles` first, `applicableFiles` only to explain a
+   * component that is not in it.
+   */
+  passingFiles: string[]
   violations: DodViolation[]
 }
 
@@ -455,6 +485,8 @@ export function checkStoryDod(
       level: check.level,
       applicable: applicable.length,
       passing: applicable.length - failing.length,
+      applicableFiles: applicable.map(c => c.file),
+      passingFiles: contexts.filter(c => check.passes(c)).map(c => c.file),
       violations: failing.map(c => ({
         file: c.file,
         check: check.id,

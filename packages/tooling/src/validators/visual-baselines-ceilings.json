@@ -1,0 +1,12 @@
+{
+  "//": "TASK-S1-O3 (2026-09-23, measured at 4e4e46f). The one-way ratchet over visual lanes that are NOT gates. `validate:visual-baselines` fails when `developerLocalLanes` RISES above the ceiling, and fails when it FALLS without the ceiling being lowered in the same change -- the two-way handshake capability-matrix-ceilings.json and component-meta-ceilings.json already use, so progress is recorded rather than absorbed. A developer-local lane is honest; a repository that quietly grows a second one is how 'we have visual regression testing' becomes true in the README and false in CI.",
+
+  "developerLocalLanes": {
+    "//": "A lane whose `capturedOn` is not `scope.authoritativePlatform` (linux). It cannot fail a CI run, because its images do not exist for the runner. 1 at 4e4e46f: `component-baselines`, whose 24 images (8 components x 2 themes + 4 fixtures x 2 themes) were captured on win32 by TASK-N1-O6 at 51dec93/2d51eec. Clearing it means one `yarn visual:accept` pass per snapshot on a linux host, then flipping `lanes[component-baselines].capturedOn` to `linux` and deleting the win32 images -- a baseline capture, which is an OWNER action withheld from every agent in this programme (README section 5 <authority>). Lower this to 0 in the same change that lands the linux capture.",
+    "ceiling": 1,
+    "blockedOn": "owner decision D-S1O3-1 (capture the per-component lane on linux)",
+    "lanes": [
+      "component-baselines"
+    ]
+  }
+}

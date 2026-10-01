@@ -1,0 +1,42 @@
+{
+  "$comment": "Data for the doc-08 release stop-condition gate (TASK-S2-O2). Read stop-conditions.ts first: it states why doc 08's NINE prose bullets are ELEVEN machine conditions, and which of them the repository can see. Adding a watched ceiling or a governed artifact is an edit HERE, not to the validator.",
+  "$nineBulletsElevenConditions": "08-11 doc 08 §'Release stop conditions' is a list of nine bullets. Its FIRST bullet is compound -- 'dirty/unidentified source, generated drift, or evidence bound to a different commit/configuration' -- and names three independent failures with three different remedies. Splitting it gives 3 + 8 = 11, which is the count this programme's task brief uses and the count this gate enumerates. The split is recorded here rather than inferred, because a reader counting bullets in doc 08 will find nine and must not conclude that two conditions were invented.",
+  "attested": [
+    {
+      "condition": 11,
+      "statement": "No credential was used, no registry was mutated, nothing was published, signed, deployed or promoted, no entitlement was changed and no production action was taken without explicit authority from the release owner.",
+      "whyNotMachineCheckable": "The repository can observe that an action did NOT happen (0 release tags, provenance.json stamped unsigned, no npm publish record). It cannot observe whether an action that DID happen was authorised -- authority lives in a person, not in a file. doc 08 lists it as a stop condition precisely because a tool cannot close it. An agent may never sign this row."
+    }
+  ],
+  "attestationFile": "attestations.json",
+  "attestationTemplate": "docs/qa/release/attestations.template.json",
+  "$ceilingComment": "SC-7 ('threshold/budget raised without a reviewed product justification') compares these files' numeric ceilings against the values recorded in the PREVIOUS release-candidate directory. The walk is generic: every numeric leaf whose key starts with max/min/ceiling/limit/budget/threshold/allow is collected, plus the length of every declared allowlist array. Declaring a new ceiling file is an edit here; the validator needs no schema knowledge of it.",
+  "ceilingFiles": [
+    "packages/tooling/src/validators/anatomy-parts-ceilings.json",
+    "packages/tooling/src/validators/capability-matrix-ceilings.json",
+    "packages/tooling/src/validators/component-meta-ceilings.json",
+    "packages/tooling/src/validators/docs-size-ceilings.json",
+    "packages/tooling/src/validators/i18n-completeness-ceilings.json",
+    "packages/tooling/src/validators/llms-ceilings.json",
+    "packages/tooling/src/validators/mcp-surface-ceilings.json",
+    "packages/tooling/src/validators/provider-defaults-ceilings.json",
+    "packages/tooling/scripts/adr-registry.json",
+    "packages/tooling/scripts/release-policy.json",
+    "packages/core/docs/wcag-deviations.json",
+    "packages/core/security/security-deviations.json"
+  ],
+  "$allowlistComment": "An allowlist that grew is a threshold that was raised, even though no number changed. Length is the measured value.",
+  "allowlistFiles": [
+    { "path": "packages/tooling/scripts/licence-exceptions.json", "pointer": "exceptions" },
+    { "path": "packages/tooling/scripts/tracked-build-output-allowlist.json", "pointer": null },
+    { "path": "packages/tooling/scripts/retired-package-names.json", "pointer": null }
+  ],
+  "$justificationComment": "A raise is permitted only with a justification line naming an owner, recorded in the CURRENT candidate's ratchets.json under `justifications`. Shape: { \"key\": \"<ceiling key>\", \"from\": n, \"to\": n, \"owner\": \"<name>\", \"reason\": \"<product justification>\" }. An agent does not write these.",
+  "highRiskTiers": ["B", "C", "D"],
+  "$highRiskComment": "SC-9 ('browser/AT/RTL/SSR evidence missing for a CHANGED high-risk component'). The 08-11 browser-and-accessibility matrix makes Tier A 'sampled' and Tiers B/C/D 'required', so a changed component at those tiers owes evidence. Changed = appears in `git status --porcelain` under packages/core/src/components/.",
+  "qualificationRows": {
+    "failOpen": [8, 9],
+    "tarball": [11],
+    "$comment": "Row numbers in docs/qa/release/<candidate>/package-qualification.json, the twelve-row doc-08 matrix TASK-S2-O1 built. Rows 8 (optional peer absent/incompatible/installed) and 9 (CSP/Trusted Types) carry the fail-open question; row 11 (tarball file/export/API diff) carries the tarball question. Before TASK-S2-O1 neither was mechanically detectable and both conditions could only be described."
+  }
+}

@@ -120,7 +120,20 @@ export interface CapabilityMatrix {
   schemaVersion: string
   sourceCommit: string
   generatedFrom: string[]
-  inputs: Record<string, { available: boolean, path: string, note?: string }>
+  /**
+   * `gate` is optional because an input may not declare one, and it is a
+   * DIFFERENT fact from `available` — see `inputs[].gate` in
+   * `../quality/capability-matrix.ts` (TASK-S1-O3). This is a structural
+   * restatement of that type rather than an import, as the rest of this module
+   * is; adding `gate` here is what let the evidence page stop printing
+   * "Available: yes" for two inputs that gate nothing (TASK-S1-O4).
+   */
+  inputs: Record<string, {
+    available: boolean
+    path: string
+    note?: string
+    gate?: { platform: string, authoritative: string, ciGate: boolean, blockedOn?: string }
+  }>
   totals: Record<string, Record<string, number>>
   rows: CapabilityRow[]
 }

@@ -37,6 +37,8 @@
  * @module @dzup-ui/tooling/release/report
  */
 
+import type { DeprecationReport } from '../validators/deprecations.ts'
+import type { StopConditionReport } from '../validators/stop-conditions.ts'
 import type { DiffReport } from './api-diff.ts'
 import type { SourceBinding } from './binding.ts'
 import type { EvidenceResult } from './evidence.ts'
@@ -44,10 +46,32 @@ import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import process from 'node:process'
+import { runDeprecationCheck } from '../validators/deprecations.ts'
+import { candidateForCommit, readStopConfig, runStopConditions } from '../validators/stop-conditions.ts'
 import { declaredLevels } from './api-diff.ts'
 import { bundleId, contentDigest, gitState, provenanceOf, ROOT } from './binding.ts'
 import { licenceExceptions } from './evidence.ts'
 import { releasePolicy } from './pack.ts'
+
+/**
+ * One row of the 08-11 doc 08 package-qualification matrix, as TASK-S2-O1's
+ * `yarn qualify:package` records it in
+ * `docs/qa/release/<bundle>/package-qualification.json`.
+ */
+export interface QualificationRow {
+  n: number
+  title: string
+  verdict: string
+  reason: string
+  secondTier?: string
+  secondTierReason?: string
+}
+
+export interface QualificationReport {
+  sourceCommit: string
+  generatedAt: string
+  rows: QualificationRow[]
+}
 
 export const EVIDENCE_DIR = resolve(ROOT, 'docs/qa/release')
 
@@ -185,10 +209,65 @@ export interface ReportInputs {
   chainLinks: number
   versions: Record<string, string>
   tags: string[]
+  /** TASK-S2-O1's twelve-row matrix. `null` when the lane has not been run into this bundle. */
+  qualification: QualificationReport | null
+  /** TASK-S2-O2's eleven-condition gate. `null` when it could not be run. */
+  stopConditions: StopConditionReport | null
+  /** TASK-S2-O2's deprecation ledger state. `null` when it could not be read. */
+  deprecations: DeprecationReport | null
+}
+
+/**
+ * The eight section headings doc 08 §"Required release report" names, in order.
+ *
+ * Exported so `--verify-sections` can assert the document against them rather
+ * than against a count. Eight `##` headings could be any eight; these are the
+ * eight the specification requires, each present **even when empty** — an empty
+ * section is evidence, an absent one is an omission.
+ */
+export const REQUIRED_SECTIONS = [
+  '1. Implemented scope and source commit',
+  '2. Focused validation',
+  '3. Aggregate repository qualification',
+  '4. Browser / AT / security / performance experience qualification',
+  '5. Packed-artifact qualification',
+  '6. Downstream canary / adoption evidence',
+  '7. Publication / production authority and actual operation status',
+  '8. Known gaps, accepted exceptions, rollback, ranked next work',
+] as const
+
+export interface SectionCheck { ok: boolean, found: string[], missing: string[], extra: string[] }
+
+/** Every top-level (`##`) heading in a rendered report, in document order. */
+export function topLevelSections(markdown: string): string[] {
+  return markdown
+    .split(/\r?\n/)
+    .filter(line => line.startsWith('## '))
+    .map(line => line.replace(/^##\s+/, '').trim())
+}
+
+/**
+ * Does the rendered document carry exactly doc 08's eight sections, in order?
+ *
+ * This is the invariant the whole generator exists to make unbreakable: the
+ * 08-11 spec is explicit that local, aggregate, browser, package, adoption and
+ * authority evidence are reported *separately and never collapsed*. A renderer
+ * that silently dropped a section because its input was missing would collapse
+ * two levels of the maturity ladder into one, which `<evidence_rules>` forbids.
+ */
+export function verifySections(markdown: string): SectionCheck {
+  const found = topLevelSections(markdown)
+  const required = [...REQUIRED_SECTIONS]
+  return {
+    ok: found.length === required.length && found.every((h, i) => h === required[i]),
+    found,
+    missing: required.filter(r => !found.includes(r)),
+    extra: found.filter(f => !required.includes(f as never)),
+  }
 }
 
 export function renderReport(input: ReportInputs): string {
-  const { binding, bundle, gates, apiDiff, supplyChain, hashes, experience, digest, chainLinks, versions, tags } = input
+  const { binding, bundle, gates, apiDiff, supplyChain, hashes, experience, digest, chainLinks, versions, tags, qualification, stopConditions, deprecations } = input
   const head = binding.sourceCommit
   const L: string[] = []
 
@@ -377,6 +456,34 @@ export function renderReport(input: ReportInputs): string {
     L.push('')
   }
 
+  // The twelve-row doc-08 package-qualification matrix (TASK-S2-O1).
+  L.push('### Package qualification matrix (doc 08 §Package qualification)')
+  L.push('')
+  if (qualification === null) {
+    L.push('**No qualification report in this bundle.** `yarn qualify:package` has not been')
+    L.push('run into it, so none of the twelve doc-08 rows has a verdict for this candidate.')
+    L.push('The rows are not "passing by default" and are not reproduced here from an older')
+    L.push('bundle — an absent measurement is absent.')
+  }
+  else {
+    const green = qualification.rows.filter(r => r.verdict === 'green').length
+    const red = qualification.rows.filter(r => r.verdict === 'red').length
+    const blocked = qualification.rows.filter(r => r.verdict === 'blocked').length
+    L.push(`**${green} green · ${red} red · ${blocked} blocked** across ${qualification.rows.length} rows, stamped ${stamp(qualification, head)}.`)
+    L.push('')
+    L.push('| # | Row | Core only | Second tier |')
+    L.push('|---|---|---|---|')
+    for (const row of qualification.rows) {
+      const mark = row.verdict === 'green' ? '**green**' : row.verdict === 'red' ? '**RED**' : `**${row.verdict}**`
+      L.push(`| ${row.n} | ${row.title} | ${mark} — ${row.reason.replaceAll('|', '\\|')} | ${row.secondTier ?? '—'} |`)
+    }
+    L.push('')
+    L.push('Full report: [`package-qualification.md`](./package-qualification.md).')
+    L.push('Every blocked cell names its reason; a blocked cell is not a pass and is not a')
+    L.push('failure of this repository — it is a measurement that could not be taken.')
+  }
+  L.push('')
+
   if (apiDiff) {
     L.push('### API diff')
     L.push('')
@@ -468,17 +575,94 @@ export function renderReport(input: ReportInputs): string {
   // 8 ────────────────────────────────────────────────────────────────────────
   L.push('## 8. Known gaps, accepted exceptions, rollback, ranked next work')
   L.push('')
-  L.push('### Stop conditions met (doc 08 §Release stop conditions)')
+  L.push('### Release stop conditions (doc 08 §Release stop conditions)')
   L.push('')
+  if (stopConditions === null) {
+    L.push('**The stop-condition gate could not be run for this bundle.** That is itself a')
+    L.push('red: doc 08\'s conditions are unevaluated, and unevaluated is not clear.')
+    L.push('Run `yarn validate:stop-conditions`.')
+  }
+  else {
+    const t = stopConditions.totals
+    L.push(`doc 08 prints **nine** bullets; its first is compound and names three independent`)
+    L.push(`failures, so the gate enumerates **eleven** conditions. At this candidate:`)
+    L.push(`**${t.clear} clear · ${t.fired} FIRED · ${t.unevaluable} unevaluable · ${t.unattested} unattested**.`)
+    L.push('')
+    L.push('| # | Condition (doc 08 wording) | Mode | Verdict | What revealed it |')
+    L.push('|---|---|---|---|---|')
+    for (const r of stopConditions.results) {
+      const mark = r.verdict === 'clear' ? '**clear**' : `**${r.verdict.toUpperCase()}**`
+      L.push(`| ${r.n} | ${r.wording} | ${r.mode} | ${mark} | ${r.detail.replaceAll('|', '\\|').replaceAll('\n', ' ')} |`)
+    }
+    L.push('')
+    L.push('`unevaluable` is a **red**, not a pass: a gate that cannot see a condition must')
+    L.push('not report one. `unattested` is a condition no tool can decide, awaiting an')
+    L.push('owner\'s signature — an agent may never sign it.')
+    L.push('')
+    const attested = stopConditions.results.filter(r => r.mode === 'attested')
+    L.push(`### Attested rows the owner must sign for this candidate (${attested.length})`)
+    L.push('')
+    if (attested.length === 0) {
+      L.push('None.')
+    }
+    else {
+      const spec = readStopConfig()
+      L.push('| # | Statement | Signed by | Date | Decision |')
+      L.push('|---|---|---|---|---|')
+      for (const r of attested) {
+        const statement = spec.attested.find(a => a.condition === r.n)?.statement ?? r.wording
+        const signed = r.verdict === 'clear'
+        L.push(`| ${r.n} | ${statement.replaceAll('|', '\\|')} | ${signed ? r.detail : '_(empty)_'} | ${signed ? '' : '_(empty)_'} | ${signed ? 'clear' : '_(empty)_'} |`)
+      }
+      L.push('')
+      L.push('Template: [`../attestations.template.json`](../attestations.template.json).')
+      L.push('Copy it to `attestations.json` beside this report and sign it. The emptiness')
+      L.push('above is a recorded fact, not an absent section.')
+    }
+  }
+  L.push('')
+
+  // The api-diff generator keeps its own, narrower stop-condition list. Both
+  // are shown: it sees API facts the eleven-condition gate reads back from its
+  // artifact, and a reader comparing them should not have to guess.
   const stops = apiDiff?.stopConditions ?? []
+  L.push('### Stop conditions reported by `release:api-diff`')
+  L.push('')
   if (stops.length === 0) {
-    L.push('None recorded by `release:api-diff`.')
+    L.push('None recorded — the API-diff pass found nothing to report. (This is a narrower')
+    L.push('list than the eleven above and never replaces it.)')
   }
   else {
     L.push('| Code | Detail |')
     L.push('|---|---|')
     for (const stop of stops)
-      L.push(`| \`${stop.code}\` | ${stop.detail} |`)
+      L.push(`| \`${stop.code}\` | ${stop.detail.replaceAll('|', '\\|')} |`)
+  }
+  L.push('')
+
+  L.push('### Deprecations standing in the public surface')
+  L.push('')
+  if (deprecations === null) {
+    L.push('**The deprecation ledger could not be read.** Run `yarn validate:deprecations`.')
+  }
+  else {
+    L.push(`**${deprecations.annotations} \`@deprecated\` symbol(s)** in package sources — `)
+    L.push(`**${deprecations.withRecord} with a record, ${deprecations.withoutRecord} without.**`)
+    L.push('')
+    L.push('| Fact | Value |')
+    L.push('|---|---|')
+    L.push(`| Records in \`packages/contracts/deprecations.json\` | ${deprecations.records} |`)
+    L.push(`| Annotated with no record (doc 06 violation) | **${deprecations.withoutRecord}** |`)
+    L.push(`| Carrying written instructions instead of a codemod | ${deprecations.withoutCodemod} |`)
+    L.push(`| Without a dev-mode runtime warning (each with a recorded reason) | ${deprecations.withoutRuntimeWarning} |`)
+    L.push(`| Schema/policy violations | ${deprecations.violations.length} |`)
+    L.push('')
+    L.push('doc 06 §"API compatibility and deprecation" requires a runtime development')
+    L.push('warning *when practical*, a typed annotation, docs, a replacement example, a')
+    L.push('codemod or adapter where feasible, the first-deprecated and earliest-removal')
+    L.push('versions, and a rollback path. `yarn validate:deprecations` is the gate;')
+    L.push('`packages/contracts/deprecations.json` is the ledger, and VERSIONING.md §4 is')
+    L.push('the policy it enforces.')
   }
   L.push('')
   L.push('### Accepted exceptions')
@@ -602,14 +786,16 @@ export function renderLedger(input: ReportInputs): string {
 
 // --- CLI ---
 
-export interface ReportArgs { out: string | null }
+export interface ReportArgs { out: string | null, verifySections: boolean }
 
 export function parseArgs(argv: string[]): ReportArgs {
-  const args: ReportArgs = { out: null }
+  const args: ReportArgs = { out: null, verifySections: false }
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
     if (arg === '--out')
       args.out = argv[++i] ?? null
+    else if (arg === '--verify-sections')
+      args.verifySections = true
     else
       throw new Error(`unknown argument: ${arg}`)
   }
@@ -633,7 +819,16 @@ function workspaceVersions(): Record<string, string> {
 function main(): void {
   const args = parseArgs(process.argv.slice(2))
   const binding = gitState()
-  const bundle = bundleId(binding)
+  // Resolve the candidate by COMMIT, not by date. `bundleId()` is
+  // `<date>-<shortCommit>`, so at midnight the same tree acquires a second
+  // candidate name and a report generated under the new one reports every
+  // artifact as ABSENT while it sits, complete, under yesterday's. Measured:
+  // the first cross-midnight run of this task said "api-diff: ABSENT ·
+  // supply chain: ABSENT · qualification: ABSENT" for a commit whose evidence
+  // was entirely present. A report that says ABSENT about evidence that exists
+  // is exactly the false statement section 8 of doc 08 exists to prevent.
+  // `--out` still wins, so a caller can always target one directory explicitly.
+  const bundle = candidateForCommit(binding.shortCommit, bundleId(binding))
   const outDir = args.out ? resolve(ROOT, args.out) : join(EVIDENCE_DIR, bundle)
   mkdirSync(outDir, { recursive: true })
 
@@ -655,9 +850,32 @@ function main(): void {
     chainLinks,
     versions: workspaceVersions(),
     tags: git(['tag', '--list']).split(/\r?\n/).filter(t => t !== '' && !t.startsWith('backup/')),
+    qualification: readJsonOrNull<QualificationReport>(join(outDir, 'package-qualification.json')),
+    // Both gates are run live rather than read from a file: a stop-condition
+    // verdict cached in the bundle would be evidence about whenever it was
+    // written, and section 8's whole job is to say what is true of THIS tree.
+    // Either failing to run is a red, never an omission — hence the catch.
+    stopConditions: (() => {
+      try {
+        return runStopConditions({ candidate: outDir, binding })
+      }
+      catch {
+        return null
+      }
+    })(),
+    deprecations: (() => {
+      try {
+        return runDeprecationCheck()
+      }
+      catch {
+        return null
+      }
+    })(),
   }
 
-  writeFileSync(join(outDir, 'report.md'), renderReport(input), 'utf8')
+  const markdown = renderReport(input)
+  const sections = verifySections(markdown)
+  writeFileSync(join(outDir, 'report.md'), markdown, 'utf8')
   writeFileSync(join(outDir, 'ledger.md'), renderLedger(input), 'utf8')
   writeFileSync(
     join(outDir, 'candidate-content-digest.json'),
@@ -671,7 +889,28 @@ function main(): void {
   console.log(`  supply chain: ${input.supplyChain ? `present · ${input.supplyChain.totals.tarballs} tarball(s)` : 'ABSENT'}`)
   console.log(`  content digest: ${digest.digest.slice(0, 16)}… (${digest.fileCount} files)`)
   console.log(`  admissible: ${binding.admissible}${binding.admissible ? '' : ` — ${binding.inadmissibleReason}`}`)
+  console.log(`  qualification: ${input.qualification ? `${input.qualification.rows.length} row(s)` : 'ABSENT'}`)
+  console.log(`  stop conditions: ${input.stopConditions
+    ? `${input.stopConditions.results.length} — ${input.stopConditions.totals.clear} clear · ${input.stopConditions.totals.fired} fired · ${input.stopConditions.totals.unevaluable} unevaluable · ${input.stopConditions.totals.unattested} unattested`
+    : 'COULD NOT RUN (a red, not an omission)'}`)
+  console.log(`  deprecations: ${input.deprecations
+    ? `${input.deprecations.annotations} symbol(s) — ${input.deprecations.withRecord} with a record, ${input.deprecations.withoutRecord} without`
+    : 'COULD NOT RUN'}`)
+  console.log(`  sections: ${sections.found.length} top-level — ${sections.ok ? 'all eight doc-08 sections present, in order' : 'MISMATCH'}`)
   console.log(`  written → ${outDir.slice(ROOT.length + 1).replaceAll('\\', '/')}/{report.md,ledger.md,candidate-content-digest.json}`)
+
+  if (args.verifySections && !sections.ok) {
+    console.error('')
+    console.error('✗ the rendered report does not carry doc 08\'s eight sections.')
+    for (const m of sections.missing)
+      console.error(`    missing: ${m}`)
+    for (const e of sections.extra)
+      console.error(`    unexpected: ${e}`)
+    console.error('  doc 08 §Required release report: every release report states these EIGHT')
+    console.error('  things INDEPENDENTLY. A section with no evidence prints the absence in')
+    console.error('  words; it is never dropped.')
+    process.exit(1)
+  }
 }
 
 const invokedDirectly = process.argv[1] !== undefined

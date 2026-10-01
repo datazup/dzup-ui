@@ -9,10 +9,18 @@
  * over a stale artifact for three packets (S1-F10).
  *
  * The second block asserts the state of the real repository. It is written to
- * describe reality rather than to demand a particular outcome, because the
- * duplication is an open owner decision (TASK-R1-O6 item 1, D174): when the
- * decision lands, `versions.length` becomes 1 and the assertion below is the
- * one line that has to change.
+ * describe reality rather than to demand a particular outcome.
+ *
+ * The duplication it used to pin is GONE (2026-09-28): RESIDUAL-01 aligned the
+ * three app declarants to `^0.477.0` and the owner's `yarn install` refreshed
+ * the lock, so `versions.length` is 1 and the aggregate is green. As this header
+ * predicted, one assertion had to change — it was inverted, not removed, so the
+ * settled state is now pinned and a regression to two versions turns red. The
+ * "names every declarer" case moved to a synthetic lock to keep that coverage,
+ * since the real repository can no longer produce the diagnostic.
+ *
+ * What remains open is the OTHER half of TASK-R1-O6 item 1 (D174): `lucide-vue-next`
+ * is deprecated upstream in favour of `@lucide/vue`. That is reported, never failed.
  */
 
 import { describe, expect, it } from 'vitest'
@@ -217,18 +225,44 @@ describe('the real repository', () => {
     expect(collectDeclarations(manifests).undeclaredFamily).toEqual([])
   })
 
-  it('records the duplication that is open as TASK-R1-O6 item 1 (D174)', () => {
+  it('holds the single version the range alignment settled (was D174 item 1)', () => {
     const report = checkRepository()
-    // When D174 is taken this becomes 1 and the gate goes green. Until then the
-    // fact is asserted rather than tolerated, so nobody can quietly re-introduce
-    // a second version under cover of the first.
-    expect(report.versions).toEqual(['0.475.0', '0.477.0'])
+    // Resolved 2026-09-28 (RESIDUAL-01 aligned the three app declarants to
+    // ^0.477.0; the owner's `yarn install` refreshed the lock). The assertion is
+    // INVERTED rather than deleted: it now pins the settled state, so a second
+    // version cannot be re-introduced quietly — which is the failure this file
+    // exists to catch. `versions.length` going back to 2 must turn this red.
+    expect(report.versions).toEqual(['0.477.0'])
     expect(report.idents).toEqual(['lucide-vue-next'])
-    expect(report.violations.filter(v => v.level === 'error').map(v => v.rule)).toEqual(['single-version'])
+    expect(report.violations.filter(v => v.level === 'error')).toEqual([])
+    // The ident's own deprecation is a SEPARATE open decision (the swap to
+    // @lucide/vue, TASK-R1-O6 item 1's remaining half) and is reported, not failed.
+    expect(report.violations.map(v => v.rule)).toContain('deprecated-ident')
   })
 
   it('names every declarer in the diagnostic a human reads', () => {
-    const report = checkRepository()
+    // Synthetic, because the real repository no longer duplicates. This carries
+    // the coverage the real-repository assertion used to: when two versions DO
+    // appear, the message must name every manifest that declared one, so a
+    // reader can go straight to them instead of re-deriving the set.
+    const lock = `__metadata:
+  version: 10
+
+"lucide-vue-next@npm:^0.475.0":
+  version: 0.475.0
+  resolution: "lucide-vue-next@npm:0.475.0"
+  languageName: node
+
+"lucide-vue-next@npm:^0.477.0":
+  version: 0.477.0
+  resolution: "lucide-vue-next@npm:0.477.0"
+  languageName: node
+`
+    const report = checkIconDuplicates(lock, [
+      { workspace: '@dzup-ui/core', manifest: 'packages/core/package.json', field: 'dependencies', ident: 'lucide-vue-next', range: '^0.477.0' },
+      { workspace: '@dzup-ui/landing', manifest: 'apps/landing/package.json', field: 'dependencies', ident: 'lucide-vue-next', range: '^0.475.0' },
+    ], [], null)
+    expect(report.violations.filter(v => v.level === 'error').map(v => v.rule)).toEqual(['single-version'])
     const message = report.violations.find(v => v.rule === 'single-version')?.message ?? ''
     expect(message).toContain('packages/core/package.json')
     expect(message).toContain('apps/landing/package.json')

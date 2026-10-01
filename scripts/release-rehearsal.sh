@@ -165,10 +165,23 @@ run_gate "nuxt-fixtures" "yarn test:nuxt-fixtures:pack"
 if [[ "$WITH_EVIDENCE" == "true" ]]; then
   run_gate "api-diff"  "yarn release:api-diff --out $BUNDLE"
   run_gate "evidence"  "yarn release:evidence --out $BUNDLE"
+  # The twelve-row package-qualification matrix (TASK-S2-O1). It packs six
+  # tarballs and runs ~10 Vite builds, so it is release-candidate evidence, not
+  # a per-change gate -- decision D-S2O1-6 option (a), taken here.
+  run_gate "qualify-package" "yarn qualify:package"
+  # The eleven doc-08 stop conditions (TASK-S2-O2). It runs AFTER the evidence
+  # it reads (api-diff.json, hashes.json, package-qualification.json) and
+  # BEFORE the report that projects it. It is deliberately NOT a `validate:all`
+  # link: SC-1 fires on any dirty worktree, which is exactly right for a
+  # release and useless for a gate run on every change. `--write-ratchets`
+  # records this candidate's ceiling values so the NEXT candidate's SC-7 has a
+  # baseline to compare against; without one SC-7 is unevaluable, which is a
+  # red, which is the correct answer for the first candidate that ever ran.
+  run_gate "stop-conditions" "yarn validate:stop-conditions --candidate $BUNDLE --write-ratchets"
   # The report is a projection of results.jsonl, so it runs LAST and is not
   # itself a gate row — a report that reported on itself would be circular.
-  step "$((GATE_N + 1)). yarn release:report --out $BUNDLE"
-  yarn release:report --out "$BUNDLE" || fail "release:report"
+  step "$((GATE_N + 1)). yarn generate:release-report --out $BUNDLE"
+  yarn generate:release-report --out "$BUNDLE" || fail "generate:release-report"
   ok "release report written"
 else
   warn "Skipping release evidence (--no-evidence)"

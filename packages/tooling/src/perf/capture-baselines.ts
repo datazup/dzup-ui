@@ -33,9 +33,23 @@
  * numbers become the budget. Without it the distinction had no expression in
  * the tooling — the only way to see what a new lane would record was to
  * overwrite the file that thirty-three existing metrics depend on.
+ *
+ * **The in-place write is now guarded (TASK-S1-O4).** `--propose` was the
+ * distinction; it was not yet a *control*, because the unguarded path was still
+ * the default and still one keystroke away. Four refusals now stand between
+ * `perf:capture` and `packages/core/perf/baselines.json` — undesignated host,
+ * wrong host, unattested quiescence, and any upward threshold move — and each
+ * of them prints what would clear it. See `capture-environment.ts` for why the
+ * upward-move refusal matters most: R2-O7 measured that an in-place capture at
+ * that moment would have silently raised **22 of 33** committed budgets (D132).
+ *
+ *   tsx …/capture-baselines.ts --propose <path>                 # always allowed
+ *   tsx …/capture-baselines.ts --quiet-host-attested-by "<name>"
+ *   tsx …/capture-baselines.ts --quiet-host-attested-by "<name>" \
+ *       --raise-budget --owner "<name>" --reason "<the user benefit>"
  */
 
-import type { Baseline, BaselineFile } from './baselines.ts'
+import type { Baseline, BaselineFile, CaptureStamp } from './baselines.ts'
 import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { arch, cpus, platform } from 'node:os'
@@ -46,9 +60,15 @@ import { ROOT } from '../ownership/generate-ownership-manifest.ts'
 import { compareSymbols } from '../ownership/ownership-manifest.types.ts'
 import { readCommittedMatrix } from '../quality/generate-quality-matrix.ts'
 import { BASELINE_SCHEMA_VERSION } from './baselines.ts'
+import {
+  checkCaptureAuthority,
+  currentHost,
+  readCaptureEnvironment,
+  thresholdMovements,
+} from './capture-environment.ts'
 import { measureExportSizes } from './export-sizes.ts'
 import { harnessIdentity } from './harness-hash.ts'
-import { BASELINES_PATH } from './read-baselines.ts'
+import { BASELINES_PATH, readBaselineFile } from './read-baselines.ts'
 import {
   MEASURABLE_CV,
   MINIMUM_RUNS,
@@ -199,6 +219,11 @@ const isMain = process.argv[1] !== undefined
   && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))
 
 if (isMain) {
+  const flag = (name: string): string | undefined => {
+    const at = process.argv.indexOf(name)
+    return at >= 0 ? process.argv[at + 1] : undefined
+  }
+
   const runsFlag = process.argv.indexOf('--runs')
   const runs = runsFlag >= 0 ? Number(process.argv[runsFlag + 1]) : MINIMUM_RUNS
   const skipSizes = process.argv.includes('--skip-sizes')
@@ -206,6 +231,40 @@ if (isMain) {
   const proposeFlag = process.argv.indexOf('--propose')
   const proposeTo = proposeFlag >= 0 ? resolve(process.argv[proposeFlag + 1] ?? '') : undefined
   const outputPath = proposeTo ?? BASELINES_PATH
+  const inPlace = proposeTo === undefined
+
+  // TASK-S1-O4. The four refusals, and the owner's two escape hatches.
+  const attestedBy = flag('--quiet-host-attested-by')
+  const budgetRaiseAuthorised = process.argv.includes('--raise-budget')
+    && (flag('--owner') ?? '').trim() !== ''
+    && (flag('--reason') ?? '').trim() !== ''
+  const environment = readCaptureEnvironment()
+  const host = currentHost()
+
+  const refuse = (refusals: readonly { code: string, message: string }[]): never => {
+    console.error('')
+    for (const r of refusals)
+      console.error(`✗ perf:capture REFUSED [${r.code}] ${r.message}`)
+    console.error(
+      `\n${refusals.length} refusal(s). `
+      + 'packages/core/perf/baselines.json is unchanged. Baseline replacement is an owner '
+      + 'action (docs/program-2026-09-22-architecture/README.md §5 <authority>).',
+    )
+    process.exit(1)
+  }
+
+  // Phase 1 — everything knowable BEFORE spending five process runs. A refusal
+  // that arrives after a twenty-minute capture teaches people to work around
+  // it; this one costs a second.
+  const preflight = checkCaptureAuthority(environment, host, { inPlace, attestedBy })
+  if (!preflight.allowed)
+    refuse(preflight.refusals)
+  if (inPlace) {
+    console.warn(
+      `perf:capture — in-place write authorised for host ${host.platform}/${host.arch} `
+      + `(${host.cpus} CPUs, node ${host.node}), quiescence attested by "${attestedBy}".`,
+    )
+  }
 
   const matrix = readCommittedMatrix()
   if (matrix === undefined) {
@@ -263,6 +322,59 @@ if (isMain) {
     }
   }
 
+  // --- Phase 2: the direction of every threshold move, before the write ----
+  // This is defect D132's missing call site. `mayRatchet()` has been exported
+  // and unit-tested since P5-05 and called by nothing; `toBaseline` derives a
+  // threshold from the fresh distribution alone and never reads the recorded
+  // file, so `perf:capture` wrote whatever the machine produced that day —
+  // upward moves included — over the committed budgets, which is exactly what
+  // the policy string inside the same file forbids. R2-O7 measured the cost:
+  // 22 of 33 budgets would have been raised, by up to +21.6 %.
+  const movements = thresholdMovements(readBaselineFile(), baselines)
+  console.warn(
+    `\nperf:capture — threshold movement vs the committed file: `
+    + `${movements.raised.length} up · ${movements.lowered.length} down · `
+    + `${movements.added.length} new · ${movements.removed.length} gone · `
+    + `${movements.thresholdLost.length} threshold lost`,
+  )
+  const postflight = checkCaptureAuthority(environment, host, {
+    inPlace,
+    attestedBy,
+    budgetRaiseAuthorised,
+    movements,
+  })
+  if (!postflight.allowed) {
+    console.error(
+      '\n(The capture itself completed. Nothing was written to '
+      + 'packages/core/perf/baselines.json. Re-run with `--propose <path>` to keep these '
+      + 'numbers as a proposal.)',
+    )
+    refuse(postflight.refusals)
+  }
+
+  const capture: CaptureStamp = {
+    sourceCommit,
+    capturedAt: new Date().toISOString(),
+    runs,
+    hardwareProfile: {
+      profileId: environment?.authoritative.profileId ?? null,
+      platform: host.platform,
+      arch: host.arch,
+      cpus: host.cpus,
+      node: host.node,
+    },
+    quiescenceAttestedBy: (attestedBy ?? '').trim() === '' ? null : attestedBy!,
+    ...(budgetRaiseAuthorised && movements.raised.length > 0
+      ? {
+          budgetRaise: {
+            owner: flag('--owner')!,
+            reason: flag('--reason')!,
+            raisedMetrics: movements.raised.map(r => r.id),
+          },
+        }
+      : {}),
+  }
+
   const file: BaselineFile = {
     schemaVersion: BASELINE_SCHEMA_VERSION,
     policy: {
@@ -274,6 +386,9 @@ if (isMain) {
     },
     // D90: the instrument that produced these numbers, recorded beside them.
     harness: harnessIdentity(),
+    // TASK-S1-O4: the capture session — commit, date, run count, declared host
+    // profile and the quiescence signature. Written only here.
+    capture,
     baselines: baselines.sort((a, b) => compareSymbols(a.id, b.id)),
   }
 
