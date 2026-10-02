@@ -44,7 +44,7 @@ describe('dzCarousel', () => {
 
   it('has contain: layout style', () => {
     const wrapper = mountCarousel()
-    expect(wrapper.find('[role="region"]').attributes('style')).toContain('contain: layout style')
+    expect(wrapper.find('[role="region"]').classes()).toContain('[contain:layout_style]')
   })
 
   it('renders slide content', () => {

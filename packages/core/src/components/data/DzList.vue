@@ -106,7 +106,7 @@ function handleBlur(event: FocusEvent): void {
     :data-loading="loading ? '' : undefined"
     :data-tone="resolvedTone"
     role="list"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
     @focus="handleFocus"
     @blur="handleBlur"

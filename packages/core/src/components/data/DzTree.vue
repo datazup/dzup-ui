@@ -218,7 +218,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-state="disabled ? 'disabled' : loading ? 'loading' : 'ready'"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-tree'), ...$attrs, class: undefined }"
   >
     <template v-if="items.length > 0">

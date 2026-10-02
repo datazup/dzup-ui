@@ -60,7 +60,7 @@ describe('dzSwitch — Contract Spec v1', () => {
     const wrapper = mount(DzSwitch, {
       slots: { default: 'sw' },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   // ── Slots ──

@@ -437,7 +437,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-label="ariaLabel"
     :data-orientation="orientation"
     :data-collapsed="isCollapsed ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-mega-menu'), ...$attrs, class: undefined }"
   >
     <!-- ── Collapsed: stacked disclosure / accordion ── -->

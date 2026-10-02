@@ -70,7 +70,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     data-state="ready"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-breadcrumb'), ...$attrs, class: undefined }"
   >
     <ol data-part="list" :class="cn(styles.list(), ui?.list)">

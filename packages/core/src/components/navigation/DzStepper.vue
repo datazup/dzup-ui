@@ -155,7 +155,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-describedby="ariaDescribedby"
     data-state="ready"
     role="group"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-stepper'), ...$attrs, class: undefined }"
   >
     <slot />

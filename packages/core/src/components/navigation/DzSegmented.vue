@@ -79,7 +79,7 @@ const { testId: dzTestId } = useDzTestIds()
     :class="rootClasses"
     :data-state="disabled ? 'disabled' : 'idle'"
     :aria-label="ariaLabel"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-segmented'), ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"
   >

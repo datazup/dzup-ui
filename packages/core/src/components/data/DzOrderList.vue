@@ -544,7 +544,7 @@ const { testId: dzTestId } = useDzTestIds()
     :class="rootClasses"
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-order-list'), ...$attrs, class: undefined }"
   >
     <!-- Move controls -->

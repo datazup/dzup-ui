@@ -1,3 +1,4 @@
+import { resolve } from 'node:path'
 import process from 'node:process'
 import { defineConfig, devices } from '@playwright/test'
 
@@ -39,6 +40,7 @@ export default defineConfig({
     { name: 'csp-webkit', use: { ...devices['Desktop Safari'] } },
   ],
   webServer: {
+    cwd: resolve(import.meta.dirname, '../..'),
     command: 'node node_modules/tsx/dist/cli.mjs e2e/csp/serve-csp.ts',
     url: `http://127.0.0.1:${process.env.DZUP_CSP_PORT ?? 6180}/open/`,
     reuseExistingServer: !process.env.CI,

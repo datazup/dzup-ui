@@ -44,12 +44,11 @@ const classes = computed(() =>
 
 <template>
   <div
-    class="relative"
+    class="relative [contain:layout_style]"
     :data-state="ctx?.loading.value ? 'loading' : ctx?.disabled.value ? 'disabled' : 'idle'"
     :data-tone="ctx?.tone.value"
     :data-disabled="ctx?.disabled.value ? '' : undefined"
     :data-loading="ctx?.loading.value ? '' : undefined"
-    style="contain: layout style"
   >
     <slot>
       <button

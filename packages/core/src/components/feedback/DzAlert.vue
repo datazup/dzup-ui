@@ -68,7 +68,7 @@ const dzMessages = useComponentMessages('DzAlert')
     :aria-describedby="ariaDescribedby"
     :data-tone="tone"
     :data-state="visible ? 'open' : 'closed'"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Icon -->

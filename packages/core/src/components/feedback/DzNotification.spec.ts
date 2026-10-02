@@ -40,7 +40,7 @@ describe('dzNotification', () => {
 
   it('has contain: layout style', () => {
     const wrapper = mountNotification()
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('sets data-tone attribute', () => {

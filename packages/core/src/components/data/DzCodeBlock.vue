@@ -78,7 +78,7 @@ const { testId: dzTestId } = useDzTestIds()
     :class="rootClasses"
     :aria-label="ariaLabel"
     role="region"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-code-block'), ...$attrs, class: undefined }"
   >
     <!-- Header -->

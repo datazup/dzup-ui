@@ -81,7 +81,7 @@ const { testId: dzTestId } = useDzTestIds()
     data-part="root"
     :class="rootClasses"
     :data-tone="toast.tone ?? 'neutral'"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-toast'), ...rootStateProps }"
     @update:open="(open: boolean) => { if (!open) handleClose() }"
   >

@@ -323,7 +323,7 @@ const { testId: dzTestId } = useDzTestIds()
   <div
     data-part="root"
     :class="rootClasses"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-speed-dial'), ...$attrs, class: undefined }"
     @keydown="onRootKeydown"
     @mouseenter="onHoverOpen"

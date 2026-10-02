@@ -98,7 +98,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-describedby="ariaDescribedby"
     :data-tone="tone"
     :data-state="visible ? 'open' : 'closed'"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-notification'), ...$attrs, class: undefined }"
   >
     <!-- Icon -->

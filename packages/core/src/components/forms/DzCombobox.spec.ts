@@ -36,7 +36,7 @@ describe('dzCombobox — Unit Tests', () => {
     const wrapper = mount(DzCombobox, {
       props: { items },
     })
-    expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   it('displays placeholder text', () => {
@@ -133,7 +133,7 @@ describe('dzCombobox — Unit Tests', () => {
     const wrapper = mount(DzCombobox, {
       props: { items },
     })
-    const el = wrapper.find('[style*="contain: layout style"]')
+    const el = wrapper.find('[class~="[contain:layout_style]"]')
     expect(el.exists()).toBe(true)
   })
 

@@ -383,7 +383,7 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
         :data-required="resolvedRequired ? '' : undefined"
         :data-loading="loading ? '' : undefined"
         :aria-busy="loading || undefined"
-        style="contain: layout style"
+        class="[contain:layout_style]"
         v-bind="{ ...$attrs, class: undefined }"
       >
         <ComboboxInput

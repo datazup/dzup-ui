@@ -71,7 +71,7 @@ const dzMotionAttr = useDzMotionAttribute()
       data-part="content"
       :class="contentClasses"
       :data-dz-motion="dzMotionAttr"
-      style="contain: layout style"
+      class="[contain:layout_style]"
       v-bind="{ ...$attrs, class: undefined }"
     >
       <slot />

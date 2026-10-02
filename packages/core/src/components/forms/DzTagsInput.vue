@@ -341,7 +341,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-readonly="readonly ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     :aria-busy="loading || undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-tags-input'), ...$attrs, class: undefined }"
   >
     <div

@@ -167,7 +167,7 @@ const { testId: dzTestId } = useDzTestIds()
     data-state="ready"
     :data-variant="resolvedVariant"
     :data-tone="resolvedTone"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-tabs'), ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"
   >

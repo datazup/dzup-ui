@@ -15,7 +15,7 @@ describe('dzSplitter — Contract Spec v1', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzSplitter, { slots: { default: '<div>Panel</div>' } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('accepts all canonical size values', () => {

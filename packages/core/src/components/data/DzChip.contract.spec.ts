@@ -29,7 +29,7 @@ describe('dzChip — Contract Spec v1', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzChip, { slots: { default: 'Vue 3' } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   // RESIDUAL-11 `D-RES10-3`: the root carries no role. It used to declare

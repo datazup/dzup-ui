@@ -4,13 +4,13 @@
   "scope": "packages/core/src/**/*.vue — template sections only",
   "generatedBy": "packages/tooling/src/security/inline-style-inventory.ts",
   "totals": {
-    "staticFiles": 78,
-    "staticSites": 81,
+    "staticFiles": 0,
+    "staticSites": 0,
     "boundFiles": 38,
     "boundSites": 52,
     "byDisposition": {
-      "recipe-movable": 78,
-      "layout-static": 3,
+      "recipe-movable": 0,
+      "layout-static": 0,
       "custom-property": 0,
       "required-dynamic": 19,
       "unclassified-binding": 33
@@ -18,81 +18,11 @@
   },
   "sites": [
     {
-      "file": "packages/core/src/components/buttons/DzButton.vue",
-      "line": 209,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzButtonGroup.vue",
-      "line": 73,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzCopyButton.vue",
-      "line": 183,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzFab.vue",
-      "line": 129,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzIconButton.vue",
-      "line": 147,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzSpeedDial.vue",
-      "line": 326,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/buttons/DzSpeedDial.vue",
       "line": 348,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"itemStyle(index)\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzSplitButton.vue",
-      "line": 101,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzSplitButtonAction.vue",
-      "line": 71,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzSplitButtonMenu.vue",
-      "line": 52,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/buttons/DzToggleButton.vue",
-      "line": 121,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/cards/DzImageCard.vue",
@@ -102,60 +32,11 @@
       "source": ":style=\"imageStyle\""
     },
     {
-      "file": "packages/core/src/components/data/DzAccordion.vue",
-      "line": 141,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzAnimatedNumber.vue",
-      "line": 308,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzCalendar.vue",
-      "line": 380,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzChip.vue",
-      "line": 190,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzCodeBlock.vue",
-      "line": 81,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/data/DzCodeBlock.vue",
       "line": 121,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"contentStyles\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzCountdown.vue",
-      "line": 160,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzDataGrid.vue",
-      "line": 163,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/data/DzDataGridBody.vue",
@@ -170,13 +51,6 @@
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"getColumnStyle(col)\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzDataView.vue",
-      "line": 260,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/data/DzDescriptions.vue",
@@ -200,27 +74,6 @@
       "source": ":style=\"groupStyle\""
     },
     {
-      "file": "packages/core/src/components/data/DzInfiniteScroll.vue",
-      "line": 123,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzList.vue",
-      "line": 109,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzOrderList.vue",
-      "line": 547,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/data/DzTable.vue",
       "line": 178,
       "kind": "bound",
@@ -236,24 +89,10 @@
     },
     {
       "file": "packages/core/src/components/data/DzTableBody.vue",
-      "line": 132,
-      "kind": "static",
-      "disposition": "layout-static",
-      "source": "style=\"padding: 0; border: none\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzTableBody.vue",
       "line": 139,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ height: `${virtualWindow.paddingBottom}px` }\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzTableBody.vue",
-      "line": 141,
-      "kind": "static",
-      "disposition": "layout-static",
-      "source": "style=\"padding: 0; border: none\""
     },
     {
       "file": "packages/core/src/components/data/DzTableCell.vue",
@@ -261,41 +100,6 @@
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"cellStyle\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzTag.vue",
-      "line": 137,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzTimeline.vue",
-      "line": 85,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/data/DzTree.vue",
-      "line": 221,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/feedback/DzAlert.vue",
-      "line": 71,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/feedback/DzMeterGroup.vue",
-      "line": 148,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/feedback/DzMeterGroup.vue",
@@ -312,32 +116,11 @@
       "source": ":style=\"{ backgroundColor: segment.resolvedColor }\""
     },
     {
-      "file": "packages/core/src/components/feedback/DzNotification.vue",
-      "line": 101,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/feedback/DzProgress.vue",
-      "line": 132,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/feedback/DzProgress.vue",
       "line": 137,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ width: indeterminate ? '50%' : `${percentage}%` }\""
-    },
-    {
-      "file": "packages/core/src/components/feedback/DzProgress.vue",
-      "line": 155,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/feedback/DzProgress.vue",
@@ -389,13 +172,6 @@
       "source": ":style=\"elementStyle\""
     },
     {
-      "file": "packages/core/src/components/feedback/DzToast.vue",
-      "line": 84,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/feedback/DzTokenProgressBar.vue",
       "line": 98,
       "kind": "bound",
@@ -417,34 +193,6 @@
       "source": ":style=\"dotStyle\""
     },
     {
-      "file": "packages/core/src/components/forms/DzCascader.vue",
-      "line": 568,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzCheckbox.vue",
-      "line": 126,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzCheckboxGroup.vue",
-      "line": 117,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 158,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
       "line": 186,
       "kind": "bound",
@@ -460,59 +208,17 @@
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 215,
-      "kind": "static",
-      "disposition": "layout-static",
-      "source": "style=\"appearance: none; -webkit-appearance: none; border: none; background: none;\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 226,
+      "line": 225,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ backgroundColor: model }\""
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 249,
+      "line": 248,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ backgroundColor: color }\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzCombobox.vue",
-      "line": 386,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzDatePicker.vue",
-      "line": 228,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzDateRangePicker.vue",
-      "line": 241,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzFormField.vue",
-      "line": 100,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzInplace.vue",
-      "line": 191,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/forms/DzKnob.vue",
@@ -522,20 +228,6 @@
       "source": ":style=\"{ width: `${diameter}px`, height: `${diameter}px` }\""
     },
     {
-      "file": "packages/core/src/components/forms/DzListbox.vue",
-      "line": 429,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzMention.vue",
-      "line": 761,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/forms/DzMention.vue",
       "line": 841,
       "kind": "bound",
@@ -543,137 +235,11 @@
       "source": ":style=\"menuStyle\""
     },
     {
-      "file": "packages/core/src/components/forms/DzMultiSelect.vue",
-      "line": 280,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzRadio.vue",
-      "line": 80,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzRadioGroup.vue",
-      "line": 126,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzRangeSlider.vue",
-      "line": 182,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/forms/DzRating.vue",
       "line": 312,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ width: `${fillPercent(index)}%` }\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzSelect.vue",
-      "line": 497,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzSlider.vue",
-      "line": 181,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzSwitch.vue",
-      "line": 97,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzTagsInput.vue",
-      "line": 344,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzTimePicker.vue",
-      "line": 557,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzTransfer.vue",
-      "line": 388,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/forms/DzTreeSelect.vue",
-      "line": 660,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/inputs/DzInput.vue",
-      "line": 199,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/inputs/DzInputMask.vue",
-      "line": 274,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/inputs/DzNumberInput.vue",
-      "line": 235,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/inputs/DzOtpInput.vue",
-      "line": 178,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/inputs/DzPasswordInput.vue",
-      "line": 171,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/inputs/DzSearchInput.vue",
-      "line": 201,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/inputs/DzTextarea.vue",
-      "line": 230,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/layout/DzAffix.vue",
@@ -725,34 +291,6 @@
       "source": ":style=\"containerStyle\""
     },
     {
-      "file": "packages/core/src/components/layout/DzResizable.vue",
-      "line": 81,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/layout/DzScrollArea.vue",
-      "line": 81,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/layout/DzSplitter.vue",
-      "line": 83,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/media/DzCarousel.vue",
-      "line": 197,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/media/DzCarousel.vue",
       "line": 207,
       "kind": "bound",
@@ -779,13 +317,6 @@
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"dividerStyle\""
-    },
-    {
-      "file": "packages/core/src/components/media/DzLightbox.vue",
-      "line": 159,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/media/DzQRCode.vue",
@@ -816,53 +347,11 @@
       "source": ":style=\"rootStyle\""
     },
     {
-      "file": "packages/core/src/components/navigation/DzBreadcrumb.vue",
-      "line": 73,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/navigation/DzColorModeToggle.vue",
-      "line": 207,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/navigation/DzMegaMenu.vue",
-      "line": 440,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/navigation/DzMegaMenu.vue",
       "line": 598,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ gridTemplateColumns: `repeat(${item.items!.length}, minmax(0, 1fr))` }\""
-    },
-    {
-      "file": "packages/core/src/components/navigation/DzMenu.vue",
-      "line": 68,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/navigation/DzPagination.vue",
-      "line": 94,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/navigation/DzSegmented.vue",
-      "line": 82,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/navigation/DzSidebar.vue",
@@ -872,67 +361,11 @@
       "source": ":style=\"rootStyles\""
     },
     {
-      "file": "packages/core/src/components/navigation/DzSidebar.vue",
-      "line": 230,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/navigation/DzStepper.vue",
-      "line": 158,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/navigation/DzTabs.vue",
-      "line": 170,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/overlays/DzCommandPalette.vue",
-      "line": 240,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/overlays/DzDialogContent.vue",
-      "line": 162,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
       "file": "packages/core/src/components/overlays/DzPopconfirm.vue",
       "line": 222,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"floatingStyles\""
-    },
-    {
-      "file": "packages/core/src/components/overlays/DzPopoverContent.vue",
-      "line": 97,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/overlays/DzSheetContent.vue",
-      "line": 106,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
-    },
-    {
-      "file": "packages/core/src/components/overlays/DzTooltipContent.vue",
-      "line": 74,
-      "kind": "static",
-      "disposition": "recipe-movable",
-      "source": "style=\"contain: layout style\""
     },
     {
       "file": "packages/core/src/components/overlays/DzTour.vue",

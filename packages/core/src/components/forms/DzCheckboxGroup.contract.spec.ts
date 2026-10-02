@@ -24,7 +24,7 @@ describe('dzCheckboxGroup — Contract Spec v1', () => {
     const wrapper = mount(DzCheckboxGroup, {
       slots: { default: '<div>Checkboxes</div>' },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('sets data-disabled when disabled=true', () => {

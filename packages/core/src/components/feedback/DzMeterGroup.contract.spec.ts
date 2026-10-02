@@ -102,6 +102,6 @@ describe('dzMeterGroup — Contract Spec v1', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzMeterGroup, { props: { values: sampleValues } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 })

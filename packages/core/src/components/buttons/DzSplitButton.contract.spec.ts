@@ -68,7 +68,7 @@ describe('dzSplitButton — Contract Spec v1', () => {
     const wrapper = mount(DzSplitButton, {
       slots: { default: '<button>Save</button>' },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   // ── Class merging ──

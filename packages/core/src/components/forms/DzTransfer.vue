@@ -385,7 +385,7 @@ function typeAheadIndex(event: KeyboardEvent, options: readonly HTMLElement[], c
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
       role="group"
-      style="contain: layout style"
+      class="[contain:layout_style]"
       @focus.capture="handleFocus"
       @blur.capture="handleBlur"
     >

@@ -1,0 +1,4 @@
+@import 'tailwindcss';
+
+/* Consumer utilities must cover library classes, including SSR containment. */
+@source '../../../../packages/core/src';

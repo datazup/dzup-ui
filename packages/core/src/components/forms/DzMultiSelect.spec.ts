@@ -19,7 +19,7 @@ describe('dzMultiSelect — Unit Tests', () => {
     const wrapper = mount(DzMultiSelect, {
       props: { items },
     })
-    expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   it('displays placeholder when no values are selected', () => {
@@ -104,7 +104,7 @@ describe('dzMultiSelect — Unit Tests', () => {
     const wrapper = mount(DzMultiSelect, {
       props: { items },
     })
-    const el = wrapper.find('[style*="contain: layout style"]')
+    const el = wrapper.find('[class~="[contain:layout_style]"]')
     expect(el.exists()).toBe(true)
   })
 

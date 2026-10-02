@@ -138,7 +138,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :data-state="disabled ? 'disabled' : 'ready'"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-accordion'), ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"
   >

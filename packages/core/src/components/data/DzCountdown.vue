@@ -157,7 +157,7 @@ watch(
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Live region: per-second announcement of the remaining time -->

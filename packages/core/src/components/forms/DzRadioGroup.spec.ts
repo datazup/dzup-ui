@@ -46,7 +46,7 @@ describe('dzRadioGroup — Unit Tests', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mountGroup()
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('merges consumer class via cn()', () => {
@@ -102,7 +102,7 @@ describe('dzRadio — Unit Tests', () => {
       },
     })
     const radio = wrapper.findComponent(DzRadio)
-    expect(radio.attributes('style')).toContain('contain: layout style')
+    expect(radio.classes()).toContain('[contain:layout_style]')
   })
 })
 

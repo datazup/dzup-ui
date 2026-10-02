@@ -27,7 +27,7 @@ describe('dzTransfer — Unit Tests', () => {
     const wrapper = mount(DzTransfer, {
       props: { source: sourceItems },
     })
-    expect(wrapper.find('[style*="contain: layout style"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   it('renders role="group" on root', () => {

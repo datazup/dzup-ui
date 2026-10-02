@@ -758,7 +758,7 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
     :data-readonly="readonly ? '' : undefined"
     :data-loading="optionsLoading ? '' : undefined"
     :aria-busy="optionsLoading || undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     @keydown="handleAsyncOptionsKeydown"
   >
     <div data-part="control" :class="[styles.field(), ui?.control]">

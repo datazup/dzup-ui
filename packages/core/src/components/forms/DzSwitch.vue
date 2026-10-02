@@ -94,7 +94,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="model ? 'checked' : 'unchecked'"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-switch'), ...$attrs, class: undefined }"
   >
     <SwitchRoot

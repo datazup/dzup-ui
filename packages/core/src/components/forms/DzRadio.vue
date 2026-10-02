@@ -77,7 +77,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-state="resolvedDisabled ? 'disabled' : 'idle'"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-radio'), ...$attrs, class: undefined }"
   >
     <RadioGroupItem

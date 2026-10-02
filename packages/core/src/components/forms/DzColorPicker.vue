@@ -155,7 +155,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-color-picker'), ...$attrs, class: undefined }"
   >
     <PopoverRoot v-model:open="popoverOpen">
@@ -210,9 +210,8 @@ const { testId: dzTestId } = useDzTestIds()
                 type="color"
                 data-part="input"
                 :value="model"
-                class="h-full w-full cursor-crosshair border-0 p-0"
+                class="h-full w-full cursor-crosshair border-0 p-0 appearance-none [-webkit-appearance:none] border-0 bg-transparent"
                 :class="[ui?.input]"
-                style="appearance: none; -webkit-appearance: none; border: none; background: none;"
                 :aria-label="dzMessages.colorArea"
                 @input="handleNativeColorChange"
               >

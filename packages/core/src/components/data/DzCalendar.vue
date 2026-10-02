@@ -377,7 +377,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-mode="mode"
     :data-view="view"
     :data-disabled="disabled ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-calendar'), ...$attrs, class: undefined }"
   >
     <!-- Live region: announces the visible period on navigation -->

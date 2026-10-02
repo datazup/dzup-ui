@@ -76,7 +76,7 @@ describe('dzButtonGroup', () => {
     const wrapper = mount(DzButtonGroup, {
       slots: { default: () => h(DzButton, null, { default: () => 'A' }) },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('merges consumer class via cn()', () => {

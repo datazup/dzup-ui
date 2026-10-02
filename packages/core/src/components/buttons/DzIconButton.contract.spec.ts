@@ -152,7 +152,7 @@ describe('dzIconButton — Contract Spec v1', () => {
     const wrapper = mount(DzIconButton, {
       props: { icon: IconStub, ariaLabel: 'Add' },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   // ── Class merging ──

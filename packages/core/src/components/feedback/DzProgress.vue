@@ -129,7 +129,7 @@ const toneColorVar = computed(() => {
     :aria-describedby="ariaDescribedby"
     :data-tone="resolvedTone"
     :data-state="indeterminate ? 'indeterminate' : 'determinate'"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <div
@@ -152,7 +152,7 @@ const toneColorVar = computed(() => {
     :aria-describedby="ariaDescribedby"
     :data-tone="resolvedTone"
     :data-state="indeterminate ? 'indeterminate' : 'determinate'"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <svg

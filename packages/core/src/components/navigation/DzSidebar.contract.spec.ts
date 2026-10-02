@@ -65,7 +65,7 @@ describe('dzSidebar — Contract Spec v1', () => {
 
   it('applies contain: layout style within the template', () => {
     const wrapper = mount(DzSidebar)
-    expect(wrapper.html()).toContain('contain: layout style')
+    expect(wrapper.html()).toContain('[contain:layout_style]')
   })
 })
 

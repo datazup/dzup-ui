@@ -101,7 +101,7 @@ describe('dzTextarea — Contract Spec v1', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzTextarea)
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   // ── Error message ──

@@ -161,7 +161,7 @@ describe('dzButton — Contract Spec v1', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzButton, { slots: { default: 'btn' } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   // ── HTML type attribute ──
@@ -266,7 +266,7 @@ describe('dzButton — Contract Spec v1', () => {
       props: { href: '/test' },
       slots: { default: 'Link' },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
   // ── Anatomy (Contract Spec v1 styling surface, ADR-19) ──
 

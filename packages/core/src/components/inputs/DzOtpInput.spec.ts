@@ -104,7 +104,7 @@ describe('dzOtpInput — Unit Tests', () => {
 
   it('has contain: layout style on root', () => {
     const wrapper = mount(DzOtpInput)
-    expect(wrapper.find('[style*="contain: layout style"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   it('merges consumer class via cn()', () => {

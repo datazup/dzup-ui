@@ -61,7 +61,7 @@ describe('dzTimeline', () => {
         default: () => h(DzTimelineItem, null, { default: () => 'Event 1' }),
       },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 })
 
