@@ -26,6 +26,7 @@ test('a packed public resolution export works without workspace aliases or TS lo
   mkdirSync(join(library, 'packages/core/dist'), { recursive: true })
   writeFileSync(join(library, 'packages/core/package.json'), JSON.stringify({
     name: '@dzup-ui/core',
+    type: 'module',
     exports: { '.': { import: './dist/index.js' }, './providers': { import: './dist/providers.js' } },
     peerDependencies: { vue: '^3.5.0', 'reka-ui': '^2.0.0' },
   }))
@@ -59,7 +60,7 @@ toViteAliases(resolution)
 })
 
 test('the external guide uses the tested public import', () => {
-  const guide = readFileSync(resolve(import.meta.dirname, '../../../..', 'docs/resolution-external-consumers.md'), 'utf8')
+  const guide = readFileSync(resolve(import.meta.dirname, '../../..', 'docs/resolution-external-consumers.md'), 'utf8')
   assert.match(guide, /import \{ createDzupResolution \} from '@dzup-ui\/testing\/resolution'/)
   assert.doesNotMatch(guide, /from '@dzup-ui\/tooling\/resolution'/)
 })
