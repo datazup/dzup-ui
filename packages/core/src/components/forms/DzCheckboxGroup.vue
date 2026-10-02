@@ -114,7 +114,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-orientation="orientation"
     role="group"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-checkbox-group'), ...$attrs, class: undefined }"
   >
     <slot />

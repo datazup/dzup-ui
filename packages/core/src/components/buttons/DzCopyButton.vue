@@ -180,7 +180,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-variant="resolvedVariant"
     :data-tone="resolvedTone"
     :data-disabled="disabled ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-copy-button'), ...$attrs, class: undefined }"
     @click="handleCopy"
   >

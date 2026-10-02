@@ -159,7 +159,7 @@ const dzMotionAttr = useDzMotionAttribute()
         data-part="content"
         :class="contentClasses"
         :data-dz-motion="dzMotionAttr"
-        style="contain: layout style"
+        class="[contain:layout_style]"
         v-bind="{ ...(id === undefined ? {} : { id }), ...contentAria, ...$attrs, class: undefined }"
         @escape-key-down="handleEscapeKeyDown"
         @pointer-down-outside="handlePointerDownOutside"

@@ -748,7 +748,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-readonly="readonly ? '' : undefined"
     :data-loading="optionsLoading ? '' : undefined"
     :aria-busy="optionsLoading || undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
   >
     <div data-part="control" :class="[styles.field(), ui?.control]">
       <!-- Text control: textarea (multiline) or input (single-line) -->

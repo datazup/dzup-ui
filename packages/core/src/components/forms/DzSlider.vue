@@ -178,7 +178,7 @@ const { testId: dzTestId } = useDzTestIds()
       :data-required="resolvedRequired ? '' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
       :data-tone="resolvedTone"
-      style="contain: layout style"
+      class="[contain:layout_style]"
       v-bind="{ ...$attrs, class: undefined }"
       @update:model-value="handleValueChange"
     >

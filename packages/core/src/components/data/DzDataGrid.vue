@@ -147,7 +147,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-state="loading ? 'loading' : 'ready'"
     :data-loading="loading ? '' : undefined"
     role="region"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-data-grid'), ...$attrs, class: undefined }"
   >
     <!-- Loading overlay -->

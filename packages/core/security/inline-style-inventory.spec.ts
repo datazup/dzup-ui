@@ -31,11 +31,11 @@ describe('inline-style inventory', () => {
     expect(measured.sites).toEqual(artifact.sites)
   })
 
-  it('still measures what TASK-N1-O5 measured, which is what makes it comparable', () => {
-    // F-C1's two numbers, re-derived by a different program at a different
-    // commit. They agree, so the classification below is a classification OF
-    // that finding rather than a second, differently-scoped count.
-    expect(artifact.totals.staticFiles).toBe(78)
+  it('keeps static inline styles at zero and retains the dynamic disposition', () => {
+    // DZUI-GAPADM-03-20261002-R1 removes all 81 static sites. The 52 bound
+    // sites remain visible; this packet does not claim to fix runtime styles.
+    expect(artifact.totals.staticFiles).toBe(0)
+    expect(artifact.totals.staticSites).toBe(0)
     expect(artifact.totals.boundFiles).toBe(38)
   })
 
@@ -43,8 +43,8 @@ describe('inline-style inventory', () => {
     // Downward-only. Lower a number here when the sites go away; raising one is
     // how a CSP claim quietly stops being true.
     const ceilings = {
-      'recipe-movable': 78,
-      'layout-static': 3,
+      'recipe-movable': 0,
+      'layout-static': 0,
       'custom-property': 0,
       'required-dynamic': 19,
       'unclassified-binding': 33,

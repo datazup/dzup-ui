@@ -204,7 +204,7 @@ const { testId: dzTestId } = useDzTestIds()
     :class="rootClasses"
     :data-dz-motion="dzMotionAttr"
     :data-variant="variant"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-color-mode-toggle'), ...$attrs, class: undefined }"
   >
     <!-- icon variant: a single button that cycles modes -->

@@ -80,7 +80,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :data-disabled="disabled ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-splitter'), ...$attrs, class: undefined }"
     @layout="handleLayoutChange"
   >

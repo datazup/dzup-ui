@@ -65,7 +65,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-label="ariaLabel"
     data-state="ready"
     role="navigation"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-menu'), ...$attrs, class: undefined }"
   >
     <slot />

@@ -97,7 +97,7 @@ const classes = computed(() =>
     :data-disabled="disabled ? '' : undefined"
     :data-invalid="invalid || !!error ? '' : undefined"
     :data-required="required ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
     role="group"
   >

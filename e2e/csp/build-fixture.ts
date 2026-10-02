@@ -35,6 +35,7 @@ import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
 import { build } from 'vite'
 import { createDzupResolution } from '../../packages/tooling/src/resolution/dzup-resolution.ts'
 
@@ -53,7 +54,7 @@ export async function buildCspFixture(stage = CSP_STAGE): Promise<string> {
     root: join(HERE, 'fixture'),
     base: './',
     logLevel: 'warn',
-    plugins: [vue()],
+    plugins: [vue(), tailwindcss()],
     resolve: { alias: dzup.alias, dedupe: dzup.dedupe },
     build: {
       outDir: stage,

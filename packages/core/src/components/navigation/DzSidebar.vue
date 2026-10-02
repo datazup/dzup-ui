@@ -227,7 +227,7 @@ const { testId: dzTestId } = useDzTestIds()
     :inert="mobileClosed || undefined"
     :data-state="dataState"
     role="navigation"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-sidebar'), ...$attrs, class: undefined }"
   >
     <div data-part="body" :class="bodyClasses">

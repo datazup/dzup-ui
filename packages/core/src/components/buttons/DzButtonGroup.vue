@@ -70,7 +70,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-state="disabled ? 'disabled' : 'idle'"
     :data-disabled="disabled ? '' : undefined"
     :data-tone="tone"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-button-group'), ...$attrs, class: undefined }"
   >
     <slot />

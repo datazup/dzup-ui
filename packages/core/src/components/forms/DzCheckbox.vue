@@ -123,7 +123,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="checkedState === 'indeterminate' ? 'indeterminate' : checkedState ? 'checked' : 'unchecked'"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-checkbox'), ...$attrs, class: undefined }"
   >
     <CheckboxRoot

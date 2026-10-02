@@ -129,7 +129,7 @@ const windowedRows = computed<VNode[]>(() => {
         class="dz-virtual-spacer"
         :style="{ height: `${virtualWindow.paddingTop}px` }"
       >
-        <td colspan="1000" style="padding: 0; border: none" />
+        <td colspan="1000" class="p-0 border-0" />
       </tr>
       <RowFragment :nodes="windowedRows" />
       <tr
@@ -138,7 +138,7 @@ const windowedRows = computed<VNode[]>(() => {
         class="dz-virtual-spacer"
         :style="{ height: `${virtualWindow.paddingBottom}px` }"
       >
-        <td colspan="1000" style="padding: 0; border: none" />
+        <td colspan="1000" class="p-0 border-0" />
       </tr>
     </template>
     <slot v-else-if="!isEmpty" />

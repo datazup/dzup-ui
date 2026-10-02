@@ -68,7 +68,7 @@ function handleClick(event: MouseEvent): void {
     :data-tone="ctx?.tone.value"
     :data-disabled="ctx?.disabled.value ? '' : undefined"
     :data-loading="ctx?.loading.value ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
     @click="handleClick"
   >

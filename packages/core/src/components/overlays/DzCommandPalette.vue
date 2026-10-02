@@ -237,7 +237,7 @@ const dzMotionAttr = useDzMotionAttribute()
         data-part="content"
         :class="contentClasses"
         :data-dz-motion="dzMotionAttr"
-        style="contain: layout style"
+        class="[contain:layout_style]"
         v-bind="{ ...(id === undefined ? {} : { id }), ...contentAria, ...$attrs, class: undefined }"
       >
         <DialogTitle class="sr-only">

@@ -98,7 +98,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     :data-tone="resolvedTone"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-split-button'), ...$attrs, class: undefined }"
   >
     <slot />

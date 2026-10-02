@@ -196,7 +196,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-readonly="readonly ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-input'), ...$attrs, class: undefined }"
   >
     <!-- The visual field: border, background, focus ring -->

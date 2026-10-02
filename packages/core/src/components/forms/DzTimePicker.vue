@@ -478,7 +478,7 @@ const { testId: dzTestId } = useDzTestIds()
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-time-picker'), ...$attrs, class: undefined }"
   >
     <PopoverRoot v-model:open="open">

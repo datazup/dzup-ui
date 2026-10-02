@@ -188,7 +188,7 @@ const { testId: dzTestId } = useDzTestIds()
     :class="[rootClasses, ui?.root]"
     :data-state="active ? 'edit' : 'display'"
     :data-disabled="disabled ? '' : undefined"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-inplace'), ...$attrs, class: undefined }"
   >
     <!-- Editor view -->

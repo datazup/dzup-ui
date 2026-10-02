@@ -156,7 +156,7 @@ const dzMessages = useComponentMessages('DzLightbox')
         :id="id"
         data-part="content"
         :class="cn(styles.content(), attrs.class as string | undefined, props.ui?.content)"
-        style="contain: layout style"
+        class="[contain:layout_style]"
         v-bind="{ ...contentAria, ...$attrs, class: undefined }"
         @keydown="handleKeydown"
       >

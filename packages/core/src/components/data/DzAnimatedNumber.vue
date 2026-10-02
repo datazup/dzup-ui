@@ -305,7 +305,7 @@ const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string
     :data-tone="resolvedTone"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Visible counting figure — hidden from screen readers to avoid flooding -->

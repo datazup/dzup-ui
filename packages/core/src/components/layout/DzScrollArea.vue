@@ -78,7 +78,7 @@ const { testId: dzTestId } = useDzTestIds()
     :type="type"
     :class="rootClasses"
     :aria-label="ariaLabel"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-scroll-area'), ...$attrs, class: undefined }"
   >
     <ScrollAreaViewport data-part="viewport" :class="cn(styles.viewport(), props.ui?.viewport)">

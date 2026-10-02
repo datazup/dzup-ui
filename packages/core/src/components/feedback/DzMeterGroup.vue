@@ -145,7 +145,7 @@ function segmentStyle(segment: DzMeterGroupComputedSegment) {
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :data-orientation="orientation"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Label -->

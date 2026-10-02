@@ -82,7 +82,7 @@ const rootClasses = computed(() =>
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     role="list"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <slot />

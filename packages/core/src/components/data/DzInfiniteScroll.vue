@@ -120,7 +120,7 @@ const { testId: dzTestId } = useDzTestIds()
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    style="contain: layout style"
+    class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-infinite-scroll'), ...$attrs, class: undefined }"
   >
     <!-- Live region: announces loading / end / error transitions -->
