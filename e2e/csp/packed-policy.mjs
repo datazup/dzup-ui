@@ -61,6 +61,8 @@ writeFileSync('ssr.html', html)
   await build({
     configFile: false,
     root: consumer,
+    // Both policy mounts serve identical bytes with mount-relative assets.
+    base: './',
     plugins: [tailwind()],
     build: { outDir: stage, assetsInlineLimit: 0, modulePreload: { polyfill: false } },
     logLevel: 'warn',
