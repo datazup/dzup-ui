@@ -17,19 +17,10 @@ import { expect, test } from '@playwright/test'
  * something the policy changed. A lane that only looked at the strict run would
  * pass on a page that was broken in both.
  *
- * Three results, and the third is a finding rather than a pass:
- *
- * 1. `DzThemeProvider` + `DzFileUpload` render **identically** under the policy.
- * 2. The URL policy holds in a real engine: the `javascript:` URL is not in the
- *    DOM, and the element that would have carried it is not a link.
- * 3. Finding F-C1 is **narrower than its two counts suggested**. A `style`
- *    attribute in the SERVED markup is dropped, as expected. The identical
- *    declaration written by a Vue render is **not**: Vue applies a static
- *    template `style` through CSSOM (`el.style.setProperty`), which CSP does not
- *    govern. So a client-rendered page is unaffected by `style-src-attr`, and
- *    the exposure is SSR output — where the same 78 components emit a literal
- *    `style=` and the parser applies it. Measured here for the first time, with
- *    a control element in the fixture proving the directive is enforced at all.
+ * External styles preserve file-upload and button styling under the policy.
+ * The hostile URL is refused in a real engine. The parser-style control proves
+ * style-src-attr is enforced, while the library buttons emit no style attributes.
+ * The SSR regression and packed gate cover the pre-hydration parser path.
  */
 
 /** The properties the comparison reads. Chosen because each has a visible failure mode. */
@@ -61,6 +52,7 @@ interface Snapshot {
   readonly uploadStyles: Record<string, string>
   readonly buttonStyles: Record<string, string>
   readonly buttonContain: string
+  readonly buttonInlineStyles: number
   readonly parserStyleContain: string
   readonly allowedHref: string | null
   readonly refusedTag: string
@@ -117,6 +109,7 @@ async function snapshot(page: Page, mount: 'strict' | 'open'): Promise<Snapshot>
       uploadStyles: read(upload),
       buttonStyles: read(allowed),
       buttonContain: allowed === null ? '' : getComputedStyle(allowed).contain,
+      buttonInlineStyles: document.querySelectorAll('#button-host [style]').length,
       parserStyleContain: (() => {
         const el = document.querySelector('#parser-style')
         return el === null ? '(absent)' : getComputedStyle(el).contain
@@ -174,7 +167,7 @@ test.describe('strict CSP', () => {
     expect(open.hostileUrlsInDom).toBe(0)
   })
 
-  test('finding F-C1 in a browser: the exposure is the SSR-rendered markup, not the client render', async ({ page }) => {
+  test('external containment survives strict CSP and the parser control is blocked', async ({ page }) => {
     const strict = await snapshot(page, 'strict')
     const open = await snapshot(page, 'open')
 
@@ -192,30 +185,14 @@ test.describe('strict CSP', () => {
       + 'is not being enforced, so every other result in this file is about an unprotected page.',
     ).not.toBe(open.parserStyleContain)
 
-    // ── The finding ──────────────────────────────────────────────────────────
-    // `DzButton` declares `style="contain: layout style"` in its TEMPLATE, and
-    // it is one of the 78 `recipe-movable` sites in
-    // `packages/core/security/inline-style-inventory.json`. It is NOT dropped,
-    // and the reason matters: Vue compiles a static template `style` into a
-    // render-time `patchStyle`, which writes through CSSOM
-    // (`el.style.setProperty`) — a path CSP does not govern. The parser path
-    // above is governed; the CSSOM path is not.
-    //
-    // So finding F-C1's exposure is narrower and sharper than its two counts
-    // suggested: a client-rendered dzup-ui page is unaffected by
-    // `style-src-attr`, and the SAME components emit a literal `style=` in
-    // SERVER-rendered markup, where the parser applies it and the policy drops
-    // it. That is an SSR + strict-CSP defect, measured here for the first time.
-    // Pinned in both directions: when the sweep moves those declarations into
-    // recipes, this stops being true and the test says so.
-    expect(open.buttonContain, 'the control changed: DzButton no longer declares containment')
-      .toContain('layout')
-    expect(
-      strict.buttonContain,
-      'DzButton containment WAS dropped under the policy. That would mean the client render '
-      + 'now sets a style attribute rather than writing through CSSOM — a change in exposure, '
-      + 'not a fix. Re-read the inventory dispositions before touching this expectation.',
-    ).toBe(open.buttonContain)
+    // Static containment lives in the external utility sheet. The SSR spec
+    // separately asserts the bytes contain no style attributes/tags, and the
+    // packed gate parses those bytes before any hydration can repair styling.
+    expect(open.buttonContain, 'external containment CSS did not load')
+      .toBe('layout style')
+    expect(strict.buttonContain).toBe(open.buttonContain)
+    expect(strict.buttonInlineStyles).toBe(0)
+    expect(open.buttonInlineStyles).toBe(0)
 
     // Everything else about the button is identical, which is what makes the
     // parser/CSSOM distinction above attributable rather than asserted.
@@ -228,8 +205,7 @@ test.describe('strict CSP', () => {
     // A second violation would mean the library emitted a construct the policy
     // blocks — which is the claim `DzFileUpload.csp-fixture.spec.ts` makes in
     // jsdom and this lane is here to check in an engine.
-    const libraryViolations = strict.violations.filter(v => !v.startsWith('style-src-attr'))
-    expect(libraryViolations, 'the library emitted a construct a strict policy blocks')
-      .toEqual([])
+    expect(strict.violations, 'only the deliberate parser-style control may violate CSP')
+      .toEqual(['style-src-attr|inline'])
   })
 })
