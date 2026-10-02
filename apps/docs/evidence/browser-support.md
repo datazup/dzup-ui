@@ -174,9 +174,9 @@ SHA-256 of the exact bytes these pages were rendered from:
 | --- | --- | --- |
 | `e2e/matrix/engine-ratchets.json` | `43a6f0ee01e1df5e…` | yes |
 | `e2e/matrix/known-failures.json` | `d579c5e0ea41a156…` | yes |
-| `packages/core/docs/capability-matrix.json` | `74089dbc013542df…` | yes |
+| `packages/core/docs/capability-matrix.json` | `5b9a48fc5d255d70…` | yes |
 
-Capability matrix `sourceCommit` `d95750ad` · quality matrix `d95750ad`.
+Capability matrix `sourceCommit` `47010932` · quality matrix `47010932`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production
