@@ -11,9 +11,8 @@ export const root = resolve(import.meta.dirname, '../../..')
 const require = createRequire(join(root, 'package.json'))
 
 export function runYarn(args) {
-  // Yarn supplies its own executable; no global Yarn version or install needed.
-  assert.ok(process.env.npm_execpath, 'invoke this gate with yarn test:resolution:packed or yarn test:csp:packed')
-  execFileSync(process.execPath, [process.env.npm_execpath, ...args], {
+  // The parent Yarn script puts its version-pinned executable shim on PATH.
+  execFileSync('yarn', args, {
     cwd: root,
     env: process.env,
     stdio: 'inherit',
