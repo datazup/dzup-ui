@@ -145,7 +145,7 @@ describe('dzDialog -- Contract Spec v1', () => {
 
   it('has contain: layout style on content element', () => {
     const wrapper = mountDialog()
-    const content = wrapper.find('[style*="contain"]')
+    const content = wrapper.find('[class~="[contain:layout_style]"]')
     expect(content.exists()).toBeTruthy()
     wrapper.unmount()
   })

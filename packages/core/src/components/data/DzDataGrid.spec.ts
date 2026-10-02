@@ -79,7 +79,7 @@ describe('dzDataGrid — Rendering', () => {
 
   it('has contain: layout style', () => {
     const wrapper = mountGrid()
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('merges consumer class via cn()', () => {

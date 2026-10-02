@@ -109,6 +109,6 @@ describe('dzListbox — Contract Spec v1', () => {
 
   it('has contain: layout style on the root element', () => {
     const wrapper = mount(DzListbox, { props: { options } })
-    expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 })

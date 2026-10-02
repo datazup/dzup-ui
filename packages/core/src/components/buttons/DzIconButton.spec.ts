@@ -87,7 +87,7 @@ describe('dzIconButton', () => {
     const wrapper = mount(DzIconButton, {
       props: { icon: StubIcon, ariaLabel: 'Test' },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('merges consumer class via cn()', () => {

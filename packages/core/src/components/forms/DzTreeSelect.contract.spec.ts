@@ -103,7 +103,7 @@ describe('dzTreeSelect — Contract Spec v1', () => {
 
   it('has contain: layout style on the trigger element', () => {
     const wrapper = mount(DzTreeSelect, { props: { nodes: mockNodes } })
-    expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   // ── Class merging ──

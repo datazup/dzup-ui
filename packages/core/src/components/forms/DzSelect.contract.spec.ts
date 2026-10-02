@@ -104,7 +104,7 @@ describe('dzSelect — Contract Spec v1', () => {
     const wrapper = mount(DzSelect, {
       props: { items: mockItems },
     })
-    const trigger = wrapper.find('[style*="contain"]')
+    const trigger = wrapper.find('[class~="[contain:layout_style]"]')
     expect(trigger.exists()).toBe(true)
   })
   // ── Anatomy (ADR-19) ──

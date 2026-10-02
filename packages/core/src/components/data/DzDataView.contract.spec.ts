@@ -23,7 +23,7 @@ describe('dzDataView — Contract Spec v1', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mountView()
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('exposes the dz-data-view root class for token scoping', () => {

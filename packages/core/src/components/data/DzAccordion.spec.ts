@@ -40,7 +40,7 @@ describe('dzAccordion', () => {
 
   it('has contain: layout style', () => {
     const wrapper = mountAccordion()
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('forwards aria-label', () => {

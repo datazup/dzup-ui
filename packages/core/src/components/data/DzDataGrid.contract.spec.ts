@@ -24,7 +24,7 @@ describe('dzDataGrid — Contract Spec v1', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzDataGrid, { props: { data, columns } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('forwards aria-label', () => {

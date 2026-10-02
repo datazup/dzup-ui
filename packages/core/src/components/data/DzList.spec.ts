@@ -66,7 +66,7 @@ describe('dzList', () => {
     const wrapper = mount(DzList, {
       slots: { default: () => h(DzListItem, null, { default: () => 'Item' }) },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 })
 

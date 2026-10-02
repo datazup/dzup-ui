@@ -186,6 +186,6 @@ describe('dzChip', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzChip, { slots: { default: 'chip' } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 })

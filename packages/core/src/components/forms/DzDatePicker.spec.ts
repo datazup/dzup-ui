@@ -8,7 +8,7 @@ import DzDatePicker from './DzDatePicker.vue'
 describe('dzDatePicker — Unit Tests', () => {
   it('renders the date picker field', () => {
     const wrapper = mount(DzDatePicker)
-    expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   it('displays placeholder when no value is selected', () => {
@@ -72,14 +72,14 @@ describe('dzDatePicker — Unit Tests', () => {
 
   it('emits focus event', async () => {
     const wrapper = mount(DzDatePicker)
-    const field = wrapper.find('[style*="contain"]')
+    const field = wrapper.find('[class~="[contain:layout_style]"]')
     await field.trigger('focus')
     expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
   it('emits blur event', async () => {
     const wrapper = mount(DzDatePicker)
-    const field = wrapper.find('[style*="contain"]')
+    const field = wrapper.find('[class~="[contain:layout_style]"]')
     await field.trigger('blur')
     expect(wrapper.emitted('blur')).toBeTruthy()
   })
@@ -109,7 +109,7 @@ describe('dzDatePicker — Unit Tests', () => {
 
   it('has contain: layout style on root field', () => {
     const wrapper = mount(DzDatePicker)
-    const field = wrapper.find('[style*="contain: layout style"]')
+    const field = wrapper.find('[class~="[contain:layout_style]"]')
     expect(field.exists()).toBe(true)
   })
 

@@ -163,7 +163,7 @@ describe('dzCopyButton', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzCopyButton, { props: { value: 'test' } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   // ── Slots ──

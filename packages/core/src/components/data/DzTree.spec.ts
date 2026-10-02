@@ -46,7 +46,7 @@ describe('dzTree', () => {
 
   it('has contain: layout style', () => {
     const wrapper = mountTree()
-    expect(wrapper.find('[role="tree"]').attributes('style')).toContain('contain: layout style')
+    expect(wrapper.find('[role="tree"]').classes()).toContain('[contain:layout_style]')
   })
 
   it('renders root-level items', () => {

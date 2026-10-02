@@ -8,7 +8,7 @@ import DzSlider from './DzSlider.vue'
 describe('dzSlider — Unit Tests', () => {
   it('renders the slider root', () => {
     const wrapper = mount(DzSlider)
-    expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   it('renders track, range, and thumb elements', () => {
@@ -69,7 +69,7 @@ describe('dzSlider — Unit Tests', () => {
 
   it('has contain: layout style on root', () => {
     const wrapper = mount(DzSlider)
-    const root = wrapper.find('[style*="contain: layout style"]')
+    const root = wrapper.find('[class~="[contain:layout_style]"]')
     expect(root.exists()).toBe(true)
   })
 

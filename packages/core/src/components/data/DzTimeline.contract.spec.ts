@@ -13,7 +13,7 @@ describe('dzTimeline — Contract Spec v1', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzTimeline, { slots: { default: '<div>Event</div>' } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('accepts all canonical size values', () => {

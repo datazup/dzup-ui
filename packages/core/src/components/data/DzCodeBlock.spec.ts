@@ -137,7 +137,7 @@ describe('dzCodeBlock', () => {
 
   it('has contain: layout style on root element', () => {
     const wrapper = mount(DzCodeBlock, { props: { code: sampleCode } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   // ── Slots ──

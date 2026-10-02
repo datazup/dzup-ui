@@ -80,7 +80,7 @@ describe('dzPagination — Contract Spec v1', () => {
       props: { total: 100 },
     })
     const nav = wrapper.find('nav')
-    expect(nav.attributes('style')).toContain('contain: layout style')
+    expect(nav.classes()).toContain('[contain:layout_style]')
   })
 
   // ── ARIA ──

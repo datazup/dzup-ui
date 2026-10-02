@@ -30,7 +30,7 @@ describe('dzOrderList — Contract Spec v1', () => {
   })
 
   it('has contain: layout style on root element', () => {
-    expect(mountList().attributes('style')).toContain('contain: layout style')
+    expect(mountList().classes()).toContain('[contain:layout_style]')
   })
 
   it('exposes the dz-order-list root class for token scoping', () => {

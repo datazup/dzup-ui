@@ -207,7 +207,7 @@ describe('dzPopover -- Unit Tests', () => {
 
   it('content has contain: layout style', () => {
     const wrapper = mountPopover()
-    const content = wrapper.find('[style*="contain"]')
+    const content = wrapper.find('[class~="[contain:layout_style]"]')
     expect(content.exists()).toBeTruthy()
     wrapper.unmount()
   })

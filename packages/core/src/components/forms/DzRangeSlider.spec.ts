@@ -8,7 +8,7 @@ import DzRangeSlider from './DzRangeSlider.vue'
 describe('dzRangeSlider — Unit Tests', () => {
   it('renders the slider root', () => {
     const wrapper = mount(DzRangeSlider)
-    expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   it('renders two thumb elements', () => {
@@ -71,7 +71,7 @@ describe('dzRangeSlider — Unit Tests', () => {
 
   it('has contain: layout style on root', () => {
     const wrapper = mount(DzRangeSlider)
-    expect(wrapper.find('[style*="contain: layout style"]').exists()).toBe(true)
+    expect(wrapper.find('[class~="[contain:layout_style]"]').exists()).toBe(true)
   })
 
   it('emits focus event on thumb focus', async () => {

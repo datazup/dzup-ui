@@ -164,7 +164,7 @@ describe('dzDialog -- Unit Tests', () => {
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
-    const content = wrapper.find('[style*="contain"]')
+    const content = wrapper.find('[class~="[contain:layout_style]"]')
     expect(content.classes().join(' ')).toContain('max-w-lg')
     wrapper.unmount()
   })
@@ -179,7 +179,7 @@ describe('dzDialog -- Unit Tests', () => {
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
-    const content = wrapper.find('[style*="contain"]')
+    const content = wrapper.find('[class~="[contain:layout_style]"]')
     expect(content.classes().join(' ')).toContain('max-w-sm')
     wrapper.unmount()
   })
@@ -194,7 +194,7 @@ describe('dzDialog -- Unit Tests', () => {
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
-    const content = wrapper.find('[style*="contain"]')
+    const content = wrapper.find('[class~="[contain:layout_style]"]')
     expect(content.classes().join(' ')).toContain('max-w-')
     wrapper.unmount()
   })

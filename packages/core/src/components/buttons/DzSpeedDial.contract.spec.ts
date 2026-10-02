@@ -99,6 +99,6 @@ describe('dzSpeedDial — Contract Spec v1', () => {
 
   it('has contain: layout style on the root element', () => {
     const wrapper = mount(DzSpeedDial, { props: { items, ariaLabel: 'Quick actions' } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 })

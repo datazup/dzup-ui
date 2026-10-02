@@ -17,7 +17,7 @@ describe('dzAccordion — Contract Spec v1', () => {
     const wrapper = mount(DzAccordion, {
       slots: { default: '<div>Item</div>' },
     })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.classes()).toContain('[contain:layout_style]')
   })
 
   it('forwards aria-label', () => {
