@@ -192,8 +192,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `e6980361` for the capability matrix,
-`e6980361` for the quality matrix. It is **locally qualified**:
+artifact records — `b666b008` for the capability matrix,
+`b666b008` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -291,7 +291,7 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It renders `<slot />` and nothing else, and publishes context — which is not a bound value. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `excepted` | Renders no focusable node of its own; its browser evidence is the SSR/hydration fixture rather than a keyboard sequence. |
 | `rtl-contract` | tier B | `present` | `packages/core/src/providers/DzProvider.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 3ee3d5f. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at b666b00. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzProvider.md` — 6 AT/browser pairs, none executed. |
 
 **1 unrun:** `at-manual` · **6 excepted:** `axe`, `token-contrast`, `keyboard-spec`, `state-stories`, `controlled-uncontrolled`, `browser-play`. They are named rather than counted, because a total tells a reader nothing about what is missing.

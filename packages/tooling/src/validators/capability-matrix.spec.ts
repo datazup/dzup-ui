@@ -384,18 +384,21 @@ describe('the evidence ratchet (gate 8, RESIDUAL-17, D-RES16-3)', () => {
     const shipped = readCapabilityCeilings()
     const kinds = Object.keys(shipped.evidenceCells.kinds).filter(k => !k.startsWith('//'))
     expect(kinds).toHaveLength(23)
-    // `at-manual` and `perf-baseline` hold zero credit today and are recorded
-    // anyway: an entry that only appears once a column earns credit is an entry
-    // that cannot notice the column earning it.
+    // `at-manual` holds zero credit today and is recorded anyway: an entry that
+    // only appears once a column earns credit is an entry that cannot notice the
+    // column earning it. `perf-baseline` was such an entry until 2026-10-02, when
+    // upstream's size recapture gave five components a fresh baseline — the first
+    // rise the record noticed, declared in `//moves`.
     expect(shipped.evidenceCells.kinds['at-manual']).toEqual({ pass: 0, present: 0 })
-    expect(shipped.evidenceCells.kinds['perf-baseline']).toEqual({ pass: 0, present: 0 })
+    expect(shipped.evidenceCells.kinds['perf-baseline']).toEqual({ pass: 5, present: 0 })
     // The baseline was seeded at the post-RESIDUAL-16 measurement — `pass` 558,
     // `present` 608 — NOT at the pre-audit 585/623, because seeding a ratchet at
     // numbers an audit has just shown to be false would write the inflation into
-    // the record permanently. `present` then rose to 611 in the same packet, and
-    // that move is DECLARED in `//moves`: RESIDUAL-17's hydration harness gave
-    // `portal-hydration` a fourth cell and `ssr-sample` two more.
-    expect(shipped.evidenceCells.totals.pass).toBe(558)
-    expect(shipped.evidenceCells.totals.present).toBe(611)
+    // the record permanently. Every later figure is a DECLARED move in `//moves`:
+    // RESIDUAL-17 took `present` to 611 (portal-hydration +1, ssr-sample +2),
+    // RESIDUAL-19 took it to 517 (contract-spec -80, unit-spec -14), and the
+    // 2026-10-02 merge took `pass` to 563 (perf-baseline +5).
+    expect(shipped.evidenceCells.totals.pass).toBe(563)
+    expect(shipped.evidenceCells.totals.present).toBe(517)
   })
 })
