@@ -38,6 +38,8 @@ export default defineConfig({
     include: [
       'packages/*/src/**/*.spec.ts',
       'packages/*/tests/**/*.spec.ts',
+      // Inspect SSR bytes before hydration can hide strict-CSP regressions.
+      'e2e/csp/ssr.spec.ts',
       // packages/*/scripts holds the validators invoked as `tsx <script>` rather
       // than imported from a barrel (validate-exports, validate-peers,
       // validate-package-names …). Their logic gates merges, so it is testable

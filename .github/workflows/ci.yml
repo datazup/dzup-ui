@@ -104,6 +104,12 @@ jobs:
         run: yarn test:a11y
       - name: Run SSR smoke tests
         run: yarn test:ssr
+      - name: Packed public resolution consumer
+        run: yarn test:resolution:packed
+      - name: Install Playwright Chromium for packed CSP
+        run: yarn playwright install --with-deps chromium
+      - name: Packed pre-hydration strict-CSP policy
+        run: yarn test:csp:packed
 
   # ──────────────────────────────────────────────
   # The floor, exercised (ADR-18, TASK-OSS-P2-01)
