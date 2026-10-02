@@ -257,6 +257,14 @@ describe('validate:docs-freshness', () => {
     it('is false when --allow-missing-dist overrides CI', () => {
       expect(shouldRequireDist(['--allow-missing-dist'], { CI: 'true' })).toBe(false)
     })
+
+    it('honours DOCS_SIZE_ALLOW_MISSING_DIST=1, the chain-level opt-out docs-size reads', () => {
+      // The min-runtime lane runs the whole chain with no docs build and sets
+      // this variable for docs-size; one opt-out must silence both dist gates.
+      expect(shouldRequireDist([], { CI: 'true', DOCS_SIZE_ALLOW_MISSING_DIST: '1' })).toBe(false)
+      expect(shouldRequireDist(['--require-dist'], { DOCS_SIZE_ALLOW_MISSING_DIST: '1' })).toBe(false)
+      expect(shouldRequireDist([], { CI: 'true', DOCS_SIZE_ALLOW_MISSING_DIST: '0' })).toBe(true)
+    })
   })
 
   describe('helpers', () => {

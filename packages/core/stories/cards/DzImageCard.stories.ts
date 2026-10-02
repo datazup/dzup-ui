@@ -356,7 +356,7 @@ export const RealWorldProductGrid: Story = {
         </DzImageCard>
         <DzImageCard :src="images.ocean" alt="Beach sandals" aspect-ratio="4/3">
           <template #header>
-            <span class="text-xs uppercase tracking-wider text-[var(--dz-colors-orange-600)] font-semibold">Casual</span>
+            <span class="text-xs uppercase tracking-wider text-[var(--dz-warning-muted-foreground)] font-semibold">Casual</span>
           </template>
           <h3 class="font-semibold">Beach Sandals</h3>
           <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">Perfect for summer.</p>

@@ -148,13 +148,19 @@ export interface FreshnessResult {
  * `--require-dist` or `CI` makes an absent or stale dist an error.
  * Same shape and same reasoning as `validate:docs-size`'s own predicate:
  * off CI an absence is an honest skip, on CI it is a finding.
- * `--allow-missing-dist` opts a pre-build CI job back out.
+ * `--allow-missing-dist` opts a pre-build CI job back out, and so does
+ * `DOCS_SIZE_ALLOW_MISSING_DIST=1` — docs-size's opt-out for a job that runs
+ * the whole `validate:all` chain before any build, where no flag can reach
+ * one link. The min-runtime lane is that job, and it sets exactly that
+ * variable; this gate read only the flag and failed there on 2026-10-02
+ * (run 36999837825) for a dist the lane never builds. One opt-out for both
+ * dist gates, so a lane cannot silence one and forget the other.
  */
 export function shouldRequireDist(
   argv: readonly string[] = process.argv,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
-  if (argv.includes('--allow-missing-dist'))
+  if (argv.includes('--allow-missing-dist') || env.DOCS_SIZE_ALLOW_MISSING_DIST === '1')
     return false
   return argv.includes('--require-dist') || Boolean(env.CI)
 }
