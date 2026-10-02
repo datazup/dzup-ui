@@ -2,6 +2,8 @@ import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
+// Plain Node proves the packed export without Vitest aliases or transforms.
+// eslint-disable-next-line test/no-import-node-test
 import { test } from 'node:test'
 
 // The evidence runner builds and packs the package, then extracts it here.
@@ -28,7 +30,7 @@ test('a packed public resolution export works without workspace aliases or TS lo
     name: '@dzup-ui/core',
     type: 'module',
     exports: { '.': { import: './dist/index.js' }, './providers': { import: './dist/providers.js' } },
-    peerDependencies: { vue: '^3.5.0', 'reka-ui': '^2.0.0' },
+    peerDependencies: { 'vue': '^3.5.0', 'reka-ui': '^2.0.0' },
   }))
   writeFileSync(join(library, 'packages/core/dist/index.js'), 'export const marker = "core"\n')
   writeFileSync(join(library, 'packages/core/dist/providers.js'), 'export const marker = "providers"\n')
