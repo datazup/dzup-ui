@@ -35,12 +35,23 @@ Two facts worth stating plainly, because they are what the helper exists to stop
 
 ## What an external application should do
 
+For an application using installed npm packages, let the bundler resolve their
+public exports normally. No checkout aliases are needed.
+
+For deliberate co-development against a dzup-ui checkout, the helper is available
+as `@dzup-ui/testing/resolution` in the built, publishable testing package.
+Install a version containing this export (or a locally built tarball); this
+candidate does not establish registry availability. The helper is a Node build
+configuration utility, and does not install packages or build the checkout.
+Pass the absolute checkout root and build the selected packages before using
+`externalized` mode. Do not import the private source-only tooling package.
+
 ```ts
 // vite.config.ts
 import { resolve } from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
-import { createDzupResolution } from '@dzup-ui/tooling/resolution'
+import { createDzupResolution } from '@dzup-ui/testing/resolution'
 
 const dzup = createDzupResolution({
   // The library as a published consumer receives it. See "Which mode" below.
@@ -96,9 +107,9 @@ entries. Make it a **re-export with the mode made explicit**, so there is one
 implementation and the caller states its choice:
 
 ```ts
-import type { DzupResolutionMode } from '@dzup-ui/tooling/resolution'
+import type { DzupResolutionMode } from '@dzup-ui/testing/resolution'
 import { resolve } from 'node:path'
-import { createDzupResolution } from '@dzup-ui/tooling/resolution'
+import { createDzupResolution } from '@dzup-ui/testing/resolution'
 
 export interface AliasEntry {
   find: string
@@ -142,14 +153,9 @@ const dzup = dzupResolution({ fromDir: import.meta.dirname, mode: 'externalized'
    `externalized` requires `yarn build` in `ui/dzup-ui` to have run — that is the
    point, but it is a workflow change and it is theirs to make. The deprecated
    wrapper above keeps today's behaviour until they do.
-2. **How `@dzup-ui/tooling` reaches them.** It is `private: true` and
-   unpublished. `website-app` already uses `portal:` entries for
-   `@dzup-ui/core`, `/tokens` and `/contracts`; adding
-   `"@dzup-ui/tooling": "portal:../../ui/dzup-ui/packages/tooling"` is the
-   smallest change and needs no publication. If shared-kit would rather not
-   depend on a private package, the alternative is for `ui/dzup-ui` to stop
-   marking `tooling` private and publish it — a bigger decision, and not one
-   this packet makes.
+2. **How the built `@dzup-ui/testing` package reaches them.** Use a release
+   containing the resolution export or a built tarball. The compatibility
+   entry in `@dzup-ui/tooling` remains private for in-repo callers.
 3. **Whether the fallback `dzupUiRoot` should stay.**
    `resolve(fromDir, '../../../../ui/dzup-ui')` encodes a directory layout four
    levels up. It is correct today and silently wrong the moment an app moves.

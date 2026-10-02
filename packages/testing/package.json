@@ -31,6 +31,10 @@
     "./security-corpus": {
       "types": "./dist/security-corpus.d.ts",
       "import": "./dist/security-corpus.js"
+    },
+    "./resolution": {
+      "types": "./dist/resolution.d.ts",
+      "import": "./dist/resolution.js"
     }
   },
   "files": [
