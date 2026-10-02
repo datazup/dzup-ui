@@ -37,6 +37,11 @@
       // stale `dist/i18n/messages.d.ts` merged against the live source augmentation
       // and reported two phantom TS2717/TS2353 errors that no source edit could fix.
       // A typecheck must not depend on whether someone has run `yarn build`.
+      // `@dzup-ui/core/ownership` is the one subpath whose source sits under
+      // src/generated/, so neither candidate below finds it. Mapped explicitly for
+      // the same reason as the comment above: packages/nuxt imports it, and the
+      // Typecheck CI job has no dist (found 2026-10-02, run 36997534497).
+      "@dzup-ui/core/ownership": ["./packages/core/src/generated/component-ownership.ts"],
       "@dzup-ui/core/*": ["./packages/core/src/*", "./packages/core/src/components/*"],
       "@dzup-ui/compat": ["./packages/compat/src/index.ts"],
       "@dzup-ui/compat/*": ["./packages/compat/src/*"],

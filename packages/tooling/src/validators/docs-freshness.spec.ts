@@ -32,16 +32,24 @@ function seed(root: string, options: {
   noDist?: boolean
 } = {}): void {
   const commit = options.commit ?? 'a'.repeat(40)
+  // Everything seeded is older than the dist stamp the clause-2 cases set
+  // (-600s), so a test's own setMtime(..., 0) is the ONLY input newer than the
+  // build. Without this the fixture leaned on write-time mtimes, which made
+  // every seeded input stale on Linux (11 of 11, CI run 36997534497) and only
+  // happened to read as one on the Windows machine the test was written on.
+  const written: string[] = []
   for (const rel of STAMPED_ARTIFACTS) {
     if (options.omitStamped?.includes(rel))
       continue
     const abs = join(root, rel)
     mkdirSync(join(abs, '..'), { recursive: true })
     writeFileSync(abs, JSON.stringify({ sourceCommit: options.commits?.[rel] ?? commit }))
+    written.push(abs)
   }
   for (const dir of INPUT_DIRS) {
     mkdirSync(join(root, dir), { recursive: true })
     writeFileSync(join(root, dir, 'DzButton.md'), '# DzButton\n')
+    written.push(join(root, dir, 'DzButton.md'))
   }
   for (const rel of INPUT_FILES) {
     if (STAMPED_ARTIFACTS.includes(rel as (typeof STAMPED_ARTIFACTS)[number]))
@@ -49,12 +57,16 @@ function seed(root: string, options: {
     const abs = join(root, rel)
     mkdirSync(join(abs, '..'), { recursive: true })
     writeFileSync(abs, '{}')
+    written.push(abs)
   }
   if (!options.noDist) {
     const dist = join(root, 'apps/docs/.vitepress/dist')
     mkdirSync(dist, { recursive: true })
     writeFileSync(join(dist, 'index.html'), '<!doctype html>')
+    written.push(join(dist, 'index.html'))
   }
+  for (const abs of written)
+    setMtime(abs, -1200)
 }
 
 /** Moves a file's mtime by `deltaSeconds` relative to now. */

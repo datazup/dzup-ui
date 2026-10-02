@@ -8,6 +8,7 @@
       "@dzup-ui/contracts": ["../../packages/contracts/src/index.ts"],
       "@dzup-ui/contracts/*": ["../../packages/contracts/src/*"],
       "@dzup-ui/core": ["../../packages/core/src/index.ts"],
+      "@dzup-ui/core/ownership": ["../../packages/core/src/generated/component-ownership.ts"],
       "@dzup-ui/core/*": ["../../packages/core/src/*"]
     },
     "types": ["node"]
