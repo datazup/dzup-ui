@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "a6150b6fa5d16e37363b35600d7e453fd7e8e323",
+  "sourceCommit": "d95750ad93cc5c64fd56bb49c6ef2511eeb8ce8d",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -221,6 +221,40 @@
       "horizontal",
       "vertical"
     ],
+    "OwnershipManifestAvailability": [
+      "loaded",
+      "no-manifest",
+      "non-conforming",
+      "not-installed",
+      "unreadable"
+    ],
+    "OwnershipManifestKind": [
+      "public-component",
+      "compound-part",
+      "composable",
+      "type",
+      "recipe",
+      "token-module",
+      "internal",
+      "compat-alias",
+      "unclassified"
+    ],
+    "OwnershipManifestRejection": [
+      "invalid-entries",
+      "malformed",
+      "unreadable-version",
+      "unsupported-major"
+    ],
+    "OwnershipManifestStatus": [
+      "experimental",
+      "beta",
+      "stable",
+      "deprecated"
+    ],
+    "OwnershipManifestTier": [
+      "core",
+      "pro"
+    ],
     "PanelVariant": [
       "outlined",
       "elevated",
@@ -276,10 +310,10 @@
     "publicComponents": 144,
     "compoundParts": 65,
     "unclassifiable": 0,
-    "props": 1755,
-    "propsWithDescription": 1755,
+    "props": 1757,
+    "propsWithDescription": 1757,
     "propsWithDeclaredDefault": 685,
-    "propsWithLiteralUndefinedDefault": 548,
+    "propsWithLiteralUndefinedDefault": 550,
     "events": 366,
     "eventsWithDescription": 366,
     "eventsFromExtractor": 0,
@@ -412,11 +446,12 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 5,
-          "unrun": 3
+          "present": 4,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -916,11 +951,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -1115,9 +1151,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 4
+          "present": 3,
+          "unrun": 1
         },
-        "unrun": [],
+        "unrun": [
+          "unit-spec"
+        ],
         "stale": []
       },
       "props": [
@@ -1451,12 +1490,13 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 6,
-          "unrun": 6
+          "present": 5,
+          "unrun": 7
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec",
@@ -1702,11 +1742,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -1975,11 +2016,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -2413,12 +2455,13 @@
         "cells": {
           "excepted": 1,
           "pass": 1,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
-          "ssr-sample"
+          "ssr-sample",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -2627,9 +2670,13 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 7
+          "present": 5,
+          "unrun": 2
         },
-        "unrun": [],
+        "unrun": [
+          "contract-spec",
+          "unit-spec"
+        ],
         "stale": []
       },
       "props": [
@@ -3138,14 +3185,14 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "excepted": 2,
+          "pass": 4,
           "present": 3,
-          "unrun": 5
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
           "keyboard-spec",
           "ssr-sample"
         ],
@@ -3824,18 +3871,17 @@
           "teleports"
         ],
         "cells": {
-          "excepted": 1,
-          "pass": 4,
-          "present": 3,
-          "unrun": 6
+          "excepted": 2,
+          "pass": 3,
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
           "browser-play",
-          "controlled-uncontrolled",
-          "portal-hydration",
-          "ssr-sample"
+          "contract-spec",
+          "controlled-uncontrolled"
         ],
         "stale": []
       },
@@ -4109,13 +4155,13 @@
           "dataset"
         ],
         "cells": {
+          "excepted": 1,
           "pass": 5,
           "present": 8,
-          "unrun": 4
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec"
         ],
@@ -4564,13 +4610,13 @@
         ],
         "traits": [],
         "cells": {
+          "excepted": 1,
           "pass": 5,
           "present": 8,
-          "unrun": 3
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": []
@@ -5230,7 +5276,7 @@
       ],
       "source": "packages/core/src/components/data/DzCalendar.vue",
       "typesSource": "packages/core/src/components/data/DzCalendar.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -5405,18 +5451,21 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 8,
+          "pass": 7,
           "present": 3,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec",
-          "ssr-sample"
+          "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -6002,13 +6051,13 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "excepted": 2,
+          "pass": 4,
           "present": 6,
-          "unrun": 2
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "controlled-uncontrolled"
+          "at-manual"
         ],
         "stale": []
       },
@@ -6489,7 +6538,7 @@
       ],
       "source": "packages/core/src/components/media/DzCarousel.vue",
       "typesSource": "packages/core/src/components/media/DzCarousel.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -6545,7 +6594,7 @@
           {
             "key": "Enter",
             "action": "Activate the focused previous or next control.",
-            "when": "control",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
@@ -6554,7 +6603,7 @@
           {
             "key": " ",
             "action": "Activate the focused previous or next control.",
-            "when": "control",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
@@ -6563,6 +6612,7 @@
         ]
       },
       "providerHooks": [
+        "useDzDirection",
         "useDzTestIds"
       ],
       "capability": {
@@ -6576,11 +6626,12 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 4,
-          "unrun": 5
+          "present": 3,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec",
@@ -7084,7 +7135,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCascader.vue",
       "typesSource": "packages/core/src/components/forms/DzCascader.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -7255,18 +7306,23 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 5,
-          "unrun": 5
+          "pass": 7,
+          "present": 3,
+          "stale": 1,
+          "unrun": 7
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -7871,11 +7927,12 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 5,
-          "unrun": 3
+          "present": 4,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -7982,7 +8039,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"indicator\" | \"control\" | \"label\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"indicator\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzCheckbox.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\na key outside the declared parts is a type error, not a class that lands\nnowhere.",
@@ -8229,8 +8286,8 @@
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "contract-spec",
+          "controlled-uncontrolled"
         ],
         "stale": []
       },
@@ -8464,7 +8521,7 @@
       ],
       "source": "packages/core/src/components/data/DzChip.vue",
       "typesSource": "packages/core/src/components/data/DzChip.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -8493,25 +8550,9 @@
         },
         "keyboard": [
           {
-            "key": "Enter",
-            "action": "Activate the chip.",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "button"
-          },
-          {
-            "key": " ",
-            "action": "Activate the chip.",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "button"
-          },
-          {
             "key": "Backspace",
             "action": "Remove the chip.",
-            "when": "removable",
+            "when": "closable",
             "wcag": [
               "2.1.1"
             ]
@@ -8519,7 +8560,7 @@
           {
             "key": "Delete",
             "action": "Remove the chip.",
-            "when": "removable",
+            "when": "closable",
             "wcag": [
               "2.1.1"
             ]
@@ -8538,14 +8579,13 @@
         ],
         "traits": [],
         "cells": {
+          "excepted": 1,
           "pass": 5,
-          "present": 5,
-          "unrun": 3
+          "present": 6,
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": []
       },
@@ -9102,11 +9142,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -9392,14 +9433,15 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "excepted": 1,
+          "pass": 4,
           "present": 4,
           "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -9657,14 +9699,15 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
-          "present": 3,
+          "excepted": 2,
+          "pass": 4,
+          "present": 2,
           "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
+          "contract-spec",
           "keyboard-spec",
           "ssr-sample"
         ],
@@ -9910,54 +9953,56 @@
         },
         "keyboard": [
           {
-            "key": "ArrowRight",
-            "action": "Move the colour pointer one step along the saturation axis.",
+            "key": "Enter",
+            "action": "Open the colour panel.",
+            "when": "trigger",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "slider",
-            "rtl": "fixed"
+            "apg": "button"
           },
           {
-            "key": "ArrowLeft",
-            "action": "Move the colour pointer one step back along the saturation axis.",
+            "key": " ",
+            "action": "Open the colour panel.",
+            "when": "trigger",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "slider",
-            "rtl": "fixed"
+            "apg": "button"
           },
           {
-            "key": "ArrowUp",
-            "action": "Move the colour pointer one step up the value axis.",
+            "key": "Escape",
+            "action": "Close the colour panel without changing the value.",
             "wcag": [
-              "2.1.1"
+              "2.1.1",
+              "2.1.2"
             ],
-            "apg": "slider"
+            "apg": "dialog"
           },
           {
-            "key": "ArrowDown",
-            "action": "Move the colour pointer one step down the value axis.",
+            "key": "Tab",
+            "action": "Move through the panel: the colour field, the hex field, then the presets.",
             "wcag": [
-              "2.1.1"
+              "2.1.2"
             ],
-            "apg": "slider"
+            "apg": "dialog"
           },
           {
-            "key": "Home",
-            "action": "Move the colour pointer to the start of the axis.",
+            "key": "Enter",
+            "action": "Select the focused preset colour.",
+            "when": "item",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "slider"
+            "apg": "button"
           },
           {
-            "key": "End",
-            "action": "Move the colour pointer to the end of the axis.",
+            "key": "<character>",
+            "action": "Type a hex value into the colour field.",
+            "when": "input",
             "wcag": [
               "2.1.1"
-            ],
-            "apg": "slider"
+            ]
           }
         ]
       },
@@ -9977,14 +10022,15 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 5,
-          "unrun": 4
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "portal-hydration"
         ],
         "stale": []
       },
@@ -10348,7 +10394,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCombobox.vue",
       "typesSource": "packages/core/src/components/forms/DzCombobox.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -10487,16 +10533,21 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 7,
-          "unrun": 3
+          "pass": 7,
+          "present": 5,
+          "stale": 1,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -10797,7 +10848,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"clear\" | \"error\" | \"item-label\" | \"viewport\" | \"item-indicator\" | \"empty\" | \"control\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"clear\" | \"error\" | \"item-label\" | \"viewport\" | \"item-indicator\" | \"empty\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzCombobox.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the field anchor,\ndeclared there as `control` — and the panel parts render into a portal,\nwhere `class` never reached them.",
@@ -11223,11 +11274,11 @@
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec",
-          "portal-hydration",
-          "ssr-sample"
+          "portal-hydration"
         ],
         "stale": []
       },
@@ -11341,7 +11392,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"item\" | \"content\" | \"list\" | \"overlay\" | \"item-label\" | \"group\" | \"empty\" | \"control\" | \"input\" | \"group-label\" | \"suffix\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"item\" | \"content\" | \"list\" | \"overlay\" | \"item-label\" | \"group\" | \"empty\" | \"input\" | \"control\" | \"group-label\" | \"suffix\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in\n`DzCommandPalette.anatomy.ts` (ADR-19 §5). `class` keeps its existing\ntarget (the portalled dialog content); `ui.item` and `ui.icon` land on\nevery row and every row icon.",
@@ -12303,13 +12354,14 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 6,
-          "unrun": 3
+          "present": 5,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
         "stale": []
       },
@@ -12866,14 +12918,15 @@
         ],
         "traits": [],
         "cells": {
+          "excepted": 1,
           "pass": 5,
-          "present": 3,
+          "present": 2,
           "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
+          "contract-spec",
           "keyboard-spec",
           "ssr-sample"
         ],
@@ -13169,11 +13222,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -13422,7 +13476,7 @@
       ],
       "source": "packages/core/src/components/data/DzDataGrid.vue",
       "typesSource": "packages/core/src/components/data/DzDataGrid.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -13522,6 +13576,22 @@
             "apg": "grid"
           },
           {
+            "key": "PageDown",
+            "action": "Move focus down ten rows, or to the last row.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
+            "key": "PageUp",
+            "action": "Move focus up ten rows, or to the header row.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "grid"
+          },
+          {
             "key": "Enter",
             "action": "Cycle the focused column sort.",
             "when": "header",
@@ -13578,17 +13648,16 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 5,
           "stale": 1,
-          "unrun": 6
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec",
-          "portal-hydration",
-          "ssr-sample"
+          "portal-hydration"
         ],
         "stale": [
           "perf-baseline"
@@ -14260,7 +14329,7 @@
       ],
       "source": "packages/core/src/components/data/DzDataView.vue",
       "typesSource": "packages/core/src/components/data/DzDataView.types.ts",
-      "componentCommit": "2d51eec41433e3684bf15885cd52761bbf971b23",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -14324,18 +14393,21 @@
           "dataset"
         ],
         "cells": {
-          "pass": 8,
+          "pass": 7,
           "present": 4,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec",
-          "ssr-sample"
+          "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -14703,23 +14775,23 @@
             "id": "States",
             "lines": [
               306,
-              414
+              425
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: List Semantics & Keyboard",
             "lines": [
-              420,
-              500
+              431,
+              511
             ]
           },
           {
             "id": "RealWorldCatalog",
             "name": "Real World: Product Catalog",
             "lines": [
-              506,
-              583
+              517,
+              594
             ]
           }
         ],
@@ -14760,7 +14832,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDatePicker.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -14837,21 +14909,21 @@
           },
           {
             "key": "Home",
-            "action": "Move to the first option.",
-            "when": "list open",
+            "action": "Move to the first day of the focused week.",
+            "when": "calendar open",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "combobox"
+            "apg": "grid"
           },
           {
             "key": "End",
-            "action": "Move to the last option.",
-            "when": "list open",
+            "action": "Move to the last day of the focused week.",
+            "when": "calendar open",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "combobox"
+            "apg": "grid"
           },
           {
             "key": "Enter",
@@ -14914,16 +14986,20 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 8,
-          "present": 5,
-          "unrun": 3
+          "pass": 7,
+          "present": 4,
+          "stale": 1,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -15071,7 +15147,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"title\" | \"error\" | \"header\" | \"group\" | \"row\" | \"cell\" | \"control\" | \"panel\" | \"input\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"title\" | \"error\" | \"header\" | \"group\" | \"row\" | \"cell\" | \"panel\" | \"input\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzDatePicker.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the segment field,\ndeclared here as `control` — and the calendar parts render inside a popper\nwhere `class` never reached them.",
@@ -15309,7 +15385,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDateRangePicker.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -15387,21 +15463,21 @@
           },
           {
             "key": "Home",
-            "action": "Move to the first option.",
-            "when": "list open",
+            "action": "Move to the first day of the focused week.",
+            "when": "calendar open",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "combobox"
+            "apg": "grid"
           },
           {
             "key": "End",
-            "action": "Move to the last option.",
-            "when": "list open",
+            "action": "Move to the last day of the focused week.",
+            "when": "calendar open",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "combobox"
+            "apg": "grid"
           },
           {
             "key": "Enter",
@@ -15464,17 +15540,21 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 8,
-          "present": 4,
-          "unrun": 4
+          "pass": 7,
+          "present": 3,
+          "stale": 1,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -15622,7 +15702,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"title\" | \"error\" | \"separator\" | \"header\" | \"group\" | \"row\" | \"cell\" | \"control\" | \"panel\" | \"input\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"title\" | \"error\" | \"separator\" | \"header\" | \"group\" | \"row\" | \"cell\" | \"panel\" | \"input\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in\n`DzDateRangePicker.anatomy.ts` (ADR-19 §5). `ui.input` reaches the segments\non **both** ends of the range.",
@@ -15869,11 +15949,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -16085,11 +16166,12 @@
         ],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 3
+          "present": 1,
+          "unrun": 4
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "data-scenarios",
           "ssr-sample"
         ],
@@ -16448,14 +16530,17 @@
           "teleports"
         ],
         "cells": {
-          "pass": 5,
-          "present": 6,
-          "unrun": 3
+          "excepted": 1,
+          "pass": 4,
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -17495,13 +17580,14 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 6,
-          "unrun": 3
+          "present": 5,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
         "stale": []
       },
@@ -18203,11 +18289,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 3,
-          "unrun": 1
+          "present": 2,
+          "unrun": 2
         },
         "unrun": [
-          "axe"
+          "axe",
+          "contract-spec"
         ],
         "stale": []
       },
@@ -18623,16 +18710,18 @@
         ],
         "traits": [],
         "cells": {
+          "excepted": 1,
           "pass": 5,
-          "present": 3,
-          "unrun": 5
+          "present": 1,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
+          "contract-spec",
           "keyboard-spec",
-          "ssr-sample"
+          "ssr-sample",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -18963,17 +19052,15 @@
           "dataset"
         ],
         "cells": {
-          "excepted": 1,
-          "pass": 4,
-          "present": 4,
-          "unrun": 5
+          "excepted": 3,
+          "pass": 3,
+          "present": 5,
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "axe",
           "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec"
+          "data-scenarios"
         ],
         "stale": []
       },
@@ -19207,12 +19294,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 12,
+          "present": 11,
           "stale": 1,
-          "unrun": 1
+          "unrun": 2
         },
         "unrun": [
-          "at-manual"
+          "at-manual",
+          "contract-spec"
         ],
         "stale": [
           "perf-baseline"
@@ -20564,67 +20652,75 @@
             ]
           },
           {
+            "id": "FormLayoutNode",
+            "name": "Form Layout Node (colSpan + rowSpan)",
+            "lines": [
+              243,
+              333
+            ]
+          },
+          {
             "id": "ExplicitRows",
             "name": "Explicit Rows",
             "lines": [
-              243,
-              261
+              339,
+              357
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              267,
-              281
+              363,
+              377
             ]
           },
           {
             "id": "RealWorldCardGrid",
             "name": "Real World: Card Grid",
             "lines": [
-              287,
-              302
+              383,
+              398
             ]
           },
           {
             "id": "RealWorldDashboardStats",
             "name": "Real World: Dashboard Stats",
             "lines": [
-              308,
-              333
+              404,
+              429
             ]
           },
           {
             "id": "ResponsiveMobile",
             "name": "Responsive: Mobile",
             "lines": [
-              364,
-              369
+              460,
+              465
             ]
           },
           {
             "id": "ResponsiveTablet",
             "name": "Responsive: Tablet",
             "lines": [
-              371,
-              376
+              467,
+              472
             ]
           },
           {
             "id": "ResponsiveDesktop",
             "name": "Responsive: Desktop",
             "lines": [
-              378,
-              383
+              474,
+              479
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Semantic Grid",
             "lines": [
-              389,
-              404
+              485,
+              500
             ]
           }
         ],
@@ -20667,7 +20763,7 @@
       "name": "DzGridItem",
       "kind": "compound-part",
       "parentComponent": "DzGrid",
-      "description": "a `DzGrid` child that says how many columns it occupies.",
+      "description": "a `DzGrid` child that says how many columns and rows it occupies.",
       "descriptionSource": "sfc-header",
       "family": "layout",
       "subpaths": [
@@ -20693,11 +20789,29 @@
           "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
         },
         {
+          "name": "colSpan",
+          "type": "GridSpan | ResponsiveSpan | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Columns this item occupies, fixed or per breakpoint. Omitted means one\ncolumn, the CSS default. A numeric span outside 1–12 is clamped into that\nrange; a span wider than the grid's own column count creates implicit\ncolumns, exactly as the CSS it compiles to would — clamp to your grid.\n\nThis is the name a Form document uses, so a renderer forwards\n`node.layout.colSpan` with no lookup table of its own.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
+        },
+        {
+          "name": "rowSpan",
+          "type": "GridSpan | ResponsiveSpan | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Rows this item occupies, fixed or per breakpoint. Omitted means one row.\n\nClamped and mirrored on exactly the same terms as `colSpan`: `grid-row: span\nN` is writing-mode relative on the block axis, so it needs no RTL handling\neither. Without this prop a document carrying `layout.rowSpan` has to be\nrendered with a raw `row-span-*` class — the persisted-CSS violation doc 03\n§3 forbids, relocated into the component boundary rather than removed.\n\nA row span is meaningful whether or not the parent `DzGrid` declares `rows`:\nwith `rows` it spans explicit tracks, without it the item creates implicit\nones, exactly as the CSS does.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
+        },
+        {
           "name": "span",
           "type": "GridSpan | ResponsiveSpan | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Columns this item occupies, fixed or per breakpoint. Omitted means one\ncolumn, the CSS default. A numeric span outside 1–12 is clamped into that\nrange; a span wider than the grid's own column count creates implicit\ncolumns, exactly as the CSS it compiles to would — clamp to your grid.",
+          "description": "Columns this item occupies — the original spelling, an alias of\n{@link DzGridItemProps.colSpan}.\n\nKept because it reads better than `colSpan` on a grid with no row spans, and\nbecause removing it would be a breaking change for the API D67 shipped. When\nboth are given, `colSpan` wins and dev mode warns.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/layout/DzGrid.types.ts"
         }
@@ -20718,8 +20832,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 2,
-        "propsWithDescription": 2,
+        "props": 4,
+        "propsWithDescription": 4,
         "propsWithDeclaredDefault": 1,
         "events": 0,
         "eventsWithDescription": 0,
@@ -21244,13 +21358,13 @@
         ],
         "traits": [],
         "cells": {
+          "excepted": 1,
           "pass": 5,
           "present": 5,
-          "unrun": 3
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": []
@@ -21547,9 +21661,13 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 7
+          "present": 5,
+          "unrun": 2
         },
-        "unrun": [],
+        "unrun": [
+          "contract-spec",
+          "unit-spec"
+        ],
         "stale": []
       },
       "props": [
@@ -22212,12 +22330,13 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 7,
-          "unrun": 5
+          "present": 6,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec",
           "ssr-sample"
@@ -22352,7 +22471,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"separator\" | \"control\" | \"label\" | \"panel\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"separator\" | \"label\" | \"panel\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in\n`DzImageComparison.anatomy.ts` (ADR-19 §5). `ui.panel` lands on **both**\nimage layers — they share a part name.",
@@ -22569,15 +22688,15 @@
           "dataset"
         ],
         "cells": {
+          "excepted": 1,
           "pass": 5,
           "present": 4,
-          "unrun": 5
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
-          "keyboard-spec",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -23251,12 +23370,13 @@
         "cells": {
           "excepted": 1,
           "pass": 5,
-          "present": 5,
-          "unrun": 2
+          "present": 4,
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled"
+          "controlled-uncontrolled",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -23442,7 +23562,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"clear\" | \"error\" | \"spinner\" | \"control\" | \"input\" | \"suffix\" | \"prefix\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"clear\" | \"error\" | \"spinner\" | \"input\" | \"control\" | \"suffix\" | \"prefix\", DzClassValue>> | undefined",
           "required": false,
           "default": "undefined",
           "description": "Per-part class overrides, keyed by the names in `DzInput.anatomy.ts`\n(ADR-19). `class` keeps landing on the `control` part — the visual field —\nwhich is where it has always landed; `ui.root` reaches the outer node.",
@@ -24088,7 +24208,8 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "excepted": 1,
+          "pass": 4,
           "present": 4,
           "unrun": 4
         },
@@ -24282,7 +24403,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"error\" | \"control\" | \"input\" | \"suffix\" | \"prefix\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"error\" | \"input\" | \"control\" | \"suffix\" | \"prefix\", DzClassValue>> | undefined",
           "required": false,
           "default": "undefined",
           "description": "Per-part class overrides, keyed by the names in `DzInputMask.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\n`ui` addresses the other parts by name, and a typo is a type error.",
@@ -24560,11 +24681,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -24862,13 +24984,15 @@
           "drags"
         ],
         "cells": {
-          "pass": 5,
-          "present": 5,
-          "unrun": 4
+          "excepted": 1,
+          "pass": 4,
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -25056,7 +25180,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"indicator\" | \"error\" | \"control\" | \"label\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"indicator\" | \"error\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzKnob.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
@@ -25360,17 +25484,20 @@
           "teleports"
         ],
         "cells": {
-          "pass": 5,
-          "present": 6,
-          "unrun": 6
+          "excepted": 1,
+          "pass": 4,
+          "present": 4,
+          "unrun": 8
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec",
           "portal-hydration",
-          "ssr-sample"
+          "ssr-sample",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -25661,9 +25788,12 @@
         ],
         "cells": {
           "pass": 2,
-          "present": 5
+          "present": 4,
+          "unrun": 1
         },
-        "unrun": [],
+        "unrun": [
+          "contract-spec"
+        ],
         "stale": []
       },
       "props": [
@@ -25971,7 +26101,7 @@
       ],
       "source": "packages/core/src/components/forms/DzListbox.vue",
       "typesSource": "packages/core/src/components/forms/DzListbox.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -26110,12 +26240,13 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 4,
-          "unrun": 5
+          "present": 3,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec"
@@ -26376,7 +26507,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"error\" | \"item-label\" | \"group\" | \"viewport\" | \"item-indicator\" | \"empty\" | \"control\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"group-label\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"error\" | \"item-label\" | \"group\" | \"viewport\" | \"item-indicator\" | \"empty\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"control\" | \"group-label\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzListbox.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the listbox box, declared\nthere as `control`.",
@@ -26613,7 +26744,7 @@
         "./data"
       ],
       "source": "packages/core/src/components/data/DzListItem.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -26667,16 +26798,13 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
-          "present": 3,
-          "unrun": 5
+          "excepted": 2,
+          "pass": 4,
+          "present": 6,
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "controlled-uncontrolled",
-          "keyboard-spec",
-          "ssr-sample",
-          "unit-spec"
+          "at-manual"
         ],
         "stale": []
       },
@@ -27096,7 +27224,7 @@
       ],
       "source": "packages/core/src/components/navigation/DzMegaMenu.vue",
       "typesSource": "packages/core/src/components/navigation/DzMegaMenu.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -27244,19 +27372,21 @@
           "dataset"
         ],
         "cells": {
-          "pass": 8,
-          "present": 6,
-          "unrun": 6
+          "excepted": 1,
+          "pass": 7,
+          "present": 7,
+          "stale": 1,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
+          "contract-spec",
           "data-scenarios",
-          "keyboard-spec",
-          "ssr-sample"
+          "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -27525,7 +27655,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMention.vue",
       "typesSource": "packages/core/src/components/forms/DzMention.types.ts",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -27649,18 +27779,22 @@
           "dataset"
         ],
         "cells": {
-          "pass": 8,
-          "present": 4,
-          "unrun": 5
+          "pass": 7,
+          "present": 3,
+          "stale": 1,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -27916,7 +28050,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"item\" | \"content\" | \"list\" | \"error\" | \"item-label\" | \"empty\" | \"control\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"loader\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"item\" | \"content\" | \"list\" | \"error\" | \"item-label\" | \"empty\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"control\" | \"loader\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzMention.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the text control, declared\nthere as `input` — so `ui.root` is the route to the wrapper.",
@@ -28284,13 +28418,13 @@
           "dataset"
         ],
         "cells": {
+          "excepted": 1,
           "pass": 5,
           "present": 7,
-          "unrun": 5
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec",
           "ssr-sample"
@@ -28676,11 +28810,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -28907,7 +29042,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzMultiSelect.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -29044,17 +29179,22 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 6,
-          "unrun": 4
+          "pass": 7,
+          "present": 4,
+          "stale": 1,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -29247,7 +29387,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"clear\" | \"error\" | \"item-label\" | \"viewport\" | \"item-indicator\" | \"empty\" | \"control\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"clear\" | \"error\" | \"item-label\" | \"viewport\" | \"item-indicator\" | \"empty\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzMultiSelect.anatomy.ts`\n(ADR-19 §5). The selected-value chips are **not** among them: they are the\nvocabulary stop that declaration records, and `ui.control` plus a\ndescendant selector is the route to them until the word exists.",
@@ -29588,14 +29728,15 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
-          "present": 3,
+          "excepted": 2,
+          "pass": 4,
+          "present": 2,
           "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
+          "contract-spec",
           "keyboard-spec",
           "ssr-sample"
         ],
@@ -30124,7 +30265,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"error\" | \"control\" | \"input\" | \"prefix\" | \"decrement\" | \"increment\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"error\" | \"input\" | \"control\" | \"prefix\" | \"decrement\" | \"increment\", DzClassValue>> | undefined",
           "required": false,
           "default": "undefined",
           "description": "Per-part class overrides, keyed by the names in `DzNumberInput.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\n`ui` addresses the other parts by name, and a typo is a type error.",
@@ -30371,7 +30512,7 @@
       ],
       "source": "packages/core/src/components/data/DzOrderList.vue",
       "typesSource": "packages/core/src/components/data/DzOrderList.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -30470,11 +30611,11 @@
           },
           {
             "key": " ",
-            "action": "Select the focused option.",
+            "action": "Grab the focused item for reordering, or drop it when it is already grabbed.",
             "wcag": [
-              "2.1.1"
-            ],
-            "apg": "listbox"
+              "2.1.1",
+              "2.5.7"
+            ]
           },
           {
             "key": "<character>",
@@ -30486,10 +30627,8 @@
           },
           {
             "key": "ArrowUp",
-            "action": "Move the selected item one position earlier.",
-            "modifiers": [
-              "Alt"
-            ],
+            "action": "Move the grabbed item one position earlier.",
+            "when": "grabbed",
             "wcag": [
               "2.1.1",
               "2.5.7"
@@ -30497,10 +30636,8 @@
           },
           {
             "key": "ArrowDown",
-            "action": "Move the selected item one position later.",
-            "modifiers": [
-              "Alt"
-            ],
+            "action": "Move the grabbed item one position later.",
+            "when": "grabbed",
             "wcag": [
               "2.1.1",
               "2.5.7"
@@ -30531,18 +30668,22 @@
           "drags"
         ],
         "cells": {
-          "pass": 8,
-          "present": 5,
-          "unrun": 5
+          "pass": 7,
+          "present": 4,
+          "stale": 1,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -30956,12 +31097,13 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 4,
-          "unrun": 4
+          "present": 3,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -31113,7 +31255,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"error\" | \"control\" | \"input\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"error\" | \"input\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": "undefined",
           "description": "Per-part class overrides, keyed by the names in `DzOtpInput.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\n`ui` addresses the other parts by name, and a typo is a type error.",
@@ -31546,11 +31688,12 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 5,
-          "unrun": 3
+          "present": 4,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -31950,13 +32093,15 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
-          "present": 3,
-          "unrun": 5
+          "excepted": 1,
+          "pass": 4,
+          "present": 2,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec",
           "ssr-sample"
@@ -32271,12 +32416,13 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 4,
-          "unrun": 4
+          "present": 3,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -32455,7 +32601,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"error\" | \"spinner\" | \"control\" | \"input\" | \"prefix\" | \"toggle\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"error\" | \"spinner\" | \"input\" | \"control\" | \"prefix\" | \"toggle\", DzClassValue>> | undefined",
           "required": false,
           "default": "undefined",
           "description": "Per-part class overrides, keyed by the names in `DzPasswordInput.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\n`ui` addresses the other parts by name, and a typo is a type error.",
@@ -32815,14 +32961,16 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 9,
-          "unrun": 4
+          "present": 7,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
         "stale": []
       },
@@ -32891,7 +33039,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"clear\" | \"error\" | \"item-label\" | \"viewport\" | \"item-indicator\" | \"empty\" | \"control\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"clear\" | \"error\" | \"item-label\" | \"viewport\" | \"item-indicator\" | \"empty\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in\n`DzPersonaSelector.anatomy.ts` (ADR-19 §5). This component renders no\nelement of its own, so the map is forwarded whole to the `DzCombobox` that\nis* its root — one map still reaches every part the declaration names.",
@@ -33171,16 +33319,14 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 3,
-          "unrun": 6
+          "present": 5,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
           "controlled-uncontrolled",
-          "keyboard-spec",
-          "portal-hydration",
-          "ssr-sample"
+          "keyboard-spec"
         ],
         "stale": []
       },
@@ -33544,14 +33690,17 @@
           "teleports"
         ],
         "cells": {
-          "pass": 5,
-          "present": 6,
-          "unrun": 3
+          "excepted": 1,
+          "pass": 4,
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -33970,9 +34119,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 4
+          "present": 3,
+          "unrun": 1
         },
-        "unrun": [],
+        "unrun": [
+          "contract-spec"
+        ],
         "stale": []
       },
       "props": [
@@ -34237,15 +34389,13 @@
         ],
         "traits": [],
         "cells": {
-          "excepted": 4,
+          "excepted": 6,
           "pass": 2,
           "present": 4,
-          "unrun": 3
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled"
+          "at-manual"
         ],
         "stale": []
       },
@@ -34506,11 +34656,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 5,
-          "unrun": 2
+          "present": 4,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -34806,13 +34957,14 @@
         ],
         "traits": [],
         "cells": {
+          "excepted": 1,
           "pass": 5,
-          "present": 5,
+          "present": 4,
           "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
+          "contract-spec",
           "keyboard-spec"
         ],
         "stale": []
@@ -34883,7 +35035,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"indicator\" | \"control\" | \"label\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"indicator\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzRadio.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
@@ -35097,11 +35249,12 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 5,
-          "unrun": 3
+          "present": 4,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -35504,12 +35657,13 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 4,
-          "unrun": 5
+          "present": 3,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec",
           "non-drag-alternative"
@@ -35671,7 +35825,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"indicator\" | \"error\" | \"control\" | \"label\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"indicator\" | \"error\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzRangeSlider.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`,\ndeclared here as `control`; `ui.indicator` reaches **both** thumbs.",
@@ -35926,6 +36080,24 @@
             "apg": "slider"
           },
           {
+            "key": "ArrowRight",
+            "action": "Increase the rating by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Decrease the rating by one step.",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "slider",
+            "rtl": "mirrored"
+          },
+          {
             "key": "Home",
             "action": "Set the rating to its minimum.",
             "wcag": [
@@ -35960,13 +36132,15 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
-          "present": 4,
-          "unrun": 4
+          "excepted": 1,
+          "pass": 4,
+          "present": 3,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -36404,11 +36578,12 @@
         ],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 3
+          "present": 1,
+          "unrun": 4
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "portal-hydration",
           "ssr-sample"
         ],
@@ -36719,14 +36894,15 @@
           "drags"
         ],
         "cells": {
+          "excepted": 1,
           "pass": 5,
-          "present": 4,
+          "present": 3,
           "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
+          "contract-spec",
           "keyboard-spec",
           "ssr-sample"
         ],
@@ -37183,11 +37359,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -37395,11 +37572,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -37583,14 +37761,14 @@
         ],
         "traits": [],
         "cells": {
-          "excepted": 1,
-          "pass": 5,
-          "present": 4,
+          "excepted": 3,
+          "pass": 4,
+          "present": 3,
           "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -37815,11 +37993,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -38095,12 +38274,13 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 4,
-          "unrun": 4
+          "present": 3,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -38279,7 +38459,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"clear\" | \"error\" | \"spinner\" | \"control\" | \"input\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"clear\" | \"error\" | \"spinner\" | \"input\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": "undefined",
           "description": "Per-part class overrides, keyed by the names in `DzSearchInput.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target;\n`ui` addresses the other parts by name, and a typo is a type error.",
@@ -38620,14 +38800,16 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 4,
-          "unrun": 4
+          "present": 2,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -38886,7 +39068,7 @@
       ],
       "source": "packages/core/src/components/forms/DzSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzSelect.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -39039,14 +39221,16 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 6,
-          "unrun": 4
+          "present": 4,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
         "stale": []
       },
@@ -39637,14 +39821,17 @@
           "teleports"
         ],
         "cells": {
-          "pass": 5,
-          "present": 6,
-          "unrun": 3
+          "excepted": 1,
+          "pass": 4,
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -40272,17 +40459,16 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 6,
-          "unrun": 7
+          "present": 7,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
-          "keyboard-spec",
-          "portal-hydration",
-          "ssr-sample"
+          "keyboard-spec"
         ],
         "stale": []
       },
@@ -41271,11 +41457,12 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 5,
-          "unrun": 4
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec",
           "non-drag-alternative"
@@ -41437,7 +41624,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"indicator\" | \"error\" | \"control\" | \"label\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"indicator\" | \"error\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzSlider.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing target — the Reka `SliderRoot`,\ndeclared here as `control` — so `ui.root` is the only route to the\nwrapper element.",
@@ -41839,6 +42026,44 @@
             "apg": "menu-button"
           },
           {
+            "key": "ArrowDown",
+            "action": "Move focus to the next action in a vertical fan.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous action in a vertical fan.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu"
+          },
+          {
+            "key": "ArrowRight",
+            "action": "Move focus to the next action in a horizontal fan.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu",
+            "rtl": "fixed"
+          },
+          {
+            "key": "ArrowLeft",
+            "action": "Move focus to the previous action in a horizontal fan.",
+            "when": "open",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "menu",
+            "rtl": "fixed"
+          },
+          {
             "key": "Home",
             "action": "Move focus to the first action.",
             "when": "open",
@@ -41883,12 +42108,13 @@
         ],
         "cells": {
           "pass": 5,
-          "present": 3,
-          "unrun": 7
+          "present": 2,
+          "unrun": 8
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec",
@@ -42438,7 +42664,7 @@
           {
             "key": "Enter",
             "action": "Activate the primary action.",
-            "when": "root",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
@@ -42447,39 +42673,20 @@
           {
             "key": " ",
             "action": "Activate the primary action.",
-            "when": "root",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
             "apg": "button"
           },
           {
-            "key": "ArrowDown",
-            "action": "Open the menu and focus its first item.",
-            "when": "trigger",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "menu-button"
-          },
-          {
             "key": "Enter",
-            "action": "Open the menu and focus its first item.",
+            "action": "Activate the disclosure; the menu composed into its slot is what opens.",
             "when": "trigger",
             "wcag": [
               "2.1.1"
             ],
-            "apg": "menu-button"
-          },
-          {
-            "key": "Escape",
-            "action": "Close the menu and return focus to the trigger.",
-            "when": "menu open",
-            "wcag": [
-              "2.1.1",
-              "2.1.2"
-            ],
-            "apg": "menu-button"
+            "apg": "button"
           }
         ]
       },
@@ -42495,13 +42702,13 @@
         ],
         "traits": [],
         "cells": {
+          "excepted": 1,
           "pass": 5,
           "present": 4,
-          "unrun": 4
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
           "keyboard-spec",
           "ssr-sample"
         ],
@@ -42999,14 +43206,15 @@
           "drags"
         ],
         "cells": {
-          "pass": 5,
-          "present": 4,
+          "excepted": 2,
+          "pass": 4,
+          "present": 3,
           "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
+          "contract-spec",
           "keyboard-spec",
           "ssr-sample"
         ],
@@ -43941,12 +44149,14 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
-          "present": 5,
-          "unrun": 3
+          "excepted": 1,
+          "pass": 4,
+          "present": 4,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -44240,7 +44450,7 @@
         "./navigation"
       ],
       "source": "packages/core/src/components/navigation/DzStepperItem.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -44299,14 +44509,14 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "excepted": 2,
+          "pass": 4,
           "present": 3,
-          "unrun": 5
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "contract-spec",
-          "controlled-uncontrolled",
           "keyboard-spec",
           "unit-spec"
         ],
@@ -44557,11 +44767,12 @@
         "traits": [],
         "cells": {
           "pass": 5,
-          "present": 5,
-          "unrun": 3
+          "present": 4,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -44659,7 +44870,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"indicator\" | \"control\" | \"label\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"indicator\" | \"label\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzSwitch.anatomy.ts`\n(ADR-19 §5). `class` keeps its existing meaning and its existing target.",
@@ -44948,36 +45159,6 @@
             "apg": "table"
           },
           {
-            "key": "Enter",
-            "action": "Cycle the focused column sort.",
-            "when": "header sortable",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "table"
-          },
-          {
-            "key": " ",
-            "action": "Cycle the focused column sort.",
-            "when": "header sortable",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "table"
-          },
-          {
-            "key": "Enter",
-            "action": "Add the focused column to the existing sort rather than replacing it.",
-            "modifiers": [
-              "Shift"
-            ],
-            "when": "header sortable",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "table"
-          },
-          {
             "key": "ArrowRight",
             "action": "Widen the column by 8px, or 24px with Shift.",
             "when": "header resizable",
@@ -45015,14 +45196,14 @@
           "drags"
         ],
         "cells": {
+          "excepted": 1,
           "pass": 7,
           "present": 7,
           "stale": 1,
-          "unrun": 3
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": [
@@ -45970,6 +46151,22 @@
               "2.1.2"
             ],
             "apg": "tabs"
+          },
+          {
+            "key": "Delete",
+            "action": "Close the focused tab.",
+            "when": "closable",
+            "wcag": [
+              "2.1.1"
+            ]
+          },
+          {
+            "key": "Backspace",
+            "action": "Close the focused tab.",
+            "when": "closable",
+            "wcag": [
+              "2.1.1"
+            ]
           }
         ]
       },
@@ -46375,7 +46572,7 @@
       ],
       "source": "packages/core/src/components/data/DzTag.vue",
       "typesSource": "packages/core/src/components/data/DzTag.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -46404,25 +46601,9 @@
         },
         "keyboard": [
           {
-            "key": "Enter",
-            "action": "Activate the tag.",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "button"
-          },
-          {
-            "key": " ",
-            "action": "Activate the tag.",
-            "wcag": [
-              "2.1.1"
-            ],
-            "apg": "button"
-          },
-          {
             "key": "Backspace",
             "action": "Remove the tag.",
-            "when": "removable",
+            "when": "closable",
             "wcag": [
               "2.1.1"
             ]
@@ -46430,7 +46611,7 @@
           {
             "key": "Delete",
             "action": "Remove the tag.",
-            "when": "removable",
+            "when": "closable",
             "wcag": [
               "2.1.1"
             ]
@@ -46449,14 +46630,14 @@
         ],
         "traits": [],
         "cells": {
+          "excepted": 1,
           "pass": 5,
           "present": 5,
-          "unrun": 3
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "contract-spec"
         ],
         "stale": []
       },
@@ -46812,13 +46993,15 @@
           "dataset"
         ],
         "cells": {
-          "pass": 5,
-          "present": 5,
-          "unrun": 4
+          "excepted": 1,
+          "pass": 4,
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios"
         ],
@@ -47024,7 +47207,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"root\" | \"error\" | \"control\" | \"input\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"root\" | \"error\" | \"input\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzTagsInput.anatomy.ts`\n(ADR-19 §5). The committed tokens are `DzChip`s and therefore their own\nanatomy boundary; restyle them through `chipVariant` / `chipTone` or\n`DzChip`'s own parts.",
@@ -47576,12 +47759,13 @@
         "cells": {
           "excepted": 1,
           "pass": 5,
-          "present": 5,
-          "unrun": 2
+          "present": 4,
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled"
+          "controlled-uncontrolled",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -48037,15 +48221,13 @@
         ],
         "traits": [],
         "cells": {
-          "excepted": 4,
+          "excepted": 6,
           "present": 4,
-          "unrun": 5
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "axe",
           "browser-matrix",
-          "controlled-uncontrolled",
           "story-light-dark"
         ],
         "stale": []
@@ -48392,12 +48574,11 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 1,
-          "unrun": 3
+          "present": 2,
+          "unrun": 2
         },
         "unrun": [
           "contract-spec",
-          "ssr-sample",
           "unit-spec"
         ],
         "stale": []
@@ -48568,7 +48749,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTimePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzTimePicker.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -48665,6 +48846,7 @@
           {
             "key": "Enter",
             "action": "Select the highlighted option and close the time list.",
+            "when": "item",
             "wcag": [
               "2.1.1"
             ],
@@ -48705,17 +48887,22 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 5,
-          "unrun": 4
+          "pass": 7,
+          "present": 3,
+          "stale": 1,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -48980,7 +49167,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"clear\" | \"list\" | \"error\" | \"footer\" | \"separator\" | \"group\" | \"control\" | \"label\" | \"panel\" | \"input\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"trigger\" | \"content\" | \"action\" | \"clear\" | \"list\" | \"error\" | \"footer\" | \"separator\" | \"group\" | \"label\" | \"panel\" | \"input\" | \"control\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzTimePicker.anatomy.ts`\n(ADR-19 §5). `ui.list` names the region of choices in **both** the roll and\nthe select layout, so a theme does not have to branch on `selection`.",
@@ -49312,16 +49499,18 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
-          "present": 3,
-          "unrun": 5
+          "excepted": 2,
+          "pass": 4,
+          "present": 1,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
+          "contract-spec",
           "keyboard-spec",
-          "ssr-sample"
+          "ssr-sample",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -50086,11 +50275,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -50259,7 +50449,7 @@
       ],
       "source": "packages/core/src/components/layout/DzToolbar.vue",
       "typesSource": "packages/core/src/components/layout/DzToolbar.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -50312,6 +50502,24 @@
             "rtl": "mirrored"
           },
           {
+            "key": "ArrowDown",
+            "action": "Move focus to the next control in the toolbar.",
+            "when": "orientation vertical",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "toolbar"
+          },
+          {
+            "key": "ArrowUp",
+            "action": "Move focus to the previous control in the toolbar.",
+            "when": "orientation vertical",
+            "wcag": [
+              "2.1.1"
+            ],
+            "apg": "toolbar"
+          },
+          {
             "key": "Home",
             "action": "Move focus to the first control.",
             "wcag": [
@@ -50338,6 +50546,7 @@
         ]
       },
       "providerHooks": [
+        "useDzDirection",
         "useDzTestIds"
       ],
       "capability": {
@@ -50348,15 +50557,14 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
-          "present": 4,
-          "unrun": 4
+          "excepted": 2,
+          "pass": 4,
+          "present": 5,
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "axe"
         ],
         "stale": []
       },
@@ -50637,14 +50845,17 @@
           "teleports"
         ],
         "cells": {
-          "pass": 5,
-          "present": 6,
-          "unrun": 3
+          "excepted": 1,
+          "pass": 4,
+          "present": 4,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "controlled-uncontrolled",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration",
+          "unit-spec"
         ],
         "stale": []
       },
@@ -51003,7 +51214,7 @@
       ],
       "source": "packages/core/src/components/overlays/DzTour.vue",
       "typesSource": "packages/core/src/components/overlays/DzTour.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -51100,20 +51311,23 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 3,
-          "unrun": 7
+          "excepted": 1,
+          "pass": 6,
+          "present": 4,
+          "stale": 1,
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
-          "keyboard-spec",
-          "portal-hydration",
-          "ssr-sample"
+          "keyboard-spec"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -51381,7 +51595,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTransfer.vue",
       "typesSource": "packages/core/src/components/forms/DzTransfer.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -51501,7 +51715,7 @@
           {
             "key": "Enter",
             "action": "Move the selected items to the other list.",
-            "when": "transfer action",
+            "when": "action",
             "wcag": [
               "2.1.1"
             ],
@@ -51523,18 +51737,21 @@
           "dataset"
         ],
         "cells": {
-          "pass": 8,
+          "pass": 7,
           "present": 4,
+          "stale": 1,
           "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec"
+          "data-scenarios"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -51700,7 +51917,7 @@
         },
         {
           "name": "ui",
-          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"action\" | \"list\" | \"error\" | \"item-label\" | \"header\" | \"group\" | \"body\" | \"item-indicator\" | \"empty\" | \"control\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"hint\", DzClassValue>> | undefined",
+          "type": "Partial<Record<\"icon\" | \"root\" | \"item\" | \"action\" | \"list\" | \"error\" | \"item-label\" | \"header\" | \"group\" | \"body\" | \"item-indicator\" | \"empty\" | \"input\" | \"options-state\" | \"options-message\" | \"options-retry\" | \"control\" | \"hint\", DzClassValue>> | undefined",
           "required": false,
           "default": null,
           "description": "Per-part class overrides, keyed by the names in `DzTransfer.anatomy.ts`\n(ADR-19 §5). Every pane-level key reaches **both** panes — the source and\nthe target are one declaration, not two.",
@@ -52050,11 +52267,12 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 6,
-          "unrun": 3
+          "present": 5,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
+          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -52539,14 +52757,14 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 5,
+          "excepted": 2,
+          "pass": 4,
           "present": 2,
-          "unrun": 6
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "controlled-uncontrolled",
           "keyboard-spec",
           "ssr-sample",
           "unit-spec"
@@ -52710,7 +52928,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTreeSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzTreeSelect.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "27b5e730adb0ddf89fb0c40c40fce9e3676abf97",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -52866,18 +53084,24 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 5,
-          "unrun": 5
+          "excepted": 1,
+          "pass": 6,
+          "present": 3,
+          "stale": 1,
+          "unrun": 7
         },
         "unrun": [
           "at-manual",
           "axe",
+          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
-          "keyboard-spec"
+          "keyboard-spec",
+          "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -53851,11 +54075,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
@@ -54041,11 +54266,12 @@
         "traits": [],
         "cells": {
           "pass": 2,
-          "present": 2,
-          "unrun": 2
+          "present": 1,
+          "unrun": 3
         },
         "unrun": [
           "axe",
+          "contract-spec",
           "ssr-sample"
         ],
         "stale": []
