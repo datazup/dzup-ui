@@ -7,7 +7,6 @@
       "@dzup-ui/tokens": ["../tokens/src/index.ts"],
       "@dzup-ui/tokens/*": ["../tokens/src/*"],
       "@dzup-ui/core": ["../core/src/index.ts"],
-      "@dzup-ui/core/ownership": ["../core/src/generated/component-ownership.ts"],
       "@dzup-ui/core/*": ["../core/src/*", "../core/src/components/*"]
     },
     "allowImportingTsExtensions": false,
