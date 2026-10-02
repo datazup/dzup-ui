@@ -5,6 +5,7 @@ import { createServer } from 'node:http'
 import { createRequire } from 'node:module'
 import { join, resolve } from 'node:path'
 import process from 'node:process'
+import { pathToFileURL } from 'node:url'
 import { createConsumer, linkConsumerDependencies, packPackage, root, runYarn } from '../../packages/testing/tests/run-resolution-consumer.mjs'
 
 const require = createRequire(join(root, 'package.json'))
@@ -53,7 +54,9 @@ writeFileSync('ssr.html', html)
 `)
   writeFileSync(join(consumer, 'index.html'), `<!doctype html><html><head><link rel="stylesheet" href="./style.css"></head><body>${html}<div id="policy-control" style="contain:layout style"></div></body></html>`)
   const { build } = require('vite')
-  const tailwind = require('@tailwindcss/vite').default
+  // The existing landing workspace declares the Tailwind build plugin.
+  const landingRequire = createRequire(join(root, 'apps/landing/package.json'))
+  const tailwind = (await import(pathToFileURL(landingRequire.resolve('@tailwindcss/vite')).href)).default
   const stage = join(consumer, 'site')
   await build({
     configFile: false,
@@ -75,7 +78,7 @@ writeFileSync('ssr.html', html)
     }
     const headers = { 'content-type': file.endsWith('.css') ? 'text/css' : 'text/html' }
     if (strict)
-      headers['content-security-policy'] = "default-src 'self'; style-src 'self'; style-src-attr 'none'; script-src 'none'; object-src 'none'; base-uri 'none'"
+      headers['content-security-policy'] = 'default-src \'self\'; style-src \'self\'; style-src-attr \'none\'; script-src \'none\'; object-src \'none\'; base-uri \'none\''
     response.writeHead(200, headers)
     response.end(readFileSync(file))
   })
@@ -98,7 +101,7 @@ writeFileSync('ssr.html', html)
       assert.equal(response.status(), 200)
       const policy = response.headers()['content-security-policy']
       if (mount === 'strict')
-        assert.ok(policy?.includes("style-src-attr 'none'"))
+        assert.ok(policy?.includes('style-src-attr \'none\''))
       else
         assert.equal(policy, undefined)
       return page.evaluate((ids) => {

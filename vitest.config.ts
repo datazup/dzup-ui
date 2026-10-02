@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vitest/config'
 import { createDzupResolution } from './packages/tooling/src/resolution/dzup-resolution.ts'
 
 /**

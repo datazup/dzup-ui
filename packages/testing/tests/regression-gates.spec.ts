@@ -7,7 +7,7 @@ const scripts = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')).
 
 describe('clean-checkout regression gate wiring', () => {
   it('discovers pre-hydration CSP in normal tests and the documented SSR command', () => {
-    expect(readFileSync(resolve(root, 'vitest.config.ts'), 'utf8')).toContain("'e2e/csp/ssr.spec.ts'")
+    expect(readFileSync(resolve(root, 'vitest.config.ts'), 'utf8')).toContain('e2e/csp/ssr.spec.ts')
     expect(scripts['test:ssr']).toContain('e2e/csp/ssr.spec.ts')
   })
 
