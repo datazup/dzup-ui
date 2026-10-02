@@ -1700,6 +1700,16 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
+    "summary": "**Replace Core's static SSR inline styles with utility classes.**",
+    "body": "**Replace Core's static SSR inline styles with utility classes.**\n\nThe static containment and reset styles previously rendered as `style`\nattributes now use equivalent utility classes. This removes all 81 inventoried\nstatic inline-style sites, allowing the covered SSR/browser fixtures to render\nthose styles under a policy that blocks inline style attributes.\n\nConsumers must generate the corresponding Tailwind utilities from Core's\ncomponent sources; removing inline attributes does not itself supply those CSS\nrules. The CSP proof includes that utility generation, so this note does not\nclaim that the existing getting-started instructions alone provide it.\n\nBound styles remain unchanged and require separate policy qualification.\nWhole-library strict-CSP SSR compatibility is unproven; this correction covers\nthe static inline-style sites only.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/core",
       "@dzup-ui/contracts"
     ],
@@ -1750,6 +1760,16 @@ export const PENDING: PendingChange[] = [
     "level": "minor",
     "summary": "`expectKeyboardContract` can now assert the shape of a tab order",
     "body": "`expectKeyboardContract` can now assert the shape of a tab order\n\nA new `tabStops` option, for the one row the existing options cannot evidence: a\ndeclared `Tab`.\n\n```ts\nexpectKeyboardContract(wrapper, anatomy, {\n  tabStops: { of: '[role=\"checkbox\"]', expect: 'each' },\n})\n```\n\n**Why neither existing option works.** `handled: ['Tab']` asserts the component\ncalled `preventDefault()`, which is what a focus **trap** does and the opposite of a\nrow that says focus moves. `platform: ['Tab']` fails, deliberately: the table of\nelements whose documented behaviour is a given key credits activation and text entry\nonly, **never navigation**, because `Tab` is not a behaviour of an element — it is\nthe document's focus order, and crediting any focusable node for any `Tab` row is\nthe verdict this check exists to refuse.\n\n**A `Tab` row makes one of two opposite claims**, and telling them apart is the\nwhole content of the row:\n\n| The row says | Pass | Mechanism |\n|---|---|---|\n| \"each box in the group is its own tab stop\" | `expect: 'each'` | every node in the order |\n| \"the toolbar is one tab stop\" | `expect: 'one'` | a roving `tabindex`, which takes the siblings **out** of the order |\n\nAn audit found the first of those published against a citation that proves the\nsecond, so a single `Tab` key list could not have told them apart either.\n\n**What it asserts**, and it fails on any of them: `Tab` is in the declared contract;\nthe selector matches at least two nodes, because a claim about order over one node is\nnot a claim; exactly all of them or exactly one is in the tab order; and the key is\n**driven** — a cancelable `Tab` keydown is dispatched and the component must not have\nconsumed it. The root counts when it matches the selector, which is how a roving\nfocus group built on the container (Reka's `RovingFocusGroup` puts `tabindex=\"0\"` on\nthe group and `-1` on every item) reads as one tab stop rather than as none.\n\nIt does not prove the browser's order matches DOM order — `tabindex` above zero,\n`inert` and portals all reorder it, and that belongs in a browser lane. Existing\ncalls are unaffected; the option is opt-in.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/testing"
+    ],
+    "level": "patch",
+    "summary": "**Expose the built `@dzup-ui/testing/resolution` entrypoint for checkout co-development.**",
+    "body": "**Expose the built `@dzup-ui/testing/resolution` entrypoint for checkout co-development.**\n\nThe published testing package now exports `createDzupResolution` and its types\nthrough built JavaScript and declarations. External build configurations can\nimport this public subpath instead of the private, source-only\n`@dzup-ui/tooling/resolution` entrypoint. Existing private tooling imports remain\ncompatible; the resolution algorithm is unchanged.\n\nThis is a Node build-configuration helper. It requires an explicit absolute\ndzup-ui checkout root; `externalized` mode also requires the selected packages\nto be built. It does not install packages, build a checkout, or establish npm\nregistry availability. Applications consuming installed packages should use\ntheir native package exports without checkout aliases.",
     "breaking": false,
     "deprecated": false
   },
