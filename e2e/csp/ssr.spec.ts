@@ -1,12 +1,12 @@
 import type { Component } from 'vue'
+import { describe, expect, it } from 'vitest'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { describe, expect, it } from 'vitest'
 import DzButton from '../../packages/core/src/components/buttons/DzButton.vue'
 import DzAlert from '../../packages/core/src/components/feedback/DzAlert.vue'
-import DzInput from '../../packages/core/src/components/inputs/DzInput.vue'
 import DzCheckbox from '../../packages/core/src/components/forms/DzCheckbox.vue'
 import DzColorPicker from '../../packages/core/src/components/forms/DzColorPicker.vue'
+import DzInput from '../../packages/core/src/components/inputs/DzInput.vue'
 import { buildInventory } from '../../packages/tooling/src/security/inline-style-inventory.ts'
 
 /**
@@ -37,4 +37,3 @@ describe('static styles under strict CSP in SSR', () => {
     expect(buildInventory().sites.filter(site => site.kind === 'static')).toEqual([])
   })
 })
-

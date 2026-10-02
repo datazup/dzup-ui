@@ -7,4 +7,3 @@ export default mergeConfig(config, {
     include: [...config.test!.include!, 'e2e/csp/ssr.spec.ts'],
   },
 })
-
