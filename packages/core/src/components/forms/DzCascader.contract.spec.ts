@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
  * DzCascader — Contract Spec v1 conformance tests.
  */
 import { describe, expect, it } from 'vitest'
+import { h } from 'vue'
 import DzCascader from './DzCascader.vue'
 
 const options = [
@@ -17,6 +18,20 @@ const options = [
 ]
 
 describe('dzCascader — Contract Spec v1', () => {
+  it('passes the selected path, keys and labels to the value slot and updates them with the model', async () => {
+    const wrapper = mount(DzCascader, {
+      props: { options, modelValue: ['cn', 'zj', 'hz'], ariaLabel: 'Region' },
+      slots: {
+        value: ({ path, value, labels }) => h('span', `${path.length}:${value.join(',')}:${labels.join(' > ')}`),
+      },
+    })
+    expect(wrapper.get('[role="combobox"]').attributes('aria-label')).toBe('Region')
+    expect(wrapper.text()).toContain('3:cn,zj,hz:China > Zhejiang > Hangzhou')
+    await wrapper.setProps({ modelValue: ['us', 'ca'] })
+    expect(wrapper.text()).toContain('2:us,ca:USA > California')
+    wrapper.unmount()
+  })
+
   it('renders without errors', () => {
     const wrapper = mount(DzCascader, { props: { options } })
     expect(wrapper.exists()).toBe(true)

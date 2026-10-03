@@ -16,6 +16,55 @@ const sourceItems: TransferItem[] = [
 ]
 
 describe('dzTransfer — Unit Tests', () => {
+  it('round-trips an uncontrolled model in both directions and clears pane selection', async () => {
+    const wrapper = mount(DzTransfer, { props: { source: sourceItems } })
+    const [sourceList, targetList] = wrapper.findAll('[role="listbox"]')
+    await sourceList!.findAll('[role="option"]')[0]!.trigger('click')
+    await wrapper.get('[aria-label="Move selected to target"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['a']])
+    expect(targetList!.findAll('[role="option"]').map(item => item.text())).toEqual(['Item A'])
+    expect(targetList!.get('[role="option"]').attributes('aria-selected')).toBe('false')
+    await targetList!.get('[role="option"]').trigger('keydown', { key: 'Enter' })
+    await wrapper.get('[aria-label="Move selected to source"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
+    expect(wrapper.emitted('change')?.at(-1)).toEqual([{ source: ['a', 'b', 'c', 'd'], target: [] }])
+    expect(targetList!.findAll('[role="option"]')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('round-trips a controlled model through its host and responds to external replacement', async () => {
+    const wrapper = mount(DzTransfer, {
+      props: { source: sourceItems, modelValue: ['a'] },
+    })
+    await wrapper.findAll('[role="listbox"]')[0]!.findAll('[role="option"]')[0]!.trigger('click')
+    await wrapper.get('[aria-label="Move selected to target"]').trigger('click')
+    const requested = wrapper.emitted('update:modelValue')?.at(-1)?.[0] as string[]
+    expect(requested).toEqual(['a', 'b'])
+    // A controlled host must acknowledge the requested value; the next render
+    // comes from the host's replacement, not a private copy in the component.
+    await wrapper.setProps({ modelValue: requested })
+    expect(wrapper.findAll('[role="listbox"]')[1]!.findAll('[role="option"]')).toHaveLength(2)
+    await wrapper.setProps({ modelValue: ['c'] })
+    expect(wrapper.findAll('[role="listbox"]')[1]!.text()).toBe('Item C')
+    wrapper.unmount()
+  })
+
+  it('filters a large dataset and transfers only enabled selected keys', async () => {
+    const source = Array.from({ length: 200 }, (_, index) => ({
+      key: String(index), label: `Record ${index}`, disabled: index === 199,
+    }))
+    const wrapper = mount(DzTransfer, { props: { source, searchable: true } })
+    await wrapper.findAll('input')[0]!.setValue('Record 19')
+    const list = wrapper.findAll('[role="listbox"]')[0]!
+    expect(list.findAll('[role="option"]')).toHaveLength(11)
+    await list.findAll('[role="option"]')[0]!.trigger('click')
+    await list.findAll('[role="option"]').at(-1)!.trigger('click')
+    await wrapper.get('[aria-label="Move selected to target"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['19']])
+    expect(wrapper.findAll('[role="listbox"]')[1]!.text()).toBe('Record 19')
+    wrapper.unmount()
+  })
+
   it('renders the component', () => {
     const wrapper = mount(DzTransfer, {
       props: { source: sourceItems },

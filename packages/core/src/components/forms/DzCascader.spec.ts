@@ -71,6 +71,60 @@ function optionByLabel(wrapper: ReturnType<typeof mountCascader>, label: string)
 enableAutoUnmount(afterEach)
 
 describe('dzCascader — columns', () => {
+  it('commits an uncontrolled default model and retains the chosen leaf after closing', async () => {
+    const wrapper = mountCascader()
+    await openPanel(wrapper)
+    await optionByLabel(wrapper, 'China')!.trigger('click')
+    await optionByLabel(wrapper, 'Zhejiang')!.trigger('click')
+    await optionByLabel(wrapper, 'Hangzhou')!.trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['cn', 'zj', 'hz']])
+    expect(wrapper.get('[role="combobox"]').text()).toContain('China / Zhejiang / Hangzhou')
+    expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false')
+  })
+
+  it('requests and accepts a controlled model replacement from the host', async () => {
+    const wrapper = mountCascader({ modelValue: ['cn', 'zj', 'hz'] })
+    await openPanel(wrapper)
+    await optionByLabel(wrapper, 'USA')!.trigger('click')
+    await optionByLabel(wrapper, 'California')!.trigger('click')
+    await optionByLabel(wrapper, 'Los Angeles')!.trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['us', 'ca', 'la']])
+    await wrapper.setProps({ modelValue: ['us', 'ca', 'la'] })
+    expect(wrapper.get('[role="combobox"]').text()).toContain('USA / California / Los Angeles')
+    await wrapper.setProps({ modelValue: [] })
+    expect(wrapper.get('[role="combobox"]').text()).toBe('Select')
+  })
+
+  it('selects a leaf with Space and dismisses with Escape without changing the selected path', async () => {
+    const wrapper = mountCascader({ options: [{ value: 'one', label: 'One' }] })
+    await openPanel(wrapper)
+    await wrapper.get('[role="option"]').trigger('keydown', { key: ' ' })
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['one']])
+    await openPanel(wrapper)
+    await wrapper.get('[role="option"]').trigger('keydown', { key: 'Escape' })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false')
+    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
+  })
+
+  it('leaves Tab unconsumed and dismisses when browser focus advances outside the panel', async () => {
+    const wrapper = mountCascader({ options: [{ value: 'one', label: 'One' }] })
+    const next = document.createElement('button')
+    document.body.append(next)
+    await openPanel(wrapper)
+    const option = wrapper.get('[role="option"]').element as HTMLElement
+    option.focus()
+    const tab = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+    option.dispatchEvent(tab)
+    expect(tab.defaultPrevented).toBe(false)
+    // jsdom has no native Tab traversal. Model that browser action explicitly.
+    next.focus()
+    await wrapper.vm.$nextTick()
+    expect(document.activeElement).toBe(next)
+    expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false')
+    next.remove()
+  })
+
   it('shows only the root column before any selection', async () => {
     const wrapper = mountCascader()
     await openPanel(wrapper)
