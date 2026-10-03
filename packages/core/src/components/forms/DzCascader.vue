@@ -153,6 +153,7 @@ const autoId = useId()
 const fieldContext = useFormFieldContext()
 
 const open = ref(false)
+const triggerEl = ref<HTMLButtonElement>()
 /** Element scoping the popover panel — used to focus option cells by data attrs */
 const panelEl = ref<HTMLElement>()
 /**
@@ -295,12 +296,15 @@ function closePanel(): void {
 }
 
 // Reka's popover focus scope loops Tab at its boundary. The combobox contract
-// instead leaves the control: keep native traversal and its resulting focus,
-// including on Shift+Tab, rather than restoring focus to the trigger on close.
+// instead leaves the control. Remove the closing panel from native traversal
+// and start at the trigger so both directions skip all of the panel's fields.
 let tabExit = false
 function handlePanelTab(event: KeyboardEvent): void {
   tabExit = true
   event.stopPropagation()
+  if (panelEl.value)
+    panelEl.value.inert = true
+  triggerEl.value?.focus()
   closePanel()
 }
 
@@ -392,8 +396,9 @@ function stepIndex(opts: DzCascaderOption[], from: number, dir: 1 | -1): number 
 function focusActive(): void {
   void nextTick(() => {
     const a = active.value
-    if (!a || !panelEl.value)
+    if (!open.value || !a || !panelEl.value)
       return
+    panelEl.value.inert = false
     const btn = panelEl.value.querySelector<HTMLElement>(
       `[data-col="${a.col}"][data-index="${a.index}"]`,
     )
@@ -593,6 +598,7 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
       >
         <button
           :id="resolvedId"
+          ref="triggerEl"
           type="button"
           role="combobox"
           data-part="trigger"
