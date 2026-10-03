@@ -185,7 +185,7 @@ function anatomyJoin(sourceAbs: string): AnatomyJoin {
  * The published provider readers, plus the wrappers that ARE an adoption of
  * one (TASK-R5-O3, ADR-20).
  *
- * `useComponentMessages` is `useDzMessages` with a component's own catalog
+ * `useComponentMessages` and `useMessageGroup` are `useDzMessages` with a component's catalog
  * branch already applied, and `useDzMotionAttribute` is `useDzMotion` reduced to
  * the one value a template binds. `useComponentMessageFormat` (TASK-R5-O4)
  * adopts two contexts — the component's catalog branch **and** the locale whose
@@ -200,7 +200,7 @@ const PROVIDER_HOOKS: readonly (readonly [reader: string, callee: RegExp])[] = [
   ['useDzDirection', /\buseDzDirection\s*\(/],
   ['useDzFormats', /\buseDzFormats\s*\(/],
   ['useDzLocale', /\buse(?:DzLocale|DzMessageFormat|ComponentMessageFormat)\s*\(/],
-  ['useDzMessages', /\buse(?:DzMessages|ComponentMessages|ComponentMessageFormat)\s*\(/],
+  ['useDzMessages', /\buse(?:DzMessages|ComponentMessages|ComponentMessageFormat|MessageGroup)\s*\(/],
   ['useDzMotion', /\buseDzMotion(?:Attribute)?\s*\(/],
   ['useDzNonce', /\buseDzNonce\s*\(/],
   ['useDzPortalTarget', /\buseDzPortalTarget\s*\(/],
