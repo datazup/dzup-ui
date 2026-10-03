@@ -192,9 +192,9 @@ declare module '@dzup-ui/contracts' {
       searchTarget: string
       targetItems: string
       searchPlaceholder: string
+    }
+    DzTreeSelect: { filterOptions: string, filterPlaceholder: string, noResults: string }
   }
-  DzTreeSelect: { filterOptions: string, filterPlaceholder: string, noResults: string }
-}
 }
 
 /**
