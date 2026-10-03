@@ -1,18 +1,20 @@
 import assert from 'node:assert/strict'
-import { readFileSync, readdirSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+// eslint-disable-next-line test/no-import-node-test -- This prose gate must run without a UI dependency installation.
 import { test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 const root = fileURLToPath(new URL('../../../', import.meta.url))
 const read = path => readFileSync(resolve(root, path), 'utf8')
 const json = path => JSON.parse(read(path))
-const row = (path, id) => read(path).split('\n').find(line =>
-  line.startsWith(`| ${id} |`) || line.startsWith(`| **${id}**`))
+function row(path, id) {
+  return read(path).split('\n').find(line =>
+    line.startsWith(`| ${id} |`) || line.startsWith(`| **${id}**`))
+}
 
 test('architecture reference counts the same Vue files as the token generator', () => {
-  const count = readdirSync(resolve(root, 'packages/core/src/components'), { recursive: true })
-    .filter(path => path.endsWith('.vue')).length
+  const count = readdirSync(resolve(root, 'packages/core/src/components'), { recursive: true }).filter(path => path.endsWith('.vue')).length
   const stated = read('CLAUDE.md').match(/\*\*(\d+)\*\* `\.vue` files/)
   assert.ok(stated, 'component count must remain visible')
   assert.equal(Number(stated[1]), count)
@@ -46,10 +48,8 @@ test('ADR execution row records actual acceptance rather than pending signatures
   const status = row(ledger, 'TASK-S0-O3')
   assert.match(status, /accepted.*2026-09-26/i)
   assert.doesNotMatch(status.split(' | ')[4], /signatures are still/)
-  for (const file of ['ADR-18-runtime-floor-and-validator-runner.md',
-    'ADR-19-public-styling-contract.md', 'ADR-20-provider-contract.md']) {
+  for (const prefix of ['ADR-18', 'ADR-19', 'ADR-20']) {
     // Resolve the actual ADR filename rather than duplicating its slug.
-    const prefix = file.slice(0, 6)
     const actual = readdirSync(resolve(root, 'docs/adr')).find(name => name.startsWith(prefix))
     assert.match(read(`docs/adr/${actual}`), /Status:\*\*\s+Accepted/)
   }
