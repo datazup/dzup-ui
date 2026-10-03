@@ -108,7 +108,7 @@ createApp({ render: () => h('section', [
     }
     const headers = { 'content-type': file.endsWith('.css') ? 'text/css' : file.endsWith('.js') ? 'application/javascript' : 'text/html' }
     if (strict)
-      headers['content-security-policy'] = `default-src 'self'; style-src 'self'; style-src-attr 'none'; script-src ${local === 'resets.html' ? "'self'" : "'none'"}; object-src 'none'; base-uri 'none'`
+      headers['content-security-policy'] = `default-src 'self'; style-src 'self'; style-src-attr 'none'; script-src ${local === 'resets.html' ? '\'self\'' : '\'none\''}; object-src 'none'; base-uri 'none'`
     response.writeHead(200, headers)
     response.end(readFileSync(file))
   })

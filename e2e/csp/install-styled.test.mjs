@@ -1,5 +1,5 @@
 // Native Node proves the public setup without Vitest aliases or transforms.
-/* eslint-disable test/prefer-vitest */
+/* eslint-disable test/no-import-node-test */
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
