@@ -22,7 +22,7 @@
 | Task | Title | Priority | Status | Started | Ended | Commit observed | Report | Ratchets / owner decisions |
 |---|---|---|---|---|---|---|---|---|
 | TASK-PL-O1 | Workspace dependency-graph hygiene: Vite 7 / plugin-vue 6 for the apps · one Vue · guard | 🟠 | `[ ]` | | | | | before: vite 6.4.1 ×3 apps / 7.3.5 packages; vue 3.5.31 / 3.5.39 / 3.5.42 |
-| TASK-PL-O2 | Consumer-resolution helper reachable outside the workspace · tooling seam decision | 🔴 `[!owner]` | `[ ]` | | | | | option-A packet → owner |
+| TASK-PL-O2 | Consumer-resolution helper reachable outside the workspace · tooling seam decision | 🔴 | `[x]` helper implemented; tooling publication remains `[!owner]` | 2026-10-02 | 2026-10-03 | `0afb2968`, `041fa272` (on main `00163d8080620079f2cea1cbffd40af05f46b512`) | `packages/testing/tests/run-resolution-consumer.mjs`; [`../../resolution-external-consumers.md`](../../resolution-external-consumers.md) | Reconciled 2026-10-03: `@dzup-ui/testing/resolution` has built import/types exports and a packed consumer regression. No claim of a new qualification run; PL-D1's private-tooling publication decision stays open. |
 | TASK-PL-O3 | Landing Lighthouse re-measure · CLS baseline promotion packet | 🟢 `[!owner baseline]` | `[ ]` | | | | | after PL-O1; before: 08-10 hero-split CLS 0.000005 / 0 on `fce7eef` |
 | TASK-PL-O4 | Disposition stamps on the 39 planning documents + README planning section (workspace-docs) | 🟢 | `[ ]` | | | | | 3 of 39 stamped at open |
 
@@ -43,6 +43,6 @@
 
 | # | Decision | Raised by | Options | Recommendation | Status |
 |---|---|---|---|---|---|
-| PL-D1 | Tooling seam: publish `@dzup-ui/tooling` / relocate the resolution helper / leave it | TASK-PL-O2 | A · B · C (see decision sheet in the handoff) | B for the helper now; A to the owner for the validator seam | open |
+| PL-D1 | Tooling seam: publish `@dzup-ui/tooling` / relocate the resolution helper / leave it | TASK-PL-O2 | A · B · C (see decision sheet in the handoff) | B implemented for the helper in `@dzup-ui/testing/resolution`; A to the owner for the validator seam | open for tooling publication only; helper relocation landed (`0afb2968`, `041fa272`), reconciled 2026-10-03 |
 | PL-D2 | `@floating-ui/vue` Vue duplicate: root `resolutions` override vs dependency bump | TASK-PL-O1 | override · bump · accept | to be filled by the handoff | open |
 | PL-D3 | Landing Lighthouse baseline: promote / hold / regression | TASK-PL-O3 | promote medians · hold · file regression | to be filled by the packet | open |

@@ -26,8 +26,10 @@ yarn add -D tailwindcss@^4 @tailwindcss/vite@^4
 ```
 
 `@dzup-ui/core` depends on `@dzup-ui/tokens` (design tokens) and
-`@dzup-ui/contracts` (types only, zero runtime) — that is the whole dependency
-graph, and yarn/npm will pull both in for you. Vue and Reka UI are peers.
+`@dzup-ui/contracts` (types only, zero runtime). Its other direct dependencies
+are `@floating-ui/vue`, `@internationalized/date`, `@lucide/vue`, `clsx`,
+`qrcode-generator`, `tailwind-merge` and `tailwind-variants`; yarn/npm installs
+these dependencies for you. Vue and Reka UI are peers.
 
 ## Generate the component utilities
 

@@ -34,7 +34,7 @@ Counting rules: Core “catalog components” counts every exported `.vue` compo
 The landing site is held to a performance budget in CI (`landing-perf` job):
 
 - **Core Web Vitals** — Lighthouse CI asserts **LCP < 2.5s** and **CLS < 0.1** on
-  every push (desktop preset, median of 3 runs), with advisory warnings on the
+  every push (desktop preset, median of 5 runs), with advisory warnings on the
   performance/accessibility scores, TBT and FCP. The full report uploads to
   temporary public storage and as a run artifact.
 - **Bundle budget** — a gzip payload budget on the first-paint JS/CSS

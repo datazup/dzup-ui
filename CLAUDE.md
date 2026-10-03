@@ -45,7 +45,7 @@ type CanonicalTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 
 
 ## Component Structure
 
-**205** `.vue` files in `packages/core/src/components/` across 11 families:
+**208** `.vue` files in `packages/core/src/components/` across 11 families:
 `buttons`, `cards`, `data`, `feedback`, `forms`, `inputs`, `layout`, `media`,
 `navigation`, `overlays`, `typography`
 

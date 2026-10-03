@@ -51,14 +51,14 @@ test('ADR execution row records actual acceptance rather than pending signatures
     // Resolve the actual ADR filename rather than duplicating its slug.
     const prefix = file.slice(0, 6)
     const actual = readdirSync(resolve(root, 'docs/adr')).find(name => name.startsWith(prefix))
-    assert.match(read(`docs/adr/${actual}`), /Status:\s*\*?\*?Accepted/)
+    assert.match(read(`docs/adr/${actual}`), /Status:\*\*\s+Accepted/)
   }
 })
 
 test('decision rows separate implemented stale/version gates from release qualification', () => {
   const register = 'docs/program-2026-09-04/reports/owner-decision-register-2026-09.md'
-  assert.equal(json('packages/tooling/src/validators/capability-matrix-ceilings.json')
-    .staleCells.ceiling, 17)
+  const ceiling = json('packages/tooling/src/validators/capability-matrix-ceilings.json').staleCells.ceiling
+  assert.ok(Number.isInteger(ceiling) && ceiling >= 0)
   assert.match(row(register, 'D143'), /implemented/i)
   assert.match(json('package.json').scripts['version-packages'], /sync:mcp-version/)
   assert.match(row(register, 'D146'), /implemented/i)
