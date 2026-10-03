@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "38620c3a88ca12fd8dc10a8414371d59375f60a0",
+  "sourceCommit": "0b0d714dafe30b73c0444ad1c1d81ddf5fc16bd5",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -7135,7 +7135,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCascader.vue",
       "typesSource": "packages/core/src/components/forms/DzCascader.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "0b0d714dafe30b73c0444ad1c1d81ddf5fc16bd5",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -7291,7 +7291,6 @@
       },
       "providerHooks": [
         "useDzDirection",
-        "useDzMessages",
         "useDzPortalTarget",
         "useDzTestIds"
       ],
@@ -7306,21 +7305,17 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
-          "present": 3,
-          "stale": 1,
-          "unrun": 7
+          "pass": 6,
+          "present": 8,
+          "stale": 2,
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "contract-spec",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec",
           "portal-hydration"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -7740,88 +7735,102 @@
             ]
           },
           {
+            "id": "Empty",
+            "lines": [
+              211,
+              223
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              225,
+              244
+            ]
+          },
+          {
             "id": "ChangeOnSelect",
             "name": "Change on Select",
             "lines": [
-              215,
-              261
+              250,
+              296
             ]
           },
           {
             "id": "HoverExpand",
             "name": "Hover Expand",
             "lines": [
-              267,
-              281
+              302,
+              316
             ]
           },
           {
             "id": "Filterable",
             "lines": [
-              287,
-              330
+              322,
+              365
             ]
           },
           {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              336,
-              353
+              371,
+              388
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              359,
-              372
+              394,
+              407
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              378,
-              387
+              413,
+              422
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              393,
-              408
+              428,
+              443
             ]
           },
           {
             "id": "States",
             "lines": [
-              414,
-              512
+              449,
+              547
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Keyboard-Only Cascade",
             "lines": [
-              518,
-              595
+              553,
+              630
             ]
           },
           {
             "id": "RealWorldShippingRegion",
             "name": "Real World: Shipping Region",
             "lines": [
-              601,
-              688
+              636,
+              723
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              701,
-              749
+              736,
+              784
             ]
           }
         ],
@@ -7838,8 +7847,8 @@
           "id": "ChangeOnSelect",
           "name": "Change on Select",
           "lines": [
-            215,
-            261
+            250,
+            296
           ],
           "source": "export const ChangeOnSelect: Story = {\n  name: 'Change on Select',\n  render: () => ({\n    components: { DzCascader },\n    data() {\n      return { value: [], regions }\n    },\n    template: `\n      <div class=\"space-y-2 max-w-xs\">\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Any level commits; the popover stays open to drill deeper.</p>\n        <DzCascader v-model:value=\"value\" :options=\"regions\" change-on-select placeholder=\"Select region\" />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n    const trigger = canvas.getByRole('combobox')\n\n    // Open the panel.\n    await userEvent.click(trigger)\n    // Popover is portalled to document.body — use screen, not canvas.\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))\n\n    // Click \"USA\" (a parent) — with change-on-select it commits immediately.\n    const usaOption = screen.getAllByRole('option').find(el => el.textContent?.includes('USA'))!\n    await userEvent.click(usaOption)\n\n    // Panel stays open (change-on-select keeps it open to drill deeper).\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))\n\n    // Click the leaf \"California → Los Angeles\" path: click California first.\n    const californiaOption = screen\n      .getAllByRole('option')\n      .find(el => el.textContent?.includes('California'))!\n    await userEvent.click(californiaOption)\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(3))\n\n    // Select leaf \"Los Angeles\" — panel closes and trigger shows the full path.\n    const laOption = screen\n      .getAllByRole('option')\n      .find(el => el.textContent?.includes('Los Angeles'))!\n    await userEvent.click(laOption)\n    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))\n    await expect(trigger).toHaveTextContent(/Los Angeles/)\n  },\n}",
           "template": "\n      <div class=\"space-y-2 max-w-xs\">\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Any level commits; the popover stays open to drill deeper.</p>\n        <DzCascader v-model:value=\"value\" :options=\"regions\" change-on-select placeholder=\"Select region\" />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>\n      </div>\n    "
@@ -51604,7 +51613,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTransfer.vue",
       "typesSource": "packages/core/src/components/forms/DzTransfer.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "74c763e07d0a35d2b6159e45c0f6197aef728fd1",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -51733,7 +51742,6 @@
         ]
       },
       "providerHooks": [
-        "useDzMessages",
         "useDzTestIds"
       ],
       "capability": {
@@ -51746,19 +51754,16 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
-          "present": 4,
-          "stale": 1,
-          "unrun": 5
+          "pass": 6,
+          "present": 8,
+          "stale": 2,
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "contract-spec",
-          "controlled-uncontrolled",
-          "data-scenarios"
+          "at-manual"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -52027,95 +52032,109 @@
             ]
           },
           {
+            "id": "Empty",
+            "lines": [
+              107,
+              117
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              119,
+              140
+            ]
+          },
+          {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              111,
-              132
+              146,
+              167
             ]
           },
           {
             "id": "Searchable",
             "lines": [
-              138,
-              150
+              173,
+              185
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              156,
-              165
+              191,
+              200
             ]
           },
           {
             "id": "DisabledItems",
             "name": "Disabled Items",
             "lines": [
-              171,
-              185
+              206,
+              220
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              191,
-              204
+              226,
+              239
             ]
           },
           {
             "id": "States",
             "lines": [
-              210,
-              238
+              245,
+              273
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              244,
-              256
+              279,
+              291
             ]
           },
           {
             "id": "Interactive",
             "lines": [
-              262,
-              280
+              297,
+              315
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Focus States",
             "lines": [
-              286,
-              300
+              321,
+              335
             ]
           },
           {
             "id": "RealWorldPermissions",
             "name": "Real World: Permission Assignment",
             "lines": [
-              306,
-              330
+              341,
+              365
             ]
           },
           {
             "id": "MoveBothDirections",
             "name": "Move Both Directions",
             "lines": [
-              336,
-              376
+              371,
+              411
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              390,
-              435
+              425,
+              470
             ]
           }
         ],
@@ -52132,8 +52151,8 @@
           "id": "AllSizes",
           "name": "Size Gallery",
           "lines": [
-            111,
-            132
+            146,
+            167
           ],
           "source": "export const AllSizes: Story = {\n  name: 'Size Gallery',\n  render: () => ({\n    components: { DzTransfer },\n    setup() {\n      const small: TransferItem[] = [\n        { key: '1', label: 'Item A' },\n        { key: '2', label: 'Item B' },\n        { key: '3', label: 'Item C' },\n      ]\n      return { small }\n    },\n    template: `\n      <div class=\"space-y-8\">\n        <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n          <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n          <DzTransfer :source=\"small\" :size=\"size\" />\n        </div>\n      </div>\n    `,\n  }),\n}",
           "template": "\n      <div class=\"space-y-8\">\n        <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n          <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n          <DzTransfer :source=\"small\" :size=\"size\" />\n        </div>\n      </div>\n    "

@@ -87,11 +87,11 @@ export const CAPABILITY_TOTALS = {
     "excepted": 66
   },
   "C": {
-    "pass": 146,
+    "pass": 144,
     "fail": 0,
-    "present": 92,
-    "stale": 20,
-    "unrun": 112,
+    "present": 101,
+    "stale": 22,
+    "unrun": 103,
     "excepted": 4
   },
   "D": {
@@ -105,7 +105,7 @@ export const CAPABILITY_TOTALS = {
 } as const
 
 /** Repository HEAD the evidence was collected at. */
-export const CAPABILITY_SOURCE_COMMIT = "38620c3a88ca12fd8dc10a8414371d59375f60a0"
+export const CAPABILITY_SOURCE_COMMIT = "0b0d714dafe30b73c0444ad1c1d81ddf5fc16bd5"
 
 export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
   {
@@ -582,20 +582,20 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzCascader.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCascader.contract.spec.ts"], note: "The contract spec exists and does not touch `slots` — a surface this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCascader.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCascader.spec.ts"] },
-    { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
+    { kind: "axe", state: "present", origin: "tier A", artifacts: ["packages/core/tests/a11y/gap5-selection.a11y.spec.ts"] },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "ssr-sample", state: "present", origin: "tier A", artifacts: ["packages/core/tests/ssr/form-controls-ssr.spec.ts"] },
     { kind: "token-contrast", state: "pass", origin: "tier A", scope: "corpus", artifacts: ["packages/tooling/src/token-checks/intent-text-contrast.ts"], note: "Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once." },
-    { kind: "keyboard-spec", state: "unrun", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzCascader.spec.ts"], note: "The component declares 10 binding(s); the unit spec asserts no key event for `Escape`, `Tab`, `Space`. The contract is the yardstick, not the presence of any key at all." },
+    { kind: "keyboard-spec", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzCascader.spec.ts"], note: "All 10 declared binding(s) are exercised by the unit spec." },
     { kind: "state-stories", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
-    { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
+    { kind: "controlled-uncontrolled", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzCascader.spec.ts"] },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzCascader.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
-    { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
+    { kind: "browser-matrix", state: "stale", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 38620c3. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
     { kind: "portal-hydration", state: "unrun", origin: "trait teleports", note: "No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true." },
-    { kind: "data-scenarios", state: "unrun", origin: "trait dataset", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
+    { kind: "data-scenarios", state: "present", origin: "trait dataset", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzCascader.md"], note: "6 AT/browser pairs, none executed." },
@@ -3323,19 +3323,19 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzTransfer.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTransfer.contract.spec.ts"], note: "The contract spec exists and does not touch `events`, `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTransfer.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTransfer.spec.ts"] },
-    { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
+    { kind: "axe", state: "present", origin: "tier A", artifacts: ["packages/core/tests/a11y/gap5-selection.a11y.spec.ts"] },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "ssr-sample", state: "present", origin: "tier A", artifacts: ["packages/core/tests/ssr/form-controls-ssr.spec.ts"] },
     { kind: "token-contrast", state: "pass", origin: "tier A", scope: "corpus", artifacts: ["packages/tooling/src/token-checks/intent-text-contrast.ts"], note: "Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once." },
     { kind: "keyboard-spec", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzTransfer.spec.ts"], note: "All 8 declared binding(s) are exercised by the unit spec." },
     { kind: "state-stories", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
-    { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
+    { kind: "controlled-uncontrolled", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzTransfer.spec.ts"] },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzTransfer.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
-    { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
-    { kind: "data-scenarios", state: "unrun", origin: "trait dataset", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
+    { kind: "browser-matrix", state: "stale", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 38620c3. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
+    { kind: "data-scenarios", state: "present", origin: "trait dataset", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTransfer.md"], note: "6 AT/browser pairs, none executed." },

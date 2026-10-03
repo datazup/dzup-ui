@@ -131,7 +131,7 @@ export const Large: Story = {
     const source = within(canvas.getByRole('listbox', { name: 'Source items' }))
     await expect(source.getAllByRole('option')).toHaveLength(11)
     await userEvent.click(source.getByRole('option', { name: 'Record 19', exact: true }))
-    await userEvent.click(source.getByRole('option', { name: 'Record 199', exact: true }))
+    await expect(source.getByRole('option', { name: 'Record 199', exact: true })).toHaveAttribute('aria-disabled', 'true')
     await userEvent.click(canvas.getByRole('button', { name: 'Move selected to target' }))
     const target = within(canvas.getByRole('listbox', { name: 'Target items' }))
     await expect(target.getAllByRole('option')).toHaveLength(1)

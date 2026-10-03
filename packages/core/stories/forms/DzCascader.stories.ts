@@ -243,6 +243,30 @@ export const Large: Story = {
   },
 }
 
+/** Native browser traversal must leave the popup, rather than loop one option. */
+export const TabExit: Story = {
+  render: () => ({
+    components: { DzCascader, DzButton },
+    setup() {
+      return { options: [{ value: 'one', label: 'One' }] }
+    },
+    template: `
+      <div class="space-y-3">
+        <DzCascader :options="options" portal-disabled aria-label="Tab exit fixture" />
+        <DzButton>After cascader</DzButton>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('combobox'))
+    await waitFor(() => expect(canvas.getByRole('option')).toHaveFocus())
+    await userEvent.keyboard('{Tab}')
+    await waitFor(() => expect(canvas.getByRole('button', { name: 'After cascader' })).toHaveFocus())
+    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false')
+  },
+}
+
 // ---------------------------------------------------------------------------
 // Change on select (parents selectable)
 // ---------------------------------------------------------------------------
