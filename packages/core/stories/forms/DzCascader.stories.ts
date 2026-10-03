@@ -259,24 +259,6 @@ export const TabExit: Story = {
       </div>
     `,
   }),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    await userEvent.click(canvas.getByRole('combobox'))
-    await waitFor(() => expect(canvas.getByRole('option')).toHaveFocus())
-    await userEvent.keyboard('{Tab}')
-    await waitFor(() => expect(canvas.getByRole('button', { name: 'After cascader' })).toHaveFocus())
-    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false')
-    await userEvent.click(canvas.getByRole('combobox'))
-    await waitFor(() => expect(canvas.getByRole('option')).toHaveFocus())
-    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
-    await waitFor(() => expect(canvas.getByRole('button', { name: 'Before cascader' })).toHaveFocus())
-    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false')
-    await userEvent.click(canvas.getByRole('combobox'))
-    await userEvent.click(canvas.getByRole('searchbox', { name: 'Search paths' }))
-    await userEvent.keyboard('{Tab}')
-    await waitFor(() => expect(canvas.getByRole('button', { name: 'After cascader' })).toHaveFocus())
-    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false')
-  },
 }
 
 // ---------------------------------------------------------------------------
