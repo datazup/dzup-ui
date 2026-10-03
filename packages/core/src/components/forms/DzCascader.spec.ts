@@ -146,7 +146,8 @@ describe('dzCascader — columns', () => {
 
   it('filters a large hierarchy and commits the full matching path', async () => {
     const tree = Array.from({ length: 100 }, (_, index) => ({
-      value: `region-${index}`, label: `Region ${index}`,
+      value: `region-${index}`,
+      label: `Region ${index}`,
       children: [{ value: `city-${index}`, label: `City ${index}`, disabled: index === 99 }],
     }))
     const wrapper = mountCascader({ options: tree, filter: true })

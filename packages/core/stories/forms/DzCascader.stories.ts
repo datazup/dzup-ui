@@ -227,7 +227,8 @@ export const Large: Story = {
   args: {
     filter: true,
     options: Array.from({ length: 100 }, (_, index) => ({
-      value: `region-${index}`, label: `Region ${index}`,
+      value: `region-${index}`,
+      label: `Region ${index}`,
       children: [{ value: `city-${index}`, label: `City ${index}`, disabled: index === 99 }],
     })),
   },

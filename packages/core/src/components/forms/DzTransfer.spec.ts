@@ -51,7 +51,9 @@ describe('dzTransfer — Unit Tests', () => {
 
   it('filters a large dataset and transfers only enabled selected keys', async () => {
     const source = Array.from({ length: 200 }, (_, index) => ({
-      key: String(index), label: `Record ${index}`, disabled: index === 199,
+      key: String(index),
+      label: `Record ${index}`,
+      disabled: index === 199,
     }))
     const wrapper = mount(DzTransfer, { props: { source, searchable: true } })
     await wrapper.findAll('input')[0]!.setValue('Record 19')

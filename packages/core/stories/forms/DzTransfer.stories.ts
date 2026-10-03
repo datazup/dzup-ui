@@ -120,7 +120,9 @@ export const Empty: Story = {
 export const Large: Story = {
   args: {
     source: Array.from({ length: 200 }, (_, index) => ({
-      key: String(index), label: `Record ${index}`, disabled: index === 199,
+      key: String(index),
+      label: `Record ${index}`,
+      disabled: index === 199,
     })),
     searchable: true,
   },

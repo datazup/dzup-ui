@@ -24,7 +24,10 @@ describe('gap5 selection-control accessibility scope', () => {
     const wrapper = mount(DzTransfer, {
       props: {
         source: [{ key: 'a', label: 'Alpha' }, { key: 'b', label: 'Beta', disabled: true }],
-        modelValue: ['a'], ariaLabel: 'Assign records', required: true, invalid: true,
+        modelValue: ['a'],
+        ariaLabel: 'Assign records',
+        required: true,
+        invalid: true,
         error: 'Choose a record',
       },
       attachTo: landmark,
