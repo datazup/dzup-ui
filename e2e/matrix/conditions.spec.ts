@@ -324,7 +324,6 @@ for (const target of RUNNABLE_TARGETS) {
   })
 }
 
-
 /**
  * Assert the condition introduced no new clipping.
  *

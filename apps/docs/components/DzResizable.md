@@ -267,7 +267,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `527dbd1`.
+last changed at `b0e3e0c`.
 
 ## Extraction fidelity
 
@@ -285,7 +285,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `47010932` for the capability matrix,
+artifact records — `38620c3a` for the capability matrix,
 `47010932` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
@@ -296,7 +296,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `drags`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `527dbd15`
+- **Component last changed at:** `b0e3e0c3`
 
 **Compound sub-parts are not matrix rows.** `DzResizableHandle`, `DzResizablePanel` are documented on this page and carry no evidence row of its own. Everything below describes `DzResizable`. Whether sub-parts should become rows — some of them own a sink their parent declares — is an open owner decision.
 
@@ -404,7 +404,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It reports the layout it settled on with `layoutChange` and does not accept one back. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/layout/DzResizable.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/layout/DzResizable.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at b666b00. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzResizable.md` — 6 AT/browser pairs, none executed. |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/layout/DzResizable.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 
