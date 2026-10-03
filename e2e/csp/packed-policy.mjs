@@ -54,6 +54,28 @@ writeFileSync('ssr.html', html)
   mkdirSync(join(consumer, 'src'))
   writeFileSync(join(consumer, 'src/style.css'), css)
   writeFileSync(join(consumer, 'index.html'), `<!doctype html><html><head><link rel="stylesheet" href="./src/style.css"></head><body>${html}<div id="policy-control" style="contain:layout style"></div></body></html>`)
+  // These resets are inside interactive/bound-style branches. Exercise actual
+  // packed components after mounting, separately from the static SSR oracle.
+  writeFileSync(join(consumer, 'src/resets.css'), `${css}
+@layer base {
+  td, input[type="color"] { padding: 11px; border: 3px solid; }
+  input[type="color"] { appearance: auto; }
+}
+#table [data-virtual] { max-height: 88px; overflow-y: auto; }
+`)
+  writeFileSync(join(consumer, 'src/resets.mjs'), `
+import { createApp, h } from 'vue'
+import { DzTable, DzTableBody, DzTableRow, DzTableCell } from '@dzup-ui/core/data'
+import { DzColorPicker } from '@dzup-ui/core/forms'
+createApp({ render: () => h('section', [
+  h('div', { id: 'table' }, [h(DzTable, { virtualScroll: true, maxHeight: '88px', overscan: 0 }, {
+    default: () => h(DzTableBody, {}, { default: () => Array.from({ length: 100 }, (_, index) =>
+      h(DzTableRow, { key: index }, { default: () => h(DzTableCell, {}, { default: () => String(index) }) })) }),
+  })]),
+  h('div', { id: 'color' }, [h(DzColorPicker, { portalDisabled: true })]),
+]) }).mount('#app')
+`)
+  writeFileSync(join(consumer, 'resets.html'), '<!doctype html><html><head><link rel="stylesheet" href="./src/resets.css"></head><body><div id="app"></div><script type="module" src="./src/resets.mjs"></script></body></html>')
   const { build } = require('vite')
   // The existing landing workspace declares the Tailwind build plugin.
   const landingRequire = createRequire(join(root, 'apps/landing/package.json'))
@@ -65,7 +87,12 @@ writeFileSync('ssr.html', html)
     // Both policy mounts serve identical bytes with mount-relative assets.
     base: './',
     plugins: [tailwind()],
-    build: { outDir: stage, assetsInlineLimit: 0, modulePreload: { polyfill: false } },
+    build: {
+      outDir: stage,
+      assetsInlineLimit: 0,
+      modulePreload: { polyfill: false },
+      rollupOptions: { input: [join(consumer, 'index.html'), join(consumer, 'resets.html')] },
+    },
     logLevel: 'warn',
   })
 
@@ -79,9 +106,9 @@ writeFileSync('ssr.html', html)
       response.end()
       return
     }
-    const headers = { 'content-type': file.endsWith('.css') ? 'text/css' : 'text/html' }
+    const headers = { 'content-type': file.endsWith('.css') ? 'text/css' : file.endsWith('.js') ? 'application/javascript' : 'text/html' }
     if (strict)
-      headers['content-security-policy'] = 'default-src \'self\'; style-src \'self\'; style-src-attr \'none\'; script-src \'none\'; object-src \'none\'; base-uri \'none\''
+      headers['content-security-policy'] = `default-src 'self'; style-src 'self'; style-src-attr 'none'; script-src ${local === 'resets.html' ? "'self'" : "'none'"}; object-src 'none'; base-uri 'none'`
     response.writeHead(200, headers)
     response.end(readFileSync(file))
   })
@@ -115,7 +142,13 @@ writeFileSync('ssr.html', html)
         document.body.append(expected)
         const buttonTokens = getComputedStyle(expected)
         const expectedButton = { backgroundColor: buttonTokens.backgroundColor, height: buttonTokens.height }
+        expected.style.height = 'var(--dz-input-md-height)'
+        expected.style.backgroundColor = 'var(--dz-input-bg)'
+        expected.style.border = '1px solid var(--dz-input-border)'
+        const inputTokens = getComputedStyle(expected)
+        const expectedInput = { height: inputTokens.height, backgroundColor: inputTokens.backgroundColor, border: inputTokens.border }
         expected.remove()
+        const input = getComputedStyle(document.querySelector('#input [data-part="control"]'))
         return {
           libraryStyles: document.querySelectorAll('#library [style], #library style').length,
           styles: ids.map((id) => {
@@ -125,6 +158,8 @@ writeFileSync('ssr.html', html)
           }),
           token: getComputedStyle(document.documentElement).getPropertyValue('--dz-primary').trim(),
           expectedButton,
+          expectedInput,
+          input: { display: input.display, height: input.height, backgroundColor: input.backgroundColor, border: input.border },
           control: getComputedStyle(document.querySelector('#policy-control')).contain,
           violations: globalThis.__violations,
         }
@@ -138,7 +173,10 @@ writeFileSync('ssr.html', html)
     assert.equal(open.styles[0].display, 'inline-flex', 'documented Button must have generated utilities')
     assert.equal(open.styles[0].backgroundColor, open.expectedButton.backgroundColor)
     assert.equal(open.styles[0].height, open.expectedButton.height)
-    assert.equal(open.styles[3].display, 'flex', 'documented Input must have generated utilities')
+    assert.equal(open.input.display, 'flex', 'documented Input must have generated utilities')
+    for (const property of ['height', 'backgroundColor', 'border'])
+      assert.equal(open.input[property], open.expectedInput[property], `Input ${property} must match its design token`)
+    assert.deepEqual(strict.input, open.input)
     assert.equal(strict.token, open.token)
     assert.deepEqual(strict.styles, open.styles)
     for (const style of strict.styles)
@@ -147,7 +185,40 @@ writeFileSync('ssr.html', html)
     assert.equal(strict.control, 'none')
     assert.deepEqual(open.violations, [])
     assert.deepEqual(strict.violations, ['style-src-attr|inline'], 'only the deliberate parser control may violate CSP')
-    writeFileSync(join(consumer, 'policy-summary.json'), `${JSON.stringify({ open, strict }, null, 2)}\n`)
+    async function readResets(mount) {
+      await page.goto(`http://127.0.0.1:${server.address().port}/${mount}/resets.html`)
+      await page.locator('#table .dz-virtual-spacer td').waitFor()
+      await page.locator('#table [data-virtual]').evaluate((el) => {
+        el.scrollTop = 440
+        el.dispatchEvent(new Event('scroll'))
+      })
+      await page.waitForFunction(() => document.querySelectorAll('#table .dz-virtual-spacer td').length === 2)
+      await page.locator('#color [data-part="trigger"]').click()
+      await page.locator('#color input[type="color"]').waitFor({ state: 'visible' })
+      return page.evaluate(() => {
+        const elements = [...document.querySelectorAll('#table .dz-virtual-spacer td'), document.querySelector('#color input[type="color"]')]
+        return elements.map((el) => {
+          const style = getComputedStyle(el)
+          return {
+            padding: style.padding,
+            borders: [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth],
+            appearance: style.appearance,
+            inlineStyle: el.getAttribute('style'),
+          }
+        })
+      })
+    }
+    const openResets = await readResets('open')
+    const strictResets = await readResets('strict')
+    assert.equal(openResets.length, 3, 'both table spacers and the open native color input must be exercised')
+    assert.deepEqual(strictResets, openResets)
+    for (const reset of strictResets) {
+      assert.equal(reset.padding, '0px')
+      assert.deepEqual(reset.borders, ['0px', '0px', '0px', '0px'])
+      assert.equal(reset.inlineStyle, null, 'reset elements must use external utilities')
+    }
+    assert.equal(strictResets[2].appearance, 'none')
+    writeFileSync(join(consumer, 'policy-summary.json'), `${JSON.stringify({ open, strict, openResets, strictResets }, null, 2)}\n`)
     console.warn('Packed pre-hydration strict-CSP policy passed (Chromium)')
   }
   finally {

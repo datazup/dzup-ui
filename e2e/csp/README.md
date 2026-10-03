@@ -25,13 +25,29 @@ under open and strict policy headers. A deliberate inline-style control must
 be blocked, while every library root retains external containment and matching
 computed styles. CI invokes all three commands as blocking steps.
 
+The packed consumer copies the first CSS block from
+`apps/docs/guide/getting-started.md` into `src/style.css`. It checks actual Button
+display, height and fill, and Input control layout, height, fill and border;
+token CSS loading and open/strict equality alone cannot pass an unstyled install.
+`node --test e2e/csp/install-styled.test.mjs` also pins the README/guide setup,
+Tailwind plugin and entry import. Removing the explicit Core `@source` must fail
+the packed styling assertion; installed packages are excluded from automatic
+Tailwind detection.
+
+A separate packed client page mounts a virtual table, scrolls until both spacer
+cells exist, opens the color picker, and checks their zero padding/borders and
+the color input's native appearance reset under open/strict headers. Host base
+rules deliberately add padding/borders so absent reset utilities cannot pass by
+default. This page permits external scripts; its surrounding dynamic bound
+styles remain outside the static SSR compatibility claim.
+
 Both packed commands reuse installed external dependencies without installing
 or downloading packages. Their temporary directories are printed and retained
 for diagnosis; `TMPDIR` selects the output location. Datazup operators run them
 through the Storage launcher so outputs remain on Storage. The browser install
 is needed only when Chromium is absent.
 
-This gate pins the existing Tailwind fixture contract. It qualifies static
-styles and the representative packed SSR cases; bound-style compatibility,
-public installation instructions, other browser engines, AT and performance
+This gate qualifies the documented Vue/Vite styling setup, static styles and
+these representative packed cases. General bound-style compatibility, Nuxt
+utility-generation integration, other browser engines, AT and performance
 remain separate work.

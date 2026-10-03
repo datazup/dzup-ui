@@ -9,8 +9,9 @@ description: Install dzup-ui, wire up the design tokens, and render your first c
 and a three-tier design-token system.
 
 ::: info Where these snippets come from
-The install instructions on this page are the ones already validated elsewhere in
-the repository. The Nuxt configuration below is marked with a `fixture:` comment
+The Vite stylesheet below is executed from packed packages by
+`yarn test:csp:packed`, which checks computed Button/Input styles in Chromium.
+The Nuxt configuration below is marked with a `fixture:` comment
 and is compared byte for byte against a fixture that CI installs from a packed
 tarball and builds — `yarn validate:doc-snippets` fails if this page and that
 fixture drift apart. Install documentation that nothing executes drifts, and this
@@ -20,21 +21,49 @@ repository has paid that bill twice.
 ## Install
 
 ```bash
-yarn add @dzup-ui/core @dzup-ui/tokens
+yarn add @dzup-ui/core @dzup-ui/tokens vue@^3.5.0 reka-ui@^2.0.0
+yarn add -D tailwindcss@^4 @tailwindcss/vite@^4
 ```
 
 `@dzup-ui/core` depends on `@dzup-ui/tokens` (design tokens) and
 `@dzup-ui/contracts` (types only, zero runtime) — that is the whole dependency
-graph, and yarn/npm will pull both in for you.
+graph, and yarn/npm will pull both in for you. Vue and Reka UI are peers.
 
-## Wire up tokens
+## Generate the component utilities
 
-Components read CSS variables (`var(--dz-*)`) emitted by the tokens package. Import
-the token stylesheet once at your app entry, **before** your own styles:
+Components use Tailwind CSS 4 utility classes backed by design tokens.
+`@dzup-ui/core/styles` contains shared base rules; it does **not** contain the
+generated utilities. Importing tokens alone leaves components unstyled.
+For an existing Vue/Vite app, enable Tailwind's Vite plugin alongside Vue:
 
 ```ts
-// main.ts
-import '@dzup-ui/tokens/css'
+// vite.config.ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [vue(), tailwindcss()],
+})
+```
+
+Create **`src/style.css`** with these imports, then your app's styles:
+
+```css
+@import "tailwindcss";
+@import "@dzup-ui/tokens/css";
+@import "@dzup-ui/core/styles";
+@source "../node_modules/@dzup-ui/core/dist";
+```
+
+Tailwind excludes `node_modules` from automatic detection. The explicit
+`@source` scans the installed Core package, including classes in compiled
+components and variants. Its path is relative to this stylesheet; adjust it
+if your stylesheet lives elsewhere. Import the stylesheet once at the entry:
+
+```ts
+// src/main.ts
+import './style.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 
@@ -77,7 +106,9 @@ export default defineNuxtConfig({
 ```
 
 The module also pushes the token stylesheet before the component stylesheet and
-injects the FOUC-prevention theme script (ADR-15).
+injects the FOUC-prevention theme script (ADR-15). It does not generate Tailwind
+utilities: configure your Nuxt app's Tailwind 4 integration and scan the installed
+Core dist as above, adjusting `@source` relative to your app stylesheet.
 
 ## Vite auto-imports
 
@@ -85,6 +116,8 @@ For a plain Vite app, `DzResolver` teaches
 [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components)
 which names this library owns. It answers from generated ownership data by exact
 name, so a component it does not own resolves to nothing rather than to a guess:
+
+Keep the Vue and Tailwind plugins from the styling setup when adding this plugin.
 
 ```ts
 // vite.config.ts

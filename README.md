@@ -51,14 +51,44 @@ thresholds and the `/compare` page for how dzup-ui lines up against peer librari
 
 ```bash
 yarn add @dzup-ui/core @dzup-ui/tokens vue@^3.5.0 reka-ui@^2.0.0
+yarn add -D tailwindcss@^4 @tailwindcss/vite@^4
 ```
 
-**2. Import styles**
+**2. Generate and import styles (Vue/Vite)**
+
+Enable Tailwind CSS 4 alongside the Vue plugin in your existing Vite app:
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [vue(), tailwindcss()],
+})
+```
+
+Create **`src/style.css`**:
 
 ```css
+@import "tailwindcss";
 @import "@dzup-ui/tokens/css";
 @import "@dzup-ui/core/styles";
+@source "../node_modules/@dzup-ui/core/dist";
 ```
+
+Import it once in **`src/main.ts`**:
+
+```ts
+import './style.css'
+```
+
+Core's stylesheet supplies shared base rules, not generated component utilities.
+Tailwind skips `node_modules` unless explicitly scanned: keep the `@source` line
+and adjust its relative path if you move the stylesheet. The
+[getting-started guide](apps/docs/guide/getting-started.md) is exercised by the
+packed Chromium styling proof (`yarn test:csp:packed`).
 
 **3. Use components**
 
