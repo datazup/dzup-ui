@@ -43,7 +43,10 @@ const html = await renderToString(createSSRApp({
 process.stdout.write(html)
 `)
   const html = execFileSync(process.execPath, [join(consumer, 'render.mjs')], {
-    cwd: consumer, encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], timeout: 60_000,
+    cwd: consumer,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'inherit'],
+    timeout: 60_000,
   })
   assert.doesNotMatch(html, /\sstyle\s*=/i)
   assert.doesNotMatch(html, /<style\b/i)
