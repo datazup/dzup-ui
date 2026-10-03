@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "0b0d714dafe30b73c0444ad1c1d81ddf5fc16bd5",
+  "sourceCommit": "74269ecfa4f213b335d5bb10d68c184aabab1acb",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -7135,7 +7135,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCascader.vue",
       "typesSource": "packages/core/src/components/forms/DzCascader.types.ts",
-      "componentCommit": "0b0d714dafe30b73c0444ad1c1d81ddf5fc16bd5",
+      "componentCommit": "14d4cb4a770b6f14bbbc2cc91894f28cd35619c7",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -7291,6 +7291,7 @@
       },
       "providerHooks": [
         "useDzDirection",
+        "useDzMessages",
         "useDzPortalTarget",
         "useDzTestIds"
       ],
@@ -7305,9 +7306,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 8,
-          "stale": 2,
+          "stale": 1,
           "unrun": 2
         },
         "unrun": [
@@ -7315,7 +7316,6 @@
           "portal-hydration"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -7745,92 +7745,99 @@
             "id": "Large",
             "lines": [
               225,
-              244
+              245
+            ]
+          },
+          {
+            "id": "TabExit",
+            "lines": [
+              247,
+              262
             ]
           },
           {
             "id": "ChangeOnSelect",
             "name": "Change on Select",
             "lines": [
-              250,
-              296
+              268,
+              314
             ]
           },
           {
             "id": "HoverExpand",
             "name": "Hover Expand",
             "lines": [
-              302,
-              316
+              320,
+              334
             ]
           },
           {
             "id": "Filterable",
             "lines": [
-              322,
-              365
+              340,
+              383
             ]
           },
           {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              371,
-              388
+              389,
+              406
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              394,
-              407
+              412,
+              425
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              413,
-              422
+              431,
+              440
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              428,
-              443
+              446,
+              461
             ]
           },
           {
             "id": "States",
             "lines": [
-              449,
-              547
+              467,
+              565
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Keyboard-Only Cascade",
             "lines": [
-              553,
-              630
+              571,
+              648
             ]
           },
           {
             "id": "RealWorldShippingRegion",
             "name": "Real World: Shipping Region",
             "lines": [
-              636,
-              723
+              654,
+              741
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              736,
-              784
+              754,
+              802
             ]
           }
         ],
@@ -7844,14 +7851,13 @@
           "template": "<DzCascader v-bind=\"args\" class=\"max-w-xs\" />"
         },
         "runnable": {
-          "id": "ChangeOnSelect",
-          "name": "Change on Select",
+          "id": "TabExit",
           "lines": [
-            250,
-            296
+            247,
+            262
           ],
-          "source": "export const ChangeOnSelect: Story = {\n  name: 'Change on Select',\n  render: () => ({\n    components: { DzCascader },\n    data() {\n      return { value: [], regions }\n    },\n    template: `\n      <div class=\"space-y-2 max-w-xs\">\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Any level commits; the popover stays open to drill deeper.</p>\n        <DzCascader v-model:value=\"value\" :options=\"regions\" change-on-select placeholder=\"Select region\" />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n    const trigger = canvas.getByRole('combobox')\n\n    // Open the panel.\n    await userEvent.click(trigger)\n    // Popover is portalled to document.body — use screen, not canvas.\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))\n\n    // Click \"USA\" (a parent) — with change-on-select it commits immediately.\n    const usaOption = screen.getAllByRole('option').find(el => el.textContent?.includes('USA'))!\n    await userEvent.click(usaOption)\n\n    // Panel stays open (change-on-select keeps it open to drill deeper).\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))\n\n    // Click the leaf \"California → Los Angeles\" path: click California first.\n    const californiaOption = screen\n      .getAllByRole('option')\n      .find(el => el.textContent?.includes('California'))!\n    await userEvent.click(californiaOption)\n    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(3))\n\n    // Select leaf \"Los Angeles\" — panel closes and trigger shows the full path.\n    const laOption = screen\n      .getAllByRole('option')\n      .find(el => el.textContent?.includes('Los Angeles'))!\n    await userEvent.click(laOption)\n    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))\n    await expect(trigger).toHaveTextContent(/Los Angeles/)\n  },\n}",
-          "template": "\n      <div class=\"space-y-2 max-w-xs\">\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Any level commits; the popover stays open to drill deeper.</p>\n        <DzCascader v-model:value=\"value\" :options=\"regions\" change-on-select placeholder=\"Select region\" />\n        <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>\n      </div>\n    "
+          "source": "/** Native browser traversal must leave the popup, rather than loop one option. */\nexport const TabExit: Story = {\n  render: () => ({\n    components: { DzCascader, DzButton },\n    setup() {\n      return { options: [{ value: 'one', label: 'One' }] }\n    },\n    template: `\n      <div class=\"space-y-3\">\n        <DzButton>Before cascader</DzButton>\n        <DzCascader :options=\"options\" filter portal-disabled aria-label=\"Tab exit fixture\" />\n        <DzButton>After cascader</DzButton>\n      </div>\n    `,\n  }),\n}",
+          "template": "\n      <div class=\"space-y-3\">\n        <DzButton>Before cascader</DzButton>\n        <DzCascader :options=\"options\" filter portal-disabled aria-label=\"Tab exit fixture\" />\n        <DzButton>After cascader</DzButton>\n      </div>\n    "
         }
       },
       "extraction": {
@@ -51742,6 +51748,7 @@
         ]
       },
       "providerHooks": [
+        "useDzMessages",
         "useDzTestIds"
       ],
       "capability": {
@@ -51754,16 +51761,15 @@
           "dataset"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 8,
-          "stale": 2,
+          "stale": 1,
           "unrun": 1
         },
         "unrun": [
           "at-manual"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -52042,99 +52048,99 @@
             "id": "Large",
             "lines": [
               119,
-              140
+              142
             ]
           },
           {
             "id": "AllSizes",
             "name": "Size Gallery",
             "lines": [
-              146,
-              167
+              148,
+              169
             ]
           },
           {
             "id": "Searchable",
             "lines": [
-              173,
-              185
+              175,
+              187
             ]
           },
           {
             "id": "Disabled",
             "lines": [
-              191,
-              200
+              193,
+              202
             ]
           },
           {
             "id": "DisabledItems",
             "name": "Disabled Items",
             "lines": [
-              206,
-              220
+              208,
+              222
             ]
           },
           {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              226,
-              239
+              228,
+              241
             ]
           },
           {
             "id": "States",
             "lines": [
-              245,
-              273
+              247,
+              275
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              279,
-              291
+              281,
+              293
             ]
           },
           {
             "id": "Interactive",
             "lines": [
-              297,
-              315
+              299,
+              317
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Focus States",
             "lines": [
-              321,
-              335
+              323,
+              337
             ]
           },
           {
             "id": "RealWorldPermissions",
             "name": "Real World: Permission Assignment",
             "lines": [
-              341,
-              365
+              343,
+              367
             ]
           },
           {
             "id": "MoveBothDirections",
             "name": "Move Both Directions",
             "lines": [
-              371,
-              411
+              373,
+              413
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              425,
-              470
+              427,
+              472
             ]
           }
         ],
@@ -52151,8 +52157,8 @@
           "id": "AllSizes",
           "name": "Size Gallery",
           "lines": [
-            146,
-            167
+            148,
+            169
           ],
           "source": "export const AllSizes: Story = {\n  name: 'Size Gallery',\n  render: () => ({\n    components: { DzTransfer },\n    setup() {\n      const small: TransferItem[] = [\n        { key: '1', label: 'Item A' },\n        { key: '2', label: 'Item B' },\n        { key: '3', label: 'Item C' },\n      ]\n      return { small }\n    },\n    template: `\n      <div class=\"space-y-8\">\n        <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n          <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n          <DzTransfer :source=\"small\" :size=\"size\" />\n        </div>\n      </div>\n    `,\n  }),\n}",
           "template": "\n      <div class=\"space-y-8\">\n        <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n          <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n          <DzTransfer :source=\"small\" :size=\"size\" />\n        </div>\n      </div>\n    "

@@ -46,7 +46,7 @@ The inputs that carry a recorded caveat:
 | --- | --- | --- | --- | --- | --- |
 | `A` | 106 | 150 | 0 | 4 | 90 |
 | `B` | 300 | 264 | 0 | 66 | 287 |
-| `C` | 146 | 92 | 20 | 4 | 112 |
+| `C` | 146 | 101 | 20 | 4 | 103 |
 | `D` | 7 | 11 | 1 | 0 | 2 |
 
 ## By kind of evidence
@@ -55,20 +55,20 @@ Each kind, what puts it on a component, and how the cells resolved.
 
 | Evidence | Required by | Rows | pass | present | stale | excepted | unrun |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `contract-spec` | tier A | 144 | 0 | 62 | 0 | 0 | 82 |
+| `contract-spec` | tier A | 144 | 0 | 64 | 0 | 0 | 80 |
 | `unit-spec` | tier A | 144 | 0 | 127 | 0 | 0 | 17 |
-| `axe` | tier A | 144 | 0 | 61 | 0 | 3 | 80 |
+| `axe` | tier A | 144 | 0 | 63 | 0 | 3 | 78 |
 | `story-light-dark` | tier A | 144 | 142 | 0 | 0 | 1 | 1 |
 | `ssr-sample` | tier A | 144 | 0 | 96 | 0 | 0 | 48 |
 | `token-contrast` | tier A | 144 | 138 | 0 | 0 | 6 | 0 |
-| `keyboard-spec` | tier B | 89 | 0 | 16 | 0 | 6 | 67 |
+| `keyboard-spec` | tier B | 89 | 0 | 17 | 0 | 6 | 66 |
 | `state-stories` | tier B | 89 | 60 | 0 | 0 | 29 | 0 |
-| `controlled-uncontrolled` | tier B | 89 | 0 | 1 | 0 | 27 | 61 |
+| `controlled-uncontrolled` | tier B | 89 | 0 | 3 | 0 | 27 | 59 |
 | `browser-play` | tier B | 89 | 86 | 0 | 0 | 2 | 1 |
 | `rtl-contract` | tier B | 89 | 0 | 89 | 0 | 0 | 0 |
 | `browser-matrix` | tier B | 89 | 88 | 0 | 0 | 0 | 1 |
 | `at-manual` | tier B | 89 | 0 | 0 | 0 | 0 | 89 |
-| `data-scenarios` | trait dataset | 30 | 0 | 8 | 0 | 0 | 22 |
+| `data-scenarios` | trait dataset | 30 | 0 | 10 | 0 | 0 | 20 |
 | `threat-model` | boundary url | 15 | 0 | 15 | 0 | 0 | 0 |
 | `malicious-corpus` | boundary url | 15 | 0 | 15 | 0 | 0 | 0 |
 | `url-policy` | boundary url | 15 | 0 | 15 | 0 | 0 | 0 |
@@ -81,8 +81,8 @@ Each kind, what puts it on a component, and how the cells resolved.
 
 ## The 14 kinds with an unmeasured or stale cell, named
 
-::: details `contract-spec` — 82 unrun, 0 stale
-**unrun (82):** `DzAccordion`, `DzAffix`, `DzAnchor`, `DzAnimatedNumber`, `DzAppShell`, `DzAvatar`, `DzBlockUI`, `DzCalendar`, `DzCarousel`, `DzCascader`, `DzCheckbox`, `DzCheckboxGroup`, `DzCodeBlock`, `DzCollapse`, `DzColorModeToggle`, `DzColorPicker`, `DzCombobox`, `DzCommandPalette`, `DzCopyButton`, `DzCountdown`, `DzDataGrid`, `DzDataView`, `DzDatePicker`, `DzDateRangePicker`, `DzDeferredContent`, `DzDescriptions`, `DzEmpty`, `DzFab`, `DzFileUpload`, `DzImage`, `DzImageComparison`, `DzInfiniteScroll`, `DzKbd`, `DzKnob`, `DzLightbox`, `DzList`, `DzListbox`, `DzMegaMenu`, `DzMention`, `DzMeterGroup`, `DzMultiSelect`, `DzNotification`, `DzOrderList`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzProgress`, `DzQRCode`, `DzRadio`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzRelativeTime`, `DzResizable`, `DzResult`, `DzRunStatusBadge`, `DzScrollArea`, `DzScrollProgress`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzSplitter`, `DzStepper`, `DzStepperItem`, `DzSwitch`, `DzTag`, `DzTagsInput`, `DzTimePicker`, `DzTimelineItem`, `DzToast`, `DzTokenProgressBar`, `DzTour`, `DzTransfer`, `DzTree`, `DzTreeSelect`, `GovernanceBadge`, `TeamMemberBadge`
+::: details `contract-spec` — 80 unrun, 0 stale
+**unrun (80):** `DzAccordion`, `DzAffix`, `DzAnchor`, `DzAnimatedNumber`, `DzAppShell`, `DzAvatar`, `DzBlockUI`, `DzCalendar`, `DzCarousel`, `DzCheckbox`, `DzCheckboxGroup`, `DzCodeBlock`, `DzCollapse`, `DzColorModeToggle`, `DzColorPicker`, `DzCombobox`, `DzCommandPalette`, `DzCopyButton`, `DzCountdown`, `DzDataGrid`, `DzDataView`, `DzDatePicker`, `DzDateRangePicker`, `DzDeferredContent`, `DzDescriptions`, `DzEmpty`, `DzFab`, `DzFileUpload`, `DzImage`, `DzImageComparison`, `DzInfiniteScroll`, `DzKbd`, `DzKnob`, `DzLightbox`, `DzList`, `DzListbox`, `DzMegaMenu`, `DzMention`, `DzMeterGroup`, `DzMultiSelect`, `DzNotification`, `DzOrderList`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzProgress`, `DzQRCode`, `DzRadio`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzRelativeTime`, `DzResizable`, `DzResult`, `DzRunStatusBadge`, `DzScrollArea`, `DzScrollProgress`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzSplitter`, `DzStepper`, `DzStepperItem`, `DzSwitch`, `DzTag`, `DzTagsInput`, `DzTimePicker`, `DzTimelineItem`, `DzToast`, `DzTokenProgressBar`, `DzTour`, `DzTree`, `DzTreeSelect`, `GovernanceBadge`, `TeamMemberBadge`
 
 :::
 
@@ -91,8 +91,8 @@ Each kind, what puts it on a component, and how the cells resolved.
 
 :::
 
-::: details `axe` — 80 unrun, 0 stale
-**unrun (80):** `DzAffix`, `DzAnchor`, `DzAnimatedNumber`, `DzAppShell`, `DzAspectRatio`, `DzAsyncBoundary`, `DzBackTop`, `DzBadge`, `DzBlockUI`, `DzButtonGroup`, `DzCalendar`, `DzCascader`, `DzCheckboxGroup`, `DzCodeBlock`, `DzColorModeToggle`, `DzColorPicker`, `DzCommandPalette`, `DzConfirmDialog`, `DzCopyButton`, `DzCountdown`, `DzDataGrid`, `DzDataView`, `DzDateRangePicker`, `DzDeferredContent`, `DzDescriptions`, `DzEmoji`, `DzEmpty`, `DzErrorBoundary`, `DzFab`, `DzFloatLabel`, `DzImageComparison`, `DzInfiniteScroll`, `DzInplace`, `DzInputGroup`, `DzInputMask`, `DzKbd`, `DzKnob`, `DzLightbox`, `DzListbox`, `DzMasonry`, `DzMention`, `DzMeterGroup`, `DzNotification`, `DzNumberInput`, `DzOrderList`, `DzOtpInput`, `DzPageHero`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzPopconfirm`, `DzQRCode`, `DzRangeSlider`, `DzRating`, `DzRelativeTime`, `DzResizable`, `DzResult`, `DzRunStatusBadge`, `DzScrollProgress`, `DzSearchInput`, `DzSegmented`, `DzSidebar`, `DzSkeleton`, `DzSpacer`, `DzSpeedDial`, `DzSplitter`, `DzTagsInput`, `DzTimePicker`, `DzToast`, `DzToggleButton`, `DzTokenProgressBar`, `DzToolbar`, `DzTour`, `DzTransfer`, `DzTreeItem`, `DzTreeSelect`, `DzVisuallyHidden`, `DzWatermark`, `GovernanceBadge`, `TeamMemberBadge`
+::: details `axe` — 78 unrun, 0 stale
+**unrun (78):** `DzAffix`, `DzAnchor`, `DzAnimatedNumber`, `DzAppShell`, `DzAspectRatio`, `DzAsyncBoundary`, `DzBackTop`, `DzBadge`, `DzBlockUI`, `DzButtonGroup`, `DzCalendar`, `DzCheckboxGroup`, `DzCodeBlock`, `DzColorModeToggle`, `DzColorPicker`, `DzCommandPalette`, `DzConfirmDialog`, `DzCopyButton`, `DzCountdown`, `DzDataGrid`, `DzDataView`, `DzDateRangePicker`, `DzDeferredContent`, `DzDescriptions`, `DzEmoji`, `DzEmpty`, `DzErrorBoundary`, `DzFab`, `DzFloatLabel`, `DzImageComparison`, `DzInfiniteScroll`, `DzInplace`, `DzInputGroup`, `DzInputMask`, `DzKbd`, `DzKnob`, `DzLightbox`, `DzListbox`, `DzMasonry`, `DzMention`, `DzMeterGroup`, `DzNotification`, `DzNumberInput`, `DzOrderList`, `DzOtpInput`, `DzPageHero`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzPopconfirm`, `DzQRCode`, `DzRangeSlider`, `DzRating`, `DzRelativeTime`, `DzResizable`, `DzResult`, `DzRunStatusBadge`, `DzScrollProgress`, `DzSearchInput`, `DzSegmented`, `DzSidebar`, `DzSkeleton`, `DzSpacer`, `DzSpeedDial`, `DzSplitter`, `DzTagsInput`, `DzTimePicker`, `DzToast`, `DzToggleButton`, `DzTokenProgressBar`, `DzToolbar`, `DzTour`, `DzTreeItem`, `DzTreeSelect`, `DzVisuallyHidden`, `DzWatermark`, `GovernanceBadge`, `TeamMemberBadge`
 
 :::
 
@@ -106,13 +106,13 @@ Each kind, what puts it on a component, and how the cells resolved.
 
 :::
 
-::: details `keyboard-spec` — 67 unrun, 0 stale
-**unrun (67):** `DzAccordion`, `DzAnchor`, `DzBackTop`, `DzBreadcrumb`, `DzButton`, `DzCalendar`, `DzCarousel`, `DzCascader`, `DzCheckbox`, `DzColorModeToggle`, `DzCombobox`, `DzCommandPalette`, `DzConfirmDialog`, `DzContextMenu`, `DzCopyButton`, `DzDataView`, `DzDatePicker`, `DzDateRangePicker`, `DzDialog`, `DzDropdownMenu`, `DzFab`, `DzIconButton`, `DzImageComparison`, `DzInputMask`, `DzKnob`, `DzLightbox`, `DzListbox`, `DzMegaMenu`, `DzMention`, `DzMenu`, `DzMultiSelect`, `DzNotification`, `DzOrderList`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzPopconfirm`, `DzPopover`, `DzRadio`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzResizable`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSheet`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzSplitButton`, `DzSplitter`, `DzStepper`, `DzStepperItem`, `DzSwitch`, `DzTable`, `DzTabs`, `DzTimePicker`, `DzToast`, `DzToggleButton`, `DzTooltip`, `DzTour`, `DzTree`, `DzTreeItem`, `DzTreeSelect`
+::: details `keyboard-spec` — 66 unrun, 0 stale
+**unrun (66):** `DzAccordion`, `DzAnchor`, `DzBackTop`, `DzBreadcrumb`, `DzButton`, `DzCalendar`, `DzCarousel`, `DzCheckbox`, `DzColorModeToggle`, `DzCombobox`, `DzCommandPalette`, `DzConfirmDialog`, `DzContextMenu`, `DzCopyButton`, `DzDataView`, `DzDatePicker`, `DzDateRangePicker`, `DzDialog`, `DzDropdownMenu`, `DzFab`, `DzIconButton`, `DzImageComparison`, `DzInputMask`, `DzKnob`, `DzLightbox`, `DzListbox`, `DzMegaMenu`, `DzMention`, `DzMenu`, `DzMultiSelect`, `DzNotification`, `DzOrderList`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzPopconfirm`, `DzPopover`, `DzRadio`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzResizable`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSheet`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzSplitButton`, `DzSplitter`, `DzStepper`, `DzStepperItem`, `DzSwitch`, `DzTable`, `DzTabs`, `DzTimePicker`, `DzToast`, `DzToggleButton`, `DzTooltip`, `DzTour`, `DzTree`, `DzTreeItem`, `DzTreeSelect`
 
 :::
 
-::: details `controlled-uncontrolled` — 61 unrun, 0 stale
-**unrun (61):** `DzAccordion`, `DzAnchor`, `DzBlockUI`, `DzCalendar`, `DzCarousel`, `DzCascader`, `DzCheckbox`, `DzCheckboxGroup`, `DzCollapse`, `DzColorPicker`, `DzCombobox`, `DzCommandPalette`, `DzConfirmDialog`, `DzContextMenu`, `DzDataGrid`, `DzDataView`, `DzDatePicker`, `DzDateRangePicker`, `DzDialog`, `DzDropdownMenu`, `DzFieldArray`, `DzImageComparison`, `DzInplace`, `DzInput`, `DzInputMask`, `DzKnob`, `DzLightbox`, `DzListbox`, `DzMention`, `DzMultiSelect`, `DzNumberInput`, `DzOrderList`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzPopconfirm`, `DzPopover`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSheet`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzStepper`, `DzSwitch`, `DzTabs`, `DzTagsInput`, `DzTextarea`, `DzTimePicker`, `DzToggleButton`, `DzTooltip`, `DzTour`, `DzTransfer`, `DzTree`, `DzTreeSelect`
+::: details `controlled-uncontrolled` — 59 unrun, 0 stale
+**unrun (59):** `DzAccordion`, `DzAnchor`, `DzBlockUI`, `DzCalendar`, `DzCarousel`, `DzCheckbox`, `DzCheckboxGroup`, `DzCollapse`, `DzColorPicker`, `DzCombobox`, `DzCommandPalette`, `DzConfirmDialog`, `DzContextMenu`, `DzDataGrid`, `DzDataView`, `DzDatePicker`, `DzDateRangePicker`, `DzDialog`, `DzDropdownMenu`, `DzFieldArray`, `DzImageComparison`, `DzInplace`, `DzInput`, `DzInputMask`, `DzKnob`, `DzLightbox`, `DzListbox`, `DzMention`, `DzMultiSelect`, `DzNumberInput`, `DzOrderList`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzPersonaSelector`, `DzPopconfirm`, `DzPopover`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSheet`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzStepper`, `DzSwitch`, `DzTabs`, `DzTagsInput`, `DzTextarea`, `DzTimePicker`, `DzToggleButton`, `DzTooltip`, `DzTour`, `DzTree`, `DzTreeSelect`
 
 :::
 
@@ -131,8 +131,8 @@ Each kind, what puts it on a component, and how the cells resolved.
 
 :::
 
-::: details `data-scenarios` — 22 unrun, 0 stale
-**unrun (22):** `DzAnchor`, `DzAvatarGroup`, `DzBreadcrumb`, `DzCarousel`, `DzCascader`, `DzCommandPalette`, `DzDescriptions`, `DzFieldArray`, `DzListbox`, `DzMegaMenu`, `DzMention`, `DzMenu`, `DzMultiSelect`, `DzOrderList`, `DzSelect`, `DzSidebar`, `DzSpeedDial`, `DzTagsInput`, `DzTimeline`, `DzTour`, `DzTransfer`, `DzTreeSelect`
+::: details `data-scenarios` — 20 unrun, 0 stale
+**unrun (20):** `DzAnchor`, `DzAvatarGroup`, `DzBreadcrumb`, `DzCarousel`, `DzCommandPalette`, `DzDescriptions`, `DzFieldArray`, `DzListbox`, `DzMegaMenu`, `DzMention`, `DzMenu`, `DzMultiSelect`, `DzOrderList`, `DzSelect`, `DzSidebar`, `DzSpeedDial`, `DzTagsInput`, `DzTimeline`, `DzTour`, `DzTreeSelect`
 
 :::
 
@@ -178,7 +178,7 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzCaption](/components/DzCaption#accessibility-and-evidence) | typography | `A` | `none` | `none` | 6 | — | — |
 | [DzCard](/components/DzCard#accessibility-and-evidence) | cards | `B` | `custom` | `none` | 13 | **`at-manual`** | — |
 | [DzCarousel](/components/DzCarousel#accessibility-and-evidence) | media | `B` | [`carousel`](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/) | `none` | 14 | **`contract-spec`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | — |
-| [DzCascader](/components/DzCascader#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`** | `perf-baseline` |
+| [DzCascader](/components/DzCascader#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`portal-hydration`, `at-manual`** | `perf-baseline` |
 | [DzCheckbox](/components/DzCheckbox#accessibility-and-evidence) | forms | `B` | [`checkbox`](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/) | `none` | 13 | **`contract-spec`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | — |
 | [DzCheckboxGroup](/components/DzCheckboxGroup#accessibility-and-evidence) | forms | `B` | [`checkbox`](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/) | `none` | 13 | **`contract-spec`, `axe`, `controlled-uncontrolled`, `at-manual`** | — |
 | [DzChip](/components/DzChip#accessibility-and-evidence) | data | `B` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | `none` | 13 | **`at-manual`** | — |
@@ -293,7 +293,7 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzToolbar](/components/DzToolbar#accessibility-and-evidence) | layout | `B` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | `none` | 13 | **`axe`, `at-manual`** | — |
 | [DzTooltip](/components/DzTooltip#accessibility-and-evidence) | overlays | `B` | [`tooltip`](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) | `none` | 14 | **`unit-spec`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | — |
 | [DzTour](/components/DzTour#accessibility-and-evidence) | overlays | `C` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) | `none` | 18 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | `perf-baseline` |
-| [DzTransfer](/components/DzTransfer#accessibility-and-evidence) | forms | `C` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) | `none` | 17 | **`contract-spec`, `axe`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | `perf-baseline` |
+| [DzTransfer](/components/DzTransfer#accessibility-and-evidence) | forms | `C` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) | `none` | 17 | **`at-manual`** | `perf-baseline` |
 | [DzTree](/components/DzTree#accessibility-and-evidence) | data | `C` | [`treeview`](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) | `none` | 17 | **`contract-spec`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | `perf-baseline` |
 | [DzTreeItem](/components/DzTreeItem#accessibility-and-evidence) | data | `B` | [`treeview`](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) | `none` | 13 | **`unit-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `at-manual`** | — |
 | [DzTreeSelect](/components/DzTreeSelect#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`** | `perf-baseline` |
@@ -309,10 +309,10 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/capability-matrix.json` | `25f7c2e4088bf809…` | yes |
-| `packages/core/docs/quality-matrix.json` | `183ab39b7ae54a0b…` | yes |
+| `packages/core/docs/capability-matrix.json` | `502c290fa8242e4e…` | yes |
+| `packages/core/docs/quality-matrix.json` | `9c693adede2d8348…` | yes |
 
-Capability matrix `sourceCommit` `38620c3a` · quality matrix `47010932`.
+Capability matrix `sourceCommit` `74269ecf` · quality matrix `74269ecf`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

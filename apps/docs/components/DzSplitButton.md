@@ -270,8 +270,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `38620c3a` for the capability matrix,
-`47010932` for the quality matrix. It is **locally qualified**:
+artifact records — `74269ecf` for the capability matrix,
+`74269ecf` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -374,7 +374,7 @@ Every kind of evidence required of this component — by Tier B — and what was
 | `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. It composes a button with a menu; the menu's open state belongs to `DzSplitButtonMenu`. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/buttons/DzSplitButton.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/buttons/DzSplitButton.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSplitButton.md` — 6 AT/browser pairs, none executed. |
 
 **3 unrun:** `ssr-sample`, `keyboard-spec`, `at-manual` · **1 excepted:** `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "sourceCommit": "0b0d714dafe30b73c0444ad1c1d81ddf5fc16bd5",
+  "sourceCommit": "74269ecfa4f213b335d5bb10d68c184aabab1acb",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
     "packages/contracts/src/quality-tiers.ts",

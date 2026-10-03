@@ -121,7 +121,7 @@ from.
 
 An honest gap is worth more than a plausible table.
 
-Measured today: of the 89 components that owe a `keyboard-spec`, 16 have a specification asserting at least one key sequence, 67 do not, and 6 are excepted. None of that is a table of bindings, and the repository has nowhere to hold one.
+Measured today: of the 89 components that owe a `keyboard-spec`, 17 have a specification asserting at least one key sequence, 66 do not, and 6 are excepted. None of that is a table of bindings, and the repository has nowhere to hold one.
 
 ## What "in scope" means on a component page
 
@@ -180,7 +180,7 @@ The published dictionary carries 38 success criteria — the ones a component li
 
 ### The automated lane
 
-An automated accessibility assertion is bound to 61 of 144 components; 80 have none. Automated checking finds a minority of accessibility defects even where it passes, so this is published as coverage, never as conformance.
+An automated accessibility assertion is bound to 63 of 144 components; 78 have none. Automated checking finds a minority of accessibility defects even where it passes, so this is published as coverage, never as conformance.
 
 ### Components with no APG pattern
 
@@ -193,12 +193,12 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/quality-matrix.json` | `183ab39b7ae54a0b…` | yes |
-| `packages/core/docs/capability-matrix.json` | `25f7c2e4088bf809…` | yes |
+| `packages/core/docs/quality-matrix.json` | `9c693adede2d8348…` | yes |
+| `packages/core/docs/capability-matrix.json` | `502c290fa8242e4e…` | yes |
 | `packages/core/docs/wcag-deviations.json` | `bde6dc788456481d…` | yes |
 | `e2e/at-matrix/index.json` | `d35ef2dfa049e253…` | yes |
 
-Capability matrix `sourceCommit` `38620c3a` · quality matrix `47010932`.
+Capability matrix `sourceCommit` `74269ecf` · quality matrix `74269ecf`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

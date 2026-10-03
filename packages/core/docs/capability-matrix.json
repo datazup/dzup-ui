@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "0b0d714dafe30b73c0444ad1c1d81ddf5fc16bd5",
+  "sourceCommit": "74269ecfa4f213b335d5bb10d68c184aabab1acb",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -49,7 +49,7 @@
       "path": "e2e/matrix/browser-evidence.json",
       "note": "24/24 projects (chromium, firefox, webkit × 8 conditions) projected over 89 Tier B–D components: 2112 pass, 0 fail, 24 unrun. Every run was measured on a clean worktree at its stated commit; still a developer machine, not CI.",
       "gate": {
-        "platform": "linux — node v24.17.0",
+        "platform": "linux — node v24.20.0",
         "authoritative": "linux",
         "ciGate": false,
         "blockedOn": "two acts, in this order. (1) A CI job that runs the Playwright matrix lane on `ubuntu-latest` and projects its JSON report through `yarn generate:browser-evidence` — measured 2026-09-28, NO workflow in .github/ invokes `yarn test:e2e:matrix` or `yarn generate:browser-evidence`, and the only `continue-on-error: true` in ci.yml is on the visual e2e step. (2) One sweep on a CLEAN worktree. Until (1), these rows are developer-local evidence and cannot fail anything."
@@ -95,10 +95,10 @@
       "excepted": 66
     },
     "C": {
-      "pass": 144,
+      "pass": 146,
       "fail": 0,
       "present": 101,
-      "stale": 22,
+      "stale": 20,
       "unrun": 103,
       "excepted": 4
     },
@@ -239,7 +239,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -546,7 +546,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -1281,7 +1281,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -1510,7 +1510,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -1750,7 +1750,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -1941,7 +1941,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -2212,7 +2212,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -2469,7 +2469,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -2619,7 +2619,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -2665,7 +2665,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzCascader.vue",
-      "componentCommit": "0b0d714dafe30b73c0444ad1c1d81ddf5fc16bd5",
+      "componentCommit": "14d4cb4a770b6f14bbbc2cc91894f28cd35619c7",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2773,14 +2773,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -2975,7 +2975,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3123,7 +3123,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3271,7 +3271,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3577,7 +3577,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3725,7 +3725,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3875,7 +3875,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4063,7 +4063,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4260,7 +4260,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4453,7 +4453,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4690,7 +4690,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4845,7 +4845,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -5080,7 +5080,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -5275,7 +5275,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -5461,7 +5461,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -5637,7 +5637,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -5984,7 +5984,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -6221,7 +6221,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -6608,7 +6608,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -6762,7 +6762,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -6924,7 +6924,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -7630,7 +7630,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8010,7 +8010,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8202,7 +8202,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -8358,7 +8358,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8508,7 +8508,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8734,7 +8734,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8963,7 +8963,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -9124,7 +9124,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -9404,7 +9404,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -9554,7 +9554,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -9791,7 +9791,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10011,7 +10011,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10197,7 +10197,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10469,7 +10469,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -10662,7 +10662,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -10810,7 +10810,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -10961,7 +10961,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -11156,7 +11156,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11383,7 +11383,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11531,7 +11531,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11680,7 +11680,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11831,7 +11831,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12058,7 +12058,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12220,7 +12220,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12450,7 +12450,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12711,7 +12711,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12861,7 +12861,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13011,7 +13011,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13168,7 +13168,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13405,7 +13405,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13720,7 +13720,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13947,7 +13947,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -14096,7 +14096,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -14249,7 +14249,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14418,7 +14418,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14578,7 +14578,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14888,7 +14888,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15124,7 +15124,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -15373,7 +15373,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15529,7 +15529,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15849,7 +15849,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15990,7 +15990,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16140,7 +16140,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16291,7 +16291,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -16487,7 +16487,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16636,7 +16636,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16787,7 +16787,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -17025,7 +17025,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17164,7 +17164,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "0/24 projects measured green at 38620c3. 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "0/24 projects measured green at 5bcfd20. 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17314,7 +17314,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -17664,7 +17664,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17810,7 +17810,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -18042,7 +18042,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -18194,7 +18194,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -18355,7 +18355,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -18546,14 +18546,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "stale",
+          "state": "pass",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -18741,7 +18741,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -18918,7 +18918,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -19070,7 +19070,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 38620c3. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",

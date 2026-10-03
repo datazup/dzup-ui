@@ -40,26 +40,27 @@
       "2026-09-29 RESIDUAL-17 seeded the baseline at the working tree measured after RESIDUAL-16's correction: pass 558, present 608 over 1,662 cells. NOT at the pre-audit 585/623, which were the inflated figures.",
       "2026-09-29 RESIDUAL-17 `portal-hydration` present 3 -> 4 (+1) and `ssr-sample` present 94 -> 96 (+2). The hydration harness landed -- packages/core/tests/ssr/portal-hydration.spec.ts -- and the kind's predicate now requires a server render, the teleport anchor pair in the ASSERTED OUTPUT, and an actual hydration. DzBlockUI and DzPopconfirm GAINED the portal cell (native `<Teleport>`, the branch taken on the server, hydration rewrites 0 bytes) and gained `ssr-sample` with it, since the harness is the first spec that server-renders either. DzSidebar and DzTour KEPT the portal cell through the new harness. DzCommandPalette LOST it: measured, its server output is `<!--[--><!--v-if--><!--]-->` with an EMPTY ctx.teleports, because Reka UI's *Portal primitives render nothing on the server, and hydration then replaces those 27 bytes with an anchor pair -- so `open: true` in its citation was never proof the branch had been taken. This is the first move declared through gate 8, by the packet that built gate 8.",
       "2026-09-30 RESIDUAL-19 `contract-spec` present 142 -> 62 (-80) and `unit-spec` present 141 -> 127 (-14). Both kinds were credited on the sidecar file EXISTING. @dzup-ui/contracts documents `contract-spec` as 'Contract Spec v1 props/events/slots/ARIA' and `unit-spec` as 'render and behaviour units', and a census of all 283 citations at 4e4e46f found 80 contract specs that never touch a surface the component itself declares (41 miss events, 44 slots, 34 ARIA; 36 miss more than one) and 14 unit specs that never drive a component calling defineEmits/defineModel -- DzCheckbox.contract.spec.ts has nine tests and none mentions `change`; DzInput.spec.ts has 23 and never types into the input. The rule is packages/tooling/src/quality/spec-contract-surfaces.ts: a surface is owed only when the component's own .types.ts or template declares it, and it is a surface-TOUCHED predicate, not a conformance proof. The 94 cells are `unrun` WITH the spec still cited and a note naming what is missing; no spec was written to win a cell back in the same change. `pass` is unmoved at 558; total present 611 -> 517.",
-      "2026-10-02 merge of origin/main + browser-matrix re-sweep: `perf-baseline` pass 0 -> 5 (+5). What exercises the new cells: upstream's D135 / O7-D1 size recapture (commits 7c23198 and 70647fb, 2026-09-29, linux) rewrote the 22 `size` baselines in packages/core/perf/baselines.json; for DzColorPicker, DzCommandPalette, DzPersonaSelector, DzSidebar and DzTree that baseline is now newer than the component's last change, so the cell that was `stale` is `pass`. The other 17 `size` owners changed again in this programme after the recapture and stay `stale` (see staleCells). `browser-matrix` pass 88 -> 65 -> 88 inside the same change: committing the programme made 23 component sources newer than the 589be13 / 3ee3d5f browser runs, and the full three-engine re-sweep at b666b00 (chromium 1431/0, firefox 1429/0 + reduced-motion re-run 190/0 after an overnight suspend, webkit 1431/0; 24 of 24 projects, 2112 pass / 0 fail / 24 declared unrun) restored every one, so the kind's record does not move. Totals pass 558 -> 563; present unchanged at 517."
+      "2026-10-02 merge of origin/main + browser-matrix re-sweep: `perf-baseline` pass 0 -> 5 (+5). What exercises the new cells: upstream's D135 / O7-D1 size recapture (commits 7c23198 and 70647fb, 2026-09-29, linux) rewrote the 22 `size` baselines in packages/core/perf/baselines.json; for DzColorPicker, DzCommandPalette, DzPersonaSelector, DzSidebar and DzTree that baseline is now newer than the component's last change, so the cell that was `stale` is `pass`. The other 17 `size` owners changed again in this programme after the recapture and stay `stale` (see staleCells). `browser-matrix` pass 88 -> 65 -> 88 inside the same change: committing the programme made 23 component sources newer than the 589be13 / 3ee3d5f browser runs, and the full three-engine re-sweep at b666b00 (chromium 1431/0, firefox 1429/0 + reduced-motion re-run 190/0 after an overnight suspend, webkit 1431/0; 24 of 24 projects, 2112 pass / 0 fail / 24 declared unrun) restored every one, so the kind's record does not move. Totals pass 558 -> 563; present unchanged at 517.",
+      "2026-10-03 G5-DZUP-UI-GAP5-02-20261003-R1: present 517 -> 526 (+9), contract-spec +2, axe +2, controlled-uncontrolled +2, data-scenarios +2 and keyboard-spec +1. Actual Cascader/Transfer tests exercise slot payloads, model replacement and local ownership, enabled/disabled selection, 100-path/200-record filtering and empty/loading/error/retry states; Cascader adds Space, Escape and native forward/reverse Tab. Axe scope is representative Transfer states and closed Cascader triggers under a real host landmark; open portal and D4 clear-control debt are not qualified. Full local three-engine/eight-condition reports at clean 5bcfd20e retain browser-matrix pass 88 with zero degradation. These are present automated cells, not human AT, portal hydration or full component conformance. Perf pass counts and stale ceilings remain unchanged: main already has the owner-controlled 5 versus 1 pass drift and 21 stale versus 17 ceiling."
     ],
 
     "totals": {
       "//": "Derived, and checked against the sum of `kinds` by gate 8 -- so the headline a report quotes cannot drift from the per-kind table underneath it. This is `runtime-floor-ceilings.json`'s device (`maxBreaches` must EQUAL the list) applied to a tally.",
       "pass": 563,
-      "present": 517
+      "present": 526
     },
 
     "kinds": {
       "a11y-narrative": { "pass": 22, "present": 0 },
       "at-manual": { "pass": 0, "present": 0 },
-      "axe": { "pass": 0, "present": 61 },
+      "axe": { "pass": 0, "present": 63 },
       "browser-matrix": { "pass": 88, "present": 0 },
       "browser-play": { "pass": 86, "present": 0 },
-      "contract-spec": { "pass": 0, "present": 62 },
-      "controlled-uncontrolled": { "pass": 0, "present": 1 },
+      "contract-spec": { "pass": 0, "present": 64 },
+      "controlled-uncontrolled": { "pass": 0, "present": 3 },
       "csp-fixture": { "pass": 0, "present": 1 },
-      "data-scenarios": { "pass": 0, "present": 8 },
-      "keyboard-spec": { "pass": 0, "present": 16 },
+      "data-scenarios": { "pass": 0, "present": 10 },
+      "keyboard-spec": { "pass": 0, "present": 17 },
       "malicious-corpus": { "pass": 0, "present": 15 },
       "non-drag-alternative": { "pass": 0, "present": 7 },
       "perf-baseline": { "pass": 5, "present": 0 },

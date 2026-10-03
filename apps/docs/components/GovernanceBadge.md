@@ -152,8 +152,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `38620c3a` for the capability matrix,
-`47010932` for the quality matrix. It is **locally qualified**:
+artifact records — `74269ecf` for the capability matrix,
+`74269ecf` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::

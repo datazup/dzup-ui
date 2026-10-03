@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "generatedFrom": "packages/core/docs/component-meta.json",
-  "sourceCommit": "38620c3a88ca12fd8dc10a8414371d59375f60a0",
+  "sourceCommit": "74269ecfa4f213b335d5bb10d68c184aabab1acb",
   "totals": {
     "publicComponents": 144,
     "withSeed": 129,
@@ -216,13 +216,12 @@
       ]
     },
     "DzCascader": {
-      "code": "<script setup lang=\"ts\">\nimport { DzCascader } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-2 max-w-xs\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Any level commits; the popover stays open to drill deeper.</p>\n    <DzCascader v-model:value=\"value\" :options=\"regions\" change-on-select placeholder=\"Select region\" />\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>\n  </div>\n</template>\n",
-      "storyId": "ChangeOnSelect",
-      "storyName": "Change on Select",
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzCascader } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-3\">\n    <DzButton>Before cascader</DzButton>\n    <DzCascader :options=\"options\" filter portal-disabled aria-label=\"Tab exit fixture\" />\n    <DzButton>After cascader</DzButton>\n  </div>\n</template>\n",
+      "storyId": "TabExit",
       "storyFile": "packages/core/stories/forms/DzCascader.stories.ts",
       "storyLines": [
-        215,
-        261
+        247,
+        262
       ]
     },
     "DzCheckbox": {
@@ -1238,8 +1237,8 @@
       "storyName": "Size Gallery",
       "storyFile": "packages/core/stories/forms/DzTransfer.stories.ts",
       "storyLines": [
-        111,
-        132
+        148,
+        169
       ]
     },
     "DzTree": {
