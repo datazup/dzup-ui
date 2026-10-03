@@ -55,6 +55,14 @@ export async function measureVerticalClipping(page: Page): Promise<ClippedBox[]>
       const rect = el.getBoundingClientRect()
       if (rect.width === 0 || rect.height === 0 || !el.checkVisibility())
         continue
+      // A classic sr-only region remains in the accessibility tree, but its
+      // zero-area clip intentionally removes it from the visible layout.
+      // Class names alone never exempt a box that actually paints clipped text.
+      const screenReaderOnly = style.position === 'absolute'
+        && rect.width <= 1 && rect.height <= 1
+        && (style.clip === 'rect(0px, 0px, 0px, 0px)' || style.clipPath === 'inset(50%)')
+      if (screenReaderOnly)
+        continue
       if ((el.textContent ?? '').trim() === '')
         continue
       // 2px of tolerance: sub-pixel layout and a rounded corner's clip both land
