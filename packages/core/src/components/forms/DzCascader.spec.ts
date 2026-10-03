@@ -120,9 +120,47 @@ describe('dzCascader — columns', () => {
     // jsdom has no native Tab traversal. Model that browser action explicitly.
     next.focus()
     await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
     expect(document.activeElement).toBe(next)
     expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false')
     next.remove()
+  })
+
+  it('preserves backward traversal on Shift+Tab instead of trapping or restoring trigger focus', async () => {
+    const wrapper = mountCascader({ options: [{ value: 'one', label: 'One' }] })
+    const previous = document.createElement('button')
+    document.body.prepend(previous)
+    await openPanel(wrapper)
+    const option = wrapper.get('[role="option"]').element as HTMLElement
+    option.focus()
+    const tab = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true })
+    option.dispatchEvent(tab)
+    expect(tab.defaultPrevented).toBe(false)
+    previous.focus()
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+    expect(document.activeElement).toBe(previous)
+    expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false')
+    previous.remove()
+  })
+
+  it('filters a large hierarchy and commits the full matching path', async () => {
+    const tree = Array.from({ length: 100 }, (_, index) => ({
+      value: `region-${index}`, label: `Region ${index}`,
+      children: [{ value: `city-${index}`, label: `City ${index}`, disabled: index === 99 }],
+    }))
+    const wrapper = mountCascader({ options: tree, filter: true })
+    await openPanel(wrapper)
+    await wrapper.get('[role="searchbox"]').setValue('City 42')
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(1)
+    await wrapper.get('[role="option"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['region-42', 'city-42']])
+    expect(wrapper.get('[role="combobox"]').text()).toContain('Region 42 / City 42')
+    await openPanel(wrapper)
+    await wrapper.get('[role="searchbox"]').setValue('City 99')
+    expect(wrapper.get('[role="option"]').attributes('aria-disabled')).toBe('true')
+    await wrapper.get('[role="option"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
   })
 
   it('shows only the root column before any selection', async () => {

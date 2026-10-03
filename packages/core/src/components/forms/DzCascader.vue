@@ -294,6 +294,22 @@ function closePanel(): void {
   open.value = false
 }
 
+// Reka's popover focus scope loops Tab at its boundary. The combobox contract
+// instead leaves the control: keep native traversal and its resulting focus,
+// including on Shift+Tab, rather than restoring focus to the trigger on close.
+let tabExit = false
+function handlePanelTab(event: KeyboardEvent): void {
+  tabExit = true
+  event.stopPropagation()
+  closePanel()
+}
+
+function handleCloseAutoFocus(event: Event): void {
+  if (tabExit)
+    event.preventDefault()
+  tabExit = false
+}
+
 /** Click handler for a column cell: expand and/or commit per the rules. */
 function selectOption(colIndex: number, option: DzCascaderOption, index: number): void {
   if (option.disabled || resolvedReadonly.value)
@@ -633,6 +649,8 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
           align="start"
           class="z-50"
           :class="[ui?.content]"
+          @keydown.tab.capture="handlePanelTab"
+          @close-auto-focus="handleCloseAutoFocus"
         >
           <div :id="panelId" ref="panelEl" data-part="panel" :class="[styles.panel(), ui?.panel]">
             <!-- Filter (search) input -->

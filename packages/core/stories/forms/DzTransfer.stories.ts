@@ -104,6 +104,41 @@ export const Default: Story = {
   }),
 }
 
+/** The empty async source is a declared dataset state, not an empty gallery. */
+export const Empty: Story = {
+  args: { source: [], optionsState: 'empty' },
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByText('No options found')).toBeVisible()
+    await expect(canvas.queryAllByRole('option')).toHaveLength(0)
+    await expect(canvas.getByRole('button', { name: 'Move selected to target' })).toBeDisabled()
+  },
+}
+
+/** Exercise filtered selection against many records, including a disabled key. */
+export const Large: Story = {
+  args: {
+    source: Array.from({ length: 200 }, (_, index) => ({
+      key: String(index), label: `Record ${index}`, disabled: index === 199,
+    })),
+    searchable: true,
+  },
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.type(canvas.getByRole('textbox', { name: 'Search source items' }), 'Record 19')
+    const source = within(canvas.getByRole('listbox', { name: 'Source items' }))
+    await expect(source.getAllByRole('option')).toHaveLength(11)
+    await userEvent.click(source.getByRole('option', { name: 'Record 19', exact: true }))
+    await userEvent.click(source.getByRole('option', { name: 'Record 199', exact: true }))
+    await userEvent.click(canvas.getByRole('button', { name: 'Move selected to target' }))
+    const target = within(canvas.getByRole('listbox', { name: 'Target items' }))
+    await expect(target.getAllByRole('option')).toHaveLength(1)
+    await expect(target.getByRole('option', { name: 'Record 19', exact: true })).toBeVisible()
+  },
+}
+
 // ---------------------------------------------------------------------------
 // Size Gallery
 // ---------------------------------------------------------------------------

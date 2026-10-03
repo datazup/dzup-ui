@@ -208,6 +208,41 @@ export const Default: Story = {
   },
 }
 
+/** Empty options with a host-owned asynchronous state and no selectable path. */
+export const Empty: Story = {
+  args: { options: [], optionsState: 'empty' },
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('combobox'))
+    await waitFor(() => expect(screen.getByText('No options found')).toBeVisible())
+    await expect(screen.queryAllByRole('option')).toHaveLength(0)
+    await userEvent.keyboard('{Escape}')
+    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false')
+  },
+}
+
+/** Filter and commit one leaf from a large hierarchy without selecting disabled paths. */
+export const Large: Story = {
+  args: {
+    filter: true,
+    options: Array.from({ length: 100 }, (_, index) => ({
+      value: `region-${index}`, label: `Region ${index}`,
+      children: [{ value: `city-${index}`, label: `City ${index}`, disabled: index === 99 }],
+    })),
+  },
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('combobox'))
+    await userEvent.type(await screen.findByRole('searchbox', { name: 'Search paths' }), 'City 42')
+    await waitFor(() => expect(screen.getAllByRole('option')).toHaveLength(1))
+    await userEvent.click(screen.getByRole('option'))
+    await expect(canvas.getByRole('combobox')).toHaveTextContent('Region 42 / City 42')
+    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false')
+  },
+}
+
 // ---------------------------------------------------------------------------
 // Change on select (parents selectable)
 // ---------------------------------------------------------------------------
