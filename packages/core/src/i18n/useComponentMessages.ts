@@ -38,6 +38,7 @@ import { useDzLocale } from '../composables/provider/useDzLocale.ts'
 import { useDzMessages } from '../composables/provider/useDzMessages.ts'
 import { formatMessage } from './message-format.ts'
 import { enMessages } from './messages.ts'
+import { useMessageGroup } from './useMessageGroup.ts'
 
 /**
  * Messages for `component`, with the application's overrides applied per key.
@@ -59,23 +60,7 @@ import { enMessages } from './messages.ts'
 export function useComponentMessages<K extends keyof DzMessageCatalog>(
   component: K,
 ): ComputedRef<DzMessageCatalog[K]> {
-  const { messages } = useDzMessages()
-
-  return computed(() => {
-    const defaults = enMessages[component as keyof typeof enMessages] as DzMessageCatalog[K]
-    const override = messages.value[component as string]
-
-    if (override === undefined || typeof override !== 'object')
-      return defaults
-
-    const resolved: Record<string, string> = { ...(defaults as Record<string, string>) }
-    for (const key of Object.keys(resolved)) {
-      const value = (override as Record<string, unknown>)[key]
-      if (typeof value === 'string')
-        resolved[key] = value
-    }
-    return resolved as DzMessageCatalog[K]
-  })
+  return useMessageGroup(component, enMessages[component as keyof typeof enMessages] as DzMessageCatalog[K])
 }
 
 /** Broken host messages already reported, so a re-render does not repeat the warning. */

@@ -19,7 +19,8 @@ import type { AsyncOptionsState } from '@dzup-ui/contracts'
  * @module @dzup-ui/core/components/forms/DzOptionsState
  */
 import { computed, ref } from 'vue'
-import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { enAsyncOptionsMessages } from '../../i18n/messages.ts'
+import { useMessageGroup } from '../../i18n/useMessageGroup.ts'
 import { cn } from '../../utilities/cn.ts'
 import {
   createRetryKeyboardRoute,
@@ -44,7 +45,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{ retry: [] }>()
 
-const dzMessages = useComponentMessages('DzAsyncOptions')
+const dzMessages = useMessageGroup('DzAsyncOptions', enAsyncOptionsMessages)
 
 const rowRef = ref<HTMLElement | null>(null)
 const retryRef = ref<HTMLButtonElement | null>(null)

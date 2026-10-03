@@ -33,7 +33,8 @@ import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
-import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { enAsyncOptionsMessages, enCascaderMessages } from '../../i18n/messages.ts'
+import { useMessageGroup } from '../../i18n/useMessageGroup.ts'
 import { cn } from '../../utilities/cn.ts'
 import { cascaderVariants } from './DzCascader.variants.ts'
 import DzOptionsState from './DzOptionsState.vue'
@@ -97,7 +98,7 @@ const dzDirection = useDzDirection()
 
 // The async-options rows are one shared group across all seven selection
 // controls, so a translator writes them once (renderer contract C9).
-const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
+const dzAsyncMessages = useMessageGroup('DzAsyncOptions', enAsyncOptionsMessages)
 
 /**
  * The async-options seam (renderer contract C9).
@@ -143,7 +144,7 @@ const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
-const dzMessages = useComponentMessages('DzCascader')
+const dzMessages = useMessageGroup('DzCascader', enCascaderMessages)
 const resolvedSearchPlaceholder = computed(() => props.searchPlaceholder ?? dzMessages.value.searchPlaceholder)
 const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 

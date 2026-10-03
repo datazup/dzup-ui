@@ -205,21 +205,14 @@ declare module '@dzup-ui/contracts' {
  * not declared — is a type error, not a string that silently resolves to
  * `undefined` at runtime in whichever locale nobody tested.
  */
-export const enMessages = {
-  DzAlert: { close: 'Close' },
-  DzAnchor: { ariaLabel: 'Page navigation' },
-  DzAsyncOptions: {
+export const enAsyncOptionsMessages = {
     loading: 'Loading options',
     empty: 'No options found',
     error: 'Could not load options',
     retry: 'Try again',
-  },
-  DzBackTop: { ariaLabel: 'Back to top' },
-  DzBreadcrumb: { ariaLabel: 'Breadcrumb' },
-  DzCarouselDots: { slideNavigation: 'Slide navigation' },
-  DzCarouselNext: { nextSlide: 'Next slide' },
-  DzCarouselPrevious: { previousSlide: 'Previous slide' },
-  DzCascader: {
+  } as const satisfies DzMessageCatalog['DzAsyncOptions']
+
+export const enCascaderMessages = {
     clearSelection: 'Clear selection',
     searchPaths: 'Search paths',
     matchingPaths: 'Matching paths',
@@ -229,7 +222,29 @@ export const enMessages = {
     // ellipses is a visible change that belongs in its own commit.
     searchPlaceholder: 'Search…',
     noResults: 'No matching paths',
-  },
+  } as const satisfies DzMessageCatalog['DzCascader']
+
+export const enTransferMessages = {
+    ariaLabel: 'Transfer list',
+    searchSource: 'Search source items',
+    sourceItems: 'Source items',
+    moveToTarget: 'Move selected to target',
+    moveToSource: 'Move selected to source',
+    searchTarget: 'Search target items',
+    targetItems: 'Target items',
+    searchPlaceholder: 'Search...',
+  } as const satisfies DzMessageCatalog['DzTransfer']
+
+export const enMessages = {
+  DzAlert: { close: 'Close' },
+  DzAnchor: { ariaLabel: 'Page navigation' },
+  DzAsyncOptions: enAsyncOptionsMessages,
+  DzBackTop: { ariaLabel: 'Back to top' },
+  DzBreadcrumb: { ariaLabel: 'Breadcrumb' },
+  DzCarouselDots: { slideNavigation: 'Slide navigation' },
+  DzCarouselNext: { nextSlide: 'Next slide' },
+  DzCarouselPrevious: { previousSlide: 'Previous slide' },
+  DzCascader: enCascaderMessages,
   DzColorPicker: {
     ariaLabel: 'Choose a color',
     colorArea: 'Color area',
@@ -343,16 +358,7 @@ export const enMessages = {
   },
   DzToast: { close: 'Close notification' },
   DzTokenProgressBar: { tokenUsage: 'Token usage' },
-  DzTransfer: {
-    ariaLabel: 'Transfer list',
-    searchSource: 'Search source items',
-    sourceItems: 'Source items',
-    moveToTarget: 'Move selected to target',
-    moveToSource: 'Move selected to source',
-    searchTarget: 'Search target items',
-    targetItems: 'Target items',
-    searchPlaceholder: 'Search...',
-  },
+  DzTransfer: enTransferMessages,
   DzTreeSelect: {
     filterOptions: 'Filter options',
     filterPlaceholder: 'Search...',

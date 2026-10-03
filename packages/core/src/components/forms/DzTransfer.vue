@@ -16,7 +16,8 @@ import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useTransfer } from '../../composables/useTransfer/index.ts'
-import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { enAsyncOptionsMessages, enTransferMessages } from '../../i18n/messages.ts'
+import { useMessageGroup } from '../../i18n/useMessageGroup.ts'
 import { cn } from '../../utilities/cn.ts'
 import { focusedIndexIn, ownsItsOwnCaret } from '../../utilities/keyboardTargets.ts'
 import DzOptionsState from './DzOptionsState.vue'
@@ -54,7 +55,7 @@ defineSlots<DzTransferSlots>()
 
 // The async-options rows are one shared group across all seven selection
 // controls, so a translator writes them once (renderer contract C9).
-const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
+const dzAsyncMessages = useMessageGroup('DzAsyncOptions', enAsyncOptionsMessages)
 
 /**
  * The async-options seam (renderer contract C9).
@@ -90,7 +91,7 @@ function handleRetryOptions(): void {
 }
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
-const dzMessages = useComponentMessages('DzTransfer')
+const dzMessages = useMessageGroup('DzTransfer', enTransferMessages)
 const resolvedSearchPlaceholder = computed(() => props.searchPlaceholder ?? dzMessages.value.searchPlaceholder)
 const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
