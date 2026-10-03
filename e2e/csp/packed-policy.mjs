@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createServer } from 'node:http'
 import { createRequire } from 'node:module'
 import { join, resolve } from 'node:path'
@@ -47,12 +47,13 @@ writeFileSync('ssr.html', html)
   const html = readFileSync(join(consumer, 'ssr.html'), 'utf8')
   assert.doesNotMatch(html, /\sstyle\s*=/i)
   assert.doesNotMatch(html, /<style\b/i)
-  writeFileSync(join(consumer, 'style.css'), `@import 'tailwindcss';
-@import './node_modules/@dzup-ui/tokens/dist/tokens.css';
-@import './node_modules/@dzup-ui/core/dist/core.css';
-@source './node_modules/@dzup-ui/core/dist';
-`)
-  writeFileSync(join(consumer, 'index.html'), `<!doctype html><html><head><link rel="stylesheet" href="./style.css"></head><body>${html}<div id="policy-control" style="contain:layout style"></div></body></html>`)
+  // Execute the public instructions, never supply hidden utility generation.
+  // The token-only fallback reproduces the original main.ts instructions.
+  const guide = readFileSync(join(root, 'apps/docs/guide/getting-started.md'), 'utf8')
+  const css = guide.match(/```css\n([\s\S]*?)```/)?.[1] ?? '@import "@dzup-ui/tokens/css";\n'
+  mkdirSync(join(consumer, 'src'))
+  writeFileSync(join(consumer, 'src/style.css'), css)
+  writeFileSync(join(consumer, 'index.html'), `<!doctype html><html><head><link rel="stylesheet" href="./src/style.css"></head><body>${html}<div id="policy-control" style="contain:layout style"></div></body></html>`)
   const { build } = require('vite')
   // The existing landing workspace declares the Tailwind build plugin.
   const landingRequire = createRequire(join(root, 'apps/landing/package.json'))
@@ -107,7 +108,14 @@ writeFileSync('ssr.html', html)
       else
         assert.equal(policy, undefined)
       return page.evaluate((ids) => {
-        const properties = ['contain', 'display', 'position', 'padding', 'border', 'color', 'backgroundColor']
+        const properties = ['contain', 'display', 'position', 'height', 'padding', 'border', 'color', 'backgroundColor']
+        const expected = document.createElement('div')
+        expected.style.backgroundColor = 'var(--dz-primary-solid)'
+        expected.style.height = 'var(--dz-button-md-height)'
+        document.body.append(expected)
+        const buttonTokens = getComputedStyle(expected)
+        const expectedButton = { backgroundColor: buttonTokens.backgroundColor, height: buttonTokens.height }
+        expected.remove()
         return {
           libraryStyles: document.querySelectorAll('#library [style], #library style').length,
           styles: ids.map((id) => {
@@ -116,6 +124,7 @@ writeFileSync('ssr.html', html)
             return Object.fromEntries(properties.map(property => [property, computed[property]]))
           }),
           token: getComputedStyle(document.documentElement).getPropertyValue('--dz-primary').trim(),
+          expectedButton,
           control: getComputedStyle(document.querySelector('#policy-control')).contain,
           violations: globalThis.__violations,
         }
@@ -126,6 +135,10 @@ writeFileSync('ssr.html', html)
     assert.equal(open.libraryStyles, 0)
     assert.equal(strict.libraryStyles, 0)
     assert.ok(strict.token, 'external token CSS must load')
+    assert.equal(open.styles[0].display, 'inline-flex', 'documented Button must have generated utilities')
+    assert.equal(open.styles[0].backgroundColor, open.expectedButton.backgroundColor)
+    assert.equal(open.styles[0].height, open.expectedButton.height)
+    assert.equal(open.styles[3].display, 'flex', 'documented Input must have generated utilities')
     assert.equal(strict.token, open.token)
     assert.deepEqual(strict.styles, open.styles)
     for (const style of strict.styles)
