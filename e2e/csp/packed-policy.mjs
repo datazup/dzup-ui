@@ -25,7 +25,6 @@ async function main() {
   // Run inside the extracted consumer, with public exports and native Node
   // resolution. No repository aliases, TypeScript loader or hydration script.
   writeFileSync(join(consumer, 'render.mjs'), `
-import { writeFileSync } from 'node:fs'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { DzButton } from '@dzup-ui/core/buttons'
@@ -41,10 +40,11 @@ const html = await renderToString(createSSRApp({
   render: () => h('section', { id: 'library' }, cases.map(([id, component, props]) =>
     h('div', { id }, [h(component, props, { default: () => 'Packed SSR evidence' })]))),
 }))
-writeFileSync('ssr.html', html)
+process.stdout.write(html)
 `)
-  execFileSync(process.execPath, [join(consumer, 'render.mjs')], { cwd: consumer, stdio: 'inherit', timeout: 60_000 })
-  const html = readFileSync(join(consumer, 'ssr.html'), 'utf8')
+  const html = execFileSync(process.execPath, [join(consumer, 'render.mjs')], {
+    cwd: consumer, encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], timeout: 60_000,
+  })
   assert.doesNotMatch(html, /\sstyle\s*=/i)
   assert.doesNotMatch(html, /<style\b/i)
   // Execute the public instructions, never supply hidden utility generation.
@@ -53,7 +53,9 @@ writeFileSync('ssr.html', html)
   const css = guide.match(/```css\n([\s\S]*?)```/)?.[1] ?? '@import "@dzup-ui/tokens/css";\n'
   mkdirSync(join(consumer, 'src'))
   writeFileSync(join(consumer, 'src/style.css'), css)
-  writeFileSync(join(consumer, 'index.html'), `<!doctype html><html><head><link rel="stylesheet" href="./src/style.css"></head><body>${html}<div id="policy-control" style="contain:layout style"></div></body></html>`)
+  // Keep SSR classes out of Tailwind's automatic HTML scanning. Otherwise the
+  // fixture itself supplies utilities even when the documented @source is lost.
+  writeFileSync(join(consumer, 'index.html'), '<!doctype html><html><head><link rel="stylesheet" href="./src/style.css"></head><body><!--packed-ssr--><div id="policy-control" style="contain:layout style"></div></body></html>')
   // These resets are inside interactive/bound-style branches. Exercise actual
   // packed components after mounting, separately from the static SSR oracle.
   writeFileSync(join(consumer, 'src/resets.css'), `${css}
@@ -95,6 +97,8 @@ createApp({ render: () => h('section', [
     },
     logLevel: 'warn',
   })
+  const builtIndex = join(stage, 'index.html')
+  writeFileSync(builtIndex, readFileSync(builtIndex, 'utf8').replace('<!--packed-ssr-->', html))
 
   const server = createServer((request, response) => {
     const url = new URL(request.url ?? '/', 'http://localhost')
@@ -213,7 +217,7 @@ createApp({ render: () => h('section', [
     assert.equal(openResets.length, 3, 'both table spacers and the open native color input must be exercised')
     assert.deepEqual(strictResets, openResets)
     for (const reset of strictResets) {
-      assert.equal(reset.padding, '0px')
+      assert.equal(reset.padding, '0px', 'packed table/color input reset must have generated utilities')
       assert.deepEqual(reset.borders, ['0px', '0px', '0px', '0px'])
       assert.equal(reset.inlineStyle, null, 'reset elements must use external utilities')
     }
