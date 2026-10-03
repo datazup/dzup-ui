@@ -33,9 +33,7 @@
 
 import type { DzMessageArgsOf, DzMessageCatalog, DzMessageValues } from '@dzup-ui/contracts'
 import type { ComputedRef } from 'vue'
-import { computed } from 'vue'
 import { useDzLocale } from '../composables/provider/useDzLocale.ts'
-import { useDzMessages } from '../composables/provider/useDzMessages.ts'
 import { formatMessage } from './message-format.ts'
 import { enMessages } from './messages.ts'
 import { useMessageGroup } from './useMessageGroup.ts'

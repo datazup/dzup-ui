@@ -192,9 +192,9 @@ declare module '@dzup-ui/contracts' {
       searchTarget: string
       targetItems: string
       searchPlaceholder: string
-    }
-    DzTreeSelect: { filterOptions: string, filterPlaceholder: string, noResults: string }
   }
+  DzTreeSelect: { filterOptions: string, filterPlaceholder: string, noResults: string }
+}
 }
 
 /**
@@ -206,34 +206,34 @@ declare module '@dzup-ui/contracts' {
  * `undefined` at runtime in whichever locale nobody tested.
  */
 export const enAsyncOptionsMessages = {
-    loading: 'Loading options',
-    empty: 'No options found',
-    error: 'Could not load options',
-    retry: 'Try again',
-  } as const satisfies DzMessageCatalog['DzAsyncOptions']
+  loading: 'Loading options',
+  empty: 'No options found',
+  error: 'Could not load options',
+  retry: 'Try again',
+} as const satisfies DzMessageCatalog['DzAsyncOptions']
 
 export const enCascaderMessages = {
-    clearSelection: 'Clear selection',
-    searchPaths: 'Search paths',
-    matchingPaths: 'Matching paths',
-    // Note the character: U+2026, not three periods. `DzSelect` and `DzListbox`
-    // use three. The inconsistency is preserved rather than tidied — every
-    // value here is byte-identical to the literal it replaced, and normalising
-    // ellipses is a visible change that belongs in its own commit.
-    searchPlaceholder: 'Search…',
-    noResults: 'No matching paths',
-  } as const satisfies DzMessageCatalog['DzCascader']
+  clearSelection: 'Clear selection',
+  searchPaths: 'Search paths',
+  matchingPaths: 'Matching paths',
+  // Note the character: U+2026, not three periods. `DzSelect` and `DzListbox`
+  // use three. The inconsistency is preserved rather than tidied — every
+  // value here is byte-identical to the literal it replaced, and normalising
+  // ellipses is a visible change that belongs in its own commit.
+  searchPlaceholder: 'Search…',
+  noResults: 'No matching paths',
+} as const satisfies DzMessageCatalog['DzCascader']
 
 export const enTransferMessages = {
-    ariaLabel: 'Transfer list',
-    searchSource: 'Search source items',
-    sourceItems: 'Source items',
-    moveToTarget: 'Move selected to target',
-    moveToSource: 'Move selected to source',
-    searchTarget: 'Search target items',
-    targetItems: 'Target items',
-    searchPlaceholder: 'Search...',
-  } as const satisfies DzMessageCatalog['DzTransfer']
+  ariaLabel: 'Transfer list',
+  searchSource: 'Search source items',
+  sourceItems: 'Source items',
+  moveToTarget: 'Move selected to target',
+  moveToSource: 'Move selected to source',
+  searchTarget: 'Search target items',
+  targetItems: 'Target items',
+  searchPlaceholder: 'Search...',
+} as const satisfies DzMessageCatalog['DzTransfer']
 
 export const enMessages = {
   DzAlert: { close: 'Close' },
