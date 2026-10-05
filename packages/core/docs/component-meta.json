@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "74269ecfa4f213b335d5bb10d68c184aabab1acb",
+  "sourceCommit": "3ee52a87a13ebbaac248c20e09b28f584e29d4ef",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -27801,17 +27801,15 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 3,
+          "present": 5,
           "stale": 1,
-          "unrun": 6
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
           "contract-spec",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec"
+          "data-scenarios"
         ],
         "stale": [
           "perf-baseline"
@@ -30690,17 +30688,15 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 6,
           "stale": 1,
-          "unrun": 6
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
           "contract-spec",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec"
+          "data-scenarios"
         ],
         "stale": [
           "perf-baseline"
@@ -52301,15 +52297,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 7,
           "stale": 1,
-          "unrun": 4
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "contract-spec",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "contract-spec"
         ],
         "stale": [
           "perf-baseline"

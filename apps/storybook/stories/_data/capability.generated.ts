@@ -89,9 +89,9 @@ export const CAPABILITY_TOTALS = {
   "C": {
     "pass": 146,
     "fail": 0,
-    "present": 101,
+    "present": 107,
     "stale": 20,
-    "unrun": 103,
+    "unrun": 97,
     "excepted": 4
   },
   "D": {
@@ -105,7 +105,7 @@ export const CAPABILITY_TOTALS = {
 } as const
 
 /** Repository HEAD the evidence was collected at. */
-export const CAPABILITY_SOURCE_COMMIT = "74269ecfa4f213b335d5bb10d68c184aabab1acb"
+export const CAPABILITY_SOURCE_COMMIT = "3ee52a87a13ebbaac248c20e09b28f584e29d4ef"
 
 export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
   {
@@ -1857,9 +1857,9 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzMention.stories.ts"] },
     { kind: "ssr-sample", state: "present", origin: "tier A", artifacts: ["packages/core/tests/ssr/form-controls-ssr.spec.ts"] },
     { kind: "token-contrast", state: "pass", origin: "tier A", scope: "corpus", artifacts: ["packages/tooling/src/token-checks/intent-text-contrast.ts"], note: "Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once." },
-    { kind: "keyboard-spec", state: "unrun", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzMention.spec.ts"], note: "The component declares 6 binding(s); the unit spec asserts no key event for `ArrowUp`. The contract is the yardstick, not the presence of any key at all." },
+    { kind: "keyboard-spec", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzMention.spec.ts"], note: "All 6 declared binding(s) are exercised by the unit spec." },
     { kind: "state-stories", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzMention.stories.ts"] },
-    { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
+    { kind: "controlled-uncontrolled", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzMention.spec.ts"] },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzMention.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzMention.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
     { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
@@ -2013,9 +2013,9 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/data/DzOrderList.stories.ts"] },
     { kind: "ssr-sample", state: "present", origin: "tier A", artifacts: ["packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts"] },
     { kind: "token-contrast", state: "pass", origin: "tier A", scope: "corpus", artifacts: ["packages/tooling/src/token-checks/intent-text-contrast.ts"], note: "Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once." },
-    { kind: "keyboard-spec", state: "unrun", origin: "tier B", artifacts: ["packages/core/src/components/data/DzOrderList.spec.ts"], note: "The component declares 10 binding(s); the unit spec asserts no key event for `Home`, `Enter`. The contract is the yardstick, not the presence of any key at all." },
+    { kind: "keyboard-spec", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/data/DzOrderList.spec.ts"], note: "All 10 declared binding(s) are exercised by the unit spec." },
     { kind: "state-stories", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/data/DzOrderList.stories.ts"] },
-    { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
+    { kind: "controlled-uncontrolled", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/data/DzOrderList.spec.ts"] },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/data/DzOrderList.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/data/DzOrderList.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
     { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
@@ -3358,9 +3358,9 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/data/DzTree.stories.ts"] },
     { kind: "ssr-sample", state: "present", origin: "tier A", artifacts: ["packages/core/tests/ssr/aria-attribute-casing-ssr.spec.ts"] },
     { kind: "token-contrast", state: "pass", origin: "tier A", scope: "corpus", artifacts: ["packages/tooling/src/token-checks/intent-text-contrast.ts"], note: "Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once." },
-    { kind: "keyboard-spec", state: "unrun", origin: "tier B", artifacts: ["packages/core/src/components/data/DzTree.spec.ts"], note: "The component declares 8 binding(s); the unit spec asserts no key event for `Space`. The contract is the yardstick, not the presence of any key at all." },
+    { kind: "keyboard-spec", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/data/DzTree.spec.ts"], note: "All 8 declared binding(s) are exercised by the unit spec." },
     { kind: "state-stories", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/data/DzTree.stories.ts"] },
-    { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
+    { kind: "controlled-uncontrolled", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/data/DzTree.spec.ts"] },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/data/DzTree.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/data/DzTree.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
     { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },

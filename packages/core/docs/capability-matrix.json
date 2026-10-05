@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "74269ecfa4f213b335d5bb10d68c184aabab1acb",
+  "sourceCommit": "3ee52a87a13ebbaac248c20e09b28f584e29d4ef",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -97,9 +97,9 @@
     "C": {
       "pass": 146,
       "fail": 0,
-      "present": 101,
+      "present": 107,
       "stale": 20,
-      "unrun": 103,
+      "unrun": 97,
       "excepted": 4
     },
     "D": {
@@ -9958,11 +9958,11 @@
           "kind": "keyboard-spec",
           "origin": "tier B",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/forms/DzMention.spec.ts"
           ],
-          "note": "The component declares 6 binding(s); the unit spec asserts no key event for `ArrowUp`. The contract is the yardstick, not the presence of any key at all."
+          "note": "All 6 declared binding(s) are exercised by the unit spec."
         },
         {
           "kind": "state-stories",
@@ -9977,9 +9977,10 @@
           "kind": "controlled-uncontrolled",
           "origin": "tier B",
           "scope": "component",
-          "state": "unrun",
-          "artifacts": [],
-          "note": "The unit spec does not exercise both a controlled and an uncontrolled value path."
+          "state": "present",
+          "artifacts": [
+            "packages/core/src/components/forms/DzMention.spec.ts"
+          ]
         },
         {
           "kind": "browser-play",
@@ -10908,11 +10909,11 @@
           "kind": "keyboard-spec",
           "origin": "tier B",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/data/DzOrderList.spec.ts"
           ],
-          "note": "The component declares 10 binding(s); the unit spec asserts no key event for `Home`, `Enter`. The contract is the yardstick, not the presence of any key at all."
+          "note": "All 10 declared binding(s) are exercised by the unit spec."
         },
         {
           "kind": "state-stories",
@@ -10927,9 +10928,10 @@
           "kind": "controlled-uncontrolled",
           "origin": "tier B",
           "scope": "component",
-          "state": "unrun",
-          "artifacts": [],
-          "note": "The unit spec does not exercise both a controlled and an uncontrolled value path."
+          "state": "present",
+          "artifacts": [
+            "packages/core/src/components/data/DzOrderList.spec.ts"
+          ]
         },
         {
           "kind": "browser-play",
@@ -18688,11 +18690,11 @@
           "kind": "keyboard-spec",
           "origin": "tier B",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/data/DzTree.spec.ts"
           ],
-          "note": "The component declares 8 binding(s); the unit spec asserts no key event for `Space`. The contract is the yardstick, not the presence of any key at all."
+          "note": "All 8 declared binding(s) are exercised by the unit spec."
         },
         {
           "kind": "state-stories",
@@ -18707,9 +18709,10 @@
           "kind": "controlled-uncontrolled",
           "origin": "tier B",
           "scope": "component",
-          "state": "unrun",
-          "artifacts": [],
-          "note": "The unit spec does not exercise both a controlled and an uncontrolled value path."
+          "state": "present",
+          "artifacts": [
+            "packages/core/src/components/data/DzTree.spec.ts"
+          ]
         },
         {
           "kind": "browser-play",
