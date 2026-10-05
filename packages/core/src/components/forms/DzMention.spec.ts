@@ -171,6 +171,33 @@ describe('dzMention — keyboard insertion', () => {
     expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toBe('@Albert ')
   })
 
+  it('navigates back with ArrowUp, wrapping from the first option to the last', async () => {
+    const wrapper = mountMention()
+    await typeInto(wrapper, '@al')
+    const textarea = wrapper.find('textarea')
+    await textarea.trigger('keydown', { key: 'ArrowDown' }) // Alice → Albert
+    await textarea.trigger('keydown', { key: 'ArrowUp' }) // Albert → Alice
+    expect(options(wrapper)[0]!.attributes('aria-selected')).toBe('true')
+    expect(textarea.attributes('aria-activedescendant')).toBe(options(wrapper)[0]!.attributes('id'))
+
+    const up = new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true })
+    textarea.element.dispatchEvent(up) // Alice → Albert (wraps)
+    await flushPromises()
+    expect(up.defaultPrevented).toBe(true)
+    expect(options(wrapper)[1]!.attributes('aria-selected')).toBe('true')
+    await textarea.trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+    expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toBe('@Albert ')
+  })
+
+  it('leaves ArrowUp to the textarea while the menu is closed', async () => {
+    const wrapper = mountMention()
+    await typeInto(wrapper, 'line one')
+    const up = new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true })
+    wrapper.find('textarea').element.dispatchEvent(up)
+    expect(up.defaultPrevented).toBe(false)
+  })
+
   it('inserts on Tab as well', async () => {
     const wrapper = mountMention()
     await typeInto(wrapper, '@al')
@@ -257,6 +284,39 @@ describe('dzMention — D8: an external write after a user edit is honoured', ()
 
     await wrapper.setProps({ value: '' })
     expect((wrapper.find('textarea').element as HTMLTextAreaElement).value).toBe('')
+  })
+})
+
+describe('dzMention — default v-model ownership', () => {
+  function text(wrapper: ReturnType<typeof mountMention>): string {
+    return (wrapper.find('textarea').element as HTMLTextAreaElement).value
+  }
+
+  it('controlled: renders the parent value, proposes the inserted text through update:modelValue, obeys a reset', async () => {
+    const proposals: string[] = []
+    const wrapper = mountMention({
+      'modelValue': 'hi ',
+      'onUpdate:modelValue': (value: string) => proposals.push(value),
+    })
+    expect(text(wrapper)).toBe('hi ')
+    await typeInto(wrapper, 'hi @bo')
+    await wrapper.find('textarea').trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+    expect(proposals.at(-1)).toBe('hi @Bob ')
+    await wrapper.setProps({ modelValue: proposals.at(-1) })
+    expect(text(wrapper)).toBe('hi @Bob ')
+    await wrapper.setProps({ modelValue: '' })
+    expect(text(wrapper)).toBe('')
+  })
+
+  it('uncontrolled: with no model bound the component owns the text locally', async () => {
+    const wrapper = mountMention()
+    expect(text(wrapper)).toBe('')
+    await typeInto(wrapper, '@al')
+    await wrapper.find('textarea').trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+    expect(text(wrapper)).toBe('@Alice ')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('@Alice ')
   })
 })
 
