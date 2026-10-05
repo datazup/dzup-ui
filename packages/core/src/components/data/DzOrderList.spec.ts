@@ -154,6 +154,47 @@ describe('dzOrderList — keyboard grab / move / drop', () => {
     expect(wrapper.findAll('[role="listitem"]')[1]!.attributes('tabindex')).toBe('0')
   })
 
+  it('moves focus to the first row on Home without reordering', async () => {
+    const wrapper = mountList()
+    await wrapper.findAll('[role="listitem"]')[0]!.trigger('keydown', { key: 'End' })
+    expect(wrapper.findAll('[role="listitem"]')[3]!.attributes('tabindex')).toBe('0')
+    await wrapper.findAll('[role="listitem"]')[3]!.trigger('keydown', { key: 'Home' })
+    expect(wrapper.findAll('[role="listitem"]')[0]!.attributes('tabindex')).toBe('0')
+    expect(wrapper.findAll('[role="listitem"]')[3]!.attributes('tabindex')).toBe('-1')
+    expect(wrapper.emitted('update:value')).toBeUndefined()
+  })
+
+  it('moves a grabbed row to the top on Home', async () => {
+    const wrapper = mountList()
+    await wrapper.findAll('[role="listitem"]')[0]!.trigger('keydown', { key: 'End' })
+    await wrapper.findAll('[role="listitem"]')[3]!.trigger('keydown', { key: ' ' }) // grab Delta
+    await wrapper.findAll('[role="listitem"]')[3]!.trigger('keydown', { key: 'Home' })
+    const value = wrapper.emitted('update:value')!.at(-1)![0] as Row[]
+    expect(labels(value)).toEqual(['Delta', 'Alpha', 'Bravo', 'Charlie'])
+  })
+
+  it('selects and deselects the focused option with Enter in a selectable list', async () => {
+    const wrapper = mountList({ selectable: true })
+    await wrapper.findAll('[role="option"]')[0]!.trigger('keydown', { key: 'ArrowDown' })
+    const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })
+    wrapper.findAll('[role="option"]')[1]!.element.dispatchEvent(enter)
+    await nextTick()
+    expect(enter.defaultPrevented).toBe(true)
+    expect(wrapper.findAll('[role="option"]')[1]!.attributes('aria-selected')).toBe('true')
+    expect(wrapper.emitted('selectionChange')!.at(-1)![0]).toEqual([2])
+    await wrapper.findAll('[role="option"]')[1]!.trigger('keydown', { key: 'Enter' })
+    expect(wrapper.findAll('[role="option"]')[1]!.attributes('aria-selected')).toBe('false')
+    expect(wrapper.emitted('selectionChange')!.at(-1)![0]).toEqual([])
+  })
+
+  it('leaves Enter alone in a non-selectable list', () => {
+    const wrapper = mountList()
+    const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })
+    wrapper.findAll('[role="listitem"]')[0]!.element.dispatchEvent(enter)
+    expect(enter.defaultPrevented).toBe(false)
+    expect(wrapper.emitted('selectionChange')).toBeUndefined()
+  })
+
   it('announces position changes via the live region', async () => {
     const wrapper = mountList()
     await wrapper.findAll('[role="listitem"]')[0]!.trigger('keydown', { key: ' ' })
@@ -161,6 +202,36 @@ describe('dzOrderList — keyboard grab / move / drop', () => {
     await nextTick()
     await nextTick()
     expect(wrapper.find('[role="status"]').text()).toContain('position 2 of 4')
+  })
+})
+
+// The order is `v-model:value`, so its write-back event is `update:value`
+// rather than the default `update:modelValue`.
+describe('dzOrderList — value ownership', () => {
+  function rendered(wrapper: ReturnType<typeof mountList>): string[] {
+    return wrapper.findAll('.cell').map(cell => cell.text())
+  }
+
+  it('controlled: proposes the new order and renders only what the parent writes back', async () => {
+    const proposals: Row[][] = []
+    const wrapper = mountList({ 'onUpdate:value': (value: Row[]) => proposals.push(value) })
+    await wrapper.get(`[aria-label="Move down"]`).trigger('click')
+    expect(labels(proposals.at(-1)!)).toEqual(['Bravo', 'Alpha', 'Charlie', 'Delta'])
+    expect(rendered(wrapper)).toEqual(['Alpha', 'Bravo', 'Charlie', 'Delta'])
+    await wrapper.setProps({ value: proposals.at(-1) })
+    expect(rendered(wrapper)).toEqual(['Bravo', 'Alpha', 'Charlie', 'Delta'])
+    // A parent replacement wins over the local interaction history.
+    await wrapper.setProps({ value: makeItems().reverse() })
+    expect(rendered(wrapper)).toEqual(['Delta', 'Charlie', 'Bravo', 'Alpha'])
+  })
+
+  it('uncontrolled: with a one-way initial value the list owns the order locally', async () => {
+    const wrapper = mountList()
+    await wrapper.get(`[aria-label="Move down"]`).trigger('click')
+    expect(rendered(wrapper)).toEqual(['Bravo', 'Alpha', 'Charlie', 'Delta'])
+    await wrapper.get(`[aria-label="Move down"]`).trigger('click')
+    expect(rendered(wrapper)).toEqual(['Bravo', 'Charlie', 'Alpha', 'Delta'])
+    expect(labels(wrapper.emitted('update:value')!.at(-1)![0] as Row[])).toEqual(['Bravo', 'Charlie', 'Alpha', 'Delta'])
   })
 })
 

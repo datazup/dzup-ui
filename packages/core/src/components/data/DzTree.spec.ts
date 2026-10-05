@@ -265,6 +265,24 @@ describe('dzTree — APG roving tabindex & structural semantics', () => {
     expect(wrapper.emitted('update:selectedKeys')?.at(-1)).toEqual([['root-1']])
   })
 
+  it('selects the focused node with Space and deselects it on a second Space', async () => {
+    const wrapper = mountTree({ selectable: true })
+    const row = wrapper.find('[data-dz-tree-row]')
+    await row.trigger('keydown', { key: ' ' })
+    expect(wrapper.emitted('update:selectedKeys')?.at(-1)).toEqual([['root-1']])
+    expect(wrapper.find('[role="treeitem"]').attributes('aria-selected')).toBe('true')
+    await wrapper.find('[data-dz-tree-row]').trigger('keydown', { key: ' ' })
+    expect(wrapper.emitted('update:selectedKeys')?.at(-1)).toEqual([[]])
+    expect(wrapper.find('[role="treeitem"]').attributes('aria-selected')).toBe('false')
+  })
+
+  it('prevents the page scroll default on Space', () => {
+    const wrapper = mountTree({ selectable: true })
+    const event = new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+    wrapper.find('[data-dz-tree-row]').element.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(true)
+  })
+
   it('gives each checkbox an accessible name (aria-toggle-field-name)', () => {
     const wrapper = mountTree({ checkable: true })
     const checkboxes = wrapper.findAll('[role="checkbox"]')
@@ -279,6 +297,47 @@ describe('dzTree — APG roving tabindex & structural semantics', () => {
     expect(wrapper.findAll('[role="treeitem"]')).toHaveLength(0)
     const placeholder = wrapper.find('[role="tree"] > li')
     expect(placeholder.attributes('role')).toBe('none')
+  })
+})
+
+describe('dzTree — selectedKeys ownership', () => {
+  function rootSelected(wrapper: ReturnType<typeof mountTree>): string | undefined {
+    return wrapper.find('[role="treeitem"]').attributes('aria-selected')
+  }
+
+  // The tree's model is `v-model:selectedKeys`, so its write-back event is
+  // `update:selectedKeys` rather than the default `update:modelValue`; the
+  // controlled path is the parent round-trip through that event below.
+  it('controlled: renders the parent value and only moves when the parent writes back', async () => {
+    // A parent binding `v-model:selectedKeys` passes both the prop and its
+    // update listener; this one has not written anything back yet.
+    const updates: string[][] = []
+    const wrapper = mountTree({
+      'selectable': true,
+      'selectedKeys': ['root-2'],
+      'onUpdate:selectedKeys': (keys: string[]) => updates.push(keys),
+    })
+    expect(wrapper.findAll('[role="treeitem"]')[1]!.attributes('aria-selected')).toBe('true')
+    await wrapper.find('[data-dz-tree-row]').trigger('click')
+    expect(updates.at(-1)).toEqual(['root-2', 'root-1'])
+    // The parent has not written the value back, so the tree keeps showing it.
+    expect(rootSelected(wrapper)).toBe('false')
+    await wrapper.setProps({ selectedKeys: ['root-2', 'root-1'] })
+    expect(rootSelected(wrapper)).toBe('true')
+    // A parent replacement wins over local interaction history.
+    await wrapper.setProps({ selectedKeys: [] })
+    expect(rootSelected(wrapper)).toBe('false')
+    expect(wrapper.findAll('[role="treeitem"]')[1]!.attributes('aria-selected')).toBe('false')
+  })
+
+  it('uncontrolled: with no selectedKeys bound the tree owns the selection locally', async () => {
+    const wrapper = mountTree({ selectable: true })
+    expect(rootSelected(wrapper)).toBe('false')
+    await wrapper.find('[data-dz-tree-row]').trigger('click')
+    expect(rootSelected(wrapper)).toBe('true')
+    await wrapper.findAll('[data-dz-tree-row]')[1]!.trigger('click')
+    expect(wrapper.emitted('update:selectedKeys')?.at(-1)).toEqual([['root-1', 'root-2']])
+    expect(wrapper.findAll('[role="treeitem"]')[1]!.attributes('aria-selected')).toBe('true')
   })
 })
 
