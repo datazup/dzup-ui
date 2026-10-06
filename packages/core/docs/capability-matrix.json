@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "ef277eb66cd6eb2cb8cbb411a9e77b0abbd37d9c",
+  "sourceCommit": "d8eff9536cb052898e78f3dc8a001c334c71c07c",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -97,17 +97,17 @@
     "C": {
       "pass": 146,
       "fail": 0,
-      "present": 119,
+      "present": 125,
       "stale": 20,
-      "unrun": 85,
+      "unrun": 79,
       "excepted": 4
     },
     "D": {
       "pass": 7,
       "fail": 0,
-      "present": 11,
+      "present": 12,
       "stale": 1,
-      "unrun": 2,
+      "unrun": 1,
       "excepted": 0
     }
   },
@@ -2104,11 +2104,10 @@
           "kind": "contract-spec",
           "origin": "tier A",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/data/DzCalendar.contract.spec.ts"
-          ],
-          "note": "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing."
+          ]
         },
         {
           "kind": "unit-spec",
@@ -4149,11 +4148,10 @@
           "kind": "contract-spec",
           "origin": "tier A",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/overlays/DzCommandPalette.contract.spec.ts"
-          ],
-          "note": "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing."
+          ]
         },
         {
           "kind": "unit-spec",
@@ -6807,11 +6805,10 @@
           "kind": "contract-spec",
           "origin": "tier A",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/forms/DzFileUpload.contract.spec.ts"
-          ],
-          "note": "The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing."
+          ]
         },
         {
           "kind": "unit-spec",
@@ -9676,11 +9673,10 @@
           "kind": "contract-spec",
           "origin": "tier A",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/navigation/DzMegaMenu.contract.spec.ts"
-          ],
-          "note": "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing."
+          ]
         },
         {
           "kind": "unit-spec",
@@ -14461,11 +14457,10 @@
           "kind": "contract-spec",
           "origin": "tier A",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/navigation/DzSidebar.contract.spec.ts"
-          ],
-          "note": "The contract spec exists and does not touch `events`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing."
+          ]
         },
         {
           "kind": "unit-spec",
@@ -18236,11 +18231,10 @@
           "kind": "contract-spec",
           "origin": "tier A",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/overlays/DzTour.contract.spec.ts"
-          ],
-          "note": "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing."
+          ]
         },
         {
           "kind": "unit-spec",
@@ -18952,11 +18946,10 @@
           "kind": "contract-spec",
           "origin": "tier A",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/forms/DzTreeSelect.contract.spec.ts"
-          ],
-          "note": "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing."
+          ]
         },
         {
           "kind": "unit-spec",

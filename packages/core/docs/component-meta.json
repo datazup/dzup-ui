@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "ef277eb66cd6eb2cb8cbb411a9e77b0abbd37d9c",
+  "sourceCommit": "d8eff9536cb052898e78f3dc8a001c334c71c07c",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -5452,14 +5452,13 @@
         "traits": [],
         "cells": {
           "pass": 7,
-          "present": 3,
+          "present": 4,
           "stale": 1,
-          "unrun": 5
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -11284,14 +11283,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 3,
+          "present": 4,
           "stale": 1,
-          "unrun": 7
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec",
@@ -19309,13 +19307,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 11,
+          "present": 12,
           "stale": 1,
-          "unrun": 2
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "contract-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -27389,13 +27386,12 @@
         "cells": {
           "excepted": 1,
           "pass": 7,
-          "present": 7,
+          "present": 8,
           "stale": 1,
-          "unrun": 4
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "contract-spec",
           "data-scenarios",
           "keyboard-spec"
         ],
@@ -40466,14 +40462,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 7,
+          "present": 8,
           "stale": 1,
-          "unrun": 6
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec"
@@ -51322,14 +51317,13 @@
         "cells": {
           "excepted": 1,
           "pass": 6,
-          "present": 4,
+          "present": 5,
           "stale": 1,
-          "unrun": 6
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec"
@@ -53105,14 +53099,13 @@
         "cells": {
           "excepted": 1,
           "pass": 6,
-          "present": 3,
+          "present": 4,
           "stale": 1,
-          "unrun": 7
+          "unrun": 6
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec",

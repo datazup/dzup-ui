@@ -46,8 +46,8 @@ The inputs that carry a recorded caveat:
 | --- | --- | --- | --- | --- | --- |
 | `A` | 106 | 150 | 0 | 4 | 90 |
 | `B` | 300 | 264 | 0 | 66 | 287 |
-| `C` | 146 | 119 | 20 | 4 | 85 |
-| `D` | 7 | 11 | 1 | 0 | 2 |
+| `C` | 146 | 125 | 20 | 4 | 79 |
+| `D` | 7 | 12 | 1 | 0 | 1 |
 
 ## By kind of evidence
 
@@ -55,7 +55,7 @@ Each kind, what puts it on a component, and how the cells resolved.
 
 | Evidence | Required by | Rows | pass | present | stale | excepted | unrun |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `contract-spec` | tier A | 144 | 0 | 76 | 0 | 0 | 68 |
+| `contract-spec` | tier A | 144 | 0 | 83 | 0 | 0 | 61 |
 | `unit-spec` | tier A | 144 | 0 | 127 | 0 | 0 | 17 |
 | `axe` | tier A | 144 | 0 | 63 | 0 | 3 | 78 |
 | `story-light-dark` | tier A | 144 | 142 | 0 | 0 | 1 | 1 |
@@ -81,8 +81,8 @@ Each kind, what puts it on a component, and how the cells resolved.
 
 ## The 14 kinds with an unmeasured or stale cell, named
 
-::: details `contract-spec` — 68 unrun, 0 stale
-**unrun (68):** `DzAccordion`, `DzAffix`, `DzAnchor`, `DzAnimatedNumber`, `DzAppShell`, `DzAvatar`, `DzBlockUI`, `DzCalendar`, `DzCarousel`, `DzCheckbox`, `DzCheckboxGroup`, `DzCodeBlock`, `DzCollapse`, `DzColorModeToggle`, `DzCommandPalette`, `DzCopyButton`, `DzCountdown`, `DzDeferredContent`, `DzDescriptions`, `DzEmpty`, `DzFab`, `DzFileUpload`, `DzImage`, `DzImageComparison`, `DzInfiniteScroll`, `DzKbd`, `DzKnob`, `DzLightbox`, `DzList`, `DzListbox`, `DzMegaMenu`, `DzMeterGroup`, `DzNotification`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzProgress`, `DzQRCode`, `DzRadio`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzRelativeTime`, `DzResizable`, `DzResult`, `DzRunStatusBadge`, `DzScrollArea`, `DzScrollProgress`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSidebar`, `DzSlider`, `DzSpeedDial`, `DzSplitter`, `DzStepper`, `DzStepperItem`, `DzSwitch`, `DzTag`, `DzTagsInput`, `DzTimelineItem`, `DzToast`, `DzTokenProgressBar`, `DzTour`, `DzTreeSelect`, `GovernanceBadge`, `TeamMemberBadge`
+::: details `contract-spec` — 61 unrun, 0 stale
+**unrun (61):** `DzAccordion`, `DzAffix`, `DzAnchor`, `DzAnimatedNumber`, `DzAppShell`, `DzAvatar`, `DzBlockUI`, `DzCarousel`, `DzCheckbox`, `DzCheckboxGroup`, `DzCodeBlock`, `DzCollapse`, `DzColorModeToggle`, `DzCopyButton`, `DzCountdown`, `DzDeferredContent`, `DzDescriptions`, `DzEmpty`, `DzFab`, `DzImage`, `DzImageComparison`, `DzInfiniteScroll`, `DzKbd`, `DzKnob`, `DzLightbox`, `DzList`, `DzListbox`, `DzMeterGroup`, `DzNotification`, `DzOtpInput`, `DzPagination`, `DzPanel`, `DzPasswordInput`, `DzProgress`, `DzQRCode`, `DzRadio`, `DzRadioGroup`, `DzRangeSlider`, `DzRating`, `DzRelativeTime`, `DzResizable`, `DzResult`, `DzRunStatusBadge`, `DzScrollArea`, `DzScrollProgress`, `DzSearchInput`, `DzSegmented`, `DzSelect`, `DzSlider`, `DzSpeedDial`, `DzSplitter`, `DzStepper`, `DzStepperItem`, `DzSwitch`, `DzTag`, `DzTagsInput`, `DzTimelineItem`, `DzToast`, `DzTokenProgressBar`, `GovernanceBadge`, `TeamMemberBadge`
 
 :::
 
@@ -174,7 +174,7 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzBreadcrumb](/components/DzBreadcrumb#accessibility-and-evidence) | navigation | `B` | [`breadcrumb`](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/) | `url` | 17 | **`keyboard-spec`, `data-scenarios`, `at-manual`** | — |
 | [DzButton](/components/DzButton#accessibility-and-evidence) | buttons | `B` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | `url` | 16 | **`keyboard-spec`, `at-manual`** | — |
 | [DzButtonGroup](/components/DzButtonGroup#accessibility-and-evidence) | buttons | `A` | `none` | `none` | 6 | **`axe`** | — |
-| [DzCalendar](/components/DzCalendar#accessibility-and-evidence) | data | `C` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | `none` | 16 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | `perf-baseline` |
+| [DzCalendar](/components/DzCalendar#accessibility-and-evidence) | data | `C` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | `none` | 16 | **`axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | `perf-baseline` |
 | [DzCaption](/components/DzCaption#accessibility-and-evidence) | typography | `A` | `none` | `none` | 6 | — | — |
 | [DzCard](/components/DzCard#accessibility-and-evidence) | cards | `B` | `custom` | `none` | 13 | **`at-manual`** | — |
 | [DzCarousel](/components/DzCarousel#accessibility-and-evidence) | media | `B` | [`carousel`](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/) | `none` | 14 | **`contract-spec`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | — |
@@ -188,7 +188,7 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzColorModeToggle](/components/DzColorModeToggle#accessibility-and-evidence) | navigation | `B` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | `none` | 13 | **`contract-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `at-manual`** | — |
 | [DzColorPicker](/components/DzColorPicker#accessibility-and-evidence) | forms | `C` | `custom` | `none` | 17 | **`axe`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | `perf-baseline` |
 | [DzCombobox](/components/DzCombobox#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | `perf-baseline` |
-| [DzCommandPalette](/components/DzCommandPalette#accessibility-and-evidence) | overlays | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`** | `perf-baseline` |
+| [DzCommandPalette](/components/DzCommandPalette#accessibility-and-evidence) | overlays | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`axe`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`** | `perf-baseline` |
 | [DzConfirmDialog](/components/DzConfirmDialog#accessibility-and-evidence) | overlays | `B` | [`alertdialog`](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) | `none` | 14 | **`axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | — |
 | [DzContainer](/components/DzContainer#accessibility-and-evidence) | layout | `A` | `none` | `none` | 6 | — | — |
 | [DzContextMenu](/components/DzContextMenu#accessibility-and-evidence) | overlays | `B` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) | `none` | 14 | **`keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | — |
@@ -208,7 +208,7 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzErrorBoundary](/components/DzErrorBoundary#accessibility-and-evidence) | feedback | `A` | `none` | `none` | 6 | **`axe`, `ssr-sample`** | — |
 | [DzFab](/components/DzFab#accessibility-and-evidence) | buttons | `B` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | `none` | 13 | **`contract-spec`, `unit-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `at-manual`** | — |
 | [DzFieldArray](/components/DzFieldArray#accessibility-and-evidence) | forms | `B` | `custom` | `none` | 14 | **`controlled-uncontrolled`, `data-scenarios`, `at-manual`** | — |
-| [DzFileUpload](/components/DzFileUpload#accessibility-and-evidence) | forms | `D` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | `file` | 21 | **`contract-spec`, `at-manual`** | `perf-baseline` |
+| [DzFileUpload](/components/DzFileUpload#accessibility-and-evidence) | forms | `D` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | `file` | 21 | **`at-manual`** | `perf-baseline` |
 | [DzFlex](/components/DzFlex#accessibility-and-evidence) | layout | `A` | `none` | `none` | 6 | — | — |
 | [DzFloatLabel](/components/DzFloatLabel#accessibility-and-evidence) | forms | `A` | `none` | `none` | 6 | **`axe`** | — |
 | [DzFormField](/components/DzFormField#accessibility-and-evidence) | forms | `A` | `none` | `none` | 6 | — | — |
@@ -231,7 +231,7 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzListbox](/components/DzListbox#accessibility-and-evidence) | forms | `B` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) | `none` | 14 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | — |
 | [DzListItem](/components/DzListItem#accessibility-and-evidence) | data | `B` | `custom` | `none` | 13 | **`at-manual`** | — |
 | [DzMasonry](/components/DzMasonry#accessibility-and-evidence) | layout | `A` | `none` | `none` | 6 | **`axe`, `ssr-sample`** | — |
-| [DzMegaMenu](/components/DzMegaMenu#accessibility-and-evidence) | navigation | `C` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | `url` | 20 | **`contract-spec`, `keyboard-spec`, `data-scenarios`, `at-manual`** | `perf-baseline` |
+| [DzMegaMenu](/components/DzMegaMenu#accessibility-and-evidence) | navigation | `C` | [`menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) | `url` | 20 | **`keyboard-spec`, `data-scenarios`, `at-manual`** | `perf-baseline` |
 | [DzMention](/components/DzMention#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 17 | **`axe`, `data-scenarios`, `at-manual`** | `perf-baseline` |
 | [DzMenu](/components/DzMenu#accessibility-and-evidence) | navigation | `B` | [`menu`](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) | `url` | 17 | **`ssr-sample`, `keyboard-spec`, `data-scenarios`, `at-manual`** | — |
 | [DzMeterGroup](/components/DzMeterGroup#accessibility-and-evidence) | feedback | `A` | [`meter`](https://www.w3.org/WAI/ARIA/apg/patterns/meter/) | `none` | 6 | **`contract-spec`, `axe`, `ssr-sample`** | — |
@@ -264,7 +264,7 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzSegmented](/components/DzSegmented#accessibility-and-evidence) | navigation | `B` | [`radio-group`](https://www.w3.org/WAI/ARIA/apg/patterns/radio-group/) | `none` | 13 | **`contract-spec`, `unit-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | — |
 | [DzSelect](/components/DzSelect#accessibility-and-evidence) | forms | `B` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 15 | **`contract-spec`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`** | — |
 | [DzSheet](/components/DzSheet#accessibility-and-evidence) | overlays | `B` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) | `none` | 14 | **`unit-spec`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | — |
-| [DzSidebar](/components/DzSidebar#accessibility-and-evidence) | navigation | `C` | [`landmarks`](https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/) | `url` | 21 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | `perf-baseline` |
+| [DzSidebar](/components/DzSidebar#accessibility-and-evidence) | navigation | `C` | [`landmarks`](https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/) | `url` | 21 | **`axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | `perf-baseline` |
 | [DzSkeleton](/components/DzSkeleton#accessibility-and-evidence) | feedback | `A` | `none` | `none` | 6 | **`axe`** | — |
 | [DzSlider](/components/DzSlider#accessibility-and-evidence) | forms | `B` | [`slider`](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) | `none` | 14 | **`contract-spec`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`, `non-drag-alternative`** | — |
 | [DzSpacer](/components/DzSpacer#accessibility-and-evidence) | layout | `A` | `none` | `none` | 6 | **`axe`** | — |
@@ -292,11 +292,11 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzTokenProgressBar](/components/DzTokenProgressBar#accessibility-and-evidence) | feedback | `A` | `none` | `none` | 6 | **`contract-spec`, `axe`, `ssr-sample`** | — |
 | [DzToolbar](/components/DzToolbar#accessibility-and-evidence) | layout | `B` | [`toolbar`](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) | `none` | 13 | **`axe`, `at-manual`** | — |
 | [DzTooltip](/components/DzTooltip#accessibility-and-evidence) | overlays | `B` | [`tooltip`](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) | `none` | 14 | **`unit-spec`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | — |
-| [DzTour](/components/DzTour#accessibility-and-evidence) | overlays | `C` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) | `none` | 18 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | `perf-baseline` |
+| [DzTour](/components/DzTour#accessibility-and-evidence) | overlays | `C` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) | `none` | 18 | **`axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`** | `perf-baseline` |
 | [DzTransfer](/components/DzTransfer#accessibility-and-evidence) | forms | `C` | [`listbox`](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) | `none` | 17 | **`at-manual`** | `perf-baseline` |
 | [DzTree](/components/DzTree#accessibility-and-evidence) | data | `C` | [`treeview`](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) | `none` | 17 | **`at-manual`** | `perf-baseline` |
 | [DzTreeItem](/components/DzTreeItem#accessibility-and-evidence) | data | `B` | [`treeview`](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) | `none` | 13 | **`unit-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `at-manual`** | — |
-| [DzTreeSelect](/components/DzTreeSelect#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`** | `perf-baseline` |
+| [DzTreeSelect](/components/DzTreeSelect#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`axe`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`** | `perf-baseline` |
 | [DzVisuallyHidden](/components/DzVisuallyHidden#accessibility-and-evidence) | typography | `A` | `none` | `none` | 6 | **`axe`, `ssr-sample`** | — |
 | [DzWatermark](/components/DzWatermark#accessibility-and-evidence) | media | `A` | `none` | `none` | 6 | **`axe`, `ssr-sample`** | — |
 | [GovernanceBadge](/components/GovernanceBadge#accessibility-and-evidence) | feedback | `A` | `none` | `none` | 6 | **`contract-spec`, `axe`, `ssr-sample`** | — |
@@ -309,10 +309,10 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/capability-matrix.json` | `150807ad989a8073…` | yes |
-| `packages/core/docs/quality-matrix.json` | `4d7f5e7b94da8f9c…` | yes |
+| `packages/core/docs/capability-matrix.json` | `2e9f71cddf3809a7…` | yes |
+| `packages/core/docs/quality-matrix.json` | `ae3113fd7f51a7a4…` | yes |
 
-Capability matrix `sourceCommit` `ef277eb6` · quality matrix `ef277eb6`.
+Capability matrix `sourceCommit` `d8eff953` · quality matrix `d8eff953`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

@@ -89,23 +89,23 @@ export const CAPABILITY_TOTALS = {
   "C": {
     "pass": 146,
     "fail": 0,
-    "present": 119,
+    "present": 125,
     "stale": 20,
-    "unrun": 85,
+    "unrun": 79,
     "excepted": 4
   },
   "D": {
     "pass": 7,
     "fail": 0,
-    "present": 11,
+    "present": 12,
     "stale": 1,
-    "unrun": 2,
+    "unrun": 1,
     "excepted": 0
   }
 } as const
 
 /** Repository HEAD the evidence was collected at. */
-export const CAPABILITY_SOURCE_COMMIT = "ef277eb66cd6eb2cb8cbb411a9e77b0abbd37d9c"
+export const CAPABILITY_SOURCE_COMMIT = "d8eff9536cb052898e78f3dc8a001c334c71c07c"
 
 export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
   {
@@ -485,7 +485,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/data/DzCalendar.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `data` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCalendar.contract.spec.ts"], note: "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCalendar.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/data/DzCalendar.spec.ts"] },
     { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/data/DzCalendar.stories.ts"] },
@@ -832,7 +832,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/overlays/DzCommandPalette.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzCommandPalette.contract.spec.ts"], note: "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzCommandPalette.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzCommandPalette.spec.ts"] },
     { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/overlays/DzCommandPalette.stories.ts"] },
@@ -1302,7 +1302,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzFileUpload.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFileUpload.contract.spec.ts"], note: "The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFileUpload.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzFileUpload.spec.ts"] },
     { kind: "axe", state: "present", origin: "tier A", artifacts: ["packages/core/tests/a11y/forms.a11y.spec.ts"] },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzFileUpload.stories.ts"] },
@@ -1819,7 +1819,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/navigation/DzMegaMenu.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzMegaMenu.contract.spec.ts"], note: "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzMegaMenu.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzMegaMenu.spec.ts"] },
     { kind: "axe", state: "present", origin: "tier A", artifacts: ["packages/core/tests/a11y/navigation.a11y.spec.ts"] },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/navigation/DzMegaMenu.stories.ts"] },
@@ -2632,7 +2632,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/navigation/DzSidebar.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `navigation` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzSidebar.contract.spec.ts"], note: "The contract spec exists and does not touch `events`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzSidebar.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/navigation/DzSidebar.spec.ts"] },
     { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/navigation/DzSidebar.stories.ts"] },
@@ -3293,7 +3293,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/overlays/DzTour.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `overlays` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzTour.contract.spec.ts"], note: "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzTour.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/overlays/DzTour.spec.ts"] },
     { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/overlays/DzTour.stories.ts"] },
@@ -3406,7 +3406,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzTreeSelect.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTreeSelect.contract.spec.ts"], note: "The contract spec exists and does not touch `events`, `slots` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTreeSelect.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTreeSelect.spec.ts"] },
     { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzTreeSelect.stories.ts"] },
