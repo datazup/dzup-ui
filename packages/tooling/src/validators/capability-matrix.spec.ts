@@ -398,7 +398,9 @@ describe('the evidence ratchet (gate 8, RESIDUAL-17, D-RES16-3)', () => {
     // RESIDUAL-17 took `present` to 611 (portal-hydration +1, ssr-sample +2),
     // RESIDUAL-19 took it to 517 (contract-spec -80, unit-spec -14), and the
     // 2026-10-02 merge took `pass` to 563 (perf-baseline +5).
+    // Declared contract-spec moves: g5 present 526, r6 532, r8 538,
+    // and R9-01 544 (six picker slots/aria cells).
     expect(shipped.evidenceCells.totals.pass).toBe(563)
-    expect(shipped.evidenceCells.totals.present).toBe(517)
+    expect(shipped.evidenceCells.totals.present).toBe(544)
   })
 })
