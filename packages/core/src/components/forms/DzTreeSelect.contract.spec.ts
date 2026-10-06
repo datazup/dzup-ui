@@ -130,6 +130,40 @@ describe('dzTreeSelect — renderer contract C1 value', () => {
   })
 })
 
+describe('dzTreeSelect — Contract Spec v1 events and slots', () => {
+  it('emits open when the trigger opens the panel', async () => {
+    const wrapper = mount(DzTreeSelect, { props: { nodes: mockNodes } })
+    await trigger(wrapper).trigger('keydown', { key: 'ArrowDown' })
+    expect(wrapper.emitted('open')).toEqual([[]])
+    expect(trigger(wrapper).attributes('aria-expanded')).toBe('true')
+  })
+
+  it('emits focus and blur with the native FocusEvent', async () => {
+    const wrapper = mount(DzTreeSelect, { props: { nodes: mockNodes } })
+    await trigger(wrapper).trigger('focus')
+    await trigger(wrapper).trigger('blur')
+    expect(wrapper.emitted('focus')?.[0]?.[0]).toBeInstanceOf(FocusEvent)
+    expect(wrapper.emitted('blur')?.[0]?.[0]).toBeInstanceOf(FocusEvent)
+  })
+
+  it('renders the #value slot with the selected nodes and placeholder in scope', () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes: mockNodes, modelValue: 'apple', placeholder: 'Pick one' },
+      slots: { value: '<template #value="{ selectedNodes, placeholder }"><em class="value-probe">{{ selectedNodes.map(n => n.key).join(\',\') }}|{{ placeholder }}</em></template>' },
+    })
+    expect(trigger(wrapper).get('.value-probe').text()).toBe('apple|Pick one')
+  })
+
+  it('passes an empty selection to the #value slot when nothing is chosen', () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes: mockNodes, placeholder: 'Pick one' },
+      slots: { value: '<template #value="{ selectedNodes }"><em class="value-probe">{{ selectedNodes.length }}</em></template>' },
+    })
+    expect(trigger(wrapper).get('.value-probe').text()).toBe('0')
+    expect(trigger(wrapper).text()).not.toContain('Pick one')
+  })
+})
+
 /**
  * N1-O1 defects **D4** and **D10** — recorded, NOT fixed here.
  *

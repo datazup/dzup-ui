@@ -73,4 +73,38 @@ describe('dzCalendar — Contract Spec v1', () => {
     expect(tabbable).toHaveLength(1)
     expect(tabbable[0]!.attributes('data-iso')).toBe('2026-06-15')
   })
+
+  // ── Events ──
+
+  it('emits panelChange with the new focused date when the month changes', async () => {
+    const wrapper = mount(DzCalendar, { props: { focusedDate: '2026-06-15' } })
+    await wrapper.get('button[aria-label="Next month"]').trigger('click')
+    expect(wrapper.emitted('panelChange')).toEqual([[{ focusedDate: '2026-07-15', view: 'month' }]])
+  })
+
+  it('does not emit panelChange when focus stays in the visible month', async () => {
+    const wrapper = mount(DzCalendar, { props: { focusedDate: '2026-06-15' } })
+    await wrapper.get('button[data-iso="2026-06-15"]').trigger('keydown', { key: 'ArrowDown' })
+    expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2026-06-22'])
+    expect(wrapper.emitted('panelChange')).toBeUndefined()
+  })
+
+  // ── Slots ──
+
+  it('renders the #day slot with its scope in place of the day number', () => {
+    const wrapper = mount(DzCalendar, {
+      props: { focusedDate: '2026-06-15', value: '2026-06-10' },
+      slots: {
+        day: `<template #day="{ date, isSelected, isOutsideMonth }">
+          <span class="day-probe" :data-day="date.getDate()" :data-selected="String(isSelected)" :data-outside="String(isOutsideMonth)">*</span>
+        </template>`,
+      },
+    })
+    expect(wrapper.findAll('.day-probe')).toHaveLength(42)
+    const selected = wrapper.get('button[data-iso="2026-06-10"] .day-probe')
+    expect(selected.attributes('data-day')).toBe('10')
+    expect(selected.attributes('data-selected')).toBe('true')
+    expect(selected.attributes('data-outside')).toBe('false')
+    expect(wrapper.get('button[data-iso="2026-06-15"]').text()).toBe('*')
+  })
 })

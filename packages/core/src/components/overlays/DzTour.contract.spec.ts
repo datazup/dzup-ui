@@ -112,4 +112,58 @@ describe('dzTour -- Contract Spec v1', () => {
     const title = document.getElementById(labelledby as string)
     expect(title?.textContent).toContain('Step A')
   })
+
+  // ── Events ──
+
+  function click(testId: string): void {
+    document.body.querySelector<HTMLElement>(`[data-testid="${testId}"]`)!.click()
+  }
+
+  it('emits change on Next, then finish and update:open on the last step', async () => {
+    const wrapper = mount(DzTour, { props: { steps: makeSteps(), open: true }, attachTo: document.body })
+    click('dz-tour-next')
+    await flushPromises()
+    expect(wrapper.emitted('change')).toEqual([[1]])
+    expect(wrapper.emitted('update:current')).toEqual([[1]])
+    click('dz-tour-next')
+    await flushPromises()
+    expect(wrapper.emitted('finish')).toEqual([[]])
+    expect(wrapper.emitted('update:open')).toEqual([[false]])
+    expect(wrapper.emitted('close')).toBeUndefined()
+  })
+
+  it('emits close (not finish) on Skip', async () => {
+    const wrapper = mount(DzTour, { props: { steps: makeSteps(), open: true }, attachTo: document.body })
+    click('dz-tour-skip')
+    await flushPromises()
+    expect(wrapper.emitted('close')).toEqual([[]])
+    expect(wrapper.emitted('finish')).toBeUndefined()
+    expect(wrapper.emitted('update:open')).toEqual([[false]])
+  })
+
+  // ── Slots ──
+
+  it('renders the default slot with the step scope in place of the title', () => {
+    mount(DzTour, {
+      props: { steps: makeSteps(), open: true },
+      slots: { default: '<template #default="{ step, current, total, isFirst, isLast }"><p class="body-probe">{{ step.title }} {{ current + 1 }}/{{ total }} {{ isFirst }} {{ isLast }}</p></template>' },
+      attachTo: document.body,
+    })
+    const panel = document.body.querySelector('[data-testid="dz-tour-panel"]')!
+    expect(panel.querySelector('.body-probe')?.textContent).toBe('Step A 1/2 true false')
+    expect(panel.querySelector('[data-part="title"]')).toBeNull()
+  })
+
+  it('replaces the controls through the #footer slot, whose next() advances', async () => {
+    const wrapper = mount(DzTour, {
+      props: { steps: makeSteps(), open: true },
+      slots: { footer: '<template #footer="{ next, current }"><button class="footer-probe" @click="next">go {{ current }}</button></template>' },
+      attachTo: document.body,
+    })
+    expect(document.body.querySelector('[data-testid="dz-tour-next"]')).toBeNull()
+    document.body.querySelector<HTMLElement>('.footer-probe')!.click()
+    await flushPromises()
+    expect(wrapper.emitted('change')).toEqual([[1]])
+    expect(document.body.querySelector('.footer-probe')?.textContent).toBe('go 1')
+  })
 })

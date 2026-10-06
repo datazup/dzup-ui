@@ -25,6 +25,61 @@ describe('dzFileUpload — Contract Spec v1', () => {
     const wrapper = mount(DzFileUpload, { attrs: { class: 'custom-class' } })
     expect(wrapper.html()).toContain('custom-class')
   })
+
+  // ── ARIA ──
+
+  it('exposes the dropzone as a labelled, focusable button', () => {
+    const wrapper = mount(DzFileUpload)
+    const zone = wrapper.get('[role="button"]')
+    expect(zone.attributes('aria-label')).toBe('Upload files')
+    expect(zone.attributes('tabindex')).toBe('0')
+    expect(zone.attributes('aria-invalid')).toBeUndefined()
+    expect(zone.attributes('aria-disabled')).toBeUndefined()
+  })
+
+  it('links an error as an alert through aria-describedby and aria-invalid', () => {
+    const wrapper = mount(DzFileUpload, { props: { error: 'File too large' } })
+    const zone = wrapper.get('[role="button"]')
+    const alert = wrapper.get('[role="alert"]')
+    expect(alert.text()).toBe('File too large')
+    expect(zone.attributes('aria-invalid')).toBe('true')
+    expect(zone.attributes('aria-describedby')?.split(' ')).toContain(alert.attributes('id'))
+  })
+
+  it('marks a disabled dropzone aria-disabled and removes it from the tab order', () => {
+    const wrapper = mount(DzFileUpload, { props: { disabled: true, ariaLabel: 'Attach receipts' } })
+    const zone = wrapper.get('[role="button"]')
+    expect(zone.attributes('aria-label')).toBe('Attach receipts')
+    expect(zone.attributes('aria-disabled')).toBe('true')
+    expect(zone.attributes('tabindex')).toBe('-1')
+  })
+
+  // ── Slots ──
+
+  it('renders the default slot with isDragOver in scope', async () => {
+    const wrapper = mount(DzFileUpload, {
+      slots: { default: '<template #default="{ isDragOver }"><span class="zone-probe">{{ isDragOver ? \'drop now\' : \'idle\' }}</span></template>' },
+    })
+    expect(wrapper.get('.zone-probe').text()).toBe('idle')
+    expect(wrapper.text()).not.toContain('Drop files here')
+    await wrapper.get('[role="button"]').trigger('dragover')
+    expect(wrapper.get('.zone-probe').text()).toBe('drop now')
+  })
+
+  it('renders the #file-item slot with the row and a working remove()', async () => {
+    const file = new File(['hello'], 'notes.txt', { type: 'text/plain' })
+    const wrapper = mount(DzFileUpload, {
+      props: { modelValue: [file] },
+      slots: {
+        'file-item': '<template #file-item="{ row, remove }"><button class="row-probe" @click="remove">{{ row.name }}:{{ row.status }}</button></template>',
+      },
+    })
+    const row = wrapper.get('.row-probe')
+    expect(row.text()).toBe('notes.txt:uploaded')
+    await row.trigger('click')
+    expect(wrapper.emitted('remove')?.at(-1)).toEqual([file])
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
+  })
 })
 
 describe('dzFileUpload — renderer contract C1 value (reference mode)', () => {

@@ -67,6 +67,48 @@ describe('dzSidebar — Contract Spec v1', () => {
     const wrapper = mount(DzSidebar)
     expect(wrapper.html()).toContain('[contain:layout_style]')
   })
+
+  // ── ARIA ──
+
+  it('is a navigation landmark with the default accessible name', () => {
+    const wrapper = mount(DzSidebar, { props: { isMobile: false } })
+    const nav = wrapper.get('[role="navigation"]')
+    expect(nav.attributes('aria-label')).toBe('Sidebar navigation')
+    expect(nav.attributes('aria-hidden')).toBeUndefined()
+  })
+
+  it('hides a closed mobile drawer from the accessibility tree', async () => {
+    const wrapper = mount(DzSidebar, { props: { isMobile: true, mobileOpen: false } })
+    const nav = wrapper.get('[role="navigation"]')
+    expect(nav.attributes('aria-hidden')).toBe('true')
+    expect(nav.attributes('inert')).toBeDefined()
+    await wrapper.setProps({ mobileOpen: true })
+    expect(wrapper.get('[role="navigation"]').attributes('aria-hidden')).toBeUndefined()
+  })
+
+  // ── Events ──
+
+  it('emits update:mobileOpen false when the mobile overlay is clicked', async () => {
+    const wrapper = mount(DzSidebar, {
+      props: { isMobile: true, mobileOpen: true },
+      global: { stubs: { teleport: true } },
+    })
+    await wrapper.get('[data-part="overlay"]').trigger('click')
+    expect(wrapper.emitted('update:mobileOpen')).toEqual([[false]])
+  })
+
+  it('emits update:collapsed with the value restored from storageKey', async () => {
+    window.localStorage.setItem('dz-sidebar-contract', '1')
+    try {
+      const wrapper = mount(DzSidebar, { props: { storageKey: 'dz-sidebar-contract', isMobile: false } })
+      await wrapper.vm.$nextTick()
+      expect(wrapper.emitted('update:collapsed')).toEqual([[true]])
+      expect(wrapper.get('[role="navigation"]').attributes('data-state')).toBe('collapsed')
+    }
+    finally {
+      window.localStorage.removeItem('dz-sidebar-contract')
+    }
+  })
 })
 
 // ---------------------------------------------------------------------------
