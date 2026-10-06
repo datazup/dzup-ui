@@ -1,8 +1,8 @@
-import { mount } from '@vue/test-utils'
 /**
  * DzDateRangePicker — Contract Spec v1 conformance tests.
  */
 import type { DateRangeValue } from './DzDateRangePicker.types.ts'
+import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 import DzDateRangePicker from './DzDateRangePicker.vue'
