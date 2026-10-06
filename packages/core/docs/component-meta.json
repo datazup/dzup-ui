@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "3ee52a87a13ebbaac248c20e09b28f584e29d4ef",
+  "sourceCommit": "de0dda04c9f441f56df096db0cde6ed1e329ce4c",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -13669,14 +13669,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 6,
           "stale": 1,
-          "unrun": 5
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "portal-hydration"
         ],
@@ -14415,14 +14414,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 5,
           "stale": 1,
-          "unrun": 5
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
@@ -27801,14 +27799,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 6,
           "stale": 1,
-          "unrun": 4
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "data-scenarios"
         ],
         "stale": [
@@ -30688,14 +30685,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 6,
+          "present": 7,
           "stale": 1,
-          "unrun": 4
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "data-scenarios"
         ],
         "stale": [
@@ -32978,13 +32974,12 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 7,
-          "unrun": 6
+          "present": 8,
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec",
           "portal-hydration"
@@ -52297,13 +52292,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 7,
+          "present": 8,
           "stale": 1,
-          "unrun": 2
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "contract-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
