@@ -186,7 +186,7 @@ const { testId: dzTestId } = useDzTestIds()
               :style="{ backgroundColor: model }"
               aria-hidden="true"
             />
-            <span data-part="label" :class="[styles.valueText(), ui?.label]">{{ model }}</span>
+            <span data-part="label" :class="[styles.valueText(), ui?.label]"><slot name="label">{{ model }}</slot></span>
           </slot>
         </button>
       </PopoverTrigger>

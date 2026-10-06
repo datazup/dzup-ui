@@ -273,7 +273,9 @@ const { testId: dzTestId } = useDzTestIds()
             :class="[ui?.trigger]"
             :aria-label="ariaLabel ?? 'Open date picker'"
           >
-            <CalendarIcon data-part="icon" :class="[styles.icon(), ui?.icon]" aria-hidden="true" />
+            <slot name="trigger" :value="model || undefined" :placeholder="props.placeholder">
+              <CalendarIcon data-part="icon" :class="[styles.icon(), ui?.icon]" aria-hidden="true" />
+            </slot>
           </DatePickerTrigger>
         </DatePickerField>
       </DatePickerAnchor>
