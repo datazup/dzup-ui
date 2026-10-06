@@ -46,7 +46,7 @@ The inputs that carry a recorded caveat:
 | --- | --- | --- | --- | --- | --- |
 | `A` | 106 | 150 | 0 | 4 | 90 |
 | `B` | 300 | 264 | 0 | 66 | 287 |
-| `C` | 143 | 119 | 23 | 4 | 85 |
+| `C` | 146 | 119 | 20 | 4 | 85 |
 | `D` | 7 | 11 | 1 | 0 | 2 |
 
 ## By kind of evidence
@@ -66,7 +66,7 @@ Each kind, what puts it on a component, and how the cells resolved.
 | `controlled-uncontrolled` | tier B | 89 | 0 | 6 | 0 | 27 | 56 |
 | `browser-play` | tier B | 89 | 86 | 0 | 0 | 2 | 1 |
 | `rtl-contract` | tier B | 89 | 0 | 89 | 0 | 0 | 0 |
-| `browser-matrix` | tier B | 89 | 85 | 0 | 3 | 0 | 1 |
+| `browser-matrix` | tier B | 89 | 88 | 0 | 0 | 0 | 1 |
 | `at-manual` | tier B | 89 | 0 | 0 | 0 | 0 | 89 |
 | `data-scenarios` | trait dataset | 30 | 0 | 10 | 0 | 0 | 20 |
 | `threat-model` | boundary url | 15 | 0 | 15 | 0 | 0 | 0 |
@@ -121,10 +121,8 @@ Each kind, what puts it on a component, and how the cells resolved.
 
 :::
 
-::: details `browser-matrix` — 1 unrun, 3 stale
+::: details `browser-matrix` — 1 unrun, 0 stale
 **unrun (1):** `DzThemeProvider`
-
-**stale (3):** `DzColorPicker`, `DzDatePicker`, `DzDateRangePicker`
 
 :::
 
@@ -188,7 +186,7 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzCodeBlock](/components/DzCodeBlock#accessibility-and-evidence) | data | `A` | `none` | `none` | 6 | **`contract-spec`, `axe`, `ssr-sample`** | — |
 | [DzCollapse](/components/DzCollapse#accessibility-and-evidence) | layout | `B` | [`disclosure`](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) | `none` | 13 | **`contract-spec`, `ssr-sample`, `controlled-uncontrolled`, `at-manual`** | — |
 | [DzColorModeToggle](/components/DzColorModeToggle#accessibility-and-evidence) | navigation | `B` | [`button`](https://www.w3.org/WAI/ARIA/apg/patterns/button/) | `none` | 13 | **`contract-spec`, `axe`, `ssr-sample`, `keyboard-spec`, `at-manual`** | — |
-| [DzColorPicker](/components/DzColorPicker#accessibility-and-evidence) | forms | `C` | `custom` | `none` | 17 | **`axe`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | `browser-matrix`, `perf-baseline` |
+| [DzColorPicker](/components/DzColorPicker#accessibility-and-evidence) | forms | `C` | `custom` | `none` | 17 | **`axe`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | `perf-baseline` |
 | [DzCombobox](/components/DzCombobox#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | `perf-baseline` |
 | [DzCommandPalette](/components/DzCommandPalette#accessibility-and-evidence) | overlays | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 18 | **`contract-spec`, `axe`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `data-scenarios`, `at-manual`** | `perf-baseline` |
 | [DzConfirmDialog](/components/DzConfirmDialog#accessibility-and-evidence) | overlays | `B` | [`alertdialog`](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) | `none` | 14 | **`axe`, `ssr-sample`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | — |
@@ -198,8 +196,8 @@ All 144 rows. Follow a component to see its cells with their artifacts and notes
 | [DzCountdown](/components/DzCountdown#accessibility-and-evidence) | data | `A` | `none` | `none` | 6 | **`contract-spec`, `axe`, `ssr-sample`** | — |
 | [DzDataGrid](/components/DzDataGrid#accessibility-and-evidence) | data | `C` | [`grid`](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) | `none` | 18 | **`axe`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | `perf-baseline` |
 | [DzDataView](/components/DzDataView#accessibility-and-evidence) | data | `C` | `custom` | `none` | 17 | **`axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | `perf-baseline` |
-| [DzDatePicker](/components/DzDatePicker#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 16 | **`keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | `browser-matrix`, `perf-baseline` |
-| [DzDateRangePicker](/components/DzDateRangePicker#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 16 | **`axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | `browser-matrix`, `perf-baseline` |
+| [DzDatePicker](/components/DzDatePicker#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 16 | **`keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | `perf-baseline` |
+| [DzDateRangePicker](/components/DzDateRangePicker#accessibility-and-evidence) | forms | `C` | [`combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) | `none` | 16 | **`axe`, `keyboard-spec`, `controlled-uncontrolled`, `at-manual`** | `perf-baseline` |
 | [DzDeferredContent](/components/DzDeferredContent#accessibility-and-evidence) | layout | `A` | `none` | `none` | 6 | **`contract-spec`, `axe`, `ssr-sample`** | — |
 | [DzDescriptions](/components/DzDescriptions#accessibility-and-evidence) | data | `A` | `none` | `none` | 7 | **`contract-spec`, `axe`, `ssr-sample`, `data-scenarios`** | — |
 | [DzDialog](/components/DzDialog#accessibility-and-evidence) | overlays | `B` | [`dialog`](https://www.w3.org/WAI/ARIA/apg/patterns/dialog/) | `none` | 14 | **`unit-spec`, `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`** | — |
@@ -311,10 +309,10 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/capability-matrix.json` | `4799ad7a5b8adb52…` | yes |
-| `packages/core/docs/quality-matrix.json` | `201e35948f0846fa…` | yes |
+| `packages/core/docs/capability-matrix.json` | `150807ad989a8073…` | yes |
+| `packages/core/docs/quality-matrix.json` | `4d7f5e7b94da8f9c…` | yes |
 
-Capability matrix `sourceCommit` `f4d61c24` · quality matrix `f4d61c24`.
+Capability matrix `sourceCommit` `ef277eb6` · quality matrix `ef277eb6`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

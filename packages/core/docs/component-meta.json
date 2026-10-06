@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
+  "sourceCommit": "ef277eb66cd6eb2cb8cbb411a9e77b0abbd37d9c",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -10036,9 +10036,9 @@
           "teleports"
         ],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 5,
-          "stale": 2,
+          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -10048,7 +10048,6 @@
           "portal-hydration"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -15004,9 +15003,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 5,
-          "stale": 2,
+          "stale": 1,
           "unrun": 3
         },
         "unrun": [
@@ -15015,7 +15014,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -15558,9 +15556,9 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 6,
+          "pass": 7,
           "present": 4,
-          "stale": 2,
+          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -15570,7 +15568,6 @@
           "keyboard-spec"
         ],
         "stale": [
-          "browser-matrix",
           "perf-baseline"
         ]
       },
