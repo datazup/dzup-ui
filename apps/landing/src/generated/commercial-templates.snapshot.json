@@ -3,6 +3,568 @@
   "showroomUrl": "https://dzup-templates-showroom.staging.dziphost.com",
   "templates": [
     {
+      "slug": "about-team-page",
+      "name": "About Team Page",
+      "blurb": "Meet the people behind a repair workspace through team profiles, pilot metrics and partner stories.",
+      "category": "content",
+      "tags": [
+        "content",
+        "profile",
+        "grid",
+        "filters",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzEmpty",
+        "DzHeading",
+        "DzInput",
+        "DzSegmented",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/about-team-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/about-team-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/about-team-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/about-team-page-dark.webp"
+      }
+    },
+    {
+      "slug": "analytics-dashboard-pro",
+      "name": "Analytics Dashboard Pro",
+      "blurb": "A data-heavy analytics dashboard with an interactive chart, a sortable data grid and a pivot table, composed from @dzup-ui-pro/pro.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "data-table",
+        "filters",
+        "responsive"
+      ],
+      "stack": [
+        "DzCard",
+        "DzGrid",
+        "DzStatCard",
+        "DzSegmented",
+        "DzChart",
+        "DzDataGridPro",
+        "DzPivotTable",
+        "DzQuickFilter"
+      ],
+      "tier": "P",
+      "licence": "commercial-pro",
+      "createdAt": "2026-10-06",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/analytics-dashboard-pro",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/analytics-dashboard-pro",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/analytics-dashboard-pro-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/analytics-dashboard-pro-dark.webp"
+      }
+    },
+    {
+      "slug": "analytics-overview-page",
+      "name": "Analytics Overview Page",
+      "blurb": "Review community space bookings, income, goals and recent team activity.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "grid",
+        "timeline",
+        "responsive"
+      ],
+      "stack": [
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzEmpty",
+        "DzHeading",
+        "DzProgress",
+        "DzSegmented",
+        "DzText",
+        "DzTimeline",
+        "DzTimelineItem",
+        "DzVisuallyHidden"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/analytics-overview-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/analytics-overview-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/analytics-overview-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/analytics-overview-page-dark.webp"
+      }
+    },
+    {
+      "slug": "app-shell-workspace-page",
+      "name": "App Shell Workspace Page",
+      "blurb": "Start a new customer workspace in a responsive sidebar and top navigation shell.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "app-shell",
+        "sidebar",
+        "empty-state",
+        "responsive"
+      ],
+      "stack": [
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzDropdownMenu",
+        "DzDropdownMenuContent",
+        "DzDropdownMenuItem",
+        "DzDropdownMenuTrigger",
+        "DzEmpty",
+        "DzHeading",
+        "DzSearchInput",
+        "DzSheet",
+        "DzSheetContent",
+        "DzSheetDescription",
+        "DzSheetTitle",
+        "DzSheetTrigger",
+        "DzText",
+        "DzTooltip",
+        "DzTooltipContent",
+        "DzTooltipTrigger"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/app-shell-workspace-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/app-shell-workspace-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/app-shell-workspace-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/app-shell-workspace-page-dark.webp"
+      }
+    },
+    {
+      "slug": "billing-subscription-page",
+      "name": "Billing Subscription Page",
+      "blurb": "Review a current plan, usage limits, payment method and recent invoices.",
+      "category": "commerce",
+      "tags": [
+        "commerce",
+        "billing",
+        "pricing",
+        "responsive"
+      ],
+      "stack": [
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzHeading",
+        "DzProgress",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/billing-subscription-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/billing-subscription-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/billing-subscription-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/billing-subscription-page-dark.webp"
+      }
+    },
+    {
+      "slug": "blog-article-page",
+      "name": "Blog Article Page",
+      "blurb": "Read a field story, meet its author, join the discussion and find related work.",
+      "category": "content",
+      "tags": [
+        "content",
+        "typography",
+        "profile",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzAvatar",
+        "DzBadge",
+        "DzBlockquote",
+        "DzButton",
+        "DzCard",
+        "DzCodeBlock",
+        "DzHeading",
+        "DzText",
+        "DzTextarea"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/blog-article-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/blog-article-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/blog-article-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/blog-article-page-dark.webp"
+      }
+    },
+    {
+      "slug": "blog-index-page",
+      "name": "Blog Index Page",
+      "blurb": "Browse practical field notes by category and page, then subscribe for the next story.",
+      "category": "content",
+      "tags": [
+        "content",
+        "grid",
+        "tabs",
+        "pagination",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzCheckbox",
+        "DzHeading",
+        "DzInput",
+        "DzPagination",
+        "DzTabContent",
+        "DzTabList",
+        "DzTabs",
+        "DzTabTrigger",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/blog-index-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/blog-index-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/blog-index-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/blog-index-page-dark.webp"
+      }
+    },
+    {
+      "slug": "cart-checkout-page",
+      "name": "Cart Checkout Page",
+      "blurb": "Review a bag and complete a four-step local checkout preview.",
+      "category": "commerce",
+      "tags": [
+        "commerce",
+        "checkout",
+        "form",
+        "split-layout",
+        "responsive"
+      ],
+      "stack": [
+        "DzBadge",
+        "DzHeading",
+        "DzResult",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/cart-checkout-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/cart-checkout-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/cart-checkout-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/cart-checkout-page-dark.webp"
+      }
+    },
+    {
+      "slug": "changelog-page",
+      "name": "Changelog Page",
+      "blurb": "Follow product changes by release type and subscribe to practical update notes.",
+      "category": "content",
+      "tags": [
+        "content",
+        "timeline",
+        "filters",
+        "form",
+        "responsive"
+      ],
+      "stack": [
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzCheckbox",
+        "DzEmpty",
+        "DzHeading",
+        "DzInput",
+        "DzSegmented",
+        "DzText",
+        "DzTimeline",
+        "DzTimelineItem"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/changelog-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/changelog-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/changelog-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/changelog-page-dark.webp"
+      }
+    },
+    {
+      "slug": "coming-soon-page",
+      "name": "Coming Soon Page",
+      "blurb": "Introduce a research product and gather a launch waitlist.",
+      "category": "marketing",
+      "tags": [
+        "marketing",
+        "form",
+        "grid",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormMessage",
+        "DzHeading",
+        "DzInput",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/coming-soon-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/coming-soon-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/coming-soon-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/coming-soon-page-dark.webp"
+      }
+    },
+    {
+      "slug": "contact-page",
+      "name": "Contact Page",
+      "blurb": "Send a detailed enquiry, browse three offices and find answers before contacting the team.",
+      "category": "content",
+      "tags": [
+        "content",
+        "form",
+        "split-layout",
+        "accordion",
+        "responsive"
+      ],
+      "stack": [
+        "DzAccordion",
+        "DzAccordionContent",
+        "DzAccordionItem",
+        "DzAccordionTrigger",
+        "DzButton",
+        "DzCard",
+        "DzCheckbox",
+        "DzEmpty",
+        "DzHeading",
+        "DzInput",
+        "DzSelect",
+        "DzTabList",
+        "DzTabs",
+        "DzTabTrigger",
+        "DzText",
+        "DzTextarea"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/contact-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/contact-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/contact-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/contact-page-dark.webp"
+      }
+    },
+    {
+      "slug": "customer-list-page",
+      "name": "Customer List Page",
+      "blurb": "Search, filter and maintain customer records with selection and deliberate deletion.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "data-table",
+        "search",
+        "pagination",
+        "filters"
+      ],
+      "stack": [
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzCheckbox",
+        "DzChip",
+        "DzDialog",
+        "DzDialogClose",
+        "DzDialogContent",
+        "DzDialogDescription",
+        "DzDialogTitle",
+        "DzDialogTrigger",
+        "DzEmpty",
+        "DzHeading",
+        "DzInput",
+        "DzPagination",
+        "DzProgress",
+        "DzSearchInput",
+        "DzSegmented",
+        "DzSelect",
+        "DzTable",
+        "DzTableBody",
+        "DzTableCell",
+        "DzTableFooter",
+        "DzTableHeader",
+        "DzTableRow",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/customer-list-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/customer-list-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/customer-list-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/customer-list-page-dark.webp"
+      }
+    },
+    {
+      "slug": "forgot-password-flow",
+      "name": "Forgot Password Flow",
+      "blurb": "Request a reset link and set a new password with clear confirmation.",
+      "category": "auth",
+      "tags": [
+        "auth",
+        "form",
+        "centered",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzButton",
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormMessage",
+        "DzHeading",
+        "DzInput",
+        "DzPasswordInput",
+        "DzSegmented",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/forgot-password-flow",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/forgot-password-flow",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/forgot-password-flow-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/forgot-password-flow-dark.webp"
+      }
+    },
+    {
+      "slug": "invoice-detail-page",
+      "name": "Invoice Detail Page",
+      "blurb": "Verify line items, paid status and totals on an itemised invoice.",
+      "category": "commerce",
+      "tags": [
+        "commerce",
+        "billing",
+        "data-table",
+        "responsive"
+      ],
+      "stack": [
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzHeading",
+        "DzTable",
+        "DzTableBody",
+        "DzTableCell",
+        "DzTableHeader",
+        "DzTableRow",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/invoice-detail-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/invoice-detail-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/invoice-detail-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/invoice-detail-page-dark.webp"
+      }
+    },
+    {
+      "slug": "maintenance-page",
+      "name": "Maintenance Page",
+      "blurb": "Explain a scheduled service window and collect update subscriptions.",
+      "category": "utility",
+      "tags": [
+        "utility",
+        "error-page",
+        "form",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormMessage",
+        "DzHeading",
+        "DzInput",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/maintenance-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/maintenance-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/maintenance-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/maintenance-page-dark.webp"
+      }
+    },
+    {
+      "slug": "not-found-page",
+      "name": "Not Found Page",
+      "blurb": "Recover from a missing page with search and three suggested destinations.",
+      "category": "utility",
+      "tags": [
+        "utility",
+        "error-page",
+        "search",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzButton",
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzHeading",
+        "DzInput",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/not-found-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/not-found-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/not-found-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/not-found-page-dark.webp"
+      }
+    },
+    {
       "slug": "ops-incident-console",
       "name": "Ops Incident Console",
       "blurb": "Incident response console: a severity queue, SLA burn-down per incident and a live update timeline.",
@@ -55,6 +617,551 @@
       "thumbnail": {
         "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/ops-incident-console-light.webp",
         "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/ops-incident-console-dark.webp"
+      }
+    },
+    {
+      "slug": "order-confirmation-page",
+      "name": "Order Confirmation Page",
+      "blurb": "Confirm an order, check its total and preview its delivery milestones.",
+      "category": "commerce",
+      "tags": [
+        "commerce",
+        "checkout",
+        "timeline",
+        "responsive"
+      ],
+      "stack": [
+        "DzBadge",
+        "DzCard",
+        "DzHeading",
+        "DzResult",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/order-confirmation-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/order-confirmation-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/order-confirmation-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/order-confirmation-page-dark.webp"
+      }
+    },
+    {
+      "slug": "order-history-page",
+      "name": "Order History Page",
+      "blurb": "Find purchases and track the selected order through its milestones.",
+      "category": "commerce",
+      "tags": [
+        "commerce",
+        "data-table",
+        "timeline",
+        "filters",
+        "responsive"
+      ],
+      "stack": [
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/order-history-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/order-history-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/order-history-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/order-history-page-dark.webp"
+      }
+    },
+    {
+      "slug": "otp-verification",
+      "name": "OTP Verification",
+      "blurb": "Verify an account with a six-digit code, resend action and clear error state.",
+      "category": "auth",
+      "tags": [
+        "auth",
+        "form",
+        "centered",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzButton",
+        "DzCard",
+        "DzHeading",
+        "DzOtpInput",
+        "DzSegmented",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/otp-verification",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/otp-verification",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/otp-verification-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/otp-verification-dark.webp"
+      }
+    },
+    {
+      "slug": "pricing-page",
+      "name": "Pricing Page",
+      "blurb": "Compare three cooperative plans by price and capability, then choose a billing period.",
+      "category": "marketing",
+      "tags": [
+        "marketing",
+        "pricing",
+        "billing",
+        "data-table",
+        "responsive"
+      ],
+      "stack": [
+        "DzAccordion",
+        "DzAccordionContent",
+        "DzAccordionItem",
+        "DzAccordionTrigger",
+        "DzAlert",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzEmpty",
+        "DzHeading",
+        "DzInput",
+        "DzSegmented",
+        "DzTabList",
+        "DzTabs",
+        "DzTabTrigger",
+        "DzTable",
+        "DzTableBody",
+        "DzTableCell",
+        "DzTableHeader",
+        "DzTableRow",
+        "DzText",
+        "DzVisuallyHidden"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/pricing-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/pricing-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/pricing-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/pricing-page-dark.webp"
+      }
+    },
+    {
+      "slug": "product-detail-page",
+      "name": "Product Detail Page",
+      "blurb": "Choose a considered lamp, read buyer impressions and browse complementary pieces.",
+      "category": "commerce",
+      "tags": [
+        "commerce",
+        "product",
+        "grid",
+        "responsive"
+      ],
+      "stack": [
+        "DzBadge",
+        "DzCard",
+        "DzHeading",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/product-detail-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/product-detail-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/product-detail-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/product-detail-page-dark.webp"
+      }
+    },
+    {
+      "slug": "product-launch-landing",
+      "name": "Product Launch Landing",
+      "blurb": "A launch page with a hero, a feature grid, plan pricing with a period switch, a FAQ and a closing call to action.",
+      "category": "marketing",
+      "tags": [
+        "marketing",
+        "pricing",
+        "accordion",
+        "responsive"
+      ],
+      "stack": [
+        "DzAccordion",
+        "DzAccordionContent",
+        "DzAccordionItem",
+        "DzAccordionTrigger",
+        "DzAlert",
+        "DzButton",
+        "DzHeading",
+        "DzPageHero",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-26",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/product-launch-landing",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/product-launch-landing",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/product-launch-landing-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/product-launch-landing-dark.webp"
+      }
+    },
+    {
+      "slug": "project-board-page",
+      "name": "Project Board Page",
+      "blurb": "Plan, filter and move project work across four delivery lanes.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "kanban",
+        "filters",
+        "responsive"
+      ],
+      "stack": [
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzDropdownMenu",
+        "DzDropdownMenuContent",
+        "DzDropdownMenuItem",
+        "DzDropdownMenuTrigger",
+        "DzHeading",
+        "DzSearchInput",
+        "DzSegmented",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/project-board-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/project-board-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/project-board-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/project-board-page-dark.webp"
+      }
+    },
+    {
+      "slug": "record-detail-page",
+      "name": "Record Detail Page",
+      "blurb": "Inspect a customer account with a summary, recent activity and internal notes.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "profile",
+        "tabs",
+        "timeline"
+      ],
+      "stack": [
+        "DzAvatar",
+        "DzBadge",
+        "DzBreadcrumb",
+        "DzBreadcrumbItem",
+        "DzButton",
+        "DzCard",
+        "DzDescriptions",
+        "DzEmpty",
+        "DzHeading",
+        "DzSegmented",
+        "DzTabContent",
+        "DzTabList",
+        "DzTabTrigger",
+        "DzTabs",
+        "DzText",
+        "DzTextarea",
+        "DzTimeline",
+        "DzTimelineItem"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/record-detail-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/record-detail-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/record-detail-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/record-detail-page-dark.webp"
+      }
+    },
+    {
+      "slug": "saas-home-page",
+      "name": "SaaS Home Page",
+      "blurb": "Introduce a repair cooperative workspace and lead visitors from capabilities to a fitting plan.",
+      "category": "marketing",
+      "tags": [
+        "marketing",
+        "pricing",
+        "grid",
+        "accordion",
+        "responsive"
+      ],
+      "stack": [
+        "DzAccordion",
+        "DzAccordionContent",
+        "DzAccordionItem",
+        "DzAccordionTrigger",
+        "DzAlert",
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzEmpty",
+        "DzHeading",
+        "DzInput",
+        "DzSegmented",
+        "DzSheet",
+        "DzSheetContent",
+        "DzSheetDescription",
+        "DzSheetTitle",
+        "DzSheetTrigger",
+        "DzTabList",
+        "DzTabs",
+        "DzTabTrigger",
+        "DzText",
+        "DzVisuallyHidden"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/saas-home-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/saas-home-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/saas-home-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/saas-home-page-dark.webp"
+      }
+    },
+    {
+      "slug": "server-error-page",
+      "name": "Server Error Page",
+      "blurb": "Explain a server failure with a copyable incident reference and recovery actions.",
+      "category": "utility",
+      "tags": [
+        "utility",
+        "error-page",
+        "centered",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzButton",
+        "DzCard",
+        "DzHeading",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/server-error-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/server-error-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/server-error-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/server-error-page-dark.webp"
+      }
+    },
+    {
+      "slug": "settings-account-page",
+      "name": "Settings Account Page",
+      "blurb": "Manage profile details, active sessions and notification channels in one account view.",
+      "category": "auth",
+      "tags": [
+        "auth",
+        "settings",
+        "form",
+        "responsive"
+      ],
+      "stack": [
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzHeading",
+        "DzInput",
+        "DzSwitch",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/settings-account-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/settings-account-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/settings-account-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/settings-account-page-dark.webp"
+      }
+    },
+    {
+      "slug": "sign-up-wizard",
+      "name": "Sign Up Wizard",
+      "blurb": "Create an account and a first workspace through a clear two-step flow.",
+      "category": "auth",
+      "tags": [
+        "auth",
+        "form",
+        "stepper",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzButton",
+        "DzCard",
+        "DzCheckbox",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormMessage",
+        "DzHeading",
+        "DzInput",
+        "DzPasswordInput",
+        "DzProgress",
+        "DzSegmented",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/sign-up-wizard",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/sign-up-wizard",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/sign-up-wizard-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/sign-up-wizard-dark.webp"
+      }
+    },
+    {
+      "slug": "split-sign-in",
+      "name": "Split Sign-in",
+      "blurb": "A sign-in page with a brand panel beside a validated form, a submitting state, an error alert and single sign-on.",
+      "category": "auth",
+      "tags": [
+        "auth",
+        "form",
+        "split-layout",
+        "responsive"
+      ],
+      "stack": [
+        "DzAlert",
+        "DzAvatar",
+        "DzBlockquote",
+        "DzButton",
+        "DzCard",
+        "DzCheckbox",
+        "DzDivider",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormMessage",
+        "DzHeading",
+        "DzInput",
+        "DzPasswordInput",
+        "DzSegmented",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-26",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/split-sign-in",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/split-sign-in",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/split-sign-in-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/split-sign-in-dark.webp"
+      }
+    },
+    {
+      "slug": "storefront-catalog-page",
+      "name": "Storefront Catalog Page",
+      "blurb": "Browse and refine considered objects, then add a favourite to your cart.",
+      "category": "commerce",
+      "tags": [
+        "commerce",
+        "product",
+        "filters",
+        "pagination",
+        "responsive"
+      ],
+      "stack": [
+        "DzButton",
+        "DzEmpty",
+        "DzHeading",
+        "DzPagination",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/storefront-catalog-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/storefront-catalog-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/storefront-catalog-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/storefront-catalog-page-dark.webp"
+      }
+    },
+    {
+      "slug": "ticket-triage-desk",
+      "name": "Ticket Triage Desk",
+      "blurb": "A support lead's triage desk: queue health at a glance, a filterable ticket queue and the next ticket in focus.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "data-table",
+        "filters",
+        "search",
+        "split-layout"
+      ],
+      "stack": [
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzCardBody",
+        "DzCardHeader",
+        "DzDivider",
+        "DzHeading",
+        "DzText"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-25",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/ticket-triage-desk",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/ticket-triage-desk",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/ticket-triage-desk-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/ticket-triage-desk-dark.webp"
+      }
+    },
+    {
+      "slug": "user-profile-page",
+      "name": "User Profile Page",
+      "blurb": "Read a teammate profile alongside recent activity and the people they work with.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "profile",
+        "tabs",
+        "timeline"
+      ],
+      "stack": [
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzCard",
+        "DzEmpty",
+        "DzHeading",
+        "DzInput",
+        "DzSegmented",
+        "DzTabContent",
+        "DzTabList",
+        "DzTabs",
+        "DzTabTrigger",
+        "DzText",
+        "DzTimeline",
+        "DzTimelineItem"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-27",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/user-profile-page",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/user-profile-page",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/user-profile-page-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/user-profile-page-dark.webp"
       }
     }
   ]
