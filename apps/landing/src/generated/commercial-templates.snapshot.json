@@ -147,6 +147,37 @@
       }
     },
     {
+      "slug": "approval-center",
+      "name": "Approval Center",
+      "blurb": "A multi-step approval workflow with a team audit log and a notification center, composed from @dzup-ui-pro/pro.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "timeline",
+        "filters",
+        "data-table"
+      ],
+      "stack": [
+        "DzCard",
+        "DzHeading",
+        "DzStatCard",
+        "DzSegmented",
+        "DzBadge",
+        "DzApprovalFlow",
+        "DzAuditLog",
+        "DzNotificationCenter"
+      ],
+      "tier": "P",
+      "licence": "commercial-pro",
+      "createdAt": "2026-10-06",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/approval-center",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/approval-center",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/approval-center-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/approval-center-dark.webp"
+      }
+    },
+    {
       "slug": "billing-subscription-page",
       "name": "Billing Subscription Page",
       "blurb": "Review a current plan, usage limits, payment method and recent invoices.",
