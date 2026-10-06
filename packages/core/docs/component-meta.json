@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "de0dda04c9f441f56df096db0cde6ed1e329ce4c",
+  "sourceCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -9924,7 +9924,7 @@
       ],
       "source": "packages/core/src/components/forms/DzColorPicker.vue",
       "typesSource": "packages/core/src/components/forms/DzColorPicker.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -10036,19 +10036,19 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
-          "present": 4,
-          "stale": 1,
-          "unrun": 5
+          "pass": 6,
+          "present": 5,
+          "stale": 2,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "portal-hydration"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -10552,13 +10552,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 6,
           "stale": 1,
-          "unrun": 5
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
-          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec",
           "portal-hydration"
@@ -14851,7 +14850,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDatePicker.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -15005,18 +15004,18 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 7,
-          "present": 4,
-          "stale": 1,
-          "unrun": 4
+          "pass": 6,
+          "present": 5,
+          "stale": 2,
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -15404,7 +15403,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDateRangePicker.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -15559,19 +15558,19 @@
         ],
         "traits": [],
         "cells": {
-          "pass": 7,
-          "present": 3,
-          "stale": 1,
-          "unrun": 5
+          "pass": 6,
+          "present": 4,
+          "stale": 2,
+          "unrun": 4
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": [
+          "browser-matrix",
           "perf-baseline"
         ]
       },
@@ -29196,13 +29195,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 5,
           "stale": 1,
-          "unrun": 6
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
-          "contract-spec",
           "controlled-uncontrolled",
           "data-scenarios",
           "keyboard-spec",
@@ -48903,14 +48901,13 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 3,
+          "present": 4,
           "stale": 1,
-          "unrun": 6
+          "unrun": 5
         },
         "unrun": [
           "at-manual",
           "axe",
-          "contract-spec",
           "controlled-uncontrolled",
           "keyboard-spec",
           "portal-hydration"

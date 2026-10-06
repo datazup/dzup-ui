@@ -87,11 +87,11 @@ export const CAPABILITY_TOTALS = {
     "excepted": 66
   },
   "C": {
-    "pass": 146,
+    "pass": 143,
     "fail": 0,
-    "present": 113,
-    "stale": 20,
-    "unrun": 91,
+    "present": 119,
+    "stale": 23,
+    "unrun": 85,
     "excepted": 4
   },
   "D": {
@@ -105,7 +105,7 @@ export const CAPABILITY_TOTALS = {
 } as const
 
 /** Repository HEAD the evidence was collected at. */
-export const CAPABILITY_SOURCE_COMMIT = "de0dda04c9f441f56df096db0cde6ed1e329ce4c"
+export const CAPABILITY_SOURCE_COMMIT = "f4d61c24e956e32568308d4ae460fb930bb72f2e"
 
 export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
   {
@@ -773,7 +773,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzColorPicker.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzColorPicker.contract.spec.ts"], note: "The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzColorPicker.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzColorPicker.spec.ts"] },
     { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzColorPicker.stories.ts"] },
@@ -784,7 +784,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzColorPicker.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzColorPicker.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
-    { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
+    { kind: "browser-matrix", state: "stale", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
     { kind: "portal-hydration", state: "unrun", origin: "trait teleports", note: "No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true." },
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzColorPicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzColorPicker.stories.ts"] },
@@ -802,7 +802,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzCombobox.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCombobox.contract.spec.ts"], note: "The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCombobox.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzCombobox.spec.ts"] },
     { kind: "axe", state: "present", origin: "tier A", artifacts: ["packages/core/tests/a11y/forms.a11y.spec.ts"] },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzCombobox.stories.ts"] },
@@ -1034,7 +1034,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzDatePicker.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDatePicker.contract.spec.ts"], note: "The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDatePicker.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDatePicker.spec.ts"] },
     { kind: "axe", state: "present", origin: "tier A", artifacts: ["packages/core/tests/a11y/forms.a11y.spec.ts"] },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzDatePicker.stories.ts"] },
@@ -1045,7 +1045,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzDatePicker.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzDatePicker.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
-    { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
+    { kind: "browser-matrix", state: "stale", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDatePicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDatePicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzDatePicker.md"], note: "6 AT/browser pairs, none executed." },
@@ -1062,7 +1062,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzDateRangePicker.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDateRangePicker.contract.spec.ts"], note: "The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDateRangePicker.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzDateRangePicker.spec.ts"] },
     { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzDateRangePicker.stories.ts"] },
@@ -1073,7 +1073,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "controlled-uncontrolled", state: "unrun", origin: "tier B", note: "The unit spec does not exercise both a controlled and an uncontrolled value path." },
     { kind: "browser-play", state: "pass", origin: "tier B", artifacts: ["packages/core/stories/forms/DzDateRangePicker.stories.ts"] },
     { kind: "rtl-contract", state: "present", origin: "tier B", artifacts: ["packages/core/src/components/forms/DzDateRangePicker.anatomy.ts", "packages/core/docs/rtl-matrix.md"] },
-    { kind: "browser-matrix", state: "pass", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
+    { kind: "browser-matrix", state: "stale", origin: "tier B", artifacts: ["e2e/matrix/conditions.spec.ts", "e2e/matrix/browser-evidence.json", "e2e/matrix/known-failures.json", "e2e/matrix/engine-ratchets.json"], note: "24/24 projects measured green at 5bcfd20. 24 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran" },
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDateRangePicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDateRangePicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzDateRangePicker.md"], note: "6 AT/browser pairs, none executed." },
@@ -1927,7 +1927,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzMultiSelect.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzMultiSelect.contract.spec.ts"], note: "The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzMultiSelect.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzMultiSelect.spec.ts"] },
     { kind: "axe", state: "present", origin: "tier A", artifacts: ["packages/core/tests/a11y/forms.a11y.spec.ts"] },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzMultiSelect.stories.ts"] },
@@ -3108,7 +3108,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     source: "packages/core/src/components/forms/DzTimePicker.vue",
     visual: { state: "not-covered", note: "The per-component visual lane covers families [buttons] on linux; `forms` is not in scope yet. Ranked for rollout in docs/program-2026-09/reports/N1-O6-visual-regression-handoff.md." },
     cells: [
-    { kind: "contract-spec", state: "unrun", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTimePicker.contract.spec.ts"], note: "The contract spec exists and does not touch `slots`, `aria` — surfaces this component declares. Contract Spec v1 is props/events/slots/ARIA; a surface is owed only when the component's own `.types.ts` or template declares it (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing." },
+    { kind: "contract-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTimePicker.contract.spec.ts"] },
     { kind: "unit-spec", state: "present", origin: "tier A", artifacts: ["packages/core/src/components/forms/DzTimePicker.spec.ts"] },
     { kind: "axe", state: "unrun", origin: "tier A", note: "No a11y spec runs axe over a tree containing this component in a test that runs." },
     { kind: "story-light-dark", state: "pass", origin: "tier A", artifacts: ["packages/core/stories/forms/DzTimePicker.stories.ts"] },
