@@ -75,4 +75,22 @@ describe('dzDataView — Contract Spec v1', () => {
     const wrapper = mountView({}, { attrs: { class: 'custom-class' } })
     expect(wrapper.classes()).toContain('custom-class')
   })
+
+  // DZUP-UI-R8-01-20261006-R1: the declared `DzDataViewEmits` surface.
+  it('emits page with the new first-record offset', async () => {
+    const wrapper = mountView({ paginator: true, rows: 2, first: 0 })
+    await wrapper.get('button[aria-label="Go to next page"]').trigger('click')
+    expect(wrapper.emitted('page')).toEqual([[2]])
+  })
+
+  it('emits sort with the chosen field and order', async () => {
+    const wrapper = mountView({
+      sortOptions: [
+        { label: 'Name', field: 'name', order: 1 },
+        { label: 'Name (Z → A)', field: 'name', order: -1 },
+      ],
+    })
+    await wrapper.get('select[aria-label="Sort by"]').setValue('1')
+    expect(wrapper.emitted('sort')?.at(-1)).toEqual([{ sortField: 'name', sortOrder: -1 }])
+  })
 })

@@ -90,6 +90,58 @@ describe('dzMention — Contract Spec v1', () => {
   })
 })
 
+// DZUP-UI-R8-01-20261006-R1: the declared `DzMentionSlots` surface (`#loading`
+// is exercised in the C9 block below).
+describe('dzMention — Contract Spec v1 slots', () => {
+  // `enableAutoUnmount` is single-use per file (the C9 block owns it), so these
+  // body-attached mounts are unmounted explicitly.
+  const mounted: Array<ReturnType<typeof mount>> = []
+  afterEach(() => {
+    mounted.splice(0).forEach(wrapper => wrapper.unmount())
+  })
+
+  async function typeAt(wrapper: ReturnType<typeof mount>, value: string) {
+    const control = wrapper.find('textarea')
+    const el = control.element as HTMLTextAreaElement
+    el.value = value
+    el.selectionStart = value.length
+    el.selectionEnd = value.length
+    await control.trigger('input')
+    await flushPromises()
+  }
+
+  it('renders each suggestion through the #option slot with its scope', async () => {
+    const wrapper = mount(DzMention, {
+      props: { triggers },
+      slots: {
+        option: `<template #option="{ option, char, query, active, index }">
+          <span class="custom-option">{{ char }}{{ option.label }}|{{ query }}|{{ active }}|{{ index }}</span>
+        </template>`,
+      },
+      attachTo: document.body,
+    })
+    mounted.push(wrapper)
+    await typeAt(wrapper, '@')
+    const rendered = wrapper.findAll('.custom-option').map(node => node.text())
+    expect(rendered).toEqual(['@Alice||true|0', '@Bob||false|1'])
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(2)
+  })
+
+  it('replaces the no-results state through the #empty slot', async () => {
+    const wrapper = mount(DzMention, {
+      props: { triggers },
+      slots: {
+        empty: `<template #empty="{ char, query }"><span class="custom-empty">none for {{ char }}{{ query }}</span></template>`,
+      },
+      attachTo: document.body,
+    })
+    mounted.push(wrapper)
+    await typeAt(wrapper, '@zz')
+    expect(wrapper.find('.custom-empty').text()).toBe('none for @zz')
+    expect(wrapper.find('[role="option"]').exists()).toBe(false)
+  })
+})
+
 /**
  * Renderer contract C9 — DzMention on the shared async-options seam
  * (TASK-R3-O3). Before this packet the readiness matrix recorded C9 as `future`:

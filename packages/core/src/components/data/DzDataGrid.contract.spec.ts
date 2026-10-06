@@ -166,4 +166,32 @@ describe('dzDataGrid — Contract Spec v1', () => {
       { field: 'age', direction: 'asc' },
     ])
   })
+
+  // DZUP-UI-R8-01-20261006-R1: the declared `DzDataGridSlots` surface.
+  it('renders every cell through the #cell slot with row, column and value', () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data, columns },
+      slots: {
+        cell: `<template #cell="{ row, column, value }"><b class="custom-cell">{{ column.field }}={{ value }}/{{ row.name }}</b></template>`,
+      },
+    })
+    expect(wrapper.findAll('.custom-cell').map(cell => cell.text())).toEqual(['name=Alice/Alice', 'name=Bob/Bob'])
+  })
+
+  it('replaces the empty state through the #empty slot', () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data: [], columns },
+      slots: { empty: '<span class="custom-empty">No users yet</span>' },
+    })
+    expect(wrapper.find('.custom-empty').text()).toBe('No users yet')
+    expect(wrapper.text()).not.toContain('No data available')
+  })
+
+  it('replaces the loading indicator through the #loading slot', () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data, columns, loading: true },
+      slots: { loading: '<span class="custom-loading">Fetching…</span>' },
+    })
+    expect(wrapper.find('[data-part="loader"] .custom-loading').text()).toBe('Fetching…')
+  })
 })

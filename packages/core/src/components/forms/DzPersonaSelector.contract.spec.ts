@@ -1,9 +1,10 @@
 import type { LoadOptionsRequest } from '@dzup-ui/contracts'
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzPersonaSelector — Contract Spec v1 conformance tests.
  */
-import { describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { nextTick } from 'vue'
 import DzCombobox from './DzCombobox.vue'
 import DzPersonaSelector from './DzPersonaSelector.vue'
 
@@ -36,6 +37,46 @@ describe('dzPersonaSelector — Contract Spec v1', () => {
   it('applies contain: layout style within the template', () => {
     const wrapper = mount(DzPersonaSelector, { props: { personas } })
     expect(wrapper.html()).toContain('[contain:layout_style]')
+  })
+})
+
+// DZUP-UI-R8-01-20261006-R1: the declared `DzPersonaSelectorSlots` surface. The
+// listbox is portalled, so the open popup is read from `document.body`.
+describe('dzPersonaSelector — Contract Spec v1 slots', () => {
+  const originalScrollIntoView = HTMLElement.prototype.scrollIntoView
+  beforeAll(() => {
+    HTMLElement.prototype.scrollIntoView = () => {}
+  })
+  afterAll(() => {
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView
+  })
+  enableAutoUnmount(afterEach)
+
+  it('renders each persona through the #item slot with its selection state', async () => {
+    const wrapper = mount(DzPersonaSelector, {
+      props: { personas, modelValue: '2' },
+      slots: {
+        item: `<template #item="{ persona, selected }"><span class="custom-persona">{{ persona.name }}:{{ selected }}</span></template>`,
+      },
+      attachTo: document.body,
+    })
+    await wrapper.find('input').trigger('click')
+    await nextTick()
+    const rendered = Array.from(document.body.querySelectorAll('.custom-persona'))
+      .map(node => node.textContent?.trim())
+    expect(rendered).toEqual(['Alice Smith:false', 'Bob Jones:true'])
+  })
+
+  it('replaces the no-match state through the #empty slot', async () => {
+    const wrapper = mount(DzPersonaSelector, {
+      props: { personas: [] },
+      slots: { empty: '<span class="custom-empty">Nobody to pick</span>' },
+      attachTo: document.body,
+    })
+    await wrapper.find('input').trigger('click')
+    await nextTick()
+    expect(document.body.querySelector('.custom-empty')?.textContent).toBe('Nobody to pick')
+    expect(document.body.textContent).not.toContain('No personas found')
   })
 })
 

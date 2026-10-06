@@ -92,4 +92,23 @@ describe('dzOrderList — Contract Spec v1', () => {
     expect(rows[0]!.attributes('tabindex')).toBe('0')
     expect(rows[1]!.attributes('tabindex')).toBe('-1')
   })
+
+  // DZUP-UI-R8-01-20261006-R1: the declared `DzOrderListEmits` surface.
+  it('emits reorder { from, to } alongside update:value when a row moves', async () => {
+    const wrapper = mountList()
+    await wrapper.get('[aria-label="Move to bottom"]').trigger('click')
+    expect(wrapper.emitted('reorder')).toEqual([[{ from: 0, to: 2 }]])
+    expect((wrapper.emitted('update:value')!.at(-1)![0] as Row[]).map(row => row.label))
+      .toEqual(['Bravo', 'Charlie', 'Alpha'])
+  })
+
+  it('emits selectionChange with the selected keys only when selectable', async () => {
+    const plain = mountList()
+    await plain.findAll('[role="listitem"]')[0]!.trigger('click')
+    expect(plain.emitted('selectionChange')).toBeUndefined()
+
+    const selectable = mountList({ selectable: true })
+    await selectable.findAll('[role="option"]')[1]!.trigger('click')
+    expect(selectable.emitted('selectionChange')).toEqual([[[2]]])
+  })
 })
