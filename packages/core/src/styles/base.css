@@ -938,7 +938,7 @@
    */
   .dz-dialog-overlay-enter-active,
   .dz-dialog-overlay-leave-active {
-    transition: opacity var(--dz-transition-fast) ease;
+    transition: opacity var(--dz-transition-fast);
   }
 
   .dz-dialog-overlay-enter-from,
@@ -949,8 +949,8 @@
   .dz-dialog-content-enter-active,
   .dz-dialog-content-leave-active {
     transition:
-      opacity var(--dz-transition-fast) ease,
-      transform var(--dz-transition-fast) ease;
+      opacity var(--dz-transition-fast),
+      transform var(--dz-transition-fast);
   }
 
   .dz-dialog-content-enter-from,
@@ -962,7 +962,7 @@
   /* DzSidebar — mobile overlay backdrop fade. */
   .dz-sidebar-overlay-enter-active,
   .dz-sidebar-overlay-leave-active {
-    transition: opacity var(--dz-transition-normal) ease;
+    transition: opacity var(--dz-transition-normal);
   }
 
   .dz-sidebar-overlay-enter-from,

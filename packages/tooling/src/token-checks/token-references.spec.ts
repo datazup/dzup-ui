@@ -8,7 +8,14 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { aliasCycles, checkTokenReferences, declarationsIn, maskComments, referencesIn } from './token-references.ts'
+import {
+  aliasCycles,
+  checkTokenReferences,
+  declarationsIn,
+  doubleTimedTransitions,
+  maskComments,
+  referencesIn,
+} from './token-references.ts'
 
 describe('maskComments', () => {
   it('blanks block comments but preserves line numbers', () => {
@@ -108,6 +115,52 @@ describe('aliasCycles', () => {
 
   it('reports a self-reference', () => {
     expect(aliasCycles(new Map([['--dz-a', 'var(--dz-a)']]))).toHaveLength(1)
+  })
+})
+
+describe('doubleTimedTransitions', () => {
+  // The shapes dist/tokens.css ships: the transition token carries its own easing.
+  const values = new Map([
+    ['--dz-duration-fast', '150ms'],
+    ['--dz-ease-default', 'cubic-bezier(0.4, 0, 0.2, 1)'],
+    ['--dz-transition-fast', 'var(--dz-duration-fast) var(--dz-ease-default)'],
+  ])
+
+  it('accepts one timing function per item, whether written or carried by a token', () => {
+    const css = '.a { transition: opacity var(--dz-transition-fast); }\n'
+      + '.b { transition: opacity 150ms ease, transform var(--dz-duration-fast) var(--dz-ease-default); }\n'
+    expect(doubleTimedTransitions(css, 'f.css', values)).toEqual([])
+  })
+
+  it('reports the item that appends a keyword to a token carrying an easing, at its line', () => {
+    // The DzDialog content rule as it shipped, with only the first item broken.
+    const css = '.a {}\n.b {\n  transition:\n    opacity var(--dz-transition-fast) ease,\n'
+      + '    transform var(--dz-transition-fast);\n}\n'
+    const found = doubleTimedTransitions(css, 'f.css', values)
+    expect(found).toHaveLength(1)
+    expect(found[0]?.rule).toBe('double-timing')
+    expect(found[0]?.symbol).toBe('f.css:3')
+    expect(found[0]?.message).toContain('opacity var(--dz-transition-fast) ease')
+    expect(found[0]?.message).toContain('cubic-bezier(0.4, 0, 0.2, 1) ease')
+  })
+
+  it('counts per item when one token expands to several', () => {
+    const multi = new Map([...values, ['--dz-button-transition', 'color var(--dz-transition-fast), opacity 150ms linear']])
+    expect(doubleTimedTransitions('.a { transition: var(--dz-button-transition); }\n', 'f.css', multi)).toEqual([])
+  })
+
+  it('reads only the <style> blocks of a Vue SFC', () => {
+    // The script line would count two `ease`s in one item if it were read as CSS.
+    const sfc = '<script setup lang="ts">\n'
+      + 'const t = { transition: wide ? \'opacity 1s ease\' : \'opacity 2s ease\' }\n'
+      + '</script>\n<style scoped>\n.x { transition: opacity var(--dz-transition-fast) ease-in; }\n</style>\n'
+    const found = doubleTimedTransitions(sfc, 'X.vue', values)
+    expect(found.map(violation => violation.symbol)).toEqual(['X.vue:5'])
+  })
+
+  it('reads nothing from TypeScript', () => {
+    expect(doubleTimedTransitions('const s = { transition: \'opacity 1s ease ease\' }\n', 'f.ts', values))
+      .toEqual([])
   })
 })
 

@@ -32,6 +32,15 @@
  *    discarded at parse time and the property silently keeps its inherited or
  *    initial value. Never allowlistable.
  *
+ * A reference can also resolve and still break its declaration. `--dz-transition-*`
+ * already carries a duration *and* a timing function, so
+ * `transition: opacity var(--dz-transition-fast) ease` names two timing
+ * functions once the `var()` substitutes. That is invalid at computed-value
+ * time and the property falls back to no transition; DzDialog and the
+ * DzSidebar backdrop shipped that way (DZUI-TRANSITION-DOUBLE-TIMING-20261007-R1).
+ * The **double-timing** rule expands every `var(--dz-*)` through the shipped
+ * values and allows one timing function per `transition` item.
+ *
  * ── Two ratchets, reported in the same pass ──
  *
  * The declared set and the referenced set are both already in memory, so the
@@ -92,7 +101,13 @@ export interface TokenReference {
 }
 
 export interface ReferenceViolation {
-  readonly rule: 'unknown-token' | 'undocumented-hook' | 'stale-allowlist' | 'alias-cycle' | 'ceiling'
+  readonly rule:
+    | 'unknown-token'
+    | 'undocumented-hook'
+    | 'stale-allowlist'
+    | 'alias-cycle'
+    | 'ceiling'
+    | 'double-timing'
   readonly symbol: string
   readonly message: string
 }
@@ -232,6 +247,109 @@ export function declarationsIn(text: string): string[] {
   return names
 }
 
+// --- Transition timing ---
+
+const STYLE_BLOCK_RE = /(<style\b[^>]*>)([\s\S]*?)<\/style>/g
+const TRANSITION_DECLARATION_RE = /(?<![\w-])transition\s*:\s*([^;{}]+)/g
+const INNERMOST_VAR_RE = /var\(\s*(--dz-[\w-]+)\s*(?:,([^()]*))?\)/
+const TIMING_FUNCTION_RE
+  = /cubic-bezier\(|steps\(|linear\(|(?<![\w-])(?:ease(?:-in-out|-in|-out)?|linear|step-start|step-end)(?![\w(-])/g
+
+/**
+ * The CSS a file contributes: all of a stylesheet, only the `<style>` blocks of
+ * a Vue SFC (with everything else blanked so line numbers survive), and nothing
+ * from TypeScript, where `transition:` is an object key whose value is code.
+ */
+function cssRegions(text: string, file: string): string {
+  if (file.endsWith('.css'))
+    return text
+  if (!file.endsWith('.vue'))
+    return ''
+  let out = ''
+  let last = 0
+  STYLE_BLOCK_RE.lastIndex = 0
+  let match: RegExpExecArray | null = STYLE_BLOCK_RE.exec(text)
+  while (match !== null) {
+    const bodyStart = match.index + (match[1] ?? '').length
+    out += blankRun(text.slice(last, bodyStart)) + (match[2] ?? '')
+    last = bodyStart + (match[2] ?? '').length
+    match = STYLE_BLOCK_RE.exec(text)
+  }
+  return out + blankRun(text.slice(last))
+}
+
+/** Substitute `var(--dz-*)` innermost-first, as the browser does at computed-value time. */
+function substituteVars(value: string, values: ReadonlyMap<string, string>): string {
+  let out = value
+  for (let guard = 0; guard < 32; guard += 1) {
+    const next = out.replace(INNERMOST_VAR_RE, (_whole, name: string, fallback?: string) =>
+      values.get(name) ?? fallback ?? '')
+    if (next === out)
+      return out
+    out = next
+  }
+  return out
+}
+
+function splitTopLevelCommas(value: string): string[] {
+  const parts: string[] = []
+  let depth = 0
+  let start = 0
+  for (let i = 0; i < value.length; i += 1) {
+    const ch = value[i]
+    if (ch === '(') {
+      depth += 1
+    }
+    else if (ch === ')') {
+      depth -= 1
+    }
+    else if (ch === ',' && depth === 0) {
+      parts.push(value.slice(start, i))
+      start = i + 1
+    }
+  }
+  parts.push(value.slice(start))
+  return parts
+}
+
+/**
+ * Every `transition` item that names more than one timing function once its
+ * `var(--dz-*)` references substitute through `values` (the shipped ABI).
+ */
+export function doubleTimedTransitions(
+  text: string,
+  file: string,
+  values: ReadonlyMap<string, string>,
+): ReferenceViolation[] {
+  const css = cssRegions(maskComments(text), file)
+  const starts = lineStarts(css)
+  const found: ReferenceViolation[] = []
+  TRANSITION_DECLARATION_RE.lastIndex = 0
+  let match: RegExpExecArray | null = TRANSITION_DECLARATION_RE.exec(css)
+  while (match !== null) {
+    const value = match[1] ?? ''
+    const declared = splitTopLevelCommas(value)
+    // Items are counted after substitution: a token may expand to several.
+    const substituted = splitTopLevelCommas(substituteVars(value, values))
+    substituted.forEach((expanded, index) => {
+      const item = substituted.length === declared.length ? declared[index] ?? value : value
+      const timings = expanded.match(TIMING_FUNCTION_RE)?.length ?? 0
+      if (timings > 1) {
+        found.push({
+          rule: 'double-timing',
+          symbol: `${file}:${lineAt(starts, match?.index ?? 0)}`,
+          message: `transition item "${item.trim().replace(/\s+/g, ' ')}" names ${timings} timing functions `
+            + `once var() substitutes ("${expanded.trim().replace(/\s+/g, ' ')}"). A transition item takes one: `
+            + 'the declaration is invalid at computed-value time and the element gets no transition. '
+            + '--dz-transition-* already carries its easing, so drop the extra timing function.',
+        })
+      }
+    })
+    match = TRANSITION_DECLARATION_RE.exec(css)
+  }
+  return found
+}
+
 // --- Alias cycles ---
 
 const ALIAS_HEAD_RE = /^var\(\s*(--dz-[\w-]+)/
@@ -298,6 +416,12 @@ export function checkTokenReferences(): ReferenceReport {
   const references: TokenReference[] = []
   for (const file of gateFiles)
     references.push(...referencesIn(readFileSync(file, 'utf8'), relative(ROOT, file).split(sep).join('/')))
+
+  // 3b. One timing function per transition item, counted after var() substitution.
+  for (const file of gateFiles) {
+    const at = relative(ROOT, file).split(sep).join('/')
+    violations.push(...doubleTimedTransitions(readFileSync(file, 'utf8'), at, abiValues))
+  }
 
   // 4. Classify.
   const allowlist = JSON.parse(readFileSync(ALLOWLIST_PATH, 'utf8')) as { hooks: AllowlistEntry[] }
