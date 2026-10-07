@@ -133,6 +133,7 @@ export type DtcgTypeName
     | 'cubicBezier'
     | 'number'
     | 'shadow'
+    | 'transition'
 
 export interface DtcgColorValue {
   readonly colorSpace: 'oklch'
@@ -163,12 +164,24 @@ export interface DtcgShadowLayer {
 
 export type DtcgShadowValue = DtcgShadowLayer | readonly DtcgShadowLayer[]
 
+/**
+ * A DTCG `transition`. Each sub-value is concrete or a `{group.token}`
+ * reference — the Format module allows both, and a sub-value the CSS spells as
+ * `var(--dz-*)` stays a reference for the same reason a whole-value alias does.
+ */
+export interface DtcgTransitionValue {
+  readonly duration: DtcgDurationValue | string
+  readonly delay: DtcgDurationValue | string
+  readonly timingFunction: DtcgCubicBezierValue | string
+}
+
 export type DtcgConcreteValue
   = | DtcgColorValue
     | DtcgDimensionValue
     | DtcgDurationValue
     | DtcgCubicBezierValue
     | DtcgShadowValue
+    | DtcgTransitionValue
     | readonly string[]
     | number
 
@@ -480,8 +493,88 @@ function parseShadowLayer(layer: string): ParseOutcome {
   return { ok: true, value: shadow }
 }
 
-/** Dispatch a CSS value string to the parser for a declared DTCG type. */
-export function parseAs(type: DtcgTypeName, value: string): ParseOutcome {
+/**
+ * Resolves a `var(--dz-*)` that sits *inside* a composite value to the
+ * `{group.token}` reference DTCG uses, and the type of the token it lands on.
+ * Supplied by the document builder, which is the only place that knows paths.
+ */
+export type ReferenceResolver = (cssVariable: string) =>
+  | { readonly ok: true, readonly reference: string, readonly type: DtcgTypeName }
+  | { readonly ok: false, readonly reason: string }
+
+/** The CSS initial value of `transition-delay`. Writing it down invents nothing. */
+const ZERO_DELAY: DtcgDurationValue = { value: 0, unit: 'ms' }
+
+/**
+ * A `duration easing [delay]` fragment -> a DTCG `transition`.
+ *
+ * That is the shape of `--dz-transition-*`: the part of a `transition` a
+ * consumer pastes after a property name. The Format module's `transition` is
+ * exactly that triple without the property, so the fragment is expressible. An
+ * omitted delay is `0ms` — the CSS initial value, not a guess. An omitted timing
+ * function is *not* filled in: its initial value is the `ease` keyword, and this
+ * parser does not translate keywords into curves.
+ */
+export function parseTransition(value: string, resolveReference?: ReferenceResolver): ParseOutcome {
+  const durations: (DtcgDurationValue | string)[] = []
+  let timingFunction: DtcgCubicBezierValue | string | undefined
+  for (const part of splitTopLevelSpace(value.trim())) {
+    let type: DtcgTypeName
+    let parsed: DtcgDurationValue | DtcgCubicBezierValue | string
+    const reference = ALIAS_PATTERN.exec(part)?.[1]
+    if (reference !== undefined) {
+      if (resolveReference === undefined)
+        return { ok: false, reason: `references ${reference}, which only the document builder can resolve` }
+      const resolved = resolveReference(reference)
+      if (!resolved.ok)
+        return { ok: false, reason: resolved.reason }
+      type = resolved.type
+      parsed = resolved.reference
+    }
+    else if (DURATION_PATTERN.test(part)) {
+      const outcome = parseDuration(part)
+      if (!outcome.ok)
+        return outcome
+      type = 'duration'
+      parsed = outcome.value as DtcgDurationValue
+    }
+    else if (CUBIC_BEZIER_PATTERN.test(part)) {
+      const outcome = parseCubicBezier(part)
+      if (!outcome.ok)
+        return outcome
+      type = 'cubicBezier'
+      parsed = outcome.value as DtcgCubicBezierValue
+    }
+    else {
+      return { ok: false, reason: `"${part}" is neither a duration nor a cubic-bezier() curve` }
+    }
+    if (type === 'duration' && durations.length < 2) {
+      durations.push(parsed as DtcgDurationValue | string)
+    }
+    else if (type === 'cubicBezier' && timingFunction === undefined) {
+      timingFunction = parsed as DtcgCubicBezierValue | string
+    }
+    else {
+      return { ok: false, reason: `"${part}" (${type}) has no place in a duration/easing/delay fragment` }
+    }
+  }
+  const duration = durations[0]
+  if (duration === undefined)
+    return { ok: false, reason: `no duration: ${value}` }
+  if (timingFunction === undefined) {
+    return {
+      ok: false,
+      reason: 'no timing function; its CSS initial value is the `ease` keyword, which is not translated into a curve',
+    }
+  }
+  return { ok: true, value: { duration, delay: durations[1] ?? ZERO_DELAY, timingFunction } }
+}
+
+/**
+ * Dispatch a CSS value string to the parser for a declared DTCG type.
+ * `resolveReference` is consulted only by composite types (`transition`).
+ */
+export function parseAs(type: DtcgTypeName, value: string, resolveReference?: ReferenceResolver): ParseOutcome {
   switch (type) {
     case 'color': return parseOklchColor(value)
     case 'dimension': return parseDimension(value)
@@ -491,6 +584,7 @@ export function parseAs(type: DtcgTypeName, value: string): ParseOutcome {
     case 'cubicBezier': return parseCubicBezier(value)
     case 'fontFamily': return parseFontFamily(value)
     case 'shadow': return parseShadow(value)
+    case 'transition': return parseTransition(value, resolveReference)
   }
 }
 
@@ -624,9 +718,8 @@ export const PRIMITIVE_GROUPS: readonly PrimitiveGroupSpec[] = [
   {
     group: 'transition',
     cssSegment: 'transition',
-    type: null,
-    untypedReason: 'a `duration easing` value fragment meant to be pasted after a property list; the DTCG `transition` type models the CSS longhands (duration + delay + timingFunction) and cannot represent a fragment without inventing a delay',
-    description: 'Duration+easing shorthands. Not expressible as a DTCG type — see $extensions["com.dzup"].untyped.',
+    type: 'transition',
+    description: 'Duration+easing fragments, pasted after a property name. `duration` and `timingFunction` reference the primitives the CSS names; `delay` is `0ms`, the CSS initial value the fragment leaves implicit.',
     vars: () => {
       const vars: Record<string, string> = {}
       for (const [name, value] of Object.entries(generateTransitionCssVars())) {
@@ -688,6 +781,7 @@ export const COMPONENT_TYPE_RULES: readonly (readonly [RegExp, DtcgTypeName | nu
   [/-transition$/, null, 'a CSS `transition` shorthand string including property names; the DTCG `transition` type models a single property\'s duration/delay/timingFunction and cannot carry a property list'],
   [/-text-transform$/, null, 'a CSS keyword; the DTCG Format module has no keyword or string token type'],
   [/-letter-spacing$/, null, 'value is in `em`; the DTCG dimension type allows only `px` and `rem`'],
+  [/^--dz-page-hero-bg$/, null, 'a CSS background value, not a colour: a var() into a brand-preset property this package does not define, falling back to a multi-stop gradient; DTCG `color` cannot hold a gradient and the `gradient` type models a single gradient\'s colour stops'],
   [/-(?:gradient|overlay)$/, null, 'a multi-layer CSS gradient with `var()` fallbacks into brand-preset properties this package does not define; the DTCG `gradient` type models a single gradient\'s colour stops'],
   [/-(?:opacity|line-height|z-index)$/, 'number'],
   [/-font-family$/, 'fontFamily'],
@@ -976,6 +1070,29 @@ export function buildDtcgDocument(options: BuildOptions): DtcgBuildResult {
     return terminalOf(next, seen)
   }
 
+  /**
+   * Resolve a `var(--dz-*)` *inside* a composite value (a transition's
+   * duration, say) to a `{group.token}` reference. The target must carry a type
+   * and a value DTCG can hold, exactly as a whole-value alias's terminal must.
+   */
+  function referenceResolverFor(token: PlannedToken, seen: ReadonlySet<string> = new Set()): ReferenceResolver {
+    const visited = new Set([...seen, token.path])
+    return (cssVariable) => {
+      const target = scopeFor(token).get(cssVariable)
+      if (target === undefined)
+        return { ok: false, reason: `references ${cssVariable}, which this package does not define` }
+      const terminal = terminalOf(target, new Set())
+      if (terminal === null || visited.has(terminal.path))
+        return { ok: false, reason: `the reference through ${cssVariable} is cyclic or broken` }
+      if (terminal.declaredType === null)
+        return { ok: false, reason: `references ${cssVariable}, which has no DTCG type` }
+      const parsed = parseAs(terminal.declaredType, terminal.cssValue, referenceResolverFor(terminal, visited))
+      if (!parsed.ok)
+        return { ok: false, reason: `references ${cssVariable}: ${parsed.reason}` }
+      return { ok: true, reference: `{${target.path}}`, type: terminal.declaredType }
+    }
+  }
+
   const untyped: UntypedTokenRecord[] = []
   const untypedPaths = new Set<string>()
   const document: Record<string, unknown> = {}
@@ -1033,7 +1150,7 @@ export function buildDtcgDocument(options: BuildOptions): DtcgBuildResult {
         })
         continue
       }
-      const terminalParse = parseAs(terminalType, terminal.cssValue)
+      const terminalParse = parseAs(terminalType, terminal.cssValue, referenceResolverFor(terminal))
       if (!terminalParse.ok) {
         decisions.push({
           token,
@@ -1053,7 +1170,7 @@ export function buildDtcgDocument(options: BuildOptions): DtcgBuildResult {
       decisions.push({ token, type: null, value: null, reason: 'no declared type' })
       continue
     }
-    const parsed = parseAs(declared, token.cssValue)
+    const parsed = parseAs(declared, token.cssValue, referenceResolverFor(token))
     if (!parsed.ok) {
       // The declared type says what the token is *for*; the parser says whether
       // DTCG can hold this particular value. Report both, so the reason never

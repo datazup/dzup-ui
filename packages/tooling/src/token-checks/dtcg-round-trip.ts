@@ -138,6 +138,47 @@ const SHADOWED_ACROSS_TIERS: readonly string[] = [
   '--dz-appshell-main-bg',
 ]
 
+/**
+ * Exact set of the DTCG paths recorded under `$extensions["com.dzup"].untyped`.
+ *
+ * The coverage check only demands that an inexpressible token be *recorded*;
+ * without this ceiling a new untyped token would join the set silently and the
+ * export would shrink without anyone deciding it should. Keyed by path rather
+ * than by `--dz-*` name because `--dz-shadow-none` is recorded twice, once per
+ * cascade. A path outside the set fails, and so does a listed path that is no
+ * longer untyped — the ceiling only falls. Each entry's reason lives in the
+ * export itself; this list is the reviewed decision that the reason holds.
+ */
+export const UNTYPED_CEILING: readonly string[] = [
+  // `em` letter-spacing — DTCG dimension allows only px and rem.
+  'primitive.letterSpacing.tighter',
+  'primitive.letterSpacing.tight',
+  'primitive.letterSpacing.normal',
+  'primitive.letterSpacing.wide',
+  'primitive.letterSpacing.wider',
+  'primitive.letterSpacing.widest',
+  'component.sidebar.section-title-letter-spacing',
+  // The `none` keyword — a DTCG shadow is an object.
+  'primitive.shadow.none',
+  'semantic.dark.shadow-none',
+  // `transition` shorthands that carry property names.
+  'component.button.transition',
+  'component.control.transition',
+  'component.input.transition',
+  'component.card.transition',
+  'component.dialog.transition',
+  'component.sidebar.transition',
+  'component.appshell.transition',
+  // `100vw`, a keyword, `clamp()`, and gradients with var() fallbacks.
+  'component.dialog.full-max-width',
+  'component.sidebar.section-title-text-transform',
+  'component.page-hero.bg',
+  'component.page-hero.overlay',
+  'component.page-hero.title-gradient',
+  'component.page-hero.title-size',
+  'component.page-hero.padding',
+]
+
 // --------------------------------------------------------------------------
 // Independent path -> ABI-name rules
 // --------------------------------------------------------------------------
@@ -392,6 +433,21 @@ export function declarationsFromTokenMaps(): CssDeclaration[] {
 }
 
 /** Follow `var(--dz-x)` chains inside one theme context. */
+/**
+ * Replace every `var(--dz-x)` *inside* a value with what it resolves to, so a
+ * composite such as `var(--dz-duration-fast) var(--dz-ease-default)` can be
+ * read as a DTCG `transition`. A reference that does not resolve is left in
+ * place, which makes the value unreadable and the comparison fail by name.
+ */
+function resolveInnerReferences(value: string | null, context: ReadonlyMap<string, string>): string | null {
+  if (value === null)
+    return null
+  return value.replace(
+    /var\(\s*(--dz-[a-z0-9_-]+)\s*\)/g,
+    (whole, name: string) => resolveCssValue(name, context) ?? whole,
+  )
+}
+
 function resolveCssValue(
   name: string,
   context: ReadonlyMap<string, string>,
@@ -521,6 +577,24 @@ function canonicalCssValue(type: string, value: string): Canonical | null {
       if (layers.length === 0 || layers.includes(null))
         return null
       return layers.length === 1 ? layers[0] : layers
+    }
+    case 'transition': {
+      const durations: Canonical[] = []
+      let timingFunction: Canonical | null = null
+      for (const part of splitOutsideParens(trimmed, ' ')) {
+        const time = canonicalCssValue('duration', part)
+        const curve = time === null ? canonicalCssValue('cubicBezier', part) : null
+        if (time !== null && durations.length < 2)
+          durations.push(time)
+        else if (curve !== null && timingFunction === null)
+          timingFunction = curve
+        else
+          return null
+      }
+      if (durations.length === 0 || timingFunction === null)
+        return null
+      // An omitted delay is the CSS initial value.
+      return { duration: durations[0], delay: durations[1] ?? { value: 0, unit: 'ms' }, timingFunction }
     }
     default:
       return null
@@ -683,6 +757,88 @@ function resolveDtcgValue(
       next = overridden
   }
   return resolveDtcgValue(next, tokens, darkOverrides, seen)
+}
+
+/**
+ * Follow `{group.token}` references held *inside* a composite value — a
+ * transition's `duration`, for one — with the same dark late binding a
+ * whole-value alias gets.
+ */
+function resolveSubReferences(
+  value: unknown,
+  tokens: ReadonlyMap<string, ReadToken>,
+  darkOverrides: ReadonlyMap<string, ReadToken> | null,
+): { value: unknown } | { error: string } {
+  if (typeof value !== 'object' || value === null || Array.isArray(value))
+    return { value }
+  const resolved: Record<string, unknown> = {}
+  for (const [key, sub] of Object.entries(value)) {
+    const match = typeof sub === 'string' ? ALIAS_REFERENCE.exec(sub) : null
+    if (match === null) {
+      resolved[key] = sub
+      continue
+    }
+    let target = tokens.get(match[1] as string)
+    if (target === undefined)
+      return { error: `sub-value ${key} references {${match[1]}}, which does not resolve to a token` }
+    if (darkOverrides !== null && target.cssVariable !== null)
+      target = darkOverrides.get(target.cssVariable) ?? target
+    const inner = resolveDtcgValue(target, tokens, darkOverrides)
+    if ('error' in inner)
+      return { error: `sub-value ${key}: ${inner.error}` }
+    resolved[key] = inner.value
+  }
+  return { value: resolved }
+}
+
+/**
+ * A composite token whose CSS names `var(--dz-*)` *inside* its value must keep
+ * each of those as a `{group.token}` sub-value. Inlining one cuts the export
+ * loose from the primitive a consumer edits to retheme the system — the same
+ * reason a whole-value alias must stay an alias.
+ */
+export function subReferenceInliningIssue(token: ReadToken): string | null {
+  const declared = token.declaredCssValue
+  if (declared === null || /^var\(\s*--dz-[a-z0-9_-]+\s*\)$/.test(declared))
+    return null
+  const named = declared.match(/var\(\s*--dz-[a-z0-9_-]+\s*\)/g)?.length ?? 0
+  const raw = token.rawValue
+  if (named === 0 || typeof raw !== 'object' || raw === null || Array.isArray(raw))
+    return null
+  const kept = Object.values(raw).filter(sub => typeof sub === 'string' && ALIAS_REFERENCE.test(sub)).length
+  return kept < named
+    ? `CSS names ${named} var() reference(s) inside "${declared}", but the export keeps only ${kept} as {group.token} sub-values`
+    : null
+}
+
+/** Hold the untyped set to `ceiling` exactly, in both directions. */
+export function checkUntypedCeiling(
+  untypedPaths: Iterable<string>,
+  ceiling: readonly string[] = UNTYPED_CEILING,
+): RoundTripIssue[] {
+  const issues: RoundTripIssue[] = []
+  const allowed = new Set(ceiling)
+  const present = new Set(untypedPaths)
+  for (const path of present) {
+    if (!allowed.has(path)) {
+      issues.push({
+        check: 'untyped-ceiling',
+        symbol: path,
+        message: 'recorded as untyped but absent from UNTYPED_CEILING. Give it a DTCG type, or — '
+          + 'if the Format module truly cannot hold it — add the path, so the decision is reviewed',
+      })
+    }
+  }
+  for (const path of allowed) {
+    if (!present.has(path)) {
+      issues.push({
+        check: 'untyped-ceiling',
+        symbol: path,
+        message: 'listed in UNTYPED_CEILING but no longer untyped — remove the entry; the ceiling only falls',
+      })
+    }
+  }
+  return issues
 }
 
 // --------------------------------------------------------------------------
@@ -967,6 +1123,7 @@ export function runRoundTrip(): RoundTripResult {
     | Record<string, unknown>
     | undefined
   const untypedRaw = (rootExtensions?.untyped ?? {}) as Record<string, UntypedRecord>
+  for (const issue of checkUntypedCeiling(Object.keys(untypedRaw))) issues.push(issue)
 
   /** ABI name -> the `semantic.dark.*` token that redeclares it. */
   const darkOverrides = new Map<string, ReadToken>()
@@ -1010,6 +1167,9 @@ export function runRoundTrip(): RoundTripResult {
         + '{group.token} reference',
       )
     }
+    const inlined = subReferenceInliningIssue(token)
+    if (inlined !== null)
+      fail('alias-preservation', token.cssVariable ?? token.path, inlined)
     if (isDtcgAlias) {
       aliasesResolved += 1
       const resolution = resolveDtcgValue(token, tokens, null)
@@ -1104,7 +1264,12 @@ export function runRoundTrip(): RoundTripResult {
         fail('value', name, `${context.name}: ${resolution.error}`)
         continue
       }
-      const cssResolved = resolveCssValue(name, context.cssContext)
+      const expanded = resolveSubReferences(resolution.value, tokens, context.darkOverrides)
+      if ('error' in expanded) {
+        fail('value', name, `${context.name}: ${expanded.error}`)
+        continue
+      }
+      const cssResolved = resolveInnerReferences(resolveCssValue(name, context.cssContext), context.cssContext)
       if (cssResolved === null) {
         fail('value', name, `${context.name}: the CSS value could not be resolved (cycle or missing target)`)
         continue
@@ -1119,11 +1284,11 @@ export function runRoundTrip(): RoundTripResult {
         )
         continue
       }
-      if (!deepEqual(resolution.value, cssCanonical)) {
+      if (!deepEqual(expanded.value, cssCanonical)) {
         fail(
           'value',
           name,
-          `${context.name}: export resolves to ${JSON.stringify(resolution.value)} but tokens.css `
+          `${context.name}: export resolves to ${JSON.stringify(expanded.value)} but tokens.css `
           + `resolves to ${JSON.stringify(cssCanonical)} (from "${cssResolved}")`,
         )
         continue
@@ -1239,6 +1404,9 @@ function main(): void {
       `  high-contrast:  ${stats.comparedHighContrast} values matched, key-identical to `
       + `light and dark (${stats.highContrastSource}); valued in CSS system colours, which `
       + `DTCG 2025.10 cannot express — see D47`,
+    )
+    console.warn(
+      `  untyped: ${stats.untyped} at ceiling (UNTYPED_CEILING) — a new untyped path fails by name`,
     )
     console.warn(`  CSS read from:  ${stats.cssSource}`)
     console.warn(`  DTCG read from: ${stats.dtcgSource}`)

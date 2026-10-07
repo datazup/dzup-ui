@@ -14,11 +14,15 @@
 
 import { describe, expect, it } from 'vitest'
 
+import type { ReadToken } from './dtcg-round-trip.js'
 import {
+  checkUntypedCeiling,
   declarationsFromTokenMaps,
   parseCssDeclarations,
   readDtcgDocument,
   runRoundTrip,
+  subReferenceInliningIssue,
+  UNTYPED_CEILING,
 } from './dtcg-round-trip.js'
 
 const FIXTURE_CSS = `
@@ -200,6 +204,57 @@ describe('dtcg reader', () => {
   })
 })
 
+describe('untyped ceiling', () => {
+  it('accepts the exact set', () => {
+    expect(checkUntypedCeiling(['a.b.c', 'a.b.d'], ['a.b.c', 'a.b.d'])).toEqual([])
+  })
+
+  it('fails a new untyped path by name', () => {
+    const issues = checkUntypedCeiling(['a.b.c', 'a.b.new'], ['a.b.c'])
+    expect(issues.map(issue => issue.symbol)).toEqual(['a.b.new'])
+    expect(issues[0]?.check).toBe('untyped-ceiling')
+  })
+
+  it('fails a ceiling entry that is no longer untyped, so the ceiling only falls', () => {
+    const issues = checkUntypedCeiling(['a.b.c'], ['a.b.c', 'a.b.gone'])
+    expect(issues.map(issue => issue.symbol)).toEqual(['a.b.gone'])
+  })
+
+  it('lists each path once', () => {
+    expect(UNTYPED_CEILING.length).toBeGreaterThan(0)
+    expect(new Set(UNTYPED_CEILING).size).toBe(UNTYPED_CEILING.length)
+  })
+})
+
+describe('composite sub-value references', () => {
+  const transition = (rawValue: unknown): ReadToken => ({
+    path: 'primitive.transition.fast',
+    type: 'transition',
+    rawValue,
+    cssVariable: '--dz-transition-fast',
+    declaredCssValue: 'var(--dz-duration-fast) var(--dz-ease-default)',
+    deprecated: null,
+    themeVarying: false,
+  })
+  const zero = { value: 0, unit: 'ms' }
+
+  it('accepts a transition that keeps both references', () => {
+    expect(subReferenceInliningIssue(transition({
+      duration: '{primitive.duration.fast}',
+      delay: zero,
+      timingFunction: '{primitive.easing.default}',
+    }))).toBeNull()
+  })
+
+  it('fails a transition that inlined one of them', () => {
+    expect(subReferenceInliningIssue(transition({
+      duration: { value: 150, unit: 'ms' },
+      delay: zero,
+      timingFunction: '{primitive.easing.default}',
+    }))).toContain('keeps only 1')
+  })
+})
+
 describe('the gate over the real package', () => {
   const result = runRoundTrip()
 
@@ -227,5 +282,9 @@ describe('the gate over the real package', () => {
     expect(result.stats.cssNamesLight - result.stats.comparedLight).toBeLessThanOrEqual(
       result.stats.untyped,
     )
+  })
+
+  it('holds the untyped set at UNTYPED_CEILING', () => {
+    expect(result.stats.untyped).toBe(UNTYPED_CEILING.length)
   })
 })

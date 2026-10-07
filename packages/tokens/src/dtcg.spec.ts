@@ -31,6 +31,7 @@ import {
   parseNumber,
   parseOklchColor,
   parseShadow,
+  parseTransition,
   PRIMITIVE_GROUPS,
   serializeDtcgDocument,
 } from './dtcg.js'
@@ -170,6 +171,57 @@ describe('dtcg value parsers', () => {
         expect(outcome.reason).toContain('none')
     })
   })
+
+  describe('transition', () => {
+    const curve = 'cubic-bezier(0.4, 0, 0.2, 1)'
+
+    it('fills an omitted delay with the CSS initial value, 0ms', () => {
+      expect(ok(parseTransition(`150ms ${curve}`))).toEqual({
+        duration: { value: 150, unit: 'ms' },
+        delay: { value: 0, unit: 'ms' },
+        timingFunction: [0.4, 0, 0.2, 1],
+      })
+    })
+
+    it('reads a second duration as the delay', () => {
+      const value = ok(parseTransition(`150ms 50ms ${curve}`)) as { delay: unknown }
+      expect(value.delay).toEqual({ value: 50, unit: 'ms' })
+    })
+
+    it('keeps a var() sub-value as the reference the resolver returns', () => {
+      const value = ok(parseTransition('var(--dz-duration-fast) var(--dz-ease-default)', name =>
+        name === '--dz-duration-fast'
+          ? { ok: true, reference: '{primitive.duration.fast}', type: 'duration' }
+          : { ok: true, reference: '{primitive.easing.default}', type: 'cubicBezier' }))
+      expect(value).toEqual({
+        duration: '{primitive.duration.fast}',
+        delay: { value: 0, unit: 'ms' },
+        timingFunction: '{primitive.easing.default}',
+      })
+    })
+
+    it('refuses a var() sub-value when there is no resolver to name its path', () => {
+      expect(parseTransition(`var(--dz-duration-fast) ${curve}`).ok).toBe(false)
+    })
+
+    it('refuses a reference whose target is the wrong type', () => {
+      const outcome = parseTransition('var(--dz-x) var(--dz-y)', () =>
+        ({ ok: true, reference: '{primitive.color.x}', type: 'color' }))
+      expect(outcome.ok).toBe(false)
+    })
+
+    it('does not translate a keyword easing or invent a missing one', () => {
+      expect(parseTransition('150ms ease').ok).toBe(false)
+      const missing = parseTransition('150ms')
+      expect(missing.ok).toBe(false)
+      if (!missing.ok)
+        expect(missing.reason).toContain('timing function')
+    })
+
+    it('refuses a property name — a list of transitions is not one transition', () => {
+      expect(parseTransition(`opacity 150ms ${curve}`).ok).toBe(false)
+    })
+  })
 })
 
 describe('dtcg document', () => {
@@ -295,6 +347,27 @@ describe('dtcg document', () => {
     for (const name of Object.keys(DEPRECATED_TOKENS)) {
       expect(byCssVariable.get(name)?.$deprecated, name).toBe(DEPRECATED_TOKENS[name])
     }
+  })
+
+  it('types the --dz-transition-* fragments as transitions that reference their primitives', () => {
+    const transition = (document.primitive as Record<string, Record<string, unknown>>).transition as Record<string, TokenNode>
+    const steps = Object.keys(transition).filter(key => !key.startsWith('$'))
+    expect(steps.length).toBeGreaterThan(0)
+    for (const step of steps) {
+      const token = transition[step] as TokenNode
+      expect(token.$type, step).toBe('transition')
+      const value = token.$value as Record<string, unknown>
+      expect(String(value.duration)).toMatch(/^\{primitive\.duration\.[^{}]+\}$/)
+      expect(value.timingFunction).toBe('{primitive.easing.default}')
+      expect(value.delay).toEqual({ value: 0, unit: 'ms' })
+    }
+    expect(untyped.some(record => record.path.startsWith('primitive.transition.'))).toBe(false)
+  })
+
+  it('records --dz-page-hero-bg as a background value, not as a colour that failed to parse', () => {
+    const record = untyped.find(entry => entry.cssVariable === '--dz-page-hero-bg')
+    expect(record?.reason).toContain('background value')
+    expect(record?.reason).not.toContain('declared $type')
   })
 
   it('is deterministic — two builds serialise to the same bytes', () => {

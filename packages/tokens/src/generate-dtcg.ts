@@ -11,7 +11,12 @@
  * a side effect, and would put a hard requirement (zero change to tokens.css) at
  * the mercy of an unrelated edit.
  *
- * Run via: yarn generate:tokens:dtcg
+ * Run via: yarn generate:tokens:dtcg [--verbose]
+ *
+ * The untyped set is summarised in one line; `--verbose` lists every record
+ * with its reason. The records themselves always ship in the artifact, under
+ * `$extensions["com.dzup"].untyped`, and `validate:tokens:dtcg` holds them to
+ * an exact-set ceiling — so a quiet build hides nothing a gate does not catch.
  *
  * The output is deterministic and timestamp-free — run it twice, diff the bytes.
  * Freshness is gated by `yarn validate:tokens:dtcg`, which rebuilds in memory
@@ -20,6 +25,7 @@
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 import { buildDtcgDocument, DTCG_OUTPUT_RELATIVE_PATH, serializeDtcgDocument } from './dtcg.js'
@@ -60,13 +66,17 @@ function main(): void {
   )
   console.log('[tokens:dtcg] by $type: %s', typeCensus)
   if (counts.untyped > 0) {
+    const verbose = process.argv.includes('--verbose')
     console.log(
       '[tokens:dtcg] %d tokens have no DTCG type and are recorded under '
-      + '$extensions["com.dzup"].untyped (never given a fake $type):',
+      + '$extensions["com.dzup"].untyped (never given a fake $type)%s',
       counts.untyped,
+      verbose ? ':' : ' — pass --verbose to list them',
     )
-    for (const record of result.untyped) {
-      console.log('[tokens:dtcg]   %s (%s) — %s', record.path, record.cssVariable, record.reason)
+    if (verbose) {
+      for (const record of result.untyped) {
+        console.log('[tokens:dtcg]   %s (%s) — %s', record.path, record.cssVariable, record.reason)
+      }
     }
   }
   /* eslint-enable no-console */
