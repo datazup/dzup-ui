@@ -129,7 +129,7 @@ From `packages/tokens/src/primitives/transitions.ts` (emitted as CSS vars):
 | `--dz-duration-fast` / `-normal` / `-slow` / `-slower` | `150` / `200` / `300` / `500ms` |
 | `--dz-ease-default` | `cubic-bezier(0.4, 0, 0.2, 1)` |
 | `--dz-ease-in` / `-out` / `-in-out` / `-bounce` | standard + overshoot curves |
-| `--dz-transition-fast` / `-normal` / `-slow` | `duration + ease-default` shorthand |
+| `--dz-transition-fast` / `-normal` / `-slow` | `duration + ease-default` shorthand — use it alone (`opacity var(--dz-transition-fast)`); appending `ease` names a second timing function and the browser drops the transition |
 
 > **Gap (addressed by Task N0):** there is **no semantic / asymmetric motion
 > scale** (entering vs leaving) and **no parametric enter/leave system** — the two

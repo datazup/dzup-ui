@@ -219,8 +219,9 @@ holds it to an exact list of paths (`UNTYPED_CEILING` in
 `packages/tooling/src/token-checks/dtcg-round-trip.ts`). A new untyped token
 fails the gate by name, and so does a listed one that has since gained a type,
 so the list only shrinks. The build prints one summary line for the set;
-`yarn generate:tokens:dtcg --verbose` lists every record with its reason. To consume them, read `--dz-*` directly — that is the ABI, and it
-expresses everything.
+`yarn generate:tokens:dtcg --verbose` lists every record with its reason. To
+consume them, read `--dz-*` directly — that is the ABI, and it expresses
+everything.
 
 ---
 

@@ -313,6 +313,12 @@ transitions users see most; `slower` is for large surface changes.
 
 **Shorthands**: `--dz-transition-fast` → `var(--dz-duration-fast) var(--dz-ease-default)` · `--dz-transition-normal` → `var(--dz-duration-normal) var(--dz-ease-default)` · `--dz-transition-slow` → `var(--dz-duration-slow) var(--dz-ease-default)`
 
+A shorthand already ends in its timing function, so use it alone:
+`transition: opacity var(--dz-transition-fast)`. Appending `ease` (or any
+other timing function) names two, which is invalid once the `var()`
+substitutes — the browser drops the whole transition. `validate:tokens:refs`
+rejects it as `double-timing`.
+
 A global `@media (prefers-reduced-motion: reduce)` rule in `tokens.css`
 collapses every animation and transition to ~0 ms. Honor it; never re-enable
 motion behind it.
