@@ -13,17 +13,17 @@ import { tv } from 'tailwind-variants'
  * (TASK-OSS-P4-05).
  */
 export const headingVariants = tv({
-  base: 'text-[var(--dz-foreground)] font-[var(--dz-font-sans)] m-0',
+  base: 'text-[var(--dz-foreground)] font-(family-name:--dz-font-sans) m-0',
   variants: {
     size: {
-      'xs': 'text-[length:var(--dz-text-sm)] font-semibold leading-[var(--dz-leading-snug)] tracking-[var(--dz-tracking-tight)]',
-      'sm': 'text-[length:var(--dz-text-base)] font-semibold leading-[var(--dz-leading-snug)] tracking-[var(--dz-tracking-tight)]',
-      'md': 'text-[length:var(--dz-text-lg)] font-semibold leading-[var(--dz-leading-snug)] tracking-[var(--dz-tracking-tight)]',
-      'lg': 'text-[length:var(--dz-text-xl)] font-semibold leading-[var(--dz-leading-tight)] tracking-[var(--dz-tracking-tight)]',
-      'xl': 'text-[length:var(--dz-text-2xl)] font-bold leading-[var(--dz-leading-tight)] tracking-[var(--dz-tracking-tight)]',
-      '2xl': 'text-[length:var(--dz-text-3xl)] font-bold leading-[var(--dz-leading-tight)] tracking-[var(--dz-tracking-tight)]',
-      '3xl': 'text-[length:var(--dz-text-4xl)] font-bold leading-[var(--dz-leading-tight)] tracking-[var(--dz-tracking-tighter)]',
-      '4xl': 'text-[length:var(--dz-text-5xl)] font-bold leading-[var(--dz-leading-none)] tracking-[var(--dz-tracking-tighter)]',
+      'xs': 'text-[length:var(--dz-text-sm)] font-[var(--dz-font-semibold)] leading-[var(--dz-leading-snug)] tracking-[var(--dz-tracking-tight)]',
+      'sm': 'text-[length:var(--dz-text-base)] font-[var(--dz-font-semibold)] leading-[var(--dz-leading-snug)] tracking-[var(--dz-tracking-tight)]',
+      'md': 'text-[length:var(--dz-text-lg)] font-[var(--dz-font-semibold)] leading-[var(--dz-leading-snug)] tracking-[var(--dz-tracking-tight)]',
+      'lg': 'text-[length:var(--dz-text-xl)] font-[var(--dz-font-semibold)] leading-[var(--dz-leading-tight)] tracking-[var(--dz-tracking-tight)]',
+      'xl': 'text-[length:var(--dz-text-2xl)] font-[var(--dz-font-bold)] leading-[var(--dz-leading-tight)] tracking-[var(--dz-tracking-tight)]',
+      '2xl': 'text-[length:var(--dz-text-3xl)] font-[var(--dz-font-bold)] leading-[var(--dz-leading-tight)] tracking-[var(--dz-tracking-tight)]',
+      '3xl': 'text-[length:var(--dz-text-4xl)] font-[var(--dz-font-bold)] leading-[var(--dz-leading-tight)] tracking-[var(--dz-tracking-tighter)]',
+      '4xl': 'text-[length:var(--dz-text-5xl)] font-[var(--dz-font-bold)] leading-[var(--dz-leading-none)] tracking-[var(--dz-tracking-tighter)]',
     },
     weight: {
       light: 'font-[var(--dz-font-light)]',

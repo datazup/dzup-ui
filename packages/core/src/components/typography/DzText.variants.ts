@@ -10,7 +10,7 @@ import { tv } from 'tailwind-variants'
  * side (TASK-OSS-P4-05).
  */
 export const textVariants = tv({
-  base: 'font-[var(--dz-font-sans)] m-0',
+  base: 'font-(family-name:--dz-font-sans) m-0',
   variants: {
     size: {
       xs: 'text-[length:var(--dz-text-xs)] leading-[var(--dz-leading-normal)]',
