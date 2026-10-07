@@ -596,6 +596,35 @@
       }
     },
     {
+      "slug": "ops-console",
+      "name": "Ops Console Kit",
+      "blurb": "A compact operations workspace for reviewing customer activity and follow-up.",
+      "category": "dashboards",
+      "tags": [
+        "dashboard",
+        "app-shell",
+        "sidebar",
+        "data-table",
+        "responsive"
+      ],
+      "stack": [
+        "DzHeading",
+        "DzButton",
+        "DzCard",
+        "DzTable",
+        "DzBadge"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-29",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/ops-console",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/ops-console",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/ops-console-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/ops-console-dark.webp"
+      }
+    },
+    {
       "slug": "ops-incident-console",
       "name": "Ops Incident Console",
       "blurb": "Incident response console: a severity queue, SLA burn-down per incident and a live update timeline.",
@@ -838,6 +867,34 @@
       "thumbnail": {
         "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/product-launch-landing-light.webp",
         "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/product-launch-landing-dark.webp"
+      }
+    },
+    {
+      "slug": "product-site",
+      "name": "Product Site Kit",
+      "blurb": "A spacious product site with plans, company pages, updates, and a connected journal.",
+      "category": "marketing",
+      "tags": [
+        "marketing",
+        "grid",
+        "pricing",
+        "content",
+        "responsive"
+      ],
+      "stack": [
+        "DzHeading",
+        "DzButton",
+        "DzCard",
+        "DzAccordion"
+      ],
+      "tier": "H",
+      "licence": "commercial-core",
+      "createdAt": "2026-09-29",
+      "detailUrl": "https://dzup-templates-showroom.staging.dziphost.com/templates/product-site",
+      "previewUrl": "https://dzup-templates-showroom.staging.dziphost.com/preview/product-site",
+      "thumbnail": {
+        "light": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/product-site-light.webp",
+        "dark": "https://dzup-templates-showroom.staging.dziphost.com/templates/thumbnails/product-site-dark.webp"
       }
     },
     {
