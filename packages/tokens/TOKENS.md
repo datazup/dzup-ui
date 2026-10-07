@@ -187,13 +187,14 @@ theme yet — TASK-R5-O7 changed no component.
 | `--dz-shadow-*` (7 of 8), `*-shadow` | `shadow` | multi-layer → array; `inner` → `inset: true`; implicit spread filled as `0px` |
 | `--dz-duration-*` | `duration` | `ms` |
 | `--dz-ease-*` | `cubicBezier` | four numbers; y may overshoot |
+| `--dz-transition-*` | `transition` | `duration` and `timingFunction` are `{group.token}` references to the primitives the CSS names; `delay` is `0ms`, the CSS initial value the fragment leaves implicit |
 
 **No colour carries a `hex` fallback.** Deriving one from OKLCH requires a
 gamut-mapping choice (naive clipping vs CSS Color 4 gamut mapping) that would
 produce a different colour than the browser renders for out-of-sRGB values.
 Shipping a silently wrong fallback is worse than shipping none.
 
-### The 26 tokens with no `$type`
+### The 23 tokens with no `$type`
 
 Some values have no DTCG type, and this export **does not invent one**. A token
 whose `$type` cannot be resolved is invalid per the spec, so these are not
@@ -204,16 +205,21 @@ their exact CSS value and the reason:
 | Group | Count | Why |
 |---|---|---|
 | `--dz-tracking-*`, `*-letter-spacing` | 7 | values are in `em`; `dimension` allows only `px`/`rem`, and `em` is relative to the element's own font size, so no lossless conversion exists |
-| `--dz-transition-*`, `*-transition` | 10 | CSS shorthand fragments and property lists; the DTCG `transition` type models one property's duration/delay/timingFunction |
+| `*-transition` | 7 | CSS `transition` shorthands that include property names; the DTCG `transition` type models one transition's duration/delay/timingFunction and has no place for a property list |
 | `--dz-shadow-none` (both themes) | 2 | the `none` keyword; a DTCG shadow is an object |
-| `--dz-page-hero-{bg,overlay,title-gradient}` | 3 | multi-layer gradients with `var()` fallbacks into brand-preset properties this package does not define |
+| `--dz-page-hero-{bg,overlay,title-gradient}` | 3 | background values and multi-layer gradients with `var()` fallbacks into brand-preset properties this package does not define |
 | `--dz-page-hero-{title-size,padding}` | 2 | `clamp()` |
 | `--dz-dialog-full-max-width` | 1 | `100vw` |
 | `--dz-sidebar-section-title-text-transform` | 1 | a CSS keyword; the spec has no keyword or string type |
 
 They are still covered by the round-trip gate: their recorded CSS value is
 checked against the stylesheet like every other token. Nothing is dropped
-silently. To consume them, read `--dz-*` directly — that is the ABI, and it
+silently, and nothing joins the set silently either: `validate:tokens:dtcg`
+holds it to an exact list of paths (`UNTYPED_CEILING` in
+`packages/tooling/src/token-checks/dtcg-round-trip.ts`). A new untyped token
+fails the gate by name, and so does a listed one that has since gained a type,
+so the list only shrinks. The build prints one summary line for the set;
+`yarn generate:tokens:dtcg --verbose` lists every record with its reason. To consume them, read `--dz-*` directly — that is the ABI, and it
 expresses everything.
 
 ---

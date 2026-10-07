@@ -12,9 +12,9 @@
  * assertion with teeth; the rest exist so a failure says *which part* broke.
  */
 
-import { describe, expect, it } from 'vitest'
-
 import type { ReadToken } from './dtcg-round-trip.js'
+
+import { describe, expect, it } from 'vitest'
 import {
   checkUntypedCeiling,
   declarationsFromTokenMaps,
