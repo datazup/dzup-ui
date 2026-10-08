@@ -775,28 +775,75 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19380,
-          19380,
-          19380,
-          19380,
-          19380
+          19428,
+          19428,
+          19428,
+          19428,
+          19428
         ],
         "runs": 5,
-        "median": 19380,
-        "p95": 19380,
-        "mean": 19380,
+        "median": 19428,
+        "p95": 19428,
+        "mean": 19428,
         "stddev": 0,
         "cv": 0
       },
       "threshold": 20349,
       "thresholdFormula": "median 19380.00 + max(3σ 0.00, 5% 969.00) = 20349.00",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-08T09:16:49.908Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "c1dda2f7dc75c4230bb0bf53fcfa276e6abccb43971686f0dc9a05924bd7445a"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.31",
+          "typescript": "5.9.3",
+          "vitest": "3.2.6"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/gap-lanes-20261002/private/gap-ui-r11-perf-size-refresh-20261007-a3/raw-captures.json",
+        "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
+        "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
+        "adoptionDecision": "D-S1O4-2: operator use this host 2026-10-08",
+        "quietHostAttested": false,
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              19380,
+              19380,
+              19380,
+              19380,
+              19380
+            ],
+            "runs": 5,
+            "median": 19380,
+            "p95": 19380,
+            "mean": 19380,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 20349,
+          "thresholdFormula": "median 19380.00 + max(3σ 0.00, 5% 969.00) = 20349.00",
+          "policy": "Retained existing threshold and its original derivation; not recalculated from the refreshed distribution."
+        }
       }
     },
     {
@@ -841,28 +888,75 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          20100,
-          20100,
-          20100,
-          20100,
-          20100
+          20137,
+          20137,
+          20137,
+          20137,
+          20137
         ],
         "runs": 5,
-        "median": 20100,
-        "p95": 20100,
-        "mean": 20100,
+        "median": 20137,
+        "p95": 20137,
+        "mean": 20137,
         "stddev": 0,
         "cv": 0
       },
       "threshold": 21105,
       "thresholdFormula": "median 20100.00 + max(3σ 0.00, 5% 1005.00) = 21105.00",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-08T09:16:58.537Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "c1dda2f7dc75c4230bb0bf53fcfa276e6abccb43971686f0dc9a05924bd7445a"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.31",
+          "typescript": "5.9.3",
+          "vitest": "3.2.6"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/gap-lanes-20261002/private/gap-ui-r11-perf-size-refresh-20261007-a3/raw-captures.json",
+        "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
+        "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
+        "adoptionDecision": "D-S1O4-2: operator use this host 2026-10-08",
+        "quietHostAttested": false,
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              20100,
+              20100,
+              20100,
+              20100,
+              20100
+            ],
+            "runs": 5,
+            "median": 20100,
+            "p95": 20100,
+            "mean": 20100,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 21105,
+          "thresholdFormula": "median 20100.00 + max(3σ 0.00, 5% 1005.00) = 21105.00",
+          "policy": "Retained existing threshold and its original derivation; not recalculated from the refreshed distribution."
+        }
       }
     },
     {
@@ -1204,28 +1298,75 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19117,
-          19117,
-          19117,
-          19117,
-          19117
+          19147,
+          19147,
+          19147,
+          19147,
+          19147
         ],
         "runs": 5,
-        "median": 19117,
-        "p95": 19117,
-        "mean": 19117,
+        "median": 19147,
+        "p95": 19147,
+        "mean": 19147,
         "stddev": 0,
         "cv": 0
       },
       "threshold": 20072.85,
       "thresholdFormula": "median 19117.00 + max(3σ 0.00, 5% 955.85) = 20072.85",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-08T09:17:07.396Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "c1dda2f7dc75c4230bb0bf53fcfa276e6abccb43971686f0dc9a05924bd7445a"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.31",
+          "typescript": "5.9.3",
+          "vitest": "3.2.6"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/gap-lanes-20261002/private/gap-ui-r11-perf-size-refresh-20261007-a3/raw-captures.json",
+        "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
+        "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
+        "adoptionDecision": "D-S1O4-2: operator use this host 2026-10-08",
+        "quietHostAttested": false,
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              19117,
+              19117,
+              19117,
+              19117,
+              19117
+            ],
+            "runs": 5,
+            "median": 19117,
+            "p95": 19117,
+            "mean": 19117,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 20072.85,
+          "thresholdFormula": "median 19117.00 + max(3σ 0.00, 5% 955.85) = 20072.85",
+          "policy": "Retained existing threshold and its original derivation; not recalculated from the refreshed distribution."
+        }
       }
     },
     {
@@ -1369,28 +1510,75 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19016,
-          19016,
-          19016,
-          19016,
-          19016
+          19015,
+          19015,
+          19015,
+          19015,
+          19015
         ],
         "runs": 5,
-        "median": 19016,
-        "p95": 19016,
-        "mean": 19016,
+        "median": 19015,
+        "p95": 19015,
+        "mean": 19015,
         "stddev": 0,
         "cv": 0
       },
       "threshold": 19966.8,
       "thresholdFormula": "median 19016.00 + max(3σ 0.00, 5% 950.80) = 19966.80",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-08T09:17:16.405Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "c1dda2f7dc75c4230bb0bf53fcfa276e6abccb43971686f0dc9a05924bd7445a"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.31",
+          "typescript": "5.9.3",
+          "vitest": "3.2.6"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/gap-lanes-20261002/private/gap-ui-r11-perf-size-refresh-20261007-a3/raw-captures.json",
+        "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
+        "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
+        "adoptionDecision": "D-S1O4-2: operator use this host 2026-10-08",
+        "quietHostAttested": false,
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              19016,
+              19016,
+              19016,
+              19016,
+              19016
+            ],
+            "runs": 5,
+            "median": 19016,
+            "p95": 19016,
+            "mean": 19016,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 19966.8,
+          "thresholdFormula": "median 19016.00 + max(3σ 0.00, 5% 950.80) = 19966.80",
+          "policy": "Retained existing threshold and its original derivation; not recalculated from the refreshed distribution."
+        }
       }
     },
     {

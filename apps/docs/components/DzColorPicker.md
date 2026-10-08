@@ -206,7 +206,7 @@ then the component's own default.**
 | --- | --- |
 | **Server rendering** | `present` — `packages/core/tests/ssr/form-controls-ssr.spec.ts`. |
 | **Portal / teleport** | `unrun`. No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
-| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
@@ -244,7 +244,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `d8eff953` for the capability matrix,
+artifact records — `eb35f34b` for the capability matrix,
 `d8eff953` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
@@ -352,9 +352,9 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzColorPicker.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
+| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**4 unrun:** `axe`, `controlled-uncontrolled`, `portal-hydration`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**4 unrun:** `axe`, `controlled-uncontrolled`, `portal-hydration`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

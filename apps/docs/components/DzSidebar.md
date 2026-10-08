@@ -373,7 +373,7 @@ then the component's own default.**
 | --- | --- |
 | **Server rendering** | `present` — `packages/core/tests/ssr/portal-hydration.spec.ts`. |
 | **Portal / teleport** | `present` — `packages/core/tests/ssr/portal-hydration.spec.ts`. Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
-| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `url` — a hostile input can reach a sink here, and the cells below are what has been measured. |
 
 | Security lane | State |
@@ -418,7 +418,7 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `d8eff953` for the capability matrix,
+artifact records — `eb35f34b` for the capability matrix,
 `d8eff953` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
@@ -525,12 +525,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSidebar.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
+| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 | `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

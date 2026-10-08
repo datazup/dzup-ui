@@ -37,6 +37,13 @@
       "minCpus": 16,
       "nodeMajor": 24,
       "description": "The cloud agent session host that captured the 22 `size` baselines on 2026-09-29 (D135 / O7-D1, upstream commits 7c23198 and 70647fb): linux x64, 32 CPUs, node v24.20.0. Recorded so those numbers have a name. Adequate for `size` only -- a gzipped byte count does not vary with the host -- and NOT a candidate for the timing families, for the same reasons as linux-x64-ci."
+    },
+    "am5-linux-x64-32c-node24-size": {
+      "platform": "linux",
+      "arch": "x64",
+      "minCpus": 32,
+      "nodeMajor": 24,
+      "description": "Operator-designated am5 workstation, Node v24.20.0. Authoritative only for the four size records admitted by UI-R11-PERF-SIZE-REFRESH-20261007-P1; no timing, leak, memory, long-task or hydration designation."
     }
   },
   "candidates": [
@@ -91,5 +98,23 @@
     "thresholdDirection": "downward-only",
     "budgetIncrease": "Per 2026-08-11 doc 06: 'A budget increase needs a recorded user benefit and owner; it is not the default response to regression.' `perf:capture` therefore requires --raise-budget with --owner and --reason together before it will write a file that raises any threshold, and it prints every raised metric first.",
     "propose": "`yarn perf:propose <path>` is never refused. Measuring and proposing is a contributor act; adopting the numbers as budgets is an owner act. This split is TASK-R2-O7's `--propose` flag, and these refusals are what make it the ONLY path open to an agent."
+  },
+  "sizeRecordAuthority": {
+    "designated": true,
+    "profileId": "am5-linux-x64-32c-node24-size",
+    "hostname": "am5",
+    "node": "v24.20.0",
+    "metricIds": [
+      "size:DzColorPicker",
+      "size:DzCommandPalette",
+      "size:DzSidebar",
+      "size:DzTree"
+    ],
+    "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+    "decision": "D-S1O4-1 / D-S1O4-2",
+    "grantedBy": "operator use this host 2026-10-08",
+    "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
+    "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
+    "scope": "SIZE byte counts only for these four records; global authoritative designation and quiescence policy remain unchanged."
   }
 }

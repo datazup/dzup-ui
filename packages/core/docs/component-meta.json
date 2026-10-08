@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "d8eff9536cb052898e78f3dc8a001c334c71c07c",
+  "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -10035,9 +10035,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 5,
-          "stale": 1,
           "unrun": 4
         },
         "unrun": [
@@ -10046,9 +10045,7 @@
           "controlled-uncontrolled",
           "portal-hydration"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -11282,9 +11279,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 4,
-          "stale": 1,
           "unrun": 6
         },
         "unrun": [
@@ -11295,9 +11291,7 @@
           "keyboard-spec",
           "portal-hydration"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -40461,9 +40455,8 @@
           "teleports"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 8,
-          "stale": 1,
           "unrun": 5
         },
         "unrun": [
@@ -40473,9 +40466,7 @@
           "data-scenarios",
           "keyboard-spec"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
@@ -52279,17 +52270,14 @@
           "dataset"
         ],
         "cells": {
-          "pass": 7,
+          "pass": 8,
           "present": 8,
-          "stale": 1,
           "unrun": 1
         },
         "unrun": [
           "at-manual"
         ],
-        "stale": [
-          "perf-baseline"
-        ]
+        "stale": []
       },
       "props": [
         {
