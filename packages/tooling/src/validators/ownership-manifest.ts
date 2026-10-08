@@ -404,8 +404,34 @@ export interface SecondTierReport {
  * manifest that is present **is** a failure: quietly merging half of one is the
  * behaviour 08-11 finding H1 recorded.
  */
+/** How {@link checkSecondTierManifest} looks for an installed second tier. */
+export interface SecondTierCheckOptions {
+  /**
+   * Resolve a bare specifier from this repository's root, or `undefined` when
+   * it is not installed. The default is Node resolution from `package.json`,
+   * which walks every ancestor `node_modules` — so on a workspace that links
+   * the second tier beside this repository it finds it. A test that needs
+   * "absent" injects a resolver instead of relying on the host.
+   */
+  resolve?: (specifier: string) => string | undefined
+}
+
+/** Node resolution anchored on this repository's `package.json`. */
+function resolveFromRepository(): (specifier: string) => string | undefined {
+  const require_ = createRequire(pathToFileURL(resolve(ROOT, 'package.json')).href)
+  return (specifier) => {
+    try {
+      return require_.resolve(specifier)
+    }
+    catch {
+      return undefined
+    }
+  }
+}
+
 export function checkSecondTierManifest(
   env: string | undefined = process.env[PRO_MANIFEST_ENV],
+  options: SecondTierCheckOptions = {},
 ): { report: SecondTierReport, violations: OwnershipViolation[] } {
   const violations: OwnershipViolation[] = []
 
@@ -470,16 +496,8 @@ export function checkSecondTierManifest(
     }
   }
 
-  const require_ = createRequire(pathToFileURL(resolve(ROOT, 'package.json')).href)
   const consumed = consumeOwnershipManifest(PRO_PACKAGE, {
-    resolve: (specifier) => {
-      try {
-        return require_.resolve(specifier)
-      }
-      catch {
-        return undefined
-      }
-    },
+    resolve: options.resolve ?? resolveFromRepository(),
     readText: path => readFileSync(path, 'utf8'),
   })
 

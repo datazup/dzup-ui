@@ -1,8 +1,12 @@
 import type { RetiredNamesConfig } from './validate-package-names.ts'
-import { describe, expect, it } from 'vitest'
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { afterAll, describe, expect, it } from 'vitest'
 import {
   checkPackageNames,
   checkSource,
+  collectFiles,
   isAllowlisted,
   matchesGlob,
   readConfig,
@@ -117,6 +121,32 @@ describe('the checked-in configuration', () => {
   it('says why each name was retired, so the allowlist is reviewable', () => {
     for (const retired of readConfig().retired)
       expect(retired.reason, retired.name).toBeTruthy()
+  })
+})
+
+describe('collectFiles', () => {
+  const root = mkdtempSync(join(tmpdir(), 'dzup-package-names-'))
+  const retiredName = readConfig().retired[0]!.name
+
+  afterAll(() => {
+    rmSync(root, { recursive: true, force: true })
+  })
+
+  it('scans this checkout but not a checkout nested inside it', () => {
+    // A linked worktree below the root — what Claude Code's `EnterWorktree`
+    // leaves under `.claude/worktrees/` — carries a `.git` FILE; a nested
+    // clone carries a `.git` directory. Both are copies of this repository,
+    // not parts of it, and a copy's own fixtures must not fail this gate.
+    mkdirSync(join(root, 'src'), { recursive: true })
+    mkdirSync(join(root, '.claude/worktrees/copy/src'), { recursive: true })
+    mkdirSync(join(root, 'vendor/clone/.git'), { recursive: true })
+    writeFileSync(join(root, 'src/own.ts'), `import '${retiredName}'\n`)
+    writeFileSync(join(root, '.claude/worktrees/copy/.git'), 'gitdir: /elsewhere\n')
+    writeFileSync(join(root, '.claude/worktrees/copy/src/copy.ts'), `import '${retiredName}'\n`)
+    writeFileSync(join(root, 'vendor/clone/clone.ts'), `import '${retiredName}'\n`)
+
+    expect(collectFiles(root)).toEqual([join(root, 'src/own.ts')])
+    expect(checkPackageNames(root).map(violation => violation.file)).toEqual(['src/own.ts'])
   })
 })
 

@@ -1,8 +1,12 @@
 import type { DzupUiModuleOptions } from './module.ts'
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
+/** This spec sits beside `module.ts`, so resolving from here is resolving from the module. */
+const HERE = dirname(fileURLToPath(import.meta.url))
 
 /**
  * The `includePro: true` **success** path (TASK-OSS-P2-03).
@@ -211,11 +215,13 @@ describe('canResolvePro', () => {
   })
 
   it('falls back to this module when no project root is given', () => {
-    // `setup` always has a root; the default arm serves direct callers. This
-    // workspace declares no dependency on Pro, so `false` is the honest answer
-    // here — what is pinned is that the arm runs at all instead of handing
-    // `createRequire` an undefined base.
-    expect(canResolvePro()).toBe(false)
+    // `setup` always has a root; the default arm serves direct callers. What
+    // is pinned is that the arm runs at all instead of handing `createRequire`
+    // an undefined base, and that it resolves from THIS module's directory:
+    // its answer must agree with the explicit form anchored here. Whether
+    // that answer is true or false is host state — a workspace that links Pro
+    // beside this package says true, CI says false — so neither is asserted.
+    expect(canResolvePro()).toBe(canResolvePro(HERE))
   })
 })
 

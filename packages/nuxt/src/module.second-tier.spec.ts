@@ -284,10 +284,24 @@ describe('fail-closed rules', () => {
 })
 
 describe('loadSecondTierOwnership', () => {
-  it('answers not-installed from the workspace itself', () => {
-    // No argument resolves from this module, and the workspace declares no
-    // dependency on a second tier — so `not-installed` is the honest answer.
-    expect(loadSecondTierOwnership().availability).toBe('not-installed')
+  it('resolves from this module when no project root is given', () => {
+    // No argument resolves from this module, so the answer must agree with
+    // the explicit form anchored on this directory. Which answer that is
+    // depends on the host — the workspace this repository lives in links
+    // `@dzup-ui-pro/pro` into an ancestor `node_modules`, CI has none — so the
+    // value itself is not asserted; `not-installed` is pinned below against an
+    // arranged root instead.
+    expect(loadSecondTierOwnership().availability).toBe(loadSecondTierOwnership(HERE).availability)
+  })
+
+  it('answers not-installed from a root with no second tier reachable', () => {
+    const root = mkdtempSync(join(tmpdir(), 'dzup-nuxt-no-second-tier-'))
+    try {
+      expect(loadSecondTierOwnership(root).availability).toBe('not-installed')
+    }
+    finally {
+      rmSync(root, { recursive: true, force: true })
+    }
   })
 
   it('answers loaded against the fixture package', () => {

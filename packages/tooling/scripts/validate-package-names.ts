@@ -28,7 +28,7 @@
  * Exit code 1 if violations found.
  */
 
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -180,17 +180,36 @@ export function checkSource(
   return violations
 }
 
-/** Recursively collect scannable files under `dir`. */
+/**
+ * True for a directory that is its own Git checkout — a linked worktree (its
+ * `.git` is a file) or a nested clone (its `.git` is a directory).
+ *
+ * A checkout that lives below this one is a *copy* of this repository, not a
+ * part of it: Claude Code's `EnterWorktree` registers one under
+ * `.claude/worktrees/`, gitignored and invisible to `git status`. Scanning it
+ * reports that copy's own spec fixtures as violations of this checkout, so the
+ * gate fails on a host that has such a worktree and passes everywhere else.
+ * The root itself is never asked.
+ */
+function isNestedCheckout(dir: string): boolean {
+  return existsSync(join(dir, '.git'))
+}
+
+/** Recursively collect scannable files under `dir`, skipping nested checkouts. */
 export function collectFiles(dir: string): string[] {
   const files: string[] = []
   for (const entry of readdirSync(dir)) {
     if (SKIP_DIRS.has(entry))
       continue
     const full = join(dir, entry)
-    if (statSync(full).isDirectory())
+    if (statSync(full).isDirectory()) {
+      if (isNestedCheckout(full))
+        continue
       files.push(...collectFiles(full))
-    else if (SCANNED_EXTENSIONS.some(extension => entry.endsWith(extension)))
+    }
+    else if (SCANNED_EXTENSIONS.some(extension => entry.endsWith(extension))) {
       files.push(full)
+    }
   }
   return files
 }

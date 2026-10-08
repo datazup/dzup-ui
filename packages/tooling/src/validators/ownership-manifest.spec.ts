@@ -425,13 +425,30 @@ describe('checkSecondTierManifest (TASK-S3-O1)', () => {
   it('states ABSENCE explicitly rather than passing quietly', () => {
     // The point of the whole gate. Before this, "no second tier anywhere" and
     // "second tier fine" printed the same green line.
-    const { report, violations } = checkSecondTierManifest(undefined)
+    //
+    // Absence is arranged, not assumed: the workspace this repository lives in
+    // links `@dzup-ui-pro/pro` into an ancestor `node_modules`, so the default
+    // resolver finds it there and this test would only pass on a host that
+    // has no Pro checkout beside it.
+    const { report, violations } = checkSecondTierManifest(undefined, { resolve: () => undefined })
 
     expect(violations).toEqual([])
     expect(report.source).toBe('none')
     expect(report.availability).toBe('not-installed')
     expect(formatSecondTier(report)).toContain('ABSENT')
     expect(formatSecondTier(report)).toContain('Reported, not a failure')
+  })
+
+  it('reports an installed second tier as the installed package, not as absent', () => {
+    const { report, violations } = checkSecondTierManifest(undefined, {
+      resolve: specifier => specifier.endsWith('component-ownership.manifest.json') ? FIXTURE : undefined,
+    })
+
+    expect(violations).toEqual([])
+    expect(report.source).toBe('installed-package')
+    expect(report.availability).toBe('loaded')
+    expect(report.path).toBe(FIXTURE)
+    expect(formatSecondTier(report)).toContain('PRESENT via installed')
   })
 
   it('accepts the env-supplied manifest and names its schema version', () => {

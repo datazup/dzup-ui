@@ -1,4 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { COMPONENT_OWNERSHIP, OWNERSHIP_TIERS } from './generated/component-ownership.ts'
 import { DzResolver } from './resolver.ts'
 
@@ -19,8 +22,23 @@ const HAS_PRO_TIER = (OWNERSHIP_TIERS as readonly string[]).includes('pro')
 const A_PRO_COMPONENT = Object.keys(COMPONENT_OWNERSHIP)
   .find(name => COMPONENT_OWNERSHIP[name]?.from === PRO_PACKAGE)
 
+/**
+ * A project root with no second tier reachable from it — an empty directory
+ * under the OS temp root, so no ancestor `node_modules` can supply one.
+ *
+ * The default `resolveFrom` is `process.cwd()`, and from this repository that
+ * walk reaches the workspace's `node_modules`, where `@dzup-ui-pro/pro` is
+ * linked beside this package. A test that means "Pro is not installed" has to
+ * arrange it; asserting the host's state only passes where the host agrees.
+ */
+const NO_SECOND_TIER = mkdtempSync(join(tmpdir(), 'dzup-resolver-no-pro-'))
+
 beforeEach(() => {
   vi.restoreAllMocks()
+})
+
+afterAll(() => {
+  rmSync(NO_SECOND_TIER, { recursive: true, force: true })
 })
 
 describe('core component resolution', () => {
@@ -65,7 +83,10 @@ describe('core component resolution', () => {
 })
 
 describe('unknown names', () => {
-  const resolver = DzResolver({ includePro: true })
+  // Pro-inclusive on purpose, and against no Pro: a stale Pro-era name must
+  // resolve to nothing because no tier owns it, not because the second tier
+  // happened to be absent on the machine that ran this.
+  const resolver = DzResolver({ includePro: true, resolveFrom: NO_SECOND_TIER })
 
   // Every one of these resolved to @dzup-ui/core under the old prefix rule,
   // which turned a typo into an import of a component that does not exist.
@@ -109,7 +130,7 @@ describe('pro components', () => {
     // so the generated table is Core-only. Silence would be the worst answer —
     // it is indistinguishable from "Pro resolved fine".
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    DzResolver({ includePro: true })
+    DzResolver({ includePro: true, resolveFrom: NO_SECOND_TIER })
 
     expect(warn).toHaveBeenCalledTimes(1)
     const message = warn.mock.calls[0]?.[0] as string
