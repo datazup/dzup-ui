@@ -50,7 +50,7 @@
     "@dzup-ui/core": "workspace:*",
     "@dzup-ui/tokens": "workspace:*",
     "@nuxt/schema": "4.4.5",
-    "nuxt": "4.4.5",
+    "nuxt": "4.5.1",
     "typescript": "^5.8.3"
   }
 }
