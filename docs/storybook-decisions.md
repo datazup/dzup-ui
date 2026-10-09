@@ -358,6 +358,14 @@ and `showRoots: true` in `manager.ts`.
   TASK-APP-06/07/08 work; the largest chunks remain the expected vendor ones
   (Storybook `iframe`/manager runtime, `axe`). Build time stays visible as the CI
   step duration.
+- **Eager graph beside the total (UI-LAZY-BUDGET-20261009-R2).** The total is
+  what the host stores; what a visitor downloads before any story renders is the
+  `iframe.html` module scripts and modulepreloads plus their transitive static
+  imports. `check-bundle-size.mjs` now measures that closure, prints its chunk
+  list on every run and budgets it with `--max-eager-mb` (seed 2.36 MB at
+  `59a397a4`, three chunks, budget 2.75 MiB). A story or engine chunk appearing
+  in the eager list is a lazy-loading regression, not a budget problem; the
+  total ceiling stays in `docs-size-ceilings.json` as before.
 
 ### TASK-X.3 / TASK-X.5 / TASK-X.8 — gated on infrastructure
 

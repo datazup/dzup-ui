@@ -46,6 +46,10 @@ export default defineConfig({
       // in the default `yarn test` lane rather than only through the CLI it
       // happens to be wrapped in (TASK-OSS-P1-01).
       'packages/*/scripts/**/*.spec.ts',
+      // apps/storybook/scripts holds the Storybook static-build size metric
+      // (check:size). Its eager-graph half is a parser and a graph walk, pinned
+      // on a tmp fixture (UI-LAZY-BUDGET-20261009-R2).
+      'apps/storybook/scripts/**/*.spec.ts',
       // packages/*/security holds Tier D evidence: a threat model beside the
       // hostile-input corpus that checks it (TASK-OSS-P5-06). Its own directory
       // rather than tests/, because the pairing is the point — a corpus without
