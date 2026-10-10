@@ -49,9 +49,9 @@ export const stepperTokens = {
     },
     active: {
       indicatorBorder: 'var(--dz-primary)',
-      indicatorColor: 'var(--dz-primary)',
+      indicatorColor: 'var(--dz-primary-muted-foreground)',
       connectorColor: 'var(--dz-border)',
-      titleColor: 'var(--dz-primary)',
+      titleColor: 'var(--dz-primary-muted-foreground)',
     },
     upcoming: {
       indicatorBorder: 'var(--dz-border)',

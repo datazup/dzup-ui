@@ -102,21 +102,22 @@ export const tabsVariants = tv({
   },
 
   compoundVariants: [
+    // On-surface labels use muted-foreground; intent fills stay on the underline.
     // ── line variant + tone (active underline + active text color) ──
-    { variant: 'line', tone: 'primary', class: { trigger: 'data-[state=active]:border-[var(--dz-primary-solid)] data-[state=active]:text-[var(--dz-primary)]' } },
+    { variant: 'line', tone: 'primary', class: { trigger: 'data-[state=active]:border-[var(--dz-primary-solid)] data-[state=active]:text-[var(--dz-primary-muted-foreground)]' } },
     { variant: 'line', tone: 'neutral', class: { trigger: 'data-[state=active]:border-[var(--dz-foreground)] data-[state=active]:text-[var(--dz-foreground)]' } },
-    { variant: 'line', tone: 'success', class: { trigger: 'data-[state=active]:border-[var(--dz-success-solid)] data-[state=active]:text-[var(--dz-success)]' } },
-    { variant: 'line', tone: 'warning', class: { trigger: 'data-[state=active]:border-[var(--dz-warning)] data-[state=active]:text-[var(--dz-warning)]' } },
-    { variant: 'line', tone: 'danger', class: { trigger: 'data-[state=active]:border-[var(--dz-danger-solid)] data-[state=active]:text-[var(--dz-danger)]' } },
-    { variant: 'line', tone: 'info', class: { trigger: 'data-[state=active]:border-[var(--dz-info-solid)] data-[state=active]:text-[var(--dz-info)]' } },
+    { variant: 'line', tone: 'success', class: { trigger: 'data-[state=active]:border-[var(--dz-success-solid)] data-[state=active]:text-[var(--dz-success-muted-foreground)]' } },
+    { variant: 'line', tone: 'warning', class: { trigger: 'data-[state=active]:border-[var(--dz-warning)] data-[state=active]:text-[var(--dz-warning-muted-foreground)]' } },
+    { variant: 'line', tone: 'danger', class: { trigger: 'data-[state=active]:border-[var(--dz-danger-solid)] data-[state=active]:text-[var(--dz-danger-muted-foreground)]' } },
+    { variant: 'line', tone: 'info', class: { trigger: 'data-[state=active]:border-[var(--dz-info-solid)] data-[state=active]:text-[var(--dz-info-muted-foreground)]' } },
 
     // ── enclosed variant + tone (active text color; border stays neutral so the tab joins the panel cleanly) ──
-    { variant: 'enclosed', tone: 'primary', class: { trigger: 'data-[state=active]:text-[var(--dz-primary)]' } },
+    { variant: 'enclosed', tone: 'primary', class: { trigger: 'data-[state=active]:text-[var(--dz-primary-muted-foreground)]' } },
     { variant: 'enclosed', tone: 'neutral', class: { trigger: 'data-[state=active]:text-[var(--dz-foreground)]' } },
-    { variant: 'enclosed', tone: 'success', class: { trigger: 'data-[state=active]:text-[var(--dz-success)]' } },
-    { variant: 'enclosed', tone: 'warning', class: { trigger: 'data-[state=active]:text-[var(--dz-warning)]' } },
-    { variant: 'enclosed', tone: 'danger', class: { trigger: 'data-[state=active]:text-[var(--dz-danger)]' } },
-    { variant: 'enclosed', tone: 'info', class: { trigger: 'data-[state=active]:text-[var(--dz-info)]' } },
+    { variant: 'enclosed', tone: 'success', class: { trigger: 'data-[state=active]:text-[var(--dz-success-muted-foreground)]' } },
+    { variant: 'enclosed', tone: 'warning', class: { trigger: 'data-[state=active]:text-[var(--dz-warning-muted-foreground)]' } },
+    { variant: 'enclosed', tone: 'danger', class: { trigger: 'data-[state=active]:text-[var(--dz-danger-muted-foreground)]' } },
+    { variant: 'enclosed', tone: 'info', class: { trigger: 'data-[state=active]:text-[var(--dz-info-muted-foreground)]' } },
 
     // ── pills variant + tone (active background + foreground) ──
     { variant: 'pills', tone: 'primary', class: { trigger: 'data-[state=active]:bg-[var(--dz-primary-solid)] data-[state=active]:text-[var(--dz-primary-foreground)] data-[state=active]:hover:bg-[var(--dz-primary-solid-hover)]' } },
