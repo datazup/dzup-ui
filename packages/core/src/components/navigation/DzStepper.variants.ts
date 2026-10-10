@@ -52,9 +52,9 @@ export const stepperVariants = tv({
         title: 'text-[var(--dz-foreground)]',
       },
       active: {
-        indicator: 'border-2 border-[var(--dz-primary)] text-[var(--dz-primary)]',
+        indicator: 'border-2 border-[var(--dz-primary)] text-[var(--dz-primary-muted-foreground)]',
         connector: 'bg-[var(--dz-border)]',
-        title: 'text-[var(--dz-primary)]',
+        title: 'text-[var(--dz-primary-muted-foreground)]',
       },
       upcoming: {
         indicator: 'border-2 border-[var(--dz-border)] text-[var(--dz-muted-foreground)]',

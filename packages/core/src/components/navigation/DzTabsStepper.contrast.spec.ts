@@ -16,8 +16,12 @@ import DzTabTrigger from './DzTabTrigger.vue'
 const lightTokens = { ...generateColorCssVars(), ...LIGHT_SEMANTIC_TOKENS }
 const darkTokens = { ...generateColorCssVars(), ...DARK_SEMANTIC_TOKENS }
 const hostSurfaces = [
-  '--dz-background', '--dz-muted', '--dz-surface',
-  '--dz-surface-raised', '--dz-surface-overlay', '--dz-surface-sunken',
+  '--dz-background',
+  '--dz-muted',
+  '--dz-surface',
+  '--dz-surface-raised',
+  '--dz-surface-overlay',
+  '--dz-surface-sunken',
 ] as const
 
 function resolveColor(token: string, tokens: Record<string, string> = lightTokens): string {
