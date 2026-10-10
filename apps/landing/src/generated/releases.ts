@@ -1703,6 +1703,16 @@ export const PENDING: PendingChange[] = [
       "@dzup-ui/core"
     ],
     "level": "patch",
+    "summary": "DzDialog's overlay and content, and DzSidebar's mobile backdrop, now fade as designed. Since they were introduced, their default transition rules have written `opacity var(--dz-transition-fast) ease`, but `--dz-transition-*` already carries a timing function, so the item named two. That is invalid at computed-value time: browsers dropped the transition and the dialog has always snapped open and shut. The rules now use the token alone, which is 150ms (200ms for the sidebar backdrop) on the token's easing curve.",
+    "body": "DzDialog's overlay and content, and DzSidebar's mobile backdrop, now fade as designed. Since they were introduced, their default transition rules have written `opacity var(--dz-transition-fast) ease`, but `--dz-transition-*` already carries a timing function, so the item named two. That is invalid at computed-value time: browsers dropped the transition and the dialog has always snapped open and shut. The rules now use the token alone, which is 150ms (200ms for the sidebar backdrop) on the token's easing curve.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
     "summary": "**Replace Core's static SSR inline styles with utility classes.**",
     "body": "**Replace Core's static SSR inline styles with utility classes.**\n\nThe static containment and reset styles previously rendered as `style`\nattributes now use equivalent utility classes. This removes all 81 inventoried\nstatic inline-style sites, allowing the covered SSR/browser fixtures to render\nthose styles under a policy that blocks inline style attributes.\n\nConsumers must generate the corresponding Tailwind utilities from Core's\ncomponent sources; removing inline attributes does not itself supply those CSS\nrules. The CSP proof includes that utility generation, so this note does not\nclaim that the existing getting-started instructions alone provide it.\n\nBound styles remain unchanged and require separate policy qualification.\nWhole-library strict-CSP SSR compatibility is unproven; this correction covers\nthe static inline-style sites only.",
     "breaking": false,
@@ -1716,6 +1726,16 @@ export const PENDING: PendingChange[] = [
     "level": "patch",
     "summary": "Fix invalid published declarations (D152). Emits payloads labelled `event` printed `(event: \"click\", event: MouseEvent)`, a duplicate identifier (`TS2300`) in `DzPopconfirm.vue.d.ts` and `DzSpeedDial.vue.d.ts` for any consumer on TypeScript's default `skipLibCheck: false`, and the same invalid signature in the generated docs. The 60 payload labels are now `e`; tuple labels do not affect assignability, so no consumer code changes.",
     "body": "Fix invalid published declarations (D152). Emits payloads labelled `event` printed `(event: \"click\", event: MouseEvent)`, a duplicate identifier (`TS2300`) in `DzPopconfirm.vue.d.ts` and `DzSpeedDial.vue.d.ts` for any consumer on TypeScript's default `skipLibCheck: false`, and the same invalid signature in the generated docs. The 60 payload labels are now `e`; tuple labels do not affect assignability, so no consumer code changes.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/tokens"
+    ],
+    "level": "patch",
+    "summary": "The DTCG export types the three `--dz-transition-*` primitives",
+    "body": "The DTCG export types the three `--dz-transition-*` primitives\n\n`dist/tokens.dtcg.json` now emits `--dz-transition-{fast,normal,slow}` as DTCG\n`transition` tokens instead of listing them as untyped. `duration` and\n`timingFunction` stay `{group.token}` references to `primitive.duration.*` and\n`primitive.easing.default`, and `delay` is `0ms`, the CSS initial value the\nfragment leaves implicit. The untyped set goes from 26 to 23.\n`--dz-page-hero-bg` stays untyped, but its reason now says what it is (a\nbackground value with a gradient fallback) instead of reading as a colour that\nfailed to parse.\n\n**What this changes for you.** Nothing in `dist/tokens.css`: the `--dz-*` custom\nproperties are the runtime ABI, and none of them changed. If you read the DTCG\nfile, three tokens moved from `$extensions[\"com.dzup\"].untyped` into\n`primitive.transition`.",
     "breaking": false,
     "deprecated": false
   },
@@ -2165,6 +2185,16 @@ export const PENDING: PendingChange[] = [
     "level": "patch",
     "summary": "**Twenty-five more components declare their styling surface, and the dialog's close button stops sitting on the wrong side in Arabic.**",
     "body": "**Twenty-five more components declare their styling surface, and the dialog's close button stops sitting on the wrong side in Arabic.**\n\nThe ADR-19 styling contract — declared parts, declared states, a typed per-part\n`ui` override — reached five families this release. Every Tier B and above\ncomponent in `cards`, `feedback`, `layout`, `media` and `overlays` now says what\na consumer may address, so restyling those components no longer means writing a\ndescendant selector against a class name `tailwind-variants` is free to change.\n\n**New `data-part` and `ui` surfaces**\n\n| Family | Components | Parts you can now address |\n|---|---|---|\n| `cards` | `DzCard` (family), `DzImageCard`, `DzStatCard` | `root`, `header`, `body`, `footer`, `action`, `overlay`, `title`, `icon`, `description` |\n| `feedback` | `DzBlockUI`, `DzNotification`, `DzToast`, `DzSpinner` | `root`, `content`, `overlay`, `icon`, `title`, `description`, `action`, `close`, `indicator` |\n| `layout` | `DzPanel`, `DzToolbar`, `DzScrollArea`, `DzSplitter`/`DzResizable` (families), `DzCollapse` | `root`, `header`, `trigger`, `title`, `indicator`, `action`, `content`, `group`, `viewport`, `panel`, `separator` |\n| `media` | `DzCarousel` (family), `DzImageComparison`, `DzLightbox` | `root`, `viewport`, `content`, `item`, `list`, `item-indicator`, `action`, `panel`, `label`, `separator`, `control`, `overlay`, `close`, `description` |\n| `overlays` | `DzDropdownMenu`, `DzContextMenu`, `DzPopover`, `DzTooltip`, `DzSheet` (families), `DzConfirmDialog`, `DzPopconfirm`, `DzCommandPalette`, `DzTour` | `content`, `item`, `prefix`, `suffix`, `separator`, `indicator`, `overlay`, `title`, `description`, `close`, `icon`, `action`, `panel`, `header`, `body`, `footer`, `input`, `control`, `list`, `group`, `group-label`, `item-label`, `empty` |\n\n```vue\n<DzToast :toast=\"toast\" :ui=\"{ indicator: 'w-2', close: 'opacity-100' }\" />\n<DzPanel collapsible header=\"Filters\" :ui=\"{ indicator: 'text-[var(--dz-primary)]' }\" />\n<DzCarousel :ui=\"{ viewport: 'rounded-xl' }\" />\n<DzDropdownMenuItem :ui=\"{ suffix: 'opacity-60' }\">Rename</DzDropdownMenuItem>\n```\n\n**One real fix, not just a declaration: RTL insets.**\n\n`validate:rtl` could not see a physical `left-…` or `right-…` inset at all — the\none clause meant to catch them named `inset-l-` / `inset-r-`, which Tailwind 4\ndoes not generate. With the gate widened, five components turned out to pin a\ncontrol to a physical edge while declaring that they mirror with the document:\n\n- `DzDialog`'s close button and `DzToast`'s close button and tone stripe,\n- `DzNotification`'s dismiss button,\n- `DzLightbox`'s previous / next buttons, close button and counter.\n\nAll are now logical (`inset-s-` / `inset-e-`). **In a left-to-right document\nnothing moves by a pixel.** In a right-to-left one, the close control is finally\non the edge the reader finishes at.\n\nWhere a physical side is the point — `DzFab`'s and `DzSpeedDial`'s\n`position=\"bottom-right\"`, `DzToast`'s viewport corners, `DzSheet`'s `side` —\nthe geometry is unchanged and now carries the `rtl-physical-ok` marker with the\nreason written at the line.\n\n**Nothing is removed and every existing override keeps working.** `ui` is a new\noptional prop; `class` lands exactly where it always did; no part was renamed.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
+    "summary": "Fix DzText and DzHeading font-family token resolution under Tailwind CSS 4 with",
+    "body": "Fix DzText and DzHeading font-family token resolution under Tailwind CSS 4 with\n`font-(family-name:--dz-font-sans)`. Text without an explicit weight now inherits\nthe host weight without the family utility overriding it. The heading size\npresets use semibold/bold weight tokens, so host token overrides apply while\nthe default weights remain unchanged.",
     "breaking": false,
     "deprecated": false
   },
