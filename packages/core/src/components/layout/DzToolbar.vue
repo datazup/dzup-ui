@@ -49,7 +49,7 @@ const props = withDefaults(defineProps<DzToolbarProps>(), {
 const _slots = defineSlots<DzToolbarSlots>()
 
 const attrs = useAttrs()
-const slotApi = useSlots()
+const slotApi: ReturnType<typeof useSlots> = useSlots()
 
 /** Whether the trailing region has content to render. */
 const hasEnd = computed(() => Boolean(slotApi.end))
