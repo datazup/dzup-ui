@@ -1713,6 +1713,16 @@ export const PENDING: PendingChange[] = [
       "@dzup-ui/core"
     ],
     "level": "patch",
+    "summary": "Improve active-label contrast in DzTabs line and enclosed variants for primary,",
+    "body": "Improve active-label contrast in DzTabs line and enclosed variants for primary,\nsuccess, warning, danger, and info tones, and in the DzStepper active title and\nindicator numeral. Use existing semantic text tokens for readable pairings in\nlight, dark, and high-contrast themes.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
     "summary": "**Replace Core's static SSR inline styles with utility classes.**",
     "body": "**Replace Core's static SSR inline styles with utility classes.**\n\nThe static containment and reset styles previously rendered as `style`\nattributes now use equivalent utility classes. This removes all 81 inventoried\nstatic inline-style sites, allowing the covered SSR/browser fixtures to render\nthose styles under a policy that blocks inline style attributes.\n\nConsumers must generate the corresponding Tailwind utilities from Core's\ncomponent sources; removing inline attributes does not itself supply those CSS\nrules. The CSP proof includes that utility generation, so this note does not\nclaim that the existing getting-started instructions alone provide it.\n\nBound styles remain unchanged and require separate policy qualification.\nWhole-library strict-CSP SSR compatibility is unproven; this correction covers\nthe static inline-style sites only.",
     "breaking": false,
