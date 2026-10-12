@@ -498,3 +498,68 @@ export const Large: Story = {
     </div>`,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Large dataset — a long tour walked end to end
+// ---------------------------------------------------------------------------
+
+const largeSteps: DzTourStep[] = Array.from({ length: 12 }, (_, index) => ({
+  target: `#tour-large-${index + 1}`,
+  title: `Feature ${index + 1}`,
+  description: `What feature ${index + 1} does for your team.`,
+  placement: 'bottom',
+}))
+
+/**
+ * Twelve steps over twelve targets: every step is reached in order, the live
+ * region counts against the full length, and only the last Next finishes.
+ */
+export const LargeTour: Story = {
+  render: () => ({
+    components: { DzTour, DzButton },
+    setup() {
+      return { largeSteps }
+    },
+    data() {
+      return { open: false, current: 0, finished: false }
+    },
+    template: `
+      <div>
+        <div class="grid grid-cols-6 gap-2 p-4">
+          <DzButton
+            v-for="(step, index) in largeSteps"
+            :id="'tour-large-' + (index + 1)"
+            :key="step.title"
+            variant="outline"
+            size="sm"
+          >
+            {{ step.title }}
+          </DzButton>
+        </div>
+        <DzButton @click="open = true; current = 0; finished = false">Start long tour</DzButton>
+        <span data-testid="tour-large-status">{{ finished ? 'finished' : 'pending' }}</span>
+        <DzTour
+          v-model:open="open"
+          v-model:current="current"
+          :steps="largeSteps"
+          @finish="finished = true"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: /start long tour/i }))
+
+    for (let step = 1; step <= 12; step++) {
+      await waitFor(() => expect(screen.getByRole('dialog')).toHaveAccessibleName(`Feature ${step}`))
+      await expect(screen.getByRole('dialog').querySelector('[aria-live="polite"]'))
+        .toHaveTextContent(`Step ${step} of 12`)
+      await expect(canvas.getByTestId('tour-large-status')).toHaveTextContent('pending')
+      await userEvent.click(screen.getByTestId('dz-tour-next'))
+    }
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    await expect(canvas.getByTestId('tour-large-status')).toHaveTextContent('finished')
+  },
+}

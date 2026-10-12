@@ -621,3 +621,47 @@ export const Large: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Empty dataset
+// ---------------------------------------------------------------------------
+
+/** No commands registered yet: the open palette shows its empty copy, never a blank panel. */
+export const Empty: Story = {
+  render: () => ({
+    components: { DzCommandPalette, DzButton },
+    data() {
+      return { isOpen: false, selected: null as CommandItem | null }
+    },
+    template: `
+      <div class="space-y-4">
+        <DzButton @click="isOpen = true">Open empty palette</DzButton>
+        <span data-testid="cp-empty-ran">{{ selected ? selected.label : 'nothing' }}</span>
+        <DzCommandPalette
+          v-model:open="isOpen"
+          :items="[]"
+          :groups="[]"
+          :enable-global-shortcut="false"
+          aria-label="Empty palette"
+          @select="selected = $event"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: /open empty palette/i }))
+    const dialog = await screen.findByRole('dialog')
+    const search = await screen.findByRole('combobox')
+    await waitFor(() => expect(within(dialog).getByText(/no results found/i)).toBeVisible())
+    await expect(within(dialog).queryAllByRole('option')).toHaveLength(0)
+
+    // Typing and Enter over an empty dataset run nothing.
+    await userEvent.type(search, 'save')
+    await userEvent.keyboard('{Enter}')
+    await expect(within(dialog).queryAllByRole('option')).toHaveLength(0)
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    await expect(canvas.getByTestId('cp-empty-ran')).toHaveTextContent('nothing')
+  },
+}

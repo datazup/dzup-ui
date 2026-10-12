@@ -640,3 +640,87 @@ export const Large: Story = {
       </DzSidebarSection></DzSidebar></div>`,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Large dataset — many sections and items in a short viewport
+// ---------------------------------------------------------------------------
+
+const largeSections = Array.from({ length: 6 }, (_, section) => ({
+  title: `Project ${section + 1}`,
+  items: Array.from({ length: 10 }, (_, item) => `Board ${section + 1}.${item + 1}`),
+}))
+
+/**
+ * Sixty items in six sections inside a 24rem frame: the sidebar body scrolls
+ * rather than clipping, and the last item is reachable and still the only
+ * current page once activated.
+ */
+export const LargeSections: Story = {
+  render: () => ({
+    components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem },
+    setup() {
+      const current = ref('Board 1.1')
+      return { largeSections, current }
+    },
+    template: `
+      <div style="height:24rem;display:flex;background:var(--dz-background);">
+        <DzSidebar aria-label="Projects" data-testid="sb-large">
+          <DzSidebarHeader>Datazup</DzSidebarHeader>
+          <DzSidebarSection v-for="section in largeSections" :key="section.title" :title="section.title">
+            <DzSidebarItem
+              v-for="label in section.items"
+              :key="label"
+              :active="current === label"
+              @click="current = label"
+            >
+              {{ label }}
+            </DzSidebarItem>
+          </DzSidebarSection>
+        </DzSidebar>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const sidebar = canvas.getByRole('navigation', { name: 'Projects' })
+    const items = within(sidebar).getAllByRole('button', { name: /^Board / })
+    await expect(items).toHaveLength(60)
+
+    // The body scrolls: its content is taller than the frame it is given.
+    const body = sidebar.querySelector('[data-part="body"]') as HTMLElement
+    await expect(body.scrollHeight).toBeGreaterThan(body.clientHeight)
+
+    // The last item is reachable and becomes the only current page.
+    const last = within(sidebar).getByRole('button', { name: 'Board 6.10' })
+    last.scrollIntoView()
+    await userEvent.click(last)
+    await waitFor(() => expect(last).toHaveAttribute('aria-current', 'page'))
+    await expect(sidebar.querySelectorAll('[aria-current="page"]')).toHaveLength(1)
+    await expect(body.scrollTop).toBeGreaterThan(0)
+  },
+}
+
+// DZUP-UI-R11-08-20261007-C1: native controls, no synthetic activation fallback.
+export const KeyboardContract: Story = {
+  render: () => ({
+    components: { DzSidebar, DzSidebarSection, DzSidebarItem },
+    data() {
+      return { action: '', count: 0, disabledCount: 0 }
+    },
+    template: `
+      <div>
+        <button type="button">Before sidebar</button>
+        <DzSidebar :is-mobile="false" position="static">
+          <DzSidebarSection title="Workspace" collapsible>
+            <DzSidebarItem aria-label="Dashboard" @click="action = 'dashboard'; count++">Dashboard</DzSidebarItem>
+            <DzSidebarItem disabled aria-label="Archived" @click="disabledCount++">Archived</DzSidebarItem>
+            <DzSidebarItem aria-label="Settings" @click="action = 'settings'; count++">Settings</DzSidebarItem>
+          </DzSidebarSection>
+        </DzSidebar>
+        <button type="button">After sidebar</button>
+        <output data-testid="actions">{{ action }}:{{ count }}</output>
+        <output data-testid="disabled-actions">{{ disabledCount }}</output>
+      </div>
+    `,
+  }),
+}

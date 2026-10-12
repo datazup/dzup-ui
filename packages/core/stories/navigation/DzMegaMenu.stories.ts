@@ -554,3 +554,59 @@ export const Large: Story = {
     template: `<div><button type="button" @mousedown.prevent @click="items = []">Clear data</button><button type="button" @mousedown.prevent @click="items = [...dataset]">Restore data</button><DzMegaMenu :items="items" :breakpoint="0" :open-on-hover="false" /></div>`,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Large dataset
+// ---------------------------------------------------------------------------
+
+const largeItems: DzMegaMenuItem[] = [
+  {
+    label: 'Catalog',
+    items: Array.from({ length: 4 }, (_, column) => ({
+      label: `Department ${column + 1}`,
+      items: Array.from({ length: 12 }, (_, link) => ({
+        label: `Aisle ${column + 1}.${link + 1}`,
+        href: '#',
+      })),
+    })),
+  },
+  ...Array.from({ length: 7 }, (_, index) => ({ label: `Section ${index + 1}`, href: '#' })),
+]
+
+/** A wide catalog: one panel with 4 columns × 12 links beside eight top-level entries. */
+export const LargeCatalog: Story = {
+  render: () => ({
+    components: { DzMegaMenu },
+    setup() {
+      return { largeItems }
+    },
+    template: `
+      <div class="pb-96" data-testid="mm-large">
+        <DzMegaMenu :items="largeItems" :open-on-hover="false" aria-label="Catalog navigation" />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const root = within(canvas.getByTestId('mm-large'))
+    const menubar = root.getByRole('menubar', { name: 'Catalog navigation' })
+
+    // Every top-level entry is rendered, and only the panel owner has a popup.
+    await expect(within(menubar).getAllByRole('menuitem', { name: /^(?:Catalog|Section \d)/ }))
+      .toHaveLength(8)
+    const catalog = root.getByRole('menuitem', { name: /^Catalog/ })
+    await expect(catalog).toHaveAttribute('aria-haspopup', 'true')
+    await expect(root.queryAllByRole('menuitem', { name: /^Aisle / })).toHaveLength(0)
+
+    // Opening the panel renders all 48 links across its four columns, first to last.
+    await userEvent.click(catalog)
+    await waitFor(() => expect(catalog).toHaveAttribute('aria-expanded', 'true'))
+    await waitFor(() => expect(root.getAllByRole('menuitem', { name: /^Aisle / })).toHaveLength(48))
+    await expect(root.getByRole('menuitem', { name: 'Aisle 1.1' })).toBeVisible()
+    await expect(root.getByRole('menuitem', { name: 'Aisle 4.12' })).toBeVisible()
+
+    // Escape closes the large panel.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(catalog).toHaveAttribute('aria-expanded', 'false'))
+  },
+}

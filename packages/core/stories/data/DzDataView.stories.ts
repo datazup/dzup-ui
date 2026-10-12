@@ -592,3 +592,25 @@ export const RealWorldCatalog: Story = {
     await expect(within(root).getAllByRole('listitem')).toHaveLength(4)
   },
 }
+
+// DZUP-UI-R11-08-20261007-C1: native Tab route from real toolbar to consumer items.
+export const KeyboardContract: Story = {
+  render: () => ({
+    components: { DzDataView },
+    data() {
+      return { items: [{ id: 'alpha', name: 'Alpha' }, { id: 'beta', name: 'Beta' }], action: '', count: 0 }
+    },
+    template: `
+      <div>
+        <button type="button">Before view</button>
+        <DzDataView :items="items" data-key="id" layout-toggle :sort-options="[{ label: 'Name', field: 'name', order: 1 }]">
+          <template #item="{ item }">
+            <button type="button" @click="action = item.id; count++">Open {{ item.name }}</button>
+          </template>
+        </DzDataView>
+        <button type="button">After view</button>
+        <output data-testid="actions">{{ action }}:{{ count }}</output>
+      </div>
+    `,
+  }),
+}

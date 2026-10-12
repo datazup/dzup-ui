@@ -945,3 +945,34 @@ export const States: Story = {
     await expect(within(loading).queryByText('INV-1001')).toBeNull()
   },
 }
+
+// DZUP-UI-R11-08-20261007-C1: plain table slots; no invented sorting behavior.
+export const KeyboardContract: Story = {
+  render: () => ({
+    components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
+    data() {
+      return { action: '', count: 0 }
+    },
+    template: `
+      <div>
+        <button type="button">Before table</button>
+        <DzTable aria-label="Native table">
+          <DzTableHeader><DzTableRow><DzTableCell header>
+            <button type="button" @click="action = 'header'; count++">Header action</button>
+          </DzTableCell></DzTableRow></DzTableHeader>
+          <DzTableBody>
+            <DzTableRow><DzTableCell>
+              <button type="button" @click="action = 'alpha'; count++">Open Alpha</button>
+              <button type="button" disabled>Archived</button>
+            </DzTableCell></DzTableRow>
+            <DzTableRow><DzTableCell>
+              <button type="button" @click="action = 'beta'; count++">Open Beta</button>
+            </DzTableCell></DzTableRow>
+          </DzTableBody>
+        </DzTable>
+        <button type="button">After table</button>
+        <output data-testid="actions">{{ action }}:{{ count }}</output>
+      </div>
+    `,
+  }),
+}
