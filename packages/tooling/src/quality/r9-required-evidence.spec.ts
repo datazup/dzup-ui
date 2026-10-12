@@ -16,6 +16,8 @@ describe('gap5-02 r9 contract-spec surface repayment', () => {
     expect(owed).toHaveLength(6)
     expect(owed.filter(cell => cell.state !== 'present').map(cell => `${cell.component}:${cell.note}`)).toEqual([])
     const timePicker = matrix.rows.find(row => row.component === 'DzTimePicker')!
-    expect(timePicker.cells.find(cell => cell.kind === 'axe')?.state).toBe('unrun')
+    // DZUP-UI-R11-01-20261006-R1 repaid this axe cell (tests/a11y/r11-tier-c.a11y.spec.ts),
+    // admitted by R13-UI-RECONCILE-20261012-R1 amendment A3.
+    expect(timePicker.cells.find(cell => cell.kind === 'axe')?.state).toBe('present')
   })
 })
