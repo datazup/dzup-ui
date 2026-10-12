@@ -146,7 +146,7 @@ const autoId = useId()
 const fieldContext = useFormFieldContext()
 const searchQuery = ref('')
 const filterQuery = ref('')
-const isOpen = ref(false)
+const isOpen = ref(props.defaultOpen)
 
 /** Resolved element ID — prop overrides field context, falls back to auto-generated */
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
@@ -362,12 +362,13 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
 </script>
 
 <template>
-  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-combobox')" @keydown="handleAsyncOptionsKeydown">
+  <div data-part="root" :class="[ui?.root]" v-bind="dzTestId('dz-combobox')" @keydown="handleAsyncOptionsKeydown" @keydown.tab.capture="isOpen && handleOpenChange(false)">
     <ComboboxRoot
       :model-value="model"
       :disabled="resolvedDisabled"
       :name="name"
       :default-open="defaultOpen"
+      :open="isOpen"
       :open-on-click="openOnClick"
       :open-on-focus="openOnFocus"
       :ignore-filter="true"

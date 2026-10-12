@@ -482,3 +482,19 @@ export const RealWorldOnboarding: Story = {
     await expect(canvas.getByTestId('tr-status')).toHaveTextContent('complete')
   },
 }
+
+// DZUP-UI-R11-07-20261007-C1: real large/empty data transitions.
+export const Large: Story = {
+  render: () => ({
+    components: { DzTour },
+    data() {
+      const dataset: DzTourStep[] = Array.from({ length: 50 }, (_, i) => ({ target: '#data-tour-target', title: `Step ${i + 1}`, description: `Instruction ${i + 1}` }))
+      return { dataset, items: [...dataset], open: false, current: 0, changed: -1 }
+    },
+    template: `<div><button id="data-tour-target" type="button" @click="current = 0; open = true">Start data tour</button>
+      <button type="button" @click="items = []">Clear data</button><button type="button" @click="items = [...dataset]">Restore data</button>
+      <output data-testid="changed">{{ changed }}</output>
+      <DzTour v-model:open="open" v-model:current="current" :steps="items" :mask="false" :scroll-into-view="false" @change="changed = $event" />
+    </div>`,
+  }),
+}

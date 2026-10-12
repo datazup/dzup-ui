@@ -1,9 +1,9 @@
-import type { ColumnDef } from '../../components/data/DzDataGrid.types.ts'
+import type { ColumnDef, DzDataGridFilter, SortModel } from '../../components/data/DzDataGrid.types.ts'
 /**
  * useDataGrid — Unit tests.
  */
 import { describe, expect, it, vi } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { effectScope, nextTick, ref } from 'vue'
 import { useDataGrid } from './useDataGrid.ts'
 
 interface TestRow extends Record<string, unknown> {
@@ -25,6 +25,61 @@ const testData: TestRow[] = [
   { id: 4, name: 'Diana', age: 28 },
   { id: 5, name: 'Eve', age: 32 },
 ]
+
+describe('useDataGrid — reactive incoming models', () => {
+  it('obeys parent replacement and in-place updates without callback feedback', async () => {
+    const selectedRows = ref<TestRow[]>([])
+    const sortModel = ref<SortModel[]>([])
+    const filters = ref<DzDataGridFilter[]>([])
+    const onSelectionChange = vi.fn()
+    const onSortChange = vi.fn()
+    const onFilterChange = vi.fn()
+    const scope = effectScope()
+    try {
+      const grid = scope.run(() => useDataGrid({
+        data: testData,
+        columns: testColumns,
+        selectable: 'single',
+        sortable: true,
+        filterable: true,
+        selectedRows,
+        sortModel,
+        filters,
+        onSelectionChange,
+        onSortChange,
+        onFilterChange,
+      }))!
+      grid.toggleRowSelection(testData[0]!)
+      grid.sort('age')
+      grid.setFilter('name', { column: 'name', operator: 'contains', value: 'charlie' })
+      expect(onSelectionChange).toHaveBeenCalledTimes(1)
+      expect(onSortChange).toHaveBeenCalledTimes(1)
+      expect(onFilterChange).toHaveBeenCalledTimes(1)
+
+      selectedRows.value = [testData[1]!]
+      sortModel.value = [{ field: 'name', direction: 'desc' }]
+      filters.value = []
+      await nextTick()
+      expect(grid.selectedRows.value).toEqual([testData[1]])
+      expect(grid.sortModel.value).toEqual([{ field: 'name', direction: 'desc' }])
+      expect(grid.displayData.value.map(row => row.name)).toEqual(['Eve', 'Diana', 'Charlie', 'Bob', 'Alice'])
+
+      selectedRows.value.splice(0, 1, testData[2]!)
+      sortModel.value[0]!.direction = 'asc'
+      filters.value.push({ column: 'name', operator: 'contains', value: 'eve' })
+      await nextTick()
+      expect(grid.selectedRows.value).toEqual([testData[2]])
+      expect(grid.sortModel.value).toEqual([{ field: 'name', direction: 'asc' }])
+      expect(grid.displayData.value.map(row => row.name)).toEqual(['Eve'])
+      expect(onSelectionChange).toHaveBeenCalledTimes(1)
+      expect(onSortChange).toHaveBeenCalledTimes(1)
+      expect(onFilterChange).toHaveBeenCalledTimes(1)
+    }
+    finally {
+      scope.stop()
+    }
+  })
+})
 
 describe('useDataGrid — Display data', () => {
   it('returns all data when no sorting/pagination', () => {

@@ -1,4 +1,4 @@
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 /**
  * DzCombobox — Unit / behavior tests.
@@ -20,6 +20,22 @@ const richItems = [
 ]
 
 const originalScrollIntoView = HTMLElement.prototype.scrollIntoView
+
+describe('dzCombobox — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('selection, controlled=%s', async (controlled) => {
+    const wrapper = mount(DzCombobox, { attachTo: document.body, props: { items, modelValue: 'apple', defaultOpen: true, portalDisabled: true, ...(controlled ? { 'onUpdate:modelValue': () => {} } : {}) } })
+    await nextTick()
+    const banana = wrapper.findAll('[role="option"]').find(option => option.text() === 'Banana')!
+    expect(banana.exists()).toBe(true)
+    await banana.trigger('click')
+    await nextTick()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['banana'])
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe(controlled ? 'Apple' : 'Banana')
+    await wrapper.setProps({ modelValue: 'cherry' })
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe('Cherry')
+    wrapper.unmount()
+  })
+})
 
 enableAutoUnmount(afterEach)
 
@@ -365,5 +381,56 @@ describe('dzCombobox — D9: a disabled control has no live clear button', () =>
     const clear = wrapper.find('[data-part="clear"]')
     expect(clear.exists()).toBe(true)
     expect((clear.element as HTMLButtonElement).disabled).toBe(false)
+  })
+})
+
+// DZUP-UI-R11-05A-20261006-C1: actual declared key dispatch, no marker-only credit.
+describe('dzCombobox — declared keyboard actions', () => {
+  it('opens, navigates both directions and endpoints, selects and dismisses', async () => {
+    const wrapper = mount(DzCombobox, { attachTo: document.body, props: { items, portalDisabled: true, openOnFocus: false } })
+    const input = wrapper.get('input')
+    ;(input.element as HTMLInputElement).focus()
+    const press = async (key: string) => {
+      await input.trigger('keydown', { key })
+      await flushPromises()
+      await new Promise(resolve => setTimeout(resolve, 30))
+    }
+    const highlighted = () => document.getElementById(input.attributes('aria-activedescendant') ?? '')?.textContent?.trim()
+    await press('ArrowDown')
+    expect(input.attributes('aria-expanded')).toBe('true')
+    expect(highlighted()).toBe('Apple')
+    await press('ArrowDown')
+    expect(highlighted()).toBe('Banana')
+    await press('ArrowUp')
+    expect(highlighted()).toBe('Apple')
+    await press('End')
+    expect(highlighted()).toBe('Cherry')
+    await press('Home')
+    expect(highlighted()).toBe('Apple')
+    await press('Enter')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['apple'])
+    expect(input.attributes('aria-expanded')).toBe('false')
+    await press('ArrowUp')
+    expect(input.attributes('aria-expanded')).toBe('true')
+    await press('End')
+    await press('Escape')
+    expect(input.attributes('aria-expanded')).toBe('false')
+    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
+    expect((input.element as HTMLInputElement).value).toBe('Apple')
+    await press('ArrowDown')
+    const tab = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+    input.element.dispatchEvent(tab)
+    expect(tab.defaultPrevented).toBe(false)
+    await nextTick()
+    expect(input.attributes('aria-expanded')).toBe('false')
+    // jsdom cannot perform native Tab traversal: move to its destination explicitly.
+    const outside = document.createElement('button')
+    document.body.append(outside)
+    outside.focus()
+    await flushPromises()
+    outside.remove()
+    expect(input.attributes('aria-expanded')).toBe('false')
+    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
+    // Native focus traversal is qualified by e2e/matrix/combobox-keyboard.spec.ts.
   })
 })

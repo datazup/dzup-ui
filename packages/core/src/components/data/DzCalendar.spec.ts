@@ -7,6 +7,29 @@ import DzCalendar from './DzCalendar.vue'
 
 const FOCUS = '2026-06-15'
 
+describe('dzCalendar — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('selection, controlled=%s', async (controlled) => {
+    const wrapper = mountCal({ value: '2026-06-10', ...(controlled ? { 'onUpdate:value': () => {} } : {}) })
+    await wrapper.get('button[data-iso="2026-06-12"]').trigger('click')
+    expect(wrapper.emitted('update:value')?.at(-1)).toEqual(['2026-06-12'])
+    expect(wrapper.get(`button[data-iso="${controlled ? '2026-06-10' : '2026-06-12'}"]`).attributes('data-selected')).toBe('')
+    await wrapper.setProps({ value: '2026-06-14' })
+    expect(wrapper.get('button[data-iso="2026-06-14"]').attributes('data-selected')).toBe('')
+    expect(wrapper.get('button[data-iso="2026-06-12"]').attributes('data-selected')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it.each([false, true])('focusedDate, controlled=%s', async (controlled) => {
+    const wrapper = mountCal(controlled ? { 'onUpdate:focusedDate': () => {} } : {})
+    await wrapper.get('button[data-iso="2026-06-15"]').trigger('keydown', { key: 'ArrowRight' })
+    expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2026-06-16'])
+    expect(wrapper.get(`button[data-iso="${controlled ? FOCUS : '2026-06-16'}"]`).attributes('tabindex')).toBe('0')
+    await wrapper.setProps({ focusedDate: '2026-06-18' })
+    expect(wrapper.get('button[data-iso="2026-06-18"]').attributes('tabindex')).toBe('0')
+    wrapper.unmount()
+  })
+})
+
 function mountCal(props: Record<string, unknown> = {}, options: Record<string, unknown> = {}) {
   return mount(DzCalendar, { props: { focusedDate: FOCUS, ...props }, ...options })
 }
@@ -221,5 +244,41 @@ describe('dzCalendar — accessibility roles', () => {
     const wrapper = mount(DzCalendar, { props: { focusedDate: '2026-06-15' } })
     expect(wrapper.get('button[data-iso="2026-06-15"]').attributes('data-today')).toBe('')
     vi.useRealTimers()
+  })
+})
+
+// Keyboard contract rows the spec did not dispatch (DZUP-UI-R11-02):
+// `ArrowLeft`, `ArrowUp` and `Space`.
+describe('dzCalendar — keyboard contract: ArrowLeft, ArrowUp, Space', () => {
+  it('moves focus one day to the inline start on ArrowLeft', async () => {
+    const wrapper = mountCal()
+    await wrapper.get('[role="grid"]').trigger('keydown', { key: 'ArrowLeft' })
+    expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2026-06-14'])
+  })
+
+  it('moves focus one row up on ArrowUp', async () => {
+    const wrapper = mountCal()
+    await wrapper.get('[role="grid"]').trigger('keydown', { key: 'ArrowUp' })
+    expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2026-06-08'])
+  })
+
+  it('selects the focused day on Space, as Enter does, and consumes the key', async () => {
+    const wrapper = mountCal()
+    const grid = wrapper.get('[role="grid"]').element
+    const space = new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+    grid.dispatchEvent(space)
+    await wrapper.vm.$nextTick()
+    expect(space.defaultPrevented).toBe(true)
+    expect(wrapper.emitted('update:value')?.at(-1)).toEqual([FOCUS])
+
+    const viaEnter = mountCal()
+    await viaEnter.get('[role="grid"]').trigger('keydown', { key: 'Enter' })
+    expect(viaEnter.emitted('update:value')?.at(-1)).toEqual([FOCUS])
+  })
+
+  it('does not select a disabled focused day on Space', async () => {
+    const wrapper = mountCal({ disabled: true })
+    await wrapper.get('[role="grid"]').trigger('keydown', { key: ' ' })
+    expect(wrapper.emitted('update:value')).toBeUndefined()
   })
 })

@@ -1,4 +1,4 @@
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzMultiSelect — Unit / behavior tests.
  */
@@ -13,6 +13,19 @@ const items = [
 ]
 
 enableAutoUnmount(afterEach)
+
+describe('dzMultiSelect — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('tag removal, controlled=%s', async (controlled) => {
+    const wrapper = mount(DzMultiSelect, { props: { items, modelValue: ['apple', 'banana'], ...(controlled ? { 'onUpdate:modelValue': () => {} } : {}) } })
+    await wrapper.get('[aria-label="Remove Apple"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['banana']])
+    expect(wrapper.find('[aria-label="Remove Apple"]').exists()).toBe(controlled)
+    expect(wrapper.find('[aria-label="Remove Banana"]').exists()).toBe(true)
+    await wrapper.setProps({ modelValue: ['cherry'] })
+    expect(wrapper.find('[aria-label="Remove Cherry"]').exists()).toBe(true)
+    expect(wrapper.find('[aria-label="Remove Banana"]').exists()).toBe(false)
+  })
+})
 
 describe('dzMultiSelect — Unit Tests', () => {
   it('renders the multi-select root', () => {
@@ -198,5 +211,53 @@ describe('dzMultiSelect — Unit Tests', () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false)
     expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(items.length)
     wrapper.unmount()
+  })
+})
+
+// DZUP-UI-R11-05B-20261006-C1
+describe('dzMultiSelect — declared keyboard actions', () => {
+  it('navigates, toggles selection while open, dismisses and removes the last tag', async () => {
+    const original = HTMLElement.prototype.scrollIntoView
+    HTMLElement.prototype.scrollIntoView = () => {}
+    const wrapper = mount(DzMultiSelect, { attachTo: document.body, props: { items, portalDisabled: true } })
+    try {
+      const input = wrapper.get('input')
+      const press = async (key: string) => {
+        await input.trigger('keydown', { key })
+        await flushPromises()
+        await new Promise(resolve => setTimeout(resolve, 30))
+      }
+      const active = () => document.getElementById(input.attributes('aria-activedescendant') ?? '')?.textContent?.trim()
+      await press('ArrowDown')
+      expect(input.attributes('aria-expanded')).toBe('true')
+      expect(active()).toBe('Apple')
+      await press('ArrowDown')
+      expect(active()).toBe('Banana')
+      await press('ArrowUp')
+      expect(active()).toBe('Apple')
+      await press('End')
+      expect(active()).toBe('Cherry')
+      await press('Home')
+      expect(active()).toBe('Apple')
+      await press('Enter')
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['apple']])
+      expect(input.attributes('aria-expanded')).toBe('true')
+      await press('Enter')
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
+      await press('ArrowDown')
+      await press('Enter')
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['banana']])
+      await press('Escape')
+      expect(input.attributes('aria-expanded')).toBe('false')
+      expect(wrapper.emitted('update:modelValue')).toHaveLength(3)
+      await press('Backspace')
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
+      await press('ArrowUp')
+      expect(input.attributes('aria-expanded')).toBe('true')
+    }
+    finally {
+      wrapper.unmount()
+      HTMLElement.prototype.scrollIntoView = original
+    }
   })
 })

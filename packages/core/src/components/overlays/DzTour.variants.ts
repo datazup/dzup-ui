@@ -52,16 +52,16 @@ export const tourVariants = tv({
     /** Footer row container. */
     footer: [
       'mt-[var(--dz-spacing-4)]',
-      'flex items-center justify-between gap-[var(--dz-spacing-3)]',
+      'flex flex-wrap items-center justify-between gap-[var(--dz-spacing-3)]',
     ].join(' '),
     /** Control buttons cluster. */
-    controls: 'flex items-center gap-[var(--dz-spacing-2)]',
+    controls: 'flex flex-wrap items-center gap-[var(--dz-spacing-2)]',
     /** Step indicator dots container. */
-    indicators: 'flex items-center gap-[var(--dz-spacing-1_5)]',
+    indicators: 'flex min-w-0 max-w-full flex-wrap items-center gap-[var(--dz-spacing-1_5)]',
     /** A single indicator dot. */
     dot: [
       'h-[var(--dz-spacing-1_5,0.375rem)] w-[var(--dz-spacing-1_5,0.375rem)]',
-      'rounded-full',
+      'shrink-0 rounded-full',
       'transition-colors',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),

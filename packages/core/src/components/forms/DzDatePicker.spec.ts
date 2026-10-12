@@ -1,11 +1,29 @@
 import { expectKeyboardContract } from '@dzup-ui/testing'
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzDatePicker — Unit / behavior tests.
  */
 import { afterEach, describe, expect, it } from 'vitest'
 import { anatomy as datePickerAnatomy } from './DzDatePicker.anatomy.ts'
 import DzDatePicker from './DzDatePicker.vue'
+
+describe('dzDatePicker — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('day segment edit, controlled=%s', async (controlled) => {
+    const wrapper = mount(DzDatePicker, { attachTo: document.body, props: { modelValue: '2026-10-10', ...(controlled ? { 'onUpdate:modelValue': () => {} } : {}) } })
+    const day = wrapper.get('[data-reka-date-field-segment="day"]')
+    await day.trigger('keydown', { key: 'ArrowUp' })
+    await flushPromises()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['2026-10-11'])
+    // Reka keeps the editable segment draft while the parent decides whether
+    // to accept the request. Accept it, then prove a later replacement wins.
+    if (controlled)
+      await wrapper.setProps({ modelValue: '2026-10-11' })
+    expect(day.attributes('aria-valuenow')).toBe('11')
+    await wrapper.setProps({ modelValue: '2026-10-14' })
+    expect(day.attributes('aria-valuenow')).toBe('14')
+    wrapper.unmount()
+  })
+})
 
 describe('dzDatePicker — Unit Tests', () => {
   it('renders the date picker field', () => {
@@ -264,5 +282,22 @@ describe('dzDatePicker — calendar grid Home/End', () => {
     // no single-word prop condition to admit.
     expectKeyboardContract(wrapper, datePickerAnatomy, {})
     wrapper.unmount()
+  })
+})
+
+// DZUP-UI-R11-05B-20261006-C1: test the promised closed-calendar action.
+describe('dzDatePicker — declared calendar opening', () => {
+  it.fails('opens from the closed trigger using the declared downward arrow', async () => {
+    const wrapper = mount(DzDatePicker, { attachTo: document.body })
+    const trigger = wrapper.get('[data-part="trigger"]')
+    await trigger.trigger('keydown', { key: datePickerAnatomy.keyboard[0].key })
+    await new Promise(resolve => setTimeout(resolve, 50))
+    try {
+      expect(trigger.attributes('aria-expanded')).toBe('true')
+      expect(document.querySelector('[data-part="panel"]')).not.toBeNull()
+    }
+    finally {
+      wrapper.unmount()
+    }
   })
 })

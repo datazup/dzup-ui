@@ -106,6 +106,18 @@ const contentClasses = computed(() =>
  * left for `??` to catch.
  */
 const fallbackTitle = resolvedAriaLabel
+/**
+ * The rendered listbox id, read back from the DOM for the input's
+ * `aria-controls` (DZUP-UI-R11-01 F1). Reka keeps the content id in a
+ * non-reactive context field that `ComboboxContent` fills in AFTER
+ * `ComboboxInput` has rendered, so the input advertised `aria-controls=""` for
+ * as long as nothing else re-rendered it -- axe `aria-required-attr`.
+ */
+const listId = ref<string>()
+function captureListId(instance: unknown) {
+  const el = (instance as { $el?: unknown } | null)?.$el
+  listId.value = el instanceof HTMLElement && el.id ? el.id : undefined
+}
 const contentAria = computed<Record<string, unknown>>(() => {
   const aria: Record<string, unknown> = {}
   aria['aria-label'] = resolvedAriaLabel.value
@@ -289,12 +301,19 @@ const dzMotionAttr = useDzMotionAttribute()
               :class="cn(styles.input(), props.ui?.input)"
               :placeholder="placeholder"
               auto-focus
+              :aria-controls="listId"
               @update:model-value="handleSearchInput"
             />
           </div>
 
           <!-- Items list -->
-          <ComboboxContent data-part="list" :class="cn(styles.list(), props.ui?.list)" :dismiss-able="false">
+          <ComboboxContent
+            :ref="captureListId"
+            data-part="list"
+            :class="cn(styles.list(), props.ui?.list)"
+            :aria-label="resolvedAriaLabel"
+            :dismiss-able="false"
+          >
             <!-- Grouped rendering -->
             <template v-if="groupedItems">
               <template v-for="groupDef in groups" :key="groupDef.id">

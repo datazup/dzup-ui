@@ -579,3 +579,45 @@ export const States: Story = {
     await expect(canvas.getByTestId('cp-ran')).toHaveTextContent('nothing')
   },
 }
+
+// DZUP-UI-R11-05B-20261006-C1: isolated global-shortcut host for the browser lane.
+export const KeyboardContract: Story = {
+  render: () => ({
+    components: { DzCommandPalette, DzButton },
+    setup() {
+      return { items: sampleItems, groups: sampleGroups }
+    },
+    data() {
+      return { open: false, selected: 'none' }
+    },
+    template: `
+      <div>
+        <DzButton>Before palette</DzButton>
+        <DzCommandPalette v-model:open="open" :items="items" :groups="groups" :enable-global-shortcut="true" @select="selected = $event.id" />
+        <p>Executed: <strong>{{ selected }}</strong></p>
+      </div>
+    `,
+  }),
+}
+
+// DZUP-UI-R11-07-20261007-C1: real large/empty data transitions.
+export const Large: Story = {
+  render: () => ({
+    components: { DzCommandPalette },
+    data() {
+      const dataset: CommandItem[] = Array.from({ length: 100 }, (_, i) => ({ id: `command-${i + 1}`, label: `Command ${i + 1}` }))
+      return { dataset, items: [...dataset], open: false, selected: '' }
+    },
+    template: `
+      <div>
+        <button type="button" @click="open = true">Open data palette</button>
+        <button type="button" @click="items = []">Clear data</button>
+        <button type="button" @click="items = [...dataset]">Restore data</button>
+        <output data-testid="selected">{{ selected }}</output>
+        <DzCommandPalette v-model:open="open" :items="items" :enable-global-shortcut="false" @select="selected = $event.id">
+          <template #empty>No commands</template>
+        </DzCommandPalette>
+      </div>
+    `,
+  }),
+}

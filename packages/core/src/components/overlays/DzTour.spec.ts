@@ -14,6 +14,26 @@ import { defineComponent, ref } from 'vue'
 import { anatomy as tourAnatomy } from './DzTour.anatomy.ts'
 import DzTour from './DzTour.vue'
 
+describe('dzTour — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('step and open models, controlled=%s', async (controlled) => {
+    const wrapper = mount(DzTour, { attachTo: document.body, props: { steps: setupTargets(), open: true, current: 0, ...(controlled ? { 'onUpdate:open': () => {}, 'onUpdate:current': () => {} } : {}) } })
+    await flushPromises()
+    expect(panelText()).toContain('Step A')
+    clickTestId('dz-tour-next')
+    await flushPromises()
+    expect(wrapper.emitted('update:current')?.at(-1)).toEqual([1])
+    expect(panelText()).toContain(controlled ? 'Step A' : 'Step B')
+    await wrapper.setProps({ current: 1 })
+    expect(panelText()).toContain('Step B')
+    clickTestId('dz-tour-skip')
+    await flushPromises()
+    expect(wrapper.emitted('update:open')?.at(-1)).toEqual([false])
+    expect(document.querySelector('[data-testid="dz-tour-panel"]') !== null).toBe(controlled)
+    await wrapper.setProps({ open: false })
+    expect(document.querySelector('[data-testid="dz-tour-panel"]')).toBeNull()
+  })
+})
+
 /**
  * Nodes this file appends to the document itself — tour targets, an opener — as
  * opposed to anything a component mounted. Unmounting cannot know about these, so
@@ -360,5 +380,42 @@ describe('dzTour -- arrow-key step navigation', () => {
     keyPanel('ArrowRight')
     await flushPromises()
     expectKeyboardContract(panel, tourAnatomy, { handled: ['ArrowLeft'] })
+  })
+})
+
+// Keyboard contract rows the spec did not dispatch (DZUP-UI-R11-02): `Tab` and
+// Shift+`Tab` wrap inside the step panel.
+describe('dzTour -- Tab wraps inside the tour', () => {
+  function tab(shiftKey = false): KeyboardEvent {
+    const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true, cancelable: true })
+    ;(document.activeElement ?? document.body).dispatchEvent(event)
+    return event
+  }
+
+  it('wraps from the last control to the first on Tab and back on Shift+Tab', async () => {
+    mountHost(setupTargets())
+    await flushPromises()
+    const panel = document.body.querySelector<HTMLElement>('[data-testid="dz-tour-panel"]')!
+    const controls = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled])'))
+    expect(controls.length).toBeGreaterThan(1)
+    const first = controls[0]!
+    const last = controls.at(-1)!
+
+    last.focus()
+    expect(tab().defaultPrevented).toBe(true)
+    expect(document.activeElement).toBe(first)
+
+    expect(tab(true).defaultPrevented).toBe(true)
+    expect(document.activeElement).toBe(last)
+  })
+
+  it('leaves Tab to the browser between two controls inside the panel', async () => {
+    mountHost(setupTargets())
+    await flushPromises()
+    const panel = document.body.querySelector<HTMLElement>('[data-testid="dz-tour-panel"]')!
+    const controls = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled])'))
+    controls[0]!.focus()
+    expect(tab().defaultPrevented).toBe(false)
+    expect(panel.contains(document.activeElement)).toBe(true)
   })
 })

@@ -2,7 +2,7 @@ import type { CommandItem } from './DzCommandPalette.types'
 /**
  * DzCommandPalette — Unit / behavior tests.
  */
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 import { mountWithDialogStubs } from '../../../test-utils/dialog'
@@ -31,6 +31,21 @@ const sampleItems: CommandItem[] = [
   { id: 'settings', label: 'Open Settings', group: 'navigation' },
   { id: 'disabled-item', label: 'Disabled', disabled: true },
 ]
+
+describe('dzCommandPalette — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('open model, controlled=%s', async (controlled) => {
+    const wrapper = mount(DzCommandPalette, { attachTo: document.body, props: { items: sampleItems, open: false, portalDisabled: true, ...(controlled ? { 'onUpdate:open': () => {} } : {}) } })
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }))
+    await nextTick()
+    expect(wrapper.emitted('update:open')?.at(-1)).toEqual([true])
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(!controlled)
+    await wrapper.setProps({ open: true })
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(true)
+    await wrapper.setProps({ open: false })
+    await flushPromises()
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
+  })
+})
 
 const sampleGroups = [
   { id: 'actions', label: 'Actions' },
@@ -347,5 +362,40 @@ describe('dzCommandPalette — filtering', () => {
     expect(rows).toEqual([])
     expect(dialog.textContent).toContain('No results found.')
     wrapper.unmount()
+  })
+})
+
+// DZUP-UI-R11-05B-20261006-C1
+describe('dzCommandPalette — declared result navigation', () => {
+  it('opens with either global modifier, navigates, executes and dismisses', async () => {
+    const commands = [{ id: 'alpha', label: 'Alpha' }, { id: 'beta', label: 'Beta' }]
+    const wrapper = mount(DzCommandPalette, { attachTo: document.body, props: { items: commands, portalDisabled: true } })
+    for (const modifier of ['ctrlKey', 'metaKey']) {
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', [modifier]: true, bubbles: true, cancelable: true }))
+      await flushPromises()
+      const input = wrapper.get('[role="combobox"]')
+      const press = async (key: string) => {
+        await input.trigger('keydown', { key })
+        await flushPromises()
+        await new Promise(resolve => setTimeout(resolve, 30))
+      }
+      const active = () => document.getElementById(input.attributes('aria-activedescendant') ?? '')?.textContent?.trim()
+      expect(active()).toBe('Alpha')
+      await press('ArrowDown')
+      expect(active()).toBe('Beta')
+      await press('ArrowUp')
+      expect(active()).toBe('Alpha')
+      await press('Enter')
+      expect(wrapper.emitted('select')?.at(-1)).toEqual([commands[0]])
+      expect(wrapper.emitted('update:open')?.at(-1)).toEqual([false])
+      await flushPromises()
+      expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
+    }
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }))
+    await flushPromises()
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    await flushPromises()
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
+    expect(wrapper.emitted('select')).toHaveLength(2)
   })
 })

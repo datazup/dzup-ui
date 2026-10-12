@@ -794,3 +794,44 @@ describe('dzTable — virtual scroll', () => {
     expect(wrapper.text()).toContain('No records found.')
   })
 })
+
+// Keyboard contract (DZUP-UI-R11-02): `Tab`. "Move to the next interactive
+// cell or header control; the table itself is not a tab stop." jsdom does not
+// move focus on Tab, so the test asserts which nodes are tab stops, in order,
+// and that the table cancels the key on none of them.
+describe('dzTable — keyboard contract: Tab', () => {
+  it('keeps the table, rows and cells out of the tab order and leaves Tab to the controls', () => {
+    const wrapper = mount(DzTable, {
+      attachTo: document.body,
+      slots: {
+        default: () => [
+          h(DzTableHeader, null, {
+            default: () => h(DzTableRow, null, {
+              default: () => h(DzTableCell, { header: true, resizable: true, colId: 'name' }, { default: () => 'Name' }),
+            }),
+          }),
+          h(DzTableBody, null, {
+            default: () => h(DzTableRow, null, {
+              default: () => h(DzTableCell, { colId: 'name' }, { default: () => h('a', { href: '#alice' }, 'Alice') }),
+            }),
+          }),
+        ],
+      },
+    })
+    const root = wrapper.element as HTMLElement
+    expect(root.tabIndex).toBe(-1)
+    for (const node of root.querySelectorAll<HTMLElement>('table, thead, tbody, tr, th, td'))
+      expect(node.tabIndex).toBe(-1)
+
+    const stops = Array.from(root.querySelectorAll<HTMLElement>('a[href], button, input, select, [tabindex]'))
+      .filter(el => el.tabIndex >= 0)
+    expect(stops.map(el => el.getAttribute('role') ?? el.tagName)).toEqual(['separator', 'A'])
+
+    for (const stop of stops) {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+      stop.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(false)
+    }
+    wrapper.unmount()
+  })
+})

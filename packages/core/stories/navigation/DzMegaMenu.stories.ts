@@ -542,3 +542,15 @@ export const RealWorldSiteHeader: Story = {
     await expect(pricing.tagName).toBe('A')
   },
 }
+
+// DZUP-UI-R11-07-20261007-C1: real large/empty data transitions.
+export const Large: Story = {
+  render: () => ({
+    components: { DzMegaMenu },
+    data() {
+      const dataset: DzMegaMenuItem[] = [{ label: 'Catalog', items: [{ label: 'Products', items: Array.from({ length: 100 }, (_, i) => ({ key: `product-${i + 1}`, label: `Product ${i + 1}` })) }] }]
+      return { dataset, items: [...dataset] }
+    },
+    template: `<div><button type="button" @mousedown.prevent @click="items = []">Clear data</button><button type="button" @mousedown.prevent @click="items = [...dataset]">Restore data</button><DzMegaMenu :items="items" :breakpoint="0" :open-on-hover="false" /></div>`,
+  }),
+}

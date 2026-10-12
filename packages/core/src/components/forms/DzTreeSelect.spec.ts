@@ -24,6 +24,36 @@ const nodes: TreeNode[] = [
   { key: 'veg', label: 'Vegetable', disabled: true },
 ]
 
+describe('dzTreeSelect — controlled and uncontrolled value ownership', () => {
+  it.each(['modelValue', 'value'] as const)('selection through %s', async (modelName) => {
+    for (const controlled of [false, true]) {
+      const event = `update:${modelName}`
+      const wrapper = mount(DzTreeSelect, { attachTo: document.body, props: { nodes, defaultOpen: true, [modelName]: 'apple', ...(controlled ? { [`onUpdate:${modelName}`]: () => {} } : {}) } })
+      await flush()
+      expect(clickRow('Cherry')).toBe(true)
+      await wrapper.vm.$nextTick()
+      expect(wrapper.emitted(event)?.at(-1)).toEqual(['cherry'])
+      expect(wrapper.get('[role="combobox"]').text()).toContain(controlled ? 'Apple' : 'Cherry')
+      await wrapper.setProps({ [modelName]: 'banana' })
+      expect(wrapper.get('[role="combobox"]').text()).toContain('Banana')
+      wrapper.unmount()
+    }
+  })
+
+  it.each([false, true])('expandedKeys, controlled=%s', async (controlled) => {
+    const wrapper = mount(DzTreeSelect, { attachTo: document.body, props: { nodes, defaultOpen: true, expandedKeys: [], ...(controlled ? { 'onUpdate:expandedKeys': () => {} } : {}) } })
+    await flush()
+    expect(clickChevron('Fruit')).toBe(true)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:expandedKeys')?.at(-1)).toEqual([['fruit']])
+    expect(document.querySelector('[role="tree"]')?.textContent?.includes('Apple')).toBe(!controlled)
+    await wrapper.setProps({ expandedKeys: ['fruit'] })
+    expect(document.querySelector('[role="tree"]')?.textContent).toContain('Apple')
+    await wrapper.setProps({ expandedKeys: [] })
+    expect(document.querySelector('[role="tree"]')?.textContent).not.toContain('Apple')
+  })
+})
+
 async function flush(): Promise<void> {
   await new Promise(resolve => setTimeout(resolve, 50))
 }
@@ -484,6 +514,46 @@ describe('dzTreeSelect — D8: an external write after a user edit is honoured',
     await flush()
     expect(wrapper.text()).toContain('Apple')
 
+    wrapper.unmount()
+  })
+})
+
+// DZUP-UI-R11-05B-20261006-C1
+describe('dzTreeSelect — remaining declared keyboard actions', () => {
+  it('reaches endpoints, dismisses without selection, selects with Space and permits Tab', async () => {
+    const wrapper = mount(DzTreeSelect, { attachTo: document.body, props: { nodes } })
+    const input = wrapper.get('[role="combobox"]')
+    const press = async (key: string) => {
+      await input.trigger('keydown', { key })
+      await flush()
+    }
+    const active = () => document.getElementById(input.attributes('aria-activedescendant') ?? '')?.textContent?.trim()
+    await press('ArrowUp')
+    expect(input.attributes('aria-expanded')).toBe('true')
+    await press('End')
+    expect(active()).toContain('Cherry')
+    await press('Home')
+    expect(active()).toContain('Fruit')
+    await press('Escape')
+    expect(input.attributes('aria-expanded')).toBe('false')
+    expect(wrapper.emitted('change')).toBeUndefined()
+    await press('ArrowDown')
+    await press('End')
+    await press(' ')
+    expect(wrapper.emitted('change')?.at(-1)).toEqual(['cherry'])
+    expect(input.attributes('aria-expanded')).toBe('false')
+    await press('ArrowDown')
+    const tab = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+    input.element.dispatchEvent(tab)
+    await flush()
+    expect(tab.defaultPrevented).toBe(false)
+    // jsdom does not traverse on Tab; supply the native focus destination explicitly.
+    const outside = document.createElement('button')
+    document.body.append(outside)
+    outside.focus()
+    await flush()
+    outside.remove()
+    expect(input.attributes('aria-expanded')).toBe('false')
     wrapper.unmount()
   })
 })

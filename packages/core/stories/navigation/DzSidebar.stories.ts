@@ -623,3 +623,20 @@ export const RealWorldAppShell: Story = {
     await expect(canvas.getByTestId('sb-rw-title')).toHaveTextContent('drafts')
   },
 }
+
+// DZUP-UI-R11-07-20261007-C1: real large/empty data transitions.
+export const Large: Story = {
+  render: () => ({
+    components: { DzSidebar, DzSidebarSection, DzSidebarItem },
+    setup() {
+      const dataset = Array.from({ length: 100 }, (_, i) => ({ key: `route-${i + 1}`, label: `Route ${i + 1}` }))
+      const items = ref([...dataset])
+      const selected = ref('')
+      return { dataset, items, selected }
+    },
+    template: `<div><button type="button" @mousedown.prevent @click="items = []">Clear data</button><button type="button" @mousedown.prevent @click="items = [...dataset]">Restore data</button><output data-testid="selected">{{ selected }}</output>
+      <DzSidebar :mobile-breakpoint="0" position="static"><DzSidebarSection label="Routes">
+        <DzSidebarItem v-for="item in items" :key="item.key" :aria-label="item.label" @click="selected = item.key">{{ item.label }}</DzSidebarItem>
+      </DzSidebarSection></DzSidebar></div>`,
+  }),
+}

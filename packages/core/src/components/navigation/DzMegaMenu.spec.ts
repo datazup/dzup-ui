@@ -219,3 +219,82 @@ describe('dzMegaMenu — Slots', () => {
     expect(wrapper.find('.featured-card').exists()).toBe(true)
   })
 })
+
+// Keyboard contract rows the spec did not dispatch (DZUP-UI-R11-02):
+// `Space`, `Home`, `End` and `Tab`.
+describe('dzMegaMenu — Keyboard contract: Space, Home, End, Tab', () => {
+  beforeEach(() => stubMatchMedia())
+  afterEach(() => vi.unstubAllGlobals())
+
+  function key(el: Element, name: string): KeyboardEvent {
+    const event = new KeyboardEvent('keydown', { key: name, bubbles: true, cancelable: true })
+    el.dispatchEvent(event)
+    return event
+  }
+
+  it('space opens the focused item panel and moves into it, and closes it again', async () => {
+    const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
+    const trigger = wrapper.get('[data-mega-trigger="0"]')
+    expect(key(trigger.element, ' ').defaultPrevented).toBe(true)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-mega-panel="0"]').exists()).toBe(true)
+    expect(document.activeElement).toBe(wrapper.findAll('[data-mega-link]')[0]!.element)
+
+    key(trigger.element, ' ')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-mega-panel="0"]').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('space on a plain link item is left to the browser', async () => {
+    const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
+    expect(key(wrapper.get('[data-mega-trigger="2"]').element, ' ').defaultPrevented).toBe(false)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-mega-panel]').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('end moves focus to the last top-level item and Home back to the first', async () => {
+    const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
+    expect(key(wrapper.get('[data-mega-trigger="1"]').element, 'End').defaultPrevented).toBe(true)
+    await wrapper.vm.$nextTick()
+    expect(document.activeElement).toBe(wrapper.get('[data-mega-trigger="2"]').element)
+    expect(wrapper.get('[data-mega-trigger="2"]').attributes('tabindex')).toBe('0')
+
+    expect(key(wrapper.get('[data-mega-trigger="2"]').element, 'Home').defaultPrevented).toBe(true)
+    await wrapper.vm.$nextTick()
+    expect(document.activeElement).toBe(wrapper.get('[data-mega-trigger="0"]').element)
+    expect(wrapper.get('[data-mega-trigger="0"]').attributes('tabindex')).toBe('0')
+    wrapper.unmount()
+  })
+
+  it('end and Home move to the last and first link inside an open panel', async () => {
+    const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
+    await wrapper.get('[data-mega-trigger="0"]').trigger('keydown', { key: 'ArrowDown' })
+    await wrapper.vm.$nextTick()
+    const links = wrapper.findAll('[data-mega-link]')
+    expect(links.length).toBe(3)
+
+    key(links[0]!.element, 'End')
+    expect(document.activeElement).toBe(links[2]!.element)
+    key(links[2]!.element, 'Home')
+    expect(document.activeElement).toBe(links[0]!.element)
+    wrapper.unmount()
+  })
+
+  it('tab leaves the menubar: it is never cancelled, and from a panel link it closes the panel', async () => {
+    const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
+    // One tab stop for the whole menubar: Tab from it goes to whatever follows.
+    const stops = wrapper.findAll('[data-mega-trigger]').filter(t => t.attributes('tabindex') === '0')
+    expect(stops).toHaveLength(1)
+    expect(key(stops[0]!.element, 'Tab').defaultPrevented).toBe(false)
+
+    await wrapper.get('[data-mega-trigger="0"]').trigger('keydown', { key: 'ArrowDown' })
+    await wrapper.vm.$nextTick()
+    const link = wrapper.findAll('[data-mega-link]')[0]!
+    expect(key(link.element, 'Tab').defaultPrevented).toBe(false)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-mega-panel="0"]').exists()).toBe(false)
+    wrapper.unmount()
+  })
+})

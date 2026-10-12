@@ -3,12 +3,46 @@
  */
 import { mount } from '@vue/test-utils'
 import { beforeAll, describe, expect, it } from 'vitest'
-import { h, nextTick } from 'vue'
+import { defineComponent, h, inject, nextTick } from 'vue'
+import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import DzSidebar from './DzSidebar.vue'
 import DzSidebarFooter from './DzSidebarFooter.vue'
 import DzSidebarHeader from './DzSidebarHeader.vue'
 import DzSidebarItem from './DzSidebarItem.vue'
 import DzSidebarSection from './DzSidebarSection.vue'
+
+describe('dzSidebar — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('collapsed model, controlled=%s', async (controlled) => {
+    const Toggle = defineComponent({ setup() {
+      const context = inject(DZ_SIDEBAR_KEY)!
+      return () => h('button', {
+        class: 'model-toggle',
+        onClick: () => {
+          context.collapsed.value = !context.collapsed.value
+        },
+      }, 'Toggle')
+    } })
+    const wrapper = mount(DzSidebar, { props: { collapsed: false, ...(controlled ? { 'onUpdate:collapsed': () => {} } : {}) }, slots: { default: () => h(Toggle) } })
+    await wrapper.get('.model-toggle').trigger('click')
+    expect(wrapper.emitted('update:collapsed')?.at(-1)).toEqual([true])
+    expect(wrapper.get('nav').attributes('data-state')).toBe(controlled ? 'expanded' : 'collapsed')
+    await wrapper.setProps({ collapsed: true })
+    expect(wrapper.get('nav').attributes('data-state')).toBe('collapsed')
+    await wrapper.setProps({ collapsed: false })
+    expect(wrapper.get('nav').attributes('data-state')).toBe('expanded')
+    wrapper.unmount()
+  })
+
+  it.each([false, true])('mobileOpen model, controlled=%s', async (controlled) => {
+    const wrapper = mountSidebar({ position: 'fixed', isMobile: true, mobileOpen: true, ...(controlled ? { 'onUpdate:mobileOpen': () => {} } : {}) })
+    await wrapper.get('[data-part="overlay"]').trigger('click')
+    expect(wrapper.emitted('update:mobileOpen')?.at(-1)).toEqual([false])
+    expect(wrapper.find('[data-part="overlay"]').exists()).toBe(controlled)
+    await wrapper.setProps({ mobileOpen: false })
+    expect(wrapper.find('[data-part="overlay"]').exists()).toBe(false)
+    wrapper.unmount()
+  })
+})
 
 /** Helper to mount a complete sidebar setup */
 function mountSidebar(sidebarProps: Record<string, unknown> = {}) {
@@ -361,5 +395,82 @@ describe('dzSidebar -- Unit Tests', () => {
     expect(
       item.classes().some(c => c.includes('border-s-[var(--dz-sidebar-item-active-bg)]')),
     ).toBe(true)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Keyboard contract (DZUP-UI-R11-02): `Tab`, `Enter` and `Space`.
+//
+// The sidebar binds no key handler: its anatomy declares that every item and
+// group toggle is a native control in document order. jsdom neither moves focus
+// on Tab nor turns Enter/Space on a `<button>` into a click, so `press` does
+// the one thing the platform would — click a native button whose keydown was
+// not cancelled — and the tests assert what the component owns: which elements
+// are tab stops, that it cancels none of the three keys, and what activation does.
+// ---------------------------------------------------------------------------
+describe('dzSidebar — keyboard contract', () => {
+  function press(el: Element, key: string): KeyboardEvent {
+    const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })
+    el.dispatchEvent(event)
+    if (!event.defaultPrevented && el instanceof HTMLButtonElement && !el.disabled && key !== 'Tab')
+      el.click()
+    return event
+  }
+
+  function mountNav() {
+    return mount(DzSidebar, {
+      attachTo: document.body,
+      slots: {
+        default: () => h(DzSidebarSection, { title: 'Workspace', collapsible: true }, () => [
+          h(DzSidebarItem, null, () => 'Dashboard'),
+          h(DzSidebarItem, { disabled: true }, () => 'Archived'),
+          h(DzSidebarItem, null, () => 'Settings'),
+        ]),
+      },
+    })
+  }
+
+  it('makes the group toggle and every enabled item its own tab stop, in document order', () => {
+    const wrapper = mountNav()
+    const root = wrapper.element as HTMLElement
+    const stops = Array.from(root.querySelectorAll<HTMLElement>('button, a[href], [tabindex]'))
+      .filter(el => el.tabIndex >= 0 && !(el as HTMLButtonElement).disabled)
+    expect(stops.map(el => el.textContent?.trim())).toEqual(['Workspace', 'Dashboard', 'Settings'])
+    for (const stop of stops)
+      expect(press(stop, 'Tab').defaultPrevented).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('activates the focused item on Enter and on Space, and not a disabled one', () => {
+    const wrapper = mountNav()
+    const [dashboard, archived] = wrapper.findAllComponents(DzSidebarItem)
+    expect(dashboard!.element.tagName).toBe('BUTTON')
+
+    expect(press(dashboard!.element, 'Enter').defaultPrevented).toBe(false)
+    expect(dashboard!.emitted('click')).toHaveLength(1)
+    expect(press(dashboard!.element, ' ').defaultPrevented).toBe(false)
+    expect(dashboard!.emitted('click')).toHaveLength(2)
+
+    press(archived!.element, 'Enter')
+    press(archived!.element, ' ')
+    expect(archived!.emitted('click')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('collapses and expands the focused group on Enter and on Space', async () => {
+    const wrapper = mountNav()
+    const toggle = wrapper.get('[data-part="group-label"]')
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+
+    press(toggle.element, 'Enter')
+    await nextTick()
+    expect(toggle.attributes('aria-expanded')).toBe('false')
+    expect(wrapper.text()).not.toContain('Dashboard')
+
+    press(toggle.element, ' ')
+    await nextTick()
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+    expect(wrapper.text()).toContain('Dashboard')
+    wrapper.unmount()
   })
 })

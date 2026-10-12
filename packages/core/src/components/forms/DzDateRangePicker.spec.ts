@@ -1,11 +1,31 @@
 import { expectKeyboardContract } from '@dzup-ui/testing'
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzDateRangePicker — Unit / behavior tests.
  */
 import { afterEach, describe, expect, it } from 'vitest'
 import { anatomy as dateRangePickerAnatomy } from './DzDateRangePicker.anatomy.ts'
 import DzDateRangePicker from './DzDateRangePicker.vue'
+
+describe('dzDateRangePicker — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('range segment edit, controlled=%s', async (controlled) => {
+    const wrapper = mount(DzDateRangePicker, { attachTo: document.body, props: { modelValue: { start: '2026-10-10', end: '2026-10-20' }, ...(controlled ? { 'onUpdate:modelValue': () => {} } : {}) } })
+    const day = wrapper.findAll('[data-reka-date-field-segment="day"]')[0]!
+    expect(day.exists()).toBe(true)
+    await day.trigger('keydown', { key: 'ArrowUp' })
+    await flushPromises()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([{ start: '2026-10-11', end: '2026-10-20' }])
+    // The segment is an editable draft; parent acceptance and subsequent
+    // replacement are measured separately from that draft.
+    if (controlled)
+      await wrapper.setProps({ modelValue: { start: '2026-10-11', end: '2026-10-20' } })
+    expect(day.attributes('aria-valuenow')).toBe('11')
+    await wrapper.setProps({ modelValue: { start: '2026-10-14', end: '2026-10-25' } })
+    expect(day.attributes('aria-valuenow')).toBe('14')
+    expect(wrapper.findAll('[data-reka-date-field-segment="day"]')[1]!.attributes('aria-valuenow')).toBe('25')
+    wrapper.unmount()
+  })
+})
 
 describe('dzDateRangePicker — Unit Tests', () => {
   it('renders the date range picker field', () => {
@@ -192,5 +212,22 @@ describe('dzDateRangePicker — calendar grid Home/End', () => {
     const { wrapper } = await openWeekOfStart()
     expectKeyboardContract(wrapper, dateRangePickerAnatomy, {})
     wrapper.unmount()
+  })
+})
+
+// DZUP-UI-R11-05B-20261006-C1: test the promised closed-calendar action.
+describe('dzDateRangePicker — declared calendar opening', () => {
+  it.fails('opens from the closed trigger using the declared downward arrow', async () => {
+    const wrapper = mount(DzDateRangePicker, { attachTo: document.body })
+    const trigger = wrapper.get('[data-part="trigger"]')
+    await trigger.trigger('keydown', { key: dateRangePickerAnatomy.keyboard[0].key })
+    await new Promise(resolve => setTimeout(resolve, 50))
+    try {
+      expect(trigger.attributes('aria-expanded')).toBe('true')
+      expect(document.querySelector('[data-part="panel"]')).not.toBeNull()
+    }
+    finally {
+      wrapper.unmount()
+    }
   })
 })

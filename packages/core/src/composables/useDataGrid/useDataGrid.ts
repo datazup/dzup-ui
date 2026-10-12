@@ -15,7 +15,7 @@ import type {
   SortDirection,
   SortModel,
 } from '../../components/data/DzDataGrid.types.ts'
-import { computed, ref, toRef, toValue } from 'vue'
+import { computed, ref, toRef, toValue, watch } from 'vue'
 import { useDataGridPagination } from './useDataGridPagination.ts'
 import { useDataGridSort } from './useDataGridSort.ts'
 
@@ -181,6 +181,19 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
 
   // ── Selection state ──
   const selectedRows = ref<T[]>(toValue(options.selectedRows) ?? []) as Ref<T[]>
+
+  // Incoming models can be replaced by form resets or server state after a
+  // user edit. Synchronize them without calling the user-change callbacks;
+  // those callbacks belong to the actions below, not to parent writes.
+  watch(() => toValue(options.sortModel), (model) => {
+    sortResult.sortModel.value = model ?? []
+  }, { deep: true })
+  watch(() => toValue(options.filters), (model) => {
+    sortResult.filters.value = model ?? []
+  }, { deep: true })
+  watch(() => toValue(options.selectedRows), (rows) => {
+    selectedRows.value = rows ?? []
+  }, { deep: true })
 
   // ── Row identity ──
   function getRowId(row: T): unknown {

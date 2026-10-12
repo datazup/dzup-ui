@@ -5,6 +5,42 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import DzDataView from './DzDataView.vue'
 
+describe('dzDataView — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('layout model, controlled=%s', async (controlled) => {
+    const wrapper = mountView({ layoutToggle: true, layout: 'list', ...(controlled ? { 'onUpdate:layout': () => {} } : {}) })
+    const grid = wrapper.findAll('button').find(button => button.text() === 'Grid')!
+    await grid.trigger('click')
+    expect(wrapper.emitted('update:layout')?.at(-1)).toEqual(['grid'])
+    expect(wrapper.get('.cell').attributes('data-layout')).toBe(controlled ? 'list' : 'grid')
+    await wrapper.setProps({ layout: 'grid' })
+    expect(wrapper.get('.cell').attributes('data-layout')).toBe('grid')
+    await wrapper.setProps({ layout: 'list' })
+    expect(wrapper.get('.cell').attributes('data-layout')).toBe('list')
+    wrapper.unmount()
+  })
+
+  it.each([false, true])('paging model, controlled=%s', async (controlled) => {
+    const wrapper = mountView({ paginator: true, rows: 2, first: 0, ...(controlled ? { 'onUpdate:first': () => {} } : {}) })
+    await wrapper.get('[aria-label="Go to next page"]').trigger('click')
+    expect(wrapper.emitted('update:first')?.at(-1)).toEqual([2])
+    expect(wrapper.get('.cell').text()).toBe(controlled ? 'Cherry' : 'Banana')
+    await wrapper.setProps({ first: 4 })
+    expect(wrapper.get('.cell').text()).toBe('Elderberry')
+    wrapper.unmount()
+  })
+
+  it.each([false, true])('sort models, controlled=%s', async (controlled) => {
+    const wrapper = mountView({ sortField: 'name', sortOrder: 1, sortOptions: [{ label: 'Price', field: 'price', order: -1 }], ...(controlled ? { 'onUpdate:sortField': () => {}, 'onUpdate:sortOrder': () => {} } : {}) })
+    await wrapper.get('select[aria-label="Sort by"]').setValue('0')
+    expect(wrapper.emitted('update:sortField')?.at(-1)).toEqual(['price'])
+    expect(wrapper.emitted('update:sortOrder')?.at(-1)).toEqual([-1])
+    expect(wrapper.get('.cell').text()).toBe(controlled ? 'Apple' : 'Damson')
+    await wrapper.setProps({ sortField: 'id', sortOrder: -1 })
+    expect(wrapper.get('.cell').text()).toBe('Elderberry')
+    wrapper.unmount()
+  })
+})
+
 interface Row extends Record<string, unknown> { id: number, name: string, price: number }
 
 const items: Row[] = [
@@ -188,5 +224,44 @@ describe('dzDataView — keys', () => {
   it('uses dataKey for stable keys (no crash, renders all rows)', () => {
     const wrapper = mountView({ dataKey: 'id' })
     expect(wrapper.findAll('.cell')).toHaveLength(items.length)
+  })
+})
+
+// Keyboard contract (DZUP-UI-R11-02): `Tab`. The view binds no key; its row
+// promises the tab order "layout controls, then rendered items". jsdom does not
+// move focus on Tab, so the test asserts the order of the tab stops and that
+// the view cancels the key nowhere along it.
+describe('dzDataView — keyboard contract: Tab', () => {
+  it('orders the sort and layout controls before the rendered items and never cancels Tab', async () => {
+    const wrapper = mount(DzDataView, {
+      props: {
+        items,
+        dataKey: 'id',
+        layoutToggle: true,
+        sortOptions: [{ label: 'Name', field: 'name', order: 1 }],
+      },
+      slots: { item: `<template #item="{ item }"><button type="button" class="open">Open {{ item.name }}</button></template>` },
+      attachTo: document.body,
+    })
+    // The layout toggle is a roving-focus group; it becomes a tab stop once mounted.
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    const root = wrapper.element as HTMLElement
+    expect(root.tabIndex).toBe(-1)
+    const stops = Array.from(root.querySelectorAll<HTMLElement>('select, button, input, a[href], [tabindex]'))
+      .filter(el => el.tabIndex >= 0)
+    const firstItem = stops.findIndex(el => el.classList.contains('open'))
+    const controls = stops.slice(0, firstItem)
+    expect(controls[0]?.tagName).toBe('SELECT')
+    expect(controls.length).toBeGreaterThan(1)
+    expect(controls.slice(1).every(el => el.closest('[aria-label="View layout"]') !== null)).toBe(true)
+    expect(stops.slice(firstItem).map(el => el.className)).toEqual(items.map(() => 'open'))
+
+    for (const stop of stops) {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+      stop.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(false)
+    }
+    wrapper.unmount()
   })
 })

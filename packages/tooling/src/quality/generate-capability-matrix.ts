@@ -805,7 +805,19 @@ function resolveCell(
       if (path === undefined)
         return cell(kind, origin, { state: 'unrun' })
       const source = readFileSync(resolve(ROOT, path), 'utf8')
-      const has = /update:modelValue/.test(source) && /defaultValue|uncontrolled/i.test(source)
+      // Named models are public value paths too (value, open, collapsed,
+      // current, etc.). Credit an asserted event only when the component
+      // declares that model; an invented update:modelValue comment is not
+      // necessary for a named-model component to earn its evidence cell.
+      const vue = readFileSync(resolve(ROOT, row.source), 'utf8')
+      const namedModels = [...vue.matchAll(/defineModel(?:<[^\n]+?>)?\s*\(\s*['"](\w+)['"]/g)].map(match => match[1]!)
+      const typesPath = sidecar(sources, row, '.types.ts')
+      const types = typesPath === undefined ? '' : readFileSync(resolve(ROOT, typesPath), 'utf8')
+      const emittedModels = [...types.matchAll(/['"]update:(\w+)['"]\s*:/g)].map(match => match[1]!)
+      const hasNamedUpdate = [...namedModels, ...emittedModels].some(name =>
+        new RegExp(`emitted\\(['"]update:${name}['"]\\)`).test(source)
+          && new RegExp(`['"]onUpdate:${name}['"]`).test(source))
+      const has = (/update:modelValue/.test(source) || hasNamedUpdate) && /defaultValue|uncontrolled/i.test(source)
       return cell(kind, origin, {
         state: has ? 'present' : 'unrun',
         artifacts: has ? [path] : [],

@@ -2,8 +2,9 @@ import type { Persona } from './DzPersonaSelector.types.ts'
 /**
  * DzPersonaSelector — Unit / behavior tests.
  */
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import { anatomy as personaAnatomy } from './DzPersonaSelector.anatomy.ts'
 import DzPersonaSelector from './DzPersonaSelector.vue'
 
 const personas: Persona[] = [
@@ -11,6 +12,23 @@ const personas: Persona[] = [
   { id: 'dev', name: 'Grace Hopper', role: 'Developer', avatarUrl: 'https://example.com/grace.png' },
   { id: 'qa', name: 'Linus Torvalds', role: 'QA Lead' },
 ]
+
+describe('dzPersonaSelector — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('persona selection, controlled=%s', async (controlled) => {
+    const wrapper = mount(DzPersonaSelector, { attachTo: document.body, props: { personas, modelValue: 'arch', ...(controlled ? { 'onUpdate:modelValue': () => {} } : {}) } })
+    await wrapper.get('input').trigger('click')
+    await flushPromises()
+    const option = Array.from(document.querySelectorAll<HTMLElement>('[role="option"]')).find(node => node.textContent?.includes('Grace Hopper'))!
+    expect(option).toBeDefined()
+    option.click()
+    await flushPromises()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['dev'])
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe(controlled ? 'Ada Lovelace' : 'Grace Hopper')
+    await wrapper.setProps({ modelValue: 'qa' })
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe('Linus Torvalds')
+    wrapper.unmount()
+  })
+})
 
 describe('dzPersonaSelector — Unit Tests', () => {
   it('renders a searchable combobox', () => {
@@ -71,5 +89,29 @@ describe('dzPersonaSelector — Unit Tests', () => {
       props: { personas, modelValue: '', disabled: true },
     })
     expect(wrapper.find('[data-disabled]').exists()).toBe(true)
+  })
+})
+
+// DZUP-UI-R11-05B-20261006-C1: compare the declared listbox action with the real editable wrapper.
+describe('dzPersonaSelector — declared option activation', () => {
+  it.fails('selects the active persona using the second declared activation key', async () => {
+    const original = HTMLElement.prototype.scrollIntoView
+    HTMLElement.prototype.scrollIntoView = () => {}
+    const wrapper = mount(DzPersonaSelector, { attachTo: document.body, props: { personas }, attrs: { portalDisabled: true } })
+    try {
+      const input = wrapper.get('input')
+      await input.trigger('keydown', { key: 'ArrowDown' })
+      await flushPromises()
+      await new Promise(resolve => setTimeout(resolve, 30))
+      expect(input.attributes('aria-activedescendant')).toBeTruthy()
+      const key = personaAnatomy.keyboard.filter(binding => binding.action === 'Select the focused option.')[1]!.key
+      await input.trigger('keydown', { key })
+      await flushPromises()
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['arch'])
+    }
+    finally {
+      wrapper.unmount()
+      HTMLElement.prototype.scrollIntoView = original
+    }
   })
 })

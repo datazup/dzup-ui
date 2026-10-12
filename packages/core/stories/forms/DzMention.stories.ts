@@ -782,3 +782,23 @@ export const AsyncOptions: Story = {
     })
   },
 }
+
+// DZUP-UI-R11-07-20261007-C1: real large/empty data transitions.
+export const Large: Story = {
+  render: () => ({
+    components: { DzMention },
+    data() {
+      const dataset: DzMentionOption[] = Array.from({ length: 100 }, (_, i) => ({ value: `person-${i + 1}`, label: `Person ${i + 1}` }))
+      return { dataset, items: [...dataset], state: 'ready', retries: 0 }
+    },
+    template: `<div>
+      <button type="button" @mousedown.prevent @click="items = []; state = 'empty'">Clear data</button>
+      <button type="button" @mousedown.prevent @click="items = [...dataset]; state = 'ready'">Restore data</button>
+      <button type="button" @mousedown.prevent @click="items = []; state = 'loading'">Load data</button>
+      <button type="button" @mousedown.prevent @click="items = []; state = 'error'">Fail data</button>
+      <output data-testid="retries">{{ retries }}</output>
+      <DzMention :triggers="[{ char: '@', options: items }]" :multiline="false" :options-state="state" options-error="Directory unavailable" aria-label="Data people"
+        @retry-options="retries++; items = [...dataset]; state = 'ready'" />
+    </div>`,
+  }),
+}

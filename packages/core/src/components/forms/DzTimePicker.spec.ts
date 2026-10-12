@@ -40,6 +40,17 @@ async function open(wrapper: ReturnType<typeof mountPicker>) {
  */
 enableAutoUnmount(afterEach)
 
+describe('dzTimePicker — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('clear, controlled=%s', async (controlled) => {
+    const wrapper = mountPicker({ modelValue: '09:30', hour12: false, ...(controlled ? { 'onUpdate:modelValue': () => {} } : {}) })
+    await wrapper.get('[aria-label="Clear time"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([''])
+    expect(wrapper.get('[role="combobox"]').text()).toContain(controlled ? '09:30' : 'Select time')
+    await wrapper.setProps({ modelValue: '14:45' })
+    expect(wrapper.get('[role="combobox"]').text()).toContain('14:45')
+  })
+})
+
 describe('dzTimePicker — Trigger', () => {
   it('renders a trigger button', () => {
     const wrapper = mountPicker()
@@ -401,5 +412,40 @@ describe('dzTimePicker — APG combobox keyboard', () => {
     // `when: 'list open'` is two words, so it is read as free text rather than as
     // a part name — no `conditions` to admit.
     expectKeyboardContract(wrapper, timePickerAnatomy, {})
+  })
+})
+
+// Keyboard contract rows the spec did not dispatch (DZUP-UI-R11-02): `Escape`
+// and `Tab`. The third unasserted row, option activation, is deliberately not
+// asserted here: the anatomy says it selects and closes the list, and the
+// component selects without closing (finding F4 in the R11 admission record).
+describe('dzTimePicker — keyboard contract: Escape, Tab', () => {
+  function key(el: Element, name: string): KeyboardEvent {
+    const event = new KeyboardEvent('keydown', { key: name, bubbles: true, cancelable: true })
+    el.dispatchEvent(event)
+    return event
+  }
+  function expanded(wrapper: ReturnType<typeof mountPicker>) {
+    return wrapper.get('[role="combobox"]').attributes('aria-expanded')
+  }
+
+  it('closes the list on Escape without changing the value', async () => {
+    const wrapper = mountPicker({ modelValue: '14:30' })
+    await open(wrapper)
+    expect(expanded(wrapper)).toBe('true')
+    key(document.activeElement ?? document.body, 'Escape')
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    expect(expanded(wrapper)).toBe('false')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
+
+  it('does not cancel Tab on the trigger or inside the list', async () => {
+    const wrapper = mountPicker()
+    expect(key(wrapper.get('[role="combobox"]').element, 'Tab').defaultPrevented).toBe(false)
+    await open(wrapper)
+    const hour = wrapper.get('[role="listbox"][aria-label="Hours"]').findAll('button:not([disabled])')[0]!
+    ;(hour.element as HTMLElement).focus()
+    expect(key(hour.element, 'Tab').defaultPrevented).toBe(false)
   })
 })

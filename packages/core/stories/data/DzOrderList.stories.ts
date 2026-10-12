@@ -503,3 +503,20 @@ export const RealWorldDashboardOrder: Story = {
     ).toHaveTextContent('Revenue')
   },
 }
+
+// DZUP-UI-R11-07-20261007-C1: real large/empty data transitions.
+export const Large: Story = {
+  render: () => ({
+    components: { DzOrderList },
+    setup() {
+      const dataset = Array.from({ length: 100 }, (_, i) => ({ id: `task-${i + 1}`, label: `Task ${i + 1}` }))
+      const items = ref([...dataset])
+      const moved = ref('')
+      return { dataset, items, moved }
+    },
+    template: `<div><button type="button" @mousedown.prevent @click="items = []">Clear data</button><button type="button" @mousedown.prevent @click="items = [...dataset]">Restore data</button><output data-testid="moved">{{ moved }}</output>
+      <DzOrderList v-model:value="items" data-key="id" :show-controls="true" :drag-handle="false" @reorder="moved = $event.from + ':' + $event.to">
+        <template #item="{ item }">{{ item.label }}</template><template #empty>No tasks</template>
+      </DzOrderList></div>`,
+  }),
+}

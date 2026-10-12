@@ -45,6 +45,62 @@ function mountGrid(gridProps = {}) {
   })
 }
 
+describe('dzDataGrid — controlled and uncontrolled value ownership', () => {
+  it('controlled sortModel replacement updates aria-sort and row order', async () => {
+    const wrapper = mountGrid({ 'sortable': true, 'sortModel': [], 'onUpdate:sortModel': () => {} })
+    try {
+      await wrapper.findAll('th').find(header => header.text().includes('Age'))!.trigger('click')
+      expect(wrapper.emitted('update:sortModel')?.at(-1)).toEqual([[{ field: 'age', direction: 'asc' }]])
+      await wrapper.setProps({ sortModel: [{ field: 'name', direction: 'desc' }] })
+      expect(wrapper.findAll('th').find(header => header.text().includes('Name'))!.attributes('aria-sort')).toBe('descending')
+      expect(wrapper.findAll('tbody tr')[0]!.text()).toContain('Charlie')
+    }
+    finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('controlled filters replacement changes the visible row set', async () => {
+    const wrapper = mountGrid({ 'columns': filterableColumns, 'filterable': true, 'filters': [], 'onUpdate:filters': () => {} })
+    try {
+      await wrapper.get('[data-testid="filter-trigger"]').trigger('click')
+      await wrapper.get('[data-testid="filter-text-input"] input').setValue('alice')
+      expect(wrapper.emitted('update:filters')).toBeTruthy()
+      await wrapper.setProps({ filters: [] })
+      expect(wrapper.findAll('tbody tr')).toHaveLength(3)
+    }
+    finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('owns uncontrolled local row selection without a parent binding', async () => {
+    const wrapper = mountGrid({ selectable: 'single', rowKey: 'id' })
+    await wrapper.findAll('tbody tr')[0]!.trigger('click')
+    expect(wrapper.emitted('update:selectedRows')?.at(-1)).toEqual([[testData[0]]])
+    expect(wrapper.findAll('tbody tr')[0]!.attributes('aria-selected')).toBe('true')
+    await wrapper.findAll('tbody tr')[1]!.trigger('click')
+    expect(wrapper.emitted('update:selectedRows')?.at(-1)).toEqual([[testData[1]]])
+    expect(wrapper.findAll('tbody tr')[0]!.attributes('aria-selected')).toBeUndefined()
+    expect(wrapper.findAll('tbody tr')[1]!.attributes('aria-selected')).toBe('true')
+    wrapper.unmount()
+  })
+
+  it('controlled selectedRows replacement after selection updates the rendered rows', async () => {
+    const wrapper = mountGrid({ 'selectable': 'single', 'rowKey': 'id', 'selectedRows': [], 'onUpdate:selectedRows': () => {} })
+    try {
+      await wrapper.findAll('tbody tr')[0]!.trigger('click')
+      expect(wrapper.emitted('update:selectedRows')?.at(-1)).toEqual([[testData[0]]])
+      await wrapper.setProps({ selectedRows: [testData[1]!] })
+      expect(wrapper.findAll('tbody tr')[1]!.attributes('aria-selected')).toBe('true')
+      expect(wrapper.findAll('tbody tr')[0]!.attributes('aria-selected')).toBeUndefined()
+    }
+    finally {
+      wrapper.unmount()
+    }
+  })
+})
+
 describe('dzDataGrid — Rendering', () => {
   it('renders a root region and an inner grid table', () => {
     const wrapper = mountGrid()

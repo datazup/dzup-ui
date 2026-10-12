@@ -8,6 +8,20 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { anatomy as colorPickerAnatomy } from './DzColorPicker.anatomy.ts'
 import DzColorPicker from './DzColorPicker.vue'
 
+describe('dzColorPicker — controlled and uncontrolled value ownership', () => {
+  it.each([false, true])('preset selection, controlled=%s', async (controlled) => {
+    const wrapper = mountColorPicker({ modelValue: '#ff0000', presets: ['#00ff00'], ...(controlled ? { 'onUpdate:modelValue': () => {} } : {}) })
+    await wrapper.get('[data-part="trigger"]').trigger('click')
+    await flushPromises()
+    await wrapper.get('[aria-label="Select color #00ff00"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['#00ff00'])
+    expect(wrapper.get('[data-part="label"]').text()).toBe(controlled ? '#ff0000' : '#00ff00')
+    await wrapper.setProps({ modelValue: '#123456' })
+    expect(wrapper.get('[data-part="label"]').text()).toBe('#123456')
+    wrapper.unmount()
+  })
+})
+
 describe('dzColorPicker — Unit Tests', () => {
   it('renders the component', () => {
     const wrapper = mount(DzColorPicker)
