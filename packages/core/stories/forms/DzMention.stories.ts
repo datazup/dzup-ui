@@ -347,6 +347,53 @@ export const SingleLine: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Empty dataset
+// ---------------------------------------------------------------------------
+
+/** A trigger with no options yet: typing it shows the no-results copy and inserts nothing. */
+export const Empty: Story = {
+  render: () => ({
+    components: { DzMention },
+    setup() {
+      const triggers = [{ char: '@', options: [] }]
+      return { triggers }
+    },
+    data() {
+      return { value: '' }
+    },
+    template: `
+      <div class="max-w-md">
+        <DzMention
+          v-model:value="value"
+          :triggers="triggers"
+          :multiline="false"
+          no-results-text="No teammates to mention yet"
+          aria-label="Empty mention"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const combobox = canvas.getByRole('combobox', { name: 'Empty mention' })
+    await userEvent.click(combobox)
+    await userEvent.type(combobox, '@al')
+
+    // The empty row replaces the list; there is no listbox and no option.
+    await waitFor(() => expect(canvas.getByText('No teammates to mention yet', { selector: '[data-mention-empty]' })).toBeVisible())
+    await expect(canvas.queryByRole('listbox')).not.toBeInTheDocument()
+    await expect(canvas.queryAllByRole('option')).toHaveLength(0)
+    await expect(canvas.getByRole('status')).toHaveTextContent('No teammates to mention yet')
+
+    // Enter over an empty dataset inserts nothing; Escape dismisses the row.
+    await userEvent.keyboard('{Enter}')
+    await expect((combobox as HTMLInputElement).value).toBe('@al')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(canvas.queryByText('No teammates to mention yet')).not.toBeInTheDocument())
+  },
+}
+
+// ---------------------------------------------------------------------------
 // Invalid state
 // ---------------------------------------------------------------------------
 

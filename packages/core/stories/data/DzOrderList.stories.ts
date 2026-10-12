@@ -222,6 +222,39 @@ export const CustomItem: Story = {
  * The disabled list is asserted rather than clicked — its variant sets
  * `pointer-events: none` on the root, so the browser would swallow the click.
  */
+/**
+ * An empty sequence: the list shows its empty row, and every move control is
+ * disabled because there is nothing to move.
+ */
+export const Empty: Story = {
+  render: () => ({
+    components: { DzOrderList },
+    setup() {
+      const value = ref<Task[]>([])
+      return { value }
+    },
+    template: `
+      <div style="max-width: 26rem" data-testid="ol-empty">
+        <DzOrderList v-model:value="value" data-key="id" aria-label="Empty sequence">
+          <template #item="{ item }">{{ item.label }}</template>
+          <template #empty>No steps in this sequence yet</template>
+        </DzOrderList>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(within(canvasElement).getByTestId('ol-empty'))
+    const list = canvas.getByRole('list', { name: 'Empty sequence' })
+    await expect(within(list).getAllByRole('listitem')).toHaveLength(1)
+    await expect(within(list).getByText('No steps in this sequence yet')).toBeVisible()
+
+    const controls = within(canvas.getByRole('group')).getAllByRole('button')
+    await expect(controls).toHaveLength(4)
+    for (const control of controls)
+      await expect(control).toBeDisabled()
+  },
+}
+
 export const States: Story = {
   render: () => ({
     components: { DzOrderList },

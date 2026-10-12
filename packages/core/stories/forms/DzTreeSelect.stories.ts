@@ -292,6 +292,41 @@ export const Filterable: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Empty dataset
+// ---------------------------------------------------------------------------
+
+/** No nodes yet: the open panel shows its empty copy instead of a tree, and nothing is selected. */
+export const Empty: Story = {
+  render: () => ({
+    components: { DzTreeSelect },
+    data() {
+      return { value: undefined as string | undefined }
+    },
+    template: `
+      <div class="max-w-xs space-y-3">
+        <DzTreeSelect :nodes="[]" v-model:value="value" placeholder="No categories yet" aria-label="Empty categories" />
+        <p class="text-sm" data-testid="ts-empty-selected">{{ value || 'none' }}</p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(document.body)
+    const trigger = canvas.getByRole('combobox')
+    await userEvent.click(trigger)
+
+    // The portalled panel renders the empty copy and no tree items.
+    await waitFor(() => expect(body.getByText('No options available')).toBeVisible())
+    await expect(body.queryAllByRole('treeitem')).toHaveLength(0)
+    await expect(canvas.getByTestId('ts-empty-selected')).toHaveTextContent('none')
+
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body.queryByText('No options available')).not.toBeInTheDocument())
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+  },
+}
+
+// ---------------------------------------------------------------------------
 // In a form field
 // ---------------------------------------------------------------------------
 

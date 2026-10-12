@@ -305,6 +305,41 @@ export const Interactive: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Empty dataset
+// ---------------------------------------------------------------------------
+
+/** No items to choose from: the open dropdown says so, and nothing can be selected. */
+export const Empty: Story = {
+  render: () => ({
+    components: { DzMultiSelect },
+    data() {
+      return { selected: [] as string[] }
+    },
+    template: `
+      <div class="space-y-4 max-w-sm">
+        <DzMultiSelect :items="[]" v-model="selected" placeholder="No frameworks yet..." aria-label="Empty frameworks" />
+        <p class="text-sm" data-testid="ms-empty-selected">{{ selected.length ? selected.join(', ') : 'none' }}</p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByPlaceholderText(/no frameworks yet/i))
+
+    // The portalled listbox shows the empty copy and no options.
+    await waitFor(() => expect(screen.getByText('No options available')).toBeVisible())
+    await expect(screen.queryAllByRole('option')).toHaveLength(0)
+
+    // Enter over an empty dataset selects nothing and adds no chip.
+    await userEvent.keyboard('{Enter}')
+    await expect(canvas.getByTestId('ms-empty-selected')).toHaveTextContent('none')
+    await expect(canvas.queryByRole('button', { name: /^remove /i })).not.toBeInTheDocument()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByText('No options available')).not.toBeInTheDocument())
+  },
+}
+
+// ---------------------------------------------------------------------------
 // Accessibility
 // ---------------------------------------------------------------------------
 
