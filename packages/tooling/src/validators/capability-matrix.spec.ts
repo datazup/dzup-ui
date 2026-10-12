@@ -388,9 +388,10 @@ describe('the evidence ratchet (gate 8, RESIDUAL-17, D-RES16-3)', () => {
     // only appears once a column earns credit is an entry that cannot notice the
     // column earning it. `perf-baseline` was such an entry until 2026-10-02, when
     // upstream's size recapture gave five components a fresh baseline — the first
-    // rise the record noticed, declared in `//moves`.
+    // rise the record noticed, declared in `//moves`. R13-UI-RECONCILE took it
+    // to 4: the R11-01 DzCommandPalette repair postdates its size baseline.
     expect(shipped.evidenceCells.kinds['at-manual']).toEqual({ pass: 0, present: 0 })
-    expect(shipped.evidenceCells.kinds['perf-baseline']).toEqual({ pass: 5, present: 0 })
+    expect(shipped.evidenceCells.kinds['perf-baseline']).toEqual({ pass: 4, present: 0 })
     // The baseline was seeded at the post-RESIDUAL-16 measurement — `pass` 558,
     // `present` 608 — NOT at the pre-audit 585/623, because seeding a ratchet at
     // numbers an audit has just shown to be false would write the inflation into
@@ -405,7 +406,9 @@ describe('the evidence ratchet (gate 8, RESIDUAL-17, D-RES16-3)', () => {
     // controlled/uncontrolled cells), R11-04 584 (DataGrid parent writes),
     // R11-05A 585 (Combobox keyboard), R11-05B 588 (three popup contracts),
     // R11-07 596 (eight real data scenarios and the large Tour footer repair).
-    expect(shipped.evidenceCells.totals.pass).toBe(563)
+    // R13-UI-RECONCILE joined side R11-02 and native R11-08 at 596 (no cell
+    // added) and took `pass` to 562 (DzCommandPalette perf-baseline stale).
+    expect(shipped.evidenceCells.totals.pass).toBe(562)
     expect(shipped.evidenceCells.totals.present).toBe(596)
   })
 })
