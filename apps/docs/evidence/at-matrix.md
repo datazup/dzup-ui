@@ -176,9 +176,9 @@ SHA-256 of the exact bytes these pages were rendered from:
 | Artifact | sha256 | Present |
 | --- | --- | --- |
 | `e2e/at-matrix/index.json` | `d35ef2dfa049e253…` | yes |
-| `packages/core/docs/capability-matrix.json` | `1e80828a82c73ba4…` | yes |
+| `packages/core/docs/capability-matrix.json` | `a621c0898bf46ea5…` | yes |
 
-Capability matrix `sourceCommit` `eb35f34b` · quality matrix `d8eff953`.
+Capability matrix `sourceCommit` `ae4c6be7` · quality matrix `ae4c6be7`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

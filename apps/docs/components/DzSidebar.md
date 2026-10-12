@@ -257,8 +257,8 @@ different contracts rather than two spellings of one.
 <DzSidebar :mobileOpen="value" @update:mobileOpen="value = $event" />
 ```
 
-**Where each variant is shown.** 11 stories in
-`packages/core/stories/navigation/DzSidebar.stories.ts`: `Default`, `Collapsed`, `FixedPosition`, `MobileDrawer`, `ActiveStyleFilled`, `ActiveStyleRail`, `Interactive`, `Dark Mode Preview`, `States`, `Accessibility: Landmark & Keyboard Order`, `Real World: App Shell Navigation`.
+**Where each variant is shown.** 14 stories in
+`packages/core/stories/navigation/DzSidebar.stories.ts`: `Default`, `Collapsed`, `FixedPosition`, `MobileDrawer`, `ActiveStyleFilled`, `ActiveStyleRail`, `Interactive`, `Dark Mode Preview`, `States`, `Accessibility: Landmark & Keyboard Order`, `Real World: App Shell Navigation`, `Large`, `LargeSections`, `KeyboardContract`.
 
 ## Parts, states and tokens
 
@@ -418,8 +418,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `eb35f34b` for the capability matrix,
-`d8eff953` for the quality matrix. It is **locally qualified**:
+artifact records — `ae4c6be7` for the capability matrix,
+`ae4c6be7` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -480,7 +480,9 @@ Declared in `packages/core/src/components/navigation/DzSidebar.anatomy.ts`.
 
 - **Pattern:** [APG — `landmarks`](https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
+  sequence in `packages/core/src/components/navigation/DzSidebar.spec.ts`.
+  That is a presence measurement, not a table: it does not say which keys, or what they do.
 
 ### Assistive technology
 
@@ -510,18 +512,18 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/navigation/DzSidebar.contract.spec.ts` |
 | `unit-spec` | tier A | `present` | `packages/core/src/components/navigation/DzSidebar.spec.ts` |
-| `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
+| `axe` | tier A | `present` | `packages/core/tests/a11y/r11-tier-c.a11y.spec.ts` |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/portal-hydration.spec.ts` · `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzSidebar.spec.ts` — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/navigation/DzSidebar.spec.ts` — All 3 declared binding(s) are exercised by the unit spec. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
-| `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
+| `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/navigation/DzSidebar.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzSidebar.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at ef277eb. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/portal-hydration.spec.ts` — Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
-| `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/navigation/DzSidebar.stories.ts` |
+| `data-scenarios` | trait dataset | `present` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/navigation/DzSidebar.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzSidebar.md` — 6 AT/browser pairs, none executed. |
@@ -530,7 +532,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**5 unrun:** `axe`, `keyboard-spec`, `controlled-uncontrolled`, `data-scenarios`, `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**1 unrun:** `at-manual`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

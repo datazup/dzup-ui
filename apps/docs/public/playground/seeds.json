@@ -1,15 +1,14 @@
 {
   "schemaVersion": "1.1.0",
   "generatedFrom": "packages/core/docs/component-meta.json",
-  "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+  "sourceCommit": "ae4c6be7fe991f9c6caf7bcbf1f67d7b76b478d5",
   "totals": {
     "publicComponents": 144,
-    "withSeed": 129,
+    "withSeed": 131,
     "withoutSeed": [
       "DzAnimatedNumber",
       "DzAsyncBoundary",
       "DzBlockUI",
-      "DzDataView",
       "DzDeferredContent",
       "DzErrorBoundary",
       "DzMasonry",
@@ -19,8 +18,7 @@
       "DzRelativeTime",
       "DzScrollProgress",
       "DzThemeProvider",
-      "DzToolbar",
-      "DzTour"
+      "DzToolbar"
     ]
   },
   "representatives": [
@@ -381,6 +379,15 @@
       "storyLines": [
         137,
         153
+      ]
+    },
+    "DzDataView": {
+      "code": "<script setup lang=\"ts\">\nimport { DzDataView } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div>\n    <button type=\"button\">Before view</button>\n    <DzDataView :items=\"items\" data-key=\"id\" layout-toggle :sort-options=\"[{ label: 'Name', field: 'name', order: 1 }]\">\n      <template #item=\"{ item }\">\n        <button type=\"button\" @click=\"action = item.id; count++\">Open {{ item.name }}</button>\n      </template>\n    </DzDataView>\n    <button type=\"button\">After view</button>\n    <output data-testid=\"actions\">{{ action }}:{{ count }}</output>\n  </div>\n</template>\n",
+      "storyId": "KeyboardContract",
+      "storyFile": "packages/core/stories/data/DzDataView.stories.ts",
+      "storyLines": [
+        597,
+        616
       ]
     },
     "DzDatePicker": {
@@ -758,12 +765,12 @@
       ]
     },
     "DzOrderList": {
-      "code": "<script setup lang=\"ts\">\nimport { DzOrderList } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid gap-8 lg:grid-cols-3\">\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Enabled</p>\n      <DzOrderList v-model:value=\"enabled\" data-key=\"id\" data-testid=\"ol-enabled\">\n        <template #item=\"{ item }\">{{ item.label }}</template>\n      </DzOrderList>\n    </section>\n\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Disabled</p>\n      <DzOrderList disabled v-model:value=\"disabled\" data-key=\"id\" data-testid=\"ol-disabled\">\n        <template #item=\"{ item }\">{{ item.label }}</template>\n      </DzOrderList>\n    </section>\n\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Selectable — selected rows</p>\n      <DzOrderList selectable v-model:value=\"selectable\" data-key=\"id\" data-testid=\"ol-selectable\">\n        <template #item=\"{ item }\">{{ item.label }}</template>\n      </DzOrderList>\n    </section>\n  </div>\n</template>\n",
-      "storyId": "States",
+      "code": "<script setup lang=\"ts\">\nimport { DzOrderList } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div style=\"max-width: 26rem\" data-testid=\"ol-empty\">\n    <DzOrderList v-model:value=\"value\" data-key=\"id\" aria-label=\"Empty sequence\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n      <template #empty>No steps in this sequence yet</template>\n    </DzOrderList>\n  </div>\n</template>\n",
+      "storyId": "Empty",
       "storyFile": "packages/core/stories/data/DzOrderList.stories.ts",
       "storyLines": [
         214,
-        310
+        256
       ]
     },
     "DzOtpInput": {
@@ -1231,6 +1238,15 @@
         95
       ]
     },
+    "DzTour": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTour } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div><button id=\"data-tour-target\" type=\"button\" @click=\"current = 0; open = true\">Start data tour</button>\n        <button type=\"button\" @click=\"items = []\">Clear data</button><button type=\"button\" @click=\"items = [...dataset]\">Restore data</button>\n        <output data-testid=\"changed\">{{ changed }}</output>\n        <DzTour v-model:open=\"open\" v-model:current=\"current\" :steps=\"items\" :mask=\"false\" :scroll-into-view=\"false\" @change=\"changed = $event\" />\n      </div>\n</template>\n",
+      "storyId": "Large",
+      "storyFile": "packages/core/stories/overlays/DzTour.stories.ts",
+      "storyLines": [
+        487,
+        500
+      ]
+    },
     "DzTransfer": {
       "code": "<script setup lang=\"ts\">\nimport { DzTransfer } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzTransfer :source=\"small\" :size=\"size\" />\n    </div>\n  </div>\n</template>\n",
       "storyId": "AllSizes",
@@ -1327,10 +1343,6 @@
       "reason": "no-runnable-story",
       "file": "packages/core/stories/feedback/DzBlockUI.stories.ts"
     },
-    "DzDataView": {
-      "reason": "no-runnable-story",
-      "file": "packages/core/stories/data/DzDataView.stories.ts"
-    },
     "DzDeferredContent": {
       "reason": "no-runnable-story",
       "file": "packages/core/stories/layout/DzDeferredContent.stories.ts"
@@ -1376,10 +1388,6 @@
     "DzToolbar": {
       "reason": "no-runnable-story",
       "file": "packages/core/stories/layout/DzToolbar.stories.ts"
-    },
-    "DzTour": {
-      "reason": "no-runnable-story",
-      "file": "packages/core/stories/overlays/DzTour.stories.ts"
     }
   }
 }

@@ -114,8 +114,8 @@ makes `[data-size="lg"]` a selector you can rely on.
 **Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
 controlled form: it holds no value a parent could own.
 
-**Where each variant is shown.** 7 stories in
-`packages/core/stories/navigation/DzMegaMenu.stories.ts`: `Horizontal`, `With Featured Card`, `Responsive (collapsed)`, `Dark Mode Preview`, `States`, `Accessibility: Menubar Keyboard Contract`, `Real World: Marketing Site Header`.
+**Where each variant is shown.** 9 stories in
+`packages/core/stories/navigation/DzMegaMenu.stories.ts`: `Horizontal`, `With Featured Card`, `Responsive (collapsed)`, `Dark Mode Preview`, `States`, `Accessibility: Menubar Keyboard Contract`, `Real World: Marketing Site Header`, `Large`, `LargeCatalog`.
 
 ## Parts, states and tokens
 
@@ -237,8 +237,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `eb35f34b` for the capability matrix,
-`d8eff953` for the quality matrix. It is **locally qualified**:
+artifact records — `ae4c6be7` for the capability matrix,
+`ae4c6be7` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -311,7 +311,9 @@ Declared in `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts`.
 
 - **Pattern:** [APG — `menubar`](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 10 binding(s); the unit spec asserts no key event for `Space`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
+  sequence in `packages/core/src/components/navigation/DzMegaMenu.spec.ts`.
+  That is a presence measurement, not a table: it does not say which keys, or what they do.
 
 ### Assistive technology
 
@@ -345,13 +347,13 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/navigation/DzMegaMenu.spec.ts` — The component declares 10 binding(s); the unit spec asserts no key event for `Space`, `Home`, `End`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/navigation/DzMegaMenu.spec.ts` — All 10 declared binding(s) are exercised by the unit spec. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Panel open/close is reported with `open`/`close` and never accepted back, and `collapsed` is a one-way layout override. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/navigation/DzMegaMenu.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at ef277eb. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
-| `data-scenarios` | trait dataset | **`unrun`** | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `data-scenarios` | trait dataset | `present` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/navigation/DzMegaMenu.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzMegaMenu.md` — 6 AT/browser pairs, none executed. |
@@ -360,7 +362,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `malicious-corpus` | boundary url | `present` | `packages/core/security/url-boundary.malicious-corpus.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `url-policy` | boundary url | `present` | `packages/core/security/url-boundary.url-policy.spec.ts` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**3 unrun:** `keyboard-spec`, `data-scenarios`, `at-manual` · **1 stale:** `perf-baseline` · **1 excepted:** `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**1 unrun:** `at-manual` · **1 stale:** `perf-baseline` · **1 excepted:** `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

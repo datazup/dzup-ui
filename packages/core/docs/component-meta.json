@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+  "sourceCommit": "ae4c6be7fe991f9c6caf7bcbf1f67d7b76b478d5",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -5452,15 +5452,12 @@
         "traits": [],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 7,
           "stale": 1,
-          "unrun": 4
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -10036,13 +10033,11 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 5,
-          "unrun": 4
+          "present": 7,
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "portal-hydration"
         ],
         "stale": []
@@ -10407,7 +10402,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCombobox.vue",
       "typesSource": "packages/core/src/components/forms/DzCombobox.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "4f68982f9c5ee808e7c8b300acfc9d05604f102e",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -10547,14 +10542,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 6,
+          "present": 8,
           "stale": 1,
-          "unrun": 4
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
-          "keyboard-spec",
           "portal-hydration"
         ],
         "stale": [
@@ -11167,7 +11160,7 @@
       ],
       "source": "packages/core/src/components/overlays/DzCommandPalette.vue",
       "typesSource": "packages/core/src/components/overlays/DzCommandPalette.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "4f68982f9c5ee808e7c8b300acfc9d05604f102e",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -11279,19 +11272,18 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 4,
-          "unrun": 6
+          "pass": 7,
+          "present": 8,
+          "stale": 1,
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec",
           "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -11540,6 +11532,27 @@
             "lines": [
               494,
               581
+            ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              584,
+              601
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              604,
+              623
+            ]
+          },
+          {
+            "id": "Empty",
+            "lines": [
+              629,
+              667
             ]
           }
         ],
@@ -13659,14 +13672,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 6,
+          "present": 8,
           "stale": 1,
-          "unrun": 4
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "portal-hydration"
         ],
         "stale": [
@@ -14404,15 +14415,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 8,
           "stale": 1,
-          "unrun": 4
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -14802,6 +14810,13 @@
               517,
               594
             ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              597,
+              616
+            ]
           }
         ],
         "primary": {
@@ -14811,6 +14826,15 @@
             131
           ],
           "source": "export const ListLayout: Story = {\n  args: { layout: 'list' },\n  render: args => ({\n    components: { DzDataView },\n    setup: () => ({ args, products }),\n    template: `\n      <DzDataView v-bind=\"args\" :items=\"products\" data-key=\"id\">\n        <template #item=\"{ item }\">${rowTemplate}</template>\n      </DzDataView>\n    `,\n  }),\n}"
+        },
+        "runnable": {
+          "id": "KeyboardContract",
+          "lines": [
+            597,
+            616
+          ],
+          "source": "export const KeyboardContract: Story = {\n  render: () => ({\n    components: { DzDataView },\n    data() {\n      return { items: [{ id: 'alpha', name: 'Alpha' }, { id: 'beta', name: 'Beta' }], action: '', count: 0 }\n    },\n    template: `\n      <div>\n        <button type=\"button\">Before view</button>\n        <DzDataView :items=\"items\" data-key=\"id\" layout-toggle :sort-options=\"[{ label: 'Name', field: 'name', order: 1 }]\">\n          <template #item=\"{ item }\">\n            <button type=\"button\" @click=\"action = item.id; count++\">Open {{ item.name }}</button>\n          </template>\n        </DzDataView>\n        <button type=\"button\">After view</button>\n        <output data-testid=\"actions\">{{ action }}:{{ count }}</output>\n      </div>\n    `,\n  }),\n}",
+          "template": "\n      <div>\n        <button type=\"button\">Before view</button>\n        <DzDataView :items=\"items\" data-key=\"id\" layout-toggle :sort-options=\"[{ label: 'Name', field: 'name', order: 1 }]\">\n          <template #item=\"{ item }\">\n            <button type=\"button\" @click=\"action = item.id; count++\">Open {{ item.name }}</button>\n          </template>\n        </DzDataView>\n        <button type=\"button\">After view</button>\n        <output data-testid=\"actions\">{{ action }}:{{ count }}</output>\n      </div>\n    "
         }
       },
       "extraction": {
@@ -14996,13 +15020,12 @@
         "traits": [],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 6,
           "stale": 1,
-          "unrun": 3
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": [
@@ -15549,14 +15572,12 @@
         "traits": [],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 6,
           "stale": 1,
-          "unrun": 4
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": [
@@ -27380,14 +27401,12 @@
         "cells": {
           "excepted": 1,
           "pass": 7,
-          "present": 8,
+          "present": 10,
           "stale": 1,
-          "unrun": 3
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "data-scenarios",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -27610,6 +27629,20 @@
               480,
               544
             ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              547,
+              556
+            ]
+          },
+          {
+            "id": "LargeCatalog",
+            "lines": [
+              576,
+              612
+            ]
           }
         ],
         "primary": {
@@ -27785,14 +27818,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 6,
+          "present": 8,
           "stale": 1,
-          "unrun": 3
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "data-scenarios"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -28256,50 +28287,64 @@
             ]
           },
           {
+            "id": "Empty",
+            "lines": [
+              353,
+              394
+            ]
+          },
+          {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              353,
-              370
+              400,
+              417
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              376,
-              397
+              423,
+              444
             ]
           },
           {
             "id": "States",
             "lines": [
-              403,
-              523
+              450,
+              570
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Combobox Keyboard Pattern",
             "lines": [
-              529,
-              621
+              576,
+              668
             ]
           },
           {
             "id": "RealWorldCommentComposer",
             "name": "Real World: Issue Comment Composer",
             "lines": [
-              627,
-              716
+              674,
+              763
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              731,
-              784
+              778,
+              831
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              834,
+              851
             ]
           }
         ],
@@ -29182,15 +29227,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 8,
           "stale": 1,
-          "unrun": 5
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec",
           "portal-hydration"
         ],
         "stale": [
@@ -29591,27 +29633,41 @@
             ]
           },
           {
+            "id": "Empty",
+            "lines": [
+              311,
+              340
+            ]
+          },
+          {
             "id": "Accessibility",
             "name": "Accessibility: Focus States",
             "lines": [
-              311,
-              325
+              346,
+              360
             ]
           },
           {
             "id": "RealWorldTagPicker",
             "name": "Real World: Tag Picker",
             "lines": [
-              331,
-              353
+              366,
+              388
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              367,
-              415
+              402,
+              450
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              453,
+              470
             ]
           }
         ],
@@ -30670,14 +30726,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 7,
+          "present": 9,
           "stale": 1,
-          "unrun": 3
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "data-scenarios"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -30954,26 +31008,40 @@
             ]
           },
           {
-            "id": "States",
+            "id": "Empty",
             "lines": [
               214,
-              310
+              256
+            ]
+          },
+          {
+            "id": "States",
+            "lines": [
+              258,
+              343
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Keyboard-Only Reorder",
             "lines": [
-              316,
-              412
+              349,
+              445
             ]
           },
           {
             "id": "RealWorldDashboardOrder",
             "name": "Real World: Dashboard Widget Order",
             "lines": [
-              418,
-              505
+              451,
+              538
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              541,
+              555
             ]
           }
         ],
@@ -30987,13 +31055,13 @@
           "template": "\n      <div style=\"max-width: 26rem\">\n        <DzOrderList v-bind=\"args\" v-model:value=\"value\" data-key=\"id\">\n          <template #item=\"{ item }\">{{ item.label }}</template>\n        </DzOrderList>\n      </div>\n    "
         },
         "runnable": {
-          "id": "States",
+          "id": "Empty",
           "lines": [
             214,
-            310
+            256
           ],
-          "source": "/**\n * `disabled` is the state DzOrderList declares as a prop, and the component adds\n * two transient row states on top of it (`data-state=\"grabbed\"` during a\n * keyboard grab, `data-state=\"selected\"` when `selectable`). All three are\n * shown here, because \"disabled\" on a reorderable list means something specific:\n * the rows stay readable, the control buttons go dead, and the keyboard grab\n * refuses to start.\n *\n * The disabled list is asserted rather than clicked — its variant sets\n * `pointer-events: none` on the root, so the browser would swallow the click.\n */\nexport const States: Story = {\n  render: () => ({\n    components: { DzOrderList },\n    setup() {\n      const enabled = ref<Task[]>([...sampleTasks])\n      const disabled = ref<Task[]>([...sampleTasks])\n      const selectable = ref<Task[]>([...sampleTasks])\n      return { enabled, disabled, selectable }\n    },\n    template: `\n      <div class=\"grid gap-8 lg:grid-cols-3\">\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Enabled</p>\n          <DzOrderList v-model:value=\"enabled\" data-key=\"id\" data-testid=\"ol-enabled\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Disabled</p>\n          <DzOrderList disabled v-model:value=\"disabled\" data-key=\"id\" data-testid=\"ol-disabled\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Selectable — selected rows</p>\n          <DzOrderList selectable v-model:value=\"selectable\" data-key=\"id\" data-testid=\"ol-selectable\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n\n    const enabled = canvas.getByTestId('ol-enabled')\n    const disabled = canvas.getByTestId('ol-disabled')\n    const selectable = canvas.getByTestId('ol-selectable')\n\n    const labels = (root: HTMLElement) =>\n      [...root.querySelectorAll('li[data-index]')]\n        .map(li => (li.textContent ?? '').replace(/\\s+/g, ' ').trim())\n\n    // Enabled: the focused row is row 0, so \"up\" is unavailable and \"down\" is\n    // live — the controls describe what is actually possible.\n    await expect(\n      within(enabled).getByRole('button', { name: 'Move up' }),\n    ).toBeDisabled()\n    const moveDown = within(enabled).getByRole('button', { name: 'Move down' })\n    await expect(moveDown).toBeEnabled()\n    await userEvent.click(moveDown)\n    await waitFor(() =>\n      expect(labels(enabled)[0]).toBe('Review with the team'),\n    )\n    await expect(labels(enabled)[1]).toBe('Draft the proposal')\n\n    // Disabled: rows are still readable, every control is dead, and the root\n    // carries `data-disabled` for the styling contract.\n    await expect(disabled).toHaveAttribute('data-disabled')\n    await expect(labels(disabled)).toHaveLength(5)\n    for (const name of ['Move to top', 'Move up', 'Move down', 'Move to bottom'])\n      await expect(within(disabled).getByRole('button', { name })).toBeDisabled()\n\n    // Selectable: rows become `option`s in a multi-selectable listbox, and a\n    // selected row stamps `data-state=\"selected\"`.\n    const listbox = within(selectable).getByRole('listbox')\n    await expect(listbox).toHaveAttribute('aria-multiselectable', 'true')\n    const options = within(listbox).getAllByRole('option')\n    await expect(options[0]).toHaveAttribute('aria-selected', 'false')\n    await userEvent.click(options[1]!)\n    await waitFor(() => expect(options[1]).toHaveAttribute('aria-selected', 'true'))\n    await expect(options[1]).toHaveAttribute('data-state', 'selected')\n\n    // Grabbed: Space on a focused row enters the keyboard-drag state, which the\n    // row exposes as `aria-grabbed` + `data-state=\"grabbed\"`.\n    const firstRow = enabled.querySelector<HTMLElement>('li[data-index=\"0\"]')!\n    firstRow.focus()\n    await userEvent.keyboard(' ')\n    await waitFor(() => expect(firstRow).toHaveAttribute('data-state', 'grabbed'))\n    await expect(firstRow).toHaveAttribute('aria-grabbed', 'true')\n    await userEvent.keyboard('{Escape}')\n    await waitFor(() => expect(firstRow).not.toHaveAttribute('data-state'))\n  },\n}",
-          "template": "\n      <div class=\"grid gap-8 lg:grid-cols-3\">\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Enabled</p>\n          <DzOrderList v-model:value=\"enabled\" data-key=\"id\" data-testid=\"ol-enabled\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Disabled</p>\n          <DzOrderList disabled v-model:value=\"disabled\" data-key=\"id\" data-testid=\"ol-disabled\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Selectable — selected rows</p>\n          <DzOrderList selectable v-model:value=\"selectable\" data-key=\"id\" data-testid=\"ol-selectable\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n      </div>\n    "
+          "source": "/**\n * `disabled` is the state DzOrderList declares as a prop, and the component adds\n * two transient row states on top of it (`data-state=\"grabbed\"` during a\n * keyboard grab, `data-state=\"selected\"` when `selectable`). All three are\n * shown here, because \"disabled\" on a reorderable list means something specific:\n * the rows stay readable, the control buttons go dead, and the keyboard grab\n * refuses to start.\n *\n * The disabled list is asserted rather than clicked — its variant sets\n * `pointer-events: none` on the root, so the browser would swallow the click.\n */\n/**\n * An empty sequence: the list shows its empty row, and every move control is\n * disabled because there is nothing to move.\n */\nexport const Empty: Story = {\n  render: () => ({\n    components: { DzOrderList },\n    setup() {\n      const value = ref<Task[]>([])\n      return { value }\n    },\n    template: `\n      <div style=\"max-width: 26rem\" data-testid=\"ol-empty\">\n        <DzOrderList v-model:value=\"value\" data-key=\"id\" aria-label=\"Empty sequence\">\n          <template #item=\"{ item }\">{{ item.label }}</template>\n          <template #empty>No steps in this sequence yet</template>\n        </DzOrderList>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(within(canvasElement).getByTestId('ol-empty'))\n    const list = canvas.getByRole('list', { name: 'Empty sequence' })\n    await expect(within(list).getAllByRole('listitem')).toHaveLength(1)\n    await expect(within(list).getByText('No steps in this sequence yet')).toBeVisible()\n\n    const controls = within(canvas.getByRole('group')).getAllByRole('button')\n    await expect(controls).toHaveLength(4)\n    for (const control of controls)\n      await expect(control).toBeDisabled()\n  },\n}",
+          "template": "\n      <div style=\"max-width: 26rem\" data-testid=\"ol-empty\">\n        <DzOrderList v-model:value=\"value\" data-key=\"id\" aria-label=\"Empty sequence\">\n          <template #item=\"{ item }\">{{ item.label }}</template>\n          <template #empty>No steps in this sequence yet</template>\n        </DzOrderList>\n      </div>\n    "
         }
       },
       "extraction": {
@@ -32959,13 +33027,11 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 8,
-          "unrun": 5
+          "present": 10,
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "keyboard-spec",
           "portal-hydration"
         ],
@@ -40456,15 +40522,11 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 8,
-          "unrun": 5
+          "present": 12,
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": []
       },
@@ -40715,6 +40777,27 @@
             "lines": [
               530,
               625
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              628,
+              642
+            ]
+          },
+          {
+            "id": "LargeSections",
+            "lines": [
+              653,
+              701
+            ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              704,
+              726
             ]
           }
         ],
@@ -45194,13 +45277,12 @@
         "cells": {
           "excepted": 1,
           "pass": 7,
-          "present": 7,
+          "present": 8,
           "stale": 1,
-          "unrun": 2
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -45533,6 +45615,13 @@
             "lines": [
               834,
               947
+            ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              950,
+              978
             ]
           }
         ],
@@ -48884,14 +48973,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 6,
           "stale": 1,
-          "unrun": 5
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "keyboard-spec",
           "portal-hydration"
         ],
@@ -50444,7 +50531,7 @@
       ],
       "source": "packages/core/src/components/layout/DzToolbar.vue",
       "typesSource": "packages/core/src/components/layout/DzToolbar.types.ts",
-      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
+      "componentCommit": "acc5ba1e7fa5e1649617762f7fd414a07d7ad914",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -51308,16 +51395,12 @@
         "cells": {
           "excepted": 1,
           "pass": 6,
-          "present": 5,
+          "present": 9,
           "stale": 1,
-          "unrun": 5
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -51550,6 +51633,20 @@
               399,
               484
             ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              487,
+              500
+            ]
+          },
+          {
+            "id": "LargeTour",
+            "lines": [
+              513,
+              565
+            ]
           }
         ],
         "primary": {
@@ -51559,6 +51656,15 @@
             116
           ],
           "source": "export const BasicThreeStep: Story = {\n  render: args => ({\n    components: { DzTour, DzButton },\n    setup() {\n      return { args, steps }\n    },\n    data() {\n      return { open: false, current: 0 }\n    },\n    template: `\n      <div>\n        ${demoToolbar}\n        <DzButton @click=\"open = true; current = 0\">Start tour</DzButton>\n        <DzTour\n          v-bind=\"args\"\n          v-model:open=\"open\"\n          v-model:current=\"current\"\n          :steps=\"steps\"\n        />\n      </div>\n    `,\n  }),\n}"
+        },
+        "runnable": {
+          "id": "Large",
+          "lines": [
+            487,
+            500
+          ],
+          "source": "export const Large: Story = {\n  render: () => ({\n    components: { DzTour },\n    data() {\n      const dataset: DzTourStep[] = Array.from({ length: 50 }, (_, i) => ({ target: '#data-tour-target', title: `Step ${i + 1}`, description: `Instruction ${i + 1}` }))\n      return { dataset, items: [...dataset], open: false, current: 0, changed: -1 }\n    },\n    template: `<div><button id=\"data-tour-target\" type=\"button\" @click=\"current = 0; open = true\">Start data tour</button>\n      <button type=\"button\" @click=\"items = []\">Clear data</button><button type=\"button\" @click=\"items = [...dataset]\">Restore data</button>\n      <output data-testid=\"changed\">{{ changed }}</output>\n      <DzTour v-model:open=\"open\" v-model:current=\"current\" :steps=\"items\" :mask=\"false\" :scroll-into-view=\"false\" @change=\"changed = $event\" />\n    </div>`,\n  }),\n}",
+          "template": "<div><button id=\"data-tour-target\" type=\"button\" @click=\"current = 0; open = true\">Start data tour</button>\n      <button type=\"button\" @click=\"items = []\">Clear data</button><button type=\"button\" @click=\"items = [...dataset]\">Restore data</button>\n      <output data-testid=\"changed\">{{ changed }}</output>\n      <DzTour v-model:open=\"open\" v-model:current=\"current\" :steps=\"items\" :mask=\"false\" :scroll-into-view=\"false\" @change=\"changed = $event\" />\n    </div>"
         }
       },
       "extraction": {
@@ -53087,16 +53193,12 @@
         "cells": {
           "excepted": 1,
           "pass": 6,
-          "present": 4,
+          "present": 8,
           "stale": 1,
-          "unrun": 6
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec",
           "portal-hydration"
         ],
         "stale": [
@@ -53520,43 +53622,64 @@
             ]
           },
           {
+            "id": "Empty",
+            "lines": [
+              298,
+              327
+            ]
+          },
+          {
             "id": "InFormField",
             "name": "In FormField",
             "lines": [
-              298,
-              322
+              333,
+              357
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              328,
-              351
+              363,
+              386
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Keyboard-Only Tree Combobox",
             "lines": [
-              357,
-              458
+              392,
+              493
             ]
           },
           {
             "id": "RealWorldCatalogFilter",
             "name": "Real World: Catalog Category Filter",
             "lines": [
-              464,
-              560
+              499,
+              595
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              573,
-              621
+              608,
+              656
+            ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              659,
+              677
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              680,
+              697
             ]
           }
         ],

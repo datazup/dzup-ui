@@ -264,8 +264,8 @@ makes `[data-size="lg"]` a selector you can rely on.
 **Controlled and uncontrolled.** This component exposes no `v-model` pair, so there is no
 controlled form: it holds no value a parent could own.
 
-**Where each variant is shown.** 18 stories in
-`packages/core/stories/data/DzTable.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Density Gallery`, `Striped & Hoverable`, `With Selected Row`, `Loading`, `With Caption Slot`, `With Colspan & Rowspan`, `Dark Mode Preview`, `Accessibility: Semantic Table`, `Sticky Header`, `Responsive – Mobile`, `Real World: Invoice Line Items`, `Column Pinning`, `Column Resizing`, `Virtual Scroll`, `States`.
+**Where each variant is shown.** 19 stories in
+`packages/core/stories/data/DzTable.stories.ts`: `Default`, `Variant Gallery`, `Size Gallery`, `Density Gallery`, `Striped & Hoverable`, `With Selected Row`, `Loading`, `With Caption Slot`, `With Colspan & Rowspan`, `Dark Mode Preview`, `Accessibility: Semantic Table`, `Sticky Header`, `Responsive – Mobile`, `Real World: Invoice Line Items`, `Column Pinning`, `Column Resizing`, `Virtual Scroll`, `States`, `KeyboardContract`.
 
 ## Parts, states and tokens
 
@@ -379,8 +379,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `eb35f34b` for the capability matrix,
-`d8eff953` for the quality matrix. It is **locally qualified**:
+artifact records — `ae4c6be7` for the capability matrix,
+`ae4c6be7` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -459,7 +459,9 @@ Declared in `packages/core/src/components/data/DzTable.anatomy.ts`.
 
 - **Pattern:** [APG — `table`](https://www.w3.org/WAI/ARIA/apg/patterns/table/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
+  sequence in `packages/core/src/components/data/DzTable.spec.ts`.
+  That is a presence measurement, not a table: it does not say which keys, or what they do.
 
 ### Assistive technology
 
@@ -493,12 +495,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/ssr-smoke.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/data/DzTable.spec.ts` — The component declares 3 binding(s); the unit spec asserts no key event for `Tab`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/data/DzTable.spec.ts` — All 3 declared binding(s) are exercised by the unit spec. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `controlled-uncontrolled` | tier B | `excepted` | No two-way binding to exercise: no `defineModel()` and no `update:<name>` emit paired with a prop of the same name, so a host cannot take ownership of a value from it. Its emits are the `rowExpand`/`rowCollapse` notifications; sort, selection and expansion are the host's to hold, and `DzDataGrid` is the component that binds them. (Measured 2026-09-22 at `4e4e46f`; a `defineModel` added here invalidates this exception.) |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzTable.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at ef277eb. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/data/DzTable.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/data/DzTable.stories.ts` |
@@ -506,7 +508,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/4 metric(s) have a derived threshold |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/data/DzTable.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 
-**2 unrun:** `keyboard-spec`, `at-manual` · **1 stale:** `perf-baseline` · **1 excepted:** `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**1 unrun:** `at-manual` · **1 stale:** `perf-baseline` · **1 excepted:** `controlled-uncontrolled`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

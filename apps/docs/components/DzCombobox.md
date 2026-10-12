@@ -262,7 +262,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `8e5f717`.
+last changed at `4f68982`.
 
 ## Extraction fidelity
 
@@ -280,8 +280,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `eb35f34b` for the capability matrix,
-`d8eff953` for the quality matrix. It is **locally qualified**:
+artifact records — `ae4c6be7` for the capability matrix,
+`ae4c6be7` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -291,7 +291,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `8e5f717f`
+- **Component last changed at:** `4f68982f`
 
 **Why this pattern:** Filtering over a consumer-supplied collection with an autocomplete contract and a teleported popup — the composite the APG combobox pattern is written for.
 
@@ -346,7 +346,9 @@ Declared in `packages/core/src/components/forms/DzCombobox.anatomy.ts`.
 
 - **Pattern:** [APG — `combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Escape`, `Tab`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **present** — a spec asserts at least one key
+  sequence in `packages/core/src/components/forms/DzCombobox.spec.ts`.
+  That is a presence measurement, not a table: it does not say which keys, or what they do.
 
 ### Assistive technology
 
@@ -380,12 +382,12 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzCombobox.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzCombobox.spec.ts` — The component declares 7 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Home`, `End`, `Enter`, `Escape`, `Tab`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | `present` | `packages/core/src/components/forms/DzCombobox.spec.ts` — All 7 declared binding(s) are exercised by the unit spec. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzCombobox.stories.ts` |
-| `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
+| `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/forms/DzCombobox.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzCombobox.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzCombobox.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at ef277eb. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `portal-hydration` | trait teleports | **`unrun`** | No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/forms/DzCombobox.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzCombobox.stories.ts` |
@@ -393,7 +395,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzCombobox.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**4 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `portal-hydration`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**2 unrun:** `portal-hydration`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

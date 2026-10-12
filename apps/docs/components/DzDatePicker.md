@@ -261,8 +261,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `eb35f34b` for the capability matrix,
-`d8eff953` for the quality matrix. It is **locally qualified**:
+artifact records — `ae4c6be7` for the capability matrix,
+`ae4c6be7` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -329,7 +329,7 @@ Declared in `packages/core/src/components/forms/DzDatePicker.anatomy.ts`.
 
 - **Pattern:** [APG — `combobox`](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) · its *Keyboard Interaction* section is
   the contract this component is audited against.
-- **Measured:** `keyboard-spec` is **unrun** — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Enter`, `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all.
+- **Measured:** `keyboard-spec` is **unrun** — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowDown`, `Enter`, `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all.
 
 ### Assistive technology
 
@@ -363,18 +363,18 @@ Every kind of evidence required of this component — by Tier C — and what was
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/forms/DzDatePicker.stories.ts` |
 | `ssr-sample` | tier A | `present` | `packages/core/tests/ssr/form-controls-ssr.spec.ts` |
 | `token-contrast` | tier A · corpus-wide | `pass` | `packages/tooling/src/token-checks/intent-text-contrast.ts` — Corpus gate: `yarn validate:tokens` covers every pair in the catalog at once. |
-| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzDatePicker.spec.ts` — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowDown`, `ArrowUp`, `Enter`, `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all. |
+| `keyboard-spec` | tier B | **`unrun`** | `packages/core/src/components/forms/DzDatePicker.spec.ts` — The component declares 9 binding(s); the unit spec asserts no key event for `ArrowDown`, `Enter`, `Escape`, `Tab`, `ArrowRight`, `ArrowLeft`. The contract is the yardstick, not the presence of any key at all. |
 | `state-stories` | tier B | `pass` | `packages/core/stories/forms/DzDatePicker.stories.ts` |
-| `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
+| `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/forms/DzDatePicker.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzDatePicker.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzDatePicker.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at ef277eb. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzDatePicker.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzDatePicker.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzDatePicker.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**3 unrun:** `keyboard-spec`, `controlled-uncontrolled`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**2 unrun:** `keyboard-spec`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

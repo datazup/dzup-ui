@@ -1,9 +1,9 @@
 {
   "generator": "yarn generate:docs-pages (TASK-N2-D1, evidence layer TASK-N2-D2)",
-  "artifactSha256": "2a514a4f6bb0b0529c557f015a415ecf1e86768427a7a8d2a59e3c98126b37df",
+  "artifactSha256": "60397b57c037b501f1f2ebe68fd6626352d22440f26b7feecd389ca26d0b481a",
   "schemaVersion": "1.2.0",
   "extractor": "vue-component-meta@3.3.7",
-  "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+  "sourceCommit": "ae4c6be7fe991f9c6caf7bcbf1f67d7b76b478d5",
   "publicComponents": 144,
   "compoundParts": 65,
   "groups": [
@@ -657,8 +657,8 @@
     }
   ],
   "evidenceSha256": {
-    "packages/core/docs/quality-matrix.json": "ae3113fd7f51a7a4907224f863212a6881d11e35da4b861540901b360b960b63",
-    "packages/core/docs/capability-matrix.json": "1e80828a82c73ba4fec2d2435b712b988309d373f2129a97685443a00a4aa9b6",
+    "packages/core/docs/quality-matrix.json": "7687ff203d798c1d85cace79b032bdae55de71a0a3d1b6e01a4b3a7c53b87fae",
+    "packages/core/docs/capability-matrix.json": "a621c0898bf46ea519e45520c39851a1555e4334e2380125f85f57e3a8108f02",
     "e2e/at-matrix/index.json": "d35ef2dfa049e253205cfca1b49b4841fe46e40d598c8fc1fdc88242a99b8de4",
     "packages/core/docs/wcag-deviations.json": "bde6dc788456481dd1a28216640d57adbe0c62a482aa45192df3ad78ec014f3c",
     "e2e/matrix/engine-ratchets.json": "43a6f0ee01e1df5eba6e07d4949da99513733775bf37653aa9410e19da99b8f0",
@@ -668,7 +668,7 @@
   },
   "evidence": {
     "cells": 1662,
-    "unrunCells": 457,
+    "unrunCells": 412,
     "atCells": 534,
     "atExecuted": 0
   }
