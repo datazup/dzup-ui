@@ -182,8 +182,14 @@ function getLabelForValue(value: string): string {
   return item?.label ?? value
 }
 
-/** Remove a specific value from the selection */
+/**
+ * Remove a specific value from the selection. Refused while disabled: the
+ * stylesheet only blocks pointer clicks, so keyboard activation of a tag's
+ * remove button, or a slot calling `remove()`, must be stopped here.
+ */
 function removeValue(value: string): void {
+  if (resolvedDisabled.value)
+    return
   model.value = model.value.filter(v => v !== value)
   emit('change', model.value)
 }
@@ -232,6 +238,8 @@ function handleBlur(event: FocusEvent): void {
 }
 
 function handleClear(): void {
+  if (resolvedDisabled.value)
+    return
   model.value = []
   emit('clear')
   emit('change', [])
@@ -292,6 +300,7 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
               type="button"
               :class="styles.tagClose()"
               :aria-label="`Remove ${getLabelForValue(value)}`"
+              :disabled="resolvedDisabled"
               @click.stop="removeValue(value)"
             >
               <X class="h-3 w-3" aria-hidden="true" />
@@ -321,6 +330,7 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
           data-part="clear"
           :class="[styles.icon(), ui?.clear]"
           :aria-label="dzMessages.clearAll"
+          :disabled="resolvedDisabled"
           @click.stop="handleClear"
         >
           <X class="h-3.5 w-3.5" aria-hidden="true" />

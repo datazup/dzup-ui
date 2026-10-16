@@ -194,21 +194,35 @@ export class CodemodRunner {
   ): string | null {
     // Many transforms handle Vue files themselves (template + script).
     // Try the transform on the whole file first — if the transform is
-    // Vue-aware it will handle extraction internally.
-    const wholeFileResult = transform(
-      { path: filePath, source },
-      { jscodeshift: jscodeshift.withParser(this.options.parser), stats: () => {} },
-      { dryRun: this.options.dryRun },
-    )
+    // Vue-aware it will handle extraction internally. A transform that is
+    // NOT Vue-aware (rename-imports) hands the whole SFC to the JS parser,
+    // which throws on `<template>` and `@click`; that must fall through to
+    // the script extraction below rather than fail the file.
+    let wholeFileError: unknown
+    let wholeFileResult: string | null = null
+    try {
+      wholeFileResult = transform(
+        { path: filePath, source },
+        { jscodeshift: jscodeshift.withParser(this.options.parser), stats: () => {} },
+        { dryRun: this.options.dryRun },
+      )
+    }
+    catch (error: unknown) {
+      wholeFileError = error
+    }
 
     if (wholeFileResult !== null) {
       return wholeFileResult
     }
 
-    // Fallback: extract script and transform it in isolation.
+    // Fallback: extract script and transform it in isolation. If the script
+    // transform throws too, its error propagates and the file is reported.
     const extraction = extractScriptFromVue(source)
-    if (!extraction)
+    if (!extraction) {
+      if (wholeFileError !== undefined)
+        throw wholeFileError
       return null
+    }
 
     const scriptResult = this.transformJsFile(
       filePath,

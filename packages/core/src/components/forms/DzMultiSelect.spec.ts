@@ -3,6 +3,8 @@ import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
  * DzMultiSelect — Unit / behavior tests.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { h } from 'vue'
+import DzFormField from './DzFormField.vue'
 import { multiSelectTokens } from './DzMultiSelect.tokens.ts'
 import DzMultiSelect from './DzMultiSelect.vue'
 
@@ -294,5 +296,69 @@ describe('dzMultiSelect — at maxSelections', () => {
       wrapper.unmount()
       HTMLElement.prototype.scrollIntoView = original
     }
+  })
+})
+
+describe('dzMultiSelect — a disabled control refuses removal (UI-DZUP-UI-CODE-M-14)', () => {
+  function expectUnchanged(wrapper: ReturnType<typeof mount>): void {
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('change')).toBeUndefined()
+    expect(wrapper.emitted('clear')).toBeUndefined()
+  }
+
+  it('disables the tag remove and clear-all buttons and ignores activation', async () => {
+    const wrapper = mount(DzMultiSelect, { props: { items, modelValue: ['apple', 'banana'], disabled: true } })
+    const remove = wrapper.get('[aria-label="Remove Apple"]')
+    const clear = wrapper.get('[aria-label="Clear all"]')
+    expect(remove.attributes('disabled')).toBeDefined()
+    expect(clear.attributes('disabled')).toBeDefined()
+    // Dispatch on the element directly as well as through VTU, so the handler
+    // guard is exercised even where the disabled attribute would stop a click.
+    await remove.trigger('click')
+    remove.element.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await clear.trigger('click')
+    clear.element.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await flushPromises()
+    expectUnchanged(wrapper)
+    expect(wrapper.find('[aria-label="Remove Apple"]').exists()).toBe(true)
+  })
+
+  it('makes the tag slot remove() a no-op while disabled', async () => {
+    let remove: (() => void) | undefined
+    const wrapper = mount(DzMultiSelect, {
+      props: { items, modelValue: ['apple'], disabled: true },
+      slots: {
+        tag: (slot: { remove: () => void }) => {
+          remove = slot.remove
+          return 'tag'
+        },
+      },
+    })
+    remove!()
+    await flushPromises()
+    expectUnchanged(wrapper)
+  })
+
+  it('inherits the guard from a disabled DzFormField', async () => {
+    let remove: (() => void) | undefined
+    const wrapper = mount(DzFormField, {
+      props: { disabled: true },
+      slots: {
+        default: () => [
+          h(DzMultiSelect, { items, modelValue: ['apple'] }, {
+            tag: (slot: { remove: () => void }) => {
+              remove = slot.remove
+              return 'tag'
+            },
+          }),
+        ],
+      },
+    })
+    const select = wrapper.findComponent(DzMultiSelect)
+    expect(wrapper.get('[aria-label="Clear all"]').attributes('disabled')).toBeDefined()
+    remove!()
+    wrapper.get('[aria-label="Clear all"]').element.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await flushPromises()
+    expectUnchanged(select)
   })
 })

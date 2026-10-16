@@ -248,3 +248,76 @@ describe('registryClient against the real artifacts', () => {
     }
   })
 })
+
+describe('registryClient caching (UI-DZUP-UI-CODE-M-15)', () => {
+  const index = JSON.stringify({ name: 'dzup-ui', homepage: '', items: [] })
+
+  it('retries a path after a rejected read instead of caching the failure', async () => {
+    const calls: string[] = []
+    const client = new RegistryClient({
+      reader: async (sitePath) => {
+        calls.push(sitePath)
+        if (calls.length === 1)
+          throw new Error('transient timeout')
+        return index
+      },
+    })
+    await expect(client.blocksIndex()).rejects.toThrow('transient timeout')
+    await expect(client.blocksIndex()).resolves.toMatchObject({ items: [] })
+    expect(calls).toEqual(['/r/registry.json', '/r/registry.json'])
+  })
+
+  it('still reads a successful path at most once', async () => {
+    let calls = 0
+    const client = new RegistryClient({
+      reader: async () => {
+        calls += 1
+        return index
+      },
+    })
+    await client.blocksIndex()
+    await client.blocksIndex()
+    expect(calls).toBe(1)
+  })
+
+  it('shares one in-flight read between concurrent callers', async () => {
+    let calls = 0
+    let release!: (value: string) => void
+    const client = new RegistryClient({
+      reader: () => {
+        calls += 1
+        return new Promise<string>((r) => {
+          release = r
+        })
+      },
+    })
+    const a = client.blocksIndex()
+    const b = client.blocksIndex()
+    release(index)
+    await Promise.all([a, b])
+    expect(calls).toBe(1)
+  })
+
+  it('shares one in-flight failure between concurrent callers, then retries', async () => {
+    let calls = 0
+    let fail!: (error: Error) => void
+    const client = new RegistryClient({
+      reader: () => {
+        calls += 1
+        if (calls === 1) {
+          return new Promise<string>((_, reject) => {
+            fail = reject
+          })
+        }
+        return Promise.resolve(index)
+      },
+    })
+    const a = client.blocksIndex()
+    const b = client.blocksIndex()
+    fail(new Error('503'))
+    await expect(a).rejects.toThrow('503')
+    await expect(b).rejects.toThrow('503')
+    await expect(client.blocksIndex()).resolves.toMatchObject({ items: [] })
+    expect(calls).toBe(2)
+  })
+})

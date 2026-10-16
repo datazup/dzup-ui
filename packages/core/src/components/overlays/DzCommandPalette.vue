@@ -42,7 +42,7 @@ import {
  * />
  * ```
  */
-import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
+import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/useEscapeKey.ts'
@@ -203,16 +203,38 @@ useEscapeKey(() => {
   open.value = false
 }, open)
 
-onMounted(() => {
-  if (props.enableGlobalShortcut) {
+/**
+ * The document listener follows `enableGlobalShortcut` for the component's whole
+ * life, not just its value at mount: flipping the prop attaches or detaches
+ * exactly one listener, and unmount always removes it. Attached from
+ * `onMounted` so nothing touches `document` during SSR.
+ */
+let shortcutAttached = false
+let isMounted = false
+function syncGlobalShortcut(enabled: boolean): void {
+  if (enabled === shortcutAttached)
+    return
+  if (enabled)
     document.addEventListener('keydown', handleKeydown)
-  }
+  else
+    document.removeEventListener('keydown', handleKeydown)
+  shortcutAttached = enabled
+}
+
+onMounted(() => {
+  isMounted = true
+  syncGlobalShortcut(props.enableGlobalShortcut)
 })
 
-onUnmounted(() => {
-  if (props.enableGlobalShortcut) {
-    document.removeEventListener('keydown', handleKeydown)
-  }
+watch(() => props.enableGlobalShortcut, (enabled) => {
+  if (isMounted)
+    syncGlobalShortcut(enabled)
+})
+
+onScopeDispose(() => {
+  isMounted = false
+  if (shortcutAttached)
+    syncGlobalShortcut(false)
 })
 
 /** Reset search when dialog closes */

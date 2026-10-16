@@ -130,6 +130,44 @@ describe('dzCommandPalette — Unit Tests', () => {
     removeSpy.mockRestore()
   })
 
+  it('follows enableGlobalShortcut after mount and leaves no listener on unmount', async () => {
+    // UI-DZUP-UI-CODE-M-13: the listener was keyed on the mount-time value, so
+    // true -> false leaked it and false -> true never attached one.
+    const addSpy = vi.spyOn(document, 'addEventListener')
+    const removeSpy = vi.spyOn(document, 'removeEventListener')
+    const keydownAddsBefore = addSpy.mock.calls.length
+
+    const wrapper = mount(DzCommandPalette, { props: { open: false, items: [], enableGlobalShortcut: false, portalDisabled: true } })
+    await nextTick()
+    // Only the always-on Escape listener so far; the shortcut handler is the one
+    // new keydown registration that toggling the prop on produces.
+    const baseline = addSpy.mock.calls.slice(keydownAddsBefore).filter(([e]) => e === 'keydown').length
+    await wrapper.setProps({ enableGlobalShortcut: true })
+    const added = addSpy.mock.calls.slice(keydownAddsBefore).filter(([e]) => e === 'keydown')
+    expect(added).toHaveLength(baseline + 1)
+    const shortcut = added.at(-1)![1]
+    const shortcutAdds = () => addSpy.mock.calls.filter(([e, fn]) => e === 'keydown' && fn === shortcut)
+    const shortcutRemoves = () => removeSpy.mock.calls.filter(([e, fn]) => e === 'keydown' && fn === shortcut)
+    expect(shortcutAdds()).toHaveLength(1)
+
+    // The shortcut actually works after the late attach.
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))
+    await nextTick()
+    expect(wrapper.emitted('update:open')?.at(-1)).toEqual([true])
+
+    await wrapper.setProps({ enableGlobalShortcut: false })
+    expect(shortcutRemoves()).toHaveLength(1)
+
+    await wrapper.setProps({ enableGlobalShortcut: true })
+    expect(shortcutAdds()).toHaveLength(2)
+    expect(shortcutRemoves()).toHaveLength(1)
+
+    wrapper.unmount()
+    expect(shortcutRemoves()).toHaveLength(2)
+    addSpy.mockRestore()
+    removeSpy.mockRestore()
+  })
+
   it('component renders without errors when items is empty', () => {
     const wrapper = mountCommandPalette({ open: true, items: [] })
     expect(wrapper.exists()).toBe(true)

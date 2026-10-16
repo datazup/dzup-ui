@@ -307,7 +307,9 @@ export interface RegistryClientOptions {
 /**
  * Cached, read-only accessor for the dzup-ui catalog artifacts. One instance is
  * shared by every tool; each distinct site path is fetched at most once per
- * process (the artifacts are immutable per deploy).
+ * process (the artifacts are immutable per deploy). Only successful reads stay
+ * cached: a rejected read is evicted once it settles, so one transient timeout
+ * or 5xx does not break that path until the server restarts.
  */
 export class RegistryClient {
   readonly base: string
@@ -327,8 +329,14 @@ export class RegistryClient {
   private text(sitePath: string): Promise<string> {
     let hit = this.cache.get(sitePath)
     if (!hit) {
-      hit = this.read(sitePath)
-      this.cache.set(sitePath, hit)
+      const pending = this.read(sitePath)
+      hit = pending
+      this.cache.set(sitePath, pending)
+      // Evict on failure; the identity check keeps a newer in-flight read.
+      pending.catch(() => {
+        if (this.cache.get(sitePath) === pending)
+          this.cache.delete(sitePath)
+      })
     }
     return hit
   }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { checkSource, isAllowed } from './hardcoded-strings.ts'
+import { applyRatchets, checkHardcodedStrings, checkSource, isAllowed, RATCHET_CEILINGS } from './hardcoded-strings.ts'
 
 /**
  * Specs for the hard-coded string validator (TASK-OSS-P4-03).
@@ -23,10 +23,9 @@ describe('static aria-label', () => {
     expect(found[0]).toMatchObject({ rule: 'static-aria-label', value: 'Clear input' })
   })
 
-  it('ignores a bound aria-label', () => {
-    // `:aria-label` resolves to something the component chose — which, after
-    // this packet, is a catalog lookup.
+  it('ignores a bound aria-label that is a catalog lookup', () => {
     expect(checkSource('X.vue', vue('', '  <button :aria-label="dzMessages.clear" />'))).toEqual([])
+    expect(checkSource('X.vue', vue('', '  <button :aria-label="dzMessages[\'clear\']" />'))).toEqual([])
   })
 
   it('ignores an aria-label inside a JSDoc @example', () => {
@@ -42,6 +41,85 @@ describe('static aria-label', () => {
 
   it('ignores a value with no letters in it', () => {
     expect(checkSource('X.vue', vue('', '  <button aria-label="—" />'))).toEqual([])
+  })
+})
+
+/* eslint-disable no-template-curly-in-string -- the sources under test are Vue templates holding JS template literals */
+describe('bound aria-label with language in it (UI-DZUP-UI-CODE-M-12)', () => {
+  it('flags a template literal whose static text has words', () => {
+    // The DzMultiSelect / DzChip / DzTag shape the old rule waved through.
+    const found = checkSource('X.vue', vue('', '  <button :aria-label="`Remove ${label}`" />'))
+    expect(found).toEqual([
+      expect.objectContaining({ rule: 'bound-literal-aria-label', value: '`Remove ${label}`', line: 6 }),
+    ])
+  })
+
+  it('flags an English string fallback in a bound expression', () => {
+    const found = checkSource('X.vue', vue('', '  <nav :aria-label="ariaLabel ?? \'Progress steps\'" />'))
+    expect(found.map(v => v.value)).toEqual(['Progress steps'])
+    const both = checkSource('X.vue', vue('', '  <b :aria-label="open ? \'Collapse row\' : \'Expand row\'" />'))
+    expect(both.map(v => v.value)).toEqual(['Collapse row', 'Expand row'])
+  })
+
+  it('ignores a template literal that is only interpolations and punctuation', () => {
+    expect(checkSource('X.vue', vue('', '  <span :aria-label="`${role} – ${status}`" />'))).toEqual([])
+  })
+
+  it('honours the escape hatch on the same line', () => {
+    const source = vue('', '  <b :aria-label="`Remove ${x}`" /> <!-- hardcoded-string-ok: test -->')
+    expect(checkSource('X.vue', source)).toEqual([])
+  })
+})
+
+/* eslint-enable no-template-curly-in-string */
+
+describe('literal text in an empty state (UI-DZUP-UI-CODE-M-12)', () => {
+  it('flags fallback text inside <slot name="empty">', () => {
+    const found = checkSource('X.vue', vue('', '  <slot name="empty">\n    No options available\n  </slot>'))
+    expect(found).toEqual([
+      expect.objectContaining({ rule: 'literal-empty-state', value: 'No options available', line: 7 }),
+    ])
+  })
+
+  it('flags text in ComboboxEmpty and data-part="empty" elements', () => {
+    const found = checkSource('X.vue', vue('', [
+      '  <ComboboxEmpty data-part="empty">No results found.</ComboboxEmpty>',
+      '  <li v-if="none" data-part="empty" class="x">No items</li>',
+    ].join('\n')))
+    expect(found.map(v => v.value)).toEqual(['No results found.', 'No items'])
+  })
+
+  it('flags an English string inside an interpolation in an empty slot', () => {
+    const found = checkSource('X.vue', vue('', '  <slot name="empty">{{ active ? noResultsText : \'No options available\' }}</slot>'))
+    expect(found.map(v => v.value)).toEqual(['No options available'])
+  })
+
+  it('ignores an empty state that renders a catalog message', () => {
+    expect(checkSource('X.vue', vue('', '  <slot name="empty">{{ resolvedEmptyText }}</slot>'))).toEqual([])
+    expect(checkSource('X.vue', vue('', '  <div data-part="empty">\n    <slot name="empty" />\n  </div>'))).toEqual([])
+  })
+})
+
+describe('ratchet', () => {
+  const v = (rule: 'static-aria-label' | 'bound-literal-aria-label') =>
+    ({ file: 'X.vue', line: 1, rule, value: 'x' })
+
+  it('fails unratcheted rules outright and ratcheted rules only above the ceiling', () => {
+    const at = applyRatchets([v('static-aria-label'), v('bound-literal-aria-label')], { 'bound-literal-aria-label': 1 })
+    expect(at.failing.map(f => f.rule)).toEqual(['static-aria-label'])
+    expect(at.ratchets).toEqual([{ rule: 'bound-literal-aria-label', count: 1, ceiling: 1 }])
+    const above = applyRatchets([v('bound-literal-aria-label'), v('bound-literal-aria-label')], { 'bound-literal-aria-label': 1 })
+    expect(above.failing).toHaveLength(2)
+  })
+
+  it('reports the real packages/core debt at exactly its pinned ceilings', () => {
+    // Both directions matter: a rise is new debt, a fall must lower the pin.
+    const { failing, ratchets } = applyRatchets(checkHardcodedStrings())
+    expect(failing).toEqual([])
+    for (const r of ratchets)
+      expect(r.count, r.rule).toBe(RATCHET_CEILINGS[r.rule])
+    expect(ratchets.find(r => r.rule === 'bound-literal-aria-label')!.count).toBeGreaterThan(0)
+    expect(ratchets.find(r => r.rule === 'literal-empty-state')!.count).toBeGreaterThan(0)
   })
 })
 

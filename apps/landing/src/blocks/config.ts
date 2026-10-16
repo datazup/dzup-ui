@@ -145,14 +145,27 @@ export function mcpServerConfig(): string {
  * (`packages/mcp`, Task G5). Unlike `mcpServerConfig()` above — which wires the
  * shadcn CLI's GENERIC `registry:mcp` at the blocks registry — this is a
  * first-party server that also exposes the component API, templates and design
- * tokens, and is run with a single `npx -y @dzup-ui/mcp` (no env needed; it
+ * tokens, and is run with a single pinned `npx -y @dzup-ui/mcp@<version>` (no env needed; it
  * defaults to the public site). The `/ai` docs page renders per-client configs
  * from these helpers so the copy-paste snippets can never drift.
  */
 export const DZUP_MCP_PACKAGE = '@dzup-ui/mcp'
 
+/**
+ * The exact `@dzup-ui/mcp` version every snippet runs (UI-DZUP-UI-SEC-M-02).
+ * `-y` suppresses npx's install prompt — stdio MCP clients cannot answer it — so
+ * an unpinned name would auto-install and execute whatever the registry serves
+ * under it. Pinned here rather than imported so the landing bundle never reaches
+ * into `packages/`; `config.spec.ts` fails when it drifts from
+ * `packages/mcp/package.json`. Bump the two together.
+ */
+export const DZUP_MCP_VERSION = '0.2.0'
+
+/** `@dzup-ui/mcp@<exact version>` — what npx is told to fetch. */
+export const DZUP_MCP_PACKAGE_SPEC = `${DZUP_MCP_PACKAGE}@${DZUP_MCP_VERSION}`
+
 /** The stdio launch command every MCP client uses, as `[command, ...args]`. */
-export const DZUP_MCP_COMMAND = ['npx', '-y', DZUP_MCP_PACKAGE] as const
+export const DZUP_MCP_COMMAND = ['npx', '-y', DZUP_MCP_PACKAGE_SPEC] as const
 
 /** The canonical `{ mcpServers: { "dzup-ui": … } }` block (Cursor, Claude Code, Windsurf). */
 export function dzupMcpConfig(): string {

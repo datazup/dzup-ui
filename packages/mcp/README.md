@@ -23,12 +23,12 @@ Ask *"add a dzup-ui pricing block"* and the assistant browses the catalog, fetch
 // works everywhere — see per-client setup below
 {
   "mcpServers": {
-    "dzup-ui": { "command": "npx", "args": ["-y", "@dzup-ui/mcp"] }
+    "dzup-ui": { "command": "npx", "args": ["-y", "@dzup-ui/mcp@0.2.0"] }
   }
 }
 ```
 
-No install, no API key, no account. `npx` fetches and runs it on demand.
+No install, no API key, no account. `npx` fetches and runs it on demand. Every snippet pins an exact version: `-y` skips npx's install prompt (stdio clients cannot answer it), so an unpinned name would run whatever the registry serves under it.
 
 ---
 
@@ -75,7 +75,7 @@ Create `.cursor/mcp.json` in your project (or edit the global one via **Settings
 ```json
 {
   "mcpServers": {
-    "dzup-ui": { "command": "npx", "args": ["-y", "@dzup-ui/mcp"] }
+    "dzup-ui": { "command": "npx", "args": ["-y", "@dzup-ui/mcp@0.2.0"] }
   }
 }
 ```
@@ -87,7 +87,7 @@ Then in the chat: *"List the dzup-ui form components, then add the `contact-form
 One command:
 
 ```sh
-claude mcp add dzup-ui -- npx -y @dzup-ui/mcp
+claude mcp add dzup-ui -- npx -y @dzup-ui/mcp@0.2.0
 ```
 
 …or add it to `.mcp.json` at your project root (shareable, checked into git):
@@ -95,7 +95,7 @@ claude mcp add dzup-ui -- npx -y @dzup-ui/mcp
 ```json
 {
   "mcpServers": {
-    "dzup-ui": { "command": "npx", "args": ["-y", "@dzup-ui/mcp"] }
+    "dzup-ui": { "command": "npx", "args": ["-y", "@dzup-ui/mcp@0.2.0"] }
   }
 }
 ```
@@ -109,7 +109,7 @@ Edit `~/.codeium/windsurf/mcp_config.json` (or **Settings → Cascade → MCP �
 ```json
 {
   "mcpServers": {
-    "dzup-ui": { "command": "npx", "args": ["-y", "@dzup-ui/mcp"] }
+    "dzup-ui": { "command": "npx", "args": ["-y", "@dzup-ui/mcp@0.2.0"] }
   }
 }
 ```
@@ -121,14 +121,14 @@ Add to `.vscode/mcp.json`:
 ```json
 {
   "servers": {
-    "dzup-ui": { "type": "stdio", "command": "npx", "args": ["-y", "@dzup-ui/mcp"] }
+    "dzup-ui": { "type": "stdio", "command": "npx", "args": ["-y", "@dzup-ui/mcp@0.2.0"] }
   }
 }
 ```
 
 ### Any other MCP client
 
-The server speaks MCP over **stdio**. Run `npx -y @dzup-ui/mcp` as the command with no arguments.
+The server speaks MCP over **stdio**. Run `npx -y @dzup-ui/mcp@0.2.0` as the command with no arguments.
 
 ---
 
@@ -145,7 +145,7 @@ Against a preview deploy:
   "mcpServers": {
     "dzup-ui": {
       "command": "npx",
-      "args": ["-y", "@dzup-ui/mcp"],
+      "args": ["-y", "@dzup-ui/mcp@0.2.0"],
       "env": { "DZUP_UI_REGISTRY_URL": "https://preview.dzup-ui.com" }
     }
   }
@@ -155,7 +155,7 @@ Against a preview deploy:
 Against a local checkout (reads `apps/landing/public` + `apps/storybook/public` directly — build the registry first with `yarn workspace @dzup-ui/landing build:registry` and the component docs with the storybook build):
 
 ```sh
-DZUP_UI_REGISTRY_URL=/path/to/dzup-ui npx -y @dzup-ui/mcp
+DZUP_UI_REGISTRY_URL=/path/to/dzup-ui npx -y @dzup-ui/mcp@0.2.0
 ```
 
 ---
