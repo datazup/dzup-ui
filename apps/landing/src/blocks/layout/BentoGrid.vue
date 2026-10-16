@@ -152,7 +152,7 @@ const channels: Channel[] = [
 <style scoped>
 .bento {
   background: var(--dz-background, #fff);
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
   max-width: 60rem;
   margin: 0 auto;
 }
@@ -160,8 +160,8 @@ const channels: Channel[] = [
 .bento-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .bento-cell {
@@ -193,7 +193,7 @@ const channels: Channel[] = [
 .bento-revenue {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bento-figure {
@@ -201,11 +201,11 @@ const channels: Channel[] = [
 }
 
 .bento-revenue-sub {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .bento-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .bento-list {
@@ -214,7 +214,7 @@ const channels: Channel[] = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .bento-list-row {
@@ -235,8 +235,8 @@ const channels: Channel[] = [
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: var(--dz-space-1, 0.25rem);
-  padding: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   background: linear-gradient(135deg, var(--dz-primary, #6366f1), var(--dz-info, #0ea5e9));
   color: var(--dz-primary-foreground, #fff);
 }
@@ -255,7 +255,7 @@ const channels: Channel[] = [
 .bento-panel--stat {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   align-items: flex-start;
 }
 
@@ -272,7 +272,7 @@ const channels: Channel[] = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   flex-wrap: wrap;
 }
 

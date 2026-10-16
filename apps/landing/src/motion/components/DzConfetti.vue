@@ -69,7 +69,7 @@ function burst(): void {
         '--c': PALETTE[i % PALETTE.length],
         'width': `${dim}px`,
         'height': `${dim}px`,
-        'borderRadius': round ? '9999px' : 'var(--dz-radius-xs, 2px)',
+        'borderRadius': round ? '9999px' : 'var(--dz-radius-sm, 0.25rem)',
         'animationDelay': `${(Math.random() * 60).toFixed(0)}ms`,
       } as CSSProperties,
     })

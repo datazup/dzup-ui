@@ -125,7 +125,7 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
 
 <style scoped>
 .pr-wrap {
-  padding: clamp(1.5rem, 5vw, 2.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(1.5rem, 5vw, 2.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -135,7 +135,7 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
 }
 
 .pr-h {
-  margin: var(--dz-space-6, 1.5rem) 0 var(--dz-space-3, 0.75rem);
+  margin: var(--dz-spacing-6, 1.5rem) 0 var(--dz-spacing-3, 0.75rem);
 }
 
 .pr-h-lead {
@@ -143,35 +143,35 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
 }
 
 .pr-lead {
-  margin: 0 0 var(--dz-space-4, 1rem);
+  margin: 0 0 var(--dz-spacing-4, 1rem);
   line-height: 1.6;
 }
 
 .pr-p {
-  margin: 0 0 var(--dz-space-4, 1rem);
+  margin: 0 0 var(--dz-spacing-4, 1rem);
   line-height: 1.75;
 }
 
 .pr-rule {
-  margin: var(--dz-space-6, 1.5rem) 0;
+  margin: var(--dz-spacing-6, 1.5rem) 0;
 }
 
 .pr-code {
-  margin: 0 0 var(--dz-space-4, 1rem);
+  margin: 0 0 var(--dz-spacing-4, 1rem);
   display: block;
   overflow-x: auto;
 }
 
 .pr-quote {
-  margin: var(--dz-space-5, 1.25rem) 0;
+  margin: var(--dz-spacing-5, 1.25rem) 0;
 }
 
 .pr-list {
-  margin: 0 0 var(--dz-space-4, 1rem);
-  padding-left: var(--dz-space-5, 1.25rem);
+  margin: 0 0 var(--dz-spacing-4, 1rem);
+  padding-left: var(--dz-spacing-5, 1.25rem);
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   line-height: 1.7;
 }
 

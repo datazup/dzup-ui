@@ -120,7 +120,7 @@ function reset() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -133,14 +133,14 @@ function reset() {
 .fp-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .fp-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .fp-submit {
@@ -151,7 +151,7 @@ function reset() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--dz-space-1, 0.375rem);
+  gap: var(--dz-spacing-1_5, 0.375rem);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: var(--dz-font-medium, 500);
   color: var(--dz-primary, #6366f1);
@@ -170,9 +170,9 @@ function reset() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   text-align: center;
-  padding: var(--dz-space-2, 0.5rem) 0;
+  padding: var(--dz-spacing-2, 0.5rem) 0;
 }
 
 .fp-sent-icon {
@@ -187,6 +187,6 @@ function reset() {
 }
 
 .fp-resend {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 </style>

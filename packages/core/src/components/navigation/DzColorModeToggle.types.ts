@@ -86,5 +86,5 @@ export interface DzColorModeToggleSlots {
    * Override the rendered glyph for a given mode (icon / switch variants).
    * Receives the resolved mode and the active theme preference.
    */
-  icon?: (props: { mode: 'light' | 'dark' | 'system', theme: ThemePreference }) => unknown
+  icon?: (props: { mode: 'light' | 'dark' | 'high-contrast' | 'system', theme: ThemePreference }) => unknown
 }

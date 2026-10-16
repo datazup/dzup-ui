@@ -254,7 +254,7 @@ const tab = ref('description')
 .pd-info {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-brand {
@@ -271,15 +271,15 @@ const tab = ref('description')
 .pd-rating {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-price {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
 }
 
 .pd-was {
@@ -293,20 +293,20 @@ const tab = ref('description')
 
 .pd-sizes {
   border: 0;
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
   padding: 0;
   min-width: 0;
 }
 
 .pd-sizes-legend {
   padding: 0;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-size-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-size {
@@ -316,8 +316,8 @@ const tab = ref('description')
 
 .pd-actions {
   display: flex;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
 }
 
 .pd-add {
@@ -326,7 +326,7 @@ const tab = ref('description')
 
 .pd-stock {
   align-self: flex-start;
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-tabs {
@@ -334,7 +334,7 @@ const tab = ref('description')
 }
 
 .pd-panel {
-  padding-top: var(--dz-space-4, 1rem);
+  padding-top: var(--dz-spacing-4, 1rem);
 }
 
 .pd-panel-text {
@@ -348,7 +348,7 @@ const tab = ref('description')
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 720px) {

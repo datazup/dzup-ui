@@ -271,6 +271,7 @@ then the component's own default.**
 | Reader | What the provider supplies through it |
 | --- | --- |
 | `useDzDirection` | the document writing direction |
+| `useDzMotion` | the motion preference, including `prefers-reduced-motion` |
 | `useDzTestIds` | the test-id attribute name and prefix |
 
 ## Locale, direction and formats

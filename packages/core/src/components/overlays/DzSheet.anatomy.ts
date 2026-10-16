@@ -26,7 +26,7 @@ export const anatomy = {
 
   /**
    * Empty and measured: `DzSheet.variants.ts` reads `--dz-overlay-bg`,
-   * `--dz-background` and the global shadow scale, and owns no
+   * `--dz-surface-raised` and the global shadow scale, and owns no
    * `--dz-sheet-*` property.
    */
   componentTokens: [],

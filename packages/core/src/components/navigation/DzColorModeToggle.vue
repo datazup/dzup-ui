@@ -61,8 +61,18 @@ const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme({ optional: tru
 
 const DEFAULT_LABELS = { light: 'Light', dark: 'Dark', system: 'System' } as const
 
+/**
+ * `'high-contrast'` is a theme an application can set, not one this toggle
+ * offers; while it is active the toggle names and draws it as the light family
+ * it belongs to, and the next activation leaves it.
+ */
+function toggleModeOf(mode: ThemePreference): 'light' | 'dark' | 'system' {
+  return mode === 'high-contrast' ? 'light' : mode
+}
+
 function labelFor(mode: ThemePreference): string {
-  return props.labels?.[mode] ?? DEFAULT_LABELS[mode]
+  const key = toggleModeOf(mode)
+  return props.labels?.[key] ?? DEFAULT_LABELS[key]
 }
 
 // ---------------------------------------------------------------------------
@@ -119,7 +129,7 @@ const ICONS: Record<'light' | 'dark' | 'system', FunctionalComponent> = {
 }
 
 /** Glyph representing the current preference (system shows the monitor glyph). */
-const currentIcon = computed<FunctionalComponent>(() => ICONS[theme.value])
+const currentIcon = computed<FunctionalComponent>(() => ICONS[toggleModeOf(theme.value)])
 
 // ---------------------------------------------------------------------------
 // Styling

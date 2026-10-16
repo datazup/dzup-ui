@@ -95,7 +95,7 @@ const actions: DzSpeedDialItem[] = [
 .fa-col {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fa-label {
@@ -109,7 +109,7 @@ const actions: DzSpeedDialItem[] = [
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 /* A relative "app surface" so the speed dial pins to a corner like in real use. */
@@ -117,12 +117,12 @@ const actions: DzSpeedDialItem[] = [
   position: relative;
   width: min(20rem, 100%);
   min-height: 16rem;
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-xl, 0.875rem);
   background:
     radial-gradient(circle at 100% 100%, color-mix(in oklch, var(--dz-primary, #6366f1) 6%, transparent), transparent 45%),
-    var(--dz-surface-muted, var(--dz-surface, #fff));
+    var(--dz-surface, #fff);
   overflow: hidden;
 }
 
@@ -132,8 +132,8 @@ const actions: DzSpeedDialItem[] = [
 
 .fa-dial {
   position: absolute;
-  right: var(--dz-space-4, 1rem);
-  bottom: var(--dz-space-4, 1rem);
+  right: var(--dz-spacing-4, 1rem);
+  bottom: var(--dz-spacing-4, 1rem);
 }
 </style>
 ```

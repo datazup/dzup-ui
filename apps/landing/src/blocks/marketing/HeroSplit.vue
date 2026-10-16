@@ -71,7 +71,7 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
 .hero-split {
   position: relative;
   overflow: hidden;
-  padding: clamp(2.5rem, 6vw, 4.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 6vw, 4.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -91,7 +91,7 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: var(--dz-space-10, 2.5rem);
+  gap: var(--dz-spacing-10, 2.5rem);
   max-width: 72rem;
   margin: 0 auto;
 }
@@ -100,7 +100,7 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
 .hs-copy {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .hs-title {
@@ -117,8 +117,8 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
 .hs-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 /* Media column */
@@ -132,8 +132,8 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
   overflow: hidden;
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);
   box-shadow:
-    0 4px 6px -1px color-mix(in oklch, var(--dz-shadow, #000) 8%, transparent),
-    0 2px 4px -2px color-mix(in oklch, var(--dz-shadow, #000) 6%, transparent);
+    0 4px 6px -1px color-mix(in oklch, oklch(0 0 0) 8%, transparent),
+    0 2px 4px -2px color-mix(in oklch, oklch(0 0 0) 6%, transparent);
 }
 
 .hs-img {

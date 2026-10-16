@@ -7,9 +7,26 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
  */
 import { afterEach, describe, expect, it } from 'vitest'
 import { h } from 'vue'
+import { cascaderVariants } from '../forms/DzCascader.variants.ts'
+import { comboboxVariants } from '../forms/DzCombobox.variants.ts'
+import { datePickerVariants } from '../forms/DzDatePicker.variants.ts'
+import { dateRangePickerVariants } from '../forms/DzDateRangePicker.variants.ts'
+import { mentionVariants } from '../forms/DzMention.variants.ts'
+import { multiSelectVariants } from '../forms/DzMultiSelect.variants.ts'
+import { selectVariants } from '../forms/DzSelect.variants.ts'
+import { timePickerVariants } from '../forms/DzTimePicker.variants.ts'
+import { treeSelectVariants } from '../forms/DzTreeSelect.variants.ts'
+import { commandPaletteVariants } from './DzCommandPalette.variants.ts'
+import { contextMenuVariants } from './DzContextMenu.variants.ts'
+import { dialogVariants } from './DzDialog.variants.ts'
+import { dropdownMenuVariants } from './DzDropdownMenu.variants.ts'
+import { popconfirmVariants } from './DzPopconfirm.variants.ts'
+import { popoverVariants } from './DzPopover.variants.ts'
 import DzPopover from './DzPopover.vue'
 import DzPopoverContent from './DzPopoverContent.vue'
 import DzPopoverTrigger from './DzPopoverTrigger.vue'
+import { sheetVariants } from './DzSheet.variants.ts'
+import { tourVariants } from './DzTour.variants.ts'
 
 /** Helper to mount full popover compound */
 /** Stub portal to render inline */
@@ -252,5 +269,60 @@ describe('dzPopover -- Unit Tests', () => {
     expect(host?.querySelector('[role="dialog"]')).toBeNull()
     expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Portaled popover body')
     wrapper.unmount()
+  })
+})
+
+/**
+ * Surface assignment (UI-DZUP-UI-DESIGN-M-10).
+ *
+ * Every floating panel paints with the one overlay-tier pair, `--dz-popover` /
+ * `--dz-popover-foreground`; modal surfaces (dialog, sheet) sit on
+ * `--dz-surface-raised`. Before, popovers and menus used the PAGE token
+ * `--dz-background` (the same colour as the page beneath them) while the select
+ * family used `--dz-surface`, so two overlays side by side disagreed.
+ */
+describe('overlay surface tokens', () => {
+  const floating: Array<[string, string]> = [
+    ['DzPopover content', popoverVariants().content()],
+    ['DzDropdownMenu content', dropdownMenuVariants().content()],
+    ['DzContextMenu content', contextMenuVariants().content()],
+    ['DzCommandPalette content', commandPaletteVariants().content()],
+    ['DzTour panel', tourVariants().panel()],
+    ['DzSelect content', selectVariants().content()],
+    ['DzCombobox content', comboboxVariants().content()],
+    ['DzMultiSelect content', multiSelectVariants().content()],
+    ['DzDatePicker content', datePickerVariants().content()],
+    ['DzDateRangePicker content', dateRangePickerVariants().content()],
+    ['DzTreeSelect panel', treeSelectVariants().panel()],
+    ['DzCascader panel', cascaderVariants().panel()],
+    ['DzTimePicker panel', timePickerVariants().panel()],
+    ['DzMention menu', mentionVariants().menu()],
+  ]
+
+  it.each(floating)('%s paints with the overlay tier', (_name, classes) => {
+    expect(classes).toContain('bg-[var(--dz-popover)]')
+    expect(classes).not.toMatch(/bg-\[var\(--dz-(?:background|surface)\)\]/)
+  })
+
+  it('the popover arrow and the popconfirm panel follow the same token', () => {
+    expect(popoverVariants().arrow()).toContain('fill-[var(--dz-popover)]')
+    expect(popconfirmVariants().panel()).toContain('bg-[var(--dz-popconfirm-bg,var(--dz-popover))]')
+  })
+
+  it('pairs the panel text with the overlay foreground where the panel sets one', () => {
+    expect(popoverVariants().content()).toContain('text-[var(--dz-popover-foreground)]')
+    expect(selectVariants().content()).toContain('text-[var(--dz-popover-foreground)]')
+  })
+
+  it('paints sticky search bands with the panel token, so they match the panel they cover', () => {
+    expect(selectVariants().searchWrapper()).toContain('bg-[var(--dz-popover)]')
+    expect(treeSelectVariants().searchWrapper()).toContain('bg-[var(--dz-popover)]')
+  })
+
+  it('puts dialog and sheet content on the raised surface, not the page token', () => {
+    for (const classes of [dialogVariants().content(), dialogVariants().header(), dialogVariants().footer(), sheetVariants().content()]) {
+      expect(classes).toContain('bg-[var(--dz-surface-raised)]')
+      expect(classes).not.toContain('bg-[var(--dz-background)]')
+    }
   })
 })

@@ -160,8 +160,8 @@ const columns: ColumnDef<Deployment>[] = [
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
 }
 
@@ -170,7 +170,7 @@ const columns: ColumnDef<Deployment>[] = [
 }
 
 .dg-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .dg-scroll {
@@ -180,6 +180,6 @@ const columns: ColumnDef<Deployment>[] = [
 .dg-service {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 </style>

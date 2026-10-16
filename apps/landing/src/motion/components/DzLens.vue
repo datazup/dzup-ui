@@ -181,7 +181,7 @@ onBeforeUnmount(detach)
   opacity: 0;
   background-repeat: no-repeat;
   box-shadow:
-    0 0 0 2px color-mix(in oklch, var(--dz-colors-base-white, #fff) 70%, transparent),
+    0 0 0 2px color-mix(in oklch, oklch(1 0 0) 70%, transparent),
     var(--dz-shadow-md, 0 4px 12px rgb(15 23 42 / 0.2));
   transition: opacity var(--dz-duration-fast, 120ms) var(--dz-ease-out, ease-out);
 }

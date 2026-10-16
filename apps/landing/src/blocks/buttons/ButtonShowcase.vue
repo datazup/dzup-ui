@@ -130,7 +130,7 @@ import { ArrowRight, Download, Trash2 } from '@lucide/vue'
 .bg-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-6, 1.5rem);
   padding: clamp(1.25rem, 4vw, 2rem);
   background: var(--dz-background, #fff);
 }
@@ -138,7 +138,7 @@ import { ArrowRight, Download, Trash2 } from '@lucide/vue'
 .bg-group {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bg-label {
@@ -152,7 +152,7 @@ import { ArrowRight, Download, Trash2 } from '@lucide/vue'
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Sizes read most clearly aligned on their text baseline. */

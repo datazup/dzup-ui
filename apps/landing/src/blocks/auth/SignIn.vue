@@ -124,7 +124,7 @@ const remember = ref(false)
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -137,21 +137,21 @@ const remember = ref(false)
 .si-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .si-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .si-label-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .si-link {
@@ -167,13 +167,13 @@ const remember = ref(false)
 
 .si-submit {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .si-or {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .si-or-line {
@@ -187,7 +187,7 @@ const remember = ref(false)
 .si-social {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .si-social-btn {
@@ -195,7 +195,7 @@ const remember = ref(false)
 }
 
 .si-foot {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 @media (max-width: 400px) {

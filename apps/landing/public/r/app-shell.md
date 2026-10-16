@@ -253,8 +253,8 @@ const secondaryNav = [
 .shell-content {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-6, 1.5rem);
 }
 
 .shell-page-title {
@@ -262,7 +262,7 @@ const secondaryNav = [
 }
 
 .shell-placeholder {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
   height: 180px;
   border-radius: var(--dz-radius-md, 0.375rem);
   background: var(--dz-muted, #f3f4f6);

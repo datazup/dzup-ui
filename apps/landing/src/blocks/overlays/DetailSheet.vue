@@ -202,7 +202,7 @@ function view(order: Order): void {
 }
 
 .ds-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ds-title {
@@ -210,7 +210,7 @@ function view(order: Order): void {
 }
 
 .ds-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 /* Orders list ------------------------------------------------------------- */
@@ -227,8 +227,8 @@ function view(order: Order): void {
 .ds-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-4, 1rem);
   border-bottom: 1px solid var(--dz-border, #e5e7eb);
 }
 
@@ -253,14 +253,14 @@ function view(order: Order): void {
 .ds-sheet {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .ds-sheet-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ds-sheet-title {
@@ -268,13 +268,13 @@ function view(order: Order): void {
 }
 
 .ds-sheet-desc {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .ds-sheet-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   flex: 1;
   overflow-y: auto;
 }
@@ -282,7 +282,7 @@ function view(order: Order): void {
 .ds-customer {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ds-customer-meta {
@@ -294,7 +294,7 @@ function view(order: Order): void {
 }
 
 .ds-items-title {
-  margin: 0 0 var(--dz-space-2, 0.5rem);
+  margin: 0 0 var(--dz-spacing-2, 0.5rem);
   letter-spacing: 0.05em;
 }
 
@@ -302,8 +302,8 @@ function view(order: Order): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-2, 0.5rem) 0;
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-2, 0.5rem) 0;
 }
 
 .ds-item-main {
@@ -313,14 +313,14 @@ function view(order: Order): void {
 }
 
 .ds-total {
-  padding-top: var(--dz-space-2, 0.5rem);
+  padding-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .ds-sheet-footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  padding-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding-top: var(--dz-spacing-2, 0.5rem);
   border-top: 1px solid var(--dz-border, #e5e7eb);
 }
 

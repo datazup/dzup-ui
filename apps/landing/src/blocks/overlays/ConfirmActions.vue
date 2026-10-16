@@ -176,15 +176,15 @@ function removeKey(id: string, label: string): void {
 .ca-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-danger-border, var(--dz-border, #e5e7eb));
   background: var(--dz-surface, #fff);
 }
 
 .ca-head {
-  margin-bottom: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-1, 0.25rem);
 }
 
 .ca-title {
@@ -193,14 +193,14 @@ function removeKey(id: string, label: string): void {
 }
 
 .ca-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .ca-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ca-row-text {
@@ -212,7 +212,7 @@ function removeKey(id: string, label: string): void {
 
 /* API keys ---------------------------------------------------------------- */
 .ca-keys-title {
-  margin: 0 0 var(--dz-space-2, 0.5rem);
+  margin: 0 0 var(--dz-spacing-2, 0.5rem);
 }
 
 .ca-key-list {
@@ -221,15 +221,15 @@ function removeKey(id: string, label: string): void {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .ca-key {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   border-radius: var(--dz-radius-md, 0.375rem);
 }
 

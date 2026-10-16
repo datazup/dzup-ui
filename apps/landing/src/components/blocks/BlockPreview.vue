@@ -1184,7 +1184,7 @@ onBeforeUnmount(() => {
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--dz-foreground-muted, var(--dz-foreground, #1b1d1f));
+  color: var(--dz-muted-foreground, var(--dz-foreground, #1b1d1f));
 }
 
 .bp-tabs {
@@ -1217,7 +1217,7 @@ onBeforeUnmount(() => {
   width: 100%;
   min-height: var(--bp-preview-min-height-wide, 0);
   margin: 0 auto;
-  transition: max-width var(--dz-transition-base, 250ms) ease;
+  transition: max-width var(--dz-transition-normal, 200ms ease);
 }
 
 @media (max-width: 768px) {
@@ -1294,7 +1294,7 @@ onBeforeUnmount(() => {
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--dz-foreground-muted, var(--dz-foreground, #1b1d1f));
+  color: var(--dz-muted-foreground, var(--dz-foreground, #1b1d1f));
   white-space: nowrap;
   opacity: 0;
   transition: opacity var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
@@ -1363,7 +1363,7 @@ onBeforeUnmount(() => {
   }
 
   .bp-controls-collapse[data-state='open'] .bp-head-controls {
-    padding-top: var(--dz-space-3, 0.75rem);
+    padding-top: var(--dz-spacing-3, 0.75rem);
   }
 
   .bp-head-controls {
@@ -1384,7 +1384,7 @@ onBeforeUnmount(() => {
 
   .bp-theme,
   .bp-dir {
-    flex: 1 1 calc(50% - var(--dz-space-2, 0.5rem));
+    flex: 1 1 calc(50% - var(--dz-spacing-2, 0.5rem));
   }
 }
 </style>

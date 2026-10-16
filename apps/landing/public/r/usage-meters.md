@@ -127,8 +127,8 @@ const overall = 74
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .um-title {
@@ -136,7 +136,7 @@ const overall = 74
 }
 
 .um-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .um-section-head,
@@ -144,24 +144,24 @@ const overall = 74
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .um-divider {
-  margin: var(--dz-space-5, 1.25rem) 0;
+  margin: var(--dz-spacing-5, 1.25rem) 0;
 }
 
 .um-limits {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .um-overall {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .um-ring {
@@ -188,7 +188,7 @@ const overall = 74
 }
 
 .um-overall-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
   line-height: 1.55;
 }
 </style>

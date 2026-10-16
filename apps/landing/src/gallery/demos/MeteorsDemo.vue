@@ -69,7 +69,7 @@ const field = computed(() => ({
   text-align: center;
   padding: 16px;
   /* Force light copy over the night surface (DzText reads these tokens). */
-  --dz-foreground: var(--dz-colors-base-white, #fff);
-  --dz-muted-foreground: color-mix(in oklch, var(--dz-colors-base-white, #fff) 72%, transparent);
+  --dz-foreground: oklch(1 0 0);
+  --dz-muted-foreground: color-mix(in oklch, oklch(1 0 0) 72%, transparent);
 }
 </style>

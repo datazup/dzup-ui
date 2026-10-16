@@ -49,6 +49,6 @@ const markClasses = computed(() => ({
 }
 
 .line strong {
-  font-weight: var(--dz-font-weight-semibold, 600);
+  font-weight: var(--dz-font-semibold, 600);
 }
 </style>

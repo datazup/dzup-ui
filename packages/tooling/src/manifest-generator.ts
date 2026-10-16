@@ -1,8 +1,17 @@
 /**
- * Manifest-Driven Export Generator (ADR-01)
+ * Manifest-Driven Export Renderer and Barrel Drift Check (ADR-01)
  *
- * Reads `manifests/public-api.manifest.json` from a package directory
- * and generates the barrel `src/index.ts` with proper exports.
+ * Reads `manifests/public-api.manifest.json` from a package directory and
+ * renders the barrel `src/index.ts` that manifest describes.
+ *
+ * The CLI NEVER WRITES. `src/index.ts` is maintained by hand: it carries
+ * ordering and comments the renderer cannot reproduce, and the version this
+ * script used to write over it failed lint, so CI had to `git checkout` the
+ * tree back after running it. The CLI now compares the export lines of the
+ * committed barrel with the rendered ones and exits 1 on any difference, so
+ * `yarn generate:exports:core` on a clean tree produces no diff. The symbol-level
+ * check in both directions (manifest → barrel and barrel → manifest) is
+ * `yarn validate:exports`.
  *
  * Usage:
  *   tsx packages/tooling/src/manifest-generator.ts <package-dir>
@@ -11,8 +20,8 @@
  *   tsx packages/tooling/src/manifest-generator.ts packages/core
  */
 
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { dirname, relative, resolve } from 'node:path'
+import { existsSync, readFileSync } from 'node:fs'
+import { relative, resolve } from 'node:path'
 import process from 'node:process'
 
 // --- Types matching actual manifest JSON shape ---
@@ -59,9 +68,7 @@ interface Manifest {
 // --- Constants ---
 
 const HEADER = `/**
- * AUTO-GENERATED — Do not edit manually.
- * Generated from public-api.manifest.json (ADR-01).
- * Run: tsx packages/tooling/src/manifest-generator.ts <package-dir>
+ * Rendered from public-api.manifest.json (ADR-01) for comparison only.
  */
 `
 
@@ -177,10 +184,8 @@ export function renderBarrel(packageDir: string): BarrelRender {
   // Side-effect import of the package's base stylesheet. This is what makes Vite
   // emit `dist/core.css` (paired with `build.lib.cssFileName` in vite.config.ts).
   //
-  // It is emitted HERE, into the generated barrel, rather than hand-written into
-  // src/index.ts — because this generator overwrites src/index.ts wholesale. A
-  // hand-added import would survive exactly until the next `yarn generate:exports`,
-  // then vanish, and the `./styles` export would silently 404 again.
+  // The committed barrel carries the same import by hand; it is rendered here so
+  // the rendered barrel stays a complete description of the package entry.
   const stylesEntry = resolve(packageDir, 'src/styles/base.css')
   const styleImport = existsSync(stylesEntry) ? `import './styles/base.css'\n\n` : ''
 
@@ -196,34 +201,64 @@ export function renderBarrel(packageDir: string): BarrelRender {
   }
 }
 
-function generate(packageDir: string): void {
-  let rendered: BarrelRender
+/** Export lines of a barrel, as a set — order and comments are the hand-maintained part. */
+export function barrelExportLines(text: string): Set<string> {
+  return new Set(text.split(/\r?\n/).filter(line => line.startsWith('export ')))
+}
+
+export interface BarrelCheck {
+  render: BarrelRender
+  /** Export lines the committed barrel has and the manifest would not emit. */
+  onlyInBarrel: string[]
+  /** Export lines the manifest would emit and the committed barrel lacks. */
+  onlyInManifest: string[]
+}
+
+/** Compare the committed barrel's export lines with the rendered ones. Reads only. */
+export function checkBarrel(packageDir: string): BarrelCheck {
+  const render = renderBarrel(packageDir)
+  const current = existsSync(render.indexPath) ? readFileSync(render.indexPath, 'utf-8') : ''
+  const now = barrelExportLines(current)
+  const next = barrelExportLines(render.output)
+  return {
+    render,
+    onlyInBarrel: [...now].filter(line => !next.has(line)).sort(),
+    onlyInManifest: [...next].filter(line => !now.has(line)).sort(),
+  }
+}
+
+function check(packageDir: string): void {
+  let result: BarrelCheck
   try {
-    rendered = renderBarrel(packageDir)
+    result = checkBarrel(packageDir)
   }
   catch (error) {
     console.error(error instanceof Error ? error.message : String(error))
     process.exit(1)
   }
 
-  const indexDir = dirname(rendered.indexPath)
-  if (!existsSync(indexDir)) {
-    console.error(`Source directory not found: ${indexDir}`)
-    process.exit(1)
+  const { render, onlyInBarrel, onlyInManifest } = result
+  const relManifest = relative(process.cwd(), render.manifestPath)
+  const relIndex = relative(process.cwd(), render.indexPath)
+  const { components, composables, utilities } = render.counts
+
+  if (onlyInBarrel.length === 0 && onlyInManifest.length === 0) {
+    console.warn(`${relIndex} agrees with ${relManifest} (${render.package}) — nothing written; the barrel is maintained by hand`)
+    console.warn(
+      `  ${components} components, `
+      + `${composables} composables, `
+      + `${utilities} utilities `
+      + `(${components + composables + utilities} total exports)`,
+    )
+    return
   }
 
-  writeFileSync(rendered.indexPath, rendered.output, 'utf-8')
-
-  const relManifest = relative(process.cwd(), rendered.manifestPath)
-  const relIndex = relative(process.cwd(), rendered.indexPath)
-  const { components, composables, utilities } = rendered.counts
-  console.warn(`Generated ${relIndex} from ${relManifest} (${rendered.package})`)
-  console.warn(
-    `  ${components} components, `
-    + `${composables} composables, `
-    + `${utilities} utilities `
-    + `(${components + composables + utilities} total exports)`,
-  )
+  console.error(`${relIndex} and ${relManifest} disagree on export lines (${render.package}). Nothing was written; edit one of them by hand.`)
+  for (const line of onlyInBarrel)
+    console.error(`  only in barrel:   ${line}`)
+  for (const line of onlyInManifest)
+    console.error(`  only in manifest: ${line}`)
+  process.exit(1)
 }
 
 // CLI entry.
@@ -242,5 +277,5 @@ if (invokedDirectly) {
     console.error('Example: tsx packages/tooling/src/manifest-generator.ts packages/core')
     process.exit(1)
   }
-  generate(packageDir)
+  check(packageDir)
 }

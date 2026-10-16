@@ -89,18 +89,18 @@ const Github = createLucideIcon('github', [
 .sab-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   width: 100%;
   max-width: 24rem;
   margin: 0 auto;
-  padding: clamp(1.5rem, 5vw, 2.5rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 2.5rem) var(--dz-spacing-4, 1rem);
   background: var(--dz-background, #fff);
 }
 
 .sab-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* The parent scope id lands on the DzButton root, so this sizes the button. */
@@ -111,7 +111,7 @@ const Github = createLucideIcon('github', [
 .sab-or {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .sab-or-line {

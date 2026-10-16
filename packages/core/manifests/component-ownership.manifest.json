@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "b22cfc7ecbf5cee5ffac925a9983eabd23505189",
+  "sourceCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -1051,8 +1051,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts"
       ]
     },
     {
@@ -21800,8 +21799,7 @@
       "subpath": ".",
       "kind": "type",
       "evidence": [
-        "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts",
-        "type-only export not listed in public-api.manifest.json#exports.types"
+        "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts"
       ]
     },
     {

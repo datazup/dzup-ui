@@ -211,7 +211,7 @@ function clearComponent(): void {
 
 .block-search-clear:hover {
   color: var(--dz-foreground, #1b1d1f);
-  border-color: var(--dz-border-strong, #d1d5db);
+  border-color: var(--dz-border-hover, #b5b7bb);
 }
 
 .block-search-clear:focus-visible {
@@ -298,7 +298,7 @@ function clearComponent(): void {
 
 .block-search-tag:hover {
   color: color-mix(in oklch, var(--dz-primary, #0766ee) 60%, var(--dz-foreground, #1b1d1f));
-  border-color: var(--dz-border-strong, #d1d5db);
+  border-color: var(--dz-border-hover, #b5b7bb);
 }
 
 .block-search-tag.is-active {

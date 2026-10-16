@@ -102,7 +102,7 @@ function subscribe() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -136,8 +136,8 @@ function subscribe() {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.375rem);
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-1_5, 0.375rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
   padding: 0.25rem 0.625rem;
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
@@ -148,7 +148,7 @@ function subscribe() {
 
 .nl-lede {
   position: relative;
-  margin: var(--dz-space-2, 0.5rem) 0 var(--dz-space-5, 1.25rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 var(--dz-spacing-5, 1.25rem);
   line-height: 1.6;
   max-width: 40ch;
 }
@@ -157,12 +157,12 @@ function subscribe() {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .nl-row {
   display: flex;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .nl-input {
@@ -179,15 +179,15 @@ function subscribe() {
 }
 
 .nl-consent {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .nl-success {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem) 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem) 0;
   text-align: center;
 }
 
@@ -197,7 +197,7 @@ function subscribe() {
   justify-content: center;
   width: 3.25rem;
   height: 3.25rem;
-  margin-bottom: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-full, 9999px);
   color: var(--dz-success, #16a34a);
   background: color-mix(in oklch, var(--dz-success, #16a34a) 14%, transparent);

@@ -22,8 +22,8 @@
     "ceiling": 41
   },
   "provider": {
-    "//": "Section 6. Components that call no DzProvider reader, so nothing an application configures reaches them (ADR-20 adoption). 39 of 144 public components. TASK-R5-O3 took providerHooks from 0 to 120 of 208 records; this is the residue, and it is a gap in the components rather than in the page.",
-    "ceiling": 39
+    "//": "Section 6. Components that call no DzProvider reader, so nothing an application configures reaches them (ADR-20 adoption). 39 of 144 public components. TASK-R5-O3 took providerHooks from 0 to 120 of 208 records; this is the residue, and it is a gap in the components rather than in the page. Lowered 39 -> 37 when component-meta was regenerated after the b07 refactors (useFormControl/useDzMessages adoption surfaced two more readers).",
+    "ceiling": 37
   },
   "keyboard": {
     "//": "Section 7. Components with no declared keyboard contract. 41 of 144 -- down from 144 of 144, which is what every page said before this packet ('Not yet derived'). The 41 are EXACTLY the components with no anatomy file to declare it in, so this ceiling is now pinned to `parts` and falls with it. It read 43 for one run: DzProvider and DzThemeProvider live in packages/core/src/providers/, outside components/{family}/, and the first authoring pass walked only the latter -- the ratchet's DOWNWARD arm is what reported the correction. NOTE the distinction the contract keeps: 19 components declare keyboard: 'none' EXPLICITLY and are NOT counted here, because an explicit claim of no keyboard behaviour is a different fact from nobody having written one down.",

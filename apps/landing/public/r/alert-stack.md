@@ -89,7 +89,7 @@ const showDanger = ref(true)
 }
 
 .as-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .as-title {
@@ -97,21 +97,21 @@ const showDanger = ref(true)
 }
 
 .as-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .as-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .as-restore {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-4, 1rem);
   border: 1px dashed var(--dz-border, #e2e8f0);
   border-radius: var(--dz-radius-md, 0.5rem);
 }

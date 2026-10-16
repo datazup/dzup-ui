@@ -75,7 +75,7 @@ never as asserted.
 
 | Slot | Slot props | Description |
 | --- | --- | --- |
-| `icon` | `{ mode: "light" \| "dark" \| "system"; theme: ThemePreference; }` | Override the rendered glyph for a given mode (icon / switch variants). Receives the resolved mode and the active theme preference. |
+| `icon` | `{ mode: "light" \| "dark" \| "high-contrast" \| "system"; theme: ThemePreference; }` | Override the rendered glyph for a given mode (icon / switch variants). Receives the resolved mode and the active theme preference. |
 
 ## Usage (from `packages/core/stories/navigation/DzColorModeToggle.stories.ts`, story `IconCycle`)
 

@@ -107,15 +107,15 @@ function restore() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-bottom: 1px solid var(--dz-border, #e2e8f0);
 }
 
 .nc-head-text {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .nc-title {
@@ -125,16 +125,16 @@ function restore() {
 .nc-list {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-3, 0.75rem);
 }
 
 .nc-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-8, 2rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-8, 2rem) var(--dz-spacing-4, 1rem);
   text-align: center;
 }
 

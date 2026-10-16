@@ -21,7 +21,7 @@ export const mentionTokens = {
   },
   /** Suggestion menu surface (shared menu family) */
   menu: {
-    surface: 'var(--dz-background)',
+    surface: 'var(--dz-popover)',
     border: 'var(--dz-border)',
     radius: 'var(--dz-radius-lg)',
     shadow: 'var(--dz-shadow-lg)',

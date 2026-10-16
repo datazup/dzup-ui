@@ -44,6 +44,16 @@
  * Bare literals (`color: #fff`) are also out of scope: they are not fallbacks and
  * have no token to diverge from. The white-over-scrim cases are the documented
  * exception the task calls out.
+ *
+ * ── Undeclared names and double timing (UI-DZUP-UI-DESIGN-M-03) ──
+ * The fallback-VALUE check above stays scoped to chrome, but the NAME check at
+ * the end of this file covers all of `apps/landing/src`, `blocks/` and
+ * `templates/` included, whatever the fallback form. The copy-paste surface had
+ * been referencing names no stylesheet declares (`--dz-text`, `--dz-text-muted`,
+ * `--dz-border-strong`, `--dz-space-*`): in a visitor's app those resolve to
+ * their light-only fallbacks forever, dark mode included. And `--dz-transition-*`
+ * already carries its easing, so `var(--dz-transition-fast) ease` names two
+ * timing functions and the browser drops the whole transition.
  */
 
 import { readdirSync, readFileSync } from 'node:fs'
@@ -173,16 +183,14 @@ describe('landing token fallbacks', () => {
    * unguardable and invisible to the assertion above. Listed explicitly, with
    * their sites, so adding a new one is a decision someone makes on purpose.
    *
-   * The three below are pre-existing (TASK-FREE3-08 found them; fixing them means
-   * choosing a real token for each, which is a design call, not a sweep):
-   *   • `--dz-colors-base-white` / `--dz-colors-base-black` — white/black scrim
-   *     overlays. The effective `#fff`/`#000` is the documented scrim exception,
-   *     so the rendering is right; the var() wrapper around it is dead.
-   *   • `--dz-border-strong` — falls back to `#d1d5db`, a Tailwind grey that is
-   *     not on the dz ramp. `--dz-border-hover` is the likely intended token.
+   * The list is empty since UI-DZUP-UI-DESIGN-M-03: the three TASK-FREE3-08 found
+   * were resolved — `--dz-colors-base-white` / `--dz-colors-base-black` (dead
+   * wrappers around the scrim exception) became the literal `oklch(1 0 0)` /
+   * `oklch(0 0 0)` they always rendered, and `--dz-border-strong` was re-pointed
+   * to `--dz-border-hover`.
    */
   it('declares every phantom token — fallbacks that always render', () => {
-    const KNOWN_PHANTOMS = ['--dz-border-strong', '--dz-colors-base-black', '--dz-colors-base-white']
+    const KNOWN_PHANTOMS: string[] = []
 
     const phantoms = [...new Set(sites.filter(s => resolveHex(s.token) === null).map(s => s.token))]
 
@@ -214,6 +222,96 @@ describe('landing token fallbacks', () => {
       + `${exempt.length} in blocks/ + templates/ deliberately NOT checked (visitor copy-paste `
       + 'source, out of scope per TASK-FREE3-08).',
     )
+  })
+})
+
+// ── Every referenced name is declared (UI-DZUP-UI-DESIGN-M-03) ─────────────
+
+/** Every `--dz-*` the token stylesheet declares, light AND dark. */
+const shippedTokens = new Set([...css.matchAll(/(--dz-[\w-]+)\s*:/g)].map(m => m[1]!))
+
+/** `--dz-x:` in CSS, `'--dz-x':` in a style object, `setProperty('--dz-x'`. */
+function declaredIn(text: string): Set<string> {
+  const names = new Set<string>()
+  for (const m of text.matchAll(/(--dz-[\w-]+)['"`]?\s*:/g))
+    names.add(m[1]!)
+  for (const m of text.matchAll(/setProperty\(\s*['"`](--dz-[\w-]+)/g))
+    names.add(m[1]!)
+  return names
+}
+
+/**
+ * Component knobs: custom properties a component READS with a default and a
+ * consumer may SET on the element or an ancestor. Declaring them on the root
+ * would break that inheritance, so they stay undeclared on purpose.
+ */
+const KNOWN_KNOBS = new Set(['--dz-compare-grip-size', '--dz-compare-line-width'])
+
+/** Landing source files the name checks read. `generated/` is release-note prose, not styling. */
+function landingFiles(): string[] {
+  return readdirSync(`${REPO_ROOT}/${LANDING_SRC}`, { recursive: true, encoding: 'utf8' })
+    .map(f => `${LANDING_SRC}/${f.replace(/\\/g, '/')}`)
+    .filter(f => /\.(?:vue|ts|css)$/.test(f) && !f.endsWith('.spec.ts'))
+    .filter(f => !f.startsWith(`${LANDING_SRC}/generated/`))
+    .sort()
+}
+
+function isCopyPaste(file: string): boolean {
+  return file.startsWith(`${LANDING_SRC}/blocks/`) || file.startsWith(`${LANDING_SRC}/templates/`)
+}
+
+describe('landing token names (UI-DZUP-UI-DESIGN-M-03)', () => {
+  const files = landingFiles()
+  const sources = new Map(files.map(f => [f, readFileSync(resolve(REPO_ROOT, f), 'utf8')]))
+  const landingDeclared = new Set([...sources.values()].flatMap(text => [...declaredIn(text)]))
+
+  it('scans the copy-paste surface too', () => {
+    expect(files.filter(isCopyPaste).length).toBeGreaterThan(50)
+  })
+
+  /**
+   * A block or template is lifted into someone else's app, so only the shipped
+   * token stylesheet and what the file declares itself count. Chrome may also
+   * use names the landing app declares elsewhere. Names ending in `-` are
+   * template-literal prefixes (`var(--dz-colors-${hue}-500)`), not names.
+   */
+  it('references no undeclared --dz-* name anywhere under apps/landing/src', () => {
+    const undeclared: string[] = []
+    for (const [file, text] of sources) {
+      const own = declaredIn(text)
+      text.split(/\r?\n/).forEach((line, index) => {
+        for (const m of line.matchAll(/var\(\s*(--dz-[\w-]+)/g)) {
+          const name = m[1]!
+          if (name.endsWith('-') || shippedTokens.has(name) || own.has(name) || KNOWN_KNOBS.has(name))
+            continue
+          if (!isCopyPaste(file) && landingDeclared.has(name))
+            continue
+          undeclared.push(`${file}:${index + 1}  ${name}`)
+        }
+      })
+    }
+
+    expect(
+      undeclared,
+      'A --dz-* name no stylesheet declares renders its fallback forever — light-only, '
+      + 'ignoring theme re-maps. Point it at a shipped token (packages/tokens/dist/tokens.css).',
+    ).toEqual([])
+  })
+
+  it('never adds a second timing function after a --dz-transition-* token', () => {
+    const doubled: string[] = []
+    for (const [file, text] of sources) {
+      text.split(/\r?\n/).forEach((line, index) => {
+        if (/var\(\s*--dz-transition-[\w-]+\s*(?:,[^)]*)?\)\s+(?:ease|linear|cubic-bezier|steps|\d)/.test(line))
+          doubled.push(`${file}:${index + 1}  ${line.trim()}`)
+      })
+    }
+
+    expect(
+      doubled,
+      '--dz-transition-* already carries duration AND easing; a second one makes the transition '
+      + 'invalid at computed-value time and the browser drops it. Put the easing in the fallback.',
+    ).toEqual([])
   })
 })
 

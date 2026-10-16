@@ -14,11 +14,16 @@ import type { ComputedRef, InjectionKey, Ref } from 'vue'
 // Theme value types
 // ---------------------------------------------------------------------------
 
-/** User-selectable theme preference */
-export type ThemePreference = 'light' | 'dark' | 'system'
+/**
+ * User-selectable theme preference.
+ *
+ * `'high-contrast'` is the shipped `[data-theme="high-contrast"]` cascade; it is
+ * an explicit choice only — `'system'` never resolves to it.
+ */
+export type ThemePreference = 'light' | 'dark' | 'high-contrast' | 'system'
 
 /** Resolved theme after accounting for system preference (never 'system') */
-export type ResolvedTheme = 'light' | 'dark'
+export type ResolvedTheme = 'light' | 'dark' | 'high-contrast'
 
 // ---------------------------------------------------------------------------
 // Provider Props
@@ -58,7 +63,7 @@ export interface DzThemeProviderProps {
 
 /** Theme context provided to descendants via inject (ADR-09 minimal API) */
 export interface DzThemeContext {
-  /** Current theme preference ('light' | 'dark' | 'system') */
+  /** Current theme preference ('light' | 'dark' | 'high-contrast' | 'system') */
   theme: Ref<ThemePreference>
   /** Resolved actual theme — accounts for system preference when theme is 'system' */
   resolvedTheme: ComputedRef<ResolvedTheme>

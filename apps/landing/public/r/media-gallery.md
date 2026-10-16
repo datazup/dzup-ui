@@ -138,7 +138,7 @@ function openAt(index: number): void {
 }
 
 .g-head {
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .g-title {
@@ -158,7 +158,7 @@ function openAt(index: number): void {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 1fr;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Lead frame occupies a 2×2 cell on wide layouts. */
@@ -178,14 +178,14 @@ function openAt(index: number): void {
   border-radius: var(--dz-radius-lg, 0.75rem);
   overflow: hidden;
   background: var(--dz-muted, #f1f5f9);
-  box-shadow: 0 1px 2px color-mix(in oklch, var(--dz-shadow, #000) 8%, transparent);
+  box-shadow: 0 1px 2px color-mix(in oklch, oklch(0 0 0) 8%, transparent);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .g-tile:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 10px 20px -8px color-mix(in oklch, var(--dz-shadow, #000) 22%, transparent),
+    0 10px 20px -8px color-mix(in oklch, oklch(0 0 0) 22%, transparent),
     0 0 0 1px color-mix(in oklch, var(--dz-primary, #6366f1) 40%, transparent);
 }
 
@@ -207,9 +207,9 @@ function openAt(index: number): void {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-3, 0.75rem);
-  background: linear-gradient(to top, color-mix(in oklch, var(--dz-shadow, #000) 55%, transparent), transparent 55%);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-3, 0.75rem);
+  background: linear-gradient(to top, color-mix(in oklch, oklch(0 0 0) 55%, transparent), transparent 55%);
   opacity: 0;
   transition: opacity 180ms ease;
 }
@@ -225,7 +225,7 @@ function openAt(index: number): void {
   color: #fff;
   padding: 2px 9px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-shadow, #000) 45%, transparent);
+  background: color-mix(in oklch, oklch(0 0 0) 45%, transparent);
   backdrop-filter: blur(4px);
 }
 

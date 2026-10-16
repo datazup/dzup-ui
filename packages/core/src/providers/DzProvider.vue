@@ -21,7 +21,10 @@
 
     3. **The root provider's first client paint matches the server's.** Theme
        and direction are reflected onto `<html>`, and `getThemeScript` writes
-       the same two attributes before any of this runs (ADR-15).
+       the same two attributes before any of this runs (ADR-15). Only the ROOT
+       writes them: a nested provider that owns a theme (a dark preview region,
+       say) provides it to its subtree but never rewrites the document's theme
+       or the persisted preference.
 
   @module @dzup-ui/core/providers/DzProvider
 -->
@@ -263,13 +266,26 @@ const themeAttribute = computed(() => props.theme?.attribute ?? 'data-theme')
 const persistsTheme = computed(() => props.theme?.persist ?? true)
 const disableTransitionOnChange = computed(() => props.theme?.disableTransitionOnChange ?? true)
 
+/**
+ * Whether this provider's theme is the DOCUMENT's theme.
+ *
+ * Only the root provider reflects theme onto `<html>` and reads or writes the
+ * persisted preference — the same rule `applyDirection` follows for `dir`. A
+ * nested owner (`<DzThemeProvider default-theme="dark">` around a preview)
+ * still provides its own theme context to its subtree, but writing `<html>`
+ * would flip the whole page, and the shared storage key would overwrite the
+ * user's own preference (UI-DZUP-UI-DESIGN-M-07). Scoping the attribute in the
+ * DOM for that subtree is the host's element, as it is for `dir`.
+ */
+const ownsDocumentTheme = isRoot
+
 /** Read persisted theme from localStorage (returns null if unavailable) */
 function readPersistedTheme(): ThemePreference | null {
-  if (!isBrowser() || !persistsTheme.value)
+  if (!isBrowser() || !ownsDocumentTheme || !persistsTheme.value)
     return null
   try {
     const stored = localStorage.getItem(storageKey.value)
-    if (stored === 'light' || stored === 'dark' || stored === 'system') {
+    if (stored === 'light' || stored === 'dark' || stored === 'high-contrast' || stored === 'system') {
       return stored
     }
   }
@@ -281,7 +297,7 @@ function readPersistedTheme(): ThemePreference | null {
 
 /** Persist theme to localStorage */
 function persistTheme(value: ThemePreference): void {
-  if (!isBrowser() || !persistsTheme.value)
+  if (!isBrowser() || !ownsDocumentTheme || !persistsTheme.value)
     return
   try {
     localStorage.setItem(storageKey.value, value)
@@ -293,7 +309,7 @@ function persistTheme(value: ThemePreference): void {
 
 /** Apply the theme attribute to document.documentElement */
 function applyThemeAttribute(resolved: ResolvedTheme): void {
-  if (!isBrowser())
+  if (!isBrowser() || !ownsDocumentTheme)
     return
   document.documentElement.setAttribute(themeAttribute.value, resolved)
 }
@@ -337,7 +353,7 @@ function suppressTransitions(): void {
 const theme = ref<ThemePreference>(themeDefault.value)
 const systemPrefersDark = ref(false)
 
-/** Resolved theme: converts 'system' to actual light/dark */
+/** Resolved theme: converts 'system' to actual light/dark; explicit themes pass through */
 const resolvedTheme = computed<ResolvedTheme>(() => {
   if (theme.value === 'system') {
     return systemPrefersDark.value ? 'dark' : 'light'
@@ -357,7 +373,10 @@ function setTheme(value: ThemePreference): void {
   theme.value = value
 }
 
-/** Toggle between light and dark (if 'system', resolves to opposite of current) */
+/**
+ * Toggle between light and dark (if 'system', resolves to opposite of current).
+ * From `'high-contrast'` it goes to `'dark'`, like any non-dark theme.
+ */
 function toggleTheme(): void {
   suppressTransitions()
   theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'

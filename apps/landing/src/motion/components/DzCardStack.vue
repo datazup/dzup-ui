@@ -261,7 +261,7 @@ onBeforeUnmount(stopAuto)
   border-color: var(--dz-primary, #0766ee);
 }
 .dz-card-stack__next:focus-visible {
-  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-primary, #0766ee);
+  outline: var(--dz-control-focus-ring-width, 2px) solid var(--dz-primary, #0766ee);
   outline-offset: 2px;
 }
 

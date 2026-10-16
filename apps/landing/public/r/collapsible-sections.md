@@ -165,29 +165,29 @@ const advancedOpen = ref(false)
 <style scoped>
 .cs {
   background: var(--dz-background, #fff);
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
 }
 
 .cs-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cs-field {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-advanced {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .cs-advanced-toggle {
-  --dz-button-gap: var(--dz-space-2, 0.5rem);
+  --dz-button-gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .cs-chevron {
@@ -199,10 +199,10 @@ const advancedOpen = ref(false)
 }
 
 .cs-advanced-body {
-  padding: var(--dz-space-4, 1rem) var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem) var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-advanced-text {

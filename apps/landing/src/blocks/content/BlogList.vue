@@ -158,8 +158,8 @@ const posts: Post[] = [
 .bl-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-6, 1.5rem);
 }
 
 .bl-eyebrow {
@@ -183,7 +183,7 @@ const posts: Post[] = [
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .bl-cell {
@@ -196,14 +196,14 @@ const posts: Post[] = [
 
 .bl-flag {
   position: absolute;
-  top: var(--dz-space-3, 0.75rem);
-  left: var(--dz-space-3, 0.75rem);
+  top: var(--dz-spacing-3, 0.75rem);
+  left: var(--dz-spacing-3, 0.75rem);
 }
 
 .bl-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .bl-post-title {
@@ -237,7 +237,7 @@ const posts: Post[] = [
 .bl-byline {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bl-byline-meta {

@@ -55,7 +55,7 @@ import { FolderOpen, Plus } from '@lucide/vue'
   align-items: center;
   justify-content: center;
   min-height: 360px;
-  padding: var(--dz-space-8, 2rem) var(--dz-space-6, 1.5rem);
+  padding: var(--dz-spacing-8, 2rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);

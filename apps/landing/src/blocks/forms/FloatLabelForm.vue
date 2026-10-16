@@ -79,7 +79,7 @@ const SUBJECTS: DzSelectItem[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -92,20 +92,20 @@ const SUBJECTS: DzSelectItem[] = [
 .fl-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .fl-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .fl-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .fl-submit {

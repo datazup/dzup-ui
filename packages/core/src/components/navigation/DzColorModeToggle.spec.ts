@@ -135,6 +135,17 @@ describe('dzColorModeToggle icon variant', () => {
     await nextTick()
     expect(localStorage.getItem('dz-theme')).toBe('dark')
   })
+
+  it('stays usable while an application has set the high-contrast theme', async () => {
+    const { toggle, getCtx } = mountToggle({ variant: 'icon' }, { defaultTheme: 'high-contrast' })
+    await nextTick()
+
+    expect(toggle.find('button svg').exists()).toBe(true)
+
+    // high-contrast is not one of the toggle's steps, so activation leaves it.
+    await toggle.find('button').trigger('click')
+    expect(getCtx().theme.value).toBe('light')
+  })
 })
 
 // ---------------------------------------------------------------------------

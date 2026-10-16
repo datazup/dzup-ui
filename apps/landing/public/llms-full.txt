@@ -72,7 +72,7 @@ import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
 .hero-centered {
   position: relative;
   overflow: hidden;
-  padding: clamp(2.5rem, 8vw, 5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 8vw, 5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -93,7 +93,7 @@ import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   max-width: 44rem;
   margin: 0 auto;
   text-align: center;
@@ -114,8 +114,8 @@ import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 560px) {
@@ -209,7 +209,7 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
 .hero-split {
   position: relative;
   overflow: hidden;
-  padding: clamp(2.5rem, 6vw, 4.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 6vw, 4.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -229,7 +229,7 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: var(--dz-space-10, 2.5rem);
+  gap: var(--dz-spacing-10, 2.5rem);
   max-width: 72rem;
   margin: 0 auto;
 }
@@ -238,7 +238,7 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
 .hs-copy {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .hs-title {
@@ -255,8 +255,8 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
 .hs-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 /* Media column */
@@ -270,8 +270,8 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
   overflow: hidden;
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);
   box-shadow:
-    0 4px 6px -1px color-mix(in oklch, var(--dz-shadow, #000) 8%, transparent),
-    0 2px 4px -2px color-mix(in oklch, var(--dz-shadow, #000) 6%, transparent);
+    0 4px 6px -1px color-mix(in oklch, oklch(0 0 0) 8%, transparent),
+    0 2px 4px -2px color-mix(in oklch, oklch(0 0 0) 6%, transparent);
 }
 
 .hs-img {
@@ -450,8 +450,8 @@ const navLinks = [
 .navbar {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
-  padding: 0 var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-4, 1rem);
+  padding: 0 var(--dz-spacing-6, 1.5rem);
   height: 3.5rem;
   background: var(--dz-surface, #fff);
   border-bottom: 1px solid var(--dz-border, #e5e7eb);
@@ -461,7 +461,7 @@ const navLinks = [
 .nb-brand {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   text-decoration: none;
   color: inherit;
   flex-shrink: 0;
@@ -487,25 +487,25 @@ const navLinks = [
 .nb-links {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
   flex: 1;
 }
 
 .nb-link {
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   text-decoration: none;
-  transition: background var(--dz-transition-fast, 150ms) ease,
-              color var(--dz-transition-fast, 150ms) ease;
+  transition: background var(--dz-transition-fast, 150ms ease),
+              color var(--dz-transition-fast, 150ms ease);
 }
 
 .nb-link:hover,
 .nb-link:focus-visible {
   background: var(--dz-surface-raised, #f3f4f6);
-  color: var(--dz-text, #111827);
+  color: var(--dz-foreground, #1b1d1f);
   outline: none;
 }
 
@@ -518,7 +518,7 @@ const navLinks = [
 .nb-utils {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   flex-shrink: 0;
 }
 
@@ -530,7 +530,7 @@ const navLinks = [
 .nb-mobile-trigger {
   display: none;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin-left: auto;
 }
 
@@ -539,32 +539,32 @@ const navLinks = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .nb-drawer-links {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .nb-drawer-link {
   display: block;
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   text-decoration: none;
-  transition: background var(--dz-transition-fast, 150ms) ease,
-              color var(--dz-transition-fast, 150ms) ease;
+  transition: background var(--dz-transition-fast, 150ms ease),
+              color var(--dz-transition-fast, 150ms ease);
 }
 
 .nb-drawer-link:hover,
 .nb-drawer-link:focus-visible {
   background: var(--dz-surface-raised, #f3f4f6);
-  color: var(--dz-text, #111827);
+  color: var(--dz-foreground, #1b1d1f);
   outline: none;
 }
 
@@ -576,7 +576,7 @@ const navLinks = [
 .nb-drawer-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Visually hidden but readable by screen readers -------------------------*/
@@ -720,14 +720,14 @@ const features: Feature[] = [
 
 <style scoped>
 .feature-grid {
-  padding: clamp(2.5rem, 8vw, 5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 8vw, 5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
 .fg-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-10, 2.5rem);
+  gap: var(--dz-spacing-10, 2.5rem);
   max-width: 68rem;
   margin: 0 auto;
 }
@@ -737,7 +737,7 @@ const features: Feature[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fg-sub {
@@ -753,7 +753,7 @@ const features: Feature[] = [
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .fg-item {
@@ -774,11 +774,11 @@ const features: Feature[] = [
   border-radius: var(--dz-radius-md, 0.5rem);
   background: color-mix(in oklch, var(--dz-primary, #6366f1) 12%, transparent);
   color: var(--dz-primary, #6366f1);
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
 }
 
 .fg-card-title {
-  margin: 0 0 var(--dz-space-2, 0.5rem);
+  margin: 0 0 var(--dz-spacing-2, 0.5rem);
 }
 
 .fg-card-desc {
@@ -919,7 +919,7 @@ const stats: Stat[] = [
 
 <style scoped>
 .stats-band {
-  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-surface, #f8fafc);
 }
 
@@ -934,7 +934,7 @@ const stats: Stat[] = [
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 /* Responsive: 4 → 2 → 1 columns */
@@ -1155,7 +1155,7 @@ const tiers: PricingTier[] = [
 
 <style scoped>
 .pricing-three {
-  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -1164,7 +1164,7 @@ const tiers: PricingTier[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   margin-bottom: clamp(2rem, 4vw, 3rem);
   text-align: center;
 }
@@ -1183,7 +1183,7 @@ const tiers: PricingTier[] = [
   list-style: none;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   max-width: 64rem;
   margin: 0 auto;
   padding: 0;
@@ -1212,14 +1212,14 @@ const tiers: PricingTier[] = [
 .pt-card-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .pt-name-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-desc {
@@ -1230,8 +1230,8 @@ const tiers: PricingTier[] = [
 .pt-price-row {
   display: flex;
   align-items: baseline;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-price {
@@ -1244,23 +1244,23 @@ const tiers: PricingTier[] = [
 }
 
 .pt-divider {
-  margin: var(--dz-space-3, 0.75rem) 0;
+  margin: var(--dz-spacing-3, 0.75rem) 0;
 }
 
 /* Feature list -----------------------------------------------------------*/
 .pt-features {
   list-style: none;
-  margin: 0 0 var(--dz-space-5, 1.25rem);
+  margin: 0 0 var(--dz-spacing-5, 1.25rem);
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-feature {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-check {
@@ -1468,7 +1468,7 @@ const testimonials: Testimonial[] = [
 
 <style scoped>
 .testimonials {
-  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -1477,7 +1477,7 @@ const testimonials: Testimonial[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   margin-bottom: clamp(2rem, 4vw, 3rem);
   text-align: center;
 }
@@ -1495,7 +1495,7 @@ const testimonials: Testimonial[] = [
   max-width: 72rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   align-items: start;
 }
 
@@ -1509,7 +1509,7 @@ const testimonials: Testimonial[] = [
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .tm-rating {
@@ -1532,8 +1532,8 @@ const testimonials: Testimonial[] = [
 .tm-reviewer {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding-top: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding-top: var(--dz-spacing-3, 0.75rem);
   border-top: 1px solid var(--dz-border, #e5e7eb);
 }
 
@@ -1689,7 +1689,7 @@ const faqs: FaqItem[] = [
 
 <style scoped>
 .faq-section {
-  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -1698,7 +1698,7 @@ const faqs: FaqItem[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   margin-bottom: clamp(2rem, 4vw, 3rem);
   text-align: center;
 }
@@ -1736,7 +1736,7 @@ const faqs: FaqItem[] = [
 .faq-answer {
   margin: 0;
   line-height: 1.7;
-  padding-bottom: var(--dz-space-1, 0.25rem);
+  padding-bottom: var(--dz-spacing-1, 0.25rem);
 }
 </style>
 ```
@@ -1802,7 +1802,7 @@ import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
 .cta-band {
   position: relative;
   overflow: hidden;
-  padding: clamp(3rem, 8vw, 5.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(3rem, 8vw, 5.5rem) var(--dz-spacing-6, 1.5rem);
 }
 
 /* Token gradient background — two overlapping radial washes of --dz-primary,
@@ -1824,7 +1824,7 @@ import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   max-width: 42rem;
   margin: 0 auto;
   text-align: center;
@@ -1847,8 +1847,8 @@ import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 480px) {
@@ -2026,13 +2026,13 @@ const socials = [
 .site-footer {
   background: var(--dz-surface, #f8fafc);
   border-top: 1px solid var(--dz-border, #e2e8f0);
-  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem) clamp(1.5rem, 3vw, 2rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-spacing-6, 1.5rem) clamp(1.5rem, 3vw, 2rem);
 }
 
 .sf-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-8, 2rem);
+  gap: var(--dz-spacing-8, 2rem);
   max-width: 72rem;
   margin: 0 auto;
 }
@@ -2041,7 +2041,7 @@ const socials = [
 .sf-top {
   display: grid;
   grid-template-columns: 1.4fr 3fr;
-  gap: var(--dz-space-10, 2.5rem);
+  gap: var(--dz-spacing-10, 2.5rem);
   align-items: flex-start;
 }
 
@@ -2049,7 +2049,7 @@ const socials = [
 .sf-brand {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Logotype — primary-coloured wordmark, re-themes with the token. */
@@ -2071,13 +2071,13 @@ const socials = [
 .sf-cols {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-6, 1.5rem);
 }
 
 .sf-col {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .sf-col-heading {
@@ -2092,7 +2092,7 @@ const socials = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 /* Links — token underline + focus ring, no raw colours. */
@@ -2116,19 +2116,19 @@ const socials = [
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .sf-bottom-controls {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .sf-socials {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 /* Responsive: collapse columns on tablet */
@@ -2419,8 +2419,8 @@ const secondaryNav = [
 .shell-content {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-6, 1.5rem);
 }
 
 .shell-page-title {
@@ -2428,7 +2428,7 @@ const secondaryNav = [
 }
 
 .shell-placeholder {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
   height: 180px;
   border-radius: var(--dz-radius-md, 0.375rem);
   background: var(--dz-muted, #f3f4f6);
@@ -2523,8 +2523,8 @@ import { Download, Plus, Share2 } from '@lucide/vue'
 .ph-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
@@ -2538,7 +2538,7 @@ import { Download, Plus, Share2 } from '@lucide/vue'
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
 }
 
@@ -2549,14 +2549,14 @@ import { Download, Plus, Share2 } from '@lucide/vue'
 .ph-title-group {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
 .ph-actions {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   flex-wrap: wrap;
 }
 
@@ -2647,14 +2647,14 @@ const stats = [
 
 <style scoped>
 .sr-wrap {
-  padding: var(--dz-space-6, 1.5rem);
+  padding: var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
 .sr-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 /* 4 → 2 columns */
@@ -2885,8 +2885,8 @@ function onFilter(value: string) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem) var(--dz-space-4, 1rem) var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem) var(--dz-spacing-4, 1rem) var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
@@ -2898,7 +2898,7 @@ function onFilter(value: string) {
 .tc-controls {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
@@ -2909,7 +2909,7 @@ function onFilter(value: string) {
 .member-cell {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .member-meta {
@@ -2921,8 +2921,8 @@ function onFilter(value: string) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-4, 1rem);
   border-top: 1px solid var(--dz-border, #e5e7eb);
   flex-wrap: wrap;
 }
@@ -2999,7 +2999,7 @@ import { FolderOpen, Plus } from '@lucide/vue'
   align-items: center;
   justify-content: center;
   min-height: 360px;
-  padding: var(--dz-space-8, 2rem) var(--dz-space-6, 1.5rem);
+  padding: var(--dz-spacing-8, 2rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
@@ -3254,8 +3254,8 @@ const reduceMotion = ref(false)
 .sl-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
-  padding: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-4, 1rem);
+  padding: var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
@@ -3265,14 +3265,14 @@ const reduceMotion = ref(false)
 .panel {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
-  margin-top: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-4, 1rem);
+  margin-top: var(--dz-spacing-5, 1.25rem);
 }
 
 .panel-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .panel-title {
@@ -3282,7 +3282,7 @@ const reduceMotion = ref(false)
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .switch-list {
@@ -3291,14 +3291,14 @@ const reduceMotion = ref(false)
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .switch-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .switch-copy {
@@ -3309,7 +3309,7 @@ const reduceMotion = ref(false)
 .sl-footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 560px) {
@@ -3487,7 +3487,7 @@ const channels: Channel[] = [
 <style scoped>
 .bento {
   background: var(--dz-background, #fff);
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
   max-width: 60rem;
   margin: 0 auto;
 }
@@ -3495,8 +3495,8 @@ const channels: Channel[] = [
 .bento-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .bento-cell {
@@ -3528,7 +3528,7 @@ const channels: Channel[] = [
 .bento-revenue {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bento-figure {
@@ -3536,11 +3536,11 @@ const channels: Channel[] = [
 }
 
 .bento-revenue-sub {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .bento-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .bento-list {
@@ -3549,7 +3549,7 @@ const channels: Channel[] = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .bento-list-row {
@@ -3570,8 +3570,8 @@ const channels: Channel[] = [
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: var(--dz-space-1, 0.25rem);
-  padding: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   background: linear-gradient(135deg, var(--dz-primary, #6366f1), var(--dz-info, #0ea5e9));
   color: var(--dz-primary-foreground, #fff);
 }
@@ -3590,7 +3590,7 @@ const channels: Channel[] = [
 .bento-panel--stat {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   align-items: flex-start;
 }
 
@@ -3607,7 +3607,7 @@ const channels: Channel[] = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   flex-wrap: wrap;
 }
 
@@ -3841,13 +3841,13 @@ const code: string[] = [
 
 .rw-scroll {
   height: 100%;
-  padding: var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
 }
 
 .rw-pane-head {
   display: block;
   letter-spacing: 0.06em;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .rw-tree {
@@ -3859,8 +3859,8 @@ const code: string[] = [
 .rw-tree-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding-block: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding-block: var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-sm, 0.25rem);
   color: var(--dz-muted-foreground, #6b7280);
 }
@@ -3886,7 +3886,7 @@ const code: string[] = [
 .rw-gutter {
   display: inline-block;
   width: 1.75rem;
-  margin-right: var(--dz-space-3, 0.75rem);
+  margin-right: var(--dz-spacing-3, 0.75rem);
   text-align: right;
   color: var(--dz-muted-foreground, #9ca3af);
   user-select: none;
@@ -3896,17 +3896,17 @@ const code: string[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--dz-space-6, 1.5rem) 0;
+  padding: var(--dz-spacing-6, 1.5rem) 0;
 }
 
 .rw-preview-rule {
-  margin: var(--dz-space-3, 0.75rem) 0;
+  margin: var(--dz-spacing-3, 0.75rem) 0;
 }
 
 .rw-status {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .rw-status-dot {
@@ -4082,14 +4082,14 @@ const items: Item[] = [
   background: var(--dz-background, #fff);
   max-width: 60rem;
   margin: 0 auto;
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
 }
 
 .mg-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .mg-card {
@@ -4109,12 +4109,12 @@ const items: Item[] = [
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem);
 }
 
 .mg-tag {
-  margin-bottom: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-1, 0.25rem);
 }
 
 .mg-card-title,
@@ -4129,9 +4129,9 @@ const items: Item[] = [
 .mg-foot {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   width: 100%;
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .mg-read {
@@ -4330,7 +4330,7 @@ const related: string[] = [
 <style scoped>
 .sa {
   background: var(--dz-background, #fff);
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
 }
 
 .sa-row {
@@ -4343,24 +4343,24 @@ const related: string[] = [
 }
 
 .sa-main-title {
-  margin: var(--dz-space-2, 0.5rem) 0 var(--dz-space-1, 0.25rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 var(--dz-spacing-1, 0.25rem);
 }
 
 .sa-lede {
-  margin: 0 0 var(--dz-space-6, 1.5rem);
+  margin: 0 0 var(--dz-spacing-6, 1.5rem);
 }
 
 .sa-section {
-  padding-bottom: var(--dz-space-6, 1.5rem);
-  scroll-margin-top: var(--dz-space-4, 1rem);
+  padding-bottom: var(--dz-spacing-6, 1.5rem);
+  scroll-margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .sa-section-title {
-  margin: 0 0 var(--dz-space-2, 0.5rem);
+  margin: 0 0 var(--dz-spacing-2, 0.5rem);
 }
 
 .sa-p {
-  margin: 0 0 var(--dz-space-3, 0.75rem);
+  margin: 0 0 var(--dz-spacing-3, 0.75rem);
   line-height: 1.65;
   color: var(--dz-muted-foreground, #4b5563);
 }
@@ -4372,7 +4372,7 @@ const related: string[] = [
 .sa-aside-inner {
   border: 1px solid transparent;
   border-radius: var(--dz-radius-lg, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   transition: background var(--dz-duration-fast, 150ms) ease, border-color var(--dz-duration-fast, 150ms) ease;
 }
 
@@ -4385,7 +4385,7 @@ const related: string[] = [
 .sa-aside-head {
   display: block;
   letter-spacing: 0.06em;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .sa-toc {
@@ -4394,12 +4394,12 @@ const related: string[] = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .sa-toc-link {
   display: block;
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   border-radius: var(--dz-radius-sm, 0.25rem);
   border-left: 2px solid transparent;
   color: var(--dz-muted-foreground, #6b7280);
@@ -4423,7 +4423,7 @@ const related: string[] = [
 }
 
 .sa-aside-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .sa-related {
@@ -4436,12 +4436,12 @@ const related: string[] = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .sa-related-item {
   color: var(--dz-muted-foreground, #6b7280);
-  padding-right: var(--dz-space-3, 0.75rem);
+  padding-right: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Stack the aside under the article on narrow viewports. */
@@ -4674,7 +4674,7 @@ const position: Field[] = [
 
 .tc-rail {
   flex: 0 0 auto;
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
   border-right: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-muted, #f9fafb);
 }
@@ -4692,8 +4692,8 @@ const position: Field[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-8, 2rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-8, 2rem);
   min-height: 100%;
 }
 
@@ -4703,10 +4703,10 @@ const position: Field[] = [
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-md, 0.5rem);
   box-shadow: var(--dz-shadow-md, 0 4px 12px rgb(0 0 0 / 0.08));
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .tc-shape {
@@ -4726,7 +4726,7 @@ const position: Field[] = [
 
 .tc-shape--row {
   display: flex;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   background: transparent;
 }
 
@@ -4750,20 +4750,20 @@ const position: Field[] = [
 .tc-group-label {
   display: block;
   letter-spacing: 0.06em;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .tc-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tc-field {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-sm, 0.25rem);
   font-size: var(--dz-text-sm, 0.875rem);
@@ -4779,19 +4779,19 @@ const position: Field[] = [
 }
 
 .tc-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .tc-appearance {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tc-swatch-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tc-swatch {
@@ -5083,7 +5083,7 @@ const footerCols: { title: string, links: string[] }[] = [
 }
 
 .ps-bar {
-  padding: var(--dz-space-3, 0.75rem) 0;
+  padding: var(--dz-spacing-3, 0.75rem) 0;
   width: 100%;
 }
 
@@ -5100,7 +5100,7 @@ const footerCols: { title: string, links: string[] }[] = [
 
 .ps-nav {
   display: flex;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .ps-nav-link,
@@ -5142,12 +5142,12 @@ const footerCols: { title: string, links: string[] }[] = [
 }
 
 .ps-hero-actions {
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 /* Sections */
 .ps-section {
-  padding: clamp(2rem, 5vw, 3rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2rem, 5vw, 3rem) var(--dz-spacing-6, 1.5rem);
 }
 
 .ps-feature-icon {
@@ -5172,17 +5172,17 @@ const footerCols: { title: string, links: string[] }[] = [
 }
 
 .ps-split-body {
-  margin: var(--dz-space-3, 0.75rem) 0;
+  margin: var(--dz-spacing-3, 0.75rem) 0;
   line-height: 1.65;
 }
 
 .ps-chiprow {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .ps-split-aside {
   flex: 0 0 14rem;
-  padding: var(--dz-space-5, 1.25rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.75rem);
   background: var(--dz-muted, #f9fafb);
@@ -5194,11 +5194,11 @@ const footerCols: { title: string, links: string[] }[] = [
 
 /* Footer */
 .ps-footer {
-  padding: 0 var(--dz-space-6, 1.5rem) var(--dz-space-8, 2rem);
+  padding: 0 var(--dz-spacing-6, 1.5rem) var(--dz-spacing-8, 2rem);
 }
 
 .ps-footer-rule {
-  margin-bottom: var(--dz-space-6, 1.5rem);
+  margin-bottom: var(--dz-spacing-6, 1.5rem);
 }
 
 .ps-footer-row {
@@ -5399,29 +5399,29 @@ const advancedOpen = ref(false)
 <style scoped>
 .cs {
   background: var(--dz-background, #fff);
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
 }
 
 .cs-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cs-field {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-advanced {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .cs-advanced-toggle {
-  --dz-button-gap: var(--dz-space-2, 0.5rem);
+  --dz-button-gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .cs-chevron {
@@ -5433,10 +5433,10 @@ const advancedOpen = ref(false)
 }
 
 .cs-advanced-body {
-  padding: var(--dz-space-4, 1rem) var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem) var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-advanced-text {
@@ -5600,7 +5600,7 @@ function openAt(index: number): void {
 }
 
 .g-head {
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .g-title {
@@ -5620,7 +5620,7 @@ function openAt(index: number): void {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 1fr;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Lead frame occupies a 2×2 cell on wide layouts. */
@@ -5640,14 +5640,14 @@ function openAt(index: number): void {
   border-radius: var(--dz-radius-lg, 0.75rem);
   overflow: hidden;
   background: var(--dz-muted, #f1f5f9);
-  box-shadow: 0 1px 2px color-mix(in oklch, var(--dz-shadow, #000) 8%, transparent);
+  box-shadow: 0 1px 2px color-mix(in oklch, oklch(0 0 0) 8%, transparent);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .g-tile:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 10px 20px -8px color-mix(in oklch, var(--dz-shadow, #000) 22%, transparent),
+    0 10px 20px -8px color-mix(in oklch, oklch(0 0 0) 22%, transparent),
     0 0 0 1px color-mix(in oklch, var(--dz-primary, #6366f1) 40%, transparent);
 }
 
@@ -5669,9 +5669,9 @@ function openAt(index: number): void {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-3, 0.75rem);
-  background: linear-gradient(to top, color-mix(in oklch, var(--dz-shadow, #000) 55%, transparent), transparent 55%);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-3, 0.75rem);
+  background: linear-gradient(to top, color-mix(in oklch, oklch(0 0 0) 55%, transparent), transparent 55%);
   opacity: 0;
   transition: opacity 180ms ease;
 }
@@ -5687,7 +5687,7 @@ function openAt(index: number): void {
   color: #fff;
   padding: 2px 9px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-shadow, #000) 45%, transparent);
+  background: color-mix(in oklch, oklch(0 0 0) 45%, transparent);
   backdrop-filter: blur(4px);
 }
 
@@ -5856,8 +5856,8 @@ const active = ref(0)
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cs-title {
@@ -5899,8 +5899,8 @@ const active = ref(0)
   color: #fff;
   background: linear-gradient(
     to top,
-    color-mix(in oklch, var(--dz-shadow, #000) 78%, transparent),
-    color-mix(in oklch, var(--dz-shadow, #000) 30%, transparent) 55%,
+    color-mix(in oklch, oklch(0 0 0) 78%, transparent),
+    color-mix(in oklch, oklch(0 0 0) 30%, transparent) 55%,
     transparent
   );
 }
@@ -6009,8 +6009,8 @@ const position = ref(50)
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cmp-title {
@@ -6029,7 +6029,7 @@ const position = ref(50)
   width: 100%;
   border-radius: var(--dz-radius-xl, 0.875rem);
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);
-  box-shadow: 0 4px 12px -6px color-mix(in oklch, var(--dz-shadow, #000) 20%, transparent);
+  box-shadow: 0 4px 12px -6px color-mix(in oklch, oklch(0 0 0) 20%, transparent);
 }
 
 .cmp-img {
@@ -6051,8 +6051,8 @@ const position = ref(50)
 .cmp-meter {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-4, 1rem);
   font-size: var(--dz-text-xs, 0.75rem);
 }
 
@@ -6194,14 +6194,14 @@ const members: Member[] = [
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--dz-space-4, 1rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-4, 1rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .t-head-text {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: 0;
 }
 
@@ -6220,14 +6220,14 @@ const members: Member[] = [
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .t-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-lg, 0.75rem);
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 55%, transparent);
   background: var(--dz-surface, #fff);
@@ -6401,21 +6401,21 @@ function refresh(): void {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   padding: clamp(1.25rem, 4vw, 1.75rem);
   border-radius: var(--dz-radius-xl, 0.875rem);
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);
   background: var(--dz-surface, #fff);
   box-shadow:
-    0 4px 6px -1px color-mix(in oklch, var(--dz-shadow, #000) 8%, transparent),
-    0 2px 4px -2px color-mix(in oklch, var(--dz-shadow, #000) 6%, transparent);
+    0 4px 6px -1px color-mix(in oklch, oklch(0 0 0) 8%, transparent),
+    0 2px 4px -2px color-mix(in oklch, oklch(0 0 0) 6%, transparent);
 }
 
 .qr-head {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .qr-title {
@@ -6430,7 +6430,7 @@ function refresh(): void {
 
 /* Framed quiet zone around the code. */
 .qr-code {
-  padding: var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-lg, 0.75rem);
   background: var(--dz-background, #fff);
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 50%, transparent);
@@ -6478,7 +6478,7 @@ function refresh(): void {
 
 .qr-actions {
   display: flex;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   width: 100%;
 }
 
@@ -6574,15 +6574,15 @@ const MARK = ['DZUP UI', 'CONFIDENTIAL']
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .pp-head-text {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: 0;
 }
 
@@ -6606,7 +6606,7 @@ const MARK = ['DZUP UI', 'CONFIDENTIAL']
   border-radius: var(--dz-radius-xl, 0.875rem);
   overflow: hidden;
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);
-  box-shadow: 0 4px 12px -6px color-mix(in oklch, var(--dz-shadow, #000) 18%, transparent);
+  box-shadow: 0 4px 12px -6px color-mix(in oklch, oklch(0 0 0) 18%, transparent);
 }
 
 .pp-img {
@@ -6618,8 +6618,8 @@ const MARK = ['DZUP UI', 'CONFIDENTIAL']
 .pp-foot {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   color: var(--dz-muted-foreground, #64748b);
 }
 
@@ -6811,8 +6811,8 @@ const columns: ColumnDef<Deployment>[] = [
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
 }
 
@@ -6821,7 +6821,7 @@ const columns: ColumnDef<Deployment>[] = [
 }
 
 .dg-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .dg-scroll {
@@ -6831,7 +6831,7 @@ const columns: ColumnDef<Deployment>[] = [
 .dg-service {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 </style>
 ```
@@ -6986,8 +6986,8 @@ const events: Event[] = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .at-title {
@@ -6997,8 +6997,8 @@ const events: Event[] = [
 .at-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  padding-bottom: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  padding-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .at-line,
@@ -7009,7 +7009,7 @@ const events: Event[] = [
 
 .at-tag {
   align-self: flex-start;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 </style>
 ```
@@ -7137,8 +7137,8 @@ import {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
   flex-wrap: wrap;
 }
 
@@ -7147,7 +7147,7 @@ import {
 }
 
 .dd-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .dd-mono {
@@ -7157,7 +7157,7 @@ import {
 .dd-tags {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 </style>
 ```
@@ -7294,8 +7294,8 @@ function flatten(nodes: TreeNode[]): TreeNode[] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-bottom: 1px solid var(--dz-border, #e5e7eb);
 }
 
@@ -7309,18 +7309,18 @@ function flatten(nodes: TreeNode[]): TreeNode[] {
 }
 
 .ft-pane {
-  padding: var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   min-height: 16rem;
 }
 
 .ft-detail {
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-left: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #f8fafc);
 }
 
 .ft-detail-label {
-  margin: 0 0 var(--dz-space-1, 0.25rem);
+  margin: 0 0 var(--dz-spacing-1, 0.25rem);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -7497,7 +7497,7 @@ function price(value: number): string {
 <style scoped>
 .dv-wrap {
   background: var(--dz-background, #fff);
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
 }
 
 .dv-title {
@@ -7526,15 +7526,15 @@ function price(value: number): string {
 .dv-card-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem);
 }
 
 .dv-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .dv-name {
@@ -7545,16 +7545,16 @@ function price(value: number): string {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 /* List row */
 .dv-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-md, 0.5rem);
 }
@@ -7730,8 +7730,8 @@ function deltaTone(delta: number): CanonicalTone {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
 }
 
@@ -7740,13 +7740,13 @@ function deltaTone(delta: number): CanonicalTone {
 }
 
 .lb-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .lb-prefix {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .lb-rank {
@@ -7757,7 +7757,7 @@ function deltaTone(delta: number): CanonicalTone {
 .lb-suffix {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .lb-score {
@@ -7865,7 +7865,7 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
 .rc-wrap {
   position: relative;
   overflow: hidden;
-  padding: clamp(2.5rem, 7vw, 4.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 7vw, 4.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -7883,7 +7883,7 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   max-width: 40rem;
   margin: 0 auto;
   text-align: center;
@@ -7898,17 +7898,17 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin: var(--dz-space-2, 0.5rem) 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0;
 }
 
 .rc-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
   min-width: 4rem;
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-2, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-md, 0.5rem);
   background: var(--dz-surface, #f8fafc);
@@ -7926,15 +7926,15 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
   font-size: var(--dz-text-xs, 0.75rem);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--dz-foreground-muted, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .rc-sep {
   font-size: clamp(1.25rem, 4vw, 2rem);
   font-weight: 700;
   line-height: 1;
-  padding-top: var(--dz-space-3, 0.75rem);
-  color: var(--dz-foreground-muted, #64748b);
+  padding-top: var(--dz-spacing-3, 0.75rem);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .rc-claimed {
@@ -8047,7 +8047,7 @@ const showDanger = ref(true)
 }
 
 .as-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .as-title {
@@ -8055,21 +8055,21 @@ const showDanger = ref(true)
 }
 
 .as-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .as-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .as-restore {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-4, 1rem);
   border: 1px dashed var(--dz-border, #e2e8f0);
   border-radius: var(--dz-radius-md, 0.5rem);
 }
@@ -8194,15 +8194,15 @@ function restore() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-bottom: 1px solid var(--dz-border, #e2e8f0);
 }
 
 .nc-head-text {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .nc-title {
@@ -8212,16 +8212,16 @@ function restore() {
 .nc-list {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-3, 0.75rem);
 }
 
 .nc-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-8, 2rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-8, 2rem) var(--dz-spacing-4, 1rem);
   text-align: center;
 }
 
@@ -8342,7 +8342,7 @@ const ToastLauncher = defineComponent({
 }
 
 .tl-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .tl-title {
@@ -8350,13 +8350,13 @@ const ToastLauncher = defineComponent({
 }
 
 .tl-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .tl-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 </style>
 ```
@@ -8482,8 +8482,8 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ls-title {
@@ -8491,38 +8491,38 @@ onBeforeUnmount(() => {
 }
 
 .ls-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .ls-status {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ls-spin-row {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ls-media {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .ls-person {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ls-person-lines {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   flex: 1;
 }
 
@@ -8533,9 +8533,9 @@ onBeforeUnmount(() => {
 .ls-chart {
   display: flex;
   align-items: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   height: 7rem;
-  padding: var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.5rem);
   background: color-mix(in oklch, var(--dz-primary) 6%, var(--dz-background, #fff));
 }
@@ -8683,8 +8683,8 @@ const overall = 74
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .um-title {
@@ -8692,7 +8692,7 @@ const overall = 74
 }
 
 .um-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .um-section-head,
@@ -8700,24 +8700,24 @@ const overall = 74
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .um-divider {
-  margin: var(--dz-space-5, 1.25rem) 0;
+  margin: var(--dz-spacing-5, 1.25rem) 0;
 }
 
 .um-limits {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .um-overall {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .um-ring {
@@ -8744,7 +8744,7 @@ const overall = 74
 }
 
 .um-overall-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
   line-height: 1.55;
 }
 </style>
@@ -8853,8 +8853,8 @@ const current = computed<ResultContent>(
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .rs-panel {
@@ -8984,7 +8984,7 @@ function onSelect(item: CommandItem): void {
 }
 
 .cm-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cm-title {
@@ -8992,10 +8992,10 @@ function onSelect(item: CommandItem): void {
 }
 
 .cm-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
   flex-wrap: wrap;
 }
 
@@ -9003,21 +9003,21 @@ function onSelect(item: CommandItem): void {
 .cm-launcher {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   width: 100%;
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-4, 1rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   cursor: text;
   text-align: left;
-  transition: border-color var(--dz-transition-fast, 150ms) ease,
-              box-shadow var(--dz-transition-fast, 150ms) ease;
+  transition: border-color var(--dz-transition-fast, 150ms ease),
+              box-shadow var(--dz-transition-fast, 150ms ease);
 }
 
 .cm-launcher:hover {
-  border-color: var(--dz-border-strong, #d1d5db);
+  border-color: var(--dz-border-hover, #b5b7bb);
 }
 
 .cm-launcher:focus-visible {
@@ -9027,7 +9027,7 @@ function onSelect(item: CommandItem): void {
 }
 
 .cm-launcher-icon {
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   flex-shrink: 0;
 }
 
@@ -9044,8 +9044,8 @@ function onSelect(item: CommandItem): void {
 .cm-result {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   min-height: 1.5rem;
 }
 
@@ -9232,8 +9232,8 @@ function choose(label: string): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-4, 1rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
@@ -9242,7 +9242,7 @@ function choose(label: string): void {
 .am-brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .am-brand-mark {
@@ -9260,7 +9260,7 @@ function choose(label: string): void {
 .am-actions {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 /* Avatar trigger ---------------------------------------------------------- */
@@ -9269,11 +9269,11 @@ function choose(label: string): void {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   border-radius: var(--dz-radius-full, 999px);
   cursor: pointer;
-  transition: background var(--dz-transition-fast, 150ms) ease;
+  transition: background var(--dz-transition-fast, 150ms ease);
 }
 
 .am-trigger:hover {
@@ -9288,19 +9288,19 @@ function choose(label: string): void {
 .am-trigger-name {
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-text, #111827);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .am-trigger-caret {
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* Menu header ------------------------------------------------------------- */
 .am-menu-head {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-2, 0.5rem) var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-2, 0.5rem) var(--dz-spacing-1, 0.25rem);
   min-width: 14rem;
 }
 
@@ -9314,7 +9314,7 @@ function choose(label: string): void {
 .am-menu-name {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .am-danger {
@@ -9324,7 +9324,7 @@ function choose(label: string): void {
 
 /* Result ------------------------------------------------------------------ */
 .am-result {
-  margin-top: var(--dz-space-3, 0.75rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   min-height: 1.25rem;
 }
 
@@ -9506,7 +9506,7 @@ function run(label: string): void {
 }
 
 .cb-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cb-title {
@@ -9514,14 +9514,14 @@ function run(label: string): void {
 }
 
 .cb-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .cb-board {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px dashed var(--dz-border, #e5e7eb);
   background: var(--dz-surface-sunken, #f9fafb);
@@ -9531,8 +9531,8 @@ function run(label: string): void {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem) var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem) var(--dz-spacing-2, 0.5rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
@@ -9545,7 +9545,7 @@ function run(label: string): void {
   width: 2.75rem;
   height: 2.75rem;
   border-radius: var(--dz-radius-md, 0.375rem);
-  background: var(--dz-primary-subtle, #eef2ff);
+  background: var(--dz-primary-muted, #d5e9ff);
   color: var(--dz-primary, #6366f1);
 }
 
@@ -9561,7 +9561,7 @@ function run(label: string): void {
 }
 
 .cb-result {
-  margin-top: var(--dz-space-3, 0.75rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   min-height: 1.25rem;
 }
 
@@ -9751,7 +9751,7 @@ function resetFilters(): void {
 }
 
 .ip-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ip-title {
@@ -9759,13 +9759,13 @@ function resetFilters(): void {
 }
 
 .ip-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .ip-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
@@ -9775,13 +9775,13 @@ function resetFilters(): void {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-3, 0.75rem) var(--dz-space-1, 0.25rem) var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-3, 0.75rem) var(--dz-spacing-1, 0.25rem) var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-full, 999px);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
   cursor: pointer;
-  transition: background var(--dz-transition-fast, 150ms) ease;
+  transition: background var(--dz-transition-fast, 150ms ease);
 }
 
 .ip-chip:hover {
@@ -9796,25 +9796,25 @@ function resetFilters(): void {
 .ip-chip-name {
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-text, #111827);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .ip-chip-caret {
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* Profile card content ---------------------------------------------------- */
 .ip-card {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: 15rem;
 }
 
 .ip-card-head {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ip-card-id {
@@ -9830,12 +9830,12 @@ function resetFilters(): void {
 .ip-card-meta {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
-  color: var(--dz-text-muted, #6b7280);
+  gap: var(--dz-spacing-1, 0.25rem);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .ip-card-action {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
   align-self: flex-start;
 }
 
@@ -9843,30 +9843,30 @@ function resetFilters(): void {
 .ip-filters {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: 15rem;
 }
 
 .ip-filters-title {
-  margin: 0 0 var(--dz-space-1, 0.25rem);
+  margin: 0 0 var(--dz-spacing-1, 0.25rem);
 }
 
 .ip-filter-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   cursor: pointer;
 }
 
 .ip-filters-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ip-result {
-  margin-top: var(--dz-space-3, 0.75rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   min-height: 1.25rem;
 }
 </style>
@@ -10009,7 +10009,7 @@ function onClick(tip: Tip): void {
 }
 
 .tt-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .tt-title {
@@ -10017,14 +10017,14 @@ function onClick(tip: Tip): void {
 }
 
 .tt-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .tt-bar {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
-  padding: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  padding: var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
@@ -10038,13 +10038,13 @@ function onClick(tip: Tip): void {
 
 .tt-sep {
   height: 1.5rem;
-  margin: 0 var(--dz-space-1, 0.25rem);
+  margin: 0 var(--dz-spacing-1, 0.25rem);
 }
 
 .tt-tip {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tt-tip-label {
@@ -10233,7 +10233,7 @@ function create(): void {
 }
 
 .cd-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cd-title {
@@ -10241,15 +10241,15 @@ function create(): void {
 }
 
 .cd-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 /* Dialog content ---------------------------------------------------------- */
 .cd-dialog-head {
   display: flex;
   align-items: flex-start;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cd-dialog-icon {
@@ -10259,7 +10259,7 @@ function create(): void {
   height: 2.5rem;
   flex-shrink: 0;
   border-radius: var(--dz-radius-md, 0.375rem);
-  background: var(--dz-primary-subtle, #eef2ff);
+  background: var(--dz-primary-muted, #d5e9ff);
   color: var(--dz-primary, #6366f1);
 }
 
@@ -10268,25 +10268,25 @@ function create(): void {
 }
 
 .cd-dialog-desc {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .cd-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .cd-dialog-footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-5, 1.25rem);
 }
 
 /* Created list ------------------------------------------------------------ */
 .cd-created {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .cd-list {
@@ -10295,15 +10295,15 @@ function create(): void {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .cd-list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
@@ -10498,15 +10498,15 @@ function removeKey(id: string, label: string): void {
 .ca-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-danger-border, var(--dz-border, #e5e7eb));
   background: var(--dz-surface, #fff);
 }
 
 .ca-head {
-  margin-bottom: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-1, 0.25rem);
 }
 
 .ca-title {
@@ -10515,14 +10515,14 @@ function removeKey(id: string, label: string): void {
 }
 
 .ca-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .ca-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ca-row-text {
@@ -10534,7 +10534,7 @@ function removeKey(id: string, label: string): void {
 
 /* API keys ---------------------------------------------------------------- */
 .ca-keys-title {
-  margin: 0 0 var(--dz-space-2, 0.5rem);
+  margin: 0 0 var(--dz-spacing-2, 0.5rem);
 }
 
 .ca-key-list {
@@ -10543,15 +10543,15 @@ function removeKey(id: string, label: string): void {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .ca-key {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   border-radius: var(--dz-radius-md, 0.375rem);
 }
 
@@ -10789,7 +10789,7 @@ function view(order: Order): void {
 }
 
 .ds-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ds-title {
@@ -10797,7 +10797,7 @@ function view(order: Order): void {
 }
 
 .ds-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 /* Orders list ------------------------------------------------------------- */
@@ -10814,8 +10814,8 @@ function view(order: Order): void {
 .ds-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-4, 1rem);
   border-bottom: 1px solid var(--dz-border, #e5e7eb);
 }
 
@@ -10840,14 +10840,14 @@ function view(order: Order): void {
 .ds-sheet {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .ds-sheet-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ds-sheet-title {
@@ -10855,13 +10855,13 @@ function view(order: Order): void {
 }
 
 .ds-sheet-desc {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .ds-sheet-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   flex: 1;
   overflow-y: auto;
 }
@@ -10869,7 +10869,7 @@ function view(order: Order): void {
 .ds-customer {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ds-customer-meta {
@@ -10881,7 +10881,7 @@ function view(order: Order): void {
 }
 
 .ds-items-title {
-  margin: 0 0 var(--dz-space-2, 0.5rem);
+  margin: 0 0 var(--dz-spacing-2, 0.5rem);
   letter-spacing: 0.05em;
 }
 
@@ -10889,8 +10889,8 @@ function view(order: Order): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-2, 0.5rem) 0;
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-2, 0.5rem) 0;
 }
 
 .ds-item-main {
@@ -10900,14 +10900,14 @@ function view(order: Order): void {
 }
 
 .ds-total {
-  padding-top: var(--dz-space-2, 0.5rem);
+  padding-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .ds-sheet-footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  padding-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding-top: var(--dz-spacing-2, 0.5rem);
   border-top: 1px solid var(--dz-border, #e5e7eb);
 }
 
@@ -11092,8 +11092,8 @@ function onClose(): void {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
-  padding: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-4, 1rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
@@ -11103,7 +11103,7 @@ function onClose(): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .pt-bar-title {
@@ -11113,25 +11113,25 @@ function onClose(): void {
 .pt-bar-actions {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-search {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   border: 1px solid var(--dz-border, #e5e7eb);
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   font-size: var(--dz-text-sm, 0.875rem);
 }
 
 .pt-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   background: var(--dz-surface-sunken, #f9fafb);
 }
@@ -11139,14 +11139,14 @@ function onClose(): void {
 .pt-stat {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
   align-items: flex-start;
 }
 
 .pt-foot {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 @media (max-width: 560px) {
@@ -11302,7 +11302,7 @@ import { ArrowRight, Download, Trash2 } from '@lucide/vue'
 .bg-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-6, 1.5rem);
   padding: clamp(1.25rem, 4vw, 2rem);
   background: var(--dz-background, #fff);
 }
@@ -11310,7 +11310,7 @@ import { ArrowRight, Download, Trash2 } from '@lucide/vue'
 .bg-group {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bg-label {
@@ -11324,7 +11324,7 @@ import { ArrowRight, Download, Trash2 } from '@lucide/vue'
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Sizes read most clearly aligned on their text baseline. */
@@ -11499,7 +11499,7 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
 .et-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   padding: clamp(1rem, 3vw, 1.5rem);
   background: var(--dz-background, #fff);
 }
@@ -11508,8 +11508,8 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.5rem);
   background: var(--dz-surface, #fff);
@@ -11519,33 +11519,33 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
 .et-cluster {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .et-sep {
   width: 1px;
   align-self: stretch;
-  margin: var(--dz-space-1, 0.25rem) var(--dz-space-1, 0.25rem);
+  margin: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-1, 0.25rem);
   background: var(--dz-border, #e5e7eb);
 }
 
 /* Pushes the publish/copy actions to the trailing edge; collapses on wrap. */
 .et-spacer {
-  flex: 1 1 var(--dz-space-4, 1rem);
-  min-width: var(--dz-space-2, 0.5rem);
+  flex: 1 1 var(--dz-spacing-4, 1rem);
+  min-width: var(--dz-spacing-2, 0.5rem);
 }
 
 .et-doc {
   padding: clamp(1rem, 3vw, 1.5rem);
   border: 1px dashed var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.5rem);
-  background: var(--dz-surface-muted, var(--dz-surface, #fff));
+  background: var(--dz-surface, #fff);
 }
 
 .et-doc-line {
   margin: 0;
   line-height: 1.6;
-  transition: font-weight var(--dz-transition-fast, 120ms) ease;
+  transition: font-weight var(--dz-transition-fast, 120ms ease);
 }
 
 @media (max-width: 560px) {
@@ -11697,7 +11697,7 @@ const range = ref<'day' | 'week' | 'month' | 'year'>('week')
 .bgr-group {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bgr-label {
@@ -11800,18 +11800,18 @@ const Github = createLucideIcon('github', [
 .sab-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   width: 100%;
   max-width: 24rem;
   margin: 0 auto;
-  padding: clamp(1.5rem, 5vw, 2.5rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 2.5rem) var(--dz-spacing-4, 1rem);
   background: var(--dz-background, #fff);
 }
 
 .sab-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* The parent scope id lands on the DzButton root, so this sizes the button. */
@@ -11822,7 +11822,7 @@ const Github = createLucideIcon('github', [
 .sab-or {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .sab-or-line {
@@ -11949,7 +11949,7 @@ const actions: DzSpeedDialItem[] = [
 .fa-col {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fa-label {
@@ -11963,7 +11963,7 @@ const actions: DzSpeedDialItem[] = [
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 /* A relative "app surface" so the speed dial pins to a corner like in real use. */
@@ -11971,12 +11971,12 @@ const actions: DzSpeedDialItem[] = [
   position: relative;
   width: min(20rem, 100%);
   min-height: 16rem;
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-xl, 0.875rem);
   background:
     radial-gradient(circle at 100% 100%, color-mix(in oklch, var(--dz-primary, #6366f1) 6%, transparent), transparent 45%),
-    var(--dz-surface-muted, var(--dz-surface, #fff));
+    var(--dz-surface, #fff);
   overflow: hidden;
 }
 
@@ -11986,8 +11986,8 @@ const actions: DzSpeedDialItem[] = [
 
 .fa-dial {
   position: absolute;
-  right: var(--dz-space-4, 1rem);
-  bottom: var(--dz-space-4, 1rem);
+  right: var(--dz-spacing-4, 1rem);
+  bottom: var(--dz-spacing-4, 1rem);
 }
 </style>
 ```
@@ -12131,7 +12131,7 @@ const remember = ref(false)
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -12144,21 +12144,21 @@ const remember = ref(false)
 .si-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .si-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .si-label-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .si-link {
@@ -12174,13 +12174,13 @@ const remember = ref(false)
 
 .si-submit {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .si-or {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .si-or-line {
@@ -12194,7 +12194,7 @@ const remember = ref(false)
 .si-social {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .si-social-btn {
@@ -12202,7 +12202,7 @@ const remember = ref(false)
 }
 
 .si-foot {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 @media (max-width: 400px) {
@@ -12381,7 +12381,7 @@ const strengthLabel = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -12394,21 +12394,21 @@ const strengthLabel = computed(() => {
 .su-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .su-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .su-strength {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .su-strength > :first-child {
@@ -12422,7 +12422,7 @@ const strengthLabel = computed(() => {
 
 .su-submit {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .su-link {
@@ -12437,7 +12437,7 @@ const strengthLabel = computed(() => {
 }
 
 .su-foot {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 </style>
 ```
@@ -12575,7 +12575,7 @@ const features = [
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
 }
 
@@ -12587,19 +12587,19 @@ const features = [
 .as-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .as-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .as-submit {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .as-link {
@@ -12640,7 +12640,7 @@ const features = [
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   max-width: 32rem;
 }
 
@@ -12660,13 +12660,13 @@ const features = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .as-feature {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   font-size: var(--dz-text-sm, 0.875rem);
   color: color-mix(in oklch, var(--dz-primary-foreground, #fff) 90%, transparent);
 }
@@ -12905,7 +12905,7 @@ function back() {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   background: var(--dz-background, #fff);
   min-height: 100%;
 }
@@ -12915,7 +12915,7 @@ function back() {
   max-width: 36rem;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-6, 1.5rem);
 }
 
 .wz-title {
@@ -12931,14 +12931,14 @@ function back() {
   background: var(--dz-surface, var(--dz-background, #fff));
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.75rem);
-  padding: var(--dz-space-6, 1.5rem);
+  padding: var(--dz-spacing-6, 1.5rem);
   min-height: 14rem;
 }
 
 .wz-step {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .wz-step-heading {
@@ -12952,13 +12952,13 @@ function back() {
 .wz-fields {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .wz-name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .wz-name-field {
@@ -12970,8 +12970,8 @@ function back() {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding-top: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding-top: var(--dz-spacing-4, 1rem);
 }
 
 .wz-done-icon {
@@ -12985,7 +12985,7 @@ function back() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .wz-nav--end {
@@ -13134,7 +13134,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -13158,14 +13158,14 @@ onBeforeUnmount(() => {
   justify-content: center;
   width: 3rem;
   height: 3rem;
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-full, 9999px);
   color: var(--dz-primary, #4f46e5);
   background: var(--dz-primary-muted, #eef2ff);
 }
 
 .otp-lede {
-  margin: var(--dz-space-2, 0.5rem) 0 var(--dz-space-5, 1.25rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 var(--dz-spacing-5, 1.25rem);
   max-width: 30ch;
 }
 
@@ -13173,7 +13173,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   width: 100%;
 }
 
@@ -13189,15 +13189,15 @@ onBeforeUnmount(() => {
 .otp-resend {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .otp-success {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem) 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem) 0;
 }
 
 .otp-success-icon {
@@ -13206,7 +13206,7 @@ onBeforeUnmount(() => {
   justify-content: center;
   width: 3.5rem;
   height: 3.5rem;
-  margin-bottom: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-full, 9999px);
   color: var(--dz-success, #16a34a);
   background: color-mix(in oklch, var(--dz-success, #16a34a) 14%, transparent);
@@ -13345,7 +13345,7 @@ function reset() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -13358,14 +13358,14 @@ function reset() {
 .fp-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .fp-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .fp-submit {
@@ -13376,7 +13376,7 @@ function reset() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--dz-space-1, 0.375rem);
+  gap: var(--dz-spacing-1_5, 0.375rem);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: var(--dz-font-medium, 500);
   color: var(--dz-primary, #6366f1);
@@ -13395,9 +13395,9 @@ function reset() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   text-align: center;
-  padding: var(--dz-space-2, 0.5rem) 0;
+  padding: var(--dz-spacing-2, 0.5rem) 0;
 }
 
 .fp-sent-icon {
@@ -13412,7 +13412,7 @@ function reset() {
 }
 
 .fp-resend {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 </style>
 ```
@@ -13534,7 +13534,7 @@ function subscribe() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -13568,8 +13568,8 @@ function subscribe() {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.375rem);
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-1_5, 0.375rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
   padding: 0.25rem 0.625rem;
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
@@ -13580,7 +13580,7 @@ function subscribe() {
 
 .nl-lede {
   position: relative;
-  margin: var(--dz-space-2, 0.5rem) 0 var(--dz-space-5, 1.25rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 var(--dz-spacing-5, 1.25rem);
   line-height: 1.6;
   max-width: 40ch;
 }
@@ -13589,12 +13589,12 @@ function subscribe() {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .nl-row {
   display: flex;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .nl-input {
@@ -13611,15 +13611,15 @@ function subscribe() {
 }
 
 .nl-consent {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .nl-success {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem) 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem) 0;
   text-align: center;
 }
 
@@ -13629,7 +13629,7 @@ function subscribe() {
   justify-content: center;
   width: 3.25rem;
   height: 3.25rem;
-  margin-bottom: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-full, 9999px);
   color: var(--dz-success, #16a34a);
   background: color-mix(in oklch, var(--dz-success, #16a34a) 14%, transparent);
@@ -13796,7 +13796,7 @@ function submit() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -13809,20 +13809,20 @@ function submit() {
 .cf-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cf-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .cf-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .cf-counter {
@@ -13833,8 +13833,8 @@ function submit() {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 @media (max-width: 540px) {
@@ -14038,7 +14038,7 @@ function applyPromo() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -14052,7 +14052,7 @@ function applyPromo() {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .pf-total {
@@ -14066,24 +14066,24 @@ function applyPromo() {
 }
 
 .pf-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .pf-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .pf-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .pf-submit {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .pf-secure {
@@ -14235,7 +14235,7 @@ function submit() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -14248,27 +14248,27 @@ function submit() {
 .fb-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .fb-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .fb-rating-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fb-label-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fb-score {
@@ -14281,14 +14281,14 @@ function submit() {
 .fb-scale {
   display: flex;
   justify-content: space-between;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .fb-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 @media (max-width: 480px) {
@@ -14487,10 +14487,10 @@ function reset() {
 .fp-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   width: 100%;
   max-width: 19rem;
-  padding: var(--dz-space-5, 1.25rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.75rem);
   background: var(--dz-surface, #fff);
@@ -14501,7 +14501,7 @@ function reset() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .fp-title {
@@ -14511,7 +14511,7 @@ function reset() {
 .fp-group {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fp-group-title {
@@ -14522,7 +14522,7 @@ function reset() {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .fp-readout {
@@ -14536,7 +14536,7 @@ function reset() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fp-switch-copy {
@@ -14546,7 +14546,7 @@ function reset() {
 
 .fp-apply {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 </style>
 ```
@@ -14717,7 +14717,7 @@ const ROLES: DzSelectItem[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -14730,20 +14730,20 @@ const ROLES: DzSelectItem[] = [
 .pr-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .pr-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .pr-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .pr-at {
@@ -14758,7 +14758,7 @@ const ROLES: DzSelectItem[] = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .pr-switch-copy {
@@ -14769,8 +14769,8 @@ const ROLES: DzSelectItem[] = [
 .pr-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 @media (max-width: 540px) {
@@ -14904,7 +14904,7 @@ const SEATING: DzSelectItem[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -14917,8 +14917,8 @@ const SEATING: DzSelectItem[] = [
 .bk-head {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .bk-badge {
@@ -14936,18 +14936,18 @@ const SEATING: DzSelectItem[] = [
 .bk-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .bk-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .bk-submit {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 @media (max-width: 480px) {
@@ -15106,7 +15106,7 @@ const PRIORITIES: DzListboxOption[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -15119,20 +15119,20 @@ const PRIORITIES: DzListboxOption[] = [
 .rf-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .rf-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .rf-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .rf-listbox {
@@ -15142,8 +15142,8 @@ const PRIORITIES: DzListboxOption[] = [
 .rf-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 @media (max-width: 540px) {
@@ -15320,7 +15320,7 @@ const REGION_OPTIONS: DzCascaderOption[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -15333,19 +15333,19 @@ const REGION_OPTIONS: DzCascaderOption[] = [
 .cp-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cp-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .cp-submit {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 </style>
 ```
@@ -15478,7 +15478,7 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -15491,38 +15491,38 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 .ae-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .ae-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   align-items: start;
 }
 
 .ae-controls {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .ae-knobs {
   display: flex;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 /* Preview panel — reflects the bound brand/radius/scale custom properties. */
 .ae-preview {
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.75rem);
   background: var(--dz-muted, #f8fafc);
 }
 
 .ae-preview-label {
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -15530,8 +15530,8 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 .ae-card-demo {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   background: var(--dz-surface, #fff);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--ae-radius, 12px);
@@ -15548,7 +15548,7 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 .ae-card-demo-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ae-bar {
@@ -15580,8 +15580,8 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 .ae-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-5, 1.25rem);
 }
 
 @media (max-width: 560px) {
@@ -15764,7 +15764,7 @@ function money(n: number) {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -15777,14 +15777,14 @@ function money(n: number) {
 .ib-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .ib-billto {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ib-inplace {
@@ -15799,14 +15799,14 @@ function money(n: number) {
 .ib-row {
   display: grid;
   grid-template-columns: 1fr 5rem 6rem 6rem 2.25rem;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   align-items: center;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .ib-row--head {
-  margin-bottom: var(--dz-space-2, 0.5rem);
-  padding: 0 var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
+  padding: 0 var(--dz-spacing-1, 0.25rem);
 }
 
 .ib-col-num {
@@ -15826,18 +15826,18 @@ function money(n: number) {
 }
 
 .ib-add {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .ib-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .ib-total {
   display: flex;
   align-items: baseline;
   justify-content: flex-end;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ib-total-amt {
@@ -15848,8 +15848,8 @@ function money(n: number) {
 .ib-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-5, 1.25rem);
 }
 
 @media (max-width: 560px) {
@@ -15999,7 +15999,7 @@ const MENTION_TRIGGERS: DzMentionTrigger[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -16012,20 +16012,20 @@ const MENTION_TRIGGERS: DzMentionTrigger[] = [
 .at-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .at-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .at-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 </style>
 ```
@@ -16120,7 +16120,7 @@ const SUBJECTS: DzSelectItem[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -16133,20 +16133,20 @@ const SUBJECTS: DzSelectItem[] = [
 .fl-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .fl-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .fl-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .fl-submit {
@@ -16352,8 +16352,8 @@ const money = (value: number) => `$${value.toFixed(2)}`
 .pg-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .pg-heading,
@@ -16367,7 +16367,7 @@ const money = (value: number) => `$${value.toFixed(2)}`
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .pg-cell {
@@ -16381,14 +16381,14 @@ const money = (value: number) => `$${value.toFixed(2)}`
 /* Corner flag sits inside the image overlay, top-left. */
 .pg-flag {
   position: absolute;
-  top: var(--dz-space-3, 0.75rem);
-  left: var(--dz-space-3, 0.75rem);
+  top: var(--dz-spacing-3, 0.75rem);
+  left: var(--dz-spacing-3, 0.75rem);
 }
 
 .pg-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .pg-eyebrow {
@@ -16404,15 +16404,15 @@ const money = (value: number) => `$${value.toFixed(2)}`
 .pg-rating {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .pg-price {
   display: flex;
   align-items: baseline;
-  gap: var(--dz-space-2, 0.5rem);
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
 }
 
 .pg-was {
@@ -16693,7 +16693,7 @@ const tab = ref('description')
 .pd-info {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-brand {
@@ -16710,15 +16710,15 @@ const tab = ref('description')
 .pd-rating {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-price {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
 }
 
 .pd-was {
@@ -16732,20 +16732,20 @@ const tab = ref('description')
 
 .pd-sizes {
   border: 0;
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
   padding: 0;
   min-width: 0;
 }
 
 .pd-sizes-legend {
   padding: 0;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-size-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-size {
@@ -16755,8 +16755,8 @@ const tab = ref('description')
 
 .pd-actions {
   display: flex;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
 }
 
 .pd-add {
@@ -16765,7 +16765,7 @@ const tab = ref('description')
 
 .pd-stock {
   align-self: flex-start;
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .pd-tabs {
@@ -16773,7 +16773,7 @@ const tab = ref('description')
 }
 
 .pd-panel {
-  padding-top: var(--dz-space-4, 1rem);
+  padding-top: var(--dz-spacing-4, 1rem);
 }
 
 .pd-panel-text {
@@ -16787,7 +16787,7 @@ const tab = ref('description')
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 720px) {
@@ -17011,8 +17011,8 @@ function remove(id: number) {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-heading {
@@ -17046,7 +17046,7 @@ function remove(id: number) {
 .cs-controls {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-qty {
@@ -17060,18 +17060,18 @@ function remove(id: number) {
 }
 
 .cs-empty {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
   text-align: center;
 }
 
 .cs-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .cs-totals {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin: 0;
 }
 
@@ -17079,7 +17079,7 @@ function remove(id: number) {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-row dt,
@@ -17094,12 +17094,12 @@ function remove(id: number) {
 
 .cs-checkout {
   width: 100%;
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .cs-continue {
   align-self: center;
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 /* On narrow viewports the qty + price + remove controls stack tidily. */
@@ -17107,7 +17107,7 @@ function remove(id: number) {
   .cs-controls {
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: var(--dz-space-2, 0.5rem);
+    gap: var(--dz-spacing-2, 0.5rem);
   }
 }
 </style>
@@ -17355,8 +17355,8 @@ function applyPromo() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ck-heading {
@@ -17368,7 +17368,7 @@ function applyPromo() {
 }
 
 .ck-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .ck-lines {
@@ -17377,14 +17377,14 @@ function applyPromo() {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ck-line {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ck-line-name {
@@ -17398,7 +17398,7 @@ function applyPromo() {
 
 .ck-promo {
   display: flex;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ck-promo-input {
@@ -17406,13 +17406,13 @@ function applyPromo() {
 }
 
 .ck-promo-msg {
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
 }
 
 .ck-totals {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin: 0;
 }
 
@@ -17420,13 +17420,13 @@ function applyPromo() {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ck-row dt {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin: 0;
 }
 
@@ -17445,11 +17445,11 @@ function applyPromo() {
 
 .ck-place {
   width: 100%;
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .ck-secure {
-  margin: var(--dz-space-3, 0.75rem) 0 0;
+  margin: var(--dz-spacing-3, 0.75rem) 0 0;
 }
 </style>
 ```
@@ -17548,7 +17548,7 @@ const resultCount = 248
 .ch-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   padding: clamp(1.25rem, 4vw, 2rem);
   background: var(--dz-background, #fff);
 }
@@ -17561,14 +17561,14 @@ const resultCount = 248
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
 }
 
 .ch-title-group {
   display: flex;
   align-items: baseline;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
   min-width: 0;
 }
@@ -17581,14 +17581,14 @@ const resultCount = 248
 .ch-controls {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
 .ch-sort {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ch-sort-label {
@@ -17760,7 +17760,7 @@ onBeforeUnmount(() => {
 .os-card {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-6, 1.5rem);
   padding: clamp(1.25rem, 4vw, 1.75rem);
   background: var(--dz-surface, var(--dz-background, #fff));
   border: 1px solid var(--dz-border, #e5e7eb);
@@ -17773,7 +17773,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
@@ -17783,7 +17783,7 @@ onBeforeUnmount(() => {
 }
 
 .os-sub {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .os-stepper {
@@ -17793,9 +17793,9 @@ onBeforeUnmount(() => {
 .os-details {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   margin: 0;
-  padding-top: var(--dz-space-2, 0.5rem);
+  padding-top: var(--dz-spacing-2, 0.5rem);
   border-top: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 70%, transparent);
 }
 
@@ -17818,7 +17818,7 @@ onBeforeUnmount(() => {
 @media (max-width: 560px) {
   .os-details {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--dz-space-3, 0.75rem);
+    gap: var(--dz-spacing-3, 0.75rem);
   }
 }
 </style>
@@ -17997,8 +17997,8 @@ const posts: Post[] = [
 .bl-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-6, 1.5rem);
 }
 
 .bl-eyebrow {
@@ -18022,7 +18022,7 @@ const posts: Post[] = [
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .bl-cell {
@@ -18035,14 +18035,14 @@ const posts: Post[] = [
 
 .bl-flag {
   position: absolute;
-  top: var(--dz-space-3, 0.75rem);
-  left: var(--dz-space-3, 0.75rem);
+  top: var(--dz-spacing-3, 0.75rem);
+  left: var(--dz-spacing-3, 0.75rem);
 }
 
 .bl-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .bl-post-title {
@@ -18076,7 +18076,7 @@ const posts: Post[] = [
 .bl-byline {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bl-byline-meta {
@@ -18176,7 +18176,7 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 
 <style scoped>
 .ah-wrap {
-  padding: clamp(2rem, 6vw, 3.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2rem, 6vw, 3.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -18186,7 +18186,7 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   text-align: center;
 }
 
@@ -18209,8 +18209,8 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 .ah-meta {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .ah-byline {
@@ -18223,7 +18223,7 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 .ah-byline-row {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ah-dot {
@@ -18232,12 +18232,12 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 
 .ah-tags {
   list-style: none;
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 560px) {
@@ -18380,7 +18380,7 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
 
 <style scoped>
 .pr-wrap {
-  padding: clamp(1.5rem, 5vw, 2.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(1.5rem, 5vw, 2.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -18390,7 +18390,7 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
 }
 
 .pr-h {
-  margin: var(--dz-space-6, 1.5rem) 0 var(--dz-space-3, 0.75rem);
+  margin: var(--dz-spacing-6, 1.5rem) 0 var(--dz-spacing-3, 0.75rem);
 }
 
 .pr-h-lead {
@@ -18398,35 +18398,35 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
 }
 
 .pr-lead {
-  margin: 0 0 var(--dz-space-4, 1rem);
+  margin: 0 0 var(--dz-spacing-4, 1rem);
   line-height: 1.6;
 }
 
 .pr-p {
-  margin: 0 0 var(--dz-space-4, 1rem);
+  margin: 0 0 var(--dz-spacing-4, 1rem);
   line-height: 1.75;
 }
 
 .pr-rule {
-  margin: var(--dz-space-6, 1.5rem) 0;
+  margin: var(--dz-spacing-6, 1.5rem) 0;
 }
 
 .pr-code {
-  margin: 0 0 var(--dz-space-4, 1rem);
+  margin: 0 0 var(--dz-spacing-4, 1rem);
   display: block;
   overflow-x: auto;
 }
 
 .pr-quote {
-  margin: var(--dz-space-5, 1.25rem) 0;
+  margin: var(--dz-spacing-5, 1.25rem) 0;
 }
 
 .pr-list {
-  margin: 0 0 var(--dz-space-4, 1rem);
-  padding-left: var(--dz-space-5, 1.25rem);
+  margin: 0 0 var(--dz-spacing-4, 1rem);
+  padding-left: var(--dz-spacing-5, 1.25rem);
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   line-height: 1.7;
 }
 
@@ -18564,7 +18564,7 @@ createApp(App).mount('#app')`,
 }
 
 .cs-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cs-title {
@@ -18575,9 +18575,9 @@ createApp(App).mount('#app')`,
 }
 
 .cs-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
   font-size: var(--dz-text-sm, 0.875rem);
-  color: var(--dz-muted-foreground, var(--dz-foreground-muted, inherit));
+  color: var(--dz-muted-foreground, inherit);
 }
 
 .cs-tabs {
@@ -18726,11 +18726,11 @@ const items: DzAnchorItem[] = [
 }
 
 .ta-h {
-  margin: var(--dz-space-6, 1.5rem) 0 var(--dz-space-2, 0.5rem);
+  margin: var(--dz-spacing-6, 1.5rem) 0 var(--dz-spacing-2, 0.5rem);
   font-size: var(--dz-text-xl, 1.25rem);
   font-weight: var(--dz-font-semibold, 600);
   color: var(--dz-foreground, inherit);
-  scroll-margin-top: var(--dz-space-4, 1rem);
+  scroll-margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .ta-h-lead {
@@ -18738,28 +18738,28 @@ const items: DzAnchorItem[] = [
 }
 
 .ta-sub {
-  margin: var(--dz-space-4, 1rem) 0 var(--dz-space-2, 0.5rem);
+  margin: var(--dz-spacing-4, 1rem) 0 var(--dz-spacing-2, 0.5rem);
   font-size: var(--dz-text-base, 1rem);
   font-weight: var(--dz-font-semibold, 600);
   color: var(--dz-foreground, inherit);
-  scroll-margin-top: var(--dz-space-4, 1rem);
+  scroll-margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .ta-p {
-  margin: 0 0 var(--dz-space-3, 0.75rem);
+  margin: 0 0 var(--dz-spacing-3, 0.75rem);
   line-height: 1.7;
 }
 
 .ta-aside {
   position: sticky;
-  top: var(--dz-space-4, 1rem);
+  top: var(--dz-spacing-4, 1rem);
 }
 
 .ta-aside-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  padding-left: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding-left: var(--dz-spacing-4, 1rem);
   border-left: 1px solid var(--dz-border, currentColor);
 }
 
@@ -18934,7 +18934,7 @@ const open = ref<Record<string, string>>(
 
 <style scoped>
 .fq-wrap {
-  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -18942,7 +18942,7 @@ const open = ref<Record<string, string>>(
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   text-align: center;
 }
@@ -18966,13 +18966,13 @@ const open = ref<Record<string, string>>(
 }
 
 .fq-col-title {
-  margin: 0 0 var(--dz-space-3, 0.75rem);
+  margin: 0 0 var(--dz-spacing-3, 0.75rem);
 }
 
 .fq-answer {
   margin: 0;
   line-height: 1.7;
-  padding-bottom: var(--dz-space-1, 0.25rem);
+  padding-bottom: var(--dz-spacing-1, 0.25rem);
 }
 
 @media (max-width: 900px) {

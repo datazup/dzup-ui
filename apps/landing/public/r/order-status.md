@@ -142,7 +142,7 @@ onBeforeUnmount(() => {
 .os-card {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-6, 1.5rem);
   padding: clamp(1.25rem, 4vw, 1.75rem);
   background: var(--dz-surface, var(--dz-background, #fff));
   border: 1px solid var(--dz-border, #e5e7eb);
@@ -155,7 +155,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
@@ -165,7 +165,7 @@ onBeforeUnmount(() => {
 }
 
 .os-sub {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .os-stepper {
@@ -175,9 +175,9 @@ onBeforeUnmount(() => {
 .os-details {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   margin: 0;
-  padding-top: var(--dz-space-2, 0.5rem);
+  padding-top: var(--dz-spacing-2, 0.5rem);
   border-top: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 70%, transparent);
 }
 
@@ -200,7 +200,7 @@ onBeforeUnmount(() => {
 @media (max-width: 560px) {
   .os-details {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--dz-space-3, 0.75rem);
+    gap: var(--dz-spacing-3, 0.75rem);
   }
 }
 </style>

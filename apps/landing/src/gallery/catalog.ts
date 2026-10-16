@@ -1937,7 +1937,7 @@ function toggle() {
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-group(atlas) {
     animation-duration: var(--dz-duration-normal);
-    animation-timing-function: var(--dz-ease-emphasis, var(--dz-ease-out));
+    animation-timing-function: var(--dz-ease-out);
   }
 }`,
     },

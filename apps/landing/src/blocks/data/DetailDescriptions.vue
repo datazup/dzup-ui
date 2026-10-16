@@ -112,8 +112,8 @@ import {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
   flex-wrap: wrap;
 }
 
@@ -122,7 +122,7 @@ import {
 }
 
 .dd-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .dd-mono {
@@ -132,6 +132,6 @@ import {
 .dd-tags {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 </style>

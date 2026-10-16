@@ -240,8 +240,8 @@ function applyPromo() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ck-heading {
@@ -253,7 +253,7 @@ function applyPromo() {
 }
 
 .ck-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .ck-lines {
@@ -262,14 +262,14 @@ function applyPromo() {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ck-line {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ck-line-name {
@@ -283,7 +283,7 @@ function applyPromo() {
 
 .ck-promo {
   display: flex;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ck-promo-input {
@@ -291,13 +291,13 @@ function applyPromo() {
 }
 
 .ck-promo-msg {
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
 }
 
 .ck-totals {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin: 0;
 }
 
@@ -305,13 +305,13 @@ function applyPromo() {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ck-row dt {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin: 0;
 }
 
@@ -330,11 +330,11 @@ function applyPromo() {
 
 .ck-place {
   width: 100%;
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .ck-secure {
-  margin: var(--dz-space-3, 0.75rem) 0 0;
+  margin: var(--dz-spacing-3, 0.75rem) 0 0;
 }
 </style>
 ```

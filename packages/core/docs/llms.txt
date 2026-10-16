@@ -658,7 +658,7 @@ These hold for every component below, so they are stated once here:
   - props: `ui`
 - **DzDataGridBody** — Internal body sub-part for DzDataGrid.
   - part of `DzDataGrid`
-  - props: `rowKey`
+  - props: `rowKey`, `rows`
 - **DzDataGridHeader** — Internal header sub-part for DzDataGrid.
   - part of `DzDataGrid`
 - **DzDataGridPagination** — Internal pagination sub-part for DzDataGrid.

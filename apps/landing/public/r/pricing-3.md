@@ -201,7 +201,7 @@ const tiers: PricingTier[] = [
 
 <style scoped>
 .pricing-three {
-  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -210,7 +210,7 @@ const tiers: PricingTier[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   margin-bottom: clamp(2rem, 4vw, 3rem);
   text-align: center;
 }
@@ -229,7 +229,7 @@ const tiers: PricingTier[] = [
   list-style: none;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   max-width: 64rem;
   margin: 0 auto;
   padding: 0;
@@ -258,14 +258,14 @@ const tiers: PricingTier[] = [
 .pt-card-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .pt-name-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-desc {
@@ -276,8 +276,8 @@ const tiers: PricingTier[] = [
 .pt-price-row {
   display: flex;
   align-items: baseline;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-price {
@@ -290,23 +290,23 @@ const tiers: PricingTier[] = [
 }
 
 .pt-divider {
-  margin: var(--dz-space-3, 0.75rem) 0;
+  margin: var(--dz-spacing-3, 0.75rem) 0;
 }
 
 /* Feature list -----------------------------------------------------------*/
 .pt-features {
   list-style: none;
-  margin: 0 0 var(--dz-space-5, 1.25rem);
+  margin: 0 0 var(--dz-spacing-5, 1.25rem);
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-feature {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .pt-check {

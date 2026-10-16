@@ -7,7 +7,7 @@
  *   - import-boundary.ts  — validates cross-package import rules
  *   - interaction-contract.ts — validates semantic focus/disabled contract usage
  *   - color-lint.ts       — validates token compliance (no raw color literals)
- *   - manifest-generator.ts — generates barrel exports from manifest files
+ *   - manifest-generator.ts — renders barrel exports from manifest files and checks the hand-maintained barrel against them (never writes)
  *
  * Usage:
  *   tsx packages/tooling/src/validators/import-boundary.ts

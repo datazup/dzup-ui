@@ -21,7 +21,7 @@ export const popconfirmVariants = tv({
       'w-[var(--dz-popconfirm-width,16rem)] max-w-[calc(100vw-2rem)]',
       'rounded-[var(--dz-popconfirm-radius,var(--dz-radius-lg))]',
       'border border-[var(--dz-popconfirm-border,var(--dz-border))]',
-      'bg-[var(--dz-popconfirm-bg,var(--dz-background))]',
+      'bg-[var(--dz-popconfirm-bg,var(--dz-popover))]',
       'text-[var(--dz-popconfirm-fg,var(--dz-foreground))]',
       'p-[var(--dz-popconfirm-padding,var(--dz-spacing-4))]',
       'shadow-[var(--dz-popconfirm-shadow,var(--dz-shadow-lg))]',

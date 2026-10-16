@@ -13,7 +13,7 @@ library; `yarn validate:tokens` fails the build on either.
 
 | Tier | What it holds | Example |
 | --- | --- | --- |
-| Primitive | Raw scales — colour ramps, spacing steps, radii, shadows | `--dz-neutral-200` |
+| Primitive | Raw scales — colour ramps, spacing steps, radii, shadows | `--dz-colors-neutral-200` |
 | Semantic | Intent-named values that switch with the theme | `--dz-primary`, `--dz-radius-sm` |
 | Component | Per-component anatomy mapping | `--dz-button-md-height` |
 

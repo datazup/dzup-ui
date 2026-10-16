@@ -201,8 +201,8 @@ function onFilter(value: string) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem) var(--dz-space-4, 1rem) var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem) var(--dz-spacing-4, 1rem) var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
@@ -214,7 +214,7 @@ function onFilter(value: string) {
 .tc-controls {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
@@ -225,7 +225,7 @@ function onFilter(value: string) {
 .member-cell {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .member-meta {
@@ -237,8 +237,8 @@ function onFilter(value: string) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-4, 1rem);
   border-top: 1px solid var(--dz-border, #e5e7eb);
   flex-wrap: wrap;
 }

@@ -126,23 +126,24 @@ Internal body sub-part for DzDataGrid.
 - **Entry points:** `@dzup-ui/core`, `@dzup-ui/core/data`
 - **Compound part of:** `DzDataGrid`
 
-#### Props (1)
+#### Props (2)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `rowKey` | `string \| undefined` | no | — | Key field for row identity |
+| `rows` | `T[] \| undefined` | no | — | Rows to render; omitted, the injected grid's display rows. `DzDataGrid` passes its display rows here so the body's row type is the grid's `T` and `rowClick` and the `cell` slot keep it (UI-DZUP-UI-CODE-M-01). |
 
 #### Events (1)
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `rowClick` | `[row: Record<string, unknown>, index: number]` | Emitted when a row is clicked, with the row and its zero-based index. Fires before selection toggles. |
+| `rowClick` | `[row: T, index: number]` | — |
 
 #### Slots (1)
 
 | Slot | Slot props | Description |
 | --- | --- | --- |
-| `cell` | `{ row: Record<string, unknown>; column: ColumnDef<Record<string, unknown>>; value: unknown; }` | Override one cell's rendering. Receives the row, its column definition and the raw field value; unfilled, the cell prints `row[column.field]`. |
+| `cell` | `{ row: T; column: ColumnDef<T>; value: unknown; }` | Override one cell's rendering. Receives the row, its column definition and the raw field value; unfilled, the cell prints `row[column.field]`. |
 
 #### Usage (no story of its own — it is documented through its parent)
 
@@ -300,6 +301,7 @@ then the component's own default.**
 
 | Reader | What the provider supplies through it |
 | --- | --- |
+| `useDzMessages` | the translated string catalogue |
 | `useDzTestIds` | the test-id attribute name and prefix |
 
 ## Locale, direction and formats
@@ -310,7 +312,7 @@ then the component's own default.**
 | `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
 | `icons` | `indicator` | These parts render a direction-bearing icon and mirror with the layout. |
 
-**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is `present` — `packages/core/src/components/data/DzDataGrid.anatomy.ts`.
 

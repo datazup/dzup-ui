@@ -103,14 +103,14 @@ const features: Feature[] = [
 
 <style scoped>
 .feature-grid {
-  padding: clamp(2.5rem, 8vw, 5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 8vw, 5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
 .fg-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-10, 2.5rem);
+  gap: var(--dz-spacing-10, 2.5rem);
   max-width: 68rem;
   margin: 0 auto;
 }
@@ -120,7 +120,7 @@ const features: Feature[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fg-sub {
@@ -136,7 +136,7 @@ const features: Feature[] = [
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .fg-item {
@@ -157,11 +157,11 @@ const features: Feature[] = [
   border-radius: var(--dz-radius-md, 0.5rem);
   background: color-mix(in oklch, var(--dz-primary, #6366f1) 12%, transparent);
   color: var(--dz-primary, #6366f1);
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
 }
 
 .fg-card-title {
-  margin: 0 0 var(--dz-space-2, 0.5rem);
+  margin: 0 0 var(--dz-spacing-2, 0.5rem);
 }
 
 .fg-card-desc {

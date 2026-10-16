@@ -75,15 +75,15 @@ const MARK = ['DZUP UI', 'CONFIDENTIAL']
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .pp-head-text {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: 0;
 }
 
@@ -107,7 +107,7 @@ const MARK = ['DZUP UI', 'CONFIDENTIAL']
   border-radius: var(--dz-radius-xl, 0.875rem);
   overflow: hidden;
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);
-  box-shadow: 0 4px 12px -6px color-mix(in oklch, var(--dz-shadow, #000) 18%, transparent);
+  box-shadow: 0 4px 12px -6px color-mix(in oklch, oklch(0 0 0) 18%, transparent);
 }
 
 .pp-img {
@@ -119,8 +119,8 @@ const MARK = ['DZUP UI', 'CONFIDENTIAL']
 .pp-foot {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   color: var(--dz-muted-foreground, #64748b);
 }
 

@@ -59,7 +59,7 @@ import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
 .cta-band {
   position: relative;
   overflow: hidden;
-  padding: clamp(3rem, 8vw, 5.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(3rem, 8vw, 5.5rem) var(--dz-spacing-6, 1.5rem);
 }
 
 /* Token gradient background — two overlapping radial washes of --dz-primary,
@@ -81,7 +81,7 @@ import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   max-width: 42rem;
   margin: 0 auto;
   text-align: center;
@@ -104,8 +104,8 @@ import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 480px) {

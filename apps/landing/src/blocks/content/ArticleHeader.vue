@@ -66,7 +66,7 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 
 <style scoped>
 .ah-wrap {
-  padding: clamp(2rem, 6vw, 3.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2rem, 6vw, 3.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -76,7 +76,7 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   text-align: center;
 }
 
@@ -99,8 +99,8 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 .ah-meta {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .ah-byline {
@@ -113,7 +113,7 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 .ah-byline-row {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ah-dot {
@@ -122,12 +122,12 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 
 .ah-tags {
   list-style: none;
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 560px) {

@@ -24,8 +24,8 @@ export const datePickerVariants = tv({
     content: [
       'z-[60] overflow-hidden rounded-[var(--dz-radius-md)]',
       'border border-[var(--dz-border)]',
-      'bg-[var(--dz-surface)]',
-      'text-[var(--dz-foreground)]',
+      'bg-[var(--dz-popover)]',
+      'text-[var(--dz-popover-foreground)]',
       'shadow-[var(--dz-shadow-lg)]',
       'p-[var(--dz-spacing-3)]',
     ].join(' '),

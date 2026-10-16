@@ -77,7 +77,7 @@ const cards = [
   width: 28px;
   height: 28px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--tint-soft, var(--dz-primary-soft));
+  background: var(--tint-soft, var(--dz-primary-muted));
   border: 2px solid var(--tint, var(--dz-primary));
 }
 </style>

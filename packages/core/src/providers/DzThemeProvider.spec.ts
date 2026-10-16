@@ -452,6 +452,11 @@ describe('getThemeScript behaviour (UI-DZUP-UI-DESIGN-M-08)', () => {
     expect(runThemeScript(script, { stored: 'light', osDark: true }).attributes['data-theme']).toBe('light')
   })
 
+  it('uses a persisted high-contrast as-is, as the provider does (UI-DZUP-UI-DESIGN-M-07)', () => {
+    const script = getThemeScript({ defaultTheme: 'light' })
+    expect(runThemeScript(script, { stored: 'high-contrast', osDark: true }).attributes['data-theme']).toBe('high-contrast')
+  })
+
   it('falls back to defaultTheme for nothing stored or a foreign value', () => {
     expect(runThemeScript(getThemeScript({ defaultTheme: 'dark' })).attributes['data-theme']).toBe('dark')
     expect(runThemeScript(getThemeScript({ defaultTheme: 'light' }), { stored: 'sepia', osDark: true }).attributes['data-theme']).toBe('light')

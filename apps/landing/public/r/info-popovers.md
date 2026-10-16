@@ -176,7 +176,7 @@ function resetFilters(): void {
 }
 
 .ip-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ip-title {
@@ -184,13 +184,13 @@ function resetFilters(): void {
 }
 
 .ip-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .ip-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
@@ -200,13 +200,13 @@ function resetFilters(): void {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-3, 0.75rem) var(--dz-space-1, 0.25rem) var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-3, 0.75rem) var(--dz-spacing-1, 0.25rem) var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-full, 999px);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
   cursor: pointer;
-  transition: background var(--dz-transition-fast, 150ms) ease;
+  transition: background var(--dz-transition-fast, 150ms ease);
 }
 
 .ip-chip:hover {
@@ -221,25 +221,25 @@ function resetFilters(): void {
 .ip-chip-name {
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-text, #111827);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .ip-chip-caret {
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* Profile card content ---------------------------------------------------- */
 .ip-card {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: 15rem;
 }
 
 .ip-card-head {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ip-card-id {
@@ -255,12 +255,12 @@ function resetFilters(): void {
 .ip-card-meta {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
-  color: var(--dz-text-muted, #6b7280);
+  gap: var(--dz-spacing-1, 0.25rem);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .ip-card-action {
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
   align-self: flex-start;
 }
 
@@ -268,30 +268,30 @@ function resetFilters(): void {
 .ip-filters {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: 15rem;
 }
 
 .ip-filters-title {
-  margin: 0 0 var(--dz-space-1, 0.25rem);
+  margin: 0 0 var(--dz-spacing-1, 0.25rem);
 }
 
 .ip-filter-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   cursor: pointer;
 }
 
 .ip-filters-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ip-result {
-  margin-top: var(--dz-space-3, 0.75rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   min-height: 1.25rem;
 }
 </style>

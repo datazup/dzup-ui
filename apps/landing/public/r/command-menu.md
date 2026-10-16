@@ -114,7 +114,7 @@ function onSelect(item: CommandItem): void {
 }
 
 .cm-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cm-title {
@@ -122,10 +122,10 @@ function onSelect(item: CommandItem): void {
 }
 
 .cm-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
   flex-wrap: wrap;
 }
 
@@ -133,21 +133,21 @@ function onSelect(item: CommandItem): void {
 .cm-launcher {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   width: 100%;
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-4, 1rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   cursor: text;
   text-align: left;
-  transition: border-color var(--dz-transition-fast, 150ms) ease,
-              box-shadow var(--dz-transition-fast, 150ms) ease;
+  transition: border-color var(--dz-transition-fast, 150ms ease),
+              box-shadow var(--dz-transition-fast, 150ms ease);
 }
 
 .cm-launcher:hover {
-  border-color: var(--dz-border-strong, #d1d5db);
+  border-color: var(--dz-border-hover, #b5b7bb);
 }
 
 .cm-launcher:focus-visible {
@@ -157,7 +157,7 @@ function onSelect(item: CommandItem): void {
 }
 
 .cm-launcher-icon {
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   flex-shrink: 0;
 }
 
@@ -174,8 +174,8 @@ function onSelect(item: CommandItem): void {
 .cm-result {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   min-height: 1.5rem;
 }
 

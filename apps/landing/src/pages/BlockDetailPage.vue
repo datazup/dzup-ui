@@ -230,8 +230,8 @@ function openStackblitz(): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .bd-back {
@@ -282,7 +282,7 @@ function openStackblitz(): void {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bd-section-title {
@@ -296,7 +296,7 @@ function openStackblitz(): void {
 }
 
 .bd-stackblitz {
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .bd-setup {
@@ -307,8 +307,8 @@ function openStackblitz(): void {
 .bd-setup-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .bd-setup-lede {
@@ -321,7 +321,7 @@ function openStackblitz(): void {
 .bd-manifest {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .bd-manifest :deep(.bm-group:first-child) {
@@ -333,9 +333,9 @@ function openStackblitz(): void {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   margin-top: clamp(32px, 5vw, 56px);
-  padding-top: var(--dz-space-5, 1.25rem);
+  padding-top: var(--dz-spacing-5, 1.25rem);
   border-top: 1px solid var(--lp-hairline);
 }
 
@@ -396,7 +396,7 @@ function openStackblitz(): void {
 
 @media (max-width: 560px) {
   .bd-preview-section {
-    padding-inline: var(--dz-space-4, 1rem);
+    padding-inline: var(--dz-spacing-4, 1rem);
   }
 
   .bd-details {
@@ -405,7 +405,7 @@ function openStackblitz(): void {
 
   .bd-setup {
     padding-inline-start: 0;
-    padding-top: var(--dz-space-6, 1.5rem);
+    padding-top: var(--dz-spacing-6, 1.5rem);
     border-inline-start: 0;
     border-top: 1px solid var(--lp-hairline);
   }

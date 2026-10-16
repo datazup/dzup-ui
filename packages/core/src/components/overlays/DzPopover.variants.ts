@@ -16,15 +16,15 @@ export const popoverVariants = tv({
       'overflow-hidden',
       'rounded-[var(--dz-radius-lg)]',
       'border border-[var(--dz-border)]',
-      'bg-[var(--dz-background)]',
-      'text-[var(--dz-foreground)]',
+      'bg-[var(--dz-popover)]',
+      'text-[var(--dz-popover-foreground)]',
       'p-[var(--dz-spacing-4)]',
       'shadow-[var(--dz-shadow-lg)]',
       'outline-none',
       'transition-opacity',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
-    arrow: 'fill-[var(--dz-background)] stroke-[var(--dz-border)]',
+    arrow: 'fill-[var(--dz-popover)] stroke-[var(--dz-border)]',
   },
   variants: {
     size: {

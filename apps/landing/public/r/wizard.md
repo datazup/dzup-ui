@@ -214,7 +214,7 @@ function back() {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   background: var(--dz-background, #fff);
   min-height: 100%;
 }
@@ -224,7 +224,7 @@ function back() {
   max-width: 36rem;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-6, 1.5rem);
 }
 
 .wz-title {
@@ -240,14 +240,14 @@ function back() {
   background: var(--dz-surface, var(--dz-background, #fff));
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.75rem);
-  padding: var(--dz-space-6, 1.5rem);
+  padding: var(--dz-spacing-6, 1.5rem);
   min-height: 14rem;
 }
 
 .wz-step {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .wz-step-heading {
@@ -261,13 +261,13 @@ function back() {
 .wz-fields {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .wz-name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .wz-name-field {
@@ -279,8 +279,8 @@ function back() {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding-top: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding-top: var(--dz-spacing-4, 1rem);
 }
 
 .wz-done-icon {
@@ -294,7 +294,7 @@ function back() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .wz-nav--end {

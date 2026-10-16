@@ -1,7 +1,11 @@
 /**
- * AUTO-GENERATED — Do not edit manually.
- * Generated from public-api.manifest.json (ADR-01).
- * Run: tsx packages/tooling/src/manifest-generator.ts <package-dir>
+ * Package entry barrel — MAINTAINED BY HAND (ADR-01).
+ *
+ * Edit this file directly, and keep it in step with
+ * manifests/public-api.manifest.json: `yarn validate:exports` fails when a
+ * symbol reachable from here is missing from the manifest, or a manifest symbol
+ * is not exported; `yarn generate:exports:core` compares the export lines with
+ * the ones the manifest renders and never rewrites this file.
  */
 
 import './styles/base.css'

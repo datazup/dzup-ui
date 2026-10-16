@@ -126,7 +126,7 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -139,38 +139,38 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 .ae-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .ae-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   align-items: start;
 }
 
 .ae-controls {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .ae-knobs {
   display: flex;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 /* Preview panel — reflects the bound brand/radius/scale custom properties. */
 .ae-preview {
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.75rem);
   background: var(--dz-muted, #f8fafc);
 }
 
 .ae-preview-label {
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -178,8 +178,8 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 .ae-card-demo {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   background: var(--dz-surface, #fff);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--ae-radius, 12px);
@@ -196,7 +196,7 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 .ae-card-demo-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ae-bar {
@@ -228,8 +228,8 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 .ae-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-5, 1.25rem);
 }
 
 @media (max-width: 560px) {

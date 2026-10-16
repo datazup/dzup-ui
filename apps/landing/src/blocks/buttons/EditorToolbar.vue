@@ -154,7 +154,7 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
 .et-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   padding: clamp(1rem, 3vw, 1.5rem);
   background: var(--dz-background, #fff);
 }
@@ -163,8 +163,8 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.5rem);
   background: var(--dz-surface, #fff);
@@ -174,33 +174,33 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
 .et-cluster {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .et-sep {
   width: 1px;
   align-self: stretch;
-  margin: var(--dz-space-1, 0.25rem) var(--dz-space-1, 0.25rem);
+  margin: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-1, 0.25rem);
   background: var(--dz-border, #e5e7eb);
 }
 
 /* Pushes the publish/copy actions to the trailing edge; collapses on wrap. */
 .et-spacer {
-  flex: 1 1 var(--dz-space-4, 1rem);
-  min-width: var(--dz-space-2, 0.5rem);
+  flex: 1 1 var(--dz-spacing-4, 1rem);
+  min-width: var(--dz-spacing-2, 0.5rem);
 }
 
 .et-doc {
   padding: clamp(1rem, 3vw, 1.5rem);
   border: 1px dashed var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.5rem);
-  background: var(--dz-surface-muted, var(--dz-surface, #fff));
+  background: var(--dz-surface, #fff);
 }
 
 .et-doc-line {
   margin: 0;
   line-height: 1.6;
-  transition: font-weight var(--dz-transition-fast, 120ms) ease;
+  transition: font-weight var(--dz-transition-fast, 120ms ease);
 }
 
 @media (max-width: 560px) {

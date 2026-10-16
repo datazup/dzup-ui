@@ -136,7 +136,7 @@ const open = ref<Record<string, string>>(
 
 <style scoped>
 .fq-wrap {
-  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -144,7 +144,7 @@ const open = ref<Record<string, string>>(
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   text-align: center;
 }
@@ -168,13 +168,13 @@ const open = ref<Record<string, string>>(
 }
 
 .fq-col-title {
-  margin: 0 0 var(--dz-space-3, 0.75rem);
+  margin: 0 0 var(--dz-spacing-3, 0.75rem);
 }
 
 .fq-answer {
   margin: 0;
   line-height: 1.7;
-  padding-bottom: var(--dz-space-1, 0.25rem);
+  padding-bottom: var(--dz-spacing-1, 0.25rem);
 }
 
 @media (max-width: 900px) {

@@ -154,7 +154,7 @@ function create(): void {
 }
 
 .cd-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cd-title {
@@ -162,15 +162,15 @@ function create(): void {
 }
 
 .cd-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 /* Dialog content ---------------------------------------------------------- */
 .cd-dialog-head {
   display: flex;
   align-items: flex-start;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cd-dialog-icon {
@@ -180,7 +180,7 @@ function create(): void {
   height: 2.5rem;
   flex-shrink: 0;
   border-radius: var(--dz-radius-md, 0.375rem);
-  background: var(--dz-primary-subtle, #eef2ff);
+  background: var(--dz-primary-muted, #d5e9ff);
   color: var(--dz-primary, #6366f1);
 }
 
@@ -189,25 +189,25 @@ function create(): void {
 }
 
 .cd-dialog-desc {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .cd-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .cd-dialog-footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-5, 1.25rem);
 }
 
 /* Created list ------------------------------------------------------------ */
 .cd-created {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .cd-list {
@@ -216,15 +216,15 @@ function create(): void {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .cd-list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);

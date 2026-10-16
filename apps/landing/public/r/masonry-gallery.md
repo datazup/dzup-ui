@@ -159,14 +159,14 @@ const items: Item[] = [
   background: var(--dz-background, #fff);
   max-width: 60rem;
   margin: 0 auto;
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
 }
 
 .mg-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .mg-card {
@@ -186,12 +186,12 @@ const items: Item[] = [
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem);
 }
 
 .mg-tag {
-  margin-bottom: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-1, 0.25rem);
 }
 
 .mg-card-title,
@@ -206,9 +206,9 @@ const items: Item[] = [
 .mg-foot {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   width: 100%;
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 .mg-read {

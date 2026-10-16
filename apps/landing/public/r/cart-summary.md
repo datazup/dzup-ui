@@ -211,8 +211,8 @@ function remove(id: number) {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-heading {
@@ -246,7 +246,7 @@ function remove(id: number) {
 .cs-controls {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-qty {
@@ -260,18 +260,18 @@ function remove(id: number) {
 }
 
 .cs-empty {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
   text-align: center;
 }
 
 .cs-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .cs-totals {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin: 0;
 }
 
@@ -279,7 +279,7 @@ function remove(id: number) {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .cs-row dt,
@@ -294,12 +294,12 @@ function remove(id: number) {
 
 .cs-checkout {
   width: 100%;
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .cs-continue {
   align-self: center;
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 /* On narrow viewports the qty + price + remove controls stack tidily. */
@@ -307,7 +307,7 @@ function remove(id: number) {
   .cs-controls {
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: var(--dz-space-2, 0.5rem);
+    gap: var(--dz-spacing-2, 0.5rem);
   }
 }
 </style>

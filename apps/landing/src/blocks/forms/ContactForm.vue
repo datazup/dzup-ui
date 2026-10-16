@@ -138,7 +138,7 @@ function submit() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -151,20 +151,20 @@ function submit() {
 .cf-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cf-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .cf-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .cf-counter {
@@ -175,8 +175,8 @@ function submit() {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 @media (max-width: 540px) {

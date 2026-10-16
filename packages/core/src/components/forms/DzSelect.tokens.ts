@@ -29,8 +29,8 @@ export const selectTokens = {
   invalidFocusRing: 'var(--dz-danger)',
   /** Dropdown content */
   content: {
-    background: 'var(--dz-background)',
-    foreground: 'var(--dz-foreground)',
+    background: 'var(--dz-popover)',
+    foreground: 'var(--dz-popover-foreground)',
     border: 'var(--dz-border)',
     radius: 'var(--dz-radius-md)',
     shadow: 'var(--dz-shadow-md)',

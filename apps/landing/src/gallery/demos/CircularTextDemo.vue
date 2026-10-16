@@ -49,8 +49,8 @@ import { DzCircularText } from '../../motion/index.ts'
 
 .ring {
   color: var(--dz-colors-primary-600, #004ecb);
-  font-size: var(--dz-font-size-sm, 0.875rem);
-  font-weight: var(--dz-font-weight-semibold, 600);
+  font-size: var(--dz-text-sm, 0.875rem);
+  font-weight: var(--dz-font-semibold, 600);
   letter-spacing: 0.04em;
 }
 

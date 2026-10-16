@@ -18,6 +18,7 @@ import {
 } from '../composables/provider/index.ts'
 import { clearFormatterCache } from '../composables/provider/useDzFormats.ts'
 import DzProvider from './DzProvider.vue'
+import DzThemeProvider from './DzThemeProvider.vue'
 import { useTheme } from './useTheme.ts'
 
 /**
@@ -305,6 +306,60 @@ describe('dzProvider theme', () => {
     await nextTick()
 
     expect(document.querySelector('#dz-theme-no-transition')?.hasAttribute('nonce')).toBe(false)
+  })
+
+  // UI-DZUP-UI-DESIGN-M-07: the shipped [data-theme="high-contrast"] cascade must
+  // be reachable through the provider, not overwritten by it.
+  it('applies and persists setTheme("high-contrast")', async () => {
+    const { value } = underProvider({ theme: {} }, () => useTheme())
+
+    value.setTheme('high-contrast')
+    await nextTick()
+
+    expect(value.resolvedTheme.value).toBe('high-contrast')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('high-contrast')
+    expect(localStorage.getItem('dz-theme')).toBe('high-contrast')
+  })
+
+  it('keeps a persisted high-contrast preference on mount instead of overwriting it', () => {
+    localStorage.setItem('dz-theme', 'high-contrast')
+    document.documentElement.setAttribute('data-theme', 'high-contrast')
+
+    const { value } = underProvider({ theme: { default: 'light' } }, () => useTheme())
+
+    expect(value.theme.value).toBe('high-contrast')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('high-contrast')
+  })
+
+  it('a nested DzThemeProvider default-theme="dark" leaves <html> and the stored preference alone', async () => {
+    localStorage.setItem('dz-theme', 'light')
+    let captured!: ReturnType<typeof useTheme>
+    const Child = defineComponent({
+      setup() {
+        captured = useTheme()
+        return () => h('div')
+      },
+    })
+
+    const wrapper = mount(DzProvider, {
+      props: { theme: {} },
+      slots: { default: () => h(DzThemeProvider, { defaultTheme: 'dark' }, { default: () => h(Child) }) },
+    })
+    await nextTick()
+
+    // The subtree reads its own theme...
+    expect(captured.resolvedTheme.value).toBe('dark')
+    // ...but the document stays on the root's, and the user's stored choice is
+    // neither read into the subtree nor overwritten by it.
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    expect(localStorage.getItem('dz-theme')).toBe('light')
+
+    captured.setTheme('high-contrast')
+    await nextTick()
+    expect(captured.resolvedTheme.value).toBe('high-contrast')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    expect(localStorage.getItem('dz-theme')).toBe('light')
+    wrapper.unmount()
   })
 })
 

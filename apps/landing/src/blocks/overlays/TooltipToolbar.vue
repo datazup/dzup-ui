@@ -126,7 +126,7 @@ function onClick(tip: Tip): void {
 }
 
 .tt-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .tt-title {
@@ -134,14 +134,14 @@ function onClick(tip: Tip): void {
 }
 
 .tt-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .tt-bar {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
-  padding: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  padding: var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
@@ -155,13 +155,13 @@ function onClick(tip: Tip): void {
 
 .tt-sep {
   height: 1.5rem;
-  margin: 0 var(--dz-space-1, 0.25rem);
+  margin: 0 var(--dz-spacing-1, 0.25rem);
 }
 
 .tt-tip {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tt-tip-label {

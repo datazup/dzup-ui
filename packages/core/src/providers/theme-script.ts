@@ -56,7 +56,7 @@ export interface ThemeScriptOptions {
    * Default theme when nothing valid is persisted (default: 'system').
    * A persisted `'system'` is honoured as system, never replaced by this.
    */
-  defaultTheme?: 'light' | 'dark' | 'system'
+  defaultTheme?: 'light' | 'dark' | 'high-contrast' | 'system'
   /**
    * Read the persisted preference (default: `true`). Mirrors
    * `DzProvider`'s `theme.persist`: with `false` the provider ignores
@@ -102,8 +102,8 @@ function jsString(value: string): string {
 /**
  * Generate a theme initialization script string with custom options.
  *
- * Resolution order, matching `DzProvider`: a persisted `'light'`, `'dark'` or
- * `'system'` wins; anything else (nothing stored, a stale or foreign value,
+ * Resolution order, matching `DzProvider`: a persisted `'light'`, `'dark'`,
+ * `'high-contrast'` or `'system'` wins; anything else (nothing stored, a stale or foreign value,
  * storage disabled or throwing) falls back to `defaultTheme`; `'system'` is
  * then resolved through `prefers-color-scheme`.
  *
@@ -133,7 +133,7 @@ export function getThemeScript(options: ThemeScriptOptions = {}): string {
     ? `var s=null;try{s=localStorage.getItem(${jsString(storageKey)})}catch(e){}`
     : `var s=null;`
 
-  return `(function(){try{${read}var p=s==='light'||s==='dark'||s==='system'?s:${jsString(defaultTheme)};`
+  return `(function(){try{${read}var p=s==='light'||s==='dark'||s==='high-contrast'||s==='system'?s:${jsString(defaultTheme)};`
     + `var t=p==='system'?(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):p;`
     + `document.documentElement.setAttribute(${jsString(attribute)},t)${dirWrite}}catch(e){}})()`
 }

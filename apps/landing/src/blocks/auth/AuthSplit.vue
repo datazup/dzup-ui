@@ -122,7 +122,7 @@ const features = [
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
 }
 
@@ -134,19 +134,19 @@ const features = [
 .as-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .as-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .as-submit {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .as-link {
@@ -187,7 +187,7 @@ const features = [
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
   max-width: 32rem;
 }
 
@@ -207,13 +207,13 @@ const features = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .as-feature {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   font-size: var(--dz-text-sm, 0.875rem);
   color: color-mix(in oklch, var(--dz-primary-foreground, #fff) 90%, transparent);
 }

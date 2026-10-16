@@ -14,7 +14,7 @@ export const sheetTokens = {
   },
   /** Content panel */
   content: {
-    background: 'var(--dz-background)',
+    background: 'var(--dz-surface-raised)',
     foreground: 'var(--dz-foreground)',
     border: 'var(--dz-border)',
     shadow: 'var(--dz-shadow-xl)',

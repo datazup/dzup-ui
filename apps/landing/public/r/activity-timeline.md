@@ -148,8 +148,8 @@ const events: Event[] = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .at-title {
@@ -159,8 +159,8 @@ const events: Event[] = [
 .at-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  padding-bottom: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  padding-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .at-line,
@@ -171,7 +171,7 @@ const events: Event[] = [
 
 .at-tag {
   align-self: flex-start;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 </style>
 ```

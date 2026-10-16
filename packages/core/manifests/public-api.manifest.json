@@ -321,6 +321,7 @@
         "path": "./src/composables/useDataGrid/index.ts",
         "exports": [
           "useDataGrid",
+          "useDataGridNavigation",
           "useDataGridPagination",
           "useDataGridSort"
         ]
@@ -1479,6 +1480,8 @@
       "UseClickOutsideOptions",
       "UseDataGridHeaderOptions",
       "UseDataGridHeaderReturn",
+      "DataGridCellPosition",
+      "UseDataGridNavigationReturn",
       "UseDataGridPaginationOptions",
       "UseDataGridPaginationReturn",
       "UseDataGridSortOptions",

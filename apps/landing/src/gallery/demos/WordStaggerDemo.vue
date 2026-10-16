@@ -36,7 +36,7 @@ import { DzWordReveal } from '../../motion/index.ts'
   max-width: 22ch;
   text-align: center;
   font-size: var(--dz-text-xl, 1.25rem);
-  font-weight: var(--dz-font-weight-semibold, 600);
+  font-weight: var(--dz-font-semibold, 600);
   line-height: 1.3;
 }
 </style>

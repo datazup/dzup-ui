@@ -91,7 +91,7 @@ SHA-256 of the exact bytes these pages were rendered from:
 | Artifact | sha256 | Present |
 | --- | --- | --- |
 | `packages/core/docs/capability-matrix.json` | `a621c0898bf46ea5…` | yes |
-| `packages/core/src/styles/base.css` | `7dc12c1c121785e0…` | yes |
+| `packages/core/src/styles/base.css` | `5188a074da5f5ba6…` | yes |
 
 Capability matrix `sourceCommit` `ae4c6be7` · quality matrix `ae4c6be7`.
 

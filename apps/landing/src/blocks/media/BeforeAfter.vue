@@ -70,8 +70,8 @@ const position = ref(50)
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cmp-title {
@@ -90,7 +90,7 @@ const position = ref(50)
   width: 100%;
   border-radius: var(--dz-radius-xl, 0.875rem);
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);
-  box-shadow: 0 4px 12px -6px color-mix(in oklch, var(--dz-shadow, #000) 20%, transparent);
+  box-shadow: 0 4px 12px -6px color-mix(in oklch, oklch(0 0 0) 20%, transparent);
 }
 
 .cmp-img {
@@ -112,8 +112,8 @@ const position = ref(50)
 .cmp-meter {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-4, 1rem);
   font-size: var(--dz-text-xs, 0.75rem);
 }
 

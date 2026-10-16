@@ -159,7 +159,7 @@ function run(label: string): void {
 }
 
 .cb-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cb-title {
@@ -167,14 +167,14 @@ function run(label: string): void {
 }
 
 .cb-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .cb-board {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px dashed var(--dz-border, #e5e7eb);
   background: var(--dz-surface-sunken, #f9fafb);
@@ -184,8 +184,8 @@ function run(label: string): void {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem) var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem) var(--dz-spacing-2, 0.5rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
@@ -198,7 +198,7 @@ function run(label: string): void {
   width: 2.75rem;
   height: 2.75rem;
   border-radius: var(--dz-radius-md, 0.375rem);
-  background: var(--dz-primary-subtle, #eef2ff);
+  background: var(--dz-primary-muted, #d5e9ff);
   color: var(--dz-primary, #6366f1);
 }
 
@@ -214,7 +214,7 @@ function run(label: string): void {
 }
 
 .cb-result {
-  margin-top: var(--dz-space-3, 0.75rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   min-height: 1.25rem;
 }
 

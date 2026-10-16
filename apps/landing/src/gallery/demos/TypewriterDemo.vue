@@ -42,6 +42,6 @@ const phrases = [
 
 .accent {
   color: var(--dz-colors-primary-600, #004ecb);
-  font-weight: var(--dz-font-weight-semibold, 600);
+  font-weight: var(--dz-font-semibold, 600);
 }
 </style>

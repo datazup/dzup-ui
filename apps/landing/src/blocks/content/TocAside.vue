@@ -129,11 +129,11 @@ const items: DzAnchorItem[] = [
 }
 
 .ta-h {
-  margin: var(--dz-space-6, 1.5rem) 0 var(--dz-space-2, 0.5rem);
+  margin: var(--dz-spacing-6, 1.5rem) 0 var(--dz-spacing-2, 0.5rem);
   font-size: var(--dz-text-xl, 1.25rem);
   font-weight: var(--dz-font-semibold, 600);
   color: var(--dz-foreground, inherit);
-  scroll-margin-top: var(--dz-space-4, 1rem);
+  scroll-margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .ta-h-lead {
@@ -141,28 +141,28 @@ const items: DzAnchorItem[] = [
 }
 
 .ta-sub {
-  margin: var(--dz-space-4, 1rem) 0 var(--dz-space-2, 0.5rem);
+  margin: var(--dz-spacing-4, 1rem) 0 var(--dz-spacing-2, 0.5rem);
   font-size: var(--dz-text-base, 1rem);
   font-weight: var(--dz-font-semibold, 600);
   color: var(--dz-foreground, inherit);
-  scroll-margin-top: var(--dz-space-4, 1rem);
+  scroll-margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .ta-p {
-  margin: 0 0 var(--dz-space-3, 0.75rem);
+  margin: 0 0 var(--dz-spacing-3, 0.75rem);
   line-height: 1.7;
 }
 
 .ta-aside {
   position: sticky;
-  top: var(--dz-space-4, 1rem);
+  top: var(--dz-spacing-4, 1rem);
 }
 
 .ta-aside-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  padding-left: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding-left: var(--dz-spacing-4, 1rem);
   border-left: 1px solid var(--dz-border, currentColor);
 }
 

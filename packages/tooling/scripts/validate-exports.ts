@@ -3,8 +3,16 @@
  *
  * For manifest-driven packages (core): reads public-api.manifest.json and validates:
  *   1. Every referenced source file exists on disk
- *   2. Every declared export symbol is actually exported from its source file
+ *   2. Every declared export symbol is actually exported from its source file —
+ *      `export *` re-exports are FOLLOWED, not trusted: a barrel that contains
+ *      one used to pass every declared name unseen
  *   3. No orphaned manifest entries (file exists but exports nothing declared)
+ *   4. The reverse direction: every symbol reachable from the entry barrel
+ *      (`src/index.ts`, star re-exports resolved transitively) is listed in the
+ *      manifest. Before, an export added to a family barrel shipped without a
+ *      manifest entry and only `release:api-diff` — which blocks nothing —
+ *      noticed. The barrel is maintained by hand; this check is what keeps the
+ *      manifest an authority over it rather than a document beside it.
  *
  * For flat-export packages (compat, nuxt): validates that:
  *   1. The package entry file exists
@@ -43,19 +51,21 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { scanModuleExports } from '../src/ownership/module-exports.ts'
 import { validatePackageExportMap } from '../src/validators/export-map.ts'
 
 // --- Types matching manifest JSON shape (from manifest-generator.ts) ---
 
-interface ManifestEntry {
+export interface ManifestEntry {
   path: string
   exports: string[]
 }
 
-interface ManifestExports {
+export interface ManifestExports {
   components: Record<string, ManifestEntry>
   composables: Record<string, ManifestEntry>
   utilities: Record<string, ManifestEntry>
+  providers?: Record<string, ManifestEntry>
   injectionKeys?: string[]
   variants?: string[]
   runtimeExports?: string[]
@@ -70,7 +80,7 @@ interface Manifest {
   exports: ManifestExports
 }
 
-interface ValidationError {
+export interface ValidationError {
   package: string
   category: string
   entry: string
@@ -93,11 +103,12 @@ interface RequiredSubpathsSnapshot {
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 
-const MANIFEST_PATHS: Array<{ name: string, path: string, packageDir: string }> = [
+const MANIFEST_PATHS: Array<{ name: string, path: string, packageDir: string, entryFile: string }> = [
   {
     name: '@dzup-ui/core',
     path: resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'),
     packageDir: resolve(ROOT, 'packages/core'),
+    entryFile: 'src/index.ts',
   },
 ]
 
@@ -187,7 +198,7 @@ function getExportedSymbols(filePath: string): { symbols: Set<string>, hasStarEx
 /**
  * Validates all entries in a single category (components, composables, utilities).
  */
-function validateCategory(
+export function validateCategory(
   packageName: string,
   packageDir: string,
   categoryName: string,
@@ -211,11 +222,22 @@ function validateCategory(
       continue // Cannot check exports if file is missing
     }
 
-    // Check 2: Declared exports exist in the source file
-    const { symbols, hasStarExport } = getExportedSymbols(filePath)
+    // Check 2: Declared exports exist in the source file. Star re-exports are
+    // resolved transitively, so `export * from` no longer short-circuits the check.
+    const scan = scanModuleExports(filePath)
+    const symbols = new Set(scan.exports.keys())
+    for (const unreadable of scan.unreadable) {
+      errors.push({
+        package: packageName,
+        category: categoryName,
+        entry: entryName,
+        filePath: relPath,
+        message: `Re-export target cannot be resolved: ${unreadable}`,
+      })
+    }
 
     for (const exportName of entry.exports) {
-      if (!symbols.has(exportName) && !hasStarExport) {
+      if (!symbols.has(exportName)) {
         errors.push({
           package: packageName,
           category: categoryName,
@@ -226,8 +248,8 @@ function validateCategory(
       }
     }
 
-    // Check 3: Orphan detection — file has no matching exports and no star re-export
-    if (!hasStarExport && entry.exports.length > 0) {
+    // Check 3: Orphan detection — file (and everything it re-exports) exports nothing
+    if (entry.exports.length > 0) {
       const foundCount = entry.exports.filter(e => symbols.has(e)).length
       if (foundCount === 0 && symbols.size === 0) {
         errors.push({
@@ -239,6 +261,74 @@ function validateCategory(
         })
       }
     }
+  }
+
+  return errors
+}
+
+/** Every symbol name the manifest accounts for, across all of its groups. */
+export function manifestSymbolNames(me: ManifestExports): Set<string> {
+  const names = new Set<string>()
+  for (const group of [me.components, me.composables, me.utilities, me.providers ?? {}]) {
+    for (const entry of Object.values(group)) {
+      for (const name of entry.exports)
+        names.add(name)
+    }
+  }
+  for (const list of [me.injectionKeys, me.variants, me.runtimeExports, me.types]) {
+    for (const name of list ?? [])
+      names.add(name)
+  }
+  return names
+}
+
+/**
+ * Check 4 — barrel → manifest. Every symbol reachable from the package entry
+ * barrel must be listed somewhere in the manifest; an unresolvable re-export is
+ * an error too, because a target that cannot be read cannot be shown to be listed.
+ */
+export function validateBarrelCoverage(
+  packageName: string,
+  entryPath: string,
+  me: ManifestExports,
+): ValidationError[] {
+  const relEntry = relative(ROOT, entryPath)
+  if (!existsSync(entryPath)) {
+    return [{
+      package: packageName,
+      category: 'barrel',
+      entry: relEntry,
+      filePath: relEntry,
+      message: `Entry barrel does not exist: ${relEntry}`,
+    }]
+  }
+
+  const listed = manifestSymbolNames(me)
+  const scan = scanModuleExports(entryPath)
+  const errors: ValidationError[] = []
+
+  for (const unreadable of scan.unreadable) {
+    errors.push({
+      package: packageName,
+      category: 'barrel',
+      entry: relEntry,
+      filePath: relEntry,
+      message: `Re-export target cannot be resolved: ${unreadable}`,
+    })
+  }
+
+  for (const [symbol, found] of [...scan.exports].sort(([a], [b]) => a.localeCompare(b))) {
+    if (listed.has(symbol))
+      continue
+    const declaredIn = found.declaredIn.startsWith('/') ? relative(ROOT, found.declaredIn) : found.declaredIn
+    errors.push({
+      package: packageName,
+      category: 'barrel',
+      entry: symbol,
+      filePath: declaredIn,
+      message: `"${symbol}" is exported from ${relEntry} (via ${declaredIn}) but not listed in public-api.manifest.json — `
+        + `add it to the matching entry (or the types/variants/injectionKeys/runtimeExports list), or stop exporting it.`,
+    })
   }
 
   return errors
@@ -462,6 +552,7 @@ function main(): void {
       { name: 'components', entries: me.components },
       { name: 'composables', entries: me.composables },
       { name: 'utilities', entries: me.utilities },
+      ...(me.providers ? [{ name: 'providers', entries: me.providers }] : []),
     ]
 
     for (const cat of categories) {
@@ -476,6 +567,15 @@ function main(): void {
       const status = errors.length === 0 ? 'PASS' : 'FAIL'
       console.warn(`  ${status}  ${cat.name}: ${entryCount} entries, ${exportCount} exports`)
     }
+
+    const coverageErrors = validateBarrelCoverage(
+      manifestDef.name,
+      resolve(manifestDef.packageDir, manifestDef.entryFile),
+      me,
+    )
+    allErrors.push(...coverageErrors)
+    const coverageStatus = coverageErrors.length === 0 ? 'PASS' : 'FAIL'
+    console.warn(`  ${coverageStatus}  barrel → manifest: every export reachable from ${manifestDef.entryFile} is listed`)
   }
 
   // Validate flat-export packages (no manifest — check entry file + export map)
@@ -525,4 +625,8 @@ function main(): void {
   process.exit(1)
 }
 
-main()
+// Guarded so the spec can import the checks without running the CLI.
+const invokedDirectly = process.argv[1] !== undefined
+  && /validate-exports\.(?:ts|js|mjs)$/.test(process.argv[1].replaceAll('\\', '/'))
+if (invokedDirectly)
+  main()

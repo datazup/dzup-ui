@@ -24,8 +24,8 @@ export const treeSelectTokens = {
   invalidBorder: 'var(--dz-danger)',
   /** Overlay panel */
   panel: {
-    background: 'var(--dz-surface)',
-    foreground: 'var(--dz-foreground)',
+    background: 'var(--dz-popover)',
+    foreground: 'var(--dz-popover-foreground)',
     border: 'var(--dz-border)',
     radius: 'var(--dz-radius-md)',
     shadow: 'var(--dz-shadow-lg)',

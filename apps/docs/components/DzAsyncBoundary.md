@@ -108,11 +108,13 @@ written them down. Until the declaration exists, a descendant selector against g
 
 ## Provider defaults and context
 
-**Not declared.** `DzAsyncBoundary` calls no `DzProvider` reader, so **nothing an application
-sets on the provider reaches it** — not the locale, not the motion preference, not the
-direction, not the test-id prefix. Every value it uses comes from its own props and defaults.
-That is measured from its source rather than assumed, and it is a gap in the component (ADR-20
-adoption), not in this page.
+This component reads the following contexts from the surrounding `DzProvider` (ADR-20). The
+precedence is fixed and not per-component: **prop, then any group context, then the provider,
+then the component's own default.**
+
+| Reader | What the provider supplies through it |
+| --- | --- |
+| `useDzMessages` | the translated string catalogue |
 
 ## Locale, direction and formats
 
@@ -122,7 +124,7 @@ direction. "Does it mirror?" has three defensible answers and only the component
 applies; leaving it undeclared is how a catalogue ends up mirroring some things and not
 others for no stated reason.
 
-**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is not a requirement at this tier, so nothing measures it.
 

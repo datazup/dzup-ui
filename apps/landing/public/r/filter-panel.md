@@ -181,10 +181,10 @@ function reset() {
 .fp-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   width: 100%;
   max-width: 19rem;
-  padding: var(--dz-space-5, 1.25rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.75rem);
   background: var(--dz-surface, #fff);
@@ -195,7 +195,7 @@ function reset() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .fp-title {
@@ -205,7 +205,7 @@ function reset() {
 .fp-group {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fp-group-title {
@@ -216,7 +216,7 @@ function reset() {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .fp-readout {
@@ -230,7 +230,7 @@ function reset() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .fp-switch-copy {
@@ -240,7 +240,7 @@ function reset() {
 
 .fp-apply {
   width: 100%;
-  margin-top: var(--dz-space-1, 0.25rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 </style>
 ```

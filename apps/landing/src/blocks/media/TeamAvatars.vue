@@ -96,14 +96,14 @@ const members: Member[] = [
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--dz-space-4, 1rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-4, 1rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .t-head-text {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: 0;
 }
 
@@ -122,14 +122,14 @@ const members: Member[] = [
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .t-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-lg, 0.75rem);
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 55%, transparent);
   background: var(--dz-surface, #fff);

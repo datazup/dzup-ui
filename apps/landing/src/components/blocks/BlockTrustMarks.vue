@@ -57,13 +57,13 @@ const ICONS: Record<CertificationId, Component> = {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tm-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .tm-icon {

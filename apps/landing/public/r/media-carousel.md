@@ -128,8 +128,8 @@ const active = ref(0)
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .cs-title {
@@ -171,8 +171,8 @@ const active = ref(0)
   color: #fff;
   background: linear-gradient(
     to top,
-    color-mix(in oklch, var(--dz-shadow, #000) 78%, transparent),
-    color-mix(in oklch, var(--dz-shadow, #000) 30%, transparent) 55%,
+    color-mix(in oklch, oklch(0 0 0) 78%, transparent),
+    color-mix(in oklch, oklch(0 0 0) 30%, transparent) 55%,
     transparent
   );
 }

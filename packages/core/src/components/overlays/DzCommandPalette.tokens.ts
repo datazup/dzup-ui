@@ -14,8 +14,8 @@ export const commandPaletteTokens = {
   },
   /** Content panel */
   content: {
-    background: 'var(--dz-background)',
-    foreground: 'var(--dz-foreground)',
+    background: 'var(--dz-popover)',
+    foreground: 'var(--dz-popover-foreground)',
     border: 'var(--dz-border)',
     radius: 'var(--dz-radius-lg)',
     shadow: 'var(--dz-shadow-xl)',

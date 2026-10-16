@@ -615,7 +615,7 @@ function money(n: number): string {
   height: 100%;
   border-radius: inherit;
   background: var(--dz-primary);
-  transition: width var(--dz-duration-base, 240ms) var(--dz-ease-out, ease-out);
+  transition: width var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out);
 }
 
 /* ── Empty state ───────────────────────────────────────────────── */

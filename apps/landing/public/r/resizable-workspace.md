@@ -199,13 +199,13 @@ const code: string[] = [
 
 .rw-scroll {
   height: 100%;
-  padding: var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
 }
 
 .rw-pane-head {
   display: block;
   letter-spacing: 0.06em;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .rw-tree {
@@ -217,8 +217,8 @@ const code: string[] = [
 .rw-tree-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding-block: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding-block: var(--dz-spacing-1, 0.25rem);
   border-radius: var(--dz-radius-sm, 0.25rem);
   color: var(--dz-muted-foreground, #6b7280);
 }
@@ -244,7 +244,7 @@ const code: string[] = [
 .rw-gutter {
   display: inline-block;
   width: 1.75rem;
-  margin-right: var(--dz-space-3, 0.75rem);
+  margin-right: var(--dz-spacing-3, 0.75rem);
   text-align: right;
   color: var(--dz-muted-foreground, #9ca3af);
   user-select: none;
@@ -254,17 +254,17 @@ const code: string[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--dz-space-6, 1.5rem) 0;
+  padding: var(--dz-spacing-6, 1.5rem) 0;
 }
 
 .rw-preview-rule {
-  margin: var(--dz-space-3, 0.75rem) 0;
+  margin: var(--dz-spacing-3, 0.75rem) 0;
 }
 
 .rw-status {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .rw-status-dot {

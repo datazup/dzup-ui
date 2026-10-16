@@ -101,8 +101,8 @@ const current = computed<ResultContent>(
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .rs-panel {

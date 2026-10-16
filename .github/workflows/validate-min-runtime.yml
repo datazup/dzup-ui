@@ -75,20 +75,19 @@ jobs:
         run: |
           yarn generate:exports:core
           yarn generate:ownership:core
-      # DEFECT 1, fixed here (TASK-R1-O4).
+      # DEFECT 1, fixed here (TASK-R1-O4), and at the source since
+      # UI-DZUP-UI-ARCH-M-06.
       #
-      # `generate:exports:core` REWRITES packages/core/src/index.ts from
-      # public-api.manifest.json. The rewrite drops the barrel's comments and
-      # emits the export lines in an order `perfectionist/sort-exports` rejects,
-      # so without the restore below `yarn validate:all` fails at its `lint` link
-      # and blames Node 20.19.0 for a file the repository never committed. That
-      # is how the runs up to 2026-09-20 went red.
+      # `generate:exports:core` used to REWRITE packages/core/src/index.ts from
+      # public-api.manifest.json, dropping the barrel's comments and emitting
+      # export lines `perfectionist/sort-exports` rejects; `yarn validate:all`
+      # then failed at `lint` and blamed Node 20.19.0. That is how the runs up to
+      # 2026-09-20 went red. The barrel is now maintained by hand and the script
+      # only COMPARES export lines (exit 1 on drift) and writes nothing.
       #
-      # Restoring the tree keeps this step's actual question — do the generators
-      # START at the floor? — and stops it from answering a different one.
-      # Whether the manifest and the barrel agree on the export lines is a
-      # release question, answered by `release:api-diff` (barrel drift, clean
-      # since 3c3f94a), not by this job.
+      # The restore stays as a guard: this step's question is whether the
+      # generators START at the floor, and no generator here should be able to
+      # change the tree the later steps measure.
       - name: Restore the tree the generators rewrote
         run: |
           git checkout -- .

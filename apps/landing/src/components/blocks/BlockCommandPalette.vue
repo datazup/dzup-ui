@@ -239,9 +239,9 @@ function chipsOf(item: CommandItem): string[] {
 .bcp-launcher {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   min-width: min(22rem, 100%);
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #b5b7bb);
   background: var(--dz-surface, #ffffff);
@@ -249,12 +249,12 @@ function chipsOf(item: CommandItem): string[] {
   cursor: text;
   text-align: left;
   transition:
-    border-color var(--dz-transition-fast, 150ms) ease,
-    box-shadow var(--dz-transition-fast, 150ms) ease;
+    border-color var(--dz-transition-fast, 150ms ease),
+    box-shadow var(--dz-transition-fast, 150ms ease);
 }
 
 .bcp-launcher:hover {
-  border-color: var(--dz-border-strong, #d1d5db);
+  border-color: var(--dz-border-hover, #b5b7bb);
 }
 
 .bcp-launcher:focus-visible {
@@ -283,7 +283,7 @@ function chipsOf(item: CommandItem): string[] {
 /* The core item row is `display:flex; align-items:center`; these fill it. */
 .bcp-item-icon {
   flex-shrink: 0;
-  margin-inline-end: var(--dz-space-2, 0.5rem);
+  margin-inline-end: var(--dz-spacing-2, 0.5rem);
   color: var(--dz-muted-foreground, #585b60);
 }
 
@@ -331,7 +331,7 @@ function chipsOf(item: CommandItem): string[] {
 
 .bcp-item-meta {
   margin-inline-start: auto;
-  padding-inline-start: var(--dz-space-3, 0.75rem);
+  padding-inline-start: var(--dz-spacing-3, 0.75rem);
   flex-shrink: 0;
   font-size: var(--dz-text-xs, 0.75rem);
   color: var(--dz-muted-foreground, #585b60);

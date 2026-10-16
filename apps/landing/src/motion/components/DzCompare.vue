@@ -250,8 +250,8 @@ onBeforeUnmount(cancelIntro)
   top: 0;
   bottom: 0;
   width: var(--dz-compare-line-width, 2px);
-  background: color-mix(in oklch, var(--dz-colors-base-white, #fff) 90%, transparent);
-  box-shadow: 0 0 0 1px color-mix(in oklch, var(--dz-colors-base-black, #000) 20%, transparent);
+  background: color-mix(in oklch, oklch(1 0 0) 90%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklch, oklch(0 0 0) 20%, transparent);
 }
 
 .dz-compare__grip {
@@ -259,7 +259,7 @@ onBeforeUnmount(cancelIntro)
   width: var(--dz-compare-grip-size, 32px);
   height: var(--dz-compare-grip-size, 32px);
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-colors-base-white, #fff);
+  background: oklch(1 0 0);
   box-shadow: var(--dz-shadow-md, 0 4px 12px rgb(15 23 42 / 0.18));
   display: grid;
   place-items: center;
@@ -284,7 +284,7 @@ onBeforeUnmount(cancelIntro)
 
 /* Visible focus ring on the grip for keyboard users. */
 .dz-compare__handle:focus-visible .dz-compare__grip {
-  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-primary, #0766ee);
+  outline: var(--dz-control-focus-ring-width, 2px) solid var(--dz-primary, #0766ee);
   outline-offset: 2px;
 }
 

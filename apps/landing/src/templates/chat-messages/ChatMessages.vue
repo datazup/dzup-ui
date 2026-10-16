@@ -713,13 +713,13 @@ function onComposerKeydown(event: KeyboardEvent) {
 .is-them .bubble {
   background: var(--dz-card);
   border: 1px solid var(--dz-border);
-  border-bottom-left-radius: var(--dz-radius-xs);
+  border-bottom-left-radius: var(--dz-radius-sm);
 }
 
 .is-me .bubble {
   background: var(--dz-primary);
   color: var(--dz-primary-foreground);
-  border-bottom-right-radius: var(--dz-radius-xs);
+  border-bottom-right-radius: var(--dz-radius-sm);
 }
 
 .bubble-sender {

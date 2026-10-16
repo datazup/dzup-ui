@@ -83,7 +83,7 @@ const resultCount = 248
 .ch-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   padding: clamp(1.25rem, 4vw, 2rem);
   background: var(--dz-background, #fff);
 }
@@ -96,14 +96,14 @@ const resultCount = 248
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
 }
 
 .ch-title-group {
   display: flex;
   align-items: baseline;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
   min-width: 0;
 }
@@ -116,14 +116,14 @@ const resultCount = 248
 .ch-controls {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
 .ch-sort {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ch-sort-label {

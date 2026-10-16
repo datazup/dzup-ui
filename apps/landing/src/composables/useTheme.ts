@@ -1,6 +1,6 @@
-import type { ThemePreference } from '@dzup-ui/core/providers'
+import type { ResolvedTheme, ThemePreference } from '@dzup-ui/core/providers'
 import { useTheme as useProviderTheme } from '@dzup-ui/core/providers'
-import { watch } from 'vue'
+import { computed, watch } from 'vue'
 
 /**
  * Landing-friendly aliases over the single DzThemeProvider authority.
@@ -13,6 +13,16 @@ import { watch } from 'vue'
 export type ThemeMode = ThemePreference
 
 export const THEME_MODES: ThemeMode[] = ['light', 'dark', 'system']
+
+/**
+ * The light/dark family a resolved theme belongs to. The provider can resolve to
+ * `'high-contrast'` (an explicit opt-in this site never offers); the site's
+ * chrome, previews and recipes only know light and dark, and high-contrast is a
+ * light-family theme.
+ */
+export function lightOrDark(resolved: ResolvedTheme): 'light' | 'dark' {
+  return resolved === 'dark' ? 'dark' : 'light'
+}
 
 /**
  * Keep the browser-chrome colour on the theme the site is ACTUALLY showing
@@ -58,13 +68,13 @@ export function useTheme() {
   // only owns the two theme-color metas.
   watch(
     [theme, resolvedTheme],
-    ([mode, resolved]) => applyThemeColorMeta(resolved, mode === 'system'),
+    ([mode, resolved]) => applyThemeColorMeta(lightOrDark(resolved), mode === 'system'),
     { immediate: true },
   )
 
   return {
     mode: theme,
-    resolved: resolvedTheme,
+    resolved: computed(() => lightOrDark(resolvedTheme.value)),
     setMode: setTheme,
     toggle: toggleTheme,
   }

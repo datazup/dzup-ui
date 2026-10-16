@@ -152,7 +152,7 @@ function price(value: number): string {
 <style scoped>
 .dv-wrap {
   background: var(--dz-background, #fff);
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
 }
 
 .dv-title {
@@ -181,15 +181,15 @@ function price(value: number): string {
 .dv-card-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-4, 1rem);
 }
 
 .dv-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .dv-name {
@@ -200,16 +200,16 @@ function price(value: number): string {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 /* List row */
 .dv-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-md, 0.5rem);
 }

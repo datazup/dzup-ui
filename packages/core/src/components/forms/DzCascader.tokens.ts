@@ -25,7 +25,7 @@ export const cascaderTokens = {
   /** Disabled state */
   disabledOpacity: 'var(--dz-input-disabled-opacity)',
   /** Popover surface + columns */
-  surface: 'var(--dz-background)',
+  surface: 'var(--dz-popover)',
   surfaceShadow: 'var(--dz-shadow-lg)',
   columnBorder: 'var(--dz-border)',
   /** Option cells */

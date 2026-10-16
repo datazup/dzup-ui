@@ -155,7 +155,7 @@ const testimonials: Testimonial[] = [
 
 <style scoped>
 .testimonials {
-  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -164,7 +164,7 @@ const testimonials: Testimonial[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   margin-bottom: clamp(2rem, 4vw, 3rem);
   text-align: center;
 }
@@ -182,7 +182,7 @@ const testimonials: Testimonial[] = [
   max-width: 72rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   align-items: start;
 }
 
@@ -196,7 +196,7 @@ const testimonials: Testimonial[] = [
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .tm-rating {
@@ -219,8 +219,8 @@ const testimonials: Testimonial[] = [
 .tm-reviewer {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding-top: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding-top: var(--dz-spacing-3, 0.75rem);
   border-top: 1px solid var(--dz-border, #e5e7eb);
 }
 

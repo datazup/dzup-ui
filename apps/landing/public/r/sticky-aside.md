@@ -188,7 +188,7 @@ const related: string[] = [
 <style scoped>
 .sa {
   background: var(--dz-background, #fff);
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
 }
 
 .sa-row {
@@ -201,24 +201,24 @@ const related: string[] = [
 }
 
 .sa-main-title {
-  margin: var(--dz-space-2, 0.5rem) 0 var(--dz-space-1, 0.25rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 var(--dz-spacing-1, 0.25rem);
 }
 
 .sa-lede {
-  margin: 0 0 var(--dz-space-6, 1.5rem);
+  margin: 0 0 var(--dz-spacing-6, 1.5rem);
 }
 
 .sa-section {
-  padding-bottom: var(--dz-space-6, 1.5rem);
-  scroll-margin-top: var(--dz-space-4, 1rem);
+  padding-bottom: var(--dz-spacing-6, 1.5rem);
+  scroll-margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .sa-section-title {
-  margin: 0 0 var(--dz-space-2, 0.5rem);
+  margin: 0 0 var(--dz-spacing-2, 0.5rem);
 }
 
 .sa-p {
-  margin: 0 0 var(--dz-space-3, 0.75rem);
+  margin: 0 0 var(--dz-spacing-3, 0.75rem);
   line-height: 1.65;
   color: var(--dz-muted-foreground, #4b5563);
 }
@@ -230,7 +230,7 @@ const related: string[] = [
 .sa-aside-inner {
   border: 1px solid transparent;
   border-radius: var(--dz-radius-lg, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   transition: background var(--dz-duration-fast, 150ms) ease, border-color var(--dz-duration-fast, 150ms) ease;
 }
 
@@ -243,7 +243,7 @@ const related: string[] = [
 .sa-aside-head {
   display: block;
   letter-spacing: 0.06em;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .sa-toc {
@@ -252,12 +252,12 @@ const related: string[] = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .sa-toc-link {
   display: block;
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   border-radius: var(--dz-radius-sm, 0.25rem);
   border-left: 2px solid transparent;
   color: var(--dz-muted-foreground, #6b7280);
@@ -281,7 +281,7 @@ const related: string[] = [
 }
 
 .sa-aside-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .sa-related {
@@ -294,12 +294,12 @@ const related: string[] = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .sa-related-item {
   color: var(--dz-muted-foreground, #6b7280);
-  padding-right: var(--dz-space-3, 0.75rem);
+  padding-right: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Stack the aside under the article on narrow viewports. */

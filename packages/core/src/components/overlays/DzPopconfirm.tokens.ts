@@ -14,7 +14,7 @@
 export const popconfirmTokens = {
   /** Anchored popover panel. */
   panel: {
-    background: 'var(--dz-popconfirm-bg, var(--dz-background))',
+    background: 'var(--dz-popconfirm-bg, var(--dz-popover))',
     foreground: 'var(--dz-popconfirm-fg, var(--dz-foreground))',
     border: 'var(--dz-popconfirm-border, var(--dz-border))',
     radius: 'var(--dz-popconfirm-radius, var(--dz-radius-lg))',

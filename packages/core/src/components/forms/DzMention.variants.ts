@@ -37,7 +37,7 @@ export const mentionVariants = tv({
       'flex flex-col',
       'rounded-[var(--dz-radius-lg)]',
       'border border-[var(--dz-border)]',
-      'bg-[var(--dz-background)]',
+      'bg-[var(--dz-popover)]',
       'shadow-[var(--dz-shadow-lg)]',
       'overflow-hidden',
     ].join(' '),

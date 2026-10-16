@@ -49,7 +49,7 @@ const reduced = useReducedMotion()
   padding: var(--dz-spacing-6, 1.5rem);
   border-radius: var(--dz-radius-lg, 0.75rem);
   border: 1px solid var(--dz-border, #b5b7bb);
-  background: var(--dz-surface-subtle, var(--dz-surface, #ffffff));
+  background: var(--dz-surface, #ffffff);
 }
 
 .region__link {
@@ -58,7 +58,7 @@ const reduced = useReducedMotion()
   font-size: var(--dz-text-sm, 0.875rem);
 }
 .region__link:focus-visible {
-  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-primary, #0766ee);
+  outline: var(--dz-control-focus-ring-width, 2px) solid var(--dz-primary, #0766ee);
   outline-offset: 2px;
 }
 </style>

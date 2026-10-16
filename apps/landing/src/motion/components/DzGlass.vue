@@ -50,18 +50,18 @@ const style = computed(() => ({
 <style scoped>
 .dz-glass {
   position: relative;
-  border: 1px solid color-mix(in oklch, var(--dz-colors-base-white, #fff) 22%, transparent);
+  border: 1px solid color-mix(in oklch, oklch(1 0 0) 22%, transparent);
   background: color-mix(in oklch, var(--dz-surface, #ffffff) 55%, transparent);
   backdrop-filter: blur(var(--dz-glass-blur, 14px)) saturate(var(--dz-anim-glass-saturate, 1.6));
   -webkit-backdrop-filter: blur(var(--dz-glass-blur, 14px)) saturate(var(--dz-anim-glass-saturate, 1.6));
   box-shadow:
     var(--dz-shadow-md, 0 8px 24px rgb(15 23 42 / 0.12)),
-    inset 0 1px 0 color-mix(in oklch, var(--dz-colors-base-white, #fff) 30%, transparent);
+    inset 0 1px 0 color-mix(in oklch, oklch(1 0 0) 30%, transparent);
 }
 
 /* Dark theme: a thinner, cooler frost so it sits well over a dark busy backdrop. */
 [data-theme="dark"] .dz-glass {
-  border-color: color-mix(in oklch, var(--dz-colors-base-white, #fff) 12%, transparent);
+  border-color: color-mix(in oklch, oklch(1 0 0) 12%, transparent);
   background: color-mix(in oklch, var(--dz-surface, #ffffff) 45%, transparent);
 }
 

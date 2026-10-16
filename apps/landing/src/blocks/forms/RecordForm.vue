@@ -137,7 +137,7 @@ const PRIORITIES: DzListboxOption[] = [
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);
+  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-spacing-4, 1rem);
   min-height: 100%;
   background: var(--dz-background, #fff);
 }
@@ -150,20 +150,20 @@ const PRIORITIES: DzListboxOption[] = [
 .rf-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .rf-form {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .rf-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .rf-listbox {
@@ -173,8 +173,8 @@ const PRIORITIES: DzListboxOption[] = [
 .rf-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 @media (max-width: 540px) {

@@ -60,7 +60,7 @@ import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
 .hero-centered {
   position: relative;
   overflow: hidden;
-  padding: clamp(2.5rem, 8vw, 5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 8vw, 5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -81,7 +81,7 @@ import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   max-width: 44rem;
   margin: 0 auto;
   text-align: center;
@@ -102,8 +102,8 @@ import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-top: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 560px) {

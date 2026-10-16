@@ -142,8 +142,8 @@ const navLinks = [
 .navbar {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
-  padding: 0 var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-4, 1rem);
+  padding: 0 var(--dz-spacing-6, 1.5rem);
   height: 3.5rem;
   background: var(--dz-surface, #fff);
   border-bottom: 1px solid var(--dz-border, #e5e7eb);
@@ -153,7 +153,7 @@ const navLinks = [
 .nb-brand {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   text-decoration: none;
   color: inherit;
   flex-shrink: 0;
@@ -179,25 +179,25 @@ const navLinks = [
 .nb-links {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
   flex: 1;
 }
 
 .nb-link {
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   text-decoration: none;
-  transition: background var(--dz-transition-fast, 150ms) ease,
-              color var(--dz-transition-fast, 150ms) ease;
+  transition: background var(--dz-transition-fast, 150ms ease),
+              color var(--dz-transition-fast, 150ms ease);
 }
 
 .nb-link:hover,
 .nb-link:focus-visible {
   background: var(--dz-surface-raised, #f3f4f6);
-  color: var(--dz-text, #111827);
+  color: var(--dz-foreground, #1b1d1f);
   outline: none;
 }
 
@@ -210,7 +210,7 @@ const navLinks = [
 .nb-utils {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   flex-shrink: 0;
 }
 
@@ -222,7 +222,7 @@ const navLinks = [
 .nb-mobile-trigger {
   display: none;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   margin-left: auto;
 }
 
@@ -231,32 +231,32 @@ const navLinks = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .nb-drawer-links {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .nb-drawer-link {
   display: block;
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.375rem);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
   text-decoration: none;
-  transition: background var(--dz-transition-fast, 150ms) ease,
-              color var(--dz-transition-fast, 150ms) ease;
+  transition: background var(--dz-transition-fast, 150ms ease),
+              color var(--dz-transition-fast, 150ms ease);
 }
 
 .nb-drawer-link:hover,
 .nb-drawer-link:focus-visible {
   background: var(--dz-surface-raised, #f3f4f6);
-  color: var(--dz-text, #111827);
+  color: var(--dz-foreground, #1b1d1f);
   outline: none;
 }
 
@@ -268,7 +268,7 @@ const navLinks = [
 .nb-drawer-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Visually hidden but readable by screen readers -------------------------*/

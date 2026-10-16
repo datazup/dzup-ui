@@ -125,7 +125,7 @@ createApp(App).mount('#app')`,
 }
 
 .cs-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .cs-title {
@@ -136,9 +136,9 @@ createApp(App).mount('#app')`,
 }
 
 .cs-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
   font-size: var(--dz-text-sm, 0.875rem);
-  color: var(--dz-muted-foreground, var(--dz-foreground-muted, inherit));
+  color: var(--dz-muted-foreground, inherit);
 }
 
 .cs-tabs {

@@ -107,7 +107,7 @@ const stats: Stat[] = [
 
 <style scoped>
 .stats-band {
-  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-surface, #f8fafc);
 }
 
@@ -122,7 +122,7 @@ const stats: Stat[] = [
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 /* Responsive: 4 → 2 → 1 columns */

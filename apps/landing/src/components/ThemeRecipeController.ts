@@ -1,3 +1,4 @@
+import type { ThemePreference } from '@dzup-ui/core/providers'
 import type { ThemeRecipeV1 } from '@dzup-ui/tokens'
 import { useTheme } from '@dzup-ui/core/providers'
 import {
@@ -8,6 +9,7 @@ import {
   themeRecipeToCssVariables,
 } from '@dzup-ui/tokens'
 import { defineComponent, watch } from 'vue'
+import { lightOrDark } from '../composables/useTheme.ts'
 import { useThemeDesigner } from '../composables/useThemeDesigner.ts'
 
 export const LANDING_RECIPE_STORAGE_KEY = 'dz-theme-recipe-v1'
@@ -67,6 +69,11 @@ function persistRecipe(recipe: ThemeRecipeV1): void {
   }
 }
 
+/** The recipe designer has no high-contrast mode; it edits that light-family theme as light. */
+function designerMode(theme: ThemePreference): Exclude<ThemePreference, 'high-contrast'> {
+  return theme === 'high-contrast' ? 'light' : theme
+}
+
 /** Applies and persists the app-owned recipe beneath the sole theme provider. */
 export default defineComponent({
   name: 'ThemeRecipeController',
@@ -82,11 +89,11 @@ export default defineComponent({
     if (initial.fromUrl)
       provider.setTheme(designer.mode.value)
     else
-      designer.mode.value = provider.theme.value
+      designer.mode.value = designerMode(provider.theme.value)
 
     watch(provider.theme, (next) => {
-      if (designer.mode.value !== next)
-        designer.mode.value = next
+      if (designer.mode.value !== designerMode(next))
+        designer.mode.value = designerMode(next)
     })
 
     watch(
@@ -95,7 +102,7 @@ export default defineComponent({
         if (provider.theme.value !== next.mode)
           provider.setTheme(next.mode)
         if (typeof document !== 'undefined')
-          applyThemeRecipe(document.documentElement, next, provider.resolvedTheme.value)
+          applyThemeRecipe(document.documentElement, next, lightOrDark(provider.resolvedTheme.value))
         persistRecipe(next)
       },
       { deep: true, immediate: true },
@@ -103,7 +110,7 @@ export default defineComponent({
 
     watch(provider.resolvedTheme, (resolved) => {
       if (typeof document !== 'undefined')
-        applyThemeRecipe(document.documentElement, designer.recipe, resolved)
+        applyThemeRecipe(document.documentElement, designer.recipe, lightOrDark(resolved))
       persistRecipe(designer.recipe)
     })
 

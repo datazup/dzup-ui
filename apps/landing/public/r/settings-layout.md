@@ -235,8 +235,8 @@ const reduceMotion = ref(false)
 .sl-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
-  padding: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-4, 1rem);
+  padding: var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
@@ -246,14 +246,14 @@ const reduceMotion = ref(false)
 .panel {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
-  margin-top: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-4, 1rem);
+  margin-top: var(--dz-spacing-5, 1.25rem);
 }
 
 .panel-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .panel-title {
@@ -263,7 +263,7 @@ const reduceMotion = ref(false)
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .switch-list {
@@ -272,14 +272,14 @@ const reduceMotion = ref(false)
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .switch-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .switch-copy {
@@ -290,7 +290,7 @@ const reduceMotion = ref(false)
 .sl-footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 @media (max-width: 560px) {

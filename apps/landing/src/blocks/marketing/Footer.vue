@@ -155,13 +155,13 @@ const socials = [
 .site-footer {
   background: var(--dz-surface, #f8fafc);
   border-top: 1px solid var(--dz-border, #e2e8f0);
-  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem) clamp(1.5rem, 3vw, 2rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-spacing-6, 1.5rem) clamp(1.5rem, 3vw, 2rem);
 }
 
 .sf-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-8, 2rem);
+  gap: var(--dz-spacing-8, 2rem);
   max-width: 72rem;
   margin: 0 auto;
 }
@@ -170,7 +170,7 @@ const socials = [
 .sf-top {
   display: grid;
   grid-template-columns: 1.4fr 3fr;
-  gap: var(--dz-space-10, 2.5rem);
+  gap: var(--dz-spacing-10, 2.5rem);
   align-items: flex-start;
 }
 
@@ -178,7 +178,7 @@ const socials = [
 .sf-brand {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 /* Logotype — primary-coloured wordmark, re-themes with the token. */
@@ -200,13 +200,13 @@ const socials = [
 .sf-cols {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-6, 1.5rem);
 }
 
 .sf-col {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .sf-col-heading {
@@ -221,7 +221,7 @@ const socials = [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 /* Links — token underline + focus ring, no raw colours. */
@@ -245,19 +245,19 @@ const socials = [
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .sf-bottom-controls {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .sf-socials {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 /* Responsive: collapse columns on tablet */

@@ -584,7 +584,7 @@
   background: linear-gradient(
     100deg,
     transparent 0%,
-    color-mix(in oklch, var(--dz-colors-base-white, #fff) 38%, transparent) 50%,
+    color-mix(in oklch, oklch(1 0 0) 38%, transparent) 50%,
     transparent 100%
   );
   transform: translateX(-180%) skewX(-18deg);
@@ -615,7 +615,7 @@
   transition: opacity var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out);
   background: radial-gradient(
     circle at var(--dz-tilt-glare-x, 50%) var(--dz-tilt-glare-y, 50%),
-    color-mix(in oklch, var(--dz-colors-base-white, #fff) 42%, transparent),
+    color-mix(in oklch, oklch(1 0 0) 42%, transparent),
     transparent 60%
   );
   mix-blend-mode: soft-light;
@@ -637,7 +637,7 @@
   transition: opacity var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out);
   background: radial-gradient(
     circle at var(--dz-glare-x, 50%) var(--dz-glare-y, 50%),
-    color-mix(in oklch, var(--dz-colors-base-white, #fff) 45%, transparent),
+    color-mix(in oklch, oklch(1 0 0) 45%, transparent),
     transparent 55%
   );
   mix-blend-mode: soft-light;
@@ -875,7 +875,7 @@
   background: linear-gradient(
     100deg,
     transparent 0%,
-    color-mix(in oklch, var(--dz-colors-base-white, #fff) 48%, transparent) 50%,
+    color-mix(in oklch, oklch(1 0 0) 48%, transparent) 50%,
     transparent 100%
   );
   transform: translateX(-100%);
@@ -993,7 +993,7 @@
   top: 50%;
   width: 9px;
   height: 9px;
-  border-radius: var(--dz-radius-xs, 2px);
+  border-radius: var(--dz-radius-sm, 0.25rem);
   background: var(--c, var(--dz-primary, #0766ee));
   will-change: transform, opacity;
   animation: dz-anim-confetti-fly var(--dz-anim-confetti-duration, 0.9s)

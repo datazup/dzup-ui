@@ -75,8 +75,8 @@ import { Download, Plus, Share2 } from '@lucide/vue'
 .ph-wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-6, 1.5rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
@@ -90,7 +90,7 @@ import { Download, Plus, Share2 } from '@lucide/vue'
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   flex-wrap: wrap;
 }
 
@@ -101,14 +101,14 @@ import { Download, Plus, Share2 } from '@lucide/vue'
 .ph-title-group {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   flex-wrap: wrap;
 }
 
 .ph-actions {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   flex-wrap: wrap;
 }
 

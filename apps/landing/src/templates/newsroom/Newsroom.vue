@@ -394,7 +394,7 @@ function iconFor(key: string): Component {
 }
 
 .logo {
-  font-family: var(--dz-font-serif, Georgia, serif);
+  font-family: Georgia, serif;
   font-size: clamp(1.05rem, 2vw, 1.35rem);
   font-weight: 700;
   letter-spacing: -0.01em;

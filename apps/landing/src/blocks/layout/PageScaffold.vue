@@ -239,7 +239,7 @@ const footerCols: { title: string, links: string[] }[] = [
 }
 
 .ps-bar {
-  padding: var(--dz-space-3, 0.75rem) 0;
+  padding: var(--dz-spacing-3, 0.75rem) 0;
   width: 100%;
 }
 
@@ -256,7 +256,7 @@ const footerCols: { title: string, links: string[] }[] = [
 
 .ps-nav {
   display: flex;
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .ps-nav-link,
@@ -298,12 +298,12 @@ const footerCols: { title: string, links: string[] }[] = [
 }
 
 .ps-hero-actions {
-  margin-top: var(--dz-space-2, 0.5rem);
+  margin-top: var(--dz-spacing-2, 0.5rem);
 }
 
 /* Sections */
 .ps-section {
-  padding: clamp(2rem, 5vw, 3rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2rem, 5vw, 3rem) var(--dz-spacing-6, 1.5rem);
 }
 
 .ps-feature-icon {
@@ -328,17 +328,17 @@ const footerCols: { title: string, links: string[] }[] = [
 }
 
 .ps-split-body {
-  margin: var(--dz-space-3, 0.75rem) 0;
+  margin: var(--dz-spacing-3, 0.75rem) 0;
   line-height: 1.65;
 }
 
 .ps-chiprow {
-  margin-top: var(--dz-space-4, 1rem);
+  margin-top: var(--dz-spacing-4, 1rem);
 }
 
 .ps-split-aside {
   flex: 0 0 14rem;
-  padding: var(--dz-space-5, 1.25rem);
+  padding: var(--dz-spacing-5, 1.25rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-lg, 0.75rem);
   background: var(--dz-muted, #f9fafb);
@@ -350,11 +350,11 @@ const footerCols: { title: string, links: string[] }[] = [
 
 /* Footer */
 .ps-footer {
-  padding: 0 var(--dz-space-6, 1.5rem) var(--dz-space-8, 2rem);
+  padding: 0 var(--dz-spacing-6, 1.5rem) var(--dz-spacing-8, 2rem);
 }
 
 .ps-footer-rule {
-  margin-bottom: var(--dz-space-6, 1.5rem);
+  margin-bottom: var(--dz-spacing-6, 1.5rem);
 }
 
 .ps-footer-row {

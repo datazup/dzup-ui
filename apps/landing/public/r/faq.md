@@ -125,7 +125,7 @@ const faqs: FaqItem[] = [
 
 <style scoped>
 .faq-section {
-  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -134,7 +134,7 @@ const faqs: FaqItem[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   margin-bottom: clamp(2rem, 4vw, 3rem);
   text-align: center;
 }
@@ -172,7 +172,7 @@ const faqs: FaqItem[] = [
 .faq-answer {
   margin: 0;
   line-height: 1.7;
-  padding-bottom: var(--dz-space-1, 0.25rem);
+  padding-bottom: var(--dz-spacing-1, 0.25rem);
 }
 </style>
 ```

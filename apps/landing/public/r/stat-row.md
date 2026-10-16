@@ -72,14 +72,14 @@ const stats = [
 
 <style scoped>
 .sr-wrap {
-  padding: var(--dz-space-6, 1.5rem);
+  padding: var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
 .sr-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 /* 4 → 2 columns */

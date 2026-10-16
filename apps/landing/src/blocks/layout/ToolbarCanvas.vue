@@ -205,7 +205,7 @@ const position: Field[] = [
 
 .tc-rail {
   flex: 0 0 auto;
-  padding: var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-2, 0.5rem);
   border-right: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-muted, #f9fafb);
 }
@@ -223,8 +223,8 @@ const position: Field[] = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-8, 2rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-8, 2rem);
   min-height: 100%;
 }
 
@@ -234,10 +234,10 @@ const position: Field[] = [
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-md, 0.5rem);
   box-shadow: var(--dz-shadow-md, 0 4px 12px rgb(0 0 0 / 0.08));
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .tc-shape {
@@ -257,7 +257,7 @@ const position: Field[] = [
 
 .tc-shape--row {
   display: flex;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
   background: transparent;
 }
 
@@ -281,20 +281,20 @@ const position: Field[] = [
 .tc-group-label {
   display: block;
   letter-spacing: 0.06em;
-  margin-bottom: var(--dz-space-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-2, 0.5rem);
 }
 
 .tc-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tc-field {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-sm, 0.25rem);
   font-size: var(--dz-text-sm, 0.875rem);
@@ -310,19 +310,19 @@ const position: Field[] = [
 }
 
 .tc-rule {
-  margin: var(--dz-space-4, 1rem) 0;
+  margin: var(--dz-spacing-4, 1rem) 0;
 }
 
 .tc-appearance {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tc-swatch-row {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .tc-swatch {

@@ -185,8 +185,8 @@ const money = (value: number) => `$${value.toFixed(2)}`
 .pg-head {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
-  margin-bottom: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
+  margin-bottom: var(--dz-spacing-5, 1.25rem);
 }
 
 .pg-heading,
@@ -200,7 +200,7 @@ const money = (value: number) => `$${value.toFixed(2)}`
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--dz-space-5, 1.25rem);
+  gap: var(--dz-spacing-5, 1.25rem);
 }
 
 .pg-cell {
@@ -214,14 +214,14 @@ const money = (value: number) => `$${value.toFixed(2)}`
 /* Corner flag sits inside the image overlay, top-left. */
 .pg-flag {
   position: absolute;
-  top: var(--dz-space-3, 0.75rem);
-  left: var(--dz-space-3, 0.75rem);
+  top: var(--dz-spacing-3, 0.75rem);
+  left: var(--dz-spacing-3, 0.75rem);
 }
 
 .pg-body {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
 }
 
 .pg-eyebrow {
@@ -237,15 +237,15 @@ const money = (value: number) => `$${value.toFixed(2)}`
 .pg-rating {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-top: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-top: var(--dz-spacing-1, 0.25rem);
 }
 
 .pg-price {
   display: flex;
   align-items: baseline;
-  gap: var(--dz-space-2, 0.5rem);
-  margin: var(--dz-space-2, 0.5rem) 0 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0 0;
 }
 
 .pg-was {

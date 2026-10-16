@@ -119,8 +119,8 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ls-title {
@@ -128,38 +128,38 @@ onBeforeUnmount(() => {
 }
 
 .ls-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .ls-status {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
-  margin-bottom: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .ls-spin-row {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .ls-media {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
 }
 
 .ls-person {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .ls-person-lines {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   flex: 1;
 }
 
@@ -170,9 +170,9 @@ onBeforeUnmount(() => {
 .ls-chart {
   display: flex;
   align-items: flex-end;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   height: 7rem;
-  padding: var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-md, 0.5rem);
   background: color-mix(in oklch, var(--dz-primary) 6%, var(--dz-background, #fff));
 }

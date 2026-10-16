@@ -95,7 +95,7 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
 .rc-wrap {
   position: relative;
   overflow: hidden;
-  padding: clamp(2.5rem, 7vw, 4.5rem) var(--dz-space-6, 1.5rem);
+  padding: clamp(2.5rem, 7vw, 4.5rem) var(--dz-spacing-6, 1.5rem);
   background: var(--dz-background, #fff);
 }
 
@@ -113,7 +113,7 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   max-width: 40rem;
   margin: 0 auto;
   text-align: center;
@@ -128,17 +128,17 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: var(--dz-space-2, 0.5rem);
-  margin: var(--dz-space-2, 0.5rem) 0;
+  gap: var(--dz-spacing-2, 0.5rem);
+  margin: var(--dz-spacing-2, 0.5rem) 0;
 }
 
 .rc-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-1, 0.25rem);
   min-width: 4rem;
-  padding: var(--dz-space-3, 0.75rem) var(--dz-space-2, 0.5rem);
+  padding: var(--dz-spacing-3, 0.75rem) var(--dz-spacing-2, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   border-radius: var(--dz-radius-md, 0.5rem);
   background: var(--dz-surface, #f8fafc);
@@ -156,15 +156,15 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
   font-size: var(--dz-text-xs, 0.75rem);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--dz-foreground-muted, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .rc-sep {
   font-size: clamp(1.25rem, 4vw, 2rem);
   font-weight: 700;
   line-height: 1;
-  padding-top: var(--dz-space-3, 0.75rem);
-  color: var(--dz-foreground-muted, #64748b);
+  padding-top: var(--dz-spacing-3, 0.75rem);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .rc-claimed {

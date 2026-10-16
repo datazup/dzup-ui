@@ -130,8 +130,8 @@ function flatten(nodes: TreeNode[]): TreeNode[] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-bottom: 1px solid var(--dz-border, #e5e7eb);
 }
 
@@ -145,18 +145,18 @@ function flatten(nodes: TreeNode[]): TreeNode[] {
 }
 
 .ft-pane {
-  padding: var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   min-height: 16rem;
 }
 
 .ft-detail {
-  padding: var(--dz-space-4, 1rem);
+  padding: var(--dz-spacing-4, 1rem);
   border-left: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #f8fafc);
 }
 
 .ft-detail-label {
-  margin: 0 0 var(--dz-space-1, 0.25rem);
+  margin: 0 0 var(--dz-spacing-1, 0.25rem);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }

@@ -130,7 +130,7 @@ const range = ref<'day' | 'week' | 'month' | 'year'>('week')
 .bgr-group {
   display: flex;
   flex-direction: column;
-  gap: var(--dz-space-3, 0.75rem);
+  gap: var(--dz-spacing-3, 0.75rem);
 }
 
 .bgr-label {

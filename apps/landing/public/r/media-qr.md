@@ -110,21 +110,21 @@ function refresh(): void {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
   padding: clamp(1.25rem, 4vw, 1.75rem);
   border-radius: var(--dz-radius-xl, 0.875rem);
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);
   background: var(--dz-surface, #fff);
   box-shadow:
-    0 4px 6px -1px color-mix(in oklch, var(--dz-shadow, #000) 8%, transparent),
-    0 2px 4px -2px color-mix(in oklch, var(--dz-shadow, #000) 6%, transparent);
+    0 4px 6px -1px color-mix(in oklch, oklch(0 0 0) 8%, transparent),
+    0 2px 4px -2px color-mix(in oklch, oklch(0 0 0) 6%, transparent);
 }
 
 .qr-head {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .qr-title {
@@ -139,7 +139,7 @@ function refresh(): void {
 
 /* Framed quiet zone around the code. */
 .qr-code {
-  padding: var(--dz-space-3, 0.75rem);
+  padding: var(--dz-spacing-3, 0.75rem);
   border-radius: var(--dz-radius-lg, 0.75rem);
   background: var(--dz-background, #fff);
   border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 50%, transparent);
@@ -187,7 +187,7 @@ function refresh(): void {
 
 .qr-actions {
   display: flex;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
   width: 100%;
 }
 

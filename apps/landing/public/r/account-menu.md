@@ -174,8 +174,8 @@ function choose(label: string): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dz-space-4, 1rem);
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-4, 1rem);
+  gap: var(--dz-spacing-4, 1rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-4, 1rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
   border: 1px solid var(--dz-border, #e5e7eb);
   background: var(--dz-surface, #fff);
@@ -184,7 +184,7 @@ function choose(label: string): void {
 .am-brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .am-brand-mark {
@@ -202,7 +202,7 @@ function choose(label: string): void {
 .am-actions {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 /* Avatar trigger ---------------------------------------------------------- */
@@ -211,11 +211,11 @@ function choose(label: string): void {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
+  padding: var(--dz-spacing-1, 0.25rem) var(--dz-spacing-2, 0.5rem);
   border-radius: var(--dz-radius-full, 999px);
   cursor: pointer;
-  transition: background var(--dz-transition-fast, 150ms) ease;
+  transition: background var(--dz-transition-fast, 150ms ease);
 }
 
 .am-trigger:hover {
@@ -230,19 +230,19 @@ function choose(label: string): void {
 .am-trigger-name {
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-text, #111827);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .am-trigger-caret {
-  color: var(--dz-text-muted, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* Menu header ------------------------------------------------------------- */
 .am-menu-head {
   display: flex;
   align-items: center;
-  gap: var(--dz-space-3, 0.75rem);
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-2, 0.5rem) var(--dz-space-1, 0.25rem);
+  gap: var(--dz-spacing-3, 0.75rem);
+  padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-2, 0.5rem) var(--dz-spacing-1, 0.25rem);
   min-width: 14rem;
 }
 
@@ -256,7 +256,7 @@ function choose(label: string): void {
 .am-menu-name {
   display: inline-flex;
   align-items: center;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 
 .am-danger {
@@ -266,7 +266,7 @@ function choose(label: string): void {
 
 /* Result ------------------------------------------------------------------ */
 .am-result {
-  margin-top: var(--dz-space-3, 0.75rem);
+  margin-top: var(--dz-spacing-3, 0.75rem);
   min-height: 1.25rem;
 }
 

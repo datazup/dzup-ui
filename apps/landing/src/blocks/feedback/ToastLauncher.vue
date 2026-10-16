@@ -94,7 +94,7 @@ const ToastLauncher = defineComponent({
 }
 
 .tl-head {
-  margin-bottom: var(--dz-space-4, 1rem);
+  margin-bottom: var(--dz-spacing-4, 1rem);
 }
 
 .tl-title {
@@ -102,12 +102,12 @@ const ToastLauncher = defineComponent({
 }
 
 .tl-sub {
-  margin: var(--dz-space-1, 0.25rem) 0 0;
+  margin: var(--dz-spacing-1, 0.25rem) 0 0;
 }
 
 .tl-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--dz-space-2, 0.5rem);
+  gap: var(--dz-spacing-2, 0.5rem);
 }
 </style>

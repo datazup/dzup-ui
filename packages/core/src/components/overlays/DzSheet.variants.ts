@@ -25,7 +25,7 @@ export const sheetVariants = tv({
     ].join(' '),
     content: [
       'fixed z-50',
-      'bg-[var(--dz-background)]',
+      'bg-[var(--dz-surface-raised)]',
       'text-[var(--dz-foreground)]',
       'shadow-[var(--dz-shadow-xl)]',
       'p-[var(--dz-spacing-6)]',
