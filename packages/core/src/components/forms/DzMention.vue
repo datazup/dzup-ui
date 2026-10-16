@@ -34,11 +34,11 @@ import type {
  * />
  * ```
  */
-import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessageFormat, useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { mentionVariants } from './DzMention.variants.ts'
@@ -106,8 +106,14 @@ const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.v
 const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 const controlRef = ref<HTMLTextAreaElement | HTMLInputElement | null>(null)
 
@@ -115,27 +121,9 @@ const controlRef = ref<HTMLTextAreaElement | HTMLInputElement | null>(null)
 // Resolved field-context state (mirrors DzTextarea / DzCascader)
 // ---------------------------------------------------------------------------
 
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
 const resolvedReadonly = computed(() => props.readonly ?? false)
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-const resolvedInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
 
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
 const listboxId = computed(() => `${resolvedId.value}-listbox`)
-
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 // ---------------------------------------------------------------------------
 // Suggestion state

@@ -62,16 +62,39 @@ jobs:
           yarn validate:engines
           yarn release:publish --dry-run
 
-      - name: Create Release Pull Request or Publish
+      # UI-DZUP-UI-SEC-M-09. The npm token reaches one step: "Publish to npm",
+      # which runs only the publish script over output built before it. Every
+      # step that executes repository or dependency code — the install (which
+      # runs lifecycle scripts), the builds, `yarn version-packages` — runs with
+      # no npm token in its environment, so a compromised build or install-time
+      # dependency has nothing to read. Pinned by
+      # packages/tooling/src/release/release-workflow.spec.ts.
+      #
+      # With changesets pending this opens or updates the release PR and the
+      # steps below are skipped. With none pending (the release PR has merged) it
+      # does nothing, and the steps below build, publish and tag.
+      - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
           version: yarn version-packages
-          publish: yarn release
           title: 'chore: version packages'
           commit: 'chore: version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # A clean rebuild, as `yarn release` did inside the publish step before the
+      # token was scoped: the tests above may have regenerated artifacts.
+      - name: Build release artifacts
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: yarn build
+
+      # Packs and uploads the prebuilt output; no published package declares a
+      # pack or publish lifecycle script.
+      - name: Publish to npm
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: yarn release:publish --provenance
+        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           # `yarn npm publish` (release:publish) reads its token from here, not
@@ -80,3 +103,14 @@ jobs:
           # both belong to registry.npmjs.org.
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           YARN_NPM_PUBLISH_REGISTRY: https://registry.npmjs.org
+
+      # `changeset tag` prints a `New tag:` line per released package; the
+      # action pushes those tags and opens a GitHub release for each, as it did
+      # when `yarn release` ended with the same command.
+      - name: Tag and create GitHub releases
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        uses: changesets/action@v1
+        with:
+          publish: yarn changeset tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

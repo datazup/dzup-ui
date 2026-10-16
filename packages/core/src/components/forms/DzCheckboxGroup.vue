@@ -15,9 +15,9 @@ import type { DzCheckboxGroupContext, DzCheckboxGroupEmits, DzCheckboxGroupProps
  * </DzCheckboxGroup>
  * ```
  */
-import { computed, provide, useAttrs, useId } from 'vue'
+import { computed, provide, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 import {
   DZ_CHECKBOX_GROUP_KEY,
@@ -46,21 +46,7 @@ const emit = defineEmits<DzCheckboxGroupEmits>()
 defineSlots<DzCheckboxGroupSlots>()
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
-
-/** Resolved element ID — prop overrides field context, falls back to auto-generated */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-/** Disabled resolved from prop or an enclosing DzFormField */
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-/** aria-describedby resolved from prop or an enclosing DzFormField */
-const resolvedAriaDescribedby = computed(
-  () => props.ariaDescribedby ?? fieldContext?.ariaDescribedby.value,
-)
+const { fieldContext, resolvedId, resolvedDisabled, resolvedAriaDescribedby } = useFormControl(props)
 
 /** aria-invalid resolved from prop or an enclosing DzFormField */
 const resolvedAriaInvalid = computed(

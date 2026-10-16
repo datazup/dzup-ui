@@ -25,10 +25,10 @@ import type {
  * <DzTagsInput v-model:value="keywords" :max="5" />
  * ```
  */
-import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessageFormat } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzChip from '../data/DzChip.vue'
@@ -80,8 +80,14 @@ defineSlots<DzTagsInputSlots>()
 const model = useDualModel(primaryModel, legacyValueModel)
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props, { describedby: id => `${id}-status` })
 
 /** Pending (uncommitted) text in the field. */
 const draft = ref('')
@@ -96,26 +102,9 @@ let flashTimer: ReturnType<typeof setTimeout> | undefined
 // Resolved field-context state
 // ---------------------------------------------------------------------------
 
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
 const resolvedReadonly = computed(() => props.readonly ?? false)
-const resolvedInvalid = computed(() => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false))
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
 const statusId = computed(() => `${resolvedId.value}-status`)
-
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  parts.push(statusId.value)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.join(' ')
-})
 
 const isInteractive = computed(() => !resolvedDisabled.value && !resolvedReadonly.value)
 

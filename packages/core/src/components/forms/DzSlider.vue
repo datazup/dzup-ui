@@ -13,10 +13,10 @@ import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
  * <DzSlider v-model="progress" tone="success" size="lg" />
  * ```
  */
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
 import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 import { sliderVariants } from './DzSlider.variants.ts'
 
@@ -56,41 +56,17 @@ defineSlots<DzSliderSlots>()
 const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 /** Template ref for the slider thumb — exposed for programmatic focus. */
 const thumbRef = ref<{ $el?: HTMLElement } | HTMLElement | null>(null)
-
-/** Resolved element ID — prop overrides field context, falls back to auto-generated */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-const resolvedInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-const resolvedRequired = computed(
-  () => props.required || (fieldContext?.isRequired.value ?? false),
-)
-
-/** ID for the error message element (for aria-describedby) */
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 /**
  * Application-wide defaults (ADR-20 §6, adopted in TASK-R5-O3).

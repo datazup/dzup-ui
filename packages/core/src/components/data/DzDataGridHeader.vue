@@ -14,6 +14,7 @@ import { computed, inject } from 'vue'
 import { useDataGridHeader } from '../../composables/useDataGridHeader/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
+import { isDevEnv } from '../../utilities/isDevEnv.ts'
 import DzButton from '../buttons/DzButton.vue'
 import DzIconButton from '../buttons/DzIconButton.vue'
 import DzCheckbox from '../forms/DzCheckbox.vue'
@@ -47,7 +48,7 @@ const operatorItems: DzSelectItem[] = [
 // that guarded template.
 const ctx = inject(DZ_DATA_GRID_KEY, null)
 if (!ctx) {
-  if (import.meta.env?.DEV) {
+  if (isDevEnv()) {
     console.warn('[DzDataGridHeader] must be used inside a <DzDataGrid> parent.')
   }
 }

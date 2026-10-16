@@ -15,7 +15,7 @@ import { DzSwitch } from '@dzup-ui/core'
  * @deprecated Use DzSwitch from @dzup-ui/core instead.
  */
 import { computed, onMounted } from 'vue'
-import { warnDeprecated } from '../utils/deprecation.ts'
+import { isDevEnv, warnDeprecated } from '../utils/deprecation.ts'
 
 const model = defineModel<boolean>({ default: false })
 
@@ -34,7 +34,7 @@ const emit = defineEmits<{
 onMounted(() => {
   warnDeprecated('DzSwitchCompat', 'DzSwitch')
 
-  if (import.meta.env?.DEV) {
+  if (isDevEnv()) {
     if (props.activeColor) {
       console.warn(
         '[dzup-ui/compat] DzSwitchCompat: "activeColor" prop is dropped in vNext. Use design tokens instead.',

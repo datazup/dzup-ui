@@ -19,9 +19,9 @@ import type { DzInputMaskEmits, DzInputMaskProps, DzInputMaskSlots } from './DzI
  * <DzInputMask v-model="phone" mask="(999) 999-9999" @update:unmasked="raw = $event" />
  * ```
  */
-import { computed, inject, onMounted, ref, useAttrs, useId, watch } from 'vue'
+import { computed, inject, onMounted, ref, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_INPUT_GROUP_KEY } from './DzInputGroup.types.ts'
 import { applyMask, backspaceValue, forwardDeleteValue } from './DzInputMask.engine.ts'
@@ -57,35 +57,25 @@ defineSlots<DzInputMaskSlots>()
 
 const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
-const autoId = useId()
 
 /** Optional DzInputGroup context (ADR-08) — present only when grouped */
 const groupContext = inject(DZ_INPUT_GROUP_KEY, null)
 
-/** Optional DzFormField context (ADR-08) — present only when inside a field */
-const fieldContext = useFormFieldContext()
+/** Id, state and aria-describedby, resolved against an optional DzFormField (ADR-08) */
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid: isInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props, { disabled: () => groupContext?.disabled.value ?? false })
 
 /** Whether this input is nested inside a DzInputGroup shell */
 const isGrouped = computed(() => groupContext !== null)
 
 /** Resolved size: own prop wins, then group context, then default */
 const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'md')
-
-/** Resolved disabled: own prop OR group-level OR form-field-level disabled */
-const resolvedDisabled = computed(
-  () => props.disabled || (groupContext?.disabled.value ?? false) || (fieldContext?.isDisabled.value ?? false),
-)
-
-/** Resolved required: own prop OR form-field-level required */
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-
-/** Resolved element ID — explicit prop wins, then the field context's control ID */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-/** Whether the invalid state should show (own prop/error OR form-field-level) */
-const isInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
 
 /** Wrapper classes merged with consumer class via cn() (ADR-10) */
 const wrapperClasses = computed(() =>
@@ -113,21 +103,6 @@ const errorClasses = computed(() => cn(
   'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
   props.ui?.error,
 ))
-
-/** ID for the error message element (for aria-describedby) */
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 // ── Mask state ──
 

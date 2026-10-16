@@ -40,14 +40,14 @@
     },
     {
       "file": "packages/core/src/components/data/DzDataGridBody.vue",
-      "line": 141,
+      "line": 150,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"getColumnStyle(col)\""
     },
     {
       "file": "packages/core/src/components/data/DzDataGridHeader.vue",
-      "line": 133,
+      "line": 134,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"getColumnStyle(col)\""
@@ -194,49 +194,49 @@
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 193,
+      "line": 165,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ backgroundColor: model }\""
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 215,
+      "line": 187,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ height: `${props.canvasHeight}px` }\""
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 232,
+      "line": 204,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ backgroundColor: model }\""
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 255,
+      "line": 227,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ backgroundColor: color }\""
     },
     {
       "file": "packages/core/src/components/forms/DzKnob.vue",
-      "line": 316,
+      "line": 298,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ width: `${diameter}px`, height: `${diameter}px` }\""
     },
     {
       "file": "packages/core/src/components/forms/DzMention.vue",
-      "line": 841,
+      "line": 829,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"menuStyle\""
     },
     {
       "file": "packages/core/src/components/forms/DzRating.vue",
-      "line": 312,
+      "line": 290,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ width: `${fillPercent(index)}%` }\""

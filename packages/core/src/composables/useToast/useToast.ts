@@ -14,6 +14,7 @@ import {
   DZ_TOAST_KEY,
 
 } from '../../components/feedback/DzToast.types.ts'
+import { isDevEnv } from '../../utilities/isDevEnv.ts'
 
 // ---------------------------------------------------------------------------
 // Return type
@@ -51,7 +52,7 @@ export type ToastOptions = Omit<ToastItem, 'id'>
 export function useToast(): UseToastReturn {
   const context = inject<DzToastContext | null>(DZ_TOAST_KEY, null)
 
-  if (!context && import.meta.env?.DEV) {
+  if (!context && isDevEnv()) {
     console.warn(
       '[dzup-ui] useToast() must be used within a <DzToastProvider>. '
       + 'Toast calls will be silently ignored.',

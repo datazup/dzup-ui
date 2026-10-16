@@ -20,7 +20,7 @@ import {
  * @deprecated Use DzTooltip, DzTooltipTrigger, DzTooltipContent from @dzup-ui/core instead.
  */
 import { computed, onMounted } from 'vue'
-import { warnDeprecated } from '../utils/deprecation.ts'
+import { isDevEnv, warnDeprecated } from '../utils/deprecation.ts'
 
 const props = withDefaults(defineProps<DzTooltipCompatProps>(), {
   placement: 'top',
@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<DzTooltipCompatProps>(), {
 onMounted(() => {
   warnDeprecated('DzTooltipCompat', 'DzTooltip')
 
-  if (import.meta.env?.DEV && props.trigger) {
+  if (isDevEnv() && props.trigger) {
     console.warn(
       '[dzup-ui/compat] DzTooltipCompat: "trigger" prop is dropped in vNext. Tooltips use hover by default.',
     )

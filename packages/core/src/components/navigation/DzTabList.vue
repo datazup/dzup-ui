@@ -17,6 +17,7 @@ import type { DzTabListProps, DzTabListSlots } from './DzTabs.types.ts'
 import { TabsList } from 'reka-ui'
 import { computed, inject, useAttrs, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+import { isDevEnv } from '../../utilities/isDevEnv.ts'
 import { DZ_TABS_KEY } from './DzTabs.types.ts'
 import { tabsVariants } from './DzTabs.variants.ts'
 
@@ -33,7 +34,7 @@ defineSlots<DzTabListSlots>()
 const attrs = useAttrs()
 const tabsContext = inject(DZ_TABS_KEY, null)
 
-if (!tabsContext && import.meta.env?.DEV) {
+if (!tabsContext && isDevEnv()) {
   console.warn('[DzTabList] must be used inside a <DzTabs> parent.')
 }
 

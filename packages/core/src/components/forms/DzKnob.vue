@@ -13,11 +13,11 @@ import type { DzKnobEmits, DzKnobProps, DzKnobSlots } from './DzKnob.types.ts'
  * <DzKnob v-model:value="level" :min="0" :max="100" value-template="{value}%" show-value />
  * ```
  */
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 import { knobTokens } from './DzKnob.tokens.ts'
 import { knobVariants } from './DzKnob.variants.ts'
@@ -71,8 +71,14 @@ const dzDirection = useDzDirection()
 const model = useDualModel(primaryModel, legacyValueModel)
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 // ---------------------------------------------------------------------------
 // Geometry constants -- a 270° gauge with a 90° gap at the bottom.
@@ -90,32 +96,8 @@ const svgRef = ref<SVGSVGElement | null>(null)
 /** Whether a pointer drag is in progress. */
 const dragging = ref(false)
 
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
-
-const resolvedInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-
 /** Interactive = neither disabled nor readonly (readonly is display-only). */
 const isInteractive = computed(() => !resolvedDisabled.value && !props.readonly)
-
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context. */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 /** Rendered dial diameter in px, derived from size (icon falls back to md). */
 const diameter = computed(() => {

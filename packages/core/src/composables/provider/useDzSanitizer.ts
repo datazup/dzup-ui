@@ -3,6 +3,7 @@ import type { Ref } from 'vue'
 import { DZ_SANITIZER_KEY } from '@dzup-ui/contracts'
 import { inject, provide } from 'vue'
 import { DZ_ESCAPING_SANITIZER, resolveSanitizer } from '../../security/sanitize.ts'
+import { isDevEnv } from '../../utilities/isDevEnv.ts'
 
 /**
  * The application's HTML sanitizer (TASK-R3-O2, ADR-20 amendment A6).
@@ -44,7 +45,7 @@ export function useDzSanitizer(instance?: DzSanitizerOptions | null): DzSanitize
   const injected = inject(DZ_SANITIZER_KEY, undefined)
 
   if (injected === null) {
-    if (import.meta.env?.DEV) {
+    if (isDevEnv()) {
       throw new Error(
         '[dzup-ui] A DzProvider above this component set `sanitizer` to null, '
         + 'which means "the host supplies one" — but nothing supplied it. Pass a '

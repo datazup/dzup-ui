@@ -2,8 +2,9 @@ import { mount } from '@vue/test-utils'
 /**
  * DzDataGrid — Contract Spec v1 conformance tests.
  */
-import { describe, expect, it } from 'vitest'
+import { describe, expect, expectTypeOf, it } from 'vitest'
 import DzDataGrid from './DzDataGrid.vue'
+import dataGridSource from './DzDataGrid.vue?raw'
 
 const columns = [{ field: 'name', header: 'Name' }]
 const data = [{ name: 'Alice' }, { name: 'Bob' }]
@@ -176,6 +177,30 @@ describe('dzDataGrid — Contract Spec v1', () => {
       },
     })
     expect(wrapper.findAll('.custom-cell').map(cell => cell.text())).toEqual(['name=Alice/Alice', 'name=Bob/Bob'])
+  })
+
+  // UI-DZUP-UI-CODE-M-01: the row type `T` survives context, row events and slots.
+  it('keeps the consumer row type in rowClick and the #cell slot', async () => {
+    interface User extends Record<string, unknown> { id: number, name: string }
+    type GridCtx = NonNullable<ReturnType<typeof DzDataGrid<User>>['__ctx']>
+    expectTypeOf<Parameters<NonNullable<GridCtx['props']['onRowClick']>>[0]>().toEqualTypeOf<User>()
+    expectTypeOf<Parameters<NonNullable<GridCtx['slots']['cell']>>[0]['row']>().toEqualTypeOf<User>()
+
+    const users: User[] = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }]
+    const wrapper = mount(DzDataGrid, {
+      props: { data: users, columns: [{ field: 'name', header: 'Name' }] },
+      slots: { cell: `<template #cell="{ row }"><i class="typed-cell">{{ row.id }}</i></template>` },
+    })
+    expect(wrapper.findAll('.typed-cell').map(cell => cell.text())).toEqual(['1', '2'])
+    await wrapper.findAll('[data-part="body"] [data-part="row"]')[1]!.trigger('click')
+    const clicks = wrapper.emitted('rowClick') as Array<[User, number]>
+    expect(clicks[0]![0]).toEqual(users[1])
+    expect(clicks[0]![1]).toBe(1)
+  })
+
+  it('wires the context and the forwarded #cell slot without casts or @vue-ignore', () => {
+    expect(dataGridSource).not.toMatch(/as DzDataGridContext\[/)
+    expect(dataGridSource).not.toContain('@vue-ignore')
   })
 
   it('replaces the empty state through the #empty slot', () => {

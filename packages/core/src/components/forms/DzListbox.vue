@@ -33,11 +33,11 @@ import {
  * <DzListbox v-model="selected" multiple filter checkmark :options="cities" />
  * ```
  */
-import { computed, markRaw, ref, useAttrs, useId } from 'vue'
+import { computed, markRaw, ref, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { listboxVariants } from './DzListbox.variants.ts'
@@ -129,44 +129,19 @@ const resolvedFilterPlaceholder = computed(() => props.filterPlaceholder ?? dzMe
 const resolvedEmptyMessage = computed(() => props.emptyMessage ?? dzMessages.value.empty)
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 /** A visible option augmented with its flat index (used for range selection) */
 type VisibleOption = DzListboxOption & { index: number }
 
 // -- Resolved field state ---------------------------------------------------
-
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-const resolvedInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-/**
- * `required` was reaching the Reka root and nothing else; `readonly` and
- * `loading` were declared, defaulted, and read nowhere at all. All three now
- * reach the DOM as the presence-only attributes ADR-19 §4 names, so a
- * stylesheet and a renderer can both see them (renderer contract C3).
- */
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 const styles = computed(() =>
   listboxVariants({

@@ -28,6 +28,8 @@
  * @module @dzup-ui/core/utilities/warnConflictingProps
  */
 
+import { isDevEnv } from './isDevEnv.ts'
+
 /**
  * `component.winner+loser` triples already warned about, so a list rendering 200
  * rows produces one line rather than 200.
@@ -47,8 +49,8 @@ const warned = new Set<string>()
  * Warn, once per component and prop pair per session, when both spellings of one
  * setting were passed.
  *
- * No-op outside dev, and the `import.meta.env?.DEV` guard lets a bundler drop
- * the whole body. Both values are compared against `undefined` only: `null`, `0`
+ * No-op outside dev, and the `isDevEnv()` guard (a `process.env.NODE_ENV`
+ * check) lets the consumer's bundler drop the whole body. Both values are compared against `undefined` only: `null`, `0`
  * and `''` are values a consumer may have meant, and treating them as absent
  * would suppress the warning for exactly the ambiguous cases.
  *
@@ -73,7 +75,7 @@ export function warnConflictingProps(
   loser: readonly [string, unknown],
   guidance: string,
 ): void {
-  if (import.meta.env?.DEV !== true)
+  if (!isDevEnv())
     return
   if (winner[1] === undefined || loser[1] === undefined)
     return

@@ -11,6 +11,7 @@
 
 import type { DzThemeContext, ThemePreference } from './DzThemeProvider.types.ts'
 import { computed, inject, ref } from 'vue'
+import { isDevEnv } from '../utilities/isDevEnv.ts'
 import { DZ_THEME_KEY } from './DzThemeProvider.types.ts'
 
 export interface UseThemeOptions {
@@ -69,7 +70,7 @@ export function useTheme(options?: UseThemeOptions): DzThemeContext {
 
   if (!context) {
     if (options?.optional) {
-      if (import.meta.env?.DEV) {
+      if (isDevEnv()) {
         console.warn(
           '[DzThemeProvider] useTheme({ optional: true }) called outside of a '
           + '<DzThemeProvider>. Returning no-op sentinel context.',
@@ -78,7 +79,7 @@ export function useTheme(options?: UseThemeOptions): DzThemeContext {
       return createSentinelContext()
     }
 
-    if (import.meta.env?.DEV) {
+    if (isDevEnv()) {
       console.warn(
         '[DzThemeProvider] useTheme() was called outside of a <DzThemeProvider>. '
         + 'Wrap your app in <DzThemeProvider> to use theme context.',

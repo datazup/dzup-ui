@@ -20,10 +20,10 @@ import { RadioGroupRoot } from 'reka-ui'
  * </DzRadioGroup>
  * ```
  */
-import { computed, useAttrs, useId } from 'vue'
+import { computed, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 
 defineOptions({
@@ -56,37 +56,13 @@ defineSlots<DzRadioGroupSlots>()
 const dzDirection = useDzDirection()
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
-
-/**
- * `required` reached the Reka primitive (which renders `aria-required`) but
- * never reached the DOM as the presence-only attribute ADR-19 §4 lists, so no
- * stylesheet could show a required field as required (renderer contract C3).
- */
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-
-/**
- * The group read the field context for required, describedby and invalid — but
- * not for disabled, so `<DzFormField disabled>` left every radio in the group
- * live (renderer contract C2). The other four axes were already merged; this
- * was the one that was not.
- */
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
-
-/** Resolved element ID — prop overrides field context, falls back to auto-generated */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-/**
- * The consumer's `aria-describedby` merged with the field's description and
- * message ids (space-joined, de-duplicated), as the other field controls do.
- */
-const resolvedAriaDescribedby = computed(() => {
-  const ids = new Set(
-    `${props.ariaDescribedby ?? ''} ${fieldContext?.ariaDescribedby.value ?? ''}`.split(/\s+/).filter(Boolean),
-  )
-  return ids.size > 0 ? [...ids].join(' ') : undefined
-})
+const {
+  fieldContext,
+  resolvedId,
+  resolvedDisabled,
+  resolvedRequired,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 /** Reka UI emits AcceptableValue; we narrow to string for our API */
 function handleValueChange(value: unknown): void {

@@ -29,6 +29,8 @@
  * @module @dzup-ui/core/utilities/warnRemovedProp
  */
 
+import { isDevEnv } from './isDevEnv.ts'
+
 /**
  * `component.prop` pairs already warned about, so a list rendering 500 rows
  * produces one line rather than 500.
@@ -58,8 +60,8 @@ function kebab(prop: string): string {
  *
  * No-op outside dev. The check is a `$attrs` lookup and nothing else, so it
  * costs one property test per removed prop per setup call in production too —
- * except that the `import.meta.env?.DEV` guard lets a bundler drop the whole
- * body.
+ * except that the `isDevEnv()` guard (a `process.env.NODE_ENV` check) lets the
+ * consumer's bundler drop the whole body.
  *
  * @param component - The component's public name, e.g. `DzGrid`.
  * @param attrs     - The result of `useAttrs()`.
@@ -78,7 +80,7 @@ export function warnRemovedProps(
   attrs: Readonly<Record<string, unknown>>,
   removed: Readonly<Record<string, string>>,
 ): void {
-  if (import.meta.env?.DEV !== true)
+  if (!isDevEnv())
     return
   for (const [prop, guidance] of Object.entries(removed)) {
     if (!(prop in attrs) && !(kebab(prop) in attrs))

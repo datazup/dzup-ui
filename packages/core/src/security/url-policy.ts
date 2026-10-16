@@ -4,6 +4,7 @@ import type {
   DzUrlPolicyOptions,
 } from '@dzup-ui/contracts'
 import { DZ_ALLOWED_URL_SCHEMES } from '@dzup-ui/contracts'
+import { isDevEnv } from '../utilities/isDevEnv.ts'
 
 /**
  * The Core half of the URL policy (TASK-R2-O4, ADR-20 amendment A7).
@@ -270,7 +271,7 @@ export function applyUrlPolicy(
   if (policy.isAllowed(raw, context))
     return { href: raw, rejected: false }
 
-  if (import.meta.env?.DEV)
+  if (isDevEnv())
     warnRejected(raw, context)
 
   return REJECTED

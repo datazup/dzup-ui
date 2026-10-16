@@ -24,9 +24,9 @@ import { isFileRef, toFileRef } from '@dzup-ui/contracts'
  * </DzFileUpload>
  * ```
  */
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { fileUploadVariants } from './DzFileUpload.variants.ts'
@@ -75,32 +75,17 @@ const dzMessages = useComponentMessages('DzFileUpload')
 const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
-const fieldContext = useFormFieldContext()
-const autoId = useId()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid: isInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 const inputRef = ref<HTMLInputElement | null>(null)
 const isDragOver = ref(false)
-
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-const isInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-const resolvedRequired = computed(
-  () => props.required || (fieldContext?.isRequired.value ?? false),
-)
-
-/**
- * Own prop, then the DzFormField context, then a generated id.
- *
- * It skipped the middle step, so a `<DzFormLabel>` inside the same field
- * pointed its `for` at an id this control never used and clicking the label
- * did nothing (renderer contract C2).
- */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 /**
  * The binaries, held beside the value rather than in it.
@@ -145,21 +130,6 @@ const rows = computed<FileRow[]>(() =>
         },
   ),
 )
-
-/** ID for the error message element (for aria-describedby) */
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 const styles = computed(() =>
   fileUploadVariants({

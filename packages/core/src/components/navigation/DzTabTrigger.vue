@@ -16,6 +16,7 @@ import { TabsTrigger } from 'reka-ui'
 import { computed, inject, useAttrs } from 'vue'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
+import { isDevEnv } from '../../utilities/isDevEnv.ts'
 import { DZ_TABS_KEY } from './DzTabs.types.ts'
 import { tabsVariants } from './DzTabs.variants.ts'
 
@@ -33,7 +34,7 @@ defineSlots<DzTabTriggerSlots>()
 const attrs = useAttrs()
 const tabsContext = inject(DZ_TABS_KEY, null)
 
-if (!tabsContext && import.meta.env?.DEV) {
+if (!tabsContext && isDevEnv()) {
   console.warn('[DzTabTrigger] must be used inside a <DzTabs> parent.')
 }
 

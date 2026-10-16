@@ -14,11 +14,11 @@ import { Star } from '@lucide/vue'
  * <DzRating v-model:value="score" :count="5" allow-half tone="warning" />
  * ```
  */
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessageFormat } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzIcon from '../media/DzIcon.vue'
@@ -72,28 +72,20 @@ const dzDirection = useDzDirection()
 const model = useDualModel(primaryModel, legacyValueModel)
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 /** Root template ref -- exposed for programmatic focus. */
 const rootRef = ref<HTMLElement | null>(null)
 
 /** Hover preview value; null when not hovering (commits only on click). */
 const hoverValue = ref<number | null>(null)
-
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-const resolvedInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-const resolvedRequired = computed(
-  () => props.required || (fieldContext?.isRequired.value ?? false),
-)
 
 /** Interactive = neither disabled nor readonly (readonly is display-only). */
 const isInteractive = computed(() => !resolvedDisabled.value && !props.readonly)
@@ -109,20 +101,6 @@ const resolvedEmptyIcon = computed(() => props.emptyIcon ?? props.icon ?? Star)
 
 /** DzIcon has no 'icon' size token — fall back to 'md' for that case. */
 const iconSize = computed(() => (props.size === 'icon' ? 'md' : props.size))
-
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context. */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 /** Spoken value, e.g. "3 of 5". */
 const valueText = computed(() => `${model.value} of ${props.count}`)

@@ -173,6 +173,22 @@ export interface DzDataGridContext<T = Record<string, unknown>> {
 /** Typed injection key for DzDataGrid context (ADR-08, SCREAMING_SNAKE) */
 export const DZ_DATA_GRID_KEY: InjectionKey<DzDataGridContext> = Symbol('dz-data-grid')
 
+/**
+ * `DZ_DATA_GRID_KEY` typed for one row type — the same symbol, so provide and
+ * inject still meet.
+ *
+ * The root is generic over its row type `T` and so is `DzDataGridBody`; both
+ * pass the key through this so the provided and injected context carry `T` end
+ * to end — no cast on any context member, and `rowClick` and the `cell` slot
+ * keep the consumer's row type (UI-DZUP-UI-CODE-M-01). It takes the key rather
+ * than closing over it so every provide / inject site still names
+ * `DZ_DATA_GRID_KEY`, which is what the ownership context graph reads.
+ * Sub-parts that never touch a row (the header) use the key directly.
+ */
+export function rowTypedKey<T>(key: InjectionKey<DzDataGridContext>): InjectionKey<DzDataGridContext<T>> {
+  return key as InjectionKey<DzDataGridContext<T>>
+}
+
 // ---------------------------------------------------------------------------
 // DzDataGrid Props
 // ---------------------------------------------------------------------------

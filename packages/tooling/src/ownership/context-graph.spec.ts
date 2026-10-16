@@ -27,6 +27,15 @@ describe('buildContextGraph', () => {
     expect(graph.consumes.get('DzTabList')).toEqual(['DZ_TABS_KEY'])
   })
 
+  it('reads a key passed through a typed-key wrapper as the same token', () => {
+    const graph = buildContextGraph(new Map([
+      ['DzDataGrid', 'provide(rowTypedKey<T>(DZ_DATA_GRID_KEY), context)'],
+      ['DzDataGridBody', 'const ctx = inject(rowTypedKey<T>(DZ_DATA_GRID_KEY), null)'],
+    ]), [])
+    expect(graph.providers.get('DZ_DATA_GRID_KEY')).toEqual(['DzDataGrid'])
+    expect(graph.consumes.get('DzDataGridBody')).toEqual(['DZ_DATA_GRID_KEY'])
+  })
+
   it('reads a composable pair without mistaking the consumer call for the provider call', () => {
     const graph = buildContextGraph(new Map([
       ['DzFormField', 'useFormField({ id })'],

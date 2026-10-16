@@ -27,12 +27,12 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * <DzCascader v-model:value="region" :options="options" filter />
  * ```
  */
-import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { enAsyncOptionsMessages, enCascaderMessages } from '../../i18n/messages.ts'
 import { useMessageGroup } from '../../i18n/useMessageGroup.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -149,8 +149,14 @@ const resolvedSearchPlaceholder = computed(() => props.searchPlaceholder ?? dzMe
 const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 const open = ref(false)
 const triggerEl = ref<HTMLButtonElement>()
@@ -168,25 +174,9 @@ const pendingTriggerNav = ref<'first' | 'last' | null>(null)
 // Resolved field-context state
 // ---------------------------------------------------------------------------
 
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 /** DOM id of the popover panel, wired to the trigger via aria-controls. */
 const panelId = computed(() => `${resolvedId.value}-panel`)
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
 const resolvedReadonly = computed(() => props.readonly ?? false)
-const resolvedInvalid = computed(() => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false))
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 // ---------------------------------------------------------------------------
 // Path resolution + display

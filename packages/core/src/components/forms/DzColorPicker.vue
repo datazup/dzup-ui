@@ -14,9 +14,9 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * <DzColorPicker v-model="color" :presets="['#ef4444','#3b82f6','#22c55e']" show-input />
  * ```
  */
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
 import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { colorPickerVariants } from './DzColorPicker.variants.ts'
@@ -63,43 +63,15 @@ const dzMessages = useComponentMessages('DzColorPicker')
 const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
-const fieldContext = useFormFieldContext()
-const autoId = useId()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid: isInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 const popoverOpen = ref(false)
-
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-const isInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-const resolvedRequired = computed(
-  () => props.required || (fieldContext?.isRequired.value ?? false),
-)
-
-/**
- * Own prop, then the DzFormField context, then a generated id — it skipped
- * the middle step, so a DzFormLabel's `for` named an id this control never
- * used (renderer contract C2).
- */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-/** ID for the error message element (for aria-describedby) */
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 const styles = computed(() =>
   colorPickerVariants({

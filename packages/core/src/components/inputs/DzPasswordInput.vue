@@ -15,9 +15,9 @@ import type {
  * <DzPasswordInput v-model="password" placeholder="Enter password" />
  * ```
  */
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
@@ -53,18 +53,17 @@ const resolvedLoadingLabel = computed(() => props.loadingLabel ?? dzMessages.val
 
 const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
-const autoId = useId()
 const showPassword = ref(false)
 
-/** Optional DzFormField context (ADR-08) — present only when inside a field */
-const fieldContext = useFormFieldContext()
-
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-const isInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
+/** Id, state and aria-describedby, resolved against an optional DzFormField (ADR-08) */
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid: isInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 const wrapperClasses = computed(() =>
   cn(
@@ -117,18 +116,6 @@ const spinnerSize = computed(() => {
     default:
       return 'sm' as const
   }
-})
-
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
 })
 
 function toggleVisibility(): void {

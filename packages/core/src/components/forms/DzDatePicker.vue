@@ -34,10 +34,10 @@ import {
  * <DzDatePicker v-model="date" min="2026-01-01" max="2026-12-31" />
  * ```
  */
-import { computed, toRef, useAttrs, useId } from 'vue'
+import { computed, toRef, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDatePicker } from '../../composables/useDatePicker/index.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 import { datePickerVariants } from './DzDatePicker.variants.ts'
 
@@ -71,11 +71,14 @@ const emit = defineEmits<DzDatePickerEmits>()
 defineSlots<DzDatePickerSlots>()
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
-
-/** Resolved element ID — prop overrides field context, falls back to auto-generated */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 const { dateValue, minValue, maxValue, placeholderDate, resolvedLocale, toISOString }
   = useDatePicker({
@@ -84,33 +87,6 @@ const { dateValue, minValue, maxValue, placeholderDate, resolvedLocale, toISOStr
     max: toRef(() => props.max),
     locale: toRef(() => props.locale),
   })
-
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-const resolvedInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-const resolvedRequired = computed(
-  () => props.required || (fieldContext?.isRequired.value ?? false),
-)
-
-/** ID for the error message element (for aria-describedby) */
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 const styles = computed(() =>
   datePickerVariants({

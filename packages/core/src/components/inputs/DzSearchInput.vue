@@ -15,9 +15,9 @@ import type {
  * <DzSearchInput v-model="query" placeholder="Search..." @search="handleSearch" />
  * ```
  */
-import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
@@ -54,32 +54,16 @@ const resolvedLoadingLabel = computed(() => props.loadingLabel ?? dzMessages.val
 
 const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
-const autoId = useId()
 
-/** Optional DzFormField context (ADR-08) — present only when inside a field */
-const fieldContext = useFormFieldContext()
-
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-const isInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-/** ID for the error message element (for aria-describedby) */
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
+/** Id, state and aria-describedby, resolved against an optional DzFormField (ADR-08) */
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid: isInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 const wrapperClasses = computed(() =>
   cn(

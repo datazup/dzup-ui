@@ -23,9 +23,11 @@
  * already landed; it is also what makes the step a no-op on every push to
  * `main` that carries no version change.
  *
- * Git tags are not this tool's job: the root `release` script runs
- * `changeset tag` afterwards, whose `New tag:` lines are what
- * `changesets/action` parses to push tags and create GitHub releases.
+ * Git tags are not this tool's job: `changeset tag` runs afterwards (the root
+ * `release` script locally; release.yml's token-free tag step in CI, since the
+ * npm token is scoped to this tool alone — UI-DZUP-UI-SEC-M-09), and its
+ * `New tag:` lines are what `changesets/action` parses to push tags and create
+ * GitHub releases.
  *
  * Usage:
  *   yarn release:publish --dry-run            # packs and reports; uploads nothing

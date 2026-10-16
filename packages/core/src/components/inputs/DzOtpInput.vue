@@ -12,9 +12,9 @@ import { PinInputInput, PinInputRoot } from 'reka-ui'
  * <DzOtpInput v-model="pin" :length="4" type="number" mask />
  * ```
  */
-import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 import { otpInputVariants } from './DzOtpInput.variants.ts'
 
@@ -48,44 +48,14 @@ const emit = defineEmits<DzOtpInputEmits>()
 defineSlots<DzOtpInputSlots>()
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
-
-/** Resolved element ID — prop overrides field context, falls back to auto-generated */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-/**
- * `required` was declared and defaulted but read nowhere, so a form that marked
- * the code mandatory said so in the type and nowhere in the DOM (renderer
- * contract C3). Resolved against the field context the same way the other
- * states are, so `<DzFormField required>` reaches it without a prop.
- */
-const resolvedRequired = computed(
-  () => props.required || (fieldContext?.isRequired.value ?? false),
-)
-
-const isInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-/** ID for the error message element (for aria-describedby) */
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby from prop + own error element + field context */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid: isInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 const styles = computed(() =>
   otpInputVariants({

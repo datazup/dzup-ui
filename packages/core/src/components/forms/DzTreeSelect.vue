@@ -30,11 +30,11 @@ import { Check, ChevronDown, Minus, X } from '@lucide/vue'
  * />
  * ```
  */
-import { computed, ref, useAttrs, useId, watch } from 'vue'
+import { computed, ref, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzTree from '../data/DzTree.vue'
@@ -136,45 +136,23 @@ const resolvedFilterPlaceholder = computed(() => props.filterPlaceholder ?? dzMe
 const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 // ── Resolved field state (mirrors DzSelect) ────────────────────────────────
 
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 const panelId = computed(() => `${resolvedId.value}-panel`)
 
 /** DOM id of a treeitem inside the panel — mirrors DzTree's id scheme. */
 function treeItemId(key: string): string {
   return `${panelId.value}-ti-${key}`
 }
-
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
-
-const resolvedInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
-
-/**
- * `required` and `loading` were both declared, defaulted, and read nowhere —
- * two props whose types told a consumer they worked (renderer contract C3).
- */
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 const styles = computed(() =>
   treeSelectVariants({

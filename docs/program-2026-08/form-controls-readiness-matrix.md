@@ -96,13 +96,13 @@
 
 | Control | kind | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | specs c/a/s | story states |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `DzCascader` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled, Invalid |
+| `DzCascader` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
 | `DzCheckbox` | boolean | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
 | `DzCheckboxGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled |
-| `DzColorPicker` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
+| `DzColorPicker` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/✓/✓ | Disabled, Invalid |
 | `DzCombobox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Loading, Invalid |
 | `DzDatePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled, Invalid |
-| `DzDateRangePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
+| `DzDateRangePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled, Invalid |
 | `DzFieldArray` | array | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
 | `DzFileUpload` | file | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
 | `DzFloatLabel` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | – n-a | – n-a | ✓/·/✓ | — |
@@ -113,9 +113,9 @@
 | `DzInplace` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
 | `DzKnob` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Readonly |
 | `DzListbox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled |
-| `DzMention` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Invalid |
+| `DzMention` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Invalid |
 | `DzMultiSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
-| `DzPersonaSelector` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled |
+| `DzPersonaSelector` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled |
 | `DzRadio` | boolean | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
 | `DzRadioGroup` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
 | `DzRangeSlider` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled |
@@ -124,9 +124,9 @@
 | `DzSlider` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
 | `DzSwitch` | boolean | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/✓/✓ | Disabled |
 | `DzTagsInput` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
-| `DzTimePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
-| `DzTransfer` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled, Invalid |
-| `DzTreeSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | — |
+| `DzTimePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✓/✓/✓ | Disabled, Invalid |
+| `DzTransfer` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
+| `DzTreeSelect` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | — |
 
 ### Layouts — the primitives a renderer uses as form sections
 

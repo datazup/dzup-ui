@@ -18,10 +18,10 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * <DzTimePicker v-model="time" min="09:00" max="17:00" :step="15" :footer="false" />
  * ```
  */
-import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzFormats } from '../../composables/provider/useDzFormats.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cachedDateTimeFormat } from '../../i18n/intl-cache.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -87,8 +87,15 @@ const resolvedConfirmText = computed(() => props.confirmText ?? dzMessages.value
 const resolvedCancelText = computed(() => props.cancelText ?? dzMessages.value.cancel)
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
+const {
+  fieldContext,
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 const open = ref(false)
 /** Element that scopes the roll columns so we can auto-scroll the selection */
@@ -99,23 +106,6 @@ const triggerEl = ref<HTMLButtonElement>()
 // ---------------------------------------------------------------------------
 // Resolved field-context state
 // ---------------------------------------------------------------------------
-
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
-const resolvedInvalid = computed(() => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false))
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
-})
 
 /**
  * A standalone ARIA combobox needs an author-provided accessible name; text

@@ -19,7 +19,7 @@ import {
  * @deprecated Use DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent from @dzup-ui/core instead.
  */
 import { computed, onMounted, useAttrs } from 'vue'
-import { warnDeprecated } from '../utils/deprecation.ts'
+import { isDevEnv, warnDeprecated } from '../utils/deprecation.ts'
 
 const model = defineModel<string | string[]>({ default: '' })
 
@@ -39,7 +39,7 @@ const attrs = useAttrs()
 onMounted(() => {
   warnDeprecated('DzAccordionCompat', 'DzAccordion')
 
-  if (import.meta.env?.DEV && props.expandIcon) {
+  if (isDevEnv() && props.expandIcon) {
     console.warn(
       '[dzup-ui/compat] DzAccordionCompat: "expandIcon" prop is dropped in vNext. Use CSS to control the expand icon.',
     )

@@ -12,9 +12,9 @@ import type { DzTextareaEmits, DzTextareaProps } from './DzTextarea.types.ts'
  * <DzTextarea v-model="bio" autoResize :maxRows="10" />
  * ```
  */
-import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
@@ -51,24 +51,16 @@ const resolvedLoadingLabel = computed(() => props.loadingLabel ?? dzMessages.val
 
 const attrs = useAttrs()
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
-const autoId = useId()
 
-/** Optional DzFormField context (ADR-08) — present only when inside a field */
-const fieldContext = useFormFieldContext()
-
-/** Resolved element ID — explicit prop wins, then the field context's control ID */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-/** Resolved disabled: own prop OR form-field-level disabled */
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
-
-/** Resolved required: own prop OR form-field-level required */
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
-
-/** Whether the invalid state should show (own prop/error OR form-field-level) */
-const isInvalid = computed(
-  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
-)
+/** Id, state and aria-describedby, resolved against an optional DzFormField (ADR-08) */
+const {
+  resolvedId,
+  resolvedDisabled,
+  resolvedInvalid: isInvalid,
+  resolvedRequired,
+  errorId,
+  resolvedAriaDescribedby,
+} = useFormControl(props)
 
 /** Merged class string using cn() (ADR-10) */
 const classes = computed(() =>
@@ -121,21 +113,6 @@ const spinnerSize = computed(() => {
     default:
       return 'sm' as const
   }
-})
-
-/** ID for the error message element */
-const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
-
-/** Combined aria-describedby */
-const resolvedAriaDescribedby = computed(() => {
-  const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
-  return parts.length > 0 ? parts.join(' ') : undefined
 })
 
 /** Auto-resize logic: adjust height to fit content */

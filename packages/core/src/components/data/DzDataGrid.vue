@@ -1,6 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, unknown>">
 import type {
-  ColumnDef,
   DzDataGridContext,
   DzDataGridEmits,
   DzDataGridFilter,
@@ -33,7 +32,7 @@ import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzButton from '../buttons/DzButton.vue'
 import DzSkeleton from '../feedback/DzSkeleton.vue'
-import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
+import { DZ_DATA_GRID_KEY, rowTypedKey } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
 import DzDataGridBody from './DzDataGridBody.vue'
 import DzDataGridHeader from './DzDataGridHeader.vue'
@@ -62,7 +61,7 @@ const attrs = useAttrs()
 
 const grid = useDataGrid<T>({
   data: toRef(() => props.data),
-  columns: toRef(() => props.columns as ColumnDef<T>[]),
+  columns: toRef(() => props.columns),
   sortable: toRef(() => props.sortable),
   sortModel: toRef(() => props.sortModel ?? []),
   filterable: toRef(() => props.filterable),
@@ -102,32 +101,32 @@ const grid = useDataGrid<T>({
  */
 const navigation = useDataGridNavigation()
 
-const context: DzDataGridContext = {
-  columns: toRef(() => props.columns) as DzDataGridContext['columns'],
-  data: toRef(() => grid.displayData.value) as DzDataGridContext['data'],
+const context: DzDataGridContext<T> = {
+  columns: toRef(() => props.columns),
+  data: toRef(() => grid.displayData.value),
   density: toRef(() => props.density),
   size: toRef(() => props.size),
   sortable: toRef(() => props.sortable),
-  sortModel: grid.sortModel as DzDataGridContext['sortModel'],
+  sortModel: grid.sortModel,
   filterable: toRef(() => props.filterable),
-  filters: grid.filters as DzDataGridContext['filters'],
+  filters: grid.filters,
   selectable: toRef(() => props.selectable),
-  selectedRows: grid.selectedRows as DzDataGridContext['selectedRows'],
+  selectedRows: grid.selectedRows,
   loading: toRef(() => props.loading),
   sort: grid.sort,
   setFilter: grid.setFilter,
   clearFilter: grid.clearFilter,
   clearAllFilters: grid.clearAllFilters,
-  toggleRowSelection: grid.toggleRowSelection as DzDataGridContext['toggleRowSelection'],
+  toggleRowSelection: grid.toggleRowSelection,
   toggleAllSelection: grid.toggleAllSelection,
-  isRowSelected: grid.isRowSelected as DzDataGridContext['isRowSelected'],
+  isRowSelected: grid.isRowSelected,
   isAllSelected: grid.isAllSelected,
   isSomeSelected: grid.isSomeSelected,
   isActiveCell: navigation.isActiveCell,
   onCellKeydown: navigation.onCellKeydown,
 }
 
-provide(DZ_DATA_GRID_KEY, context)
+provide(rowTypedKey<T>(DZ_DATA_GRID_KEY), context)
 
 const styles = computed(() =>
   dataGridVariants({ size: props.size, density: props.density }),
@@ -167,8 +166,8 @@ const columnSpan = computed(() =>
   props.columns.length + (props.selectable === 'multiple' ? 1 : 0),
 )
 
-function handleRowClick(row: Record<string, unknown>, index: number): void {
-  emit('rowClick', row as T, index)
+function handleRowClick(row: T, index: number): void {
+  emit('rowClick', row, index)
 }
 
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
@@ -233,9 +232,8 @@ const { testId: dzTestId } = useDzTestIds()
           </td>
         </tr>
       </tbody>
-      <DzDataGridBody v-else :row-key="(rowKey as string | undefined)" @row-click="handleRowClick">
+      <DzDataGridBody v-else :row-key="rowKey" :rows="grid.displayData.value" @row-click="handleRowClick">
         <template v-if="$slots.cell" #cell="cellProps">
-          <!-- @vue-ignore: generic T not preserved across slot forwarding from DzDataGridBody -->
           <slot name="cell" v-bind="cellProps" />
         </template>
       </DzDataGridBody>

@@ -13,11 +13,15 @@
  * lines instead of a checkout.
  */
 
-/** `provide(DZ_X_KEY` — the key name is the context token. */
-const PROVIDE_KEY_RE = /provide\(\s*(DZ_[A-Z0-9_]+_KEY)/g
+/**
+ * `provide(DZ_X_KEY` — the key name is the context token. A typed-key wrapper
+ * around it, `provide(rowTypedKey<T>(DZ_X_KEY)` (DzDataGrid, UI-DZUP-UI-CODE-M-01),
+ * is the same key and the same token.
+ */
+const PROVIDE_KEY_RE = /provide\(\s*(?:\w+(?:<\w+>)?\(\s*)?(DZ_[A-Z0-9_]+_KEY)/g
 
-/** `inject(DZ_X_KEY` — same token, consumed. */
-const INJECT_KEY_RE = /inject\(\s*(DZ_[A-Z0-9_]+_KEY)/g
+/** `inject(DZ_X_KEY` — same token, consumed, wrapper or not. */
+const INJECT_KEY_RE = /inject\(\s*(?:\w+(?:<\w+>)?\(\s*)?(DZ_[A-Z0-9_]+_KEY)/g
 
 export interface ContextGraph {
   /** context token → components that provide it. */

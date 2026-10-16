@@ -84,6 +84,16 @@ const VALIDATION_PROPS = ['invalid', 'error', 'required'] as const
 export const RESOLUTIONS = ['id', 'disabled', 'required', 'invalid', 'describedby'] as const
 export type Resolution = (typeof RESOLUTIONS)[number]
 
+/**
+ * The props `useFormControl(props)` reads on a control's behalf — the shared
+ * field wiring in `packages/core/src/composables/useFormField/useFormControl.ts`
+ * (UI-DZUP-UI-CODE-M-08). A control that hands it `props` reads these and
+ * resolves all five axes against `DzFormField`, though neither the props nor the
+ * context members appear in its own `.vue` any more. Keep in step with that
+ * file's `FormControlProps`.
+ */
+export const FORM_CONTROL_PROPS = ['id', 'disabled', 'invalid', 'error', 'required', 'ariaDescribedby'] as const
+
 /** The `DzFormFieldContext` member that proves each axis was merged. */
 const CONTEXT_FIELD: Record<Resolution, string> = {
   id: 'fieldId',
@@ -469,8 +479,10 @@ function probeOne(family: string, component: string): ProbeResult | null {
     }
   }
 
+  /** The shared field wiring, which reads the props and the context itself. */
+  const usesFormControl = /\buseFormControl\(\s*props\b/.test(script)
   const resolutions = RESOLUTIONS.filter(r =>
-    new RegExp(`\\b${CONTEXT_FIELD[r]}\\b`).test(vue),
+    usesFormControl || new RegExp(`\\b${CONTEXT_FIELD[r]}\\b`).test(vue),
   )
 
   /**
@@ -492,9 +504,10 @@ function probeOne(family: string, component: string): ProbeResult | null {
     templateLine: lineOf(vue, templateOffset) + 1,
     extendsClause,
     declared,
-    declaredUnread: unreadProps(vue, declared),
+    declaredUnread: unreadProps(vue, declared)
+      .filter(u => !(usesFormControl && (FORM_CONTROL_PROPS as readonly string[]).includes(u.prop))),
     models: models(script),
-    consumesFieldContext: script.includes('useFormFieldContext'),
+    consumesFieldContext: script.includes('useFormFieldContext') || usesFormControl,
     providesFieldContext: /\buseFormField\s*\(/.test(script),
     contextIdBindings: [...template.matchAll(/context\??\.(\w+Id)\b/g)]
       .flatMap(m => (m[1] === undefined ? [] : [m[1]]))

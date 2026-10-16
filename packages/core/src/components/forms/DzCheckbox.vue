@@ -14,9 +14,9 @@ import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
  * <DzCheckbox v-model="partial" indeterminate>Select all</DzCheckbox>
  * ```
  */
-import { computed, inject, useAttrs, useId } from 'vue'
+import { computed, inject, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 import { checkboxVariants } from './DzCheckbox.variants.ts'
 import { DZ_CHECKBOX_GROUP_KEY } from './DzCheckboxGroup.types.ts'
@@ -46,38 +46,17 @@ const emit = defineEmits<DzCheckboxEmits>()
 defineSlots<DzCheckboxSlots>()
 
 const attrs = useAttrs()
-const autoId = useId()
-const fieldContext = useFormFieldContext()
-
-/**
- * `required` reached the Reka primitive (which renders `aria-required`) but
- * never reached the DOM as the presence-only attribute ADR-19 §4 lists, so no
- * stylesheet could show a required field as required (renderer contract C3).
- */
-const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 const groupContext = inject(DZ_CHECKBOX_GROUP_KEY, null)
-
-/** Resolved element ID — prop overrides field context, falls back to auto-generated */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-
-/**
- * The consumer's `aria-describedby` merged with the field's description and
- * message ids (space-joined, de-duplicated), as the other field controls do.
- */
-const resolvedAriaDescribedby = computed(() => {
-  const ids = new Set(
-    `${props.ariaDescribedby ?? ''} ${fieldContext?.ariaDescribedby.value ?? ''}`.split(/\s+/).filter(Boolean),
-  )
-  return ids.size > 0 ? [...ids].join(' ') : undefined
-})
+const {
+  fieldContext,
+  resolvedId,
+  resolvedDisabled,
+  resolvedRequired,
+  resolvedAriaDescribedby,
+} = useFormControl(props, { disabled: () => groupContext?.disabled.value ?? false })
 
 /** Resolved size from prop, group, or default */
 const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'md')
-
-/** Resolved disabled from prop, group, or field context */
-const resolvedDisabled = computed(
-  () => props.disabled || (groupContext?.disabled.value ?? false) || (fieldContext?.isDisabled.value ?? false),
-)
 
 /** Computed checked state for group mode */
 const checkedState = computed<boolean | 'indeterminate'>(() => {

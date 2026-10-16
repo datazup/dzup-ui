@@ -1,9 +1,12 @@
+import type { FormControlProps, UseFormControlOptions, UseFormControlReturn } from './useFormControl.ts'
+import type { DzFormFieldContext, UseFormFieldOptions } from './useFormField.ts'
 import { mount } from '@vue/test-utils'
 /**
  * useFormField — Unit tests.
  */
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, inject } from 'vue'
+import { defineComponent, h, inject, reactive } from 'vue'
+import { useFormControl } from './useFormControl.ts'
 import { DZ_FORM_FIELD_KEY, useFormField, useFormFieldContext } from './useFormField.ts'
 
 /** Helper to test the composable within a component tree */
@@ -170,5 +173,99 @@ describe('useFormFieldContext', () => {
 
     mount(Provider)
     expect(result).not.toBeNull()
+  })
+})
+
+/**
+ * useFormControl — the control side, shared by every field control
+ * (UI-DZUP-UI-CODE-M-08). Mounted under an optional useFormField provider so
+ * both halves of the wiring are exercised together.
+ */
+function mountControl(
+  props: FormControlProps,
+  field?: UseFormFieldOptions,
+  options?: UseFormControlOptions,
+) {
+  let control: UseFormControlReturn | null = null
+  let provided: DzFormFieldContext | null = null
+  const state = reactive(props)
+
+  const Control = defineComponent({
+    setup() {
+      control = useFormControl(state, options)
+      return () => h('input')
+    },
+  })
+  const Field = defineComponent({
+    setup() {
+      provided = useFormField(field)
+      return () => h(Control)
+    },
+  })
+
+  mount(field ? Field : Control)
+  return { control: control!, field: provided as DzFormFieldContext | null, state }
+}
+
+describe('useFormControl', () => {
+  it('falls back to a generated id outside a field and resolves nothing else', () => {
+    const { control } = mountControl({})
+    expect(control.fieldContext).toBeNull()
+    expect(control.resolvedId.value).toBeTruthy()
+    expect(control.resolvedDisabled.value).toBe(false)
+    expect(control.resolvedInvalid.value).toBe(false)
+    expect(control.resolvedRequired.value).toBe(false)
+    expect(control.errorId.value).toBeUndefined()
+    expect(control.resolvedAriaDescribedby.value).toBeUndefined()
+  })
+
+  it('takes the field id, and an explicit id wins over it', () => {
+    const inField = mountControl({}, {})
+    expect(inField.control.resolvedId.value).toBe(inField.field!.fieldId)
+    const explicit = mountControl({ id: 'email' }, {})
+    expect(explicit.control.resolvedId.value).toBe('email')
+  })
+
+  it('resolves disabled, invalid and required from props, the field, or an extra source', () => {
+    const fromField = mountControl({}, { disabled: true, invalid: true, required: true })
+    expect(fromField.control.resolvedDisabled.value).toBe(true)
+    expect(fromField.control.resolvedInvalid.value).toBe(true)
+    expect(fromField.control.resolvedRequired.value).toBe(true)
+
+    const fromProps = mountControl({ disabled: true, error: 'Bad', required: true })
+    expect(fromProps.control.resolvedDisabled.value).toBe(true)
+    expect(fromProps.control.resolvedInvalid.value).toBe(true)
+    expect(fromProps.control.resolvedRequired.value).toBe(true)
+
+    const fromGroup = mountControl({}, undefined, { disabled: () => true })
+    expect(fromGroup.control.resolvedDisabled.value).toBe(true)
+  })
+
+  it('tracks prop changes reactively', () => {
+    const { control, state } = mountControl({})
+    expect(control.errorId.value).toBeUndefined()
+    state.error = 'Required'
+    expect(control.resolvedInvalid.value).toBe(true)
+    expect(control.errorId.value).toBe(`${control.resolvedId.value}-error`)
+  })
+
+  it('merges prop, extra, error and field ids into aria-describedby, in that order', () => {
+    const { control, field } = mountControl(
+      { id: 'tags', ariaDescribedby: 'hint', error: 'Bad' },
+      { error: 'Bad' },
+      { describedby: id => `${id}-status` },
+    )
+    field!.registerDescription()
+    field!.registerMessage()
+    expect(control.resolvedAriaDescribedby.value).toBe(
+      `hint tags-status tags-error ${field!.descriptionId} ${field!.messageId}`,
+    )
+  })
+
+  it('names an id given by both the prop and the field once (the DzSwitch/DzCheckbox merge)', () => {
+    const { control, field } = mountControl({ ariaDescribedby: 'extra  f-description' }, { id: 'f' })
+    field!.registerDescription()
+    expect(field!.descriptionId).toBe('f-description')
+    expect(control.resolvedAriaDescribedby.value).toBe('extra f-description')
   })
 })

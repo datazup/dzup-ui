@@ -15,9 +15,9 @@ import { RadioGroupIndicator, RadioGroupItem } from 'reka-ui'
  * </DzRadioGroup>
  * ```
  */
-import { computed, useAttrs, useId } from 'vue'
+import { computed, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
 import { cn } from '../../utilities/cn.ts'
 import { radioVariants } from './DzRadio.variants.ts'
 
@@ -38,7 +38,6 @@ const props = withDefaults(defineProps<DzRadioProps>(), {
 defineSlots<DzRadioSlots>()
 
 const attrs = useAttrs()
-const autoId = useId()
 
 /**
  * Optional DzFormField context (ADR-08).
@@ -53,22 +52,7 @@ const autoId = useId()
  * The group's own state still wins where Reka propagates it; this only fills in
  * what nothing else was providing.
  */
-const fieldContext = useFormFieldContext()
-
-/** Resolved element ID — prop, then the field context's, then auto-generated */
-const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
-const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
-const resolvedInvalid = computed(() => fieldContext?.isInvalid.value ?? false)
-/**
- * The consumer's `aria-describedby` merged with the field's description and
- * message ids (space-joined, de-duplicated), as the other field controls do.
- */
-const resolvedAriaDescribedby = computed(() => {
-  const ids = new Set(
-    `${props.ariaDescribedby ?? ''} ${fieldContext?.ariaDescribedby.value ?? ''}`.split(/\s+/).filter(Boolean),
-  )
-  return ids.size > 0 ? [...ids].join(' ') : undefined
-})
+const { resolvedId, resolvedDisabled, resolvedInvalid, resolvedAriaDescribedby } = useFormControl(props)
 
 const styles = computed(() => radioVariants({ size: props.size }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))

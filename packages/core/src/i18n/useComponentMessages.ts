@@ -34,6 +34,7 @@
 import type { DzMessageArgsOf, DzMessageCatalog, DzMessageValues } from '@dzup-ui/contracts'
 import type { ComputedRef } from 'vue'
 import { useDzLocale } from '../composables/provider/useDzLocale.ts'
+import { isDevEnv } from '../utilities/isDevEnv.ts'
 import { formatMessage } from './message-format.ts'
 import { enMessages } from './messages.ts'
 import { useMessageGroup } from './useMessageGroup.ts'
@@ -102,7 +103,7 @@ export function useComponentMessageFormat<K extends keyof DzMessageCatalog>(
       }
       catch (error) {
         const report = `${String(component)}.${key}: ${(error as Error).message}`
-        if (import.meta.env?.DEV && !warned.has(report)) {
+        if (isDevEnv() && !warned.has(report)) {
           warned.add(report)
           console.warn(`[dzup-ui] ${report}; rendering the English default.`)
         }
