@@ -40,14 +40,14 @@
     },
     {
       "file": "packages/core/src/components/data/DzDataGridBody.vue",
-      "line": 138,
+      "line": 141,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"getColumnStyle(col)\""
     },
     {
       "file": "packages/core/src/components/data/DzDataGridHeader.vue",
-      "line": 130,
+      "line": 133,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"getColumnStyle(col)\""
