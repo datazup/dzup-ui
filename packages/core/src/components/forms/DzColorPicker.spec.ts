@@ -1,10 +1,12 @@
 // token-check-disable-file — color picker tests legitimately use raw color values as test data
+import { DZ_MESSAGES_KEY } from '@dzup-ui/contracts'
 import { expectKeyboardContract } from '@dzup-ui/testing'
 import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzColorPicker — Unit / behavior tests.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { ref } from 'vue'
 import { anatomy as colorPickerAnatomy } from './DzColorPicker.anatomy.ts'
 import DzColorPicker from './DzColorPicker.vue'
 
@@ -263,6 +265,26 @@ describe('dzColorPicker — declared keyboard contract', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('#00ff00')
+  })
+
+  it('marks the preset matching the value as pressed, named from the catalog (UI-DZUP-UI-UX-L-07)', async () => {
+    const wrapper = mount(DzColorPicker, {
+      props: { modelValue: '#00FF00', presets: ['#ff0000', '#00ff00'] },
+      global: {
+        stubs: { PopoverPortal: ColorInlinePortal },
+        provide: { [DZ_MESSAGES_KEY as symbol]: ref({ DzColorPicker: { selectColor: 'Farbe {color} wählen' } }) },
+      },
+      attachTo: document.body,
+    })
+    ;(wrapper.get('[data-part="trigger"]').element as HTMLElement).click()
+    await wrapper.vm.$nextTick()
+
+    const swatches = wrapper.findAll('[data-part="item"]')
+    expect(swatches.map(s => s.attributes('aria-pressed'))).toEqual(['false', 'true'])
+    expect(swatches[0]!.attributes('aria-label')).toBe('Farbe #ff0000 wählen')
+
+    await wrapper.setProps({ modelValue: '#ff0000' })
+    expect(wrapper.findAll('[data-part="item"]').map(s => s.attributes('aria-pressed'))).toEqual(['true', 'false'])
   })
 
   it('takes a typed hex value in the colour field — the `<character>` row', async () => {

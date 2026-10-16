@@ -393,6 +393,47 @@ describe('dzDataGrid — Filtering', () => {
     }
   })
 
+  it('names the filter controls and hints from the catalog (UI-DZUP-UI-UX-L-01)', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const triggers = wrapper.findAll('[data-testid="filter-trigger"]')
+    expect(triggers[0]!.attributes('aria-label')).toBe('Filter Name')
+    await triggers[0]!.trigger('click')
+    expect(wrapper.get('[data-testid="filter-popover"]').attributes('aria-label')).toBe('Filter Name')
+    expect(wrapper.get('[data-testid="filter-text-input"] input').attributes('placeholder')).toBe('Filter...')
+    expect(wrapper.get('[data-testid="filter-text-input"] input').attributes('aria-label')).toBe('Filter Name by text')
+  })
+
+  it('applies host catalog overrides to the filter hints and names', async () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data: testData, columns: filterableColumns, filterable: true },
+      global: {
+        provide: {
+          [DZ_MESSAGES_KEY as symbol]: ref({
+            DzDataGridHeader: {
+              filterColumn: '{column} filtern',
+              filterByText: '{column} nach Text filtern',
+              filterByNumber: '{column} nach Zahl filtern',
+              textPlaceholder: 'Filtern…',
+              valuePlaceholder: 'Wert…',
+            },
+          }),
+        },
+      },
+    })
+    const triggers = wrapper.findAll('[data-testid="filter-trigger"]')
+    expect(triggers[0]!.attributes('aria-label')).toBe('Name filtern')
+    await triggers[0]!.trigger('click')
+    const text = wrapper.get('[data-testid="filter-text-input"] input')
+    expect(text.attributes('placeholder')).toBe('Filtern…')
+    expect(text.attributes('aria-label')).toBe('Name nach Text filtern')
+
+    // The number column (third trigger) carries the value hint.
+    await triggers[2]!.trigger('click')
+    const value = wrapper.get('[data-testid="filter-number-input"] input')
+    expect(value.attributes('placeholder')).toBe('Wert…')
+    expect(value.attributes('aria-label')).toBe('Age nach Zahl filtern')
+  })
+
   it('still shows the empty state when there is no data and no filter', () => {
     const wrapper = mountGrid({ columns: filterableColumns, filterable: true, data: [] })
     expect(wrapper.find('table').exists()).toBe(false)

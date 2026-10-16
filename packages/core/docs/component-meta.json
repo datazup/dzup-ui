@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
+  "sourceCommit": "7d723801cf98be8745723b3640b0e19023635adb",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -10021,6 +10021,7 @@
         ]
       },
       "providerHooks": [
+        "useDzLocale",
         "useDzMessages",
         "useDzPortalTarget",
         "useDzTestIds"
@@ -14227,6 +14228,7 @@
         "parts": []
       },
       "providerHooks": [
+        "useDzLocale",
         "useDzMessages"
       ],
       "props": [],
@@ -19323,6 +19325,7 @@
         ]
       },
       "providerHooks": [
+        "useDzLocale",
         "useDzMessages",
         "useDzTestIds"
       ],
@@ -51405,6 +51408,8 @@
         ]
       },
       "providerHooks": [
+        "useDzLocale",
+        "useDzMessages",
         "useDzMotion",
         "useDzPortalTarget"
       ],

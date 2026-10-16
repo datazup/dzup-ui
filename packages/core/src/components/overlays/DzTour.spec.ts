@@ -12,6 +12,7 @@ import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, ref } from 'vue'
 import { anatomy as tourAnatomy } from './DzTour.anatomy.ts'
+import DzProvider from '../../providers/DzProvider.vue'
 import DzTour from './DzTour.vue'
 
 describe('dzTour — controlled and uncontrolled value ownership', () => {
@@ -221,6 +222,74 @@ describe('dzTour -- behavior', () => {
     await flushPromises()
     const live = document.body.querySelector('[role="status"][aria-live="polite"]')
     expect(live?.textContent).toContain('Step 1 of 2')
+  })
+
+  it('renders its default controls in English', async () => {
+    mountHost(setupTargets())
+    await flushPromises()
+    clickTestId('dz-tour-next')
+    await flushPromises()
+    const text = (testId: string) => document.body.querySelector(`[data-testid="${testId}"]`)?.textContent?.trim()
+    expect(text('dz-tour-skip')).toBe('Skip')
+    expect(text('dz-tour-back')).toBe('Back')
+    expect(text('dz-tour-next')).toBe('Finish')
+  })
+})
+
+describe('dzTour -- catalog strings (UI-DZUP-UI-UX-L-10)', () => {
+  const german = {
+    DzTour: {
+      skip: 'Überspringen',
+      back: 'Zurück',
+      next: 'Weiter',
+      finish: 'Fertig',
+      stepOf: 'Schritt {current} von {total}',
+    },
+  }
+
+  // DzProvider reads `prefers-reduced-motion`; jsdom has no matchMedia.
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('renders the controls and the live-region counter from a German catalog', async () => {
+    vi.stubGlobal('matchMedia', vi.fn().mockImplementation((query: string) => ({
+      matches: false,
+      media: query,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+    })))
+    const steps = setupTargets()
+    mount(
+      defineComponent({
+        components: { DzProvider, DzTour },
+        setup() {
+          const open = ref(true)
+          const current = ref(0)
+          return { open, current, steps, german }
+        },
+        template: `
+          <DzProvider locale="de" :messages="german">
+            <DzTour v-model:open="open" v-model:current="current" :steps="steps" />
+          </DzProvider>
+        `,
+      }),
+      { attachTo: document.body },
+    )
+    await flushPromises()
+    const text = (selector: string) => document.body.querySelector(selector)?.textContent?.trim()
+
+    expect(text('[data-testid="dz-tour-skip"]')).toBe('Überspringen')
+    expect(text('[data-testid="dz-tour-next"]')).toBe('Weiter')
+    expect(text('[role="status"][aria-live="polite"]')).toBe('Schritt 1 von 2')
+
+    clickTestId('dz-tour-next')
+    await flushPromises()
+    expect(text('[data-testid="dz-tour-back"]')).toBe('Zurück')
+    expect(text('[data-testid="dz-tour-next"]')).toBe('Fertig')
+    expect(text('[role="status"][aria-live="polite"]')).toBe('Schritt 2 von 2')
   })
 })
 

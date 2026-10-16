@@ -586,7 +586,8 @@ describe('sSR: inputs', () => {
     expect(html).toContain('placeholder="Password"')
     expect(html).toContain('data-part="toggle"')
     expect(html).toContain('aria-label="Show password"')
-    expect(html).toContain('aria-pressed="false"')
+    // One state mechanism (UI-DZUP-UI-UX-L-06): the label swaps, so no aria-pressed.
+    expect(html).not.toContain('aria-pressed')
   })
 
   it('dzSearchInput renders a search field with its icon in SSR', async () => {

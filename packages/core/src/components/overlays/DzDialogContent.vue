@@ -85,6 +85,23 @@ const contentAria = computed<Record<string, unknown>>(() => {
   return aria
 })
 
+/**
+ * The scrollable viewport is a keyboard-scrollable region (UI-DZUP-UI-UX-L-08).
+ *
+ * A dialog of plain text (terms, release notes) has nothing focusable inside the
+ * overflow, and browsers that do not make scrollers focusable (Safari) leave a
+ * keyboard user unable to scroll it — axe `scrollable-region-focusable`. A
+ * `tabindex="0"` region takes the dialog's own name: the consumer's override
+ * when there is one, otherwise the `DzDialogTitle` id Reka generates.
+ */
+const viewportAria = computed<Record<string, unknown>>(() => {
+  if (props.ariaLabelledby !== undefined)
+    return { 'aria-labelledby': props.ariaLabelledby }
+  if (props.ariaLabel !== undefined)
+    return { 'aria-label': props.ariaLabel }
+  return { 'aria-labelledby': rootContext.titleId }
+})
+
 const dialogCtx = inject(DZ_DIALOG_KEY, undefined)
 const overlayTransitionName = computed(() => dialogCtx?.overlayTransition.value ?? 'dz-dialog-overlay')
 const contentTransitionName = computed(() => dialogCtx?.contentTransition.value ?? 'dz-dialog-content')
@@ -171,7 +188,7 @@ const dzMotionAttr = useDzMotionAttribute()
           <header v-if="$slots.header" data-part="header" :class="headerClasses">
             <slot name="header" />
           </header>
-          <div data-part="viewport" :class="bodyClasses">
+          <div data-part="viewport" class="dz-focus-ring-control-inset" :class="bodyClasses" role="region" tabindex="0" v-bind="viewportAria">
             <slot />
           </div>
           <footer v-if="$slots.footer" data-part="footer" :class="footerClasses">

@@ -210,7 +210,6 @@ const { testId: dzTestId } = useDzTestIds()
         data-part="toggle"
         :class="toggleClasses"
         :aria-label="showPassword ? dzMessages.hidePassword : dzMessages.showPassword"
-        :aria-pressed="showPassword"
         :disabled="resolvedDisabled || loading"
         @click="toggleVisibility"
       >

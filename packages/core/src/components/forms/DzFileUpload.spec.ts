@@ -1,10 +1,11 @@
 import type { DzFileRef } from '@dzup-ui/contracts'
+import { DZ_MESSAGES_KEY } from '@dzup-ui/contracts'
 import { mount } from '@vue/test-utils'
 /**
  * DzFileUpload — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
-import { h } from 'vue'
+import { h, ref } from 'vue'
 import DzFileUpload from './DzFileUpload.vue'
 
 function createFile(name: string, size: number, type = 'text/plain'): File {
@@ -269,5 +270,76 @@ describe('dzFileUpload — disabled rows', () => {
     expect(request.signal.aborted).toBe(false)
     expect(wrapper.emitted('remove')).toBeUndefined()
     expect(wrapper.emitted('update:modelValue')?.length ?? 0).toBe(updatesBefore)
+  })
+})
+
+describe('dzFileUpload — rejected files are shown and announced (UI-DZUP-UI-UX-L-09)', () => {
+  function drop(wrapper: ReturnType<typeof mount>, ...files: File[]) {
+    return wrapper.get('[role="button"]').trigger('drop', { dataTransfer: { files } })
+  }
+  const status = (wrapper: ReturnType<typeof mount>) => wrapper.get('[role="status"]')
+
+  it('renders an empty polite region before anything is rejected', () => {
+    const wrapper = mount(DzFileUpload)
+    expect(status(wrapper).text()).toBe('')
+  })
+
+  it('shows an oversized file\'s reason and still emits the same error payload', async () => {
+    const wrapper = mount(DzFileUpload, { props: { maxSize: 10 } })
+    const big = createFile('big.txt', 50)
+    await drop(wrapper, big)
+    const payload = wrapper.emitted('error')!.at(-1)![0] as { file: File, reason: string }
+    expect(payload.file).toBe(big)
+    expect(payload.reason).toMatch(/^File exceeds maximum size of /)
+    expect(status(wrapper).text()).toBe(payload.reason)
+  })
+
+  it('shows a rejected type, an over-limit file and a second file on a single control', async () => {
+    const typed = mount(DzFileUpload, { props: { accept: 'image/*' } })
+    await drop(typed, createFile('notes.txt', 4))
+    expect(status(typed).text()).toBe('File type is not accepted (image/*)')
+
+    const limited = mount(DzFileUpload, { props: { multiple: true, maxFiles: 1 } })
+    await drop(limited, createFile('a.txt', 4), createFile('b.txt', 4))
+    expect(limited.text()).toContain('a.txt')
+    expect(status(limited).text()).toBe('Maximum 1 file allowed')
+    // The event payload is unchanged API, English singular slip included.
+    expect((limited.emitted('error')!.at(-1)![0] as { reason: string }).reason).toBe('Maximum 1 files allowed')
+
+    const single = mount(DzFileUpload, { props: { modelValue: [createFile('first.txt', 4)] } })
+    await drop(single, createFile('second.txt', 4))
+    expect(status(single).text()).toBe('Only one file is accepted')
+  })
+
+  it('clears the reasons on the next accepted batch and on remove', async () => {
+    const wrapper = mount(DzFileUpload, { props: { multiple: true, maxSize: 10 } })
+    await drop(wrapper, createFile('big.txt', 50))
+    expect(status(wrapper).text()).not.toBe('')
+    await drop(wrapper, createFile('ok.txt', 4))
+    expect(status(wrapper).text()).toBe('')
+
+    await drop(wrapper, createFile('big.txt', 50))
+    expect(status(wrapper).text()).not.toBe('')
+    await wrapper.get('[aria-label="Remove ok.txt"]').trigger('click')
+    expect(status(wrapper).text()).toBe('')
+  })
+
+  it('reads the reason from the catalog', async () => {
+    const wrapper = mount(DzFileUpload, {
+      props: { accept: 'image/*' },
+      global: {
+        provide: { [DZ_MESSAGES_KEY as symbol]: ref({ DzFileUpload: { rejectedType: 'Dateityp nicht erlaubt ({accept})' } }) },
+      },
+    })
+    await drop(wrapper, createFile('notes.txt', 4))
+    expect(status(wrapper).text()).toBe('Dateityp nicht erlaubt (image/*)')
+  })
+
+  it('leaves the consumer error alone and does not duplicate it', async () => {
+    const wrapper = mount(DzFileUpload, { props: { maxSize: 10, error: 'Upload failed' } })
+    await drop(wrapper, createFile('big.txt', 50))
+    expect(wrapper.find('[role="status"]').exists()).toBe(false)
+    expect(wrapper.get('[role="alert"]').text()).toBe('Upload failed')
+    expect(wrapper.emitted('error')).toHaveLength(1)
   })
 })

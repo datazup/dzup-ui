@@ -12,7 +12,7 @@ import { Filter } from '@lucide/vue'
  */
 import { computed, inject } from 'vue'
 import { useDataGridHeader } from '../../composables/useDataGridHeader/index.ts'
-import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { useComponentMessageFormat, useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { isDevEnv } from '../../utilities/isDevEnv.ts'
 import DzButton from '../buttons/DzButton.vue'
@@ -97,6 +97,7 @@ function onHeaderCellKeydown(event: KeyboardEvent, col: { field: string, sortabl
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzDataGridHeader')
+const dzFormat = useComponentMessageFormat('DzDataGridHeader')
 </script>
 
 <template>
@@ -161,7 +162,7 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
           <DzIconButton
             v-if="isColumnFilterable(col)"
             :icon="Filter"
-            :aria-label="`Filter ${col.header}`"
+            :aria-label="dzFormat('filterColumn', { column: col.header })"
             variant="ghost"
             size="xs"
             :tone="hasActiveFilter(col.field) ? 'primary' : 'neutral'"
@@ -178,7 +179,7 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
           data-part="panel"
           :class="filterPopoverClasses"
           role="dialog"
-          :aria-label="`Filter ${col.header}`"
+          :aria-label="dzFormat('filterColumn', { column: col.header })"
           data-testid="filter-popover"
           @click.stop
           @keydown="handleFilterKeyDown"
@@ -188,8 +189,8 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
             <DzInput
               :model-value="String(getFilterValue(col.field))"
               size="sm"
-              placeholder="Filter..."
-              :aria-label="`Filter ${col.header} by text`"
+              :placeholder="dzMessages.textPlaceholder"
+              :aria-label="dzFormat('filterByText', { column: col.header })"
               data-testid="filter-text-input"
               @update:model-value="handleFilterInput(col.field, $event, col)"
               @keydown="handleFilterKeyDown"
@@ -203,15 +204,15 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
                 :model-value="getFilterOperator(col.field)"
                 :items="operatorItems"
                 size="sm"
-                :aria-label="`Filter operator for ${col.header}`"
+                :aria-label="dzFormat('filterOperator', { column: col.header })"
                 data-testid="filter-operator-select"
                 @update:model-value="handleOperatorChange(col.field, $event as FilterOperator)"
               />
               <DzInput
                 :model-value="String(getFilterValue(col.field))"
                 size="sm"
-                placeholder="Value..."
-                :aria-label="`Filter ${col.header} by number`"
+                :placeholder="dzMessages.valuePlaceholder"
+                :aria-label="dzFormat('filterByNumber', { column: col.header })"
                 data-testid="filter-number-input"
                 @update:model-value="handleFilterInput(col.field, $event, col)"
                 @keydown="handleFilterKeyDown"
@@ -225,7 +226,7 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
               :model-value="String(getFilterValue(col.field))"
               :items="[{ label: 'All', value: '' }, ...(col.filterOptions ?? []).map((o: string) => ({ label: o, value: o }))]"
               size="sm"
-              :aria-label="`Filter ${col.header} by selection`"
+              :aria-label="dzFormat('filterBySelection', { column: col.header })"
               data-testid="filter-select-input"
               @update:model-value="handleFilterInput(col.field, $event, col)"
             />

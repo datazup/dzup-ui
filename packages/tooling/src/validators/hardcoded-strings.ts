@@ -94,7 +94,7 @@ export type StringRule
  * Lower a number in the same change that routes a string through the catalog.
  */
 export const RATCHET_CEILINGS: Readonly<Partial<Record<StringRule, number>>> = {
-  'bound-literal-aria-label': 43,
+  'bound-literal-aria-label': 36,
   'literal-empty-state': 4,
 }
 
@@ -209,6 +209,33 @@ export function isAllowed(source: string, line: number): boolean {
 }
 
 /**
+ * The object literal passed to `withDefaults(defineProps<…>(), { … })`.
+ *
+ * The type argument is scanned with a bracket depth rather than matched with
+ * `<[^>]+>` (UI-DZUP-UI-UX-L-05): a generic component declares
+ * `defineProps<DzDataViewProps<T>>()`, whose first `>` closes the inner
+ * argument, so the old pattern never matched and every generic component's
+ * defaults escaped rule 2 while the gate reported green.
+ */
+export function withDefaultsBlock(head: string): string | null {
+  const opener = /withDefaults\(\s*defineProps</.exec(head)
+  if (opener === null)
+    return null
+  let depth = 1
+  let i = opener.index + opener[0].length
+  for (; i < head.length && depth > 0; i += 1) {
+    if (head[i] === '<')
+      depth += 1
+    else if (head[i] === '>' && head[i - 1] !== '=')
+      depth -= 1
+  }
+  if (depth !== 0)
+    return null
+  const rest = head.slice(i).match(/^\(\)\s*,\s*\{([\s\S]*?)\n\}\)/)
+  return rest === null ? null : rest[1]!
+}
+
+/**
  * Check one `.vue` source. Pure, so the rules are unit-testable against strings
  * rather than against the repository's current state.
  */
@@ -266,10 +293,10 @@ export function checkSource(file: string, source: string): StringViolation[] {
 
   // ── Rule 2: literal defaults on user-visible props ──
   const head = tplAt >= 0 ? source.slice(0, tplAt) : source
-  const defaults = head.match(/withDefaults\(\s*defineProps<[^>]+>\(\)\s*,\s*\{([\s\S]*?)\n\}\)/)
-  if (defaults !== null) {
-    const blockAt = head.indexOf(defaults[1]!)
-    for (const match of defaults[1]!.matchAll(/^\s*(\w+): '([^']*)'/gm)) {
+  const block = withDefaultsBlock(head)
+  if (block !== null) {
+    const blockAt = head.indexOf(block)
+    for (const match of block.matchAll(/^\s*(\w+): '([^']*)'/gm)) {
       const [, prop, value] = match as unknown as [string, string, string]
       if (!USER_VISIBLE_PROP.test(prop))
         continue

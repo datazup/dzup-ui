@@ -184,6 +184,7 @@ then the component's own default.**
 
 | Reader | What the provider supplies through it |
 | --- | --- |
+| `useDzLocale` | the active locale |
 | `useDzMessages` | the translated string catalogue |
 | `useDzPortalTarget` | where teleported content is mounted |
 | `useDzTestIds` | the test-id attribute name and prefix |
@@ -196,7 +197,7 @@ then the component's own default.**
 | `keyboard` | `none` | The arrow keys do not swap: they move on the block axis, or map to a direction the user can see. |
 | `icons` | — | No icon on this component carries direction, so none is mirrored. |
 
-**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
+**Locale and formats.** Reads `useDzLocale`, `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is `present` — `packages/core/src/components/forms/DzColorPicker.anatomy.ts`.
 

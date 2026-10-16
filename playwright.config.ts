@@ -123,6 +123,13 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
+  // UI-DZUP-UI-TEST-L-05. The two CI retries stay — a retried failure is what
+  // records the trace — but a test that fails and then passes on a retry now
+  // fails the run instead of being reported green. Before this only
+  // `test:responsive:landing:ci` passed `--fail-on-flaky-tests`; the blocking
+  // `test:e2e:functional` job laundered an intermittent component break into a
+  // pass. Local runs have no retries, so there is nothing to be flaky there.
+  failOnFlakyTests: !!process.env.CI,
   workers: 1,
   // TASK-S1-O3. Playwright's default is `missing`, which answers "there is no
   // baseline for this platform" by *writing one* and failing the test. That

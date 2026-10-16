@@ -40,7 +40,8 @@
     "DzColorPicker": {
       "ariaLabel": "Choose a color",
       "colorArea": "Color area",
-      "hexValue": "Hex color value"
+      "hexValue": "Hex color value",
+      "selectColor": "Select color {color}"
     },
     "DzCombobox": {
       "clearSelection": "Clear selection",
@@ -71,7 +72,14 @@
       "empty": "No data available"
     },
     "DzDataGridHeader": {
-      "selectAllRows": "Select all rows"
+      "selectAllRows": "Select all rows",
+      "filterColumn": "Filter {column}",
+      "filterByText": "Filter {column} by text",
+      "filterOperator": "Filter operator for {column}",
+      "filterByNumber": "Filter {column} by number",
+      "filterBySelection": "Filter {column} by selection",
+      "textPlaceholder": "Filter...",
+      "valuePlaceholder": "Value..."
     },
     "DzDataGridPagination": {
       "rowsPerPage": "Rows per page",
@@ -91,7 +99,11 @@
       "retry": "Try again"
     },
     "DzFileUpload": {
-      "ariaLabel": "Upload files"
+      "ariaLabel": "Upload files",
+      "rejectedSingle": "Only one file is accepted",
+      "rejectedMaxFiles": "{max, plural, one {Maximum # file allowed} other {Maximum # files allowed}}",
+      "rejectedType": "File type is not accepted ({accept})",
+      "rejectedSize": "File exceeds maximum size of {size}"
     },
     "DzInput": {
       "clear": "Clear input",
@@ -206,6 +218,13 @@
     },
     "DzTokenProgressBar": {
       "tokenUsage": "Token usage"
+    },
+    "DzTour": {
+      "skip": "Skip",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "stepOf": "Step {current} of {total}"
     },
     "DzTransfer": {
       "ariaLabel": "Transfer list",

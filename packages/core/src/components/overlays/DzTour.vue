@@ -6,6 +6,7 @@ import { useDzMotion, useDzMotionAttribute } from '../../composables/provider/us
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
 import { useFloating } from '../../composables/useFloating/index.ts'
 import { useFocusTrap } from '../../composables/useFocusTrap/index.ts'
+import { useComponentMessageFormat, useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { ownsItsOwnCaret } from '../../utilities/keyboardTargets.ts'
 import DzButton from '../buttons/DzButton.vue'
@@ -67,6 +68,11 @@ const dzPortalTarget = useDzPortalTarget()
 const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value ?? 'body')
 
 const styles = tourVariants()
+
+// User-visible strings, resolved against the application's catalog (ADR-20,
+// UI-DZUP-UI-UX-L-10): the three controls and the announced step counter.
+const dzMessages = useComponentMessages('DzTour')
+const dzFormat = useComponentMessageFormat('DzTour')
 
 const autoId = useId()
 const titleId = computed(() => `${props.id ?? autoId}-title`)
@@ -354,7 +360,7 @@ const dzMotionAttr = useDzMotionAttribute()
     >
       <!-- Live region announcing step changes -->
       <div :id="liveId" :class="styles.liveRegion()" aria-live="polite" role="status">
-        Step {{ activeIndex + 1 }} of {{ total }}
+        {{ dzFormat('stepOf', { current: activeIndex + 1, total }) }}
       </div>
 
       <!-- Body -->
@@ -393,7 +399,7 @@ const dzMotionAttr = useDzMotionAttribute()
               data-testid="dz-tour-skip"
               @click="close"
             >
-              Skip
+              {{ dzMessages.skip }}
             </DzButton>
             <DzButton
               v-if="!isFirst"
@@ -403,7 +409,7 @@ const dzMotionAttr = useDzMotionAttribute()
               data-testid="dz-tour-back"
               @click="prev"
             >
-              Back
+              {{ dzMessages.back }}
             </DzButton>
             <DzButton
               variant="solid"
@@ -412,7 +418,7 @@ const dzMotionAttr = useDzMotionAttribute()
               data-testid="dz-tour-next"
               @click="next"
             >
-              {{ isLast ? 'Finish' : 'Next' }}
+              {{ isLast ? dzMessages.finish : dzMessages.next }}
             </DzButton>
           </div>
         </div>

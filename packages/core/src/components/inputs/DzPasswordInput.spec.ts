@@ -35,6 +35,17 @@ describe('dzPasswordInput — Unit Tests', () => {
     expect(wrapper.find('button').attributes('aria-label')).toBe('Hide password')
   })
 
+  it('toggle exposes its state through the label alone, never aria-pressed (UI-DZUP-UI-UX-L-06)', async () => {
+    // A swapping label plus aria-pressed announces "Hide password, toggle
+    // button, pressed": two state signals that contradict each other.
+    const wrapper = mount(DzPasswordInput)
+    const toggle = wrapper.get('[data-part="toggle"]')
+    expect(toggle.attributes('aria-pressed')).toBeUndefined()
+    await toggle.trigger('click')
+    expect(toggle.attributes('aria-pressed')).toBeUndefined()
+    expect(toggle.attributes('aria-label')).toBe('Hide password')
+  })
+
   it('sets autocomplete to current-password', () => {
     const wrapper = mount(DzPasswordInput)
     expect(wrapper.find('input').attributes('autocomplete')).toBe('current-password')

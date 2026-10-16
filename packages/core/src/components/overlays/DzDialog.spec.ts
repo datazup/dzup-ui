@@ -241,6 +241,31 @@ describe('dzDialog -- Unit Tests', () => {
     wrapper.unmount()
   })
 
+  it('makes the scrollable viewport a focusable region named by the title (UI-DZUP-UI-UX-L-08)', () => {
+    const wrapper = mountDialog({}, { scrollable: true })
+    const viewport = wrapper.get('[data-part="viewport"]')
+    expect(viewport.attributes('tabindex')).toBe('0')
+    expect(viewport.attributes('role')).toBe('region')
+    const titleId = viewport.attributes('aria-labelledby')!
+    expect(titleId).toBeTruthy()
+    expect(document.getElementById(titleId)?.textContent).toBe('Dialog Title')
+    wrapper.unmount()
+  })
+
+  it('names the scrollable viewport from an explicit aria-label override', () => {
+    const wrapper = mountDialog({}, { scrollable: true, ariaLabel: 'Release notes' })
+    const viewport = wrapper.get('[data-part="viewport"]')
+    expect(viewport.attributes('aria-label')).toBe('Release notes')
+    expect(viewport.attributes('aria-labelledby')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('leaves the non-scrollable layout without a viewport region', () => {
+    const wrapper = mountDialog()
+    expect(wrapper.find('[data-part="viewport"]').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
   it('dzDialogClose defaults aria-label to Close', () => {
     const wrapper = mount(DzDialogClose, {
       global: {

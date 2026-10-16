@@ -8,6 +8,9 @@
  */
 
 import type { BrowserLaneInputs, DeclaredCiGate } from './browser-lane.ts'
+import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import {
   checkBrowserLane,
@@ -443,5 +446,19 @@ describe('the live repository', () => {
       .filter(lane => findEnforcingJob(jobs, lane.laneCommands, inputs.rootScripts) !== undefined)
       .map(lane => lane.input)
     expect(enforced).toEqual(['story-dod', 'visual-baselines'])
+  })
+})
+
+describe('the root Playwright config (UI-DZUP-UI-TEST-L-05)', () => {
+  // Read as text: importing the config pulls in `@playwright/test`'s device
+  // table and the matrix project builder for one boolean.
+  const source = readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../../../playwright.config.ts'), 'utf8')
+
+  it('keeps its CI retries for trace capture', () => {
+    expect(source).toMatch(/^\s*retries: process\.env\.CI \? 2 : 0,$/m)
+  })
+
+  it('fails a CI run whose test only passed on a retry', () => {
+    expect(source).toMatch(/^\s*failOnFlakyTests: !!process\.env\.CI,$/m)
   })
 })

@@ -86,7 +86,13 @@ declare module '@dzup-ui/contracts' {
       searchPlaceholder: string
       noResults: string
     }
-    DzColorPicker: { ariaLabel: string, colorArea: string, hexValue: string }
+    /** `selectColor` names one preset swatch; `color` is the preset value (UI-DZUP-UI-UX-L-07). */
+    DzColorPicker: {
+      ariaLabel: string
+      colorArea: string
+      hexValue: string
+      selectColor: DzMessage<{ color: string }>
+    }
     DzCombobox: {
       clearSelection: string
       toggleOptions: string
@@ -115,7 +121,20 @@ declare module '@dzup-ui/contracts' {
      * (UI-DZUP-UI-UX-M-03); a host sets it once instead of per instance.
      */
     DzDataGrid: { loading: string, empty: string }
-    DzDataGridHeader: { selectAllRows: string }
+    /**
+     * The filter popover's hints and the column-bearing names of its controls
+     * (UI-DZUP-UI-UX-L-01). `column` is the column's `header` text.
+     */
+    DzDataGridHeader: {
+      selectAllRows: string
+      filterColumn: DzMessage<{ column: string }>
+      filterByText: DzMessage<{ column: string }>
+      filterOperator: DzMessage<{ column: string }>
+      filterByNumber: DzMessage<{ column: string }>
+      filterBySelection: DzMessage<{ column: string }>
+      textPlaceholder: string
+      valuePlaceholder: string
+    }
     DzDataGridPagination: { rowsPerPage: string, previousPage: string, nextPage: string }
     DzDataView: {
       sortBy: string
@@ -130,7 +149,18 @@ declare module '@dzup-ui/contracts' {
      * (UI-DZUP-UI-UX-H-01). One group for both: they render the same fallback.
      */
     DzErrorBoundary: { message: string, retry: string }
-    DzFileUpload: { ariaLabel: string }
+    /**
+     * `rejected*` are the visible, announced reasons a file was not added
+     * (UI-DZUP-UI-UX-L-09). The `error` event payload keeps its English
+     * `reason` unchanged: a host may match on it.
+     */
+    DzFileUpload: {
+      ariaLabel: string
+      rejectedSingle: string
+      rejectedMaxFiles: DzMessage<{ max: number }>
+      rejectedType: DzMessage<{ accept: string }>
+      rejectedSize: DzMessage<{ size: string }>
+    }
     DzInput: { clear: string, loading: string }
     DzLightbox: { close: string, previous: string, next: string }
     DzListbox: { filterOptions: string, filterPlaceholder: string, empty: string }
@@ -197,6 +227,17 @@ declare module '@dzup-ui/contracts' {
     }
     DzToast: { close: string }
     DzTokenProgressBar: { tokenUsage: string }
+    /**
+     * The tour's default controls and the step counter its live region
+     * announces (UI-DZUP-UI-UX-L-10).
+     */
+    DzTour: {
+      skip: string
+      back: string
+      next: string
+      finish: string
+      stepOf: DzMessage<{ current: number, total: number }>
+    }
     DzTransfer: {
       ariaLabel: string
       searchSource: string
@@ -266,6 +307,7 @@ export const enMessages = {
     ariaLabel: 'Choose a color',
     colorArea: 'Color area',
     hexValue: 'Hex color value',
+    selectColor: 'Select color {color}',
   },
   DzCombobox: {
     clearSelection: 'Clear selection',
@@ -293,7 +335,16 @@ export const enMessages = {
     remaining: '{duration} remaining',
   },
   DzDataGrid: { loading: 'Loading data', empty: 'No data available' },
-  DzDataGridHeader: { selectAllRows: 'Select all rows' },
+  DzDataGridHeader: {
+    selectAllRows: 'Select all rows',
+    filterColumn: 'Filter {column}',
+    filterByText: 'Filter {column} by text',
+    filterOperator: 'Filter operator for {column}',
+    filterByNumber: 'Filter {column} by number',
+    filterBySelection: 'Filter {column} by selection',
+    textPlaceholder: 'Filter...',
+    valuePlaceholder: 'Value...',
+  },
   DzDataGridPagination: {
     rowsPerPage: 'Rows per page',
     previousPage: 'Previous page',
@@ -309,7 +360,13 @@ export const enMessages = {
     empty: 'No items',
   },
   DzErrorBoundary: { message: 'Something went wrong.', retry: 'Try again' },
-  DzFileUpload: { ariaLabel: 'Upload files' },
+  DzFileUpload: {
+    ariaLabel: 'Upload files',
+    rejectedSingle: 'Only one file is accepted',
+    rejectedMaxFiles: '{max, plural, one {Maximum # file allowed} other {Maximum # files allowed}}',
+    rejectedType: 'File type is not accepted ({accept})',
+    rejectedSize: 'File exceeds maximum size of {size}',
+  },
   DzInput: { clear: 'Clear input', loading: 'Loading' },
   DzLightbox: {
     close: 'Close lightbox',
@@ -384,6 +441,13 @@ export const enMessages = {
   },
   DzToast: { close: 'Close notification' },
   DzTokenProgressBar: { tokenUsage: 'Token usage' },
+  DzTour: {
+    skip: 'Skip',
+    back: 'Back',
+    next: 'Next',
+    finish: 'Finish',
+    stepOf: 'Step {current} of {total}',
+  },
   DzTransfer: enTransferMessages,
   DzTree: { empty: 'No items' },
   DzTreeSelect: {

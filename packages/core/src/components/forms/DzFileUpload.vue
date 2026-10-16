@@ -27,7 +27,7 @@ import { isFileRef, toFileRef } from '@dzup-ui/contracts'
 import { computed, ref, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
-import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { useComponentMessageFormat, useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { fileUploadVariants } from './DzFileUpload.variants.ts'
 
@@ -73,6 +73,7 @@ defineSlots<DzFileUploadSlots>()
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzFileUpload')
 const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
+const dzFormat = useComponentMessageFormat('DzFileUpload')
 
 const attrs = useAttrs()
 const {
@@ -86,6 +87,15 @@ const {
 
 const inputRef = ref<HTMLInputElement | null>(null)
 const isDragOver = ref(false)
+
+/**
+ * Why the last batch of picked or dropped files was refused, as rendered text
+ * (UI-DZUP-UI-UX-L-09). Before this a rejected file vanished without a word
+ * unless the host wired `@error` to its own message; now the reasons sit in a
+ * polite live region. A batch that is accepted in full clears them, as does
+ * removing a row. Distinct reasons only: ten oversized files say it once.
+ */
+const rejections = ref<string[]>([])
 
 /**
  * The binaries, held beside the value rather than in it.
@@ -203,6 +213,7 @@ function isAccepted(file: File): boolean {
 function processFiles(fileList: FileList | File[]): void {
   const files = Array.from(fileList)
   const validFiles: File[] = []
+  const reasons = new Set<string>()
 
   for (const file of files) {
     // A single-file control takes one file, whichever door it came through.
@@ -210,29 +221,35 @@ function processFiles(fileList: FileList | File[]): void {
     // effect on a drop.
     if (!props.multiple && (model.value.length + validFiles.length) >= 1) {
       emit('error', { file, reason: 'Only one file is accepted' })
+      reasons.add(dzMessages.value.rejectedSingle)
       continue
     }
 
     // Check max files limit
     if (props.maxFiles && (model.value.length + validFiles.length) >= props.maxFiles) {
       emit('error', { file, reason: `Maximum ${props.maxFiles} files allowed` })
+      reasons.add(dzFormat('rejectedMaxFiles', { max: props.maxFiles }))
       continue
     }
 
     // Check file type
     if (!isAccepted(file)) {
       emit('error', { file, reason: `File type is not accepted (${props.accept})` })
+      reasons.add(dzFormat('rejectedType', { accept: props.accept ?? '' }))
       continue
     }
 
     // Check file size
     if (props.maxSize && file.size > props.maxSize) {
       emit('error', { file, reason: `File exceeds maximum size of ${formatSize(props.maxSize)}` })
+      reasons.add(dzFormat('rejectedSize', { size: formatSize(props.maxSize) }))
       continue
     }
 
     validFiles.push(file)
   }
+
+  rejections.value = [...reasons]
 
   if (validFiles.length === 0)
     return
@@ -264,6 +281,7 @@ function removeRow(row: FileRow): void {
   // slot's `remove` goes through here too.
   if (resolvedDisabled.value)
     return
+  rejections.value = []
   if (isFileRef(row.entry)) {
     const { id } = row.entry
     // Removing a row that is still uploading has to cancel it: the host is
@@ -477,5 +495,19 @@ const { testId: dzTestId } = useDzTestIds()
     >
       {{ error }}
     </p>
+    <!--
+      Rejected files (UI-DZUP-UI-UX-L-09). Rendered whenever the host passes no
+      `error`, so the region exists before its text changes and the change is
+      announced; a host that passes `error` owns the message and this stays out.
+    -->
+    <div v-else role="status">
+      <p
+        v-for="reason in rejections"
+        :key="reason"
+        class="text-[length:var(--dz-text-xs)] text-[var(--dz-danger-muted-foreground)]"
+      >
+        {{ reason }}
+      </p>
+    </div>
   </div>
 </template>

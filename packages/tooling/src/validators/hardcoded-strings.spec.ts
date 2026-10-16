@@ -163,6 +163,21 @@ describe('literal prop defaults', () => {
   it('ignores an undefined default', () => {
     expect(checkSource('X.vue', vue(script('  noResultsText: undefined,'), '  <div />'))).toEqual([])
   })
+
+  it('flags a literal default on a generic component (UI-DZUP-UI-UX-L-05)', () => {
+    // `defineProps<DzDataViewProps<T>>()`: the inner `>` used to end the type
+    // argument for `<[^>]+>`, so no generic component was ever read.
+    const generic = `const props = withDefaults(defineProps<DzDataViewProps<T>>(), {\n  items: () => [],\n  emptyTitle: 'No items',\n})`
+    const found = checkSource('X.vue', vue(generic, '  <div />'))
+    expect(found).toHaveLength(1)
+    expect(found[0]).toMatchObject({ rule: 'literal-prop-default', value: 'No items' })
+  })
+
+  it('reads through an inline type with an arrow member', () => {
+    const inline = `const props = withDefaults(defineProps<{ fn?: () => void, emptyText?: string }>(), {\n  emptyText: 'Nothing here',\n})`
+    const found = checkSource('X.vue', vue(inline, '  <div />'))
+    expect(found.map(v => v.value)).toEqual(['Nothing here'])
+  })
 })
 
 describe('the escape hatch', () => {

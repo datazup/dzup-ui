@@ -17,7 +17,7 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
 import { computed, ref, useAttrs } from 'vue'
 import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
-import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { useComponentMessageFormat, useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { colorPickerVariants } from './DzColorPicker.variants.ts'
 
@@ -61,6 +61,12 @@ const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzColorPicker')
 const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
+const dzFormat = useComponentMessageFormat('DzColorPicker')
+
+/** Whether a preset is the current value; hex case is not significant (UI-DZUP-UI-UX-L-07). */
+function isSelectedPreset(color: string): boolean {
+  return color.toLowerCase() === model.value.toLowerCase()
+}
 
 const attrs = useAttrs()
 const {
@@ -225,7 +231,8 @@ const { testId: dzTestId } = useDzTestIds()
                 data-part="item"
                 :class="[styles.presetSwatch(), ui?.item]"
                 :style="{ backgroundColor: color }"
-                :aria-label="`Select color ${color}`"
+                :aria-label="dzFormat('selectColor', { color })"
+                :aria-pressed="isSelectedPreset(color)"
                 @click="handlePresetClick(color)"
               />
             </div>
