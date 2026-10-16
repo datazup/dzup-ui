@@ -607,7 +607,7 @@ const rel = (path: string): string => relative(ROOT, path).replaceAll('\\', '/')
  * otherwise, which is what an unscoped row means ("wherever the component has
  * focus", {@link KeyboardBinding.when}).
  */
-interface TemplateNode {
+export interface TemplateNode {
   tag: string
   /** The whole opening tag, attributes included — what the platform table tests. */
   text: string
@@ -618,7 +618,7 @@ interface TemplateNode {
   line: number
 }
 
-interface SourceFile {
+export interface SourceFile {
   path: string
   source: string
   /** Keys this file names in a comparison shape, first line each. */
@@ -1176,601 +1176,699 @@ function relativeImportsIn(path: string, source: string): string[] {
   return out
 }
 
-export function checkAnatomyKeyboard(): AnatomyKeyboardReport {
-  const ceilings = JSON.parse(readFileSync(CEILINGS, 'utf8')) as Ceilings
-  const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8')) as { entries: ManifestEntry[] }
-  const ledger = JSON.parse(readFileSync(REJECTED, 'utf8')) as { rejected: RejectedCitation[] }
+// ---------------------------------------------------------------------------
+// The scan context — what every stage below reads, built once per run
+// ---------------------------------------------------------------------------
 
-  /**
-   * Citations RESIDUAL-14's census judged wrong for a **specific row**.
-   *
-   * Keyed on the row, not on the file, because the same site is right for one row
-   * and wrong for another — `DzSearchInput.vue:168` really is the `Enter` that
-   * submits, and is not the `Enter` that clears. A rejected citation is skipped and
-   * the walk continues, so the row lands on a better owner or on no owner; the
-   * ledger can therefore only ever make the numbers worse, which is the property
-   * that makes it safe to check in.
-   */
-  const rejectedFor = (component: string, binding: ManifestKeyboardBinding): ReadonlySet<string> => {
-    const out = new Set<string>()
-    for (const entry of ledger.rejected) {
-      if (entry.component !== component || entry.key !== binding.key)
-        continue
-      // Exact, absent included: `DzSearchInput.vue:168` really is the `Enter` that
-      // submits and is not the `Enter` that clears, and the two rows differ only in
-      // `when`. An entry that matched both would reject a citation that is right.
-      if ((entry.when ?? '') !== (binding.when ?? ''))
-        continue
-      if ((entry.modifiers ?? []).join('+') !== (binding.modifiers ?? []).join('+'))
-        continue
-      for (const citation of entry.citations)
-        out.add(citation)
-    }
-    return out
-  }
-
+/**
+ * The read-only state the closure walk, the owner routes and the reverse-drift
+ * scan share. Built once by {@link checkAnatomyKeyboard}; a spec can build one by
+ * hand over synthetic files, which is how each route is pinned on its own.
+ */
+export interface ScanContext {
+  /** A file, comment-blanked and line-preserved, read once; `undefined` when absent. */
+  read: (path: string) => SourceFile | undefined
+  /** Every `.vue` in core, by symbol, so a render edge can be resolved by name. */
+  vueBySymbol: ReadonlyMap<string, string>
   /** `compound-part` symbol → the component whose anatomy governs it. */
-  const parentOf = new Map<string, string>()
-  for (const entry of manifest.entries) {
-    if (entry.kind === 'compound-part' && entry.parentComponent !== undefined)
-      parentOf.set(entry.symbol, entry.parentComponent)
+  parentOf: ReadonlyMap<string, string>
+}
+
+/**
+ * A file as every scan below sees it.
+ *
+ * The comment-blanked, line-preserved text IS `source` from here on, so every
+ * scan below — keys, handler token, template nodes, render-function nodes, Reka
+ * imports, relative imports, the `<Dz…>` render edges, the slot token — is
+ * reading code rather than prose, without each one having to remember to.
+ * RESIDUAL-14: `stripCommentsForScan`'s docblock lists the ten rows this cost.
+ */
+export function sourceFileFrom(path: string, raw: string): SourceFile {
+  const source = stripCommentsForScan(raw, path.endsWith('.vue'))
+  const keyLines = keyLinesIn(source)
+  return {
+    path,
+    source,
+    keyLines,
+    keys: new Map([...keyLines].map(([key, at]) => [key, at[0]!])),
+    handles: HANDLER_TOKEN.test(source),
+    // Template nodes first, so `nodes[0]` is still the component's root, then
+    // the elements a render function builds (RESIDUAL-13). `templateNodesIn`
+    // returns nothing for a file with no `<template>`, so a sibling `.ts` that
+    // builds nodes with `h()` contributes its elements and nothing else.
+    nodes: [...templateNodesIn(source), ...renderFunctionNodesIn(source)],
   }
+}
 
-  // Every .vue in core, by symbol, so a render edge can be resolved by name.
-  const vueBySymbol = new Map<string, string>()
-  for (const path of walk(CORE_SRC, p => p.endsWith('.vue')))
-    vueBySymbol.set(basename(path, '.vue'), path)
-
+/** A caching {@link ScanContext.read} over the filesystem. */
+function createSourceReader(): ScanContext['read'] {
   const sourceCache = new Map<string, SourceFile>()
-  const read = (path: string): SourceFile | undefined => {
+  return (path: string): SourceFile | undefined => {
     const cached = sourceCache.get(path)
     if (cached !== undefined)
       return cached
     if (!existsSync(path))
       return undefined
-    // The comment-blanked, line-preserved text IS `source` from here on, so every
-    // scan below — keys, handler token, template nodes, render-function nodes, Reka
-    // imports, relative imports, the `<Dz…>` render edges, the slot token — is
-    // reading code rather than prose, without each one having to remember to.
-    // RESIDUAL-14: `stripCommentsForScan`'s docblock lists the ten rows this cost.
-    const source = stripCommentsForScan(readFileSync(path, 'utf8'), path.endsWith('.vue'))
-    const keyLines = keyLinesIn(source)
-    const file: SourceFile = {
-      path,
-      source,
-      keyLines,
-      keys: new Map([...keyLines].map(([key, at]) => [key, at[0]!])),
-      handles: HANDLER_TOKEN.test(source),
-      // Template nodes first, so `nodes[0]` is still the component's root, then
-      // the elements a render function builds (RESIDUAL-13). `templateNodesIn`
-      // returns nothing for a file with no `<template>`, so a sibling `.ts` that
-      // builds nodes with `h()` contributes its elements and nothing else.
-      nodes: [...templateNodesIn(source), ...renderFunctionNodesIn(source)],
-    }
+    const file = sourceFileFrom(path, readFileSync(path, 'utf8'))
     sourceCache.set(path, file)
     return file
   }
+}
 
-  // -------------------------------------------------------------------------
-  // Declarations
-  // -------------------------------------------------------------------------
-
-  interface Declaration {
-    name: string
-    anatomyFile: string
-    vue?: string
-    anatomy: ManifestAnatomy
-    /** The spec that asserts this component's contract at runtime, if any. */
-    spec?: string
-    /** Keys that spec asserts through `expectKeyboardContract`, with the line. */
-    specKeys: Map<string, number>
+function createScanContext(entries: readonly ManifestEntry[]): ScanContext {
+  const parentOf = new Map<string, string>()
+  for (const entry of entries) {
+    if (entry.kind === 'compound-part' && entry.parentComponent !== undefined)
+      parentOf.set(entry.symbol, entry.parentComponent)
   }
+  const vueBySymbol = new Map<string, string>()
+  for (const path of walk(CORE_SRC, p => p.endsWith('.vue')))
+    vueBySymbol.set(basename(path, '.vue'), path)
+  return { read: createSourceReader(), vueBySymbol, parentOf }
+}
 
+// ---------------------------------------------------------------------------
+// The rejected-citation ledger
+// ---------------------------------------------------------------------------
+
+/**
+ * Citations RESIDUAL-14's census judged wrong for a **specific row**.
+ *
+ * Keyed on the row, not on the file, because the same site is right for one row
+ * and wrong for another — `DzSearchInput.vue:168` really is the `Enter` that
+ * submits, and is not the `Enter` that clears. A rejected citation is skipped and
+ * the walk continues, so the row lands on a better owner or on no owner; the
+ * ledger can therefore only ever make the numbers worse, which is the property
+ * that makes it safe to check in.
+ */
+export function rejectedCitationsFor(rejected: readonly RejectedCitation[], component: string, binding: ManifestKeyboardBinding): ReadonlySet<string> {
+  const out = new Set<string>()
+  for (const entry of rejected) {
+    if (entry.component !== component || entry.key !== binding.key)
+      continue
+    // Exact, absent included: `DzSearchInput.vue:168` really is the `Enter` that
+    // submits and is not the `Enter` that clears, and the two rows differ only in
+    // `when`. An entry that matched both would reject a citation that is right.
+    if ((entry.when ?? '') !== (binding.when ?? ''))
+      continue
+    if ((entry.modifiers ?? []).join('+') !== (binding.modifiers ?? []).join('+'))
+      continue
+    for (const citation of entry.citations)
+      out.add(citation)
+  }
+  return out
+}
+
+/**
+ * May a row be given this citation? See {@link RejectedCitation}.
+ *
+ * Two widenings, each because a narrower entry only moved the citation:
+ *
+ * - `<file>:*` rejects every line of a file. `optionsStateFocus.ts` names
+ *   `'ArrowUp'` twice inside the same retry handler, so naming one line moved the
+ *   citation to the other.
+ * - `<prefix>**` rejects every citation under a prefix. `DzDataGrid`'s six grid
+ *   rows do not just have the wrong Reka primitive, they have **no** Reka
+ *   primitive: the component imports none, and the ones in its closure are
+ *   collateral from a row-selection checkbox and a filter select. Rejecting one
+ *   module handed the row the next one — `RovingFocus` became `Select`. What is
+ *   true, and what the entry says, is that no primitive owns the row.
+ */
+export function citationAdmitted(rejectedHere: ReadonlySet<string>, citation: string): boolean {
+  if (rejectedHere.has(citation))
+    return false
+  const at = citation.lastIndexOf(':')
+  if (at !== -1 && rejectedHere.has(`${citation.slice(0, at)}:*`))
+    return false
+  for (const rejected of rejectedHere) {
+    if (rejected.endsWith('**') && citation.startsWith(rejected.slice(0, -2)))
+      return false
+  }
+  return true
+}
+
+// ---------------------------------------------------------------------------
+// Declarations
+// ---------------------------------------------------------------------------
+
+export interface Declaration {
+  name: string
+  anatomyFile: string
+  vue?: string
+  anatomy: ManifestAnatomy
+  /** The spec that asserts this component's contract at runtime, if any. */
+  spec?: string
+  /** Keys that spec asserts through `expectKeyboardContract`, with the line. */
+  specKeys: Map<string, number>
+}
+
+/**
+ * The spec that could carry a runtime assertion: the component's own first, then
+ * the family anatomy spec, which is where `@dzup-ui/testing`'s `keyboard.ts` says
+ * these calls belong ("called from the family anatomy specs where the components
+ * are already mounted"). The first candidate that asserts any key wins.
+ */
+function runtimeSpecFor(anatomyPath: string): Pick<Declaration, 'spec' | 'specKeys'> {
+  const family = basename(dirname(anatomyPath))
+  const specCandidates = [
+    anatomyPath.replace(/\.anatomy\.ts$/, '.spec.ts'),
+    anatomyPath.replace(/\.anatomy\.ts$/, '.contract.spec.ts'),
+    resolve(dirname(anatomyPath), `${family}.anatomy.spec.ts`),
+  ]
+  const specKeys = new Map<string, number>()
+  for (const candidate of specCandidates) {
+    if (!existsSync(candidate))
+      continue
+    const asserted = specAssertedKeys(stripCommentsForScan(readFileSync(candidate, 'utf8'), false))
+    if (asserted.size === 0)
+      continue
+    for (const [key, line] of asserted) {
+      if (!specKeys.has(key))
+        specKeys.set(key, line)
+    }
+    return { spec: candidate, specKeys }
+  }
+  return { spec: undefined, specKeys }
+}
+
+/** Every parseable `.anatomy.ts` under {@link ANATOMY_ROOTS}, sorted by name. */
+function collectDeclarations(): Declaration[] {
   const declarations: Declaration[] = []
   for (const root of ANATOMY_ROOTS) {
     for (const path of walk(root, p => p.endsWith('.anatomy.ts'))) {
-      const read = parseAnatomySource(readFileSync(path, 'utf8'), path)
-      if (read.anatomy === undefined)
+      const parsed = parseAnatomySource(readFileSync(path, 'utf8'), path)
+      if (parsed.anatomy === undefined)
         continue
-      const name = basename(path, '.anatomy.ts')
       const vue = path.replace(/\.anatomy\.ts$/, '.vue')
-      // The spec that could carry a runtime assertion: the component's own first,
-      // then the family anatomy spec, which is where `@dzup-ui/testing`'s
-      // `keyboard.ts` says these calls belong ("called from the family anatomy
-      // specs where the components are already mounted").
-      const family = basename(dirname(path))
-      const specCandidates = [
-        path.replace(/\.anatomy\.ts$/, '.spec.ts'),
-        path.replace(/\.anatomy\.ts$/, '.contract.spec.ts'),
-        resolve(dirname(path), `${family}.anatomy.spec.ts`),
-      ]
-      const specKeys = new Map<string, number>()
-      let spec: string | undefined
-      for (const candidate of specCandidates) {
-        if (!existsSync(candidate))
-          continue
-        const asserted = specAssertedKeys(stripCommentsForScan(readFileSync(candidate, 'utf8'), false))
-        if (asserted.size === 0)
-          continue
-        spec = candidate
-        for (const [key, line] of asserted) {
-          if (!specKeys.has(key))
-            specKeys.set(key, line)
-        }
-        break
-      }
+      const { spec, specKeys } = runtimeSpecFor(path)
       declarations.push({
-        name,
+        name: basename(path, '.anatomy.ts'),
         anatomyFile: rel(path),
         vue: existsSync(vue) ? vue : undefined,
-        anatomy: read.anatomy,
+        anatomy: parsed.anatomy,
         spec,
         specKeys,
       })
     }
   }
   declarations.sort((a, b) => a.name.localeCompare(b.name, 'en'))
+  return declarations
+}
 
-  // -------------------------------------------------------------------------
-  // The closure
-  // -------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// The closure
+// ---------------------------------------------------------------------------
 
-  function closureOf(declaration: Declaration): Closure {
-    const files: { route: Route, file: SourceFile }[] = []
-    const primitives = new Set<string>()
-    const unresolvedPrimitives = new Set<string>()
-    const unresolvedReferences = new Set<string>()
-    const visited = new Set<string>()
-    let depthCapped = false
+/** Every file whose keyboard handling counts for a declaration, by route. */
+function closureOf(declaration: Declaration, ctx: ScanContext): Closure {
+  const files: { route: Route, file: SourceFile }[] = []
+  const primitives = new Set<string>()
+  const unresolvedPrimitives = new Set<string>()
+  const unresolvedReferences = new Set<string>()
+  const visited = new Set<string>()
+  let depthCapped = false
 
-    const add = (route: Route, path: string): SourceFile | undefined => {
-      if (visited.has(path))
-        return undefined
-      visited.add(path)
-      const file = read(path)
-      if (file === undefined) {
-        unresolvedReferences.add(rel(path))
-        return undefined
-      }
-      files.push({ route, file })
-      for (const name of rekaImportsIn(file.source)) {
-        // Reka exports types and utilities alongside primitives; only the ones
-        // that map to a dist module are primitives, and the ones that do not
-        // map at all are recorded so the verdict can be `undetermined` rather
-        // than a guess.
-        if (rekaKeysFor(name) !== undefined)
-          primitives.add(name)
-        else if (/^[A-Z]/.test(name))
-          unresolvedPrimitives.add(name)
-      }
-      return file
+  const add = (route: Route, path: string): SourceFile | undefined => {
+    if (visited.has(path))
+      return undefined
+    visited.add(path)
+    const file = ctx.read(path)
+    if (file === undefined) {
+      unresolvedReferences.add(rel(path))
+      return undefined
     }
+    files.push({ route, file })
+    for (const name of rekaImportsIn(file.source)) {
+      // Reka exports types and utilities alongside primitives; only the ones
+      // that map to a dist module are primitives, and the ones that do not
+      // map at all are recorded so the verdict can be `undetermined` rather
+      // than a guess.
+      if (rekaKeysFor(name) !== undefined)
+        primitives.add(name)
+      else if (/^[A-Z]/.test(name))
+        unresolvedPrimitives.add(name)
+    }
+    return file
+  }
 
-    /** Composables reached from a file, one level into their own imports. */
-    const addComposables = (file: SourceFile, depth = 0): void => {
+  /** Composables reached from a file, one level into their own imports. */
+  const addComposables = (file: SourceFile, depth = 0): void => {
+    for (const target of relativeImportsIn(file.path, file.source)) {
+      if (!target.startsWith(COMPOSABLES) || target.endsWith('.spec.ts'))
+        continue
+      const added = add('composable', target)
+      if (added !== undefined && depth < 2)
+        addComposables(added, depth + 1)
+    }
+  }
+
+  // 1. own
+  if (declaration.vue !== undefined) {
+    const own = add('own', declaration.vue)
+    if (own !== undefined)
+      addComposables(own)
+  }
+  // A component may keep its key handling in a sibling `.ts` (an
+  // `optionsStateFocus.ts`-shaped module) — those arrive as relative imports
+  // of the `.vue` and are read under `own`.
+  const ownFile = declaration.vue === undefined ? undefined : ctx.read(declaration.vue)
+  if (ownFile !== undefined) {
+    for (const target of relativeImportsIn(ownFile.path, ownFile.source)) {
+      if (target.endsWith('.ts') && !target.startsWith(COMPOSABLES)
+        && !/\.(?:types|variants|tokens|anatomy|spec)\.ts$/.test(target)
+        && target.startsWith(CORE_SRC)) {
+        add('own', target)
+      }
+    }
+  }
+
+  // 2. compound parts whose parentComponent is this component
+  for (const [child, parent] of ctx.parentOf) {
+    if (parent !== declaration.name)
+      continue
+    const path = ctx.vueBySymbol.get(child)
+    if (path === undefined) {
+      unresolvedReferences.add(`${child} (compound-part, no .vue found)`)
+      continue
+    }
+    const part = add('part', path)
+    if (part !== undefined)
+      addComposables(part)
+  }
+
+  // 3. Dz* components rendered by anything already in the closure
+  let frontier = files.map(f => f.file)
+  for (let depth = 0; depth < RENDER_DEPTH; depth++) {
+    const next: SourceFile[] = []
+    for (const file of frontier) {
+      for (const match of file.source.matchAll(/<(Dz[A-Za-z0-9]+)[\s/>]/g)) {
+        const path = ctx.vueBySymbol.get(match[1]!)
+        if (path === undefined) {
+          // Not every `<Dz…>` in a template is a component of this library —
+          // a doc comment or a story name can look like one — so only a name
+          // that is exported anywhere and has no file is unresolved.
+          continue
+        }
+        const added = add('renders', path)
+        if (added !== undefined) {
+          addComposables(added)
+          next.push(added)
+        }
+      }
+      // Relative `.vue` imports catch the unexported internals
+      // (`DzOptionsState.vue`) the manifest does not carry.
       for (const target of relativeImportsIn(file.path, file.source)) {
-        if (!target.startsWith(COMPOSABLES) || target.endsWith('.spec.ts'))
+        if (!target.endsWith('.vue'))
           continue
-        const added = add('composable', target)
-        if (added !== undefined && depth < 2)
-          addComposables(added, depth + 1)
-      }
-    }
-
-    // 1. own
-    if (declaration.vue !== undefined) {
-      const own = add('own', declaration.vue)
-      if (own !== undefined)
-        addComposables(own)
-    }
-    // A component may keep its key handling in a sibling `.ts` (an
-    // `optionsStateFocus.ts`-shaped module) — those arrive as relative imports
-    // of the `.vue` and are read under `own`.
-    const ownFile = declaration.vue === undefined ? undefined : read(declaration.vue)
-    if (ownFile !== undefined) {
-      for (const target of relativeImportsIn(ownFile.path, ownFile.source)) {
-        if (target.endsWith('.ts') && !target.startsWith(COMPOSABLES)
-          && !/\.(?:types|variants|tokens|anatomy|spec)\.ts$/.test(target)
-          && target.startsWith(CORE_SRC)) {
-          add('own', target)
+        const added = add('renders', target)
+        if (added !== undefined) {
+          addComposables(added)
+          next.push(added)
         }
       }
     }
-
-    // 2. compound parts whose parentComponent is this component
-    for (const [child, parent] of parentOf) {
-      if (parent !== declaration.name)
-        continue
-      const path = vueBySymbol.get(child)
-      if (path === undefined) {
-        unresolvedReferences.add(`${child} (compound-part, no .vue found)`)
-        continue
-      }
-      const part = add('part', path)
-      if (part !== undefined)
-        addComposables(part)
-    }
-
-    // 3. Dz* components rendered by anything already in the closure
-    let frontier = files.map(f => f.file)
-    for (let depth = 0; depth < RENDER_DEPTH; depth++) {
-      const next: SourceFile[] = []
-      for (const file of frontier) {
-        for (const match of file.source.matchAll(/<(Dz[A-Za-z0-9]+)[\s/>]/g)) {
-          const path = vueBySymbol.get(match[1]!)
-          if (path === undefined) {
-            // Not every `<Dz…>` in a template is a component of this library —
-            // a doc comment or a story name can look like one — so only a name
-            // that is exported anywhere and has no file is unresolved.
-            continue
-          }
-          const added = add('renders', path)
-          if (added !== undefined) {
-            addComposables(added)
-            next.push(added)
-          }
-        }
-        // Relative `.vue` imports catch the unexported internals
-        // (`DzOptionsState.vue`) the manifest does not carry.
-        for (const target of relativeImportsIn(file.path, file.source)) {
-          if (!target.endsWith('.vue'))
-            continue
-          const added = add('renders', target)
-          if (added !== undefined) {
-            addComposables(added)
-            next.push(added)
-          }
-        }
-      }
-      if (depth === RENDER_DEPTH - 1 && next.length > 0)
-        depthCapped = true
-      frontier = next
-    }
-
-    return {
-      files,
-      primitives: [...primitives].sort(),
-      unresolvedPrimitives: [...unresolvedPrimitives].sort(),
-      unresolvedReferences: [...unresolvedReferences].sort(),
-      depthCapped,
-    }
+    if (depth === RENDER_DEPTH - 1 && next.length > 0)
+      depthCapped = true
+    frontier = next
   }
 
-  // -------------------------------------------------------------------------
-  // Resolving one declared key
-  // -------------------------------------------------------------------------
+  return {
+    files,
+    primitives: [...primitives].sort(),
+    unresolvedPrimitives: [...unresolvedPrimitives].sort(),
+    unresolvedReferences: [...unresolvedReferences].sort(),
+    depthCapped,
+  }
+}
 
-  /**
-   * Either the owner of a key, or the reason ownership cannot be decided.
-   *
-   * The second case is not a technicality. Three shapes in this library put the
-   * node that receives a key somewhere a template scan cannot follow, and each
-   * one would otherwise be reported as a false accusation:
-   *
-   * - **A consumer-supplied focus target.** `DzCheckboxGroup` is a `<div>` and a
-   *   `<slot />`; the checkboxes are the application's. Space is toggled by
-   *   whatever the consumer put there.
-   * - **A render function.** `DzAnchor` builds its links with `h()` in the
-   *   script, so its template is a `<nav>` and nothing else.
-   * - **A part emitted outside the closure.** A row scoped to a part that no
-   *   file this walk reached emits — the node exists (`validate:anatomy-parts`
-   *   keeps `maxUnemittedDeclarations` at zero) but not where this can see it.
-   */
-  type Resolution = { owner: Owner } | { undetermined: string }
+// ---------------------------------------------------------------------------
+// Resolving one declared key
+// ---------------------------------------------------------------------------
 
-  /** `<slot />` in the template — the focus target may be the consumer's. */
-  const SLOT_TOKEN = /<slot\b/
-  /** Nodes built in the script, which a template scan cannot see. */
-  const RENDER_FUNCTION_TOKEN = /\bh\(\s*['"]|createVNode\(\s*['"]|renderList\(/
+/**
+ * Either the owner of a key, or the reason ownership cannot be decided.
+ *
+ * The second case is not a technicality. Three shapes in this library put the
+ * node that receives a key somewhere a template scan cannot follow, and each
+ * one would otherwise be reported as a false accusation:
+ *
+ * - **A consumer-supplied focus target.** `DzCheckboxGroup` is a `<div>` and a
+ *   `<slot />`; the checkboxes are the application's. Space is toggled by
+ *   whatever the consumer put there.
+ * - **A render function.** `DzAnchor` builds its links with `h()` in the
+ *   script, so its template is a `<nav>` and nothing else.
+ * - **A part emitted outside the closure.** A row scoped to a part that no
+ *   file this walk reached emits — the node exists (`validate:anatomy-parts`
+ *   keeps `maxUnemittedDeclarations` at zero) but not where this can see it.
+ */
+export type Resolution = { owner: Owner } | { undetermined: string }
 
-  function ownerOf(key: string, closure: Closure, scope: string | undefined, parts: readonly string[], declaration: Declaration, modifiers: readonly string[], rejectedHere: ReadonlySet<string>): Resolution | undefined {
-    /**
-     * A citation this row may not be given — see {@link RejectedCitation}.
-     *
-     * Two widenings, each because a narrower entry only moved the citation:
-     *
-     * - `<file>:*` rejects every line of a file. `optionsStateFocus.ts` names
-     *   `'ArrowUp'` twice inside the same retry handler, so naming one line moved the
-     *   citation to the other.
-     * - `<prefix>**` rejects every citation under a prefix. `DzDataGrid`'s six grid
-     *   rows do not just have the wrong Reka primitive, they have **no** Reka
-     *   primitive: the component imports none, and the ones in its closure are
-     *   collateral from a row-selection checkbox and a filter select. Rejecting one
-     *   module handed the row the next one — `RovingFocus` became `Select`. What is
-     *   true, and what the entry says, is that no primitive owns the row.
-     */
-    const admits = (citation: string): boolean => {
-      if (rejectedHere.has(citation))
-        return false
-      const at = citation.lastIndexOf(':')
-      if (at !== -1 && rejectedHere.has(`${citation.slice(0, at)}:*`))
-        return false
-      for (const rejected of rejectedHere) {
-        if (rejected.endsWith('**') && citation.startsWith(rejected.slice(0, -2)))
-          return false
-      }
-      return true
-    }
+/** One declared row, as every owner route below asks about it. */
+export interface RowQuery {
+  key: string
+  closure: Closure
+  /** The row's `when`, when it names a declared part; otherwise unscoped. */
+  targetPart: string | undefined
+  declaration: Pick<Declaration, 'spec' | 'specKeys'>
+  modifiers: readonly string[]
+  /** {@link citationAdmitted} over this row's rejected citations. */
+  admits: (citation: string) => boolean
+}
 
-    const targetPart = scope !== undefined && parts.includes(scope) ? scope : undefined
+/** `<slot />` in the template — the focus target may be the consumer's. */
+const SLOT_TOKEN = /<slot\b/
+/** Nodes built in the script, which a template scan cannot see. */
+const RENDER_FUNCTION_TOKEN = /\bh\(\s*['"]|createVNode\(\s*['"]|renderList\(/
 
-    /**
-     * May a handler route answer for a row scoped to a declared part?
-     *
-     * Only if the node carrying that part binds a keyboard handler of its own. `when`
-     * used to be honoured by the **platform** route alone, so routes 1–4 — which are
-     * asked first and scan whole files — satisfied a scoped row with any handler
-     * anywhere in the component:
-     *
-     * - `DzSearchInput`'s `Enter` scoped to the `clear` control was answered by the
-     *   `Enter` that **submits the search**, while the `Space` row of the same part was
-     *   correctly answered by the clear `<button>`.
-     * - `DzTransfer`'s `Enter` for the transfer buttons was answered by an **option's**
-     *   own binding in a pane.
-     *
-     * The test is {@link subtreeOf} the part's node, not the handler's body: it ties a
-     * handler to a node without guessing, and it is a *region* test because a declared
-     * part often is one. Where the part's node binds nothing, the row belongs to the
-     * scoped platform route, which is where those two land. A part this walk never
-     * sees leaves the decision alone — that case is already `undetermined` further
-     * down and must not become `unbacked` here.
-     */
-    const partBindsAHandler = targetPart === undefined || (() => {
-      let sawPart = false
-      for (const { file } of closure.files) {
-        for (const node of file.nodes) {
-          if (node.part !== targetPart)
-            continue
-          sawPart = true
-          if (HANDLER_TOKEN.test(subtreeOf(file.source, node)))
-            return true
-        }
-      }
-      return !sawPart
-    })()
-
-    // Routes 1–4, in the order the closure recorded them.
-    for (const route of partBindsAHandler ? (['own', 'part', 'renders', 'composable'] as const) : []) {
-      for (const { route: fileRoute, file } of closure.files) {
-        if (fileRoute !== route || !file.handles)
-          continue
-        for (const line of file.keyLines.get(key) ?? []) {
-          const citation = `${rel(file.path)}:${line}`
-          // A declared modifier is part of the contract: the cited site has to be
-          // looking at the key the row is about (RESIDUAL-14, `readsModifiersAt`).
-          if (!admits(citation) || !readsModifiersAt(file.source, line, modifiers))
-            continue
-          return { owner: { route, citation } }
-        }
-      }
-    }
-
-    // Route 5 — a Reka primitive's own source.
-    for (const primitive of closure.primitives) {
-      const resolved = rekaKeysFor(primitive)
-      const citation = resolved?.keys.get(key)
-      if (citation === undefined || !admits(citation))
+/**
+ * May a handler route answer for a row scoped to a declared part?
+ *
+ * Only if the node carrying that part binds a keyboard handler of its own. `when`
+ * used to be honoured by the **platform** route alone, so routes 1–4 — which are
+ * asked first and scan whole files — satisfied a scoped row with any handler
+ * anywhere in the component:
+ *
+ * - `DzSearchInput`'s `Enter` scoped to the `clear` control was answered by the
+ *   `Enter` that **submits the search**, while the `Space` row of the same part was
+ *   correctly answered by the clear `<button>`.
+ * - `DzTransfer`'s `Enter` for the transfer buttons was answered by an **option's**
+ *   own binding in a pane.
+ *
+ * The test is {@link subtreeOf} the part's node, not the handler's body: it ties a
+ * handler to a node without guessing, and it is a *region* test because a declared
+ * part often is one. Where the part's node binds nothing, the row belongs to the
+ * scoped platform route, which is where those two land. A part this walk never
+ * sees leaves the decision alone — that case is already `undetermined` further
+ * down and must not become `unbacked` here.
+ */
+function partBindsAHandler(closure: Closure, targetPart: string | undefined): boolean {
+  if (targetPart === undefined)
+    return true
+  let sawPart = false
+  for (const { file } of closure.files) {
+    for (const node of file.nodes) {
+      if (node.part !== targetPart)
         continue
-      const line = Number(citation.slice(citation.lastIndexOf(':') + 1))
-      const dist = resolve(ROOT, citation.slice(0, citation.lastIndexOf(':')))
-      if (!Number.isFinite(line) || !existsSync(dist))
-        continue
-      if (!readsModifiersAt(stripCommentsForScan(readFileSync(dist, 'utf8'), false), line, modifiers))
-        continue
-      return { owner: { route: 'primitive', what: primitive, citation } }
+      sawPart = true
+      if (HANDLER_TOKEN.test(subtreeOf(file.source, node)))
+        return true
     }
+  }
+  return !sawPart
+}
 
-    // The platform route cannot satisfy a MODIFIED row at all, with one exception
-    // that is not a component's doing either: `Shift`+`Tab` is the document's own
-    // reverse focus order. No native element has a documented behaviour for
-    // `Shift`+`Enter` or `Shift`+`PageUp`, so crediting `DzTable`'s
-    // `Shift`+`Enter` multi-sort row to a `<button>` was the platform table saying
-    // "something near here activates", which is not the row.
-    if (modifiers.length > 0 && !(modifiers.length === 1 && modifiers[0] === 'Shift' && key === 'Tab'))
-      return undefined
-
-    // Route 6 — the platform table, which credits activation and text entry
-    // only (see NAVIGATION_KEYS) and is SCOPED to the node the row is about.
-    if (NAVIGATION_KEYS.has(key))
-      return undefined
-
-    /**
-     * The native element a node resolves to: itself, a `Dz*`, or a primitive.
-     *
-     * Wrapped by {@link nativeAt}, which drops a citation the ledger rejects so the
-     * walk keeps looking at the remaining nodes rather than stopping on one.
-     */
-    const nativeAtRaw = (node: TemplateNode, from: string): Owner | undefined => {
-      for (const entry of PLATFORM_KEYS) {
-        if (entry.keys.includes(key) && entry.token.test(node.text))
-          return { route: 'platform', what: entry.what, citation: `${from}:${node.line}` }
-      }
-      // A Reka primitive says in its own dist source what element it renders.
-      for (const native of rekaKeysFor(node.tag)?.natives ?? []) {
-        if (native.keys.includes(key))
-          return { route: 'platform', what: `${node.tag}${native.what.replace('a Reka primitive', '')}`, citation: native.citation }
-      }
-      // A `Dz*` node is another component of this library: its own root is the
-      // element that receives the key. One level only — deeper than that and
-      // the citation stops meaning anything.
-      const path = vueBySymbol.get(node.tag)
-      if (path === undefined)
-        return undefined
-      const inner = read(path)?.nodes[0]
-      if (inner === undefined)
-        return undefined
-      for (const entry of PLATFORM_KEYS) {
-        if (entry.keys.includes(key) && entry.token.test(inner.text))
-          return { route: 'platform', what: `${node.tag}'s root is ${entry.what}`, citation: `${rel(path)}:${inner.line}` }
-      }
-      for (const native of rekaKeysFor(inner.tag)?.natives ?? []) {
-        if (native.keys.includes(key))
-          return { route: 'platform', what: `${node.tag}'s root ${inner.tag}${native.what.replace('a Reka primitive', '')}`, citation: native.citation }
-      }
-      return undefined
-    }
-
-    /** {@link nativeAtRaw}, minus any citation the ledger rejects. */
-    const nativeAt = (node: TemplateNode, from: string): Owner | undefined => {
-      const owner = nativeAtRaw(node, from)
-      return owner !== undefined && admits(owner.citation) ? owner : undefined
-    }
-
-    /**
-     * `Tab` is the document's focus order. Nothing in this library implements it
-     * and nothing should — a component that called `preventDefault()` on Tab
-     * would be trapping focus, not implementing the row — so the row is
-     * satisfied by there being something to focus. Asked LAST, after every
-     * handler route, so that `DzDialogContent`'s Tab is attributed to Reka's
-     * `FocusScope`, which really does manage it, rather than to the first
-     * focusable node in the tree.
-     *
-     * Over template NODES, not over whole files: `tabIndex` appears in plenty of
-     * `.ts` that renders nothing, and citing `useComponentMessages.ts` as the
-     * focusable node behind a `Tab` row is a citation nobody can read back.
-     */
-    if (key === 'Tab') {
-      for (const { file } of closure.files) {
-        for (const node of file.nodes) {
-          if (FOCUSABLE_TOKEN.test(node.text) && admits(`${rel(file.path)}:${node.line}`)) {
-            return {
-              owner: {
-                route: 'platform',
-                what: `<${node.tag}> is focusable — Tab is the document focus order, not a handler`,
-                citation: `${rel(file.path)}:${node.line}`,
-              },
-            }
-          }
-          // The node may be a Reka primitive or another `Dz*` whose own root is
-          // the focusable element: `DzPagination` renders `PaginationFirst`,
-          // which is a `<button>` and therefore in the tab order.
-          const natives = rekaKeysFor(node.tag)?.natives ?? []
-          if (natives.length > 0 && admits(natives[0]!.citation))
-            return { owner: { route: 'platform', what: `${node.tag} renders a focusable element`, citation: natives[0]!.citation } }
-          const dz = vueBySymbol.get(node.tag)
-          const inner = dz === undefined ? undefined : read(dz)?.nodes[0]
-          if (inner !== undefined && FOCUSABLE_TOKEN.test(inner.text) && admits(`${rel(dz!)}:${inner.line}`))
-            return { owner: { route: 'platform', what: `${node.tag}'s root <${inner.tag}> is focusable`, citation: `${rel(dz!)}:${inner.line}` } }
-        }
-      }
-      for (const primitive of closure.primitives) {
-        const focusable = rekaKeysFor(primitive)?.focusable
-        if (focusable !== undefined && admits(focusable))
-          return { owner: { route: 'platform', what: `${primitive} puts a node in the tab order`, citation: focusable } }
-      }
-    }
-
-    /** The files whose own markup this component is answerable for. */
-    const ownAndParts = closure.files.filter(f => f.route === 'own' || f.route === 'part')
-
-    if (targetPart !== undefined) {
-      // A scoped row names the node it is about; nothing else may satisfy it.
-      let sawPart = false
-      for (const { file } of closure.files) {
-        for (const node of file.nodes) {
-          if (node.part !== targetPart)
-            continue
-          sawPart = true
-          const owner = nativeAt(node, rel(file.path))
-          if (owner !== undefined)
-            return { owner: { ...owner, what: `${owner.what} — the node carrying the declared part "${targetPart}"` } }
-        }
-      }
-      if (!sawPart) {
-        return {
-          undetermined: `the row is scoped to the declared part "${targetPart}" and no file this walk `
-            + 'reached emits it, so the node that receives the key is outside the closure',
-        }
-      }
-      return undefined
-    }
-
-    // An unscoped row applies "wherever the component has focus". If the root
-    // itself takes focus it IS that node and it has to do the key — which is
-    // how `DzChip` and `DzTag` are caught: a `<span tabindex="0">` is a focus
-    // target that activates on nothing. Only when the root does NOT take focus
-    // is the focus target somewhere inside, and then the component's own
-    // template and its compound parts are where to look — never a component it
-    // merely composes, whose keys are its own business.
-    const ownEntry = closure.files.find(f => f.route === 'own')
-    const ownRoot = ownEntry?.file.nodes[0]
-    if (ownRoot !== undefined && ownEntry !== undefined) {
-      const owner = nativeAt(ownRoot, rel(ownEntry.file.path))
-      if (owner !== undefined)
-        return { owner: { ...owner, what: `${owner.what} — the component's own root` } }
-      if (FOCUSABLE_TOKEN.test(ownRoot.text))
-        return undefined
-    }
-    for (const { file } of ownAndParts) {
-      for (const node of file.nodes) {
-        const owner = nativeAt(node, rel(file.path))
-        if (owner !== undefined)
-          return { owner: { ...owner, what: `${owner.what} — inside ${basename(file.path)}, whose root takes no focus` } }
-      }
-    }
-
-    // Route 7 — a RUNTIME assertion, and only for the one shape the other six
-    // cannot reach: a `<slot />` whose contents are the consumer's. Asked here,
-    // after every static route and before the `undetermined` verdicts, so it can
-    // only ever turn `undetermined` into `backed` and never `unbacked` into
-    // anything. See `specAssertedKeys` for the four conditions.
-    const specLine = declaration.specKeys.get(key)
-    if (specLine !== undefined
-      && declaration.spec !== undefined
-      && admits(`${rel(declaration.spec)}:${specLine}`)
-      && ownAndParts.some(f => SLOT_TOKEN.test(f.file.source))) {
-      return {
-        owner: {
-          route: 'spec',
-          what: 'the node that receives this key is supplied by the consumer, and the spec asserts '
-            + 'the contract against a rendered tree that has one',
-          citation: `${rel(declaration.spec)}:${specLine}`,
-        },
-      }
-    }
-
-    // Nothing in this component's own markup owns the key, and the markup is
-    // not all of it: a `<slot />` means the focus target may be the consumer's,
-    // and an `h()` call means the node is built in the script where a template
-    // scan cannot see it. Neither is satisfaction and neither is a defect.
-    if (ownEntry !== undefined && RENDER_FUNCTION_TOKEN.test(ownEntry.file.source)) {
-      return {
-        undetermined: `${basename(ownEntry.file.path)} builds nodes in a render function `
-          + '(`h()` / `renderList()`), which a template scan cannot follow',
-      }
-    }
-    if (ownAndParts.some(f => SLOT_TOKEN.test(f.file.source))) {
-      return {
-        undetermined: 'the component renders a `<slot />` and owns no native element for this key, '
-          + 'so the node that receives it is supplied by the consumer',
-      }
-    }
-
+/** Routes 1–4 — a handler in the closure, in the order the closure recorded them. */
+function handlerRouteOwner(q: RowQuery): Owner | undefined {
+  if (!partBindsAHandler(q.closure, q.targetPart))
     return undefined
+  for (const route of ['own', 'part', 'renders', 'composable'] as const) {
+    for (const { route: fileRoute, file } of q.closure.files) {
+      if (fileRoute !== route || !file.handles)
+        continue
+      for (const line of file.keyLines.get(q.key) ?? []) {
+        const citation = `${rel(file.path)}:${line}`
+        // A declared modifier is part of the contract: the cited site has to be
+        // looking at the key the row is about (RESIDUAL-14, `readsModifiersAt`).
+        if (!q.admits(citation) || !readsModifiersAt(file.source, line, q.modifiers))
+          continue
+        return { route, citation }
+      }
+    }
+  }
+  return undefined
+}
+
+/** Route 5 — a Reka primitive's own source. */
+function primitiveRouteOwner(q: RowQuery): Owner | undefined {
+  for (const primitive of q.closure.primitives) {
+    const resolved = rekaKeysFor(primitive)
+    const citation = resolved?.keys.get(q.key)
+    if (citation === undefined || !q.admits(citation))
+      continue
+    const line = Number(citation.slice(citation.lastIndexOf(':') + 1))
+    const dist = resolve(ROOT, citation.slice(0, citation.lastIndexOf(':')))
+    if (!Number.isFinite(line) || !existsSync(dist))
+      continue
+    if (!readsModifiersAt(stripCommentsForScan(readFileSync(dist, 'utf8'), false), line, q.modifiers))
+      continue
+    return { route: 'primitive', what: primitive, citation }
+  }
+  return undefined
+}
+
+/**
+ * May route 6 (the platform table) answer this row at all?
+ *
+ * Not for a MODIFIED row, with one exception that is not a component's doing
+ * either: `Shift`+`Tab` is the document's own reverse focus order. No native
+ * element has a documented behaviour for `Shift`+`Enter` or `Shift`+`PageUp`, so
+ * crediting `DzTable`'s `Shift`+`Enter` multi-sort row to a `<button>` was the
+ * platform table saying "something near here activates", which is not the row.
+ *
+ * And never for navigation: the platform table credits activation and text entry
+ * only (see NAVIGATION_KEYS) and is SCOPED to the node the row is about.
+ */
+function platformMayAnswer(key: string, modifiers: readonly string[]): boolean {
+  if (modifiers.length > 0 && !(modifiers.length === 1 && modifiers[0] === 'Shift' && key === 'Tab'))
+    return false
+  return !NAVIGATION_KEYS.has(key)
+}
+
+/**
+ * The native element a node resolves to: itself, a `Dz*`, or a primitive.
+ *
+ * Wrapped by {@link nativeAt}, which drops a citation the ledger rejects so the
+ * walk keeps looking at the remaining nodes rather than stopping on one.
+ */
+function nativeAtRaw(key: string, node: TemplateNode, from: string, ctx: ScanContext): Owner | undefined {
+  for (const entry of PLATFORM_KEYS) {
+    if (entry.keys.includes(key) && entry.token.test(node.text))
+      return { route: 'platform', what: entry.what, citation: `${from}:${node.line}` }
+  }
+  // A Reka primitive says in its own dist source what element it renders.
+  for (const native of rekaKeysFor(node.tag)?.natives ?? []) {
+    if (native.keys.includes(key))
+      return { route: 'platform', what: `${node.tag}${native.what.replace('a Reka primitive', '')}`, citation: native.citation }
+  }
+  // A `Dz*` node is another component of this library: its own root is the
+  // element that receives the key. One level only — deeper than that and
+  // the citation stops meaning anything.
+  const path = ctx.vueBySymbol.get(node.tag)
+  if (path === undefined)
+    return undefined
+  const inner = ctx.read(path)?.nodes[0]
+  if (inner === undefined)
+    return undefined
+  for (const entry of PLATFORM_KEYS) {
+    if (entry.keys.includes(key) && entry.token.test(inner.text))
+      return { route: 'platform', what: `${node.tag}'s root is ${entry.what}`, citation: `${rel(path)}:${inner.line}` }
+  }
+  for (const native of rekaKeysFor(inner.tag)?.natives ?? []) {
+    if (native.keys.includes(key))
+      return { route: 'platform', what: `${node.tag}'s root ${inner.tag}${native.what.replace('a Reka primitive', '')}`, citation: native.citation }
+  }
+  return undefined
+}
+
+/** {@link nativeAtRaw}, minus any citation the ledger rejects. */
+function nativeAt(q: RowQuery, node: TemplateNode, from: string, ctx: ScanContext): Owner | undefined {
+  const owner = nativeAtRaw(q.key, node, from, ctx)
+  return owner !== undefined && q.admits(owner.citation) ? owner : undefined
+}
+
+/**
+ * `Tab` is the document's focus order. Nothing in this library implements it
+ * and nothing should — a component that called `preventDefault()` on Tab
+ * would be trapping focus, not implementing the row — so the row is
+ * satisfied by there being something to focus. Asked LAST, after every
+ * handler route, so that `DzDialogContent`'s Tab is attributed to Reka's
+ * `FocusScope`, which really does manage it, rather than to the first
+ * focusable node in the tree.
+ *
+ * Over template NODES, not over whole files: `tabIndex` appears in plenty of
+ * `.ts` that renders nothing, and citing `useComponentMessages.ts` as the
+ * focusable node behind a `Tab` row is a citation nobody can read back.
+ */
+function tabOrderOwner(q: RowQuery, ctx: ScanContext): Owner | undefined {
+  for (const { file } of q.closure.files) {
+    for (const node of file.nodes) {
+      if (FOCUSABLE_TOKEN.test(node.text) && q.admits(`${rel(file.path)}:${node.line}`)) {
+        return {
+          route: 'platform',
+          what: `<${node.tag}> is focusable — Tab is the document focus order, not a handler`,
+          citation: `${rel(file.path)}:${node.line}`,
+        }
+      }
+      // The node may be a Reka primitive or another `Dz*` whose own root is
+      // the focusable element: `DzPagination` renders `PaginationFirst`,
+      // which is a `<button>` and therefore in the tab order.
+      const natives = rekaKeysFor(node.tag)?.natives ?? []
+      if (natives.length > 0 && q.admits(natives[0]!.citation))
+        return { route: 'platform', what: `${node.tag} renders a focusable element`, citation: natives[0]!.citation }
+      const dz = ctx.vueBySymbol.get(node.tag)
+      const inner = dz === undefined ? undefined : ctx.read(dz)?.nodes[0]
+      if (inner !== undefined && FOCUSABLE_TOKEN.test(inner.text) && q.admits(`${rel(dz!)}:${inner.line}`))
+        return { route: 'platform', what: `${node.tag}'s root <${inner.tag}> is focusable`, citation: `${rel(dz!)}:${inner.line}` }
+    }
+  }
+  for (const primitive of q.closure.primitives) {
+    const focusable = rekaKeysFor(primitive)?.focusable
+    if (focusable !== undefined && q.admits(focusable))
+      return { route: 'platform', what: `${primitive} puts a node in the tab order`, citation: focusable }
+  }
+  return undefined
+}
+
+/** Route 6 for a scoped row: it names the node it is about; nothing else may satisfy it. */
+function scopedPlatformResolution(q: RowQuery, targetPart: string, ctx: ScanContext): Resolution | undefined {
+  let sawPart = false
+  for (const { file } of q.closure.files) {
+    for (const node of file.nodes) {
+      if (node.part !== targetPart)
+        continue
+      sawPart = true
+      const owner = nativeAt(q, node, rel(file.path), ctx)
+      if (owner !== undefined)
+        return { owner: { ...owner, what: `${owner.what} — the node carrying the declared part "${targetPart}"` } }
+    }
+  }
+  if (!sawPart) {
+    return {
+      undetermined: `the row is scoped to the declared part "${targetPart}" and no file this walk `
+        + 'reached emits it, so the node that receives the key is outside the closure',
+    }
+  }
+  return undefined
+}
+
+/**
+ * Route 6 for an unscoped row, which applies "wherever the component has focus".
+ *
+ * If the root itself takes focus it IS that node and it has to do the key — which
+ * is how `DzChip` and `DzTag` are caught: a `<span tabindex="0">` is a focus
+ * target that activates on nothing. Only when the root does NOT take focus is the
+ * focus target somewhere inside, and then the component's own template and its
+ * compound parts are where to look — never a component it merely composes, whose
+ * keys are its own business.
+ *
+ * `settled` means no later route may answer: either an owner was found, or a
+ * focusable root owns nothing (`settled: undefined`). `undefined` lets the walk
+ * continue to route 7.
+ */
+function unscopedPlatformDecision(q: RowQuery, ctx: ScanContext): { settled: Owner | undefined } | undefined {
+  const ownEntry = q.closure.files.find(f => f.route === 'own')
+  const ownRoot = ownEntry?.file.nodes[0]
+  if (ownRoot !== undefined && ownEntry !== undefined) {
+    const owner = nativeAt(q, ownRoot, rel(ownEntry.file.path), ctx)
+    if (owner !== undefined)
+      return { settled: { ...owner, what: `${owner.what} — the component's own root` } }
+    if (FOCUSABLE_TOKEN.test(ownRoot.text))
+      return { settled: undefined }
+  }
+  for (const { file } of ownAndPartsOf(q.closure)) {
+    for (const node of file.nodes) {
+      const owner = nativeAt(q, node, rel(file.path), ctx)
+      if (owner !== undefined)
+        return { settled: { ...owner, what: `${owner.what} — inside ${basename(file.path)}, whose root takes no focus` } }
+    }
+  }
+  return undefined
+}
+
+/** The files whose own markup this component is answerable for. */
+function ownAndPartsOf(closure: Closure): Closure['files'] {
+  return closure.files.filter(f => f.route === 'own' || f.route === 'part')
+}
+
+/**
+ * Route 7 — a RUNTIME assertion, and only for the one shape the other six
+ * cannot reach: a `<slot />` whose contents are the consumer's. Asked after every
+ * static route and before the `undetermined` verdicts, so it can only ever turn
+ * `undetermined` into `backed` and never `unbacked` into anything. See
+ * `specAssertedKeys` for the four conditions.
+ */
+function runtimeSpecOwner(q: RowQuery): Owner | undefined {
+  const specLine = q.declaration.specKeys.get(q.key)
+  if (specLine !== undefined
+    && q.declaration.spec !== undefined
+    && q.admits(`${rel(q.declaration.spec)}:${specLine}`)
+    && ownAndPartsOf(q.closure).some(f => SLOT_TOKEN.test(f.file.source))) {
+    return {
+      route: 'spec',
+      what: 'the node that receives this key is supplied by the consumer, and the spec asserts '
+        + 'the contract against a rendered tree that has one',
+      citation: `${rel(q.declaration.spec)}:${specLine}`,
+    }
+  }
+  return undefined
+}
+
+/**
+ * Nothing in this component's own markup owns the key, and the markup is not all
+ * of it: a `<slot />` means the focus target may be the consumer's, and an `h()`
+ * call means the node is built in the script where a template scan cannot see it.
+ * Neither is satisfaction and neither is a defect.
+ */
+function invisibleFocusTarget(closure: Closure): string | undefined {
+  const ownEntry = closure.files.find(f => f.route === 'own')
+  if (ownEntry !== undefined && RENDER_FUNCTION_TOKEN.test(ownEntry.file.source)) {
+    return `${basename(ownEntry.file.path)} builds nodes in a render function `
+      + '(`h()` / `renderList()`), which a template scan cannot follow'
+  }
+  if (ownAndPartsOf(closure).some(f => SLOT_TOKEN.test(f.file.source))) {
+    return 'the component renders a `<slot />` and owns no native element for this key, '
+      + 'so the node that receives it is supplied by the consumer'
+  }
+  return undefined
+}
+
+/**
+ * The owner of one declared row, asking the routes in order: handlers (1–4), a
+ * Reka primitive (5), the platform table (6, `Tab` first, then scoped or
+ * unscoped), a runtime spec (7). `undefined` is `unbacked`.
+ */
+export function ownerOf(q: RowQuery, ctx: ScanContext): Resolution | undefined {
+  const handled = handlerRouteOwner(q) ?? primitiveRouteOwner(q)
+  if (handled !== undefined)
+    return { owner: handled }
+  if (!platformMayAnswer(q.key, q.modifiers))
+    return undefined
+
+  if (q.key === 'Tab') {
+    const owner = tabOrderOwner(q, ctx)
+    if (owner !== undefined)
+      return { owner }
   }
 
+  if (q.targetPart !== undefined)
+    return scopedPlatformResolution(q, q.targetPart, ctx)
+
+  const decision = unscopedPlatformDecision(q, ctx)
+  if (decision !== undefined)
+    return decision.settled === undefined ? undefined : { owner: decision.settled }
+
+  const spec = runtimeSpecOwner(q)
+  if (spec !== undefined)
+    return { owner: spec }
+
+  const undetermined = invisibleFocusTarget(q.closure)
+  return undetermined === undefined ? undefined : { undetermined }
+}
+
+// ---------------------------------------------------------------------------
+// Verdicts
+// ---------------------------------------------------------------------------
+
+/** A verdict for every declared row of every declaration that publishes bindings. */
+function verdictsFor(declarations: readonly Declaration[], rejected: readonly RejectedCitation[], ctx: ScanContext): { verdicts: DeclarationVerdict[], byRoute: Record<Route, number> } {
   const verdicts: DeclarationVerdict[] = []
   const byRoute: Record<Route, number> = { own: 0, part: 0, renders: 0, composable: 0, primitive: 0, platform: 0, spec: 0 }
-
-  /** Keys the declaring anatomy (or a parent's) declares, per component. */
-  const declaredKeys = new Map<string, Set<string>>()
-  const declaresNone = new Set<string>()
-
-  for (const declaration of declarations) {
-    const contract = declaration.anatomy.keyboard
-    if (contract === 'none')
-      declaresNone.add(declaration.name)
-    const keys = new Set<string>(
-      contract === undefined || contract === 'none' ? [] : contract.map(b => b.key),
-    )
-    declaredKeys.set(declaration.name, keys)
-  }
 
   for (const declaration of declarations) {
     const contract = declaration.anatomy.keyboard
     if (contract === undefined || contract === 'none')
       continue
-    const closure = closureOf(declaration)
+    const closure = closureOf(declaration, ctx)
     const unresolved = [
       ...closure.unresolvedPrimitives.map(name => `Reka \`${name}\` did not map to a dist module`),
       ...closure.unresolvedReferences.map(name => `could not read ${name}`),
@@ -1788,15 +1886,15 @@ export function checkAnatomyKeyboard(): AnatomyKeyboardReport {
         apg: binding.apg,
         action: binding.action,
       }
-      const resolution = ownerOf(
-        binding.key,
+      const rejectedHere = rejectedCitationsFor(rejected, declaration.name, binding)
+      const resolution = ownerOf({
+        key: binding.key,
         closure,
-        binding.when,
-        parts,
+        targetPart: binding.when !== undefined && parts.includes(binding.when) ? binding.when : undefined,
         declaration,
-        binding.modifiers ?? [],
-        rejectedFor(declaration.name, binding),
-      )
+        modifiers: binding.modifiers ?? [],
+        admits: citation => citationAdmitted(rejectedHere, citation),
+      }, ctx)
       if (resolution !== undefined && 'owner' in resolution) {
         byRoute[resolution.owner.route]++
         verdicts.push({ ...row, verdict: 'backed', owner: resolution.owner })
@@ -1815,10 +1913,26 @@ export function checkAnatomyKeyboard(): AnatomyKeyboardReport {
       })
     }
   }
+  return { verdicts, byRoute }
+}
 
-  // -------------------------------------------------------------------------
-  // Reverse drift — a key handled and not declared
-  // -------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Reverse drift — a key handled and not declared
+// ---------------------------------------------------------------------------
+
+function undeclaredHandlersIn(declarations: readonly Declaration[], ctx: ScanContext): UndeclaredHandler[] {
+  /** Keys the declaring anatomy (or a parent's) declares, per component. */
+  const declaredKeys = new Map<string, Set<string>>()
+  const declaresNone = new Set<string>()
+  for (const declaration of declarations) {
+    const contract = declaration.anatomy.keyboard
+    if (contract === 'none')
+      declaresNone.add(declaration.name)
+    const keys = new Set<string>(
+      contract === undefined || contract === 'none' ? [] : contract.map(b => b.key),
+    )
+    declaredKeys.set(declaration.name, keys)
+  }
 
   const undeclaredHandlers: UndeclaredHandler[] = []
   const componentVues = walk(resolve(CORE_SRC, 'components'), p => p.endsWith('.vue'))
@@ -1829,10 +1943,10 @@ export function checkAnatomyKeyboard(): AnatomyKeyboardReport {
     // Which anatomy governs this file? Its own, or its parentComponent's.
     const governing = declaredKeys.has(symbol)
       ? symbol
-      : parentOf.get(symbol)
+      : ctx.parentOf.get(symbol)
     if (governing === undefined || !declaredKeys.has(governing))
       continue
-    const file = read(path)
+    const file = ctx.read(path)
     if (file === undefined || !file.handles)
       continue
     const declared = declaredKeys.get(governing)!
@@ -1851,42 +1965,66 @@ export function checkAnatomyKeyboard(): AnatomyKeyboardReport {
     }
   }
   undeclaredHandlers.sort((a, b) => a.file.localeCompare(b.file, 'en') || a.key.localeCompare(b.key, 'en'))
+  return undeclaredHandlers
+}
 
-  // -------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Ceilings
+// ---------------------------------------------------------------------------
 
-  const unbacked = verdicts.filter(v => v.verdict === 'unbacked')
-  const undetermined = verdicts.filter(v => v.verdict === 'undetermined')
-  const backed = verdicts.filter(v => v.verdict === 'backed')
-
+/** The rules over their ceiling, in a fixed order. Each ceiling ratchets DOWN. */
+export function ceilingViolations(counts: { unbacked: number, undetermined: number, undeclared: number }, ceilings: Ceilings): { rule: string, message: string }[] {
   const violations: { rule: string, message: string }[] = []
-  if (unbacked.length > ceilings.maxUnbackedDeclarations) {
+  if (counts.unbacked > ceilings.maxUnbackedDeclarations) {
     violations.push({
       rule: 'unbacked-declaration',
-      message: `${unbacked.length} declared keyboard binding(s) are backed by no handler, no `
+      message: `${counts.unbacked} declared keyboard binding(s) are backed by no handler, no `
         + `primitive and no platform behaviour, over the ceiling of `
         + `${ceilings.maxUnbackedDeclarations}. The ceiling ratchets DOWN: implement the key, or `
         + 'delete the row. A published keyboard table that promises a key nothing handles is an '
         + 'accessibility claim that is false.',
     })
   }
-  if (undetermined.length > ceilings.maxUndeterminedDeclarations) {
+  if (counts.undetermined > ceilings.maxUndeterminedDeclarations) {
     violations.push({
       rule: 'undetermined-declaration',
-      message: `${undetermined.length} declared binding(s) could not be resolved either way, over `
+      message: `${counts.undetermined} declared binding(s) could not be resolved either way, over `
         + `the ceiling of ${ceilings.maxUndeterminedDeclarations}. Undetermined means the closure `
         + 'has an edge this validator could not follow — extend the resolution or simplify the '
         + 'component; it does NOT mean satisfied.',
     })
   }
-  if (undeclaredHandlers.length > ceilings.maxUndeclaredHandlers) {
+  if (counts.undeclared > ceilings.maxUndeclaredHandlers) {
     violations.push({
       rule: 'undeclared-handler',
-      message: `${undeclaredHandlers.length} key(s) are handled by a component whose governing `
+      message: `${counts.undeclared} key(s) are handled by a component whose governing `
         + `anatomy does not declare them, over the ceiling of ${ceilings.maxUndeclaredHandlers}. `
         + 'The reverse drift is the same defect mirrored: the published table is incomplete, so a '
         + 'consumer reading it does not learn what the component actually does.',
     })
   }
+  return violations
+}
+
+export function checkAnatomyKeyboard(): AnatomyKeyboardReport {
+  const ceilings = JSON.parse(readFileSync(CEILINGS, 'utf8')) as Ceilings
+  const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8')) as { entries: ManifestEntry[] }
+  const ledger = JSON.parse(readFileSync(REJECTED, 'utf8')) as { rejected: RejectedCitation[] }
+
+  const ctx = createScanContext(manifest.entries)
+  const declarations = collectDeclarations()
+  const { verdicts, byRoute } = verdictsFor(declarations, ledger.rejected, ctx)
+  const undeclaredHandlers = undeclaredHandlersIn(declarations, ctx)
+
+  const unbacked = verdicts.filter(v => v.verdict === 'unbacked')
+  const undetermined = verdicts.filter(v => v.verdict === 'undetermined')
+  const backed = verdicts.filter(v => v.verdict === 'backed')
+
+  const violations = ceilingViolations({
+    unbacked: unbacked.length,
+    undetermined: undetermined.length,
+    undeclared: undeclaredHandlers.length,
+  }, ceilings)
 
   const withBindings = declarations.filter(d => Array.isArray(d.anatomy.keyboard))
   return {

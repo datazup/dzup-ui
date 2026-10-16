@@ -1,8 +1,9 @@
+import type { Closure, RowQuery, ScanContext, SourceFile } from './anatomy-keyboard.ts'
 import { readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { checkAnatomyKeyboard, enclosingBlockAt, HANDLER_TOKEN, keyLinesIn, keysNamedIn, PLATFORM_ACTIVATION_TOKEN, readsModifiersAt, rekaKeysFor, renderFunctionNodesIn, specAssertedKeys, stripCommentsForScan, subtreeOf, templateNodesIn } from './anatomy-keyboard.ts'
+import { ceilingViolations, checkAnatomyKeyboard, citationAdmitted, enclosingBlockAt, HANDLER_TOKEN, keyLinesIn, keysNamedIn, ownerOf, PLATFORM_ACTIVATION_TOKEN, readsModifiersAt, rejectedCitationsFor, rekaKeysFor, renderFunctionNodesIn, sourceFileFrom, specAssertedKeys, stripCommentsForScan, subtreeOf, templateNodesIn } from './anatomy-keyboard.ts'
 
 /**
  * The anatomy keyboard/handler validator, asserted on its own terms
@@ -611,5 +612,141 @@ describe('dzDataGrid navigates its cells (RESIDUAL-15, D-RES14-1)', () => {
     expect(report.totals.undetermined).toBe(0)
     expect(report.undeclaredHandlers).toEqual([])
     expect(report.totals.backed).toBe(report.totals.rows)
+  })
+})
+
+/**
+ * Each owner route on its own, over synthetic files (UI-DZUP-UI-ARCH-L-08).
+ *
+ * `checkAnatomyKeyboard` used to be one 730-line function, so a route could only be
+ * observed through the whole catalogue. The routes are separate functions now and
+ * `ownerOf` takes the closure and the scan context as arguments, so each route is
+ * pinned here against a closure built by hand.
+ */
+describe('ownerOf — one route at a time', () => {
+  const HERE = dirname(fileURLToPath(import.meta.url))
+  const at = (name: string): string => resolve(HERE, '__routes__', name)
+  const sfc = (template: string, script = ''): string =>
+    ['<script setup lang="ts">', script, '</script>', '', '<template>', template, '</template>'].join('\n')
+  const HANDLES_ENTER = sfc(
+    '  <div @keydown="onKey"><span /></div>',
+    'function onKey(event: KeyboardEvent): void {\n  if (event.key === \'Enter\')\n    go()\n}',
+  )
+
+  function context(files: SourceFile[] = []): ScanContext {
+    const byPath = new Map(files.map(f => [f.path, f]))
+    return { read: path => byPath.get(path), vueBySymbol: new Map(), parentOf: new Map() }
+  }
+
+  function query(key: string, closure: Partial<Closure>, extra: Partial<RowQuery> = {}): RowQuery {
+    return {
+      key,
+      closure: { files: [], primitives: [], unresolvedPrimitives: [], unresolvedReferences: [], depthCapped: false, ...closure },
+      targetPart: undefined,
+      declaration: { spec: undefined, specKeys: new Map() },
+      modifiers: [],
+      admits: () => true,
+      ...extra,
+    }
+  }
+
+  it('routes 1–4: a handler in the closure, asked in route order rather than file order', () => {
+    const renders = sourceFileFrom(at('DzRendered.vue'), HANDLES_ENTER)
+    const part = sourceFileFrom(at('DzPart.vue'), HANDLES_ENTER)
+    const resolution = ownerOf(query('Enter', { files: [{ route: 'renders', file: renders }, { route: 'part', file: part }] }), context())
+    expect(resolution).toEqual({ owner: { route: 'part', citation: expect.stringMatching(/__routes__\/DzPart\.vue:3$/) } })
+  })
+
+  it('routes 1–4: a rejected citation is stepped over, not trusted', () => {
+    const own = sourceFileFrom(at('DzOwn.vue'), HANDLES_ENTER)
+    const resolution = ownerOf(query('Enter', { files: [{ route: 'own', file: own }] }, { admits: c => !c.includes('DzOwn.vue') }), context())
+    // Nothing else owns Enter, and the root is a plain <div>: unbacked.
+    expect(resolution).toBeUndefined()
+  })
+
+  it('route 5: a Reka primitive in the closure owns the keys its own source names', () => {
+    const resolution = ownerOf(query('Home', { primitives: ['RovingFocusGroup'] }), context())
+    expect(resolution).toMatchObject({ owner: { route: 'primitive', what: 'RovingFocusGroup' } })
+  })
+
+  it('route 6: the component\'s own root, when it is a native <button>', () => {
+    const own = sourceFileFrom(at('DzOwn.vue'), sfc('  <button type="button"><slot /></button>'))
+    const resolution = ownerOf(query(' ', { files: [{ route: 'own', file: own }] }), context())
+    expect(resolution).toMatchObject({ owner: { route: 'platform', what: expect.stringContaining('the component\'s own root') } })
+  })
+
+  it('route 6: a focusable root that activates on nothing is unbacked, not answered from inside', () => {
+    const own = sourceFileFrom(at('DzOwn.vue'), sfc('  <span tabindex="0">\n    <button type="button" />\n  </span>'))
+    expect(ownerOf(query('Enter', { files: [{ route: 'own', file: own }] }), context())).toBeUndefined()
+  })
+
+  it('route 6: never credits navigation, and never a modified key', () => {
+    const own = sourceFileFrom(at('DzOwn.vue'), sfc('  <button type="button" />'))
+    const closure = { files: [{ route: 'own' as const, file: own }] }
+    expect(ownerOf(query('ArrowDown', closure), context())).toBeUndefined()
+    expect(ownerOf(query('Enter', closure, { modifiers: ['Shift'] }), context())).toBeUndefined()
+  })
+
+  it('route 6: a scoped row is answered by the node carrying its part, or is undetermined', () => {
+    const own = sourceFileFrom(at('DzOwn.vue'), sfc('  <div>\n    <button data-part="clear" type="button" />\n  </div>'))
+    const closure = { files: [{ route: 'own' as const, file: own }] }
+    expect(ownerOf(query('Enter', closure, { targetPart: 'clear' }), context()))
+      .toMatchObject({ owner: { route: 'platform', what: expect.stringContaining('declared part "clear"') } })
+    expect(ownerOf(query('Enter', closure, { targetPart: 'missing' }), context()))
+      .toEqual({ undetermined: expect.stringContaining('declared part "missing"') })
+  })
+
+  it('route 6: Tab is satisfied by something focusable, and Shift+Tab with it', () => {
+    const own = sourceFileFrom(at('DzOwn.vue'), sfc('  <div>\n    <input type="text">\n  </div>'))
+    const closure = { files: [{ route: 'own' as const, file: own }] }
+    expect(ownerOf(query('Tab', closure), context())).toMatchObject({ owner: { route: 'platform', what: expect.stringContaining('<input> is focusable') } })
+    expect(ownerOf(query('Tab', closure, { modifiers: ['Shift'] }), context())).toMatchObject({ owner: { route: 'platform' } })
+  })
+
+  it('route 7: a runtime spec answers only for a consumer-supplied <slot />', () => {
+    const slot = sourceFileFrom(at('DzGroup.vue'), sfc('  <div>\n    <slot />\n  </div>'))
+    const declaration = { spec: at('DzGroup.spec.ts'), specKeys: new Map([[' ', 12]]) }
+    expect(ownerOf(query(' ', { files: [{ route: 'own', file: slot }] }, { declaration }), context()))
+      .toEqual({ owner: { route: 'spec', what: expect.any(String), citation: expect.stringMatching(/DzGroup\.spec\.ts:12$/) } })
+    // Without the spec the same slot is undetermined, never backed.
+    expect(ownerOf(query(' ', { files: [{ route: 'own', file: slot }] }), context()))
+      .toEqual({ undetermined: expect.stringContaining('<slot />') })
+  })
+
+  it('undetermined: a render function builds the node a template scan cannot see', () => {
+    const own = sourceFileFrom(at('DzAnchorish.ts'), 'export const render = () => h(\'div\', {})')
+    expect(ownerOf(query('Enter', { files: [{ route: 'own', file: own }] }), context()))
+      .toEqual({ undetermined: expect.stringContaining('render function') })
+  })
+})
+
+describe('the rejected-citation ledger, as functions', () => {
+  it('matches a row exactly, `when` and modifiers included', () => {
+    const ledger = [
+      { component: 'DzA', key: 'Enter', when: 'clear', citations: ['a.vue:1'], why: '' },
+      { component: 'DzA', key: 'Enter', citations: ['a.vue:2'], why: '' },
+      { component: 'DzA', key: 'Enter', modifiers: ['Shift'], citations: ['a.vue:3'], why: '' },
+    ]
+    expect([...rejectedCitationsFor(ledger, 'DzA', { key: 'Enter', action: 'x' })]).toEqual(['a.vue:2'])
+    expect([...rejectedCitationsFor(ledger, 'DzA', { key: 'Enter', when: 'clear', action: 'x' })]).toEqual(['a.vue:1'])
+    expect([...rejectedCitationsFor(ledger, 'DzA', { key: 'Enter', modifiers: ['Shift'], action: 'x' })]).toEqual(['a.vue:3'])
+  })
+
+  it('honours the exact, `<file>:*` and `<prefix>**` forms', () => {
+    const rejected = new Set(['a.vue:1', 'b.ts:*', 'node_modules/reka-ui/**'])
+    expect(citationAdmitted(rejected, 'a.vue:1')).toBe(false)
+    expect(citationAdmitted(rejected, 'a.vue:2')).toBe(true)
+    expect(citationAdmitted(rejected, 'b.ts:40')).toBe(false)
+    expect(citationAdmitted(rejected, 'node_modules/reka-ui/dist/x.js:3')).toBe(false)
+  })
+})
+
+describe('ceilingViolations', () => {
+  const ceilings = { maxUnbackedDeclarations: 0, maxUndeterminedDeclarations: 1, maxUndeclaredHandlers: 2 }
+
+  it('reports only the rules over their ceiling, in a fixed order', () => {
+    expect(ceilingViolations({ unbacked: 0, undetermined: 1, undeclared: 2 }, ceilings)).toEqual([])
+    expect(ceilingViolations({ unbacked: 1, undetermined: 2, undeclared: 3 }, ceilings).map(v => v.rule))
+      .toEqual(['unbacked-declaration', 'undetermined-declaration', 'undeclared-handler'])
   })
 })
