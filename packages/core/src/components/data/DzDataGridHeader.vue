@@ -42,6 +42,9 @@ const operatorItems: DzSelectItem[] = [
   { label: 'Less or equal', value: 'lte' },
 ]
 
+// Without a parent the template renders nothing (`v-if="ctx"`), so a standalone
+// mount warns instead of throwing; the `ctx!` reads below are reached only from
+// that guarded template.
 const ctx = inject(DZ_DATA_GRID_KEY, null)
 if (!ctx) {
   if (import.meta.env?.DEV) {
@@ -51,8 +54,8 @@ if (!ctx) {
 
 const styles = computed(() =>
   dataGridVariants({
-    size: ctx!.size.value,
-    density: ctx!.density.value,
+    size: ctx?.size.value,
+    density: ctx?.density.value,
   }),
 )
 
@@ -96,7 +99,7 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
 </script>
 
 <template>
-  <thead data-part="header" :class="styles.header()" role="rowgroup">
+  <thead v-if="ctx" data-part="header" :class="styles.header()" role="rowgroup">
     <tr data-part="row" :class="styles.headerRow()" role="row">
       <!--
         `tabindex="-1"` and the navigation handler make a header cell reachable by

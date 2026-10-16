@@ -4,9 +4,11 @@ import { mount } from '@vue/test-utils'
 /**
  * DzDataGrid — Unit / behavior / contract tests.
  */
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import DzDataGrid from './DzDataGrid.vue'
+import DzDataGridBody from './DzDataGridBody.vue'
+import DzDataGridHeader from './DzDataGridHeader.vue'
 
 interface TestRow extends Record<string, unknown> {
   id: number
@@ -753,5 +755,25 @@ describe('dzDataGrid — APG grid cell navigation', () => {
     expect(wrapper.find('[data-testid="filter-popover"]').exists()).toBe(false)
 
     wrapper.unmount()
+  })
+})
+
+describe('dzDataGrid — subparts outside a DzDataGrid parent', () => {
+  it.each([
+    ['DzDataGridHeader', DzDataGridHeader],
+    ['DzDataGridBody', DzDataGridBody],
+  ] as const)('%s warns and renders nothing instead of throwing', (name, component) => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const wrapper = mount(component)
+      expect(warn).toHaveBeenCalledWith(`[${name}] must be used inside a <DzDataGrid> parent.`)
+      expect(wrapper.find('thead').exists()).toBe(false)
+      expect(wrapper.find('tbody').exists()).toBe(false)
+      expect(wrapper.html()).toBe('<!--v-if-->')
+      wrapper.unmount()
+    }
+    finally {
+      warn.mockRestore()
+    }
   })
 })

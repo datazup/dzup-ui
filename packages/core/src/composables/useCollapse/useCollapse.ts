@@ -7,7 +7,7 @@
  */
 
 import type { Ref } from 'vue'
-import { nextTick, ref, watch } from 'vue'
+import { getCurrentScope, nextTick, onScopeDispose, ref, watch } from 'vue'
 
 /** Options for the useCollapse composable */
 export interface UseCollapseOptions {
@@ -44,11 +44,29 @@ export function useCollapse(options: UseCollapseOptions): UseCollapseReturn {
     transition: `height ${duration}ms ease-in-out`,
   })
 
+  /**
+   * The pending end-of-animation timer and the run that owns it. A toggle inside
+   * `duration` starts a new run: the previous timer is cleared and any step of the
+   * old run still waiting on `nextTick` is dropped, so a late callback cannot
+   * overwrite the newer state (e.g. reopen a panel that was just collapsed).
+   */
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let run = 0
+
+  function clearTimer(): void {
+    if (timer !== undefined) {
+      clearTimeout(timer)
+      timer = undefined
+    }
+  }
+
   watch(expanded, async (isExpanded) => {
     const el = contentRef.value
     if (!el)
       return
 
+    clearTimer()
+    const current = ++run
     isAnimating.value = true
 
     if (isExpanded) {
@@ -59,12 +77,17 @@ export function useCollapse(options: UseCollapseOptions): UseCollapseReturn {
         transition: `height ${duration}ms ease-in-out`,
       }
       await nextTick()
+      if (current !== run)
+        return
       contentStyle.value = {
         overflow: 'hidden',
         height: `${el.scrollHeight}px`,
         transition: `height ${duration}ms ease-in-out`,
       }
-      setTimeout(() => {
+      timer = setTimeout(() => {
+        timer = undefined
+        if (current !== run)
+          return
         contentStyle.value = {
           overflow: 'visible',
           height: 'auto',
@@ -83,16 +106,29 @@ export function useCollapse(options: UseCollapseOptions): UseCollapseReturn {
       // Force a reflow before transitioning to 0
       void el.offsetHeight
       await nextTick()
+      if (current !== run)
+        return
       contentStyle.value = {
         overflow: 'hidden',
         height: '0px',
         transition: `height ${duration}ms ease-in-out`,
       }
-      setTimeout(() => {
+      timer = setTimeout(() => {
+        timer = undefined
+        if (current !== run)
+          return
         isAnimating.value = false
       }, duration)
     }
   })
+
+  // Timers must not outlive the owning component.
+  if (getCurrentScope()) {
+    onScopeDispose(() => {
+      run++
+      clearTimer()
+    })
+  }
 
   return {
     contentRef,

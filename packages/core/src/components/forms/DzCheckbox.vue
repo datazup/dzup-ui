@@ -60,6 +60,17 @@ const groupContext = inject(DZ_CHECKBOX_GROUP_KEY, null)
 /** Resolved element ID — prop overrides field context, falls back to auto-generated */
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
+/**
+ * The consumer's `aria-describedby` merged with the field's description and
+ * message ids (space-joined, de-duplicated), as the other field controls do.
+ */
+const resolvedAriaDescribedby = computed(() => {
+  const ids = new Set(
+    `${props.ariaDescribedby ?? ''} ${fieldContext?.ariaDescribedby.value ?? ''}`.split(/\s+/).filter(Boolean),
+  )
+  return ids.size > 0 ? [...ids].join(' ') : undefined
+})
+
 /** Resolved size from prop, group, or default */
 const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'md')
 
@@ -134,7 +145,7 @@ const { testId: dzTestId } = useDzTestIds()
       :required="resolvedRequired"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
-      :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
+      :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
       data-part="control"
       :class="[styles.indicator(), ui?.control]"

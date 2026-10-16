@@ -2,7 +2,7 @@ import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzMultiSelect — Unit / behavior tests.
  */
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { multiSelectTokens } from './DzMultiSelect.tokens.ts'
 import DzMultiSelect from './DzMultiSelect.vue'
 
@@ -254,6 +254,41 @@ describe('dzMultiSelect — declared keyboard actions', () => {
       expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
       await press('ArrowUp')
       expect(input.attributes('aria-expanded')).toBe('true')
+    }
+    finally {
+      wrapper.unmount()
+      HTMLElement.prototype.scrollIntoView = original
+    }
+  })
+})
+
+describe('dzMultiSelect — at maxSelections', () => {
+  it('keeps the input focusable and lets selected options be toggled off', async () => {
+    const original = HTMLElement.prototype.scrollIntoView
+    HTMLElement.prototype.scrollIntoView = () => {}
+    const wrapper = mount(DzMultiSelect, {
+      attachTo: document.body,
+      props: { items, modelValue: ['apple', 'banana'], maxSelections: 2, portalDisabled: true },
+    })
+    try {
+      const input = wrapper.get('input')
+      // The limit blocks additions per option; it must not take the combobox
+      // (the element carrying the name and describedby) out of the tab order.
+      expect(input.attributes('disabled')).toBeUndefined()
+      ;(input.element as HTMLInputElement).focus()
+      expect(document.activeElement).toBe(input.element)
+
+      await input.trigger('keydown', { key: 'ArrowDown' })
+      await flushPromises()
+      await vi.waitFor(() => expect(input.attributes('aria-expanded')).toBe('true'))
+
+      const option = (label: string) => wrapper.findAll('[role="option"]').find(o => o.text() === label)!
+      expect(option('Cherry').attributes('data-disabled')).toBeDefined()
+      expect(option('Apple').attributes('data-disabled')).toBeUndefined()
+
+      await option('Apple').trigger('click')
+      await flushPromises()
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['banana']])
     }
     finally {
       wrapper.unmount()

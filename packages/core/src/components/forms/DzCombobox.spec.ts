@@ -434,3 +434,21 @@ describe('dzCombobox — declared keyboard actions', () => {
     // Native focus traversal is qualified by e2e/matrix/combobox-keyboard.spec.ts.
   })
 })
+
+describe('dzCombobox — items that arrive after the value', () => {
+  it('shows the label once the matching item arrives', async () => {
+    const wrapper = mount(DzCombobox, { props: { modelValue: 'us', items: [] } })
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe('us')
+    await wrapper.setProps({ items: [{ value: 'us', label: 'United States' }] })
+    await nextTick()
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe('United States')
+  })
+
+  it('re-resolves when displayValue changes while closed', async () => {
+    const wrapper = mount(DzCombobox, { props: { modelValue: 'apple', items } })
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe('Apple')
+    await wrapper.setProps({ displayValue: (item: { label: string } | undefined) => (item ? item.label.toUpperCase() : '') })
+    await nextTick()
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe('APPLE')
+  })
+})

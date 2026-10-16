@@ -3,6 +3,12 @@ import { mount } from '@vue/test-utils'
  * DzSwitch — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
+import { h } from 'vue'
+import DzCheckbox from './DzCheckbox.vue'
+import DzFormField from './DzFormField.vue'
+import DzFormMessage from './DzFormMessage.vue'
+import DzRadio from './DzRadio.vue'
+import DzRadioGroup from './DzRadioGroup.vue'
 import DzSwitch from './DzSwitch.vue'
 
 describe('dzSwitch — Unit Tests', () => {
@@ -63,5 +69,40 @@ describe('dzSwitch — Unit Tests', () => {
   it('renders without label when no default slot', () => {
     const wrapper = mount(DzSwitch)
     expect(wrapper.exists()).toBe(true)
+  })
+})
+
+describe('dzSwitch and sibling choice controls — aria-describedby merging', () => {
+  function mountInInvalidField(control: () => ReturnType<typeof h>) {
+    return mount(DzFormField, {
+      props: { id: 'fld', error: 'Required' },
+      slots: {
+        default: () => [control(), h(DzFormMessage, null, { default: () => 'Required' })],
+      },
+    })
+  }
+
+  it.each([
+    ['DzSwitch', () => h(DzSwitch, { ariaDescribedby: 'hint' }, { default: () => 'Enable' })],
+    ['DzCheckbox', () => h(DzCheckbox, { ariaDescribedby: 'hint' }, { default: () => 'Accept' })],
+    ['DzRadioGroup', () => h(DzRadioGroup, { ariaDescribedby: 'hint' }, {
+      default: () => h(DzRadio, { value: 'a' }, { default: () => 'A' }),
+    })],
+    ['DzRadio', () => h(DzRadioGroup, null, {
+      default: () => h(DzRadio, { value: 'a', ariaDescribedby: 'hint' }, { default: () => 'A' }),
+    })],
+  ] as const)('%s keeps the field message id beside a consumer hint', (_name, control) => {
+    const wrapper = mountInInvalidField(control)
+    const described = wrapper.findAll('[aria-describedby~="hint"]')
+    expect(described.length).toBeGreaterThan(0)
+    for (const el of described)
+      expect(el.attributes('aria-describedby')!.split(' ')).toEqual(['hint', 'fld-message'])
+    wrapper.unmount()
+  })
+
+  it('does not repeat an id the consumer already passed', () => {
+    const wrapper = mountInInvalidField(() => h(DzSwitch, { ariaDescribedby: 'fld-message' }, { default: () => 'Enable' }))
+    expect(wrapper.get('[aria-describedby]').attributes('aria-describedby')).toBe('fld-message')
+    wrapper.unmount()
   })
 })

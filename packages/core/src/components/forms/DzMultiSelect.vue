@@ -305,7 +305,7 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
           data-part="input"
           :placeholder="model.length === 0 ? placeholder : undefined"
           :class="[styles.input(), ui?.input]"
-          :disabled="resolvedDisabled || isMaxReached"
+          :disabled="resolvedDisabled"
           :aria-label="ariaLabel"
           :aria-labelledby="ariaLabelledby"
           :aria-describedby="resolvedAriaDescribedby"

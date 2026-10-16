@@ -337,8 +337,11 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 
+// Items and `displayValue` are sources too: with async options the value often
+// arrives before the item that labels it, and the closed input must then show
+// the label rather than the raw key.
 watch(
-  () => model.value,
+  [() => model.value, normalizedItems, () => props.displayValue],
   () => {
     if (!isOpen.value) {
       searchQuery.value = resolveDisplayValue(model.value)

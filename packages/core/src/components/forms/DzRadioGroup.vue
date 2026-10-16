@@ -77,6 +77,17 @@ const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisab
 /** Resolved element ID — prop overrides field context, falls back to auto-generated */
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
+/**
+ * The consumer's `aria-describedby` merged with the field's description and
+ * message ids (space-joined, de-duplicated), as the other field controls do.
+ */
+const resolvedAriaDescribedby = computed(() => {
+  const ids = new Set(
+    `${props.ariaDescribedby ?? ''} ${fieldContext?.ariaDescribedby.value ?? ''}`.split(/\s+/).filter(Boolean),
+  )
+  return ids.size > 0 ? [...ids].join(' ') : undefined
+})
+
 /** Reka UI emits AcceptableValue; we narrow to string for our API */
 function handleValueChange(value: unknown): void {
   const stringValue = String(value ?? '')
@@ -116,7 +127,7 @@ const { testId: dzTestId } = useDzTestIds()
     :orientation="orientation"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
-    :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
+    :aria-describedby="resolvedAriaDescribedby"
     :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
     :class="classes"
     :data-state="resolvedDisabled ? 'disabled' : 'ready'"

@@ -1,8 +1,8 @@
 /**
  * useCollapse — Unit tests.
  */
-import { describe, expect, it } from 'vitest'
-import { ref } from 'vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { effectScope, nextTick, ref } from 'vue'
 import { useCollapse } from './useCollapse.ts'
 
 describe('useCollapse', () => {
@@ -41,5 +41,51 @@ describe('useCollapse', () => {
     const { contentStyle } = useCollapse({ expanded, duration: 500 })
 
     expect(contentStyle.value.transition).toContain('500ms')
+  })
+})
+
+describe('useCollapse — re-toggle inside the animation', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('stays collapsed when collapsed again before the expand timer fires', async () => {
+    const expanded = ref(false)
+    const { contentRef, contentStyle, isAnimating } = useCollapse({ expanded, duration: 200 })
+    contentRef.value = document.createElement('div')
+
+    expanded.value = true
+    await nextTick()
+    await nextTick()
+    vi.advanceTimersByTime(50)
+
+    expanded.value = false
+    await nextTick()
+    await nextTick()
+    vi.runAllTimers()
+    await nextTick()
+
+    expect(contentStyle.value.height).toBe('0px')
+    expect(contentStyle.value.overflow).toBe('hidden')
+    expect(isAnimating.value).toBe(false)
+  })
+
+  it('clears a pending timer when its scope is disposed', async () => {
+    const scope = effectScope()
+    const expanded = ref(false)
+    const result = scope.run(() => useCollapse({ expanded, duration: 200 }))!
+    result.contentRef.value = document.createElement('div')
+
+    expanded.value = true
+    await nextTick()
+    await nextTick()
+    expect(vi.getTimerCount()).toBe(1)
+
+    scope.stop()
+    expect(vi.getTimerCount()).toBe(0)
+    expect(result.contentStyle.value.height).not.toBe('auto')
   })
 })

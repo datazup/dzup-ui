@@ -59,9 +59,16 @@ const fieldContext = useFormFieldContext()
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
 const resolvedInvalid = computed(() => fieldContext?.isInvalid.value ?? false)
-const resolvedAriaDescribedby = computed(
-  () => props.ariaDescribedby ?? fieldContext?.ariaDescribedby.value,
-)
+/**
+ * The consumer's `aria-describedby` merged with the field's description and
+ * message ids (space-joined, de-duplicated), as the other field controls do.
+ */
+const resolvedAriaDescribedby = computed(() => {
+  const ids = new Set(
+    `${props.ariaDescribedby ?? ''} ${fieldContext?.ariaDescribedby.value ?? ''}`.split(/\s+/).filter(Boolean),
+  )
+  return ids.size > 0 ? [...ids].join(' ') : undefined
+})
 
 const styles = computed(() => radioVariants({ size: props.size }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))

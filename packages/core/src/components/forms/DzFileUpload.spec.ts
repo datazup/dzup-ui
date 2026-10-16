@@ -1,8 +1,10 @@
+import type { DzFileRef } from '@dzup-ui/contracts'
 import { mount } from '@vue/test-utils'
 /**
  * DzFileUpload — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
+import { h } from 'vue'
 import DzFileUpload from './DzFileUpload.vue'
 
 function createFile(name: string, size: number, type = 'text/plain'): File {
@@ -218,5 +220,54 @@ describe('dzFileUpload — Unit Tests', () => {
       props: { required: true },
     })
     expect(wrapper.find('[role="button"]').attributes('aria-required')).toBe('true')
+  })
+})
+
+describe('dzFileUpload — disabled rows', () => {
+  function pick(wrapper: ReturnType<typeof mount>, ...files: File[]) {
+    const input = wrapper.find('input[type="file"]')
+    Object.defineProperty(input.element, 'files', { value: files, configurable: true })
+    return input.trigger('change')
+  }
+
+  it('disables the row remove button and keeps the file when disabled', async () => {
+    const file = createFile('test.txt', 100)
+    const wrapper = mount(DzFileUpload, {
+      props: { modelValue: [file], disabled: true },
+    })
+    const removeBtn = wrapper.get('[aria-label="Remove test.txt"]')
+    expect(removeBtn.attributes('disabled')).toBeDefined()
+    // Keyboard activation of a native button dispatches click; dispatch it
+    // directly so the guard is exercised even past the disabled attribute.
+    removeBtn.element.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('remove')).toBeUndefined()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.text()).toContain('test.txt')
+  })
+
+  it('ignores the slot remove() and leaves an in-flight upload running when disabled', async () => {
+    let remove: (() => void) | undefined
+    const wrapper = mount(DzFileUpload, {
+      props: { modelValue: [], modelMode: 'ref' },
+      slots: {
+        'file-item': (props: { remove: () => void }) => {
+          remove = props.remove
+          return h('span', 'row')
+        },
+      },
+    })
+    await pick(wrapper, createFile('notes.txt', 10))
+    const request = wrapper.emitted('uploadRequest')!.at(-1)![0] as { ref: DzFileRef, signal: AbortSignal }
+    await wrapper.setProps({ modelValue: [request.ref], disabled: true })
+    const updatesBefore = wrapper.emitted('update:modelValue')?.length ?? 0
+
+    expect(remove).toBeTypeOf('function')
+    remove!()
+    await wrapper.vm.$nextTick()
+
+    expect(request.signal.aborted).toBe(false)
+    expect(wrapper.emitted('remove')).toBeUndefined()
+    expect(wrapper.emitted('update:modelValue')?.length ?? 0).toBe(updatesBefore)
   })
 })

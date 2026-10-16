@@ -47,6 +47,9 @@ defineSlots<{
   }) => unknown
 }>()
 
+// Without a parent the template renders nothing (`v-if="ctx"`), so a standalone
+// mount warns instead of throwing; the `ctx!` reads below are reached only from
+// that guarded template.
 const ctx = inject(DZ_DATA_GRID_KEY, null)
 if (!ctx) {
   if (import.meta.env?.DEV) {
@@ -56,8 +59,8 @@ if (!ctx) {
 
 const styles = computed(() =>
   dataGridVariants({
-    size: ctx!.size.value,
-    density: ctx!.density.value,
+    size: ctx?.size.value,
+    density: ctx?.density.value,
   }),
 )
 
@@ -96,7 +99,7 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
 </script>
 
 <template>
-  <tbody data-part="body" :class="styles.body()" role="rowgroup">
+  <tbody v-if="ctx" data-part="body" :class="styles.body()" role="rowgroup">
     <tr
       v-for="(row, index) in ctx!.data.value"
       :key="rowKey ? String(row[rowKey]) : index"

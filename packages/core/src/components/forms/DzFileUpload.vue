@@ -290,6 +290,10 @@ function processFiles(fileList: FileList | File[]): void {
 }
 
 function removeRow(row: FileRow): void {
+  // Disabled blocks removal as it blocks picking and dropping; the `file-item`
+  // slot's `remove` goes through here too.
+  if (resolvedDisabled.value)
+    return
   if (isFileRef(row.entry)) {
     const { id } = row.entry
     // Removing a row that is still uploading has to cancel it: the host is
@@ -472,6 +476,7 @@ const { testId: dzTestId } = useDzTestIds()
             type="button"
             :class="styles.removeButton()"
             :aria-label="`Remove ${row.name}`"
+            :disabled="resolvedDisabled"
             @click="removeRow(row)"
           >
             <svg
