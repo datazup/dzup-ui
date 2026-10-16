@@ -201,6 +201,8 @@ describe('the default adapter', () => {
 
   it('cannot be mutated by a consumer that got hold of it', () => {
     expect(Object.isFrozen(DZ_ESCAPING_SANITIZER)).toBe(true)
+    expect(Object.isFrozen(DZ_DEFAULT_SANITIZE_LIMITS)).toBe(true)
+    expect(Object.isFrozen(DZ_ESCAPING_SANITIZER.limits)).toBe(true)
   })
 })
 

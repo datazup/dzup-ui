@@ -14,6 +14,11 @@
  *      noticed. The barrel is maintained by hand; this check is what keeps the
  *      manifest an authority over it rather than a document beside it.
  *
+ *   5. `./composables` and `./utilities` (UI-DZUP-UI-ARCH-M-03): each category
+ *      subpath barrel exports every manifest entry of its category under its
+ *      source directory and nothing the root does not, and the exports map
+ *      ships it
+ *
  * For flat-export packages (compat, nuxt): validates that:
  *   1. The package entry file exists
  *   2. The file exports at least one symbol (non-empty barrel)
@@ -334,6 +339,105 @@ export function validateBarrelCoverage(
   return errors
 }
 
+// --- Category subpath barrels (UI-DZUP-UI-ARCH-M-03) ---
+
+/**
+ * A subpath that publishes one manifest category on its own: the barrel, the
+ * exports-map key that ships it, and which manifest entries it must carry.
+ */
+export interface CategorySubpath {
+  subpath: string
+  barrel: string
+  category: 'composables' | 'utilities'
+  /** Only manifest entries whose `path` starts with this prefix belong here. */
+  pathPrefix: string
+}
+
+export const CORE_CATEGORY_SUBPATHS: readonly CategorySubpath[] = [
+  { subpath: './composables', barrel: 'src/composables/index.ts', category: 'composables', pathPrefix: './src/composables/' },
+  { subpath: './utilities', barrel: 'src/utilities/index.ts', category: 'utilities', pathPrefix: './src/utilities/' },
+]
+
+/**
+ * Check 5 — each category subpath barrel exports ALL of its manifest entries,
+ * and nothing the manifest and the root barrel do not already publish.
+ *
+ * Missing means the subpath under-delivers what it is named for (a consumer
+ * moved off the root barrel finds `useToast` gone); extra means a symbol is
+ * public through the subpath without the manifest knowing. The exports map
+ * must also declare the subpath, pointing at the barrel's build output.
+ */
+export function validateCategorySubpaths(
+  packageName: string,
+  packageDir: string,
+  me: ManifestExports,
+  subpaths: readonly CategorySubpath[] = CORE_CATEGORY_SUBPATHS,
+  rootEntry = 'src/index.ts',
+): ValidationError[] {
+  const errors: ValidationError[] = []
+  const pkgJsonPath = resolve(packageDir, 'package.json')
+  const declared = existsSync(pkgJsonPath)
+    ? ((JSON.parse(readFileSync(pkgJsonPath, 'utf-8')) as PackageJson).exports ?? {})
+    : {}
+
+  const listed = manifestSymbolNames(me)
+  const rootExports = new Set(scanModuleExports(resolve(packageDir, rootEntry)).exports.keys())
+
+  for (const def of subpaths) {
+    const barrelPath = resolve(packageDir, def.barrel)
+    const relBarrel = relative(ROOT, barrelPath)
+    const fail = (entry: string, message: string): void => {
+      errors.push({ package: packageName, category: 'category-subpath', entry, filePath: relBarrel, message })
+    }
+
+    const target = declared[def.subpath] as { import?: string } | undefined
+    const expectedImport = `./dist/${def.barrel.replace(/^src\//, '').replace(/\.ts$/, '.js')}`
+    if (target === undefined) {
+      fail(def.subpath, `"${def.subpath}" is not in the exports map`)
+    }
+    else if (typeof target !== 'object' || target.import !== expectedImport) {
+      fail(def.subpath, `"${def.subpath}" must import ${expectedImport} (the build output of ${def.barrel})`)
+    }
+
+    if (!existsSync(barrelPath)) {
+      fail(def.subpath, `barrel does not exist: ${relBarrel}`)
+      continue
+    }
+
+    const wanted = new Set<string>()
+    for (const entry of Object.values(me[def.category])) {
+      if (entry.path.startsWith(def.pathPrefix)) {
+        for (const name of entry.exports)
+          wanted.add(name)
+      }
+    }
+
+    const scan = scanModuleExports(barrelPath)
+    for (const unreadable of scan.unreadable)
+      fail(def.subpath, `Re-export target cannot be resolved: ${unreadable}`)
+    const actual = new Set(scan.exports.keys())
+
+    for (const name of [...wanted].sort()) {
+      if (!actual.has(name))
+        fail(name, `"${name}" is a manifest ${def.category} export under ${def.pathPrefix} but ${def.subpath} does not export it`)
+    }
+    // Extra: anything beyond the category's own entries must be a symbol the
+    // manifest already lists (the return/option types live in `types`) AND one
+    // the root barrel already publishes — a subpath narrows the root, it never
+    // widens it.
+    for (const name of [...actual].sort()) {
+      if (wanted.has(name))
+        continue
+      if (!listed.has(name))
+        fail(name, `"${name}" is exported from ${def.subpath} but not listed in public-api.manifest.json`)
+      else if (!rootExports.has(name))
+        fail(name, `"${name}" is exported from ${def.subpath} but not from the root barrel — a subpath may only narrow the root`)
+    }
+  }
+
+  return errors
+}
+
 // --- Flat-export validation (compat, nuxt) ---
 
 /**
@@ -576,6 +680,13 @@ function main(): void {
     allErrors.push(...coverageErrors)
     const coverageStatus = coverageErrors.length === 0 ? 'PASS' : 'FAIL'
     console.warn(`  ${coverageStatus}  barrel → manifest: every export reachable from ${manifestDef.entryFile} is listed`)
+
+    if (manifestDef.name === '@dzup-ui/core') {
+      const subpathErrors = validateCategorySubpaths(manifestDef.name, manifestDef.packageDir, me)
+      allErrors.push(...subpathErrors)
+      const subpathStatus = subpathErrors.length === 0 ? 'PASS' : 'FAIL'
+      console.warn(`  ${subpathStatus}  category subpaths: ${CORE_CATEGORY_SUBPATHS.map(d => d.subpath).join(', ')} carry their manifest entries and nothing beyond the root`)
+    }
   }
 
   // Validate flat-export packages (no manifest — check entry file + export map)

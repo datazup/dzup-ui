@@ -334,7 +334,7 @@
     },
     {
       "file": "packages/core/src/components/media/DzWatermark.vue",
-      "line": 285,
+      "line": 319,
       "kind": "bound",
       "disposition": "unclassified-binding",
       "source": ":style=\"overlayStyle\""

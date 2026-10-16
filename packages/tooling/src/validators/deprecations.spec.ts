@@ -252,6 +252,52 @@ describe('checkDeprecations — seeded failures', () => {
     expect(anchored.violations).toEqual([])
     expect(anchored.withRecord).toBe(2)
   })
+
+  describe('unexported-path (UI-DZUP-UI-ARCH-L-04)', () => {
+    const MANIFEST = JSON.stringify({
+      name: '@dzup-ui/core',
+      version: '0.2.0',
+      exports: { '.': './dist/index.js', './theme-script': './dist/t.js', './icons/*': './dist/icons/*.js' },
+    })
+
+    function run(over: Record<string, unknown>) {
+      const root = fixtureRoot({
+        'packages/core/package.json': MANIFEST,
+        'packages/core/src/DzOld.ts': ANNOTATED,
+      })
+      return checkDeprecations(
+        { $schemaVersion: '1.0.0', $rules: RULES, records: [record({ package: '@dzup-ui/core', ...over })] } as never,
+        scanAnnotations(root, ['packages/core/src/DzOld.ts']),
+        { '@dzup-ui/core': '0.2.0' },
+        root,
+      )
+    }
+
+    it('fires when a module record names a deep path the exports map refuses', () => {
+      const report = run({ kind: 'module', symbol: '@dzup-ui/core/composables/useTheme (the standalone module)' })
+      const v = report.violations.find(x => x.rule === 'unexported-path')
+      expect(v?.detail).toContain('./composables/useTheme')
+    })
+
+    it('fires on either side of a replacementExample', () => {
+      const report = run({ replacementExample: "import { a } from '@dzup-ui/core/nope'  ->  import { a } from '@dzup-ui/core'" })
+      expect(report.violations.filter(x => x.rule === 'unexported-path')).toHaveLength(1)
+    })
+
+    it('admits the root, an exact subpath and a star pattern', () => {
+      const report = run({
+        kind: 'module',
+        symbol: '@dzup-ui/core/theme-script',
+        replacementExample: "import { a } from '@dzup-ui/core/icons/check'  ->  import { a } from '@dzup-ui/core'",
+      })
+      expect(report.violations).toEqual([])
+    })
+
+    it('ignores a package outside the workspace', () => {
+      const report = run({ replacementExample: "import { a } from '@dzup-ui/elsewhere/deep'  ->  import { a } from '@dzup-ui/core'" })
+      expect(report.violations).toEqual([])
+    })
+  })
 })
 
 // --- The live repository ----------------------------------------------------

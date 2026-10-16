@@ -14,7 +14,7 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { checkBarrel } from '../src/manifest-generator.ts'
-import { validateBarrelCoverage, validateCategory } from './validate-exports.ts'
+import { validateBarrelCoverage, validateCategory, validateCategorySubpaths } from './validate-exports.ts'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 
@@ -78,6 +78,43 @@ describe('validate-exports against a fixture package', () => {
       expect.stringContaining('"neverExported" declared in manifest but not found'),
     ])
   })
+
+  describe('category subpaths (UI-DZUP-UI-ARCH-M-03)', () => {
+    const SUBPATHS = [{ subpath: './composables', barrel: 'src/composables/index.ts', category: 'composables', pathPrefix: './src/composables/' }] as const
+    const me = manifestExports({
+      composables: { useA: { path: './src/composables/useA/index.ts', exports: ['useA'] } },
+      types: ['UseAReturn'],
+    })
+
+    beforeEach(() => {
+      write('src/index.ts', `export * from './composables/index.ts'\n`)
+      write('src/composables/index.ts', `export * from './useA/index.ts'\n`)
+      write('src/composables/useA/index.ts', `export const useA = 1\nexport type UseAReturn = number\n`)
+      write('package.json', JSON.stringify({ exports: { './composables': { types: './dist/composables/index.d.ts', import: './dist/composables/index.js' } } }))
+    })
+
+    it('passes when the barrel carries its entries and their listed types', () => {
+      expect(validateCategorySubpaths('@fixture/pkg', dir, me, SUBPATHS)).toEqual([])
+    })
+
+    it('fails when a manifest entry is missing from the subpath', () => {
+      write('src/composables/index.ts', `export {}\n`)
+      const errors = validateCategorySubpaths('@fixture/pkg', dir, me, SUBPATHS)
+      expect(errors.map(e => e.entry)).toEqual(['useA'])
+    })
+
+    it('fails when the subpath publishes something the manifest does not list', () => {
+      write('src/composables/useA/index.ts', `export const useA = 1\nexport type UseAReturn = number\nexport const sneaky = 2\n`)
+      const errors = validateCategorySubpaths('@fixture/pkg', dir, me, SUBPATHS)
+      expect(errors.map(e => e.entry)).toEqual(['sneaky'])
+    })
+
+    it('fails when the exports map does not ship the subpath', () => {
+      write('package.json', JSON.stringify({ exports: {} }))
+      const errors = validateCategorySubpaths('@fixture/pkg', dir, me, SUBPATHS)
+      expect(errors.map(e => e.entry)).toEqual(['./composables'])
+    })
+  })
 })
 
 describe('the real @dzup-ui/core package', () => {
@@ -87,6 +124,16 @@ describe('the real @dzup-ui/core package', () => {
     ) as { exports: ManifestExports }
 
     const errors = validateBarrelCoverage('@dzup-ui/core', resolve(ROOT, 'packages/core/src/index.ts'), manifest.exports)
+
+    expect(errors.map(e => e.message)).toEqual([])
+  })
+
+  it('ships ./composables and ./utilities carrying their manifest entries (UI-DZUP-UI-ARCH-M-03)', () => {
+    const manifest = JSON.parse(
+      readFileSync(resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'), 'utf8'),
+    ) as { exports: ManifestExports }
+
+    const errors = validateCategorySubpaths('@dzup-ui/core', resolve(ROOT, 'packages/core'), manifest.exports)
 
     expect(errors.map(e => e.message)).toEqual([])
   })

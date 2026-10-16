@@ -14,6 +14,8 @@
         "./ownership",
         "./providers",
         "./theme-script",
+        "./composables",
+        "./utilities",
         "./i18n",
         "./i18n/locales/en.json",
         "./styles",
@@ -31,6 +33,8 @@
       ],
       "notes": {
         "./theme-script": "UI-DZUP-UI-ARCH-M-05 / SEC-M-04 / DESIGN-M-08. The ADR-15 pre-paint script generator with no Vue, DOM or component import, so a build-time host (the @dzup-ui/nuxt module) can produce the head script from the one implementation instead of carrying a hand-copied literal that ignored storageKey, attribute, defaultTheme, persist and direction. `./providers` re-exports the same function for application code.",
+        "./composables": "UI-DZUP-UI-ARCH-M-03. The public composables (the manifest's composables entries under src/composables/) without the eleven component families or the base stylesheet the root entry side-effect-imports, so `useToast` no longer costs the whole root barrel. validate:exports holds the barrel to exactly those manifest entries.",
+        "./utilities": "UI-DZUP-UI-ARCH-M-03. `cn`, the class merger every recipe consumer needs, likewise without the root barrel. validate:exports holds it to exactly the manifest's utilities entries.",
         "./i18n": "TASK-R5-O4 / N5-04 D4. The localisation surface — `useDzMessageFormat` and the message-group types. Three import paths failed with ERR_PACKAGE_PATH_NOT_EXPORTED before it existed, which blocked every locale pack and made ADR-20's i18n promises unverifiable. It is snapshotted here because the defect it fixes is invisible from inside the repository: source imports keep working after the exports entry is gone.",
         "./i18n/locales/en.json": "The English catalog ships as JSON data, not as a named export — what a translator and a translation-management tool edit, and what keeps a second language out of every bundle. A locale pack's import path is part of the contract exactly as the composable's is.",
         "./styles": "ADR-15 / the five-layer contract: `import '@dzup-ui/core/styles'` is the documented way to load the built CSS. It was declared for months while the build emitted no CSS at all (the defect that produced export-map.ts)."

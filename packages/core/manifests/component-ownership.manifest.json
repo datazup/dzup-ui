@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
+  "sourceCommit": "81eaa57ddf24cf82a56bf22777c549ecccde5ff9",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -108,6 +108,10 @@
       "symbol": "AsyncOptionsMessages",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts"
@@ -117,6 +121,10 @@
       "symbol": "AsyncOptionsRow",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts"
@@ -282,6 +290,10 @@
       "symbol": "CalendarDay",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useCalendar/useCalendar.ts",
@@ -344,6 +356,10 @@
       "symbol": "CalendarView",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useCalendar/useCalendar.ts",
@@ -857,6 +873,10 @@
       "symbol": "DZ_FORM_FIELD_KEY",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "unclassified",
       "evidence": [
         "packages/core/src/composables/useFormField/useFormField.ts",
@@ -1049,6 +1069,10 @@
       "symbol": "DataGridCellPosition",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts"
@@ -8452,6 +8476,10 @@
       "symbol": "DzFormFieldContext",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useFormField/useFormField.ts"
@@ -11095,6 +11123,10 @@
       "symbol": "DzMessageReader",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/provider/useDzMessages.ts"
@@ -19594,6 +19626,10 @@
       "symbol": "FloatingPlacement",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useFloating/useFloating.ts"
@@ -19856,6 +19892,7 @@
       "subpath": ".",
       "subpaths": [
         ".",
+        "./composables",
         "./data"
       ],
       "kind": "type",
@@ -20739,6 +20776,10 @@
       "symbol": "RevealAndFocusOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useRevealAndFocus/useRevealAndFocus.ts"
@@ -21126,6 +21167,10 @@
       "symbol": "TabItem",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useTabs/useTabs.ts"
@@ -21438,6 +21483,10 @@
       "symbol": "ToastOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useToast/useToast.ts"
@@ -21694,6 +21743,10 @@
       "symbol": "UseAffixOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useAffix/useAffix.ts",
@@ -21704,6 +21757,10 @@
       "symbol": "UseAffixReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useAffix/useAffix.ts",
@@ -21714,6 +21771,10 @@
       "symbol": "UseAsyncOptionsOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts"
@@ -21723,6 +21784,10 @@
       "symbol": "UseAsyncOptionsReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts"
@@ -21732,6 +21797,10 @@
       "symbol": "UseCalendarOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useCalendar/useCalendar.ts",
@@ -21742,6 +21811,10 @@
       "symbol": "UseCalendarReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useCalendar/useCalendar.ts",
@@ -21752,6 +21825,10 @@
       "symbol": "UseClickOutsideOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useClickOutside/useClickOutside.ts"
@@ -21761,6 +21838,10 @@
       "symbol": "UseCollapseOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useCollapse/useCollapse.ts"
@@ -21770,6 +21851,10 @@
       "symbol": "UseCollapseReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useCollapse/useCollapse.ts"
@@ -21779,6 +21864,10 @@
       "symbol": "UseDataGridHeaderOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGridHeader/useDataGridHeader.ts"
@@ -21788,6 +21877,10 @@
       "symbol": "UseDataGridHeaderReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGridHeader/useDataGridHeader.ts"
@@ -21797,6 +21890,10 @@
       "symbol": "UseDataGridNavigationReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts"
@@ -21806,6 +21903,10 @@
       "symbol": "UseDataGridOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGrid.ts"
@@ -21815,6 +21916,10 @@
       "symbol": "UseDataGridPaginationOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridPagination.ts"
@@ -21824,6 +21929,10 @@
       "symbol": "UseDataGridPaginationReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridPagination.ts"
@@ -21833,6 +21942,10 @@
       "symbol": "UseDataGridReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGrid.ts"
@@ -21842,6 +21955,10 @@
       "symbol": "UseDataGridSortOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridSort.ts"
@@ -21851,6 +21968,10 @@
       "symbol": "UseDataGridSortReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridSort.ts"
@@ -21860,6 +21981,10 @@
       "symbol": "UseDatePickerOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDatePicker/useDatePicker.ts"
@@ -21869,6 +21994,10 @@
       "symbol": "UseDatePickerReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDatePicker/useDatePicker.ts"
@@ -21878,6 +22007,10 @@
       "symbol": "UseDialogOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDialog/useDialog.ts"
@@ -21887,6 +22020,10 @@
       "symbol": "UseDialogReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useDialog/useDialog.ts"
@@ -21896,6 +22033,10 @@
       "symbol": "UseFloatingOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useFloating/useFloating.ts"
@@ -21905,6 +22046,10 @@
       "symbol": "UseFloatingReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useFloating/useFloating.ts"
@@ -21914,6 +22059,10 @@
       "symbol": "UseFocusTrapOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useFocusTrap/useFocusTrap.ts"
@@ -21923,6 +22072,10 @@
       "symbol": "UseFocusTrapReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useFocusTrap/useFocusTrap.ts"
@@ -21932,6 +22085,10 @@
       "symbol": "UseFormFieldOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useFormField/useFormField.ts"
@@ -21941,6 +22098,10 @@
       "symbol": "UseInfiniteScrollOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useInfiniteScroll/useInfiniteScroll.ts",
@@ -21951,6 +22112,10 @@
       "symbol": "UseInfiniteScrollReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useInfiniteScroll/useInfiniteScroll.ts",
@@ -21961,6 +22126,10 @@
       "symbol": "UseScrollSpyOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useScrollSpy/useScrollSpy.ts",
@@ -21971,6 +22140,10 @@
       "symbol": "UseScrollSpyReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useScrollSpy/useScrollSpy.ts",
@@ -21981,6 +22154,10 @@
       "symbol": "UseScrollToTopOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useScrollToTop/useScrollToTop.ts",
@@ -21991,6 +22168,10 @@
       "symbol": "UseScrollToTopReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useScrollToTop/useScrollToTop.ts",
@@ -22001,6 +22182,10 @@
       "symbol": "UseSelectKeyboardOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useSelect/useSelectKeyboard.ts"
@@ -22010,6 +22195,10 @@
       "symbol": "UseSelectKeyboardReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useSelect/useSelectKeyboard.ts"
@@ -22019,6 +22208,10 @@
       "symbol": "UseSelectOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useSelect/useSelect.ts"
@@ -22028,6 +22221,10 @@
       "symbol": "UseSelectReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useSelect/useSelect.ts"
@@ -22037,6 +22234,10 @@
       "symbol": "UseSidebarOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useSidebar/useSidebar.ts"
@@ -22046,6 +22247,10 @@
       "symbol": "UseSidebarReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useSidebar/useSidebar.ts"
@@ -22055,6 +22260,10 @@
       "symbol": "UseTabsOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useTabs/useTabs.ts"
@@ -22064,6 +22273,10 @@
       "symbol": "UseTabsReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useTabs/useTabs.ts"
@@ -22086,6 +22299,10 @@
       "symbol": "UseToastReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useToast/useToast.ts"
@@ -22095,6 +22312,10 @@
       "symbol": "UseTransferOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useTransfer/useTransfer.ts"
@@ -22104,6 +22325,10 @@
       "symbol": "UseTransferReturn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useTransfer/useTransfer.ts"
@@ -22165,6 +22390,10 @@
       "symbol": "WeekdayIndex",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useCalendar/useCalendar.ts",
@@ -22553,6 +22782,10 @@
       "symbol": "cn",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./utilities"
+      ],
       "kind": "unclassified",
       "evidence": [
         "packages/core/src/utilities/cn.ts",
@@ -24395,6 +24628,10 @@
       "symbol": "useAffix",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useAffix/useAffix.ts",
@@ -24405,6 +24642,10 @@
       "symbol": "useAsyncOptions",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
@@ -24415,6 +24656,10 @@
       "symbol": "useCalendar",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useCalendar/useCalendar.ts",
@@ -24425,6 +24670,10 @@
       "symbol": "useClickOutside",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useClickOutside/useClickOutside.ts",
@@ -24435,6 +24684,10 @@
       "symbol": "useCollapse",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useCollapse/useCollapse.ts",
@@ -24445,6 +24698,10 @@
       "symbol": "useDataGrid",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGrid.ts",
@@ -24455,6 +24712,10 @@
       "symbol": "useDataGridHeader",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDataGridHeader/useDataGridHeader.ts",
@@ -24465,6 +24726,10 @@
       "symbol": "useDataGridNavigation",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridNavigation.ts",
@@ -24475,6 +24740,10 @@
       "symbol": "useDataGridPagination",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridPagination.ts",
@@ -24485,6 +24754,10 @@
       "symbol": "useDataGridSort",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDataGrid/useDataGridSort.ts",
@@ -24495,6 +24768,10 @@
       "symbol": "useDatePicker",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDatePicker/useDatePicker.ts",
@@ -24505,6 +24782,10 @@
       "symbol": "useDialog",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDialog/useDialog.ts",
@@ -24515,6 +24796,10 @@
       "symbol": "useDualModel",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDualModel/useDualModel.ts",
@@ -24525,6 +24810,10 @@
       "symbol": "useDzDefaults",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzEnvironment.ts",
@@ -24535,6 +24824,10 @@
       "symbol": "useDzDirection",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzLocale.ts",
@@ -24545,6 +24838,10 @@
       "symbol": "useDzFormats",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzFormats.ts",
@@ -24555,6 +24852,10 @@
       "symbol": "useDzLocale",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzLocale.ts",
@@ -24579,6 +24880,10 @@
       "symbol": "useDzMessages",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzMessages.ts",
@@ -24589,6 +24894,10 @@
       "symbol": "useDzMotion",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzMotion.ts",
@@ -24599,6 +24908,10 @@
       "symbol": "useDzNonce",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzEnvironment.ts",
@@ -24609,6 +24922,10 @@
       "symbol": "useDzPortalTarget",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzEnvironment.ts",
@@ -24619,6 +24936,10 @@
       "symbol": "useDzSanitizer",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzSanitizer.ts",
@@ -24629,6 +24950,10 @@
       "symbol": "useDzTestIds",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzEnvironment.ts",
@@ -24639,6 +24964,10 @@
       "symbol": "useDzTheme",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/providers/useTheme.ts",
@@ -24649,6 +24978,10 @@
       "symbol": "useDzUrlPolicy",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/provider/useDzUrlPolicy.ts",
@@ -24659,6 +24992,10 @@
       "symbol": "useEscapeKey",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useEscapeKey/useEscapeKey.ts",
@@ -24669,6 +25006,10 @@
       "symbol": "useFloating",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useFloating/useFloating.ts",
@@ -24679,6 +25020,10 @@
       "symbol": "useFocusTrap",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useFocusTrap/useFocusTrap.ts",
@@ -24689,6 +25034,10 @@
       "symbol": "useFormField",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useFormField/useFormField.ts",
@@ -24699,6 +25048,10 @@
       "symbol": "useFormFieldContext",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useFormField/useFormField.ts",
@@ -24709,6 +25062,10 @@
       "symbol": "useInfiniteScroll",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useInfiniteScroll/useInfiniteScroll.ts",
@@ -24719,6 +25076,10 @@
       "symbol": "useRevealAndFocus",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useRevealAndFocus/useRevealAndFocus.ts",
@@ -24729,6 +25090,10 @@
       "symbol": "useScrollSpy",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useScrollSpy/useScrollSpy.ts",
@@ -24739,6 +25104,10 @@
       "symbol": "useScrollToTop",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useScrollToTop/useScrollToTop.ts",
@@ -24749,6 +25118,10 @@
       "symbol": "useSelect",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useSelect/useSelect.ts",
@@ -24759,6 +25132,10 @@
       "symbol": "useSelectKeyboard",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useSelect/useSelectKeyboard.ts",
@@ -24769,6 +25146,10 @@
       "symbol": "useSidebar",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useSidebar/useSidebar.ts",
@@ -24779,6 +25160,10 @@
       "symbol": "useTabs",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useTabs/useTabs.ts",
@@ -24803,6 +25188,10 @@
       "symbol": "useToast",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useToast/useToast.ts",
@@ -24813,6 +25202,10 @@
       "symbol": "useTransfer",
       "package": "@dzup-ui/core",
       "subpath": ".",
+      "subpaths": [
+        ".",
+        "./composables"
+      ],
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useTransfer/useTransfer.ts",

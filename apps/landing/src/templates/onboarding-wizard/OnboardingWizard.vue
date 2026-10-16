@@ -37,6 +37,20 @@ import {
   USE_CASE_OPTIONS,
 } from './data.ts'
 
+/**
+ * Where the finished wizard and the help link go. Props, not dead hash links, so a
+ * copied template points at the host app's own routes (UI-DZUP-UI-UX-H-02).
+ */
+const props = withDefaults(defineProps<{
+  /** The "Go to dashboard" destination on the success step. */
+  dashboardHref?: string
+  /** The "Talk to our team" support destination. */
+  supportHref?: string
+}>(), {
+  dashboardHref: '/dashboard',
+  supportHref: 'mailto:support@northwind.io',
+})
+
 const LAST_STEP = STEPS.length - 1
 const activeStep = ref(0)
 
@@ -196,7 +210,7 @@ function prev(): void {
           <DzText tone="muted" as="p" align="center" class="ob-done-text">
             We've set up your workspace and sent your invites. Jump in and start building.
           </DzText>
-          <DzButton variant="solid" tone="primary" class="ob-done-cta" href="#">
+          <DzButton variant="solid" tone="primary" class="ob-done-cta" :href="props.dashboardHref">
             Go to dashboard
           </DzButton>
         </section>
@@ -219,7 +233,7 @@ function prev(): void {
       </DzCard>
 
       <DzText size="sm" tone="muted" class="ob-foot">
-        Need a hand? <a class="link" href="#">Talk to our team</a>.
+        Need a hand? <a class="link" :href="props.supportHref">Talk to our team</a>.
       </DzText>
     </div>
   </main>

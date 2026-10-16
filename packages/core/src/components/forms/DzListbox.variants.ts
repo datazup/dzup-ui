@@ -48,10 +48,10 @@ export const listboxVariants = tv({
       'relative flex cursor-pointer select-none items-center gap-[var(--dz-spacing-2)]',
       'rounded-[var(--dz-radius-sm)]',
       'text-[var(--dz-foreground)]',
-      'outline-none',
       'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'data-[highlighted]:bg-[var(--dz-listbox-item-active-bg,var(--dz-muted))]',
-      'focus-visible:ring-2 focus-visible:ring-[var(--dz-listbox-active-ring,var(--dz-ring))]',
+      // Inset outline (forced-colors keeps it); `outline-none` would out-layer it.
+      'dz-focus-ring-control-inset [--dz-control-focus-ring-color:var(--dz-listbox-active-ring,var(--dz-ring))]',
       'data-[state=checked]:bg-[var(--dz-listbox-item-selected-bg,var(--dz-primary-muted))]',
       'data-[state=checked]:text-[var(--dz-listbox-item-selected-fg,var(--dz-primary))]',
       'dz-disabled-control',

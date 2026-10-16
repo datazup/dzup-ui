@@ -51,9 +51,12 @@
 
 import type { Component } from 'vue'
 import type { TemplateMeta } from './registry.ts'
+import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { render } from '@testing-library/vue'
 import { flushPromises } from '@vue/test-utils'
-import { beforeAll, describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { TEMPLATES } from './registry.ts'
 
@@ -212,5 +215,70 @@ describe('templates — interaction smoke', () => {
       `[interactions] template "${template.slug}" hit the ${MAX_CLICKS}-distinct-control cap — `
       + 'raise MAX_CLICKS or the tail of its controls is going untouched.',
     ).toBeLessThan(MAX_CLICKS)
+  })
+})
+
+/**
+ * Sign-up and onboarding are copied into consumer apps as the register-to-first-
+ * action flow (UI-DZUP-UI-UX-H-02): no dead `href="#"`, no links inside the
+ * checkbox label (a click there toggles the box), and a submit that shows a
+ * pending and then a result state instead of doing nothing.
+ */
+describe('sign-up / onboarding flow', () => {
+  const SOURCES = [
+    './sign-up/SignUp.vue',
+    './onboarding-wizard/OnboardingWizard.vue',
+  ]
+
+  it.each(SOURCES)('%s ships no href="#"', (rel) => {
+    const source = readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), rel), 'utf8')
+    expect(source).not.toMatch(/href="#"/)
+  })
+
+  async function mountSignUp(submit?: () => Promise<void>) {
+    const template = TEMPLATES.find(t => t.slug === 'sign-up')!
+    const component = await resolveTemplate(template)
+    const view = render(component, { props: submit ? { submit } : {} })
+    await flushPromises()
+    return view
+  }
+
+  it('keeps every link out of the checkbox label', async () => {
+    const { container } = await mountSignUp()
+    const checkbox = container.querySelector('[role="checkbox"]')
+    expect(checkbox).not.toBeNull()
+    const label = checkbox!.closest('label') ?? checkbox!.parentElement!
+    expect(label.querySelectorAll('a')).toHaveLength(0)
+    // The Terms and Privacy links still exist, beside it.
+    const hrefs = [...container.querySelectorAll('a')].map(a => a.getAttribute('href'))
+    expect(hrefs).toEqual(expect.arrayContaining(['/terms', '/privacy', '/sign-in']))
+  })
+
+  it('shows a pending state, then success, on submit', async () => {
+    let finish!: () => void
+    const submit = vi.fn(() => new Promise<void>((resolve) => {
+      finish = resolve
+    }))
+    const { container } = await mountSignUp(submit)
+    ;(container.querySelector('[role="checkbox"]') as HTMLElement).click()
+    await nextTick()
+    container.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true }))
+    await nextTick()
+    expect(submit).toHaveBeenCalledTimes(1)
+    expect(container.querySelector('form')!.getAttribute('aria-busy')).toBe('true')
+    expect(container.querySelector('button[type="submit"]')!.textContent).toContain('Creating account')
+    finish()
+    await flushPromises()
+    expect(container.querySelector('[role="status"]')!.textContent).toContain('Account created')
+  })
+
+  it('shows the error when the request fails', async () => {
+    const submit = vi.fn(() => Promise.reject(new Error('That email is already registered.')))
+    const { container } = await mountSignUp(submit)
+    ;(container.querySelector('[role="checkbox"]') as HTMLElement).click()
+    await nextTick()
+    container.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true }))
+    await flushPromises()
+    expect(container.querySelector('[role="status"]')!.textContent).toContain('That email is already registered.')
   })
 })

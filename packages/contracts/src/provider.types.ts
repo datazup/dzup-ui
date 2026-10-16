@@ -607,13 +607,13 @@ export interface DzUrlPolicyOptions {
  * the list, and so {@link DZ_PROVIDER_DEFAULTS} can publish the same values Pro
  * must resolve to.
  */
-export const DZ_ALLOWED_URL_SCHEMES: readonly string[] = [
+export const DZ_ALLOWED_URL_SCHEMES: readonly string[] = Object.freeze([
   'http',
   'https',
   'mailto',
   'tel',
   'sms',
-]
+])
 
 // ---------------------------------------------------------------------------
 // Injection keys
@@ -673,15 +673,20 @@ export const DZ_URL_POLICY_KEY: InjectionKey<DzUrlPolicy> = Symbol('dz-url-polic
  * Exported, not buried in each composable, because "works without a provider"
  * is a contract a consumer should be able to read rather than infer — and
  * because Pro must resolve to the same values.
+ *
+ * Frozen at every level, not only the outer object: `DZ_DEFAULT_URL_POLICY`
+ * reads `urlPolicy.allowedSchemes` live and the default sanitizer holds
+ * `sanitizer.limits` by reference, so a nested object a consumer could push to
+ * or raise would widen every sink in the page at once.
  */
-export const DZ_PROVIDER_DEFAULTS = {
+export const DZ_PROVIDER_DEFAULTS = Object.freeze({
   locale: 'en-US',
   direction: 'auto',
   motion: 'system',
   /** `undefined` means `document.body`, resolved by the portal at render time. */
   portalTarget: undefined,
   nonce: undefined,
-  testIds: { enabled: false, attribute: 'data-testid' },
+  testIds: Object.freeze({ enabled: false, attribute: 'data-testid' }),
   /**
    * The sanitizer's **data** half only — the policy name and the ceilings.
    *
@@ -694,10 +699,10 @@ export const DZ_PROVIDER_DEFAULTS = {
    * `128 KiB` / depth `64` are Pro's measured `DEFAULT_SANITIZE_LIMITS`, not a
    * fresh guess; see {@link DzSanitizeLimits}.
    */
-  sanitizer: {
+  sanitizer: Object.freeze({
     policyName: 'dzup-ui',
-    limits: { maxLength: 128 * 1024, maxDepth: 64 },
-  },
+    limits: Object.freeze({ maxLength: 128 * 1024, maxDepth: 64 }),
+  }),
   /**
    * The URL policy's **data** half — the scheme allowlist (TASK-R2-O4).
    *
@@ -706,10 +711,10 @@ export const DZ_PROVIDER_DEFAULTS = {
    * a value is declared rather than implemented. The list is the part both
    * tiers must agree on, which is what this object is for.
    */
-  urlPolicy: {
+  urlPolicy: Object.freeze({
     allowedSchemes: DZ_ALLOWED_URL_SCHEMES,
-  },
-} as const satisfies {
+  }),
+} as const) satisfies {
   locale: DzLocale
   direction: DzDirectionPreference
   motion: DzMotionPreference

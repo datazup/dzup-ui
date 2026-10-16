@@ -1,5 +1,10 @@
+import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { DARK_SEMANTIC_TOKENS, decodeThemeRecipe, LIGHT_SEMANTIC_TOKENS, PALETTE_CONFIGS } from '@dzup-ui/tokens'
+import { oklchLuminance, wcagContrastRatio } from '@dzup-ui/tokens/utils'
 import { afterEach, describe, expect, it } from 'vitest'
+import { contrastRatio as gateContrastRatio } from '../../../../packages/tooling/src/token-checks/oklch-contrast.ts'
 import { DARK_PAIRS, LIGHT_PAIRS, resolveSemanticEndpoint, useThemeDesigner } from './useThemeDesigner.ts'
 
 /**
@@ -158,5 +163,32 @@ describe('contrast pairs mirror the semantic tokens', () => {
   it('refuses a token that does not resolve to a designer palette shade', () => {
     expect(() => resolveSemanticEndpoint({ '--dz-x': 'red' }, '--dz-x')).toThrow(/does not resolve/)
     expect(() => resolveSemanticEndpoint({}, '--dz-missing')).toThrow(/does not resolve/)
+  })
+})
+
+describe('one contrast implementation (UI-DZUP-UI-ARCH-L-07)', () => {
+  const read = (rel: string): string =>
+    readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), rel), 'utf8')
+
+  it('agrees with the DESIGN.md gate, number for number', () => {
+    // The gate parses oklch() strings; the designer reads numbers. Both must land
+    // on the shared arithmetic, so the same colours give the same ratio.
+    const fromGate = gateContrastRatio('oklch(0.98 0.01 260)', 'oklch(0.25 0.05 260)')
+    const fromShared = wcagContrastRatio(oklchLuminance(0.98, 0.01, 260), oklchLuminance(0.25, 0.05, 260))
+    expect(fromGate).toBeCloseTo(fromShared, 12)
+    expect(wcagContrastRatio(1, 0)).toBe(21)
+    expect(wcagContrastRatio(0.2, 0.6)).toBe(wcagContrastRatio(0.6, 0.2))
+  })
+
+  it('no landing composable or the gate carries its own ratio formula', () => {
+    for (const rel of [
+      './useThemeDesigner.ts',
+      './useBlockTheme.ts',
+      '../../../../packages/tooling/src/token-checks/oklch-contrast.ts',
+    ]) {
+      const source = read(rel)
+      expect(source, rel).not.toMatch(/\+ 0\.05\)\s*\//)
+      expect(source, rel).toContain('wcagContrastRatio')
+    }
   })
 })

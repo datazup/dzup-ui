@@ -4,6 +4,9 @@
  * Validates that the compat adapter correctly maps old dzup-ui
  * single-component tabs API to the new vNext compound DzTabs API.
  */
+import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { resetDeprecationWarnings } from '../utils/deprecation.ts'
@@ -189,5 +192,19 @@ describe('dzTabsCompat', () => {
     })
     // Each tab trigger should have the closable behavior
     expect(wrapper.element).toBeTruthy()
+  })
+})
+
+describe('@dzup-ui/compat manifest (UI-DZUP-UI-ARCH-L-05)', () => {
+  // A regular dependency on core would publish as an exact version and give an
+  // app on a newer core a second, nested core — whose provider injection keys
+  // differ, so this adapter would lose the app's DzProvider context.
+  it('declares @dzup-ui/core as a peer (and a dev dependency), never a dependency', () => {
+    const manifest = JSON.parse(
+      readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../package.json'), 'utf8'),
+    ) as Record<string, Record<string, string> | undefined>
+    expect(manifest.dependencies?.['@dzup-ui/core']).toBeUndefined()
+    expect(manifest.peerDependencies?.['@dzup-ui/core']).toBeTruthy()
+    expect(manifest.devDependencies?.['@dzup-ui/core']).toBe('workspace:*')
   })
 })

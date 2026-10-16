@@ -50,6 +50,7 @@ import {
   themeRecipeToCssVariables,
   themeRecipeToUrl,
 } from '@dzup-ui/tokens'
+import { oklchLuminance, wcagContrastRatio } from '@dzup-ui/tokens/utils'
 import { computed, reactive, toRef, watch } from 'vue'
 import { SITE_ORIGIN } from '../origin.ts'
 
@@ -120,41 +121,9 @@ export const FONT_CHOICES: readonly FontChoice[] = Object.entries(THEME_RECIPE_F
 // Björn Ottosson's OKLab conversions. We convert an OKLCH triple straight to
 // linear-light sRGB and read the WCAG relative luminance off that (luminance is
 // defined on linear values), so contrast is computed from the SAME numbers the
-// browser paints — no hex round-trip, no per-channel gamma step.
-
-function clamp01(x: number): number {
-  return x < 0 ? 0 : x > 1 ? 1 : x
-}
-
-/** OKLCH (L 0–1, C, H°) → linear-light sRGB triple (unclamped). */
-function oklchToLinearSrgb(l: number, c: number, h: number): [number, number, number] {
-  const hr = (h * Math.PI) / 180
-  const a = c * Math.cos(hr)
-  const b = c * Math.sin(hr)
-  const l_ = l + 0.3963377774 * a + 0.2158037573 * b
-  const m_ = l - 0.1055613458 * a - 0.0638541728 * b
-  const s_ = l - 0.0894841775 * a - 1.291485548 * b
-  const lc = l_ ** 3
-  const mc = m_ ** 3
-  const sc = s_ ** 3
-  return [
-    4.0767416621 * lc - 3.3077115913 * mc + 0.2309699292 * sc,
-    -1.2684380046 * lc + 2.6097574011 * mc - 0.3413193965 * sc,
-    -0.0041960863 * lc - 0.7034186147 * mc + 1.707614701 * sc,
-  ]
-}
-
-/** WCAG relative luminance (0–1) of an OKLCH colour. */
-function oklchLuminance(l: number, c: number, h: number): number {
-  const [r, g, b] = oklchToLinearSrgb(l, c, h)
-  return 0.2126 * clamp01(r) + 0.7152 * clamp01(g) + 0.0722 * clamp01(b)
-}
-
-/** WCAG contrast ratio between two relative luminances. */
-function contrastRatio(a: number, b: number): number {
-  const [hi, lo] = a >= b ? [a, b] : [b, a]
-  return (hi + 0.05) / (lo + 0.05)
-}
+// browser paints — no hex round-trip, no per-channel gamma step. The forward
+// conversion and the ratio are the shared `@dzup-ui/tokens/utils` ones, the
+// same arithmetic the DESIGN.md contrast gate runs (UI-DZUP-UI-ARCH-L-07).
 
 /**
  * sRGB (0–255) → OKLCH. Powers the experimental "theme from image": a sampled
@@ -337,7 +306,7 @@ export function resolveSemanticEndpoint(map: Record<string, string>, token: stri
 
 function evalPairs(specs: readonly PairSpec[]): ContrastPair[] {
   return specs.map((spec) => {
-    const ratio = contrastRatio(endpointLum(spec.fg), endpointLum(spec.bg))
+    const ratio = wcagContrastRatio(endpointLum(spec.fg), endpointLum(spec.bg))
     return {
       label: spec.label,
       ratio,

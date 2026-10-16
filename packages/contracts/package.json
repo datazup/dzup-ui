@@ -16,6 +16,7 @@
     "safari >= 16.4",
     "ios_saf >= 16.4"
   ],
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

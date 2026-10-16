@@ -203,29 +203,63 @@ async function render(): Promise<void> {
 
 let observer: MutationObserver | null = null
 
-/** Ensure the overlay is attached to the root and carries its guard styles. */
+const OBSERVE_OPTIONS: MutationObserverInit = {
+  childList: true,
+  subtree: true,
+  attributes: true,
+  attributeFilter: ['style', 'class'],
+}
+
+/** Write an inline style property only when it differs from the wanted value. */
+function setStyle(el: HTMLElement, name: string, value: string): void {
+  if (el.style.getPropertyValue(name) !== value)
+    el.style.setProperty(name, value)
+}
+
+/**
+ * Ensure the overlay is attached to the root and carries every property that
+ * keeps it visible: its recipe class (inset, tiling, opacity token), the tile
+ * background and z-index from the props, and no inline `display`,
+ * `visibility` or `opacity` override. Vue does not re-patch `:style` after a
+ * direct DOM write, so the restore is done here rather than by re-rendering.
+ *
+ * The observer is disconnected around the writes so they never re-trigger it.
+ */
 function reapply(): void {
   const root = rootRef.value
   const overlay = overlayRef.value
   if (!root || !overlay)
     return
-  if (overlay.parentNode !== root)
-    root.appendChild(overlay)
-  overlay.style.pointerEvents = 'none'
-  overlay.style.position = 'absolute'
-  overlay.setAttribute('aria-hidden', 'true')
+  observer?.disconnect()
+  try {
+    if (overlay.parentNode !== root)
+      root.appendChild(overlay)
+    const overlayClass = styles.value.overlay()
+    if (overlay.getAttribute('class') !== overlayClass)
+      overlay.setAttribute('class', overlayClass)
+    setStyle(overlay, 'pointer-events', 'none')
+    setStyle(overlay, 'position', 'absolute')
+    for (const name of ['display', 'visibility', 'opacity']) {
+      if (overlay.style.getPropertyValue(name))
+        overlay.style.removeProperty(name)
+    }
+    const wanted = overlayStyle.value
+    setStyle(overlay, 'z-index', wanted.zIndex)
+    setStyle(overlay, 'background-image', wanted.backgroundImage ?? '')
+    setStyle(overlay, 'background-size', wanted.backgroundSize ?? '')
+    if (overlay.getAttribute('aria-hidden') !== 'true')
+      overlay.setAttribute('aria-hidden', 'true')
+  }
+  finally {
+    observer?.observe(root, OBSERVE_OPTIONS)
+  }
 }
 
 function startObserver(): void {
   if (observer || typeof MutationObserver === 'undefined' || !rootRef.value)
     return
   observer = new MutationObserver(() => reapply())
-  observer.observe(rootRef.value, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['style', 'class'],
-  })
+  observer.observe(rootRef.value, OBSERVE_OPTIONS)
 }
 
 function stopObserver(): void {

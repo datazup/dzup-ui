@@ -38,7 +38,7 @@ export const qrCodeVariants = tv({
       'border border-[var(--dz-border)] px-3 py-1 text-sm font-medium',
       'text-[var(--dz-foreground)]',
       'transition-colors hover:bg-[var(--dz-muted)]',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dz-primary)]',
+      'dz-focus-ring-control',
     ].join(' '),
   },
 

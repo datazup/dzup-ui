@@ -260,6 +260,64 @@ export function packageVersions(root: string = ROOT): Record<string, string> {
   return versions
 }
 
+/**
+ * Every workspace package's `exports` keys, by package name (`.`, `./theme-script`, …).
+ *
+ * A package with no `exports` field maps to `['.']`: its root resolves through
+ * `main`/`module` and nothing deeper is reachable under Node's ESM rules.
+ */
+export function packageExportKeys(root: string = ROOT): Record<string, string[]> {
+  const keys: Record<string, string[]> = {}
+  const packagesDir = join(root, 'packages')
+  if (!existsSync(packagesDir))
+    return keys
+  for (const dir of readdirSync(packagesDir)) {
+    const manifest = join(packagesDir, dir, 'package.json')
+    if (!existsSync(manifest))
+      continue
+    const pkg = JSON.parse(readFileSync(manifest, 'utf8')) as { name?: string, exports?: unknown }
+    if (!pkg.name)
+      continue
+    keys[pkg.name] = pkg.exports && typeof pkg.exports === 'object' && !Array.isArray(pkg.exports)
+      ? Object.keys(pkg.exports).filter(k => k.startsWith('.'))
+      : ['.']
+  }
+  return keys
+}
+
+/** Does an exports map (its keys only) admit `subpath` — exactly, or through one `*` pattern? */
+export function isExportedSubpath(keys: readonly string[], subpath: string): boolean {
+  return keys.some((key) => {
+    const star = key.indexOf('*')
+    if (star === -1)
+      return key === subpath
+    const prefix = key.slice(0, star)
+    const suffix = key.slice(star + 1)
+    return subpath.length > prefix.length + suffix.length
+      && subpath.startsWith(prefix)
+      && subpath.endsWith(suffix)
+  })
+}
+
+/**
+ * The `@dzup-ui/<pkg>[/<sub>]` specifiers a record names as importable: every
+ * quoted specifier in `replacementExample` (both the old and the new side — a
+ * deprecated path no consumer can import is not a migration anybody performs),
+ * plus the `symbol` itself for a `module` record, which names a path by
+ * definition (UI-DZUP-UI-ARCH-L-04).
+ */
+function namedSpecifiers(record: DeprecationRecord): string[] {
+  const found = new Set<string>()
+  for (const m of (record.replacementExample ?? '').matchAll(/['"](@dzup-ui\/[\w.-]+(?:\/[\w.-]+)*)['"]/g))
+    found.add(m[1] as string)
+  if (record.kind === 'module') {
+    const m = /^(@dzup-ui\/[\w.-]+(?:\/[\w.-]+)*)/.exec(record.symbol)
+    if (m)
+      found.add(m[1] as string)
+  }
+  return [...found]
+}
+
 // --- The check --------------------------------------------------------------
 
 export type DeprecationRule
@@ -268,6 +326,7 @@ export type DeprecationRule
     | 'ambiguous-annotation'
     | 'removal-overdue'
     | 'missing-codemod'
+    | 'unexported-path'
     | 'schema'
 
 export interface DeprecationViolation {
@@ -314,6 +373,7 @@ export function checkDeprecations(
   const claimed = new Map<string, DeprecationRecord>()
 
   const key = (a: Annotation): string => `${a.file}:${a.line}`
+  const exportKeys = packageExportKeys(root)
 
   for (const record of registry.records) {
     const inFile = annotations.filter(a => a.file === record.annotation.file)
@@ -416,6 +476,23 @@ export function checkDeprecations(
         detail: '`codemod` is null and no written `migration` instructions are recorded',
         remedy: 'VERSIONING.md §4 allows written instructions where the change is not mechanical — write them',
       })
+    }
+
+    for (const specifier of namedSpecifiers(record)) {
+      const [scope, name, ...rest] = specifier.split('/')
+      const keys = exportKeys[`${scope}/${name}`]
+      // A package outside this workspace is not this ledger's to check.
+      if (keys === undefined)
+        continue
+      const subpath = rest.length === 0 ? '.' : `./${rest.join('/')}`
+      if (!isExportedSubpath(keys, subpath)) {
+        violations.push({
+          rule: 'unexported-path',
+          subject: record.symbol,
+          detail: `names \`${specifier}\`, but ${scope}/${name}'s exports map has no \`${subpath}\` — no consumer can import it`,
+          remedy: 'name a path the exports map admits, or say in the record that the path was never exported',
+        })
+      }
     }
 
     if (!record.replacement) {

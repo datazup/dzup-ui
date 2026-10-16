@@ -27,13 +27,14 @@
     "build": "vite build"
   },
   "peerDependencies": {
+    "@dzup-ui/core": ">=0.2.0",
     "vue": "^3.5.0"
   },
   "dependencies": {
-    "@dzup-ui/contracts": "workspace:*",
-    "@dzup-ui/core": "workspace:*"
+    "@dzup-ui/contracts": "workspace:*"
   },
   "devDependencies": {
+    "@dzup-ui/core": "workspace:*",
     "typescript": "^5.8.3",
     "vite": "^7",
     "vite-plugin-dts": "^4.5.4",

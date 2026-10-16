@@ -8,8 +8,15 @@
  * meter, a terms DzCheckbox, the primary DzButton, a labelled DzDivider and
  * social providers. Built only from free `@dzup-ui/core` components, token-styled,
  * light + dark, 390px → up.
+ *
+ * Submitting shows a pending button, then a success or error message. Pass
+ * `submit` to call your own API (resolve = account created, reject = show the
+ * error); without it a short simulated request demonstrates the states. The
+ * Sign in, Terms and Privacy destinations are props so a copy points at your
+ * own routes (UI-DZUP-UI-UX-H-02).
  */
 import {
+  DzAlert,
   DzButton,
   DzCard,
   DzCheckbox,
@@ -32,6 +39,55 @@ const Github = createLucideIcon('github', [
   ['path', { d: 'M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4' }],
   ['path', { d: 'M9 18c-4.51 2-5-2-7-2' }],
 ])
+
+/** What the form hands to `submit`. */
+export interface SignUpValues {
+  name: string
+  email: string
+  password: string
+}
+
+const props = withDefaults(defineProps<{
+  /** Called with the form values; resolve on success, reject (with an Error) on failure. */
+  submit?: (values: SignUpValues) => Promise<void>
+  /** "Already have an account? Sign in" destination. */
+  signInHref?: string
+  /** Terms of service destination. */
+  termsHref?: string
+  /** Privacy policy destination. */
+  privacyHref?: string
+}>(), {
+  submit: undefined,
+  signInHref: '/sign-in',
+  termsHref: '/terms',
+  privacyHref: '/privacy',
+})
+
+/** Stand-in request so the preview shows the pending and success states. */
+function simulatedSubmit(): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, 800))
+}
+
+type SubmitState = 'idle' | 'pending' | 'success' | 'error'
+const state = ref<SubmitState>('idle')
+const errorMessage = ref('')
+
+async function onSubmit(): Promise<void> {
+  if (!agreed.value || state.value === 'pending')
+    return
+  state.value = 'pending'
+  errorMessage.value = ''
+  try {
+    await (props.submit ?? simulatedSubmit)({ name: name.value, email: email.value, password: password.value })
+    state.value = 'success'
+  }
+  catch (error) {
+    errorMessage.value = error instanceof Error && error.message
+      ? error.message
+      : 'We couldn\'t create your account. Check your details and try again.'
+    state.value = 'error'
+  }
+}
 
 const name = ref('Ava Kessler')
 const email = ref('ava@northwind.io')
@@ -109,7 +165,7 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
         </header>
 
         <DzCard variant="elevated" padding="lg" class="auth-card">
-          <form class="auth-form" @submit.prevent>
+          <form class="auth-form" :aria-busy="state === 'pending'" @submit.prevent="onSubmit">
             <DzFormField>
               <DzFormLabel>Full name</DzFormLabel>
               <DzInput
@@ -151,12 +207,17 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
               </div>
             </DzFormField>
 
-            <DzCheckbox v-model="agreed">
-              <span class="terms">
-                I agree to the <a class="link" href="#">Terms</a> and
-                <a class="link" href="#">Privacy Policy</a>.
-              </span>
-            </DzCheckbox>
+            <!-- The links sit beside the checkbox, never inside its label: a
+                 click on a link inside a label also toggles the box. -->
+            <div class="terms-row">
+              <DzCheckbox v-model="agreed">
+                <span class="terms">I agree to the Terms and Privacy Policy</span>
+              </DzCheckbox>
+              <DzText size="xs" tone="muted" as="p" class="terms-links">
+                Read the <a class="link" :href="props.termsHref">Terms</a> and the
+                <a class="link" :href="props.privacyHref">Privacy Policy</a>.
+              </DzText>
+            </div>
 
             <DzButton
               type="submit"
@@ -164,9 +225,20 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
               tone="primary"
               class="auth-submit"
               :disabled="!agreed"
+              :loading="state === 'pending'"
             >
-              Create account
+              {{ state === 'pending' ? 'Creating account…' : 'Create account' }}
             </DzButton>
+
+            <!-- Always mounted, so the result is announced when it appears. -->
+            <div class="auth-result" role="status" aria-live="polite">
+              <DzAlert v-if="state === 'success'" tone="success" title="Account created">
+                We sent a confirmation link to {{ email }}.
+              </DzAlert>
+              <DzAlert v-else-if="state === 'error'" tone="danger" title="Sign-up failed">
+                {{ errorMessage }}
+              </DzAlert>
+            </div>
 
             <div class="or-divider" role="separator" aria-label="or sign up with">
               <DzDivider decorative class="or-line" />
@@ -205,7 +277,7 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
 
         <DzText size="sm" tone="muted" class="auth-foot">
           Already have an account?
-          <a class="link" href="#">Sign in</a>
+          <a class="link" :href="props.signInHref">Sign in</a>
         </DzText>
       </div>
     </main>
@@ -411,9 +483,23 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
   flex: 1;
 }
 
+.terms-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .terms {
   font-size: var(--dz-text-sm);
   line-height: 1.4;
+}
+
+.terms-links {
+  margin: 0;
+}
+
+.auth-result:empty {
+  display: none;
 }
 
 .link {

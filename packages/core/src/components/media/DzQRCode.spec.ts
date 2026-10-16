@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { mount } from '@vue/test-utils'
 /**
  * DzQRCode — Unit / behavior tests.
@@ -101,5 +104,34 @@ describe('dzQRCode — Unit Tests', () => {
       attrs: { 'data-testid': 'qr' },
     })
     expect(wrapper.attributes('data-testid')).toBe('qr')
+  })
+})
+
+describe('focus indicator (UI-DZUP-UI-DESIGN-L-05)', () => {
+  it('the refresh action uses the shared outline-based control ring', () => {
+    const wrapper = mount(DzQRCode, { props: { value: 'x', status: 'expired' } })
+    const cls = wrapper.find('button').classes()
+    expect(cls).toContain('dz-focus-ring-control')
+    expect(cls).not.toContain('focus-visible:ring-2')
+    expect(cls).not.toContain('focus-visible:outline-none')
+  })
+
+  it('no recipe under components/ swaps the outline for a box-shadow ring', () => {
+    // forced-colors mode drops box-shadow, so `focus-visible:outline-none` +
+    // `focus-visible:ring-2` leaves Windows High Contrast users with no focus.
+    const components = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+    const offenders: string[] = []
+    for (const family of readdirSync(components, { withFileTypes: true })) {
+      if (!family.isDirectory())
+        continue
+      for (const file of readdirSync(join(components, family.name))) {
+        if (!/\.(?:variants\.ts|vue)$/.test(file))
+          continue
+        const source = readFileSync(join(components, family.name, file), 'utf8')
+        if (source.includes('focus-visible:outline-none') && source.includes('focus-visible:ring-2'))
+          offenders.push(`${family.name}/${file}`)
+      }
+    }
+    expect(offenders).toEqual([])
   })
 })

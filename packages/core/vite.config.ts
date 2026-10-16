@@ -75,6 +75,10 @@ const config = createLibConfig({
     'providers/index': 'src/providers/index.ts',
     // `./theme-script`: Vue-free, so @dzup-ui/nuxt can load it at build time.
     'providers/theme-script': 'src/providers/theme-script.ts',
+    // `./composables` and `./utilities`: the public composables and `cn`
+    // without the component families or the base stylesheet (UI-DZUP-UI-ARCH-M-03).
+    'composables/index': 'src/composables/index.ts',
+    'utilities/index': 'src/utilities/index.ts',
     'i18n/index': 'src/i18n/index.ts',
     ...familyEntries,
   },

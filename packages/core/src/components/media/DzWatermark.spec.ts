@@ -193,6 +193,71 @@ describe('dzWatermark — Unit Tests', () => {
       wrapper.unmount()
     })
 
+    const tampers: Array<[string, (el: HTMLElement) => void]> = [
+      ['display:none', el => void (el.style.display = 'none')],
+      ['visibility:hidden', el => void (el.style.visibility = 'hidden')],
+      ['opacity:0', el => void (el.style.opacity = '0')],
+      ['a cleared background image', el => void (el.style.backgroundImage = '')],
+      ['a removed class', el => el.removeAttribute('class')],
+    ]
+
+    async function mountTampered(observe: boolean, tamper: (el: HTMLElement) => void) {
+      const wrapper = mount(DzWatermark, {
+        props: { content: 'x', observe },
+        attachTo: document.body,
+      })
+      await flushPromises()
+      const overlay = wrapper.find('[aria-hidden="true"]').element as HTMLElement
+      const original = {
+        className: overlay.getAttribute('class'),
+        backgroundImage: overlay.style.backgroundImage,
+      }
+      expect(original.className).toBeTruthy()
+      expect(original.backgroundImage).toContain('MOCK')
+      tamper(overlay)
+      return { wrapper, overlay, original }
+    }
+
+    for (const [label, tamper] of tampers) {
+      it(`restores the overlay after ${label} when observe is on`, async () => {
+        const { wrapper, overlay, original } = await mountTampered(true, tamper)
+        await settle(() => {
+          expect(overlay.getAttribute('class')).toBe(original.className)
+          expect(overlay.style.backgroundImage).toBe(original.backgroundImage)
+          expect(overlay.style.display).toBe('')
+          expect(overlay.style.visibility).toBe('')
+          expect(overlay.style.opacity).toBe('')
+        })
+        wrapper.unmount()
+      })
+
+      it(`leaves ${label} in place when observe is off`, async () => {
+        const { wrapper, overlay, original } = await mountTampered(false, tamper)
+        await flushPromises()
+        const restored = overlay.getAttribute('class') === original.className
+          && overlay.style.backgroundImage === original.backgroundImage
+          && overlay.style.display === ''
+          && overlay.style.visibility === ''
+          && overlay.style.opacity === ''
+        expect(restored).toBe(false)
+        wrapper.unmount()
+      })
+    }
+
+    it('does not loop on its own restoring writes', async () => {
+      const observed = vi.spyOn(MutationObserver.prototype, 'observe')
+      const { wrapper, overlay } = await mountTampered(true, el => void (el.style.display = 'none'))
+      await settle(() => expect(overlay.style.display).toBe(''))
+      await flushPromises()
+      const calls = observed.mock.calls.length
+      await flushPromises()
+      await flushPromises()
+      // A feedback loop would keep re-entering reapply() and re-observing.
+      expect(observed.mock.calls.length).toBe(calls)
+      observed.mockRestore()
+      wrapper.unmount()
+    })
+
     it('does not re-attach the overlay when observe is off', async () => {
       const wrapper = mount(DzWatermark, {
         props: { content: 'x', observe: false },

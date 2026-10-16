@@ -126,6 +126,25 @@ describe('the documented default', () => {
   it('is frozen — a policy a consumer can mutate in place is not a policy', () => {
     expect(Object.isFrozen(DZ_DEFAULT_URL_POLICY)).toBe(true)
   })
+
+  it('is frozen all the way down — the scheme list and the sanitizer ceilings too', () => {
+    expect(Object.isFrozen(DZ_ALLOWED_URL_SCHEMES)).toBe(true)
+    expect(Object.isFrozen(DZ_DEFAULT_URL_POLICY.allowedSchemes)).toBe(true)
+    expect(Object.isFrozen(DZ_PROVIDER_DEFAULTS)).toBe(true)
+    expect(Object.isFrozen(DZ_PROVIDER_DEFAULTS.urlPolicy)).toBe(true)
+    expect(Object.isFrozen(DZ_PROVIDER_DEFAULTS.urlPolicy.allowedSchemes)).toBe(true)
+    expect(Object.isFrozen(DZ_PROVIDER_DEFAULTS.sanitizer.limits)).toBe(true)
+  })
+
+  it('refuses a cast-based widening and keeps refusing javascript:', () => {
+    // ES modules are strict, so a write to a frozen object throws.
+    expect(() => (DZ_ALLOWED_URL_SCHEMES as string[]).push('javascript')).toThrow(TypeError)
+    expect(() => (DZ_DEFAULT_URL_POLICY.allowedSchemes as string[]).push('javascript')).toThrow(TypeError)
+    const limits = DZ_PROVIDER_DEFAULTS.sanitizer.limits as { maxLength: number }
+    expect(() => { limits.maxLength = Number.MAX_SAFE_INTEGER }).toThrow(TypeError)
+    expect(DZ_PROVIDER_DEFAULTS.sanitizer.limits.maxLength).toBe(128 * 1024)
+    expect(DZ_DEFAULT_URL_POLICY.isAllowed('javascript:alert(1)', NAV)).toBe(false)
+  })
 })
 
 describe('resolveUrlPolicy — the provider fold', () => {

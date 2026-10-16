@@ -23,6 +23,7 @@
 
 import type { ComputedRef, Ref } from 'vue'
 import { RADIUS_SCALE, SPACING_SCALE } from '@dzup-ui/tokens'
+import { wcagContrastRatio } from '@dzup-ui/tokens/utils'
 import { computed, ref } from 'vue'
 
 /** Density presets → a multiplier applied to the whole `--dz-spacing-*` scale. */
@@ -78,12 +79,6 @@ function relativeLuminance([r, g, b]: [number, number, number]): number {
     return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
   }
   return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
-}
-
-/** WCAG contrast ratio between two relative luminances. */
-function contrastRatio(a: number, b: number): number {
-  const [hi, lo] = a >= b ? [a, b] : [b, a]
-  return (hi + 0.05) / (lo + 0.05)
 }
 
 /** Multiply a `<n>rem` / `<n>px` length by `factor`, preserving its unit. */
@@ -148,8 +143,8 @@ const brandForeground = computed<string>(() => {
   const lum = brandLuminance.value
   if (lum === null)
     return 'var(--dz-colors-neutral-50)'
-  const onLight = contrastRatio(lum, FG_LIGHT_LUM)
-  const onDark = contrastRatio(lum, FG_DARK_LUM)
+  const onLight = wcagContrastRatio(lum, FG_LIGHT_LUM)
+  const onDark = wcagContrastRatio(lum, FG_DARK_LUM)
   return onDark >= onLight ? 'var(--dz-colors-neutral-950)' : 'var(--dz-colors-neutral-50)'
 })
 
@@ -157,7 +152,7 @@ const brandContrast = computed<number | null>(() => {
   const lum = brandLuminance.value
   if (lum === null)
     return null
-  return Math.max(contrastRatio(lum, FG_LIGHT_LUM), contrastRatio(lum, FG_DARK_LUM))
+  return Math.max(wcagContrastRatio(lum, FG_LIGHT_LUM), wcagContrastRatio(lum, FG_DARK_LUM))
 })
 
 const contrastWarning = computed<string | null>(() => {

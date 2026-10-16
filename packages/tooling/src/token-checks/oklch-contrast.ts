@@ -7,8 +7,19 @@
  * DESIGN.md gate can assert documented color pairs meet AA — without pulling in
  * a color library (per the plan's "reuse, don't add a color lib" note).
  *
- * Conversion follows Björn Ottosson's OKLab reference matrices.
+ * The arithmetic itself — OKLab matrices, WCAG luminance, the ratio — lives in
+ * `@dzup-ui/tokens/utils` (`packages/tokens/src/utils/contrast.ts`), shared
+ * with the landing theme designer so the gate and the site cannot disagree
+ * (UI-DZUP-UI-ARCH-L-07). This module adds the `oklch()` string parsing and the
+ * hex round-trip the gates need.
  */
+
+import {
+  clampUnit,
+  oklchToLinearSrgb,
+  wcagContrastRatio,
+  wcagLuminanceFromLinear,
+} from '../../../tokens/src/utils/contrast.js'
 
 /** Parsed OKLCH components: L in 0–1, C ≥ 0, H in degrees. */
 export interface Oklch {
@@ -42,29 +53,10 @@ export function parseOklch(value: string): Oklch | null {
   return { l, c, h }
 }
 
-const clamp01 = (n: number): number => (n < 0 ? 0 : n > 1 ? 1 : n)
-
 /** Convert OKLCH to linear-light sRGB (channels clamped into gamut). */
 export function oklchToLinearRgb({ l, c, h }: Oklch): LinearRgb {
-  const hRad = (h * Math.PI) / 180
-  const a = c * Math.cos(hRad)
-  const bComp = c * Math.sin(hRad)
-
-  // OKLab → LMS (cube of the linearized cone responses)
-  const lp = l + 0.396_337_777_4 * a + 0.215_803_757_3 * bComp
-  const mp = l - 0.105_561_345_8 * a - 0.063_854_172_8 * bComp
-  const sp = l - 0.089_484_177_5 * a - 1.291_485_548_0 * bComp
-
-  const lc = lp * lp * lp
-  const mc = mp * mp * mp
-  const sc = sp * sp * sp
-
-  // LMS → linear sRGB
-  const r = 4.076_741_662_1 * lc - 3.307_711_591_3 * mc + 0.230_969_929_2 * sc
-  const g = -1.268_438_004_6 * lc + 2.609_757_401_1 * mc - 0.341_319_396_5 * sc
-  const b = -0.004_196_086_3 * lc - 0.703_418_614_7 * mc + 1.707_614_701_0 * sc
-
-  return { r: clamp01(r), g: clamp01(g), b: clamp01(b) }
+  const [r, g, b] = oklchToLinearSrgb(l, c, h)
+  return { r: clampUnit(r), g: clampUnit(g), b: clampUnit(b) }
 }
 
 /**
@@ -115,7 +107,7 @@ export function relativeLuminance(value: string): number | null {
   }
   const { r, g, b } = oklchToLinearRgb(oklch)
   // Linear channels are already gamma-decoded; WCAG luminance is a direct dot.
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+  return wcagLuminanceFromLinear(r, g, b)
 }
 
 /**
@@ -128,7 +120,5 @@ export function contrastRatio(a: string, b: string): number | null {
   if (la === null || lb === null) {
     return null
   }
-  const lighter = Math.max(la, lb)
-  const darker = Math.min(la, lb)
-  return (lighter + 0.05) / (darker + 0.05)
+  return wcagContrastRatio(la, lb)
 }

@@ -22,7 +22,7 @@ export const anchorVariants = tv({
       'text-[var(--dz-anchor-color)]',
       'transition-colors',
       'hover:text-[var(--dz-anchor-hover-color)]',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dz-ring)]',
+      'dz-focus-ring-control',
     ].join(' '),
   },
   variants: {
