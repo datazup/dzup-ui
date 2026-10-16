@@ -127,7 +127,7 @@ describe('declaration blocks reconstructed from the token maps', () => {
       '@layer dz-tokens::' + ':root',
       '@layer dz-tokens::' + ':root, [data-theme="light"]',
       '@layer dz-tokens::' + '[data-theme="dark"]',
-      '@layer dz-tokens|@media (prefers-color-scheme: dark)::' + ':root:not([data-theme="light"])',
+      '@layer dz-tokens|@media (prefers-color-scheme: dark)::' + ':root:not([data-theme="light"], [data-theme="high-contrast"])',
       '@layer dz-tokens::' + ':root',
     ])
   })

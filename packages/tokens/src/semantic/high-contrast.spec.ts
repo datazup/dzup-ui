@@ -1,3 +1,7 @@
+import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import { describe, expect, it } from 'vitest'
 
 import { DARK_SEMANTIC_TOKENS } from './dark.js'
@@ -116,5 +120,69 @@ describe('high-contrast semantic tokens', () => {
     for (const ceiling of HIGH_CONTRAST_CEILINGS) {
       expect(ceiling.note.length, ceiling.id).toBeGreaterThan(80)
     }
+  })
+})
+
+/**
+ * UI-DZUP-UI-DESIGN-H-03. tokens.css and tokens.high-contrast.css share
+ * @layer dz-tokens, so between the OS-dark fallback and the high-contrast
+ * opt-in specificity decides before source order does. generate.ts runs its
+ * writer on import, so the selectors are read from its source text.
+ */
+describe('high-contrast opt-in versus the OS-dark fallback', () => {
+  const generateSource = readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), '../generate.ts'),
+    'utf-8',
+  )
+  const fallback = /const OS_DARK_FALLBACK_SELECTOR = '([^']+)'/.exec(generateSource)?.[1] ?? ''
+  const optIn = '[data-theme="high-contrast"]'
+
+  /** (a, b, c) specificity for the selector shapes generate.ts emits. */
+  function specificity(selector: string): [number, number, number] {
+    let rest = selector
+    let b = 0
+    // :not() counts as its most specific argument; every argument here is one
+    // attribute selector, so it contributes (0,1,0).
+    rest = rest.replace(/:not\(([^()]*)\)/g, () => {
+      b += 1
+      return ''
+    })
+    b += (rest.match(/:root/g) ?? []).length
+    rest = rest.replace(/:root/g, '')
+    b += (rest.match(/\[[^\]]+\]/g) ?? []).length
+    rest = rest.replace(/\[[^\]]+\]/g, '')
+    expect(rest.trim(), `unexpected selector part in ${selector}`).toBe('')
+    return [0, b, 0]
+  }
+
+  /** Whether the fallback matches a root element carrying data-theme=theme. */
+  function fallbackMatchesRoot(theme: string | null): boolean {
+    const excluded = [...(/:not\(([^()]*)\)/.exec(fallback)?.[1] ?? '').matchAll(/\[data-theme="([^"]+)"\]/g)]
+      .map(match => match[1])
+    return theme === null || !excluded.includes(theme)
+  }
+
+  it('emits the fallback selector inside the prefers-color-scheme: dark block', () => {
+    expect(fallback).not.toBe('')
+    expect(generateSource).toMatch(
+      /@media \(prefers-color-scheme: dark\) \{\s*\$\{OS_DARK_FALLBACK_SELECTOR\} \{/,
+    )
+    expect(generateSource).toContain(`${optIn} {`)
+  })
+
+  it('outranks the opt-in, so it must never match a high-contrast root', () => {
+    // The relation this pins: the fallback is MORE specific than the opt-in, so
+    // the only thing keeping a dark OS from overwriting all 115 opt-in values
+    // is the fallback excluding the theme. Lowering the fallback to (0,1,0)
+    // would make import order decide instead; either change must update this.
+    expect(specificity(fallback)).toEqual([0, 2, 0])
+    expect(specificity(optIn)).toEqual([0, 1, 0])
+    expect(fallbackMatchesRoot('high-contrast')).toBe(false)
+  })
+
+  it('still applies to a root with no theme or the dark theme, never to light', () => {
+    expect(fallbackMatchesRoot(null)).toBe(true)
+    expect(fallbackMatchesRoot('dark')).toBe(true)
+    expect(fallbackMatchesRoot('light')).toBe(false)
   })
 })

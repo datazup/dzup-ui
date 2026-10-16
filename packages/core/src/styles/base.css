@@ -505,11 +505,21 @@
    5c. Component Tokens (layered)
    Component-local custom properties mapped to semantic tokens (ADR-04/ADR-17).
    Declared in the dz-components layer so consumer utilities still win.
+
+   The defaults are declared at :where(:root), not on the component element
+   (UI-DZUP-UI-DESIGN-H-01). A declaration on the element itself always beats
+   the value it would inherit, so a consumer re-map at :root or on a theme
+   wrapper (the styling contract's "re-map one and every instance follows")
+   never reached the component. :where() keeps the default at zero
+   specificity, the same root scope the component tier of tokens.css uses.
+
+   Only the variant hooks below — [data-size], [data-variant], [data-tone] —
+   stay on the element, because they are per-instance by definition.
    ========================================================================== */
 
 @layer dz-components {
   /* DzCalendar — cell sizing, today ring, selected/range fills, muting */
-  .dz-calendar {
+  :where(:root) {
     --dz-calendar-cell-size: 2.25rem;
     --dz-calendar-cell-radius: var(--dz-radius-sm);
     --dz-calendar-cell-foreground: var(--dz-foreground);
@@ -546,7 +556,7 @@
   }
 
   /* DzDataView — container gap, list dividers, list-row padding */
-  .dz-data-view {
+  :where(:root) {
     --dz-data-view-gap: var(--dz-spacing-4);
     --dz-data-view-toolbar-gap: var(--dz-spacing-3);
     --dz-data-view-list-divider: var(--dz-border);
@@ -569,7 +579,7 @@
   }
 
   /* DzInfiniteScroll — sentinel height + status-row spacing */
-  .dz-infinite-scroll {
+  :where(:root) {
     --dz-infinite-scroll-sentinel-size: var(--dz-spacing-1);
     --dz-infinite-scroll-status-gap: var(--dz-spacing-2);
     --dz-infinite-scroll-status-padding-y: var(--dz-spacing-4);
@@ -586,31 +596,31 @@
   }
 
   /* DzAnimatedNumber — affix gap, figure weight + tracking */
-  .dz-animated-number {
+  :where(:root) {
     --dz-animated-number-gap: var(--dz-spacing-1);
     --dz-animated-number-font-weight: var(--dz-font-semibold);
     --dz-animated-number-tracking: var(--dz-tracking-tight);
   }
 
   /* DzRelativeTime — font size (inherits the shared small text scale) */
-  .dz-relative-time {
+  :where(:root) {
     --dz-relative-time-font-size: var(--dz-text-sm);
   }
 
   /* DzDeferredContent — reserved height before content mounts */
-  .dz-deferred-content {
+  :where(:root) {
     --dz-deferred-content-min-height: var(--dz-spacing-32);
   }
 
   /* DzCountdown — figure spacing, weight, and tracking (size/tone via tv()) */
-  .dz-countdown {
+  :where(:root) {
     --dz-countdown-gap: var(--dz-spacing-2);
     --dz-countdown-font-weight: var(--dz-font-bold);
     --dz-countdown-tracking: var(--dz-tracking-tight);
   }
 
   /* DzKbd — keyboard-key chip: surface, gap, per-size geometry */
-  .dz-kbd {
+  :where(:root) {
     --dz-kbd-bg: var(--dz-muted);
     --dz-kbd-fg: var(--dz-foreground);
     --dz-kbd-border: var(--dz-border);
@@ -650,7 +660,7 @@
   }
 
   /* DzMegaMenu — menubar gap + dropdown panel/column spacing */
-  .dz-mega-menu {
+  :where(:root) {
     --dz-menu-bar-gap: var(--dz-spacing-1);
     --dz-menu-panel-offset: var(--dz-spacing-1);
     --dz-menu-panel-padding: var(--dz-spacing-4);
@@ -659,7 +669,7 @@
   }
 
   /* DzAnchor — scrollspy TOC: indentation, link spacing, rail + active colors */
-  .dz-anchor {
+  :where(:root) {
     --dz-anchor-font-size: var(--dz-text-sm);
     --dz-anchor-item-gap: var(--dz-spacing-1_5);
     --dz-anchor-indent: var(--dz-spacing-4);
@@ -670,7 +680,7 @@
   }
 
   /* DzFab — circular dimension, glyph size, and elevation (size-scaled) */
-  .dz-fab {
+  :where(:root) {
     --dz-fab-size: var(--dz-spacing-14);
     --dz-fab-icon-size: var(--dz-spacing-6);
     --dz-fab-shadow: var(--dz-shadow-lg);
@@ -705,14 +715,14 @@
   }
 
   /* DzBackTop — fixed-corner placement and fade/slide entrance */
-  .dz-back-top {
+  :where(:root) {
     --dz-back-top-offset: var(--dz-spacing-6);
     --dz-back-top-z: 40;
     --dz-back-top-transition: 200ms;
   }
 
   /* DzScrollProgress — edge-pinned reading-progress bar / corner ring */
-  .dz-scroll-progress {
+  :where(:root) {
     --dz-scroll-progress-height: var(--dz-spacing-1);
     --dz-scroll-progress-track: transparent;
     --dz-scroll-progress-z: 50;
@@ -721,13 +731,13 @@
   }
 
   /* DzColorModeToggle — inline glyph sizing and icon-swap transition */
-  .dz-color-mode-toggle {
+  :where(:root) {
     --dz-color-mode-toggle-icon-size: var(--dz-spacing-5);
     --dz-color-mode-toggle-transition: 200ms;
   }
 
   /* DzBlockUI — content mask scrim, blur, message, and stacking order */
-  .dz-block-ui {
+  :where(:root) {
     --dz-blockui-mask: var(--dz-overlay-bg);
     --dz-blockui-blur: 0px;
     --dz-blockui-radius: var(--dz-radius-md);
@@ -738,14 +748,14 @@
   }
 
   /* DzWatermark — tiled mark color, subtlety (opacity), and stacking order */
-  .dz-watermark {
+  :where(:root) {
     --dz-watermark-color: var(--dz-muted-foreground);
     --dz-watermark-opacity: 0.15;
     --dz-watermark-z: 9;
   }
 
   /* DzInplace — display affordance (hover hint) and editor wrapper */
-  .dz-inplace {
+  :where(:root) {
     --dz-inplace-gap: var(--dz-spacing-2);
     --dz-inplace-padding-x: var(--dz-spacing-2);
     --dz-inplace-padding-y: var(--dz-spacing-1);
@@ -757,7 +767,7 @@
   }
 
   /* DzFloatLabel — floating-label rest/float typography and color */
-  .dz-float-label {
+  :where(:root) {
     --dz-float-label-color: var(--dz-muted-foreground);
     --dz-float-label-active-color: var(--dz-primary);
     --dz-float-label-rest-font-size: var(--dz-text-base);
@@ -769,7 +779,7 @@
   }
 
   /* DzOrderList — reorderable list surface, handle, and drop indicator */
-  .dz-order-list {
+  :where(:root) {
     --dz-order-list-gap: var(--dz-spacing-2);
     --dz-order-list-control-gap: var(--dz-spacing-1);
     --dz-order-list-radius: var(--dz-radius-md);
@@ -791,7 +801,7 @@
   }
 
   /* DzToolbar — gap/padding density (size) and surface treatment (variant) */
-  .dz-toolbar {
+  :where(:root) {
     --dz-toolbar-gap: var(--dz-spacing-2);
     --dz-toolbar-padding-x: var(--dz-spacing-4);
     --dz-toolbar-padding-y: var(--dz-spacing-2);
@@ -838,7 +848,7 @@
   }
 
   /* DzPanel — titled container density (size), surface (variant), accent (tone) */
-  .dz-panel {
+  :where(:root) {
     --dz-panel-radius: var(--dz-radius-md);
     --dz-panel-bg: var(--dz-surface);
     --dz-panel-foreground: var(--dz-foreground);

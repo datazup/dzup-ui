@@ -329,6 +329,45 @@ describe('dzDataGrid — Filtering', () => {
     expect(wrapper.emitted('filter')).toBeTruthy()
   })
 
+  it('keeps the header and the focused filter input when a filter matches no rows', async () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data: testData, columns: filterableColumns, filterable: true },
+      attachTo: document.body,
+    })
+    try {
+      await wrapper.get('[data-testid="filter-trigger"]').trigger('click')
+      const input = wrapper.get('[data-testid="filter-text-input"] input')
+      ;(input.element as HTMLInputElement).focus()
+      await input.setValue('zzz-no-match')
+
+      // The table, its header, the popover input and its clear button survive.
+      expect(wrapper.find('thead').exists()).toBe(true)
+      expect(wrapper.find('[data-testid="filter-text-input"] input').element).toBe(input.element)
+      expect(document.activeElement).toBe(input.element)
+      expect(wrapper.find('[data-testid="filter-clear-button"]').exists()).toBe(true)
+
+      // The empty row is filter-specific, not the no-data copy.
+      const empty = wrapper.get('tbody [data-part="empty"]')
+      expect(empty.text()).toContain('No rows match the current filters')
+      expect(wrapper.text()).not.toContain('No data available')
+      expect(empty.element.closest('td')!.getAttribute('colspan')).toBe(String(filterableColumns.length))
+
+      await wrapper.get('[data-testid="filter-clear-all-button"]').trigger('click')
+      expect(wrapper.emitted('update:filters')?.at(-1)).toEqual([[]])
+      expect(wrapper.find('[data-part="empty"]').exists()).toBe(false)
+      expect(wrapper.text()).toContain('Bob')
+    }
+    finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('still shows the empty state when there is no data and no filter', () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true, data: [] })
+    expect(wrapper.find('table').exists()).toBe(false)
+    expect(wrapper.text()).toContain('No data available')
+  })
+
   it('shows active filter indicator', async () => {
     const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')

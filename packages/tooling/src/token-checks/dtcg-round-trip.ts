@@ -37,7 +37,7 @@
  *   1. `:root`                              — primitives
  *   2. `:root, [data-theme="light"]`        — light semantics
  *   3. `[data-theme="dark"]`                — dark semantics + dark shadows
- *   4. `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }`
+ *   4. `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"], [data-theme="high-contrast"]) }`
  *   5. `:root`                              — component tokens
  *
  * Blocks 1, 2, 3 and 5 all have specificity (0,1,0), so **source order decides**
@@ -318,7 +318,9 @@ export function parseCssDeclarations(css: string): CssDeclaration[] {
 
 const LIGHT_SELECTORS = new Set([':root', ':root, [data-theme="light"]'])
 const DARK_SELECTOR = '[data-theme="dark"]'
-const SYSTEM_DARK_SELECTOR = ':root:not([data-theme="light"])'
+// Excludes the high-contrast opt-in as well (UI-DZUP-UI-DESIGN-H-03): at
+// (0,2,0) it would otherwise outrank [data-theme="high-contrast"] (0,1,0).
+const SYSTEM_DARK_SELECTOR = ':root:not([data-theme="light"], [data-theme="high-contrast"])'
 const PREFERS_DARK = '@media (prefers-color-scheme: dark)'
 
 function isSystemDark(declaration: CssDeclaration): boolean {

@@ -51,6 +51,15 @@ import { LIGHT_SEMANTIC_TOKENS } from './semantic/light.js'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DIST_DIR = resolve(__dirname, '..', 'dist')
 
+/**
+ * The selector of the `prefers-color-scheme: dark` fallback in tokens.css.
+ * Every explicitly named theme other than dark must be excluded here: the
+ * selector is specificity (0,2,0) and outranks a plain `[data-theme="…"]`
+ * opt-in (0,1,0) in the same layer. Kept in sync with
+ * `semantic/high-contrast.spec.ts`, which pins that relation.
+ */
+const OS_DARK_FALLBACK_SELECTOR = ':root:not([data-theme="light"], [data-theme="high-contrast"])'
+
 function formatVars(vars: Record<string, string>, indent: string = '  '): string {
   return Object.entries(vars)
     .map(([key, value]) => `${indent}${key}: ${value};`)
@@ -174,10 +183,15 @@ ${formatVars(shadowsDark)}
    disappears and the media query takes over — so OS dark preference sticks.
    The DzThemeProvider and themeScript always write data-theme on startup, so
    this fallback only fires if neither has run (e.g. bare CSS usage with no JS).
+
+   The high-contrast opt-in is excluded as well (UI-DZUP-UI-DESIGN-H-03). This
+   selector is specificity (0,2,0) and [data-theme="high-contrast"] is (0,1,0),
+   so without the exclusion an OS in dark mode would replace every one of the
+   opt-in's values with the dark palette, whatever the import order.
    ========================================================================== */
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  ${OS_DARK_FALLBACK_SELECTOR} {
 ${formatVars(DARK_SEMANTIC_TOKENS, '    ')}
 
     /* ── Dark mode shadow overrides ── */
@@ -267,7 +281,9 @@ function generateHighContrastCss(): string {
    Application opt-in — [data-theme="high-contrast"]
 
    Same tier and same specificity as [data-theme="dark"], so it behaves exactly
-   like the other themes: whichever theme the root element names, wins. This is
+   like the other themes: whichever theme the root element names, wins. The OS
+   dark fallback in tokens.css is more specific (0,2,0), which is why it names
+   this theme in its :not() and never matches a high-contrast root. This is
    the load-bearing half. Under an explicit opt-in the browser forces nothing,
    and the system keywords still resolve to the OS palette.
    ========================================================================== */

@@ -30,6 +30,7 @@ import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDataGrid } from '../../composables/useDataGrid/useDataGrid.ts'
 import { useDataGridNavigation } from '../../composables/useDataGrid/useDataGridNavigation.ts'
 import { cn } from '../../utilities/cn.ts'
+import DzButton from '../buttons/DzButton.vue'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
 import DzDataGridBody from './DzDataGridBody.vue'
@@ -141,6 +142,20 @@ const pageSizeOptions = computed<number[]>(() => {
   return [10, 25, 50, 100]
 })
 
+/**
+ * A filter that matches nothing is not an empty grid (UI-DZUP-UI-UX-H-04).
+ * Swapping the table for the empty state would unmount the header, and with it
+ * the filter popover and the input the user is typing in, so while any filter
+ * is active the table stays and the empty row is rendered inside it.
+ */
+const hasActiveFilters = computed(() => grid.filters.value.length > 0)
+const isEmpty = computed(() => !props.loading && grid.displayData.value.length === 0)
+const showEmptyState = computed(() => isEmpty.value && !hasActiveFilters.value)
+const showNoMatchRow = computed(() => isEmpty.value && hasActiveFilters.value)
+const columnSpan = computed(() =>
+  props.columns.length + (props.selectable === 'multiple' ? 1 : 0),
+)
+
 function handleRowClick(row: Record<string, unknown>, index: number): void {
   emit('rowClick', row as T, index)
 }
@@ -174,7 +189,7 @@ const { testId: dzTestId } = useDzTestIds()
     </div>
 
     <!-- Empty state -->
-    <div v-else-if="!loading && grid.displayData.value.length === 0" data-part="empty" :class="cn(styles.empty(), ui?.empty)">
+    <div v-else-if="showEmptyState" data-part="empty" :class="cn(styles.empty(), ui?.empty)">
       <slot name="empty">
         No data available
       </slot>
@@ -198,6 +213,25 @@ const { testId: dzTestId } = useDzTestIds()
           <slot name="cell" v-bind="cellProps" />
         </template>
       </DzDataGridBody>
+      <!-- Filters active but nothing matches: keep the header mounted -->
+      <tbody v-if="showNoMatchRow" role="rowgroup">
+        <tr role="row">
+          <td role="gridcell" :colspan="columnSpan">
+            <div data-part="empty" data-filtered="" :class="cn(styles.empty(), 'flex-col gap-[var(--dz-spacing-2)]', ui?.empty)">
+              <span role="status">No rows match the current filters</span>
+              <DzButton
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                data-testid="filter-clear-all-button"
+                @click="grid.clearAllFilters()"
+              >
+                Clear filters
+              </DzButton>
+            </div>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
     <!-- Pagination -->

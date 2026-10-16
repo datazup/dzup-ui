@@ -101,7 +101,7 @@ export interface TokensRegistryItem {
  * still a dark rule.
  */
 function bucketFor(selector: string): keyof CssVarBuckets | null {
-  if (/\[data-theme="dark"\]/.test(selector) || /:not\(\[data-theme="light"\]\)/.test(selector)) {
+  if (/\[data-theme="dark"\]/.test(selector) || /:not\(\[data-theme="light"\][,)]/.test(selector)) {
     return 'dark'
   }
   if (/:root/.test(selector) || /\[data-theme="light"\]/.test(selector))
