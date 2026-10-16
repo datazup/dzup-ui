@@ -383,13 +383,17 @@ function toggleTheme(): void {
 }
 
 if (ownsTheme) {
+  // `flush: 'sync'`: the persisted preference is applied in `onMounted`, so a
+  // change back to the setup value before the next flush (persisted `dark`,
+  // then a toggle to `light` in the same tick) would otherwise compare equal to
+  // the watcher's stale baseline and never reach `<html>` or storage.
   watch(resolvedTheme, (resolved) => {
     applyThemeAttribute(resolved)
-  })
+  }, { flush: 'sync' })
 
   watch(theme, (value) => {
     persistTheme(value)
-  })
+  }, { flush: 'sync' })
 
   provide(DZ_THEME_KEY, {
     theme,
