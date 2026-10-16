@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, unknown>">
-import type { ColumnDef } from './DzDataGrid.types.ts'
+import type { ColumnDef, DzDataGridBodyEmits } from './DzDataGrid.types.ts'
 /**
  * DzDataGridBody — Internal body sub-part for DzDataGrid.
  *
@@ -12,18 +12,6 @@ import { isDevEnv } from '../../utilities/isDevEnv.ts'
 import DzCheckbox from '../forms/DzCheckbox.vue'
 import { DZ_DATA_GRID_KEY, rowTypedKey } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
-
-/**
- * Events emitted by DzDataGridBody.
- *
- * Named rather than inline so the `Dz…Emits` recovery can read the members'
- * JSDoc: Vue's `ShortEmits` mapped type erases it before `vue-component-meta`
- * sees it (TASK-N2-A2 finding F-1, TASK-R5-O8).
- */
-interface DzDataGridBodyEmits {
-  /** Emitted when a row is clicked, with the row and its zero-based index. Fires before selection toggles. */
-  rowClick: [row: T, index: number]
-}
 
 defineOptions({
   inheritAttrs: false,
@@ -40,7 +28,7 @@ const props = defineProps<{
   rows?: T[]
 }>()
 
-const emit = defineEmits<DzDataGridBodyEmits>()
+const emit = defineEmits<DzDataGridBodyEmits<T>>()
 
 defineSlots<{
   /**

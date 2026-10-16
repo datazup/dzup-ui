@@ -86,7 +86,7 @@ export const mentionVariants = tv({
         control: [
           'border-0 border-b-2 border-[var(--dz-input-border)]',
           'rounded-none bg-transparent',
-          'focus-visible:border-[var(--dz-input-border-focus)] focus-visible:outline-none',
+          'dz-focus-ring-underline',
         ].join(' '),
       },
     },

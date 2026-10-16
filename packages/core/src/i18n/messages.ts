@@ -110,7 +110,11 @@ declare module '@dzup-ui/contracts' {
       remaining: DzMessage<{ duration: string }>
     }
     /** The default loader label on a DataGrid fetching its first rows (UI-DZUP-UI-UX-M-04). */
-    DzDataGrid: { loading: string }
+    /**
+     * `empty` is the default empty-state text of each data-family component
+     * (UI-DZUP-UI-UX-M-03); a host sets it once instead of per instance.
+     */
+    DzDataGrid: { loading: string, empty: string }
     DzDataGridHeader: { selectAllRows: string }
     DzDataGridPagination: { rowsPerPage: string, previousPage: string, nextPage: string }
     DzDataView: {
@@ -119,6 +123,7 @@ declare module '@dzup-ui/contracts' {
       loading: string
       showingAll: DzMessage<{ count: number }>
       showingRange: DzMessage<{ start: number, end: number, total: number }>
+      empty: string
     }
     /**
      * The default error state of `DzErrorBoundary` and `DzAsyncBoundary`
@@ -144,6 +149,7 @@ declare module '@dzup-ui/contracts' {
       moveTop: string
       moveBottom: string
       dragHandle: string
+      empty: string
     }
     DzPagination: {
       ariaLabel: string
@@ -165,6 +171,7 @@ declare module '@dzup-ui/contracts' {
     DzSelect: { filterOptions: string, searchPlaceholder: string, noResults: string }
     DzSidebar: { ariaLabel: string }
     DzTabTrigger: { closeTab: string }
+    DzTableBody: { empty: string }
     /**
      * `narrowColumn` / `widenColumn` are the SC 2.5.7 stepper pair on a
      * resizable header cell (TASK-R2-O5, D117/A).
@@ -199,7 +206,9 @@ declare module '@dzup-ui/contracts' {
       searchTarget: string
       targetItems: string
       searchPlaceholder: string
+      empty: string
     }
+    DzTree: { empty: string }
     DzTreeSelect: { filterOptions: string, filterPlaceholder: string, noResults: string }
   }
 }
@@ -240,6 +249,7 @@ export const enTransferMessages = {
   searchTarget: 'Search target items',
   targetItems: 'Target items',
   searchPlaceholder: 'Search...',
+  empty: 'No items',
 } as const satisfies DzMessageCatalog['DzTransfer']
 
 export const enMessages = {
@@ -282,7 +292,7 @@ export const enMessages = {
     seconds: '{count, plural, one {# second} other {# seconds}}',
     remaining: '{duration} remaining',
   },
-  DzDataGrid: { loading: 'Loading data' },
+  DzDataGrid: { loading: 'Loading data', empty: 'No data available' },
   DzDataGridHeader: { selectAllRows: 'Select all rows' },
   DzDataGridPagination: {
     rowsPerPage: 'Rows per page',
@@ -296,6 +306,7 @@ export const enMessages = {
     showingAll: '{count, plural, one {Showing # item} other {Showing # items}}',
     // The one deliberate English change: the literal said "of 1 items".
     showingRange: '{total, plural, one {Showing {start} to {end} of # item} other {Showing {start} to {end} of # items}}',
+    empty: 'No items',
   },
   DzErrorBoundary: { message: 'Something went wrong.', retry: 'Try again' },
   DzFileUpload: { ariaLabel: 'Upload files' },
@@ -325,6 +336,7 @@ export const enMessages = {
     moveTop: 'Move to top',
     moveBottom: 'Move to bottom',
     dragHandle: 'Drag to reorder',
+    empty: 'No items',
   },
   DzPagination: {
     ariaLabel: 'Pagination',
@@ -346,6 +358,7 @@ export const enMessages = {
   },
   DzSidebar: { ariaLabel: 'Sidebar navigation' },
   DzTabTrigger: { closeTab: 'Close tab' },
+  DzTableBody: { empty: 'No records found.' },
   DzTableCell: {
     resizeColumn: 'Resize column',
     narrowColumn: 'Narrow column',
@@ -372,6 +385,7 @@ export const enMessages = {
   DzToast: { close: 'Close notification' },
   DzTokenProgressBar: { tokenUsage: 'Token usage' },
   DzTransfer: enTransferMessages,
+  DzTree: { empty: 'No items' },
   DzTreeSelect: {
     filterOptions: 'Filter options',
     filterPlaceholder: 'Search...',

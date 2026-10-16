@@ -2,9 +2,18 @@ import { mount } from '@vue/test-utils'
 /**
  * DzCombobox — Contract Spec v1 conformance tests.
  */
-import { describe, expect, it } from 'vitest'
-import { h, nextTick } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
+import { h } from 'vue'
 import DzCombobox from './DzCombobox.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 const items = [
   { value: 'vue', label: 'Vue' },
@@ -43,8 +52,7 @@ describe('dzCombobox — Contract Spec v1', () => {
       },
       attachTo: document.body,
     })
-    await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(wrapper.findAll('.custom-item')).toHaveLength(2))
 
     expect(wrapper.findAll('.custom-item').map(node => node.text())).toEqual(['0:Vue:false', '1:React:true'])
     expect(wrapper.find('[role="listbox"]').exists()).toBe(true)

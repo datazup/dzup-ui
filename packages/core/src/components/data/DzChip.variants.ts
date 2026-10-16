@@ -14,7 +14,7 @@ export const chipVariants = tv({
     'inline-flex items-center gap-[var(--dz-spacing-1)]',
     'font-medium',
     'rounded-full',
-    'transition-[var(--dz-transition-fast)]',
+    'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
     'dz-focus-ring-control dz-disabled-control',
   ].join(' '),
 

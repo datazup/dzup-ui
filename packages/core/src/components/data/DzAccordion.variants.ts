@@ -16,7 +16,7 @@ export const accordionVariants = tv({
     trigger: [
       'flex flex-1 items-center justify-between',
       'font-medium',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'cursor-pointer',
       'hover:underline',
       'dz-focus-ring-control dz-disabled-control',

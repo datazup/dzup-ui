@@ -660,7 +660,7 @@ const { testId: dzTestId } = useDzTestIds()
 
         <li v-if="model.length === 0" data-part="empty" :class="cn(styles.empty(), ui?.empty)">
           <slot name="empty">
-            No items
+            {{ dzMessages.empty }}
           </slot>
         </li>
       </ul>

@@ -29,7 +29,7 @@ export const timePickerVariants = tv({
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',
       'cursor-pointer text-start',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-ring-input dz-disabled-input-shell',
       'motion-reduce:transition-none',
     ].join(' '),
@@ -119,7 +119,7 @@ export const timePickerVariants = tv({
     variant: {
       outline: { trigger: 'border border-[var(--dz-border)] focus:border-[var(--dz-input-border-focus)] hover:border-[var(--dz-primary)]' },
       filled: { trigger: 'bg-[var(--dz-muted)] border border-transparent hover:border-[var(--dz-border)]' },
-      underlined: { trigger: 'border-b border-[var(--dz-border)] rounded-none focus:border-[var(--dz-input-border-focus)]' },
+      underlined: { trigger: 'border-b border-[var(--dz-border)] rounded-none dz-focus-ring-underline' },
     },
     size: {
       icon: '',

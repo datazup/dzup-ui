@@ -5,7 +5,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
  * Tests compound popover tree: mounting, class merging, arrow rendering,
  * size variants, side/align props, and event forwarding.
  */
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 import { cascaderVariants } from '../forms/DzCascader.variants.ts'
 import { comboboxVariants } from '../forms/DzCombobox.variants.ts'
@@ -27,6 +27,15 @@ import DzPopoverContent from './DzPopoverContent.vue'
 import DzPopoverTrigger from './DzPopoverTrigger.vue'
 import { sheetVariants } from './DzSheet.variants.ts'
 import { tourVariants } from './DzTour.variants.ts'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 /** Helper to mount full popover compound */
 /** Stub portal to render inline */
@@ -244,10 +253,7 @@ describe('dzPopover -- Unit Tests', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[data-testid="popover-host"] [role="dialog"]').text()).toContain('Inline popover body')
+    await settle(() => expect(wrapper.find('[data-testid="popover-host"] [role="dialog"]').text()).toContain('Inline popover body'))
     wrapper.unmount()
   })
 
@@ -262,12 +268,10 @@ describe('dzPopover -- Unit Tests', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Portaled popover body'))
 
     const host = document.querySelector('[data-testid="popover-host"]')
     expect(host?.querySelector('[role="dialog"]')).toBeNull()
-    expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Portaled popover body')
     wrapper.unmount()
   })
 })

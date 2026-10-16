@@ -25,7 +25,7 @@ export const breadcrumbVariants = tv({
      */
     link: [
       'dz-target-min inline-flex items-center',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'hover:text-[var(--dz-foreground)]',
     ].join(' '),
     currentPage: 'font-medium text-[var(--dz-foreground)]',

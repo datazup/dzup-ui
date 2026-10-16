@@ -1,4 +1,4 @@
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzDropdownMenu — Unit / behavior tests.
  */
@@ -10,7 +10,7 @@ import DzDropdownMenuItem from './DzDropdownMenuItem.vue'
 import DzDropdownMenuTrigger from './DzDropdownMenuTrigger.vue'
 
 /** Reka portals content through Presence, which settles over several microtasks. */
-const flush = () => new Promise(resolve => setTimeout(resolve, 0))
+const flush = () => flushPromises()
 
 enableAutoUnmount(afterEach)
 

@@ -7,9 +7,18 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
  * a portal; tests stub `PopoverPortal` so the panel renders inline, then open
  * the picker by clicking the trigger.
  */
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { anatomy as timePickerAnatomy } from './DzTimePicker.anatomy.ts'
 import DzTimePicker from './DzTimePicker.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 /** Stub the portal so popover content renders inline (not teleported). */
 const InlinePortal = { template: '<div><slot /></div>' }
@@ -190,18 +199,14 @@ describe('dzTimePicker — Popover (roll layout)', () => {
   it('renders the real Reka popover inline when portalDisabled is true', async () => {
     const wrapper = mountRealPicker({ portalDisabled: true })
     await open(wrapper)
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[role="listbox"][aria-label="Hours"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[role="listbox"][aria-label="Hours"]').exists()).toBe(true))
     wrapper.unmount()
   })
 
   it('keeps the real Reka default portal behavior', async () => {
     const wrapper = mountRealPicker()
     await open(wrapper)
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(document.body.querySelector('[role="listbox"][aria-label="Hours"]')).not.toBeNull()
+    await settle(() => expect(document.body.querySelector('[role="listbox"][aria-label="Hours"]')).not.toBeNull())
     expect(wrapper.find('[role="listbox"][aria-label="Hours"]').exists()).toBe(false)
     wrapper.unmount()
   })

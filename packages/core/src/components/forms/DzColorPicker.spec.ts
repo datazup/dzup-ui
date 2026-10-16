@@ -4,9 +4,18 @@ import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzColorPicker — Unit / behavior tests.
  */
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { anatomy as colorPickerAnatomy } from './DzColorPicker.anatomy.ts'
 import DzColorPicker from './DzColorPicker.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 describe('dzColorPicker — controlled and uncontrolled value ownership', () => {
   it.each([false, true])('preset selection, controlled=%s', async (controlled) => {
@@ -133,18 +142,14 @@ describe('dzColorPicker — Unit Tests', () => {
       attachTo: document.body,
     })
     await wrapper.find('button[aria-expanded]').trigger('click')
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('input[aria-label="Color area"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('input[aria-label="Color area"]').exists()).toBe(true))
     wrapper.unmount()
   })
 
   it('keeps the real Reka default portal behavior', async () => {
     const wrapper = mount(DzColorPicker, { attachTo: document.body })
     await wrapper.find('button[aria-expanded]').trigger('click')
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(document.body.querySelector('input[aria-label="Color area"]')).not.toBeNull()
+    await settle(() => expect(document.body.querySelector('input[aria-label="Color area"]')).not.toBeNull())
     expect(wrapper.find('input[aria-label="Color area"]').exists()).toBe(false)
     wrapper.unmount()
   })

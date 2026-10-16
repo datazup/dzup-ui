@@ -72,7 +72,10 @@ export interface DzDataViewProps<T = Record<string, unknown>> extends BaseAccess
   loading?: boolean
   /** Number of skeleton placeholders to render while loading */
   loadingRows?: number
-  /** Title for the built-in empty state */
+  /**
+   * Title for the built-in empty state. Defaults to the `DzDataView.empty`
+   * catalog message ("No items").
+   */
   emptyTitle?: string
   /** Description for the built-in empty state */
   emptyDescription?: string

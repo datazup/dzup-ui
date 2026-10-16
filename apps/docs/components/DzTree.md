@@ -201,6 +201,7 @@ then the component's own default.**
 
 | Reader | What the provider supplies through it |
 | --- | --- |
+| `useDzMessages` | the translated string catalogue |
 | `useDzTestIds` | the test-id attribute name and prefix |
 
 ## Locale, direction and formats
@@ -211,7 +212,7 @@ then the component's own default.**
 | `keyboard` | `swap-horizontal` | ArrowLeft and ArrowRight exchange meaning in a RTL document. |
 | `icons` | — | No icon on this component carries direction, so none is mirrored. |
 
-**Locale and formats.** This component reads no locale, message-catalogue or format context from the provider: nothing it renders changes with the application's locale.
+**Locale and formats.** Reads `useDzMessages` from the surrounding `DzProvider`, so its strings and formatted values follow the application locale.
 
 **Measured:** `rtl-contract` is `present` — `packages/core/src/components/data/DzTree.anatomy.ts`.
 

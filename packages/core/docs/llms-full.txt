@@ -7189,7 +7189,7 @@ list/grid switchable collection renderer.
 | `dataKey` | `string \| undefined` | no | `undefined` | Field path used to derive stable keys (falls back to index) |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state — prevents layout/sort/paging interaction |
 | `emptyDescription` | `string \| undefined` | no | `undefined` | Description for the built-in empty state |
-| `emptyTitle` | `string \| undefined` | no | `"No items"` | Title for the built-in empty state |
+| `emptyTitle` | `string \| undefined` | no | `undefined` | Title for the built-in empty state. Defaults to the `DzDataView.empty` catalog message ("No items"). |
 | `first` | `number \| undefined` | no | `0` | Zero-based index of the first item on the current page; defaults to `0`, the first page. |
 | `gap` | `LayoutGap \| undefined` | no | `"md"` | Gap between grid cells |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -7895,7 +7895,7 @@ Internal body sub-part for DzDataGrid.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `rowClick` | `[row: T, index: number]` | — |
+| `rowClick` | `[row: T, index: number]` | Emitted when a row is clicked, with the row and its zero-based index. Fires before selection toggles. |
 
 **Slots** (1):
 

@@ -6,6 +6,15 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick } from 'vue'
 import DzMasonry from './DzMasonry.vue'
 
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
+
 const items = {
   default: Array.from({ length: 6 }, (_, i) => `<div class="item">Item ${i + 1}</div>`).join(''),
 }
@@ -154,10 +163,7 @@ describe('dzMasonry -- Unit Tests', () => {
 
     Object.defineProperty(wrapper.element, 'offsetWidth', { value: 1200, configurable: true })
     trigger()
-    // Wait out the 60ms re-measure debounce.
-    await new Promise(resolve => setTimeout(resolve, 90))
-    await nextTick()
-
-    expect(wrapper.findAll('.dz-masonry__column')).toHaveLength(3)
+    // The re-measure is debounced (60ms); wait for its result, not a fixed interval.
+    await settle(() => expect(wrapper.findAll('.dz-masonry__column')).toHaveLength(3))
   })
 })

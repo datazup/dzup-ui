@@ -7,7 +7,7 @@
 import { expectAnatomy } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import { h } from 'vue'
+import { h, nextTick } from 'vue'
 import { anatomy as dialogAnatomy } from './DzDialog.anatomy.ts'
 import DzDialog from './DzDialog.vue'
 import DzDialogClose from './DzDialogClose.vue'
@@ -43,66 +43,56 @@ function mountDialog(props: Record<string, unknown> = {}) {
 describe('dzDialog -- Contract Spec v1', () => {
   // ── Root props ──
 
-  it('renders with default props', () => {
+  // Each prop test asserts the prop's observable effect, not that the mount
+  // survived it (UI-DZUP-UI-TEST-M-09).
+
+  it('renders an open dialog with its title, description and close control by default', () => {
     const wrapper = mountDialog()
-    expect(wrapper.exists()).toBe(true)
+    const content = document.querySelector('[role="dialog"]')
+    expect(content).not.toBeNull()
+    expect(content?.textContent).toContain('Test Title')
+    expect(content?.textContent).toContain('Test Description')
+    expect(content?.querySelector('button[aria-label="Close"]')).not.toBeNull()
     wrapper.unmount()
   })
 
-  it('accepts modal prop (default true)', () => {
-    const wrapper = mount(DzDialog, {
-      props: { modal: true },
-      slots: { default: () => h('div', 'child') },
-    })
-    expect(wrapper.exists()).toBe(true)
+  it('modal defaults to true and marks the content aria-modal', () => {
+    const wrapper = mountDialog()
+    expect(document.querySelector('[role="dialog"]')?.getAttribute('aria-modal')).toBe('true')
     wrapper.unmount()
   })
 
-  it('accepts modal=false prop', () => {
-    const wrapper = mount(DzDialog, {
-      props: { modal: false },
-      slots: { default: () => h('div', 'child') },
-    })
-    expect(wrapper.exists()).toBe(true)
+  it('modal=false drops aria-modal from the content', () => {
+    const wrapper = mountDialog({ modal: false })
+    expect(document.querySelector('[role="dialog"]')).not.toBeNull()
+    expect(document.querySelector('[role="dialog"]')?.hasAttribute('aria-modal')).toBe(false)
     wrapper.unmount()
   })
 
   // ── Animation props ──
 
-  it('accepts animated prop (default true)', () => {
-    const wrapper = mount(DzDialog, {
-      props: { animated: true },
-      slots: { default: () => h('div', 'child') },
-    })
-    expect(wrapper.exists()).toBe(true)
+  /** The `name` each `<Transition>` in the open dialog was given, overlay first. */
+  function transitionNames(props: Record<string, unknown>): string[] {
+    const wrapper = mountDialog(props)
+    const names = wrapper.findAllComponents({ name: 'transition' }).map(t => String(t.props('name') ?? t.attributes('name') ?? ''))
     wrapper.unmount()
+    return names
+  }
+
+  it('animated (default true) names the overlay and content transitions', () => {
+    expect(transitionNames({})).toEqual(['dz-dialog-overlay', 'dz-dialog-content'])
   })
 
-  it('accepts animated=false prop', () => {
-    const wrapper = mount(DzDialog, {
-      props: { animated: false },
-      slots: { default: () => h('div', 'child') },
-    })
-    expect(wrapper.exists()).toBe(true)
-    wrapper.unmount()
+  it('animated=false clears both transition names', () => {
+    expect(transitionNames({ animated: false })).toEqual(['', ''])
   })
 
-  it('accepts overlayTransition prop', () => {
-    const wrapper = mount(DzDialog, {
-      props: { overlayTransition: 'my-overlay' },
-      slots: { default: () => h('div', 'child') },
-    })
-    expect(wrapper.exists()).toBe(true)
-    wrapper.unmount()
+  it('overlayTransition renames the overlay transition only', () => {
+    expect(transitionNames({ overlayTransition: 'my-overlay' })).toEqual(['my-overlay', 'dz-dialog-content'])
   })
 
-  it('accepts contentTransition prop', () => {
-    const wrapper = mount(DzDialog, {
-      props: { contentTransition: 'my-content' },
-      slots: { default: () => h('div', 'child') },
-    })
-    expect(wrapper.exists()).toBe(true)
-    wrapper.unmount()
+  it('contentTransition renames the content transition only', () => {
+    expect(transitionNames({ contentTransition: 'my-content' })).toEqual(['dz-dialog-overlay', 'my-content'])
   })
 
   // ── v-model:open ──
@@ -125,8 +115,15 @@ describe('dzDialog -- Contract Spec v1', () => {
 
   // ── Content size variants ──
 
-  it('accepts all content size values', () => {
+  it('maps every content size to its own max width', () => {
     const sizes = ['sm', 'md', 'lg', 'xl', 'full'] as const
+    const expectedWidth = {
+      sm: 'max-w-sm',
+      md: 'max-w-md',
+      lg: 'max-w-lg',
+      xl: 'max-w-xl',
+      full: 'max-w-[calc(100vw-var(--dz-spacing-8))]',
+    } as const
     for (const size of sizes) {
       const wrapper = mount(DzDialog, {
         props: { open: true },
@@ -136,7 +133,10 @@ describe('dzDialog -- Contract Spec v1', () => {
         global: { stubs: { DialogPortal: InlinePortal } },
         attachTo: document.body,
       })
-      expect(wrapper.exists()).toBe(true)
+      const classes = wrapper.get('[data-part="content"]').classes()
+      expect(classes, size).toContain(expectedWidth[size])
+      for (const other of sizes.filter(s => s !== size))
+        expect(classes, `${size} vs ${other}`).not.toContain(expectedWidth[other])
       wrapper.unmount()
     }
   })
@@ -152,7 +152,7 @@ describe('dzDialog -- Contract Spec v1', () => {
 
   // ── Content events ──
 
-  it('dzDialogContent emits escapeKeyDown', () => {
+  it('dzDialogContent emits escapeKeyDown', async () => {
     const onEscapeKeyDown = vi.fn()
     const wrapper = mount(DzDialog, {
       props: { open: true },
@@ -163,7 +163,11 @@ describe('dzDialog -- Contract Spec v1', () => {
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
-    expect(wrapper.exists()).toBe(true)
+    await nextTick()
+    document.querySelector('[role="dialog"]')!
+      .dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    await vi.waitFor(() => expect(onEscapeKeyDown).toHaveBeenCalledTimes(1), { timeout: 5000, interval: 10 })
+    expect(onEscapeKeyDown.mock.calls[0]![0]).toBeInstanceOf(KeyboardEvent)
     wrapper.unmount()
   })
 
@@ -179,7 +183,7 @@ describe('dzDialog -- Contract Spec v1', () => {
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
-    expect(wrapper.exists()).toBe(true)
+    expect(document.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe('Dialog label')
     wrapper.unmount()
   })
 
@@ -193,19 +197,22 @@ describe('dzDialog -- Contract Spec v1', () => {
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
-    expect(wrapper.exists()).toBe(true)
+    expect(document.querySelector('[role="dialog"]')?.id).toBe('my-dialog')
     wrapper.unmount()
   })
 
   // ── Subcomponents exist ──
 
-  it('dzDialogOverlay renders independently', () => {
+  it('dzDialogOverlay renders independently, with the overlay surface', () => {
     const wrapper = mount(DzDialogOverlay, {
       global: {
         stubs: { DialogOverlay: { template: '<div class="overlay" />' } },
       },
     })
-    expect(wrapper.exists()).toBe(true)
+    const overlay = wrapper.get('.overlay')
+    // The recipe's classes reach the Reka overlay, so the stub is not all that rendered.
+    expect(overlay.classes().length).toBeGreaterThan(1)
+    expect(overlay.classes().some(cls => cls.startsWith('bg-'))).toBe(true)
     wrapper.unmount()
   })
 
@@ -232,15 +239,15 @@ describe('dzDialog -- Contract Spec v1', () => {
   })
 
   it('dzDialogClose renders with default X icon', () => {
-    const wrapper = mount(DzDialogClose, {
-      global: {
-        stubs: {
-          DialogClose: { template: '<button><slot /></button>' },
-          X: { template: '<svg />' },
-        },
-      },
-    })
-    expect(wrapper.find('button').exists()).toBe(true)
+    // Mounted unstubbed inside a real dialog: a stubbed DialogClose only proves
+    // the stub's own <button> rendered (UI-DZUP-UI-TEST-M-09).
+    const wrapper = mountDialog()
+    const close = document.querySelector('[role="dialog"] button[aria-label="Close"]')
+    expect(close).not.toBeNull()
+    const icon = close!.querySelector('svg')
+    expect(icon).not.toBeNull()
+    expect(icon!.classList.contains('lucide')).toBe(true)
+    expect(icon!.getAttribute('aria-hidden')).toBe('true')
     wrapper.unmount()
   })
 

@@ -3,11 +3,20 @@ import { mount } from '@vue/test-utils'
 /**
  * DzSelect — Unit / behavior tests.
  */
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 import DzFormField from './DzFormField.vue'
 import DzFormLabel from './DzFormLabel.vue'
 import DzSelect from './DzSelect.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): Reka's
+ * portalled content lands a tick or two after mount, and a loaded host makes any
+ * fixed interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 /**
  * Resolves the accessible name of a combobox-style trigger the way the ARIA
@@ -119,10 +128,7 @@ describe('dzSelect — Unit Tests', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[role="listbox"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[role="listbox"]').exists()).toBe(true))
     expect(wrapper.findAll('[role="option"]')).toHaveLength(mockItems.length)
     wrapper.unmount()
   })
@@ -139,10 +145,7 @@ describe('dzSelect — Unit Tests', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(target.querySelector('[role="listbox"]')).toBeTruthy()
+    await settle(() => expect(target.querySelector('[role="listbox"]')).toBeTruthy())
     wrapper.unmount()
     target.remove()
   })
@@ -161,8 +164,7 @@ describe('dzSelect — Searchable Mode', () => {
       props: { items: mockItems, searchable: true, defaultOpen: true, ...extraProps },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 100))
+    await settle(() => expect(document.querySelector('[data-dz-search-input]')).not.toBeNull())
     return wrapper
   }
 
@@ -190,10 +192,8 @@ describe('dzSelect — Searchable Mode', () => {
     // Simulate typing into search
     searchInput.value = 'app'
     searchInput.dispatchEvent(new Event('input', { bubbles: true }))
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
     // Only Apple should be visible (SelectItem renders with role="option")
+    await settle(() => expect(document.querySelectorAll('[role="option"]')).toHaveLength(1))
     const options = document.querySelectorAll('[role="option"]')
     expect(options.length).toBe(1)
     expect(options.item(0)?.textContent).toContain('Apple')
@@ -209,8 +209,7 @@ describe('dzSelect — Searchable Mode', () => {
     const searchInput = document.querySelector('[data-dz-search-input]') as HTMLInputElement
     searchInput.value = 'ban'
     searchInput.dispatchEvent(new Event('input', { bubbles: true }))
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.querySelectorAll('[role="option"]')).toHaveLength(1))
 
     const options = document.querySelectorAll('[role="option"]')
     expect(options.length).toBe(1)
@@ -224,11 +223,9 @@ describe('dzSelect — Searchable Mode', () => {
     const searchInput = document.querySelector('[data-dz-search-input]') as HTMLInputElement
     searchInput.value = 'zzzzz'
     searchInput.dispatchEvent(new Event('input', { bubbles: true }))
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.querySelector('[data-dz-no-results]')).not.toBeNull())
 
     const noResults = document.querySelector('[data-dz-no-results]')
-    expect(noResults).not.toBeNull()
     expect(noResults?.textContent).toContain('Nothing here')
     wrapper.unmount()
   })
@@ -248,11 +245,9 @@ describe('dzSelect — Searchable Mode', () => {
     // Simulate close event from Reka UI — triggers handleOpenChange(false)
     const selectRoot = wrapper.findComponent({ name: 'SelectRoot' })
     selectRoot.vm.$emit('update:open', false)
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
 
     // The close event should have emitted and cleared search
-    expect(wrapper.emitted('close')).toBeTruthy()
+    await settle(() => expect(wrapper.emitted('close')).toBeTruthy())
 
     // Re-mount to verify search is cleared (since portal unmounts on close)
     wrapper.unmount()
@@ -318,11 +313,8 @@ describe('dzSelect — Accessible Name (axe button-name)', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
     const trigger = wrapper.get('[role="combobox"]').element
-    expect(accessibleName(trigger, document)).toBe('Banana')
+    await settle(() => expect(accessibleName(trigger, document)).toBe('Banana'))
     wrapper.unmount()
   })
 

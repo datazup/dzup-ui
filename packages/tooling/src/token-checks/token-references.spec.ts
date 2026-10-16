@@ -15,6 +15,7 @@ import {
   doubleTimedTransitions,
   maskComments,
   referencesIn,
+  tailwindTransitionTokens,
 } from './token-references.ts'
 
 describe('maskComments', () => {
@@ -164,11 +165,32 @@ describe('doubleTimedTransitions', () => {
   })
 })
 
+describe('tailwindTransitionTokens', () => {
+  it('rejects a --dz-transition-* token used as a Tailwind transition-property, at its line', () => {
+    // The shape 39 recipe sites shipped (UI-DZUP-UI-DESIGN-M-11).
+    const source = 'trigger: [\n  \'flex\',\n  \'transition-[var(--dz-transition-fast)]\',\n].join(\' \')\n'
+    const found = tailwindTransitionTokens(source, 'X.variants.ts')
+    expect(found).toHaveLength(1)
+    expect(found[0]?.rule).toBe('tailwind-transition-token')
+    expect(found[0]?.symbol).toBe('X.variants.ts:3')
+  })
+
+  it('accepts a property list with token timing, and ignores comments', () => {
+    const source = '// transition-[var(--dz-transition-slow)] was the old shape\n'
+      + '\'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]\'\n'
+    expect(tailwindTransitionTokens(source, 'X.variants.ts')).toEqual([])
+  })
+})
+
 describe('checkTokenReferences — the real package', () => {
   const report = checkTokenReferences()
 
   it('passes at 99b963a', () => {
     expect(report.violations).toEqual([])
+  })
+
+  it('finds no Tailwind transition-property built from a --dz-transition-* token', () => {
+    expect(report.violations.filter(violation => violation.rule === 'tailwind-transition-token')).toEqual([])
   })
 
   it('reads the shipped ABI through the DTCG gate\'s own parser', () => {

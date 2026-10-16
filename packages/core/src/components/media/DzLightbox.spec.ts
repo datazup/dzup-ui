@@ -2,11 +2,20 @@ import type { LightboxImage } from './DzLightbox.types.ts'
 /**
  * DzLightbox — Unit / behavior tests.
  */
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mountWithDialogStubs } from '../../../test-utils/dialog'
 import DzLightbox from './DzLightbox.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 const sampleImages: LightboxImage[] = [
   { src: '/img1.jpg', alt: 'Image 1', caption: 'First image' },
@@ -80,10 +89,7 @@ describe('dzLightbox', () => {
         portalDisabled: true,
       },
     })
-    await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[role="dialog"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[role="dialog"]').exists()).toBe(true))
     expect(wrapper.find('[role="dialog"]').text()).toContain('1 / 3')
     wrapper.unmount()
   })
@@ -96,11 +102,8 @@ describe('dzLightbox', () => {
         modelValue: true,
       },
     })
-    await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
+    await settle(() => expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('1 / 3'))
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
-    expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('1 / 3')
     wrapper.unmount()
   })
 
@@ -116,7 +119,7 @@ describe('dzLightbox', () => {
     })
 
     await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 0))
+    await flushPromises()
 
     const rekaWarnings = warnSpy.mock.calls
       .map(([message]) => String(message))

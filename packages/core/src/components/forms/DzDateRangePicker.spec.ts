@@ -3,9 +3,18 @@ import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzDateRangePicker — Unit / behavior tests.
  */
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { anatomy as dateRangePickerAnatomy } from './DzDateRangePicker.anatomy.ts'
 import DzDateRangePicker from './DzDateRangePicker.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 describe('dzDateRangePicker — controlled and uncontrolled value ownership', () => {
   it.each([false, true])('range segment edit, controlled=%s', async (controlled) => {
@@ -161,10 +170,9 @@ describe('dzDateRangePicker — calendar grid Home/End', () => {
       attachTo: document.body,
     })
     await wrapper.find('[data-part="trigger"]').trigger('click')
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelector('[data-part="item"][data-selected]'), 'the calendar did not render a selected day').not.toBeNull())
 
     const selected = document.body.querySelector<HTMLElement>('[data-part="item"][data-selected]')
-    expect(selected, 'the calendar did not render a selected day').not.toBeNull()
     const row = selected!.closest('tr')!
     const days = Array.from(
       row.querySelectorAll<HTMLElement>('[data-part="item"]:not([data-outside-view]):not([data-disabled])'),
@@ -221,7 +229,9 @@ describe('dzDateRangePicker — declared calendar opening', () => {
     const wrapper = mount(DzDateRangePicker, { attachTo: document.body })
     const trigger = wrapper.get('[data-part="trigger"]')
     await trigger.trigger('keydown', { key: dateRangePickerAnatomy.keyboard[0].key })
-    await new Promise(resolve => setTimeout(resolve, 50))
+    // A known defect (it.fails): there is no condition to wait for, so drain the
+    // queued work instead of sleeping a fixed interval.
+    await flushPromises()
     try {
       expect(trigger.attributes('aria-expanded')).toBe('true')
       expect(document.querySelector('[data-part="panel"]')).not.toBeNull()

@@ -18,7 +18,7 @@ export const paginationVariants = tv({
       'inline-flex items-center justify-center',
       'rounded-[var(--dz-radius-md)]',
       'font-medium',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'text-[var(--dz-foreground)]',
       'hover:bg-[var(--dz-muted)]',
       'dz-focus-ring-button dz-disabled-button',

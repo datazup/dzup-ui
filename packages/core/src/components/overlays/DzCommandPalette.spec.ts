@@ -11,6 +11,15 @@ import { provideDzMessages } from '../../composables/provider/useDzMessages.ts'
 import DzCommandPalette from './DzCommandPalette.vue'
 
 /**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
+
+/**
  * Reka UI Combobox/Listbox uses scrollIntoView internally which is
  * unavailable in JSDOM. We stub it globally for these tests.
  */
@@ -261,7 +270,7 @@ describe('dzCommandPalette — Escape dismissal', () => {
     })
 
     await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 0))
+    await flushPromises()
 
     const rekaWarnings = warnSpy.mock.calls
       .map(([message]) => String(message))
@@ -283,10 +292,7 @@ describe('dzCommandPalette — Escape dismissal', () => {
       },
       attachTo: document.body,
     })
-    await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[role="dialog"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[role="dialog"]').exists()).toBe(true))
     expect(wrapper.find('[role="combobox"]').exists()).toBe(true)
     wrapper.unmount()
   })
@@ -300,11 +306,9 @@ describe('dzCommandPalette — Escape dismissal', () => {
       },
       attachTo: document.body,
     })
-    await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Edit File'))
 
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
-    expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Edit File')
     wrapper.unmount()
   })
 })
@@ -417,14 +421,13 @@ describe('dzCommandPalette — declared result navigation', () => {
       const press = async (key: string) => {
         await input.trigger('keydown', { key })
         await flushPromises()
-        await new Promise(resolve => setTimeout(resolve, 30))
       }
       const active = () => document.getElementById(input.attributes('aria-activedescendant') ?? '')?.textContent?.trim()
-      expect(active()).toBe('Alpha')
+      await settle(() => expect(active()).toBe('Alpha'))
       await press('ArrowDown')
-      expect(active()).toBe('Beta')
+      await settle(() => expect(active()).toBe('Beta'))
       await press('ArrowUp')
-      expect(active()).toBe('Alpha')
+      await settle(() => expect(active()).toBe('Alpha'))
       await press('Enter')
       expect(wrapper.emitted('select')?.at(-1)).toEqual([commands[0]])
       expect(wrapper.emitted('update:open')?.at(-1)).toEqual([false])

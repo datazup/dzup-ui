@@ -63,7 +63,7 @@ never as asserted.
 | `dataKey` | `string \| undefined` | no | `undefined` | Field path used to derive stable keys (falls back to index) |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state — prevents layout/sort/paging interaction |
 | `emptyDescription` | `string \| undefined` | no | `undefined` | Description for the built-in empty state |
-| `emptyTitle` | `string \| undefined` | no | `"No items"` | Title for the built-in empty state |
+| `emptyTitle` | `string \| undefined` | no | `undefined` | Title for the built-in empty state. Defaults to the `DzDataView.empty` catalog message ("No items"). |
 | `first` | `number \| undefined` | no | `0` | Zero-based index of the first item on the current page; defaults to `0`, the first page. |
 | `gap` | `LayoutGap \| undefined` | no | `"md"` | Gap between grid cells |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -296,7 +296,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 23 | 23 | 16 declare a default, of which 6 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 23 | 23 | 15 declare a default, of which 7 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 6 | 6 | 2 recovered from the `Dz*Emits` interface · 4 synthesised by `defineModel` |
 | Slots | 6 | 6 | 2 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |

@@ -8,6 +8,15 @@ import DzFormField from './DzFormField.vue'
 import { multiSelectTokens } from './DzMultiSelect.tokens.ts'
 import DzMultiSelect from './DzMultiSelect.vue'
 
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
+
 const items = [
   { label: 'Apple', value: 'apple' },
   { label: 'Banana', value: 'banana' },
@@ -193,10 +202,7 @@ describe('dzMultiSelect — Unit Tests', () => {
       attachTo: document.body,
     })
     await wrapper.find('input').trigger('focus')
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[role="listbox"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[role="listbox"]').exists()).toBe(true))
     expect(wrapper.findAll('[role="option"]')).toHaveLength(items.length)
     wrapper.unmount()
   })
@@ -207,11 +213,9 @@ describe('dzMultiSelect — Unit Tests', () => {
       attachTo: document.body,
     })
     await wrapper.find('input').trigger('focus')
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(items.length))
 
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false)
-    expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(items.length)
     wrapper.unmount()
   })
 })
@@ -227,23 +231,22 @@ describe('dzMultiSelect — declared keyboard actions', () => {
       const press = async (key: string) => {
         await input.trigger('keydown', { key })
         await flushPromises()
-        await new Promise(resolve => setTimeout(resolve, 30))
       }
       const active = () => document.getElementById(input.attributes('aria-activedescendant') ?? '')?.textContent?.trim()
       await press('ArrowDown')
-      expect(input.attributes('aria-expanded')).toBe('true')
-      expect(active()).toBe('Apple')
+      await settle(() => expect(input.attributes('aria-expanded')).toBe('true'))
+      await settle(() => expect(active()).toBe('Apple'))
       await press('ArrowDown')
-      expect(active()).toBe('Banana')
+      await settle(() => expect(active()).toBe('Banana'))
       await press('ArrowUp')
-      expect(active()).toBe('Apple')
+      await settle(() => expect(active()).toBe('Apple'))
       await press('End')
-      expect(active()).toBe('Cherry')
+      await settle(() => expect(active()).toBe('Cherry'))
       await press('Home')
-      expect(active()).toBe('Apple')
+      await settle(() => expect(active()).toBe('Apple'))
       await press('Enter')
       expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['apple']])
-      expect(input.attributes('aria-expanded')).toBe('true')
+      await settle(() => expect(input.attributes('aria-expanded')).toBe('true'))
       await press('Enter')
       expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
       await press('ArrowDown')
@@ -255,7 +258,7 @@ describe('dzMultiSelect — declared keyboard actions', () => {
       await press('Backspace')
       expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
       await press('ArrowUp')
-      expect(input.attributes('aria-expanded')).toBe('true')
+      await settle(() => expect(input.attributes('aria-expanded')).toBe('true'))
     }
     finally {
       wrapper.unmount()

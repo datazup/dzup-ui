@@ -17,7 +17,7 @@ export const selectVariants = tv({
       'rounded-[var(--dz-radius-md)]',
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-ring-input dz-disabled-input-shell',
       'data-[placeholder]:text-[var(--dz-muted-foreground)]',
     ].join(' '),
@@ -36,7 +36,7 @@ export const selectVariants = tv({
       'rounded-[var(--dz-radius-sm)]',
       'text-[var(--dz-foreground)]',
       'outline-none',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'data-[highlighted]:bg-[var(--dz-muted)]',
       'data-[state=checked]:bg-[var(--dz-primary-muted)] data-[state=checked]:text-[var(--dz-primary-muted-foreground)]',
       'dz-disabled-control',
@@ -70,7 +70,7 @@ export const selectVariants = tv({
     variant: {
       outline: { trigger: 'border border-[var(--dz-border)] focus-visible:border-[var(--dz-input-border-focus)]' },
       filled: { trigger: 'bg-[var(--dz-muted)] border border-transparent' },
-      underlined: { trigger: 'border-b border-[var(--dz-border)] rounded-none focus-visible:border-[var(--dz-input-border-focus)] focus-visible:outline-none' },
+      underlined: { trigger: 'border-b border-[var(--dz-border)] rounded-none dz-focus-ring-underline' },
     },
     size: {
       icon: { trigger: '', item: '', icon: '', checkIcon: '', searchInput: '' },

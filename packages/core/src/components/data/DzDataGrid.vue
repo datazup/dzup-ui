@@ -202,7 +202,7 @@ const { testId: dzTestId } = useDzTestIds()
     <!-- Empty state -->
     <div v-else-if="showEmptyState" data-part="empty" :class="cn(styles.empty(), ui?.empty)">
       <slot name="empty">
-        No data available
+        {{ dzMessages.empty }}
       </slot>
     </div>
 

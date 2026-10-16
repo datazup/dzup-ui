@@ -1,5 +1,5 @@
 import type { TreeNode } from './DzTreeSelect.types.ts'
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 /**
  * DzTreeSelect — Unit / behavior tests.
  *
@@ -7,7 +7,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
  * interaction tests open the panel via `defaultOpen` and query the document.
  */
 import { afterEach, describe, expect, it } from 'vitest'
-import { h } from 'vue'
+import { h, nextTick } from 'vue'
 import DzFormField from './DzFormField.vue'
 import DzTreeSelect from './DzTreeSelect.vue'
 
@@ -54,8 +54,14 @@ describe('dzTreeSelect — controlled and uncontrolled value ownership', () => {
   })
 })
 
+/**
+ * Drain queued render work instead of sleeping a fixed interval
+ * (UI-DZUP-UI-TEST-M-03): Reka's popover and tree settle over microtasks and
+ * one macrotask, which `flushPromises` covers, then one more render tick.
+ */
 async function flush(): Promise<void> {
-  await new Promise(resolve => setTimeout(resolve, 50))
+  await flushPromises()
+  await nextTick()
 }
 
 /** Click the clickable row of a tree node identified by its label text. */

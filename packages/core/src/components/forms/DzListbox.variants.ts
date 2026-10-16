@@ -18,7 +18,7 @@ export const listboxVariants = tv({
       'border border-[var(--dz-listbox-border,var(--dz-border))]',
       'bg-[var(--dz-listbox-bg,var(--dz-background))]',
       'text-[var(--dz-listbox-fg,var(--dz-foreground))]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-disabled-input-shell',
     ].join(' '),
     filterWrapper: [
@@ -49,7 +49,7 @@ export const listboxVariants = tv({
       'rounded-[var(--dz-radius-sm)]',
       'text-[var(--dz-foreground)]',
       'outline-none',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'data-[highlighted]:bg-[var(--dz-listbox-item-active-bg,var(--dz-muted))]',
       'focus-visible:ring-2 focus-visible:ring-[var(--dz-listbox-active-ring,var(--dz-ring))]',
       'data-[state=checked]:bg-[var(--dz-listbox-item-selected-bg,var(--dz-primary-muted))]',

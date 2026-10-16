@@ -65,7 +65,7 @@ const props = withDefaults(defineProps<DzDataViewProps<T>>(), {
   sortOptions: () => [],
   loading: false,
   loadingRows: 6,
-  emptyTitle: 'No items',
+  emptyTitle: undefined,
   emptyDescription: undefined,
   size: 'md',
   disabled: false,
@@ -349,7 +349,7 @@ const { testId: dzTestId } = useDzTestIds()
     <!-- Empty -->
     <template v-else-if="total === 0">
       <slot name="empty">
-        <DzEmpty :title="emptyTitle" :description="emptyDescription" />
+        <DzEmpty :title="emptyTitle ?? dzMessages.empty" :description="emptyDescription" />
       </slot>
     </template>
 

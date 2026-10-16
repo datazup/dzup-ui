@@ -31,7 +31,7 @@ export const dataViewVariants = tv({
       'border border-[var(--dz-border)]',
       'bg-[var(--dz-surface)] text-[var(--dz-foreground)]',
       'text-[length:var(--dz-text-sm)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-ring-control dz-disabled-control',
     ].join(' '),
     // List layout

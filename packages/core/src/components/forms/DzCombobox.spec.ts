@@ -1,5 +1,5 @@
 import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 /**
  * DzCombobox — Unit / behavior tests.
  */
@@ -7,6 +7,15 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import DzCombobox from './DzCombobox.vue'
 import DzFormField from './DzFormField.vue'
 import DzFormLabel from './DzFormLabel.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 const items = [
   { label: 'Apple', value: 'apple' },
@@ -298,10 +307,7 @@ describe('dzCombobox — Unit Tests', () => {
       props: { items, defaultOpen: true, portalDisabled: true },
       attachTo: document.body,
     })
-    await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[role="listbox"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[role="listbox"]').exists()).toBe(true))
     expect(wrapper.findAll('[role="option"]')).toHaveLength(items.length)
     wrapper.unmount()
   })
@@ -311,11 +317,9 @@ describe('dzCombobox — Unit Tests', () => {
       props: { items, defaultOpen: true },
       attachTo: document.body,
     })
-    await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(items.length))
 
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false)
-    expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(items.length)
     wrapper.unmount()
   })
 })
@@ -393,25 +397,24 @@ describe('dzCombobox — declared keyboard actions', () => {
     const press = async (key: string) => {
       await input.trigger('keydown', { key })
       await flushPromises()
-      await new Promise(resolve => setTimeout(resolve, 30))
     }
     const highlighted = () => document.getElementById(input.attributes('aria-activedescendant') ?? '')?.textContent?.trim()
     await press('ArrowDown')
-    expect(input.attributes('aria-expanded')).toBe('true')
-    expect(highlighted()).toBe('Apple')
+    await settle(() => expect(input.attributes('aria-expanded')).toBe('true'))
+    await settle(() => expect(highlighted()).toBe('Apple'))
     await press('ArrowDown')
-    expect(highlighted()).toBe('Banana')
+    await settle(() => expect(highlighted()).toBe('Banana'))
     await press('ArrowUp')
-    expect(highlighted()).toBe('Apple')
+    await settle(() => expect(highlighted()).toBe('Apple'))
     await press('End')
-    expect(highlighted()).toBe('Cherry')
+    await settle(() => expect(highlighted()).toBe('Cherry'))
     await press('Home')
-    expect(highlighted()).toBe('Apple')
+    await settle(() => expect(highlighted()).toBe('Apple'))
     await press('Enter')
     expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['apple'])
     expect(input.attributes('aria-expanded')).toBe('false')
     await press('ArrowUp')
-    expect(input.attributes('aria-expanded')).toBe('true')
+    await settle(() => expect(input.attributes('aria-expanded')).toBe('true'))
     await press('End')
     await press('Escape')
     expect(input.attributes('aria-expanded')).toBe('false')

@@ -25,6 +25,7 @@ import type { TreeNavDirection } from './treeNavigation.ts'
  */
 import { computed, nextTick, provide, toRef, useAttrs, useId } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TREE_KEY } from './DzTree.types.ts'
 import { treeVariants } from './DzTree.variants.ts'
@@ -61,6 +62,9 @@ const emit = defineEmits<DzTreeEmits>()
 defineSlots<DzTreeSlots>()
 
 const attrs = useAttrs()
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzTree')
 
 /** Stable root id; treeitem element ids derive from it for aria-activedescendant. */
 const fallbackId = useId()
@@ -240,7 +244,7 @@ const { testId: dzTestId } = useDzTestIds()
          contract (a bare listitem is not an allowed owned element of role=tree). -->
     <li v-else data-part="empty" role="none" :class="cn(styles.empty(), ui?.empty)">
       <slot name="empty">
-        No items
+        {{ dzMessages.empty }}
       </slot>
     </li>
   </ul>

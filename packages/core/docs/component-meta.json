@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
+  "sourceCommit": "76c2b67c361926e348b008d15f769b07c9aaf103",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -312,12 +312,12 @@
     "unclassifiable": 0,
     "props": 1758,
     "propsWithDescription": 1758,
-    "propsWithDeclaredDefault": 685,
-    "propsWithLiteralUndefinedDefault": 550,
+    "propsWithDeclaredDefault": 684,
+    "propsWithLiteralUndefinedDefault": 551,
     "events": 366,
-    "eventsWithDescription": 365,
+    "eventsWithDescription": 366,
     "eventsFromExtractor": 0,
-    "eventsFromEmitsInterface": 295,
+    "eventsFromEmitsInterface": 296,
     "eventsModelSynthesised": 70,
     "eventsModelDerived": 84,
     "slots": 328,
@@ -14175,8 +14175,8 @@
           "name": "rowClick",
           "type": "[row: T, index: number]",
           "signature": "(evt: \"rowClick\", row: T, index: number): void",
-          "description": "",
-          "descriptionSource": "none",
+          "description": "Emitted when a row is clicked, with the row and its zero-based index. Fires before selection toggles.",
+          "descriptionSource": "emits-interface",
           "modelDerived": false
         }
       ],
@@ -14198,7 +14198,7 @@
         "propsWithDescription": 2,
         "propsWithDeclaredDefault": 0,
         "events": 1,
-        "eventsWithDescription": 0,
+        "eventsWithDescription": 1,
         "eventsModelDerived": 0,
         "slots": 1,
         "slotsWithDescription": 1,
@@ -14507,8 +14507,8 @@
           "name": "emptyTitle",
           "type": "string | undefined",
           "required": false,
-          "default": "\"No items\"",
-          "description": "Title for the built-in empty state",
+          "default": "undefined",
+          "description": "Title for the built-in empty state. Defaults to the `DzDataView.empty`\ncatalog message (\"No items\").",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzDataView.types.ts"
         },
@@ -14853,7 +14853,7 @@
       "extraction": {
         "props": 23,
         "propsWithDescription": 23,
-        "propsWithDeclaredDefault": 16,
+        "propsWithDeclaredDefault": 15,
         "events": 6,
         "eventsWithDescription": 6,
         "eventsModelDerived": 4,
@@ -45693,7 +45693,9 @@
         "state": "absent",
         "parts": []
       },
-      "providerHooks": [],
+      "providerHooks": [
+        "useDzMessages"
+      ],
       "props": [
         {
           "name": "skeletonRows",
@@ -52379,6 +52381,7 @@
         ]
       },
       "providerHooks": [
+        "useDzMessages",
         "useDzTestIds"
       ],
       "capability": {

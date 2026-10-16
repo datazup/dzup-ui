@@ -31,8 +31,8 @@
 
 import type { LoadOptionsRequest } from '@dzup-ui/contracts'
 import type { DzSelectItem } from './DzSelect.types.ts'
-import { enableAutoUnmount, mount } from '@vue/test-utils'
-import { afterEach, describe, expect, it } from 'vitest'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import DzSelect from './DzSelect.vue'
 
 const PEOPLE: DzSelectItem[] = [
@@ -44,18 +44,26 @@ const PEOPLE: DzSelectItem[] = [
  * Mount an open select, driven by a host.
  *
  * `defaultOpen` so the panel and its portalled content exist without a pointer
- * interaction, `attachTo` so the portal has a document to render into, and the
- * settle delay the contract spec uses for the same reason — Reka's portal content
- * appears a tick or two after mount.
+ * interaction, and `attachTo` so the portal has a document to render into. Reka's
+ * portal content appears a tick or two after mount, so this waits for the
+ * content itself rather than sleeping a fixed interval (UI-DZUP-UI-TEST-M-03).
  */
 async function openDriven(props: Record<string, unknown> = {}) {
   const wrapper = mount(DzSelect, {
     props: { items: [], optionsState: 'idle', ...props, defaultOpen: true },
     attachTo: document.body,
   })
-  await wrapper.vm.$nextTick()
-  await new Promise(resolve => setTimeout(resolve, 100))
+  await settle(() => expect(document.querySelector('[data-part="content"]')).not.toBeNull())
+  await flushPromises()
   return wrapper
+}
+
+/**
+ * Wait for a condition, not for a clock. The generous ceiling is for loaded CI
+ * hosts; a passing condition returns on the first poll.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
 }
 
 /** The one row the control shows instead of its list. */
@@ -156,8 +164,7 @@ describe('state 2 — empty result', () => {
     const wrapper = await openDriven({ optionsState: 'empty' })
     expect(row()).not.toBeNull()
     await wrapper.setProps({ optionsState: 'ready', items: PEOPLE })
-    await new Promise(resolve => setTimeout(resolve, 50))
-    expect(row()).toBeNull()
+    await settle(() => expect(row()).toBeNull())
     wrapper.unmount()
   })
 })
@@ -219,7 +226,7 @@ describe('state 4 — a dependent option set clearing when its parent changes', 
     // The host's half of a cascading load: empty the collection and go back to
     // loading, because the parent field changed.
     await wrapper.setProps({ optionsState: 'loading', items: [] })
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(row()?.getAttribute('data-options-state')).toBe('loading'))
 
     expect(row()!.getAttribute('data-options-state')).toBe('loading')
     expect(announcement()).toBe('Loading options')
@@ -232,9 +239,9 @@ describe('state 4 — a dependent option set clearing when its parent changes', 
   it('renders the new option set and nothing of the old one', async () => {
     const wrapper = await openDriven({ optionsState: 'ready', items: PEOPLE })
     await wrapper.setProps({ optionsState: 'loading', items: [] })
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(row()?.getAttribute('data-options-state')).toBe('loading'))
     await wrapper.setProps({ optionsState: 'ready', items: [{ label: 'Grace Hopper', value: 'grace' }] })
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.textContent).toContain('Grace Hopper'))
 
     expect(row()).toBeNull()
     expect(document.body.textContent).toContain('Grace Hopper')
@@ -254,8 +261,7 @@ describe('state 4 — a dependent option set clearing when its parent changes', 
   it('shows the empty row rather than a blank panel when a host clears without resetting the state', async () => {
     const wrapper = await openDriven({ optionsState: 'ready', items: PEOPLE })
     await wrapper.setProps({ items: [] })
-    await new Promise(resolve => setTimeout(resolve, 50))
-    expect(row(), 'the empty row renders').not.toBeNull()
+    await settle(() => expect(row(), 'the empty row renders').not.toBeNull())
     expect(announcement()).toBe('No options found')
     expect(document.body.textContent).not.toContain('Ada Lovelace')
     expect(row()!.getAttribute('data-options-state')).toBe('ready')
@@ -322,7 +328,10 @@ describe('state 5 — a superseded request\'s answer is discarded', () => {
       : (await wrapper.setProps({ optionsState: 'ready', items: [{ label: 'STALE', value: 'stale' }] }), true)
 
     expect(applied).toBe(false)
-    await new Promise(resolve => setTimeout(resolve, 50))
+    // Nothing was applied, so there is no condition to wait for: drain the
+    // queued work and assert the absence.
+    await flushPromises()
+    await wrapper.vm.$nextTick()
     expect(document.body.textContent).not.toContain('STALE')
     // Still waiting, and still saying so. Third instance of finding `D-S3O2-5`:
     // the row is the loading row and announces the loading message, while
@@ -365,13 +374,11 @@ describe('state 6 — every state is announced, and announced politely', () => {
     expect(announcement()).toBe('Loading options')
 
     await wrapper.setProps({ optionsState: 'empty' })
-    await new Promise(resolve => setTimeout(resolve, 50))
-    expect(announcement()).toBe('No options found')
+    await settle(() => expect(announcement()).toBe('No options found'))
     expect(row()).toBe(first)
 
     await wrapper.setProps({ optionsState: 'error', optionsError: 'The directory did not answer' })
-    await new Promise(resolve => setTimeout(resolve, 50))
-    expect(announcement()).toBe('The directory did not answer')
+    await settle(() => expect(announcement()).toBe('The directory did not answer'))
     expect(row()).toBe(first)
 
     wrapper.unmount()
@@ -389,8 +396,7 @@ describe('state 6 — every state is announced, and announced politely', () => {
     const wrapper = await openDriven({ optionsState: 'loading' })
     expect(row()).not.toBeNull()
     await wrapper.setProps({ optionsState: 'ready', items: PEOPLE })
-    await new Promise(resolve => setTimeout(resolve, 50))
-    expect(row()).toBeNull()
+    await settle(() => expect(row()).toBeNull())
     wrapper.unmount()
   })
 
@@ -403,8 +409,10 @@ describe('state 6 — every state is announced, and announced politely', () => {
       props: { items: PEOPLE, defaultOpen: true },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 100))
+    // The list itself is the condition: once the options are on screen, the
+    // seam has had every chance to render a row.
+    await settle(() => expect(document.querySelectorAll('[role="option"]')).toHaveLength(PEOPLE.length))
+    await flushPromises()
     expect(row()).toBeNull()
     expect(wrapper.emitted('loadOptions')).toBeUndefined()
     wrapper.unmount()

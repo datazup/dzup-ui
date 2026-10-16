@@ -17,7 +17,7 @@ export const multiSelectVariants = tv({
       'rounded-[var(--dz-radius-md)]',
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-within-ring-input dz-disabled-input-shell',
     ].join(' '),
     input: [
@@ -43,7 +43,7 @@ export const multiSelectVariants = tv({
       'rounded-[var(--dz-radius-sm)]',
       'text-[var(--dz-foreground)]',
       'outline-none',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'data-[highlighted]:bg-[var(--dz-muted)]',
       'data-[state=checked]:bg-[var(--dz-primary-muted)] data-[state=checked]:text-[var(--dz-primary-muted-foreground)]',
       'dz-disabled-control',
@@ -59,7 +59,7 @@ export const multiSelectVariants = tv({
       'inline-flex items-center justify-center',
       'rounded-full',
       'hover:bg-[var(--dz-primary)]/20',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
     ].join(' '),
     empty: [
       'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)]',
@@ -79,7 +79,7 @@ export const multiSelectVariants = tv({
     variant: {
       outline: { root: 'border border-[var(--dz-border)] focus-within:border-[var(--dz-input-border-focus)]' },
       filled: { root: 'bg-[var(--dz-muted)] border border-transparent' },
-      underlined: { root: 'border-b border-[var(--dz-border)] rounded-none focus-within:border-[var(--dz-input-border-focus)] focus-within:outline-none' },
+      underlined: { root: 'border-b border-[var(--dz-border)] rounded-none dz-focus-ring-underline' },
     },
     size: {
       icon: { root: '', item: '', tag: '', icon: '', checkIcon: '' },

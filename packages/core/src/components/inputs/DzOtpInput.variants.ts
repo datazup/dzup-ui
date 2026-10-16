@@ -24,7 +24,7 @@ export const otpInputVariants = tv({
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',
       'shadow-[var(--dz-shadow-sm)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-ring-input dz-disabled-input',
       'focus:border-[var(--dz-input-border-focus)]',
       'placeholder:text-[var(--dz-muted-foreground)]',

@@ -137,7 +137,7 @@ Internal body sub-part for DzDataGrid.
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `rowClick` | `[row: T, index: number]` | — |
+| `rowClick` | `[row: T, index: number]` | Emitted when a row is clicked, with the row and its zero-based index. Fires before selection toggles. |
 
 #### Slots (1)
 

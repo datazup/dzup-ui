@@ -9,6 +9,15 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import DzCascader from './DzCascader.vue'
 
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
+
 /** Stub the portal so popover content renders inline (not teleported). */
 const InlinePortal = { template: '<div><slot /></div>' }
 
@@ -119,10 +128,8 @@ describe('dzCascader — columns', () => {
     expect(tab.defaultPrevented).toBe(false)
     // jsdom has no native Tab traversal. Model that browser action explicitly.
     next.focus()
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false'))
     expect(document.activeElement).toBe(next)
-    expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false')
     next.remove()
   })
 
@@ -137,10 +144,8 @@ describe('dzCascader — columns', () => {
     option.dispatchEvent(tab)
     expect(tab.defaultPrevented).toBe(false)
     previous.focus()
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false'))
     expect(document.activeElement).toBe(previous)
-    expect(wrapper.get('[role="combobox"]').attributes('aria-expanded')).toBe('false')
     previous.remove()
   })
 
@@ -214,9 +219,7 @@ describe('dzCascader — portal placement', () => {
       attachTo: document.body,
     })
     await openPanel(wrapper)
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[role="listbox"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[role="listbox"]').exists()).toBe(true))
     expect(wrapper.findAll('[role="option"]')).toHaveLength(options.length)
     wrapper.unmount()
   })
@@ -227,10 +230,9 @@ describe('dzCascader — portal placement', () => {
       attachTo: document.body,
     })
     await openPanel(wrapper)
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(options.length))
 
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false)
-    expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(options.length)
     wrapper.unmount()
   })
 
@@ -242,9 +244,7 @@ describe('dzCascader — portal placement', () => {
       attachTo: document.body,
     })
     await openPanel(wrapper)
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(target.querySelector('[role="listbox"]')).toBeTruthy()
+    await settle(() => expect(target.querySelector('[role="listbox"]')).toBeTruthy())
     wrapper.unmount()
     target.remove()
   })

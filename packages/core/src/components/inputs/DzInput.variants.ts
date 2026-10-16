@@ -32,7 +32,7 @@ export const inputWrapperVariants = tv({
       underlined: [
         'border-0 border-b-2 border-[var(--dz-input-border)]',
         'rounded-none bg-transparent',
-        'focus-within:border-[var(--dz-input-border-focus)] focus-within:outline-none',
+        'dz-focus-ring-underline',
       ].join(' '),
     },
 

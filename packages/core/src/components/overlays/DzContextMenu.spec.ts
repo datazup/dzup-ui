@@ -2,7 +2,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzContextMenu — Unit / behavior tests.
  */
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 import DzContextMenu from './DzContextMenu.vue'
 import DzContextMenuContent from './DzContextMenuContent.vue'
@@ -10,7 +10,14 @@ import DzContextMenuItem from './DzContextMenuItem.vue'
 import DzContextMenuSeparator from './DzContextMenuSeparator.vue'
 import DzContextMenuTrigger from './DzContextMenuTrigger.vue'
 
-const flush = () => new Promise(resolve => setTimeout(resolve, 50))
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 enableAutoUnmount(afterEach)
 
@@ -60,20 +67,17 @@ describe('dzContextMenu — Unit Tests', () => {
   it('renders the real Reka menu inline when portalDisabled is true', async () => {
     const wrapper = mountContextMenu({ portalDisabled: true })
     await wrapper.get('[data-testid="context-trigger"]').trigger('contextmenu', { clientX: 20, clientY: 20 })
-    await flush()
-
-    expect(wrapper.find('[data-testid="context-menu-host"] [role="menu"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[data-testid="context-menu-host"] [role="menu"]').exists()).toBe(true))
     wrapper.unmount()
   })
 
   it('keeps the real Reka default portal behavior', async () => {
     const wrapper = mountContextMenu()
     await wrapper.get('[data-testid="context-trigger"]').trigger('contextmenu', { clientX: 20, clientY: 20 })
-    await flush()
+    await settle(() => expect(document.body.querySelector('[role="menu"]')?.textContent).toContain('One'))
 
     const host = document.querySelector('[data-testid="context-menu-host"]')
     expect(host?.querySelector('[role="menu"]')).toBeNull()
-    expect(document.body.querySelector('[role="menu"]')?.textContent).toContain('One')
     wrapper.unmount()
   })
 })

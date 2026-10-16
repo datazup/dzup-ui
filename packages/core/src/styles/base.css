@@ -107,6 +107,7 @@
      - dz-focus-ring-control-inset: inset treatment for list-row style items
      - dz-focus-ring-input: direct text-entry controls
      - dz-focus-within-ring-input: composite field shells
+     - dz-focus-ring-underline: the underlined field variant, field or shell
      - dz-disabled-{button|control|input|input-shell}: semantic disabled states
      - dz-native-field-sm: small native input/select for internal filter surfaces
      - dz-target-min / dz-target-min-tight: WCAG 2.2 SC 2.5.8 24x24 target floor
@@ -144,6 +145,22 @@
 
   .dz-focus-within-ring-input:focus-within {
     outline: var(--dz-input-focus-ring-width) solid var(--dz-input-focus-ring-color);
+    outline-offset: var(--dz-input-focus-ring-offset);
+  }
+
+  /*
+   * One focus treatment for every underlined field (UI-DZUP-UI-DESIGN-M-12).
+   * It matches the field itself or a shell that holds the focused field, so a
+   * trigger button and a composite input shell carry the same class. The bottom
+   * edge takes the ring colour and thickens by 1px through an inset shadow (no
+   * layout shift). The ring outline is made transparent rather than removed:
+   * forced-colors mode repaints it, so Windows High Contrast still shows focus.
+   * Declared after the input rings so it replaces their outline on these fields.
+   */
+  .dz-focus-ring-underline:is(:focus-visible, :has(:focus-visible)) {
+    border-bottom-color: var(--dz-input-focus-ring-color);
+    box-shadow: inset 0 -1px 0 0 var(--dz-input-focus-ring-color);
+    outline: var(--dz-input-focus-ring-width) solid transparent;
     outline-offset: var(--dz-input-focus-ring-offset);
   }
 

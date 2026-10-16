@@ -25,7 +25,7 @@ export const dataGridVariants = tv({
     body: '',
     row: [
       'border-b border-[var(--dz-border)] last:border-b-0',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'hover:bg-[var(--dz-muted)]/50',
     ].join(' '),
     cell: 'text-start',
@@ -35,7 +35,7 @@ export const dataGridVariants = tv({
       'h-5 w-5 ms-[var(--dz-spacing-1)]',
       'rounded-[var(--dz-radius-sm)]',
       'hover:bg-[var(--dz-muted)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
     ].join(' '),
     checkbox: [
       'h-4 w-4 rounded-[var(--dz-radius-sm)]',
@@ -54,7 +54,7 @@ export const dataGridVariants = tv({
       'h-8 w-8',
       'rounded-[var(--dz-radius-sm)]',
       'border border-[var(--dz-border)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'hover:bg-[var(--dz-muted)]',
       'dz-focus-ring-button dz-disabled-button',
     ].join(' '),

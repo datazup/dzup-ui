@@ -5,11 +5,20 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
  * Tests compound tooltip tree: mounting, class merging, arrow rendering,
  * side/align props, and content visibility.
  */
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 import DzTooltip from './DzTooltip.vue'
 import DzTooltipContent from './DzTooltipContent.vue'
 import DzTooltipTrigger from './DzTooltipTrigger.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 /** Helper to mount full tooltip compound */
 /** Stub portal to render inline */
@@ -185,10 +194,7 @@ describe('dzTooltip -- Unit Tests', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[data-testid="tooltip-host"] [role="tooltip"]').text()).toContain('Inline tooltip text')
+    await settle(() => expect(wrapper.find('[data-testid="tooltip-host"] [role="tooltip"]').text()).toContain('Inline tooltip text'))
     wrapper.unmount()
   })
 
@@ -203,12 +209,10 @@ describe('dzTooltip -- Unit Tests', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelector('[role="tooltip"]')?.textContent).toContain('Portaled tooltip text'))
 
     const host = document.querySelector('[data-testid="tooltip-host"]')
     expect(host?.querySelector('[role="tooltip"]')).toBeNull()
-    expect(document.body.querySelector('[role="tooltip"]')?.textContent).toContain('Portaled tooltip text')
     wrapper.unmount()
   })
 })

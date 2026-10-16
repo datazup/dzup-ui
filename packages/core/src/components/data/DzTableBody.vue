@@ -15,6 +15,7 @@ import type { DzTableBodyProps, DzTableBodySlots, VirtualWindow } from './DzTabl
  *   preserve the scroll geometry.
  */
 import { Comment, computed, Fragment, inject, Text, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzEmpty from '../feedback/DzEmpty.vue'
 import DzSkeleton from '../feedback/DzSkeleton.vue'
@@ -29,6 +30,9 @@ const props = withDefaults(defineProps<DzTableBodyProps>(), {
 })
 
 const slots = defineSlots<DzTableBodySlots>()
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzTableBody')
 
 /**
  * Functional renderer that emits a pre-computed array of row VNodes. Used to
@@ -145,7 +149,7 @@ const windowedRows = computed<VNode[]>(() => {
     <tr v-else>
       <td colspan="1000">
         <slot name="empty">
-          <DzEmpty title="No records found." />
+          <DzEmpty :title="dzMessages.empty" />
         </slot>
       </td>
     </tr>

@@ -14,7 +14,7 @@ export const listVariants = tv({
     root: 'flex flex-col',
     item: [
       'flex items-center gap-[var(--dz-spacing-3)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
     ].join(' '),
   },
 

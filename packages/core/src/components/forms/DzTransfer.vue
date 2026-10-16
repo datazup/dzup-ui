@@ -437,7 +437,7 @@ function typeAheadIndex(event: KeyboardEvent, options: readonly HTMLElement[], c
             </div>
           </template>
           <div v-else data-part="empty" :class="[styles.empty(), ui?.empty]">
-            No items
+            {{ dzMessages.empty }}
           </div>
         </div>
       </div>
@@ -553,7 +553,7 @@ function typeAheadIndex(event: KeyboardEvent, options: readonly HTMLElement[], c
             </div>
           </template>
           <div v-else data-part="empty" :class="[styles.empty(), ui?.empty]">
-            No items
+            {{ dzMessages.empty }}
           </div>
         </div>
       </div>

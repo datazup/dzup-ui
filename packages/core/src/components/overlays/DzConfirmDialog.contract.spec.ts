@@ -8,6 +8,15 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import DzConfirmDialog from './DzConfirmDialog.vue'
 
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
+
 /** Contract tests keep the transport boundary synchronous; a real portal case is covered below. */
 const InlinePortal = { template: '<div data-testid="portal"><slot /></div>' }
 
@@ -207,11 +216,8 @@ describe('dzConfirmDialog -- Contract Spec v1', () => {
       },
       attachTo: host,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 0))
+    await settle(() => expect(host.querySelector('[role="dialog"]')).toBeTruthy())
 
-    const dialog = host.querySelector('[role="dialog"]')
-    expect(dialog).toBeTruthy()
     expect(host.querySelectorAll('[data-dz-dialog-overlay]')).toHaveLength(1)
     wrapper.unmount()
     // Hand-made host, so hand-removed: `attachTo` cleanup removes the element VTU

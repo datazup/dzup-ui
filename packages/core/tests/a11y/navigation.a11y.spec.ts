@@ -5,7 +5,7 @@
  * for WCAG 2.1 AA compliance using vitest-axe.
  */
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DzBreadcrumb from '../../src/components/navigation/DzBreadcrumb.vue'
@@ -22,6 +22,15 @@ import DzTabList from '../../src/components/navigation/DzTabList.vue'
 import DzTabs from '../../src/components/navigation/DzTabs.vue'
 import DzTabTrigger from '../../src/components/navigation/DzTabTrigger.vue'
 import './register-matchers.ts'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 describe('navigation family — Accessibility', () => {
   // ---------------------------------------------------------------------------
@@ -519,9 +528,7 @@ describe('navigation family — Accessibility', () => {
         components: { DzStepper, DzStepperItem },
       })
       // Wait for onMounted to register steps
-      await new Promise(resolve => setTimeout(resolve, 0))
-      const activeStep = container.querySelector('[aria-current="step"]')
-      expect(activeStep).toBeTruthy()
+      await settle(() => expect(container.querySelector('[aria-current="step"]')).toBeTruthy())
     })
 
     it('completed step indicator has aria-hidden on check SVG', async () => {
@@ -535,9 +542,8 @@ describe('navigation family — Accessibility', () => {
         components: { DzStepper, DzStepperItem },
       })
       // Wait for onMounted to register steps
-      await new Promise(resolve => setTimeout(resolve, 0))
+      await settle(() => expect(container.querySelector('[data-state="completed"] svg')).toBeTruthy())
       const completedSvg = container.querySelector('[data-state="completed"] svg')
-      expect(completedSvg).toBeTruthy()
       expect(completedSvg).toHaveAttribute('aria-hidden', 'true')
     })
 

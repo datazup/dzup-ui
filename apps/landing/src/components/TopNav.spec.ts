@@ -13,6 +13,15 @@ import { defineComponent, h, nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import TopNav from './TopNav.vue'
 
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
+
 const Blank = { template: '<div />' }
 
 function makeRouter() {
@@ -85,9 +94,7 @@ describe('topNav — desktop', () => {
     const { getByRole } = await mountAt('/')
     const trigger = getByRole('button', { name: /Components/ })
     await fireEvent.click(trigger)
-    await new Promise(r => setTimeout(r, 0))
-
-    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    await settle(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
     const menu = document.querySelector('[role="menu"]')
     expect(menu).not.toBeNull()
 
@@ -207,7 +214,6 @@ describe('topNav — mobile drawer', () => {
     expect(document.getElementById('mobile-nav')).not.toBeNull()
 
     await router.push('/themes')
-    await new Promise(r => setTimeout(r, 0))
-    expect(document.getElementById('mobile-nav')).toBeNull()
+    await settle(() => expect(document.getElementById('mobile-nav')).toBeNull())
   })
 })

@@ -19,9 +19,18 @@
 
 import type { BlockDef } from '../../blocks/registry.ts'
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { defineComponent } from 'vue'
 import BlockCardArt from './BlockCardArt.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 /** A block whose component carries every identity attribute we must strip. */
 const IdentityBlock = defineComponent({
@@ -52,7 +61,7 @@ async function mountArt() {
   const wrapper = mount(BlockCardArt, { props: { block: fakeBlock() } })
   await flushPromises()
   // The MutationObserver strips on a microtask checkpoint after DOM insertion.
-  await new Promise(resolve => setTimeout(resolve, 0))
+  await flushPromises()
   return wrapper
 }
 
@@ -90,8 +99,7 @@ describe('blockCardArt', () => {
     late.id = 'late-arrival'
     late.innerHTML = '<label for="late-input">Late</label><input id="late-input" name="late" />'
     stage.appendChild(late)
-    // MutationObserver delivery is async; give it a macrotask.
-    await new Promise(resolve => setTimeout(resolve, 0))
-    expect(stage.querySelectorAll('[id], [for], [name]').length).toBe(0)
+    // MutationObserver delivery is async; wait for the strip, not a clock.
+    await settle(() => expect(stage.querySelectorAll('[id], [for], [name]').length).toBe(0))
   })
 })

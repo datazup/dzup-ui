@@ -1,5 +1,5 @@
 import type { ColumnDef } from './DzDataGrid.types.ts'
-import { DZ_DIRECTION_KEY } from '@dzup-ui/contracts'
+import { DZ_DIRECTION_KEY, DZ_MESSAGES_KEY } from '@dzup-ui/contracts'
 import { mount } from '@vue/test-utils'
 /**
  * DzDataGrid — Unit / behavior / contract tests.
@@ -127,6 +127,15 @@ describe('dzDataGrid — Rendering', () => {
   it('shows empty state when data is empty', () => {
     const wrapper = mountGrid({ data: [] })
     expect(wrapper.text()).toContain('No data available')
+  })
+
+  it('takes the empty-state text from the message catalog (UI-DZUP-UI-UX-M-03)', () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data: [], columns: testColumns },
+      global: { provide: { [DZ_MESSAGES_KEY as symbol]: ref({ DzDataGrid: { empty: 'Keine Daten' } }) } },
+    })
+    expect(wrapper.get('[data-part="empty"]').text()).toBe('Keine Daten')
+    expect(wrapper.text()).not.toContain('No data available')
   })
 
   it('renders custom empty slot', () => {

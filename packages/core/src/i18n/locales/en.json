@@ -67,7 +67,8 @@
       "remaining": "{duration} remaining"
     },
     "DzDataGrid": {
-      "loading": "Loading data"
+      "loading": "Loading data",
+      "empty": "No data available"
     },
     "DzDataGridHeader": {
       "selectAllRows": "Select all rows"
@@ -82,7 +83,8 @@
       "viewLayout": "View layout",
       "loading": "Loading items",
       "showingAll": "{count, plural, one {Showing # item} other {Showing # items}}",
-      "showingRange": "{total, plural, one {Showing {start} to {end} of # item} other {Showing {start} to {end} of # items}}"
+      "showingRange": "{total, plural, one {Showing {start} to {end} of # item} other {Showing {start} to {end} of # items}}",
+      "empty": "No items"
     },
     "DzErrorBoundary": {
       "message": "Something went wrong.",
@@ -127,7 +129,8 @@
       "moveDown": "Move down",
       "moveTop": "Move to top",
       "moveBottom": "Move to bottom",
-      "dragHandle": "Drag to reorder"
+      "dragHandle": "Drag to reorder",
+      "empty": "No items"
     },
     "DzPagination": {
       "ariaLabel": "Pagination",
@@ -170,6 +173,9 @@
     "DzTabTrigger": {
       "closeTab": "Close tab"
     },
+    "DzTableBody": {
+      "empty": "No records found."
+    },
     "DzTableCell": {
       "resizeColumn": "Resize column",
       "narrowColumn": "Narrow column",
@@ -209,7 +215,11 @@
       "moveToSource": "Move selected to source",
       "searchTarget": "Search target items",
       "targetItems": "Target items",
-      "searchPlaceholder": "Search..."
+      "searchPlaceholder": "Search...",
+      "empty": "No items"
+    },
+    "DzTree": {
+      "empty": "No items"
     },
     "DzTreeSelect": {
       "filterOptions": "Filter options",

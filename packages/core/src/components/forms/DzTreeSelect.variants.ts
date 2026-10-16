@@ -19,7 +19,7 @@ export const treeSelectVariants = tv({
       'rounded-[var(--dz-radius-md)]',
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-ring-input dz-disabled-input-shell',
       'cursor-pointer',
     ].join(' '),
@@ -74,7 +74,7 @@ export const treeSelectVariants = tv({
       'rounded-[var(--dz-radius-sm)]',
       'border border-[var(--dz-border)]',
       'text-[var(--dz-primary-foreground)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'data-[state=checked]:bg-[var(--dz-primary)] data-[state=checked]:border-[var(--dz-primary)]',
       'data-[state=indeterminate]:bg-[var(--dz-primary)] data-[state=indeterminate]:border-[var(--dz-primary)]',
     ].join(' '),
@@ -86,7 +86,7 @@ export const treeSelectVariants = tv({
     variant: {
       outline: { trigger: 'border border-[var(--dz-border)] focus-visible:border-[var(--dz-input-border-focus)]' },
       filled: { trigger: 'bg-[var(--dz-muted)] border border-transparent' },
-      underlined: { trigger: 'border-b border-[var(--dz-border)] rounded-none focus-visible:border-[var(--dz-input-border-focus)] focus-visible:outline-none' },
+      underlined: { trigger: 'border-b border-[var(--dz-border)] rounded-none dz-focus-ring-underline' },
     },
     size: {
       icon: { trigger: '', icon: '' },

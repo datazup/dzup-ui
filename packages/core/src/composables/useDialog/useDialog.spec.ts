@@ -235,11 +235,12 @@ describe('useDialog', () => {
     await new Promise(resolve => requestAnimationFrame(resolve))
     await nextTick()
 
-    // The setTimeout(0) in click-outside setup needs to fire
-    await new Promise(resolve => setTimeout(resolve, 10))
-
-    document.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
-    expect(dialog.isOpen.value).toBe(false)
+    // The click-outside listener is armed by a setTimeout(0) in setup; poll the
+    // outside click until it lands rather than sleeping past the timer.
+    await vi.waitFor(() => {
+      document.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+      expect(dialog.isOpen.value).toBe(false)
+    }, { timeout: 5000, interval: 5 })
 
     wrapper.unmount()
   })

@@ -258,6 +258,20 @@ export interface DzDataGridProps<T = Record<string, unknown>> extends BaseAccess
 // DzDataGrid Emits
 // ---------------------------------------------------------------------------
 
+/**
+ * Events emitted by DzDataGridBody.
+ *
+ * Declared here rather than in the part's `<script setup>`: the part is generic
+ * over its row type, and a generic SFC's local declarations sit inside the
+ * generated setup function, out of reach of the `Dz…Emits` recovery that reads
+ * member JSDoc (Vue's `ShortEmits` mapped type erases it before
+ * `vue-component-meta` sees it — TASK-N2-A2 finding F-1, TASK-R5-O8).
+ */
+export interface DzDataGridBodyEmits<T = Record<string, unknown>> {
+  /** Emitted when a row is clicked, with the row and its zero-based index. Fires before selection toggles. */
+  rowClick: [row: T, index: number]
+}
+
 /** Events emitted by DzDataGrid */
 export interface DzDataGridEmits<T = Record<string, unknown>> {
   /** Sort model changed */

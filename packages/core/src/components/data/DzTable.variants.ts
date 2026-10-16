@@ -15,7 +15,7 @@ export const tableVariants = tv({
     header: 'bg-[var(--dz-muted)]',
     body: '',
     footer: 'border-t border-[var(--dz-border)] bg-[var(--dz-muted)] font-medium',
-    row: 'border-b border-[var(--dz-border)] transition-[var(--dz-transition-fast)]',
+    row: 'border-b border-[var(--dz-border)] transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
     headerCell: ['text-start font-medium text-[var(--dz-muted-foreground)]'].join(' '),
     cell: 'text-start',
     expandToggle: [

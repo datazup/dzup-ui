@@ -1,3 +1,4 @@
+import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { effectScope, nextTick, ref } from 'vue'
 import { BLOCKS } from './registry.ts'
@@ -30,8 +31,9 @@ describe('loadBlockSource', () => {
 
 describe('useBlockSource', () => {
   async function settle(): Promise<void> {
+    // Drain the loader's promise chain without a clock (UI-DZUP-UI-TEST-M-03).
     for (let i = 0; i < 5; i++) {
-      await new Promise(resolve => setTimeout(resolve, 0))
+      await flushPromises()
       await nextTick()
     }
   }

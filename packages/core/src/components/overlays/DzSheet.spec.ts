@@ -2,12 +2,21 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzSheet — Unit / behavior tests.
  */
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 import DzSheet from './DzSheet.vue'
 import DzSheetContent from './DzSheetContent.vue'
 import DzSheetDescription from './DzSheetDescription.vue'
 import DzSheetTitle from './DzSheetTitle.vue'
+
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
 
 /** Stub portal to render inline (Reka UI portals don't work in jsdom) */
 const InlinePortal = { template: '<div data-testid="portal"><slot /></div>' }
@@ -71,10 +80,7 @@ describe('dzSheet — Unit Tests', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[data-testid="sheet-host"] [role="dialog"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[data-testid="sheet-host"] [role="dialog"]').exists()).toBe(true))
     wrapper.unmount()
   })
 
@@ -91,12 +97,10 @@ describe('dzSheet — Unit Tests', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Portaled sheet'))
 
     const host = document.querySelector('[data-testid="sheet-host"]')
     expect(host?.querySelector('[role="dialog"]')).toBeNull()
-    expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Portaled sheet')
     wrapper.unmount()
   })
 })

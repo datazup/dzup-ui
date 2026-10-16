@@ -41,6 +41,15 @@
  * The **double-timing** rule expands every `var(--dz-*)` through the shipped
  * values and allows one timing function per `transition` item.
  *
+ * The same token is also misused from Tailwind: `transition-[var(--dz-transition-fast)]`
+ * compiles to `transition-property: var(--dz-transition-fast)`, a duration and an
+ * easing where a property list belongs. The value is invalid, the property falls
+ * back to `all` at Tailwind's default timing, and retuning `--dz-duration-*` or
+ * `--dz-ease-*` reaches none of those recipes (UI-DZUP-UI-DESIGN-M-11). The
+ * **tailwind-transition-token** rule rejects the class; write the property list
+ * and the timing separately (`transition-colors duration-[var(--dz-duration-fast)]
+ * ease-[var(--dz-ease-default)]`).
+ *
  * ── Two ratchets, reported in the same pass ──
  *
  * The declared set and the referenced set are both already in memory, so the
@@ -108,6 +117,7 @@ export interface ReferenceViolation {
     | 'alias-cycle'
     | 'ceiling'
     | 'double-timing'
+    | 'tailwind-transition-token'
   readonly symbol: string
   readonly message: string
 }
@@ -350,6 +360,32 @@ export function doubleTimedTransitions(
   return found
 }
 
+// --- Tailwind transition-property misuse ---
+
+const TAILWIND_TRANSITION_TOKEN_RE = /\btransition-\[var\(--dz-transition-[\w-]+\)\]/g
+
+/**
+ * Every `transition-[var(--dz-transition-*)]` utility. Tailwind maps an arbitrary
+ * `transition-[…]` value to `transition-property`, and `--dz-transition-*` is a
+ * duration-plus-easing shorthand, so the token's timing never applies.
+ */
+export function tailwindTransitionTokens(text: string, file: string): ReferenceViolation[] {
+  const masked = maskComments(text)
+  const starts = lineStarts(masked)
+  const found: ReferenceViolation[] = []
+  for (const match of masked.matchAll(TAILWIND_TRANSITION_TOKEN_RE)) {
+    found.push({
+      rule: 'tailwind-transition-token',
+      symbol: `${file}:${lineAt(starts, match.index ?? 0)}`,
+      message: `"${match[0]}" compiles to transition-property, so the token's duration and easing are `
+        + 'discarded and the element transitions all properties at Tailwind\'s default timing. Name the '
+        + 'properties and the timing separately: transition-colors duration-[var(--dz-duration-fast)] '
+        + 'ease-[var(--dz-ease-default)].',
+    })
+  }
+  return found
+}
+
 // --- Alias cycles ---
 
 const ALIAS_HEAD_RE = /^var\(\s*(--dz-[\w-]+)/
@@ -420,7 +456,9 @@ export function checkTokenReferences(): ReferenceReport {
   // 3b. One timing function per transition item, counted after var() substitution.
   for (const file of gateFiles) {
     const at = relative(ROOT, file).split(sep).join('/')
-    violations.push(...doubleTimedTransitions(readFileSync(file, 'utf8'), at, abiValues))
+    const text = readFileSync(file, 'utf8')
+    violations.push(...doubleTimedTransitions(text, at, abiValues))
+    violations.push(...tailwindTransitionTokens(text, at))
   }
 
   // 4. Classify.

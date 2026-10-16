@@ -50,7 +50,7 @@ export const toastVariants = tv({
       'h-7 px-[var(--dz-spacing-2)]',
       'text-[length:var(--dz-text-xs)]',
       'font-medium',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-ring-button',
     ].join(' '),
     closeButton: [
@@ -62,7 +62,7 @@ export const toastVariants = tv({
       'text-[var(--dz-muted-foreground)]',
       'opacity-0 group-hover:opacity-100',
       'hover:text-[var(--dz-foreground)]',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-[color,background-color,border-color,opacity] duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'focus-visible:opacity-100 dz-focus-ring-button',
     ].join(' '),
     toneIndicator: [

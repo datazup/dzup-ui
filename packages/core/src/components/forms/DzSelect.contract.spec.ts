@@ -5,8 +5,8 @@ import type { DzSelectItem } from './DzSelect.types.ts'
  * Verifies props, events, slots, data attributes, and ARIA compliance.
  */
 import { expectAnatomy } from '@dzup-ui/testing'
-import { enableAutoUnmount, mount } from '@vue/test-utils'
-import { afterEach, describe, expect, it } from 'vitest'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { anatomy } from './DzSelect.anatomy.ts'
 import DzSelect from './DzSelect.vue'
 
@@ -16,33 +16,86 @@ const mockItems: DzSelectItem[] = [
   { label: 'Cherry', value: 'cherry', disabled: true },
 ]
 
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): Reka's
+ * content lands a tick or two after mount.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
+
+/** Mount an open, searchable select with the panel inline, and wait for its search box. */
+async function openSearchable(props: Record<string, unknown> = {}) {
+  const wrapper = mount(DzSelect, {
+    props: { items: mockItems, searchable: true, defaultOpen: true, portalDisabled: true, ...props },
+    attachTo: document.body,
+  })
+  await settle(() => expect(wrapper.find('[data-dz-search-input]').exists()).toBe(true))
+  return wrapper
+}
+
+/** Type into the search box the way a template's `@input` sees it, and wait for the list to follow. */
+async function typeQuery(wrapper: ReturnType<typeof mount>, query: string, expectOptions: number): Promise<void> {
+  const input = wrapper.get<HTMLInputElement>('[data-dz-search-input]').element
+  input.value = query
+  input.dispatchEvent(new Event('input', { bubbles: true }))
+  await settle(() => expect(wrapper.findAll('[role="option"]')).toHaveLength(expectOptions))
+}
+
 describe('dzSelect — Contract Spec v1', () => {
   // ── Props ──
 
-  it('renders with required items prop', () => {
+  // Each prop test asserts the prop's observable effect, not that the mount
+  // survived it (UI-DZUP-UI-TEST-M-09): a mapping change must turn these red.
+
+  it('renders a combobox trigger from the required items prop', () => {
     const wrapper = mount(DzSelect, {
       props: { items: mockItems },
     })
-    expect(wrapper.exists()).toBe(true)
+    const trigger = wrapper.get('[data-part="trigger"]')
+    expect(trigger.attributes('role')).toBe('combobox')
+    expect(trigger.attributes('aria-expanded')).toBe('false')
   })
 
-  it('accepts all canonical size values', () => {
-    const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+  it('maps every canonical size to its own trigger metrics', () => {
+    // Spelled out in full (not templated) so the token-reference gate can check
+    // every name, and so a remapped size fails here.
+    const expected = {
+      xs: ['h-[var(--dz-input-xs-height)]', 'px-[var(--dz-input-xs-padding-x)]', 'text-[length:var(--dz-input-xs-font-size)]'],
+      sm: ['h-[var(--dz-input-sm-height)]', 'px-[var(--dz-input-sm-padding-x)]', 'text-[length:var(--dz-input-sm-font-size)]'],
+      md: ['h-[var(--dz-input-md-height)]', 'px-[var(--dz-input-md-padding-x)]', 'text-[length:var(--dz-input-md-font-size)]'],
+      lg: ['h-[var(--dz-input-lg-height)]', 'px-[var(--dz-input-lg-padding-x)]', 'text-[length:var(--dz-input-lg-font-size)]'],
+      xl: ['h-[var(--dz-input-xl-height)]', 'px-[var(--dz-input-xl-padding-x)]', 'text-[length:var(--dz-input-xl-font-size)]'],
+    } as const
+    const sizes = Object.keys(expected) as (keyof typeof expected)[]
     for (const size of sizes) {
       const wrapper = mount(DzSelect, {
         props: { items: mockItems, size },
       })
-      expect(wrapper.exists()).toBe(true)
+      const classes = wrapper.get('[data-part="trigger"]').classes()
+      for (const cls of expected[size])
+        expect(classes, size).toContain(cls)
+      // No other size's metrics leak in.
+      for (const other of sizes.filter(s => s !== size))
+        expect(classes, `${size} vs ${other}`).not.toContain(expected[other][0])
     }
   })
 
-  it('accepts all canonical variant values', () => {
-    const variants = ['outline', 'filled', 'underlined'] as const
-    for (const variant of variants) {
+  it('maps every canonical variant to its own trigger surface', () => {
+    const expected = {
+      outline: { has: ['border', 'border-[var(--dz-border)]'], lacks: ['bg-[var(--dz-muted)]', 'border-b'] },
+      filled: { has: ['bg-[var(--dz-muted)]', 'border-transparent'], lacks: ['border-[var(--dz-border)]', 'border-b'] },
+      underlined: { has: ['border-b', 'rounded-none', 'dz-focus-ring-underline'], lacks: ['bg-[var(--dz-muted)]'] },
+    } as const
+    for (const [variant, { has, lacks }] of Object.entries(expected)) {
       const wrapper = mount(DzSelect, {
-        props: { items: mockItems, variant },
+        props: { items: mockItems, variant: variant as keyof typeof expected },
       })
-      expect(wrapper.exists()).toBe(true)
+      const classes = wrapper.get('[data-part="trigger"]').classes()
+      for (const cls of has)
+        expect(classes, `${variant} has ${cls}`).toContain(cls)
+      for (const cls of lacks)
+        expect(classes, `${variant} lacks ${cls}`).not.toContain(cls)
     }
   })
 
@@ -67,35 +120,44 @@ describe('dzSelect — Contract Spec v1', () => {
 
   // ── Searchable prop ──
 
-  it('accepts searchable prop', () => {
-    const wrapper = mount(DzSelect, {
-      props: { items: mockItems, searchable: true },
+  it('renders a search box in the open panel only when searchable', async () => {
+    const searchable = await openSearchable()
+    expect(searchable.find('[data-dz-search-input]').exists()).toBe(true)
+    searchable.unmount()
+
+    const plain = mount(DzSelect, {
+      props: { items: mockItems, defaultOpen: true, portalDisabled: true },
+      attachTo: document.body,
     })
-    expect(wrapper.exists()).toBe(true)
+    await settle(() => expect(plain.findAll('[role="option"]')).toHaveLength(mockItems.length))
+    expect(plain.find('[data-dz-search-input]').exists()).toBe(false)
+    plain.unmount()
   })
 
-  it('accepts searchPlaceholder prop', () => {
-    const wrapper = mount(DzSelect, {
-      props: { items: mockItems, searchable: true, searchPlaceholder: 'Find...' },
-    })
-    expect(wrapper.exists()).toBe(true)
+  it('puts searchPlaceholder on the search box', async () => {
+    const wrapper = await openSearchable({ searchPlaceholder: 'Find...' })
+    expect(wrapper.get('[data-dz-search-input]').attributes('placeholder')).toBe('Find...')
+    wrapper.unmount()
   })
 
-  it('accepts noResultsText prop', () => {
-    const wrapper = mount(DzSelect, {
-      props: { items: mockItems, searchable: true, noResultsText: 'Nothing' },
-    })
-    expect(wrapper.exists()).toBe(true)
+  it('renders noResultsText when the query matches nothing', async () => {
+    const wrapper = await openSearchable({ noResultsText: 'Nothing' })
+    await typeQuery(wrapper, 'zzzzz', 0)
+    await settle(() => expect(wrapper.find('[data-dz-no-results]').exists()).toBe(true))
+    expect(wrapper.get('[data-dz-no-results]').text()).toContain('Nothing')
+    wrapper.unmount()
   })
 
-  it('accepts filterFn prop', () => {
+  it('filters with filterFn instead of the default substring match', async () => {
     const customFilter = (option: { label: string, value: string }, query: string): boolean => {
       return option.value === query
     }
-    const wrapper = mount(DzSelect, {
-      props: { items: mockItems, searchable: true, filterFn: customFilter },
-    })
-    expect(wrapper.exists()).toBe(true)
+    const wrapper = await openSearchable({ filterFn: customFilter })
+    // The default filter would keep Banana for 'ban'; the exact-match filter keeps nothing.
+    await typeQuery(wrapper, 'ban', 0)
+    await typeQuery(wrapper, 'banana', 1)
+    expect(wrapper.get('[role="option"]').text()).toContain('Banana')
+    wrapper.unmount()
   })
 
   // ── CSS containment ──
@@ -124,8 +186,7 @@ describe('dzSelect — Contract Spec v1', () => {
       props: { items: mockItems, defaultOpen: true, portalDisabled: true, searchable: true },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(wrapper.find('[data-part="item"]').exists()).toBe(true))
 
     for (const part of ['content', 'viewport', 'input', 'item', 'item-label'])
       expect(wrapper.find(`[data-part="${part}"]`).exists(), part).toBe(true)
@@ -141,8 +202,7 @@ describe('dzSelect — Contract Spec v1', () => {
       props: { items: mockItems, defaultOpen: true },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(document.body.querySelector('[data-part="content"] [data-part="item"]')).not.toBeNull())
 
     const content = document.body.querySelector('[data-part="content"]')
     expect(content).not.toBeNull()
@@ -158,10 +218,7 @@ describe('dzSelect — Contract Spec v1', () => {
       props: { items: [], defaultOpen: true, portalDisabled: true },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
-
-    expect(wrapper.find('[data-part="empty"]').exists()).toBe(true)
+    await settle(() => expect(wrapper.find('[data-part="empty"]').exists()).toBe(true))
     expectAnatomy(wrapper, anatomy)
     wrapper.unmount()
   })
@@ -173,11 +230,9 @@ describe('dzSelect — Contract Spec v1', () => {
       props: { items: [], defaultOpen: true, portalDisabled: true, searchable: true },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(wrapper.find('[data-dz-search-input]').exists()).toBe(true))
 
     const search = wrapper.find('[data-dz-search-input]')
-    expect(search.exists()).toBe(true)
     expect(search.attributes('data-part')).toBe('input')
     wrapper.unmount()
   })
@@ -194,8 +249,7 @@ describe('dzSelect — Contract Spec v1', () => {
       },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await settle(() => expect(wrapper.find('[data-part="item"]').exists()).toBe(true))
 
     expect(wrapper.find('[data-part="content"]').classes()).toContain('max-h-40')
     expect(wrapper.find('[data-part="item"]').classes()).toContain('py-3')
@@ -242,15 +296,15 @@ describe('dzSelect — renderer contract C9 async options', () => {
   /**
    * jsdom has no pointer-capture APIs, so Reka's trigger cannot be clicked
    * open. `defaultOpen` is how the rest of this component's suite does it, and
-   * the portal needs a tick plus a beat before its content is in the document.
+   * the portal's content lands a tick or two after mount, so this waits for it.
    */
   async function open(props: Record<string, unknown>) {
     const wrapper = mount(DzSelect, {
       props: { items: [], ...props, defaultOpen: true },
       attachTo: document.body,
     })
-    await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 100))
+    await settle(() => expect(document.querySelector('[data-part="content"]')).not.toBeNull())
+    await flushPromises()
     return wrapper
   }
 

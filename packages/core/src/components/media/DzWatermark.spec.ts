@@ -10,6 +10,15 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import DzWatermark from './DzWatermark.vue'
 
+/**
+ * Wait for a condition rather than a fixed sleep (UI-DZUP-UI-TEST-M-03): portalled
+ * content lands a tick or two after mount, and a loaded host makes any fixed
+ * interval either too short or wasted.
+ */
+async function settle(assertion: () => void): Promise<void> {
+  await vi.waitFor(assertion, { timeout: 5000, interval: 10 })
+}
+
 interface RecordingCtx {
   rotate: MockInstance
   fillText: MockInstance
@@ -179,9 +188,8 @@ describe('dzWatermark — Unit Tests', () => {
       const overlay = wrapper.find('[aria-hidden="true"]').element
       overlay.remove()
       expect(root.contains(overlay)).toBe(false)
-      // MutationObserver callbacks are microtask-scheduled.
-      await new Promise(resolve => setTimeout(resolve, 0))
-      expect(root.contains(overlay)).toBe(true)
+      // MutationObserver callbacks are microtask-scheduled; wait for the re-insert.
+      await settle(() => expect(root.contains(overlay)).toBe(true))
       wrapper.unmount()
     })
 
@@ -194,7 +202,9 @@ describe('dzWatermark — Unit Tests', () => {
       const root = wrapper.element
       const overlay = wrapper.find('[aria-hidden="true"]').element
       overlay.remove()
-      await new Promise(resolve => setTimeout(resolve, 0))
+      // Nothing should re-insert it, so there is no condition to wait for: drain
+      // the queued observer work and assert the absence.
+      await flushPromises()
       expect(root.contains(overlay)).toBe(false)
       wrapper.unmount()
     })

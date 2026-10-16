@@ -28,7 +28,7 @@ export const tagsInputVariants = tv({
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',
       'cursor-text',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-within-ring-input dz-disabled-input-shell',
       'motion-reduce:transition-none',
     ].join(' '),
@@ -47,7 +47,7 @@ export const tagsInputVariants = tv({
     variant: {
       outline: { field: 'border border-[var(--dz-border)] focus-within:border-[var(--dz-input-border-focus)]' },
       filled: { field: 'bg-[var(--dz-muted)] border border-transparent' },
-      underlined: { field: 'border-b border-[var(--dz-border)] rounded-none focus-within:border-[var(--dz-input-border-focus)] focus-within:outline-none' },
+      underlined: { field: 'border-b border-[var(--dz-border)] rounded-none dz-focus-ring-underline' },
     },
     size: {
       icon: { field: '', input: '' },

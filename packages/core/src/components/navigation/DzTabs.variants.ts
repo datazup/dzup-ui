@@ -19,7 +19,7 @@ export const tabsVariants = tv({
     trigger: [
       'inline-flex items-center justify-center whitespace-nowrap',
       'font-medium',
-      'transition-[var(--dz-transition-fast)]',
+      'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'dz-focus-ring-control dz-disabled-control',
       'data-[state=active]:text-[var(--dz-foreground)]',
     ].join(' '),
