@@ -342,6 +342,16 @@ jobs:
             fi
           done
           echo "Pack smoke test passed for all packages"
+      # ADR-19 §2 (UI-DZUP-UI-TEST-M-08). The only proof that the six layers
+      # survive into the PACKED core/tokens CSS and that a consumer's
+      # `@layer dz-overrides` beats dz-components without !important. It needs
+      # the dist built above and no web server; blocking, one engine in CI.
+      # packages/tooling/src/validators/e2e-lane-wiring.spec.ts fails if this
+      # step is removed or made advisory.
+      - name: Install Playwright Chromium for the layer-order lane
+        run: yarn playwright install --with-deps chromium
+      - name: CSS layer order in the packed tarballs (ADR-19)
+        run: yarn test:e2e:layer-order --project=layer-order-chromium
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:

@@ -1,11 +1,13 @@
+import type { DzMessages } from '@dzup-ui/contracts'
 import type { CommandItem } from './DzCommandPalette.types'
 /**
  * DzCommandPalette — Unit / behavior tests.
  */
 import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 import { mountWithDialogStubs } from '../../../test-utils/dialog'
+import { provideDzMessages } from '../../composables/provider/useDzMessages.ts'
 import DzCommandPalette from './DzCommandPalette.vue'
 
 /**
@@ -435,5 +437,47 @@ describe('dzCommandPalette — declared result navigation', () => {
     await flushPromises()
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
     expect(wrapper.emitted('select')).toHaveLength(2)
+  })
+})
+
+// UI-DZUP-UI-UX-M-06: the screen-reader instructions and the empty text come
+// from the catalog, so a host translation reaches both.
+describe('dzCommandPalette — catalog-driven description and empty text', () => {
+  async function mountWithMessages(messages: DzMessages) {
+    const Host = defineComponent({
+      setup() {
+        provideDzMessages(ref(messages))
+        return () => h(DzCommandPalette, { open: true, items: [{ id: 'edit', label: 'Edit File' }], id: 'palette-i18n' })
+      },
+    })
+    const wrapper = mount(Host, { attachTo: document.body })
+    await nextTick()
+    const dialog = document.getElementById('palette-i18n')!
+    const input = dialog.querySelector<HTMLInputElement>('[role="combobox"]')!
+    input.value = 'nothing-matches-this'
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+    await nextTick()
+    await nextTick()
+    return { wrapper, dialog }
+  }
+
+  it('renders the English defaults when the host overrides nothing', async () => {
+    const { wrapper, dialog } = await mountWithMessages({})
+    const descriptionId = dialog.getAttribute('aria-describedby')!
+    expect(document.getElementById(descriptionId)?.textContent?.trim())
+      .toBe('Search commands, then use arrow keys to move through results and Enter to select.')
+    expect(dialog.querySelector('[data-part="empty"]')?.textContent?.trim()).toBe('No results found.')
+    wrapper.unmount()
+  })
+
+  it('takes the dialog description and the empty text from the DzCommandPalette catalog entry', async () => {
+    const { wrapper, dialog } = await mountWithMessages({
+      DzCommandPalette: { description: 'Befehle suchen', noResults: 'Keine Treffer' },
+    })
+    const descriptionId = dialog.getAttribute('aria-describedby')!
+    expect(document.getElementById(descriptionId)?.textContent?.trim()).toBe('Befehle suchen')
+    expect(dialog.querySelector('[data-part="empty"]')?.textContent?.trim()).toBe('Keine Treffer')
+    expect(dialog.textContent).not.toContain('No results found.')
+    wrapper.unmount()
   })
 })

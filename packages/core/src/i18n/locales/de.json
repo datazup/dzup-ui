@@ -27,6 +27,8 @@
     "DzCombobox.noResults",
     "DzCombobox.toggleOptions",
     "DzCommandPalette.ariaLabel",
+    "DzCommandPalette.description",
+    "DzCommandPalette.noResults",
     "DzConfirmDialog.cancel",
     "DzConfirmDialog.confirm",
     "DzCountdown.days",

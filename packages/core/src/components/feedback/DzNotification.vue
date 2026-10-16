@@ -46,6 +46,7 @@ defineSlots<DzNotificationSlots>()
 
 const attrs = useAttrs()
 const visible = ref(true)
+const rootRef = ref<HTMLElement | null>(null)
 let dismissTimer: ReturnType<typeof setTimeout> | null = null
 
 const classes = computed(() =>
@@ -57,25 +58,94 @@ const classes = computed(() =>
 
 const isUrgent = computed(() => props.tone === 'danger' || props.tone === 'warning')
 
+/** The element that had focus when the notification mounted — where focus returns. */
+let returnFocusTo: HTMLElement | null = null
+
 function handleClose(): void {
+  clearDismissTimer()
+  // Unmounting the subtree that holds focus drops it to `<body>`; hand it back
+  // to where the user was before the notification appeared.
+  const root = rootRef.value
+  const focusInside = root !== null && root.contains(document.activeElement)
   visible.value = false
   emit('close')
+  if (focusInside && returnFocusTo?.isConnected)
+    returnFocusTo.focus()
 }
 
 function handleAction(): void {
   emit('action')
 }
 
+/*
+ * Auto-dismiss is pausable (WCAG 2.2.1 Timing Adjustable). While the pointer is
+ * over the notification or focus is inside it — typically on an action button —
+ * the countdown stops; leaving resumes it with the time that was left, so a
+ * user mid-interaction never has the content removed from under them.
+ */
+let remaining = 0
+let startedAt = 0
+let hovered = false
+let focusWithin = false
+
+function clearDismissTimer(): void {
+  if (dismissTimer !== null) {
+    clearTimeout(dismissTimer)
+    dismissTimer = null
+  }
+}
+
+function startDismissTimer(): void {
+  if (remaining <= 0 || dismissTimer !== null || hovered || focusWithin)
+    return
+  startedAt = Date.now()
+  dismissTimer = setTimeout(() => {
+    dismissTimer = null
+    handleClose()
+  }, remaining)
+}
+
+function pauseDismissTimer(): void {
+  if (dismissTimer === null)
+    return
+  clearDismissTimer()
+  remaining = Math.max(1, remaining - (Date.now() - startedAt))
+}
+
+function handleMouseEnter(): void {
+  hovered = true
+  pauseDismissTimer()
+}
+
+function handleMouseLeave(): void {
+  hovered = false
+  startDismissTimer()
+}
+
+function handleFocusIn(): void {
+  focusWithin = true
+  pauseDismissTimer()
+}
+
+function handleFocusOut(event: FocusEvent): void {
+  const next = event.relatedTarget as Node | null
+  if (next !== null && rootRef.value?.contains(next))
+    return
+  focusWithin = false
+  startDismissTimer()
+}
+
 onMounted(() => {
+  const active = document.activeElement
+  returnFocusTo = active instanceof HTMLElement && active !== document.body ? active : null
   if (props.duration > 0) {
-    dismissTimer = setTimeout(() => handleClose(), props.duration)
+    remaining = props.duration
+    startDismissTimer()
   }
 })
 
 onBeforeUnmount(() => {
-  if (dismissTimer !== null) {
-    clearTimeout(dismissTimer)
-  }
+  clearDismissTimer()
 })
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
@@ -89,6 +159,7 @@ const { testId: dzTestId } = useDzTestIds()
   <div
     v-if="visible"
     :id="id"
+    ref="rootRef"
     data-part="root"
     :class="classes"
     :role="isUrgent ? 'alert' : 'status'"
@@ -100,6 +171,10 @@ const { testId: dzTestId } = useDzTestIds()
     :data-state="visible ? 'open' : 'closed'"
     class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-notification'), ...$attrs, class: undefined }"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+    @focusin="handleFocusIn"
+    @focusout="handleFocusOut"
   >
     <!-- Icon -->
     <slot name="icon">

@@ -194,28 +194,28 @@
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 186,
+      "line": 193,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ backgroundColor: model }\""
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 208,
+      "line": 215,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ height: `${props.canvasHeight}px` }\""
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 225,
+      "line": 232,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ backgroundColor: model }\""
     },
     {
       "file": "packages/core/src/components/forms/DzColorPicker.vue",
-      "line": 248,
+      "line": 255,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ backgroundColor: color }\""

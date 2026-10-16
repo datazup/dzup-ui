@@ -113,14 +113,21 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 
-/** Handle direct text input change */
+/**
+ * Handle direct text input change. An invalid commit (`#12345`, `red`) puts the
+ * current value back in the field: leaving the typed text in place while the
+ * model kept the old colour made the field and the value disagree with nothing
+ * telling the user, sighted or not, that the entry was ignored.
+ */
 function handleInputChange(event: Event): void {
   const target = event.target as HTMLInputElement
   const value = target.value
   if (/^#[0-9a-f]{6}$/i.test(value) || /^#[0-9a-f]{3}$/i.test(value)) {
     model.value = value
     emit('change', value)
+    return
   }
+  target.value = model.value
 }
 
 /** Handle native color input change */

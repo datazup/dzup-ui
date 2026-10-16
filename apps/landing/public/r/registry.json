@@ -14,7 +14,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -43,7 +44,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -75,6 +77,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -112,6 +115,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -143,6 +147,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -171,6 +176,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -202,7 +208,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -232,7 +239,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -263,7 +271,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -292,6 +301,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -322,6 +332,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -366,6 +377,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -397,6 +409,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -423,7 +436,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -461,6 +475,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -488,7 +503,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -527,6 +543,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -561,6 +578,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -596,7 +614,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -629,7 +648,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -663,6 +683,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -699,6 +720,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -736,6 +758,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -771,7 +794,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -802,7 +826,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -837,7 +862,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -867,7 +893,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -897,7 +924,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -928,7 +956,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -959,7 +988,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -990,7 +1020,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1022,7 +1053,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1055,6 +1087,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1084,7 +1117,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1115,7 +1149,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1149,7 +1184,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1181,6 +1217,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1211,6 +1248,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1242,7 +1280,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1273,7 +1312,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1306,7 +1346,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1338,7 +1379,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1367,6 +1409,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1397,6 +1440,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1433,6 +1477,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1468,6 +1513,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1504,6 +1550,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1538,6 +1585,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1579,6 +1627,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1613,6 +1662,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1651,6 +1701,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1683,6 +1734,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1711,6 +1763,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1744,6 +1797,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1773,6 +1827,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1802,6 +1857,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1831,6 +1887,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1866,7 +1923,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1902,6 +1960,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1935,7 +1994,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -1969,6 +2029,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -1999,6 +2060,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -2033,6 +2095,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -2063,7 +2126,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2101,6 +2165,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -2137,7 +2202,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2173,7 +2239,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2209,7 +2276,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2249,6 +2317,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -2286,6 +2355,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -2322,7 +2392,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2357,7 +2428,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2391,6 +2463,7 @@
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens",
+        "reka-ui",
         "@lucide/vue"
       ],
       "meta": {
@@ -2426,7 +2499,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2460,7 +2534,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2493,7 +2568,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2524,7 +2600,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2565,7 +2642,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2597,7 +2675,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2630,7 +2709,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2661,7 +2741,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2691,7 +2772,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2720,7 +2802,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2750,7 +2833,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2780,7 +2864,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2811,7 +2896,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [
@@ -2838,7 +2924,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "reka-ui"
       ],
       "meta": {
         "components": [

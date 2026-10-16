@@ -15,7 +15,15 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { BLOCK_DEPENDENCIES, sourceDependencies } from './config.ts'
+import { LINKS } from '../config.ts'
+import {
+  BLOCK_DEPENDENCIES,
+  installCommand,
+  PACKAGE_MANAGERS,
+  sourceDependencies,
+  STYLING_PREREQUISITE,
+  STYLING_SETUP_PATH,
+} from './config.ts'
 import { BLOCKS } from './registry.ts'
 import {
   BLOCK_TARGET_DIR,
@@ -59,6 +67,19 @@ describe('shadcn registry', () => {
     }
   })
 
+  // UI-DZUP-UI-UX-M-07: yarn berry and strict pnpm do not install Core's
+  // `reka-ui` peer, so every install surface must name it, and the package list
+  // alone does not style a block — the Tailwind step is stated and linked.
+  it('surfaces the reka-ui peer in every manual install command and the styling step', () => {
+    expect(BLOCK_DEPENDENCIES).toContain('reka-ui')
+    for (const pm of PACKAGE_MANAGERS)
+      expect(installCommand(pm).split(' ')).toEqual(expect.arrayContaining(['@dzup-ui/core', '@dzup-ui/tokens', 'reka-ui']))
+    expect(STYLING_PREREQUISITE).toMatch(/Tailwind CSS 4/)
+    expect(STYLING_PREREQUISITE).toContain('@dzup-ui/core/styles')
+    expect(STYLING_PREREQUISITE).toContain('@source')
+    expect(STYLING_SETUP_PATH).toBe(LINKS.gettingStarted)
+  })
+
   describe.each(labelled)('item "$label"', ({ block }) => {
     const item = toRegistryItem(block, getBlockSource(block.path))
 
@@ -72,7 +93,8 @@ describe('shadcn registry', () => {
       expect(item.categories).toEqual([block.category])
       // Base packages always lead; optional imports (lucide, …) are appended when
       // the SFC actually uses them, so a copied block builds in a fresh project.
-      expect(item.dependencies.slice(0, 2)).toEqual([...BLOCK_DEPENDENCIES])
+      expect(item.dependencies.slice(0, BLOCK_DEPENDENCIES.length)).toEqual([...BLOCK_DEPENDENCIES])
+      expect(item.dependencies).toContain('reka-ui')
       expect(item.dependencies).toEqual(sourceDependencies(getBlockSource(block.path)))
     })
 

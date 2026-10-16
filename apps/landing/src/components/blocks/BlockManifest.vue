@@ -2,7 +2,7 @@
 import type { BlockDef } from '../../blocks/registry.ts'
 import { DzCodeBlock, DzCopyButton, DzText } from '@dzup-ui/core'
 import { computed } from 'vue'
-import { installCommands, REGISTRY_ENABLED, registryAddCommands } from '../../blocks/config.ts'
+import { installCommands, REGISTRY_ENABLED, registryAddCommands, STYLING_PREREQUISITE, STYLING_SETUP_PATH } from '../../blocks/config.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
 import { useBlockSource } from '../../blocks/sourceLoader.ts'
 import { buildImportLine } from '../../composables/useBlockCodeView.ts'
@@ -20,7 +20,8 @@ import PmCommandTabs from './PmCommandTabs.vue'
  *     and preview header; each emits `selectComponent` to filter the index.
  *   • Import line — `buildImportLine(components[])` (Task F5), the single source
  *     of truth shared with the Code tab.
- *   • Install — `@dzup-ui/core @dzup-ui/tokens` across npm/pnpm/yarn/bun tabs
+ *   • Install — `@dzup-ui/core @dzup-ui/tokens reka-ui` across npm/pnpm/yarn/bun
+ *     tabs, followed by the Tailwind styling prerequisite and its setup link
  *     (PmCommandTabs); the `npx shadcn@latest add …/r/<id>.json` registry line
  *     (also per-PM) only once Task G1 has shipped (gated by `REGISTRY_ENABLED`),
  *     so it never renders a dead command before the registry exists.
@@ -117,6 +118,10 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
         Install packages
       </DzText>
       <PmCommandTabs :commands="installCmds" aria-label="Install the dzup-ui packages" />
+      <DzText size="xs" tone="muted" as="p" class="bm-note" data-testid="styling-prerequisite">
+        {{ STYLING_PREREQUISITE }}
+        <a :href="STYLING_SETUP_PATH" class="bm-link">Set up styling</a>
+      </DzText>
     </div>
 
     <!-- One-command install straight from the registry via the canonical shadcn
@@ -166,6 +171,16 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
 .bm-label {
   font-weight: 600;
   letter-spacing: 0.01em;
+}
+
+.bm-note {
+  margin: 0;
+}
+
+.bm-link {
+  color: var(--dz-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* "Built from" component chips — same token treatment as BlockCard / BlockPreview. */

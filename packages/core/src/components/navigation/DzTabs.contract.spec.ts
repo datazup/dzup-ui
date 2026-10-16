@@ -229,29 +229,32 @@ describe('dzTabs — Contract Spec v1', () => {
 
   // ── Events ──
 
-  it('emits update:modelValue when tab changes', async () => {
+  // UI-DZUP-UI-TEST-M-04: Reka's TabsTrigger activates on a primary-button
+  // mousedown, so that is what the user selection is driven with; the emitted
+  // events are asserted unconditionally.
+  it('emits update:modelValue when the user selects a tab', async () => {
     const wrapper = mountTabs()
     const triggers = wrapper.findAll('[role="tab"]')
-    // Reka UI uses pointerdown/pointerup, simulate with mousedown/mouseup + click
-    await triggers[1]!.trigger('pointerdown')
-    await triggers[1]!.trigger('pointerup')
-    await triggers[1]!.trigger('click')
+    await triggers[1]!.trigger('mousedown', { button: 0 })
     await wrapper.vm.$nextTick()
-    // If Reka UI fired, we get the event; if not, test the handler is wired
-    const emitted = wrapper.emitted('update:modelValue')
-    // Accept either actual emission or verify event handler is connected
-    expect(emitted || wrapper.find('[role="tab"]').exists()).toBeTruthy()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['tab2'])
   })
 
-  it('emits change when tab changes', async () => {
+  it('emits change when the user selects a tab', async () => {
     const wrapper = mountTabs()
     const triggers = wrapper.findAll('[role="tab"]')
-    await triggers[1]!.trigger('pointerdown')
-    await triggers[1]!.trigger('pointerup')
-    await triggers[1]!.trigger('click')
+    await triggers[1]!.trigger('mousedown', { button: 0 })
     await wrapper.vm.$nextTick()
-    const emitted = wrapper.emitted('change')
-    expect(emitted || wrapper.find('[role="tab"]').exists()).toBeTruthy()
+    expect(wrapper.emitted('change')).toEqual([['tab2']])
+  })
+
+  it('emits nothing for a disabled tab', async () => {
+    const wrapper = mountTabs()
+    const triggers = wrapper.findAll('[role="tab"]')
+    await triggers[2]!.trigger('mousedown', { button: 0 })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('change')).toBeUndefined()
   })
 
   // ── Slots ──

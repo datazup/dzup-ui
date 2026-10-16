@@ -126,7 +126,23 @@ describe('dzInput — Contract Spec v1', () => {
   it('emits change event on native change', async () => {
     const wrapper = mount(DzInput, { props: { modelValue: 'hello' } })
     await wrapper.find('input').trigger('change')
-    expect(wrapper.emitted('change')).toHaveLength(1)
+    expect(wrapper.emitted('change')).toEqual([['hello', { source: 'user' }]])
+  })
+
+  // UI-DZUP-UI-TEST-M-06: typing reaches v-model directly, not only through
+  // a consumer such as the DataGrid filter.
+  it('writes typed text to v-model', async () => {
+    const wrapper = mount(DzInput, { props: { modelValue: '' } })
+    await wrapper.find('input').setValue('abc')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['abc'])
+  })
+
+  it('emits change with the typed value once committed', async () => {
+    const wrapper = mount(DzInput)
+    const input = wrapper.find('input')
+    await input.setValue('typed')
+    await input.trigger('change')
+    expect(wrapper.emitted('change')?.at(-1)).toEqual(['typed', { source: 'user' }])
   })
 
   // ── Slots ──
@@ -178,6 +194,18 @@ describe('dzInput — Contract Spec v1', () => {
     })
     await wrapper.find('button[aria-label="Clear input"]').trigger('click')
     expect(wrapper.emitted('clear')).toHaveLength(1)
+  })
+
+  it('clearing resets v-model, emits change from the user and refocuses the input', async () => {
+    const wrapper = mount(DzInput, {
+      props: { clearable: true, modelValue: 'hello' },
+      attachTo: document.body,
+    })
+    await wrapper.find('button[aria-label="Clear input"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toEqual([['']])
+    expect(wrapper.emitted('change')).toEqual([['', { source: 'user' }]])
+    expect(document.activeElement).toBe(wrapper.find('input').element)
+    wrapper.unmount()
   })
 
   // ── Error message ──

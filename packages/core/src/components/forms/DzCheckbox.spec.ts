@@ -35,6 +35,36 @@ describe('dzCheckbox — Unit Tests', () => {
     expect(wrapper.attributes('data-state')).toBe('checked')
   })
 
+  // UI-DZUP-UI-TEST-M-05: the standalone (non-group) path writes the model and
+  // emits change; the disabled negative below is only meaningful beside these.
+  it('toggles the standalone v-model and emits change on each click', async () => {
+    const wrapper = mount(DzCheckbox, {
+      props: { modelValue: false },
+      slots: { default: 'cb' },
+    })
+    const checkboxRoot = wrapper.find('button')
+    await checkboxRoot.trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toEqual([[true]])
+    expect(wrapper.emitted('change')).toEqual([[true]])
+    expect(wrapper.attributes('data-state')).toBe('checked')
+
+    await wrapper.setProps({ modelValue: true })
+    await checkboxRoot.trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([false])
+    expect(wrapper.emitted('change')?.at(-1)).toEqual([false])
+  })
+
+  it('moves an indeterminate checkbox to checked', async () => {
+    const wrapper = mount(DzCheckbox, {
+      props: { modelValue: false, indeterminate: true },
+      slots: { default: 'cb' },
+    })
+    expect(wrapper.attributes('data-state')).toBe('indeterminate')
+    await wrapper.find('button').trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toEqual([[true]])
+    expect(wrapper.emitted('change')).toEqual([[true]])
+  })
+
   it('does not emit when disabled', async () => {
     const wrapper = mount(DzCheckbox, {
       props: { disabled: true, modelValue: false },
@@ -43,6 +73,7 @@ describe('dzCheckbox — Unit Tests', () => {
     const checkboxRoot = wrapper.find('button')
     await checkboxRoot.trigger('click')
     expect(wrapper.emitted('change')).toBeFalsy()
+    expect(wrapper.emitted('update:modelValue')).toBeFalsy()
   })
 
   it('emits focus and blur events', async () => {

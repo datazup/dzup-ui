@@ -273,6 +273,25 @@ describe('dzColorPicker — declared keyboard contract', () => {
     expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('#123456')
   })
 
+  it.each(['#12345', 'red'])('puts the current colour back in the hex field after an invalid commit (%s)', async (typed) => {
+    // UI-DZUP-UI-UX-M-08: the typed text used to stay while the model kept the
+    // old colour, so the field and the value disagreed without any feedback.
+    const wrapper = mountColorPicker({ modelValue: '#ff0000' })
+    ;(wrapper.get('[data-part="trigger"]').element as HTMLElement).click()
+    await wrapper.vm.$nextTick()
+
+    // One commit, dispatched by hand: `setValue` fires its own events first, so
+    // a second `change` would re-commit the already-restored value.
+    const field = wrapper.findAll('[data-part="input"]').at(-1)!.element as HTMLInputElement
+    field.value = typed
+    field.dispatchEvent(new Event('change', { bubbles: true }))
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('change')).toBeUndefined()
+    expect(field.value).toBe('#ff0000')
+  })
+
   it('declares no key its own source pretends to handle — the panel has no 2D slider', () => {
     // The withdrawal, asserted rather than trusted: the component contains no
     // keyboard handler at all, so any arrow row would be backed by nothing. If a

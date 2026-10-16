@@ -47,31 +47,23 @@ describe('dzTabs — Unit Tests', () => {
   it('switches content when clicking different tab', async () => {
     const wrapper = mountTabs()
     const triggers = wrapper.findAll('[role="tab"]')
-    await triggers[1]!.trigger('pointerdown')
-    await triggers[1]!.trigger('pointerup')
-    await triggers[1]!.trigger('click')
+    // Reka's TabsTrigger activates on a primary-button mousedown.
+    await triggers[1]!.trigger('mousedown', { button: 0 })
     await nextTick()
-    // Reka UI may or may not fire in jsdom; verify handler is connected
-    const emitted = wrapper.emitted('update:modelValue')
-    if (emitted) {
-      expect(emitted[0]).toEqual(['tab2'])
-      expect(wrapper.emitted('change')?.[0]).toEqual(['tab2'])
-    }
-    else {
-      // Verify the component structure is correct even if jsdom doesn't fire Reka events
-      expect(triggers.length).toBe(3)
-    }
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['tab2'])
+    expect(wrapper.emitted('change')?.[0]).toEqual(['tab2'])
+    // Controlled by `modelValue`: the panel follows once the parent writes back.
+    await wrapper.setProps({ modelValue: 'tab2' })
+    expect(wrapper.text()).toContain('Content 2')
   })
 
   it('does not switch to disabled tab on click', async () => {
     const wrapper = mountTabs()
     const triggers = wrapper.findAll('[role="tab"]')
+    await triggers[2]!.trigger('mousedown', { button: 0 })
     await triggers[2]!.trigger('click')
-    // The disabled tab should not trigger a change
-    const emitted = wrapper.emitted('update:modelValue')
-    if (emitted) {
-      expect(emitted.every(e => e[0] !== 'tab3')).toBe(true)
-    }
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('change')).toBeUndefined()
   })
 
   it('applies line variant classes by default', () => {

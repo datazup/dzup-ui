@@ -94,7 +94,7 @@ declare module '@dzup-ui/contracts' {
       empty: string
       noResults: string
     }
-    DzCommandPalette: { ariaLabel: string }
+    DzCommandPalette: { ariaLabel: string, description: string, noResults: string }
     DzConfirmDialog: { confirm: string, cancel: string }
     /**
      * The live-region phrase a running countdown announces (TASK-R5-O4).
@@ -264,7 +264,11 @@ export const enMessages = {
     empty: 'No options available',
     noResults: 'No results found',
   },
-  DzCommandPalette: { ariaLabel: 'Command palette' },
+  DzCommandPalette: {
+    ariaLabel: 'Command palette',
+    description: 'Search commands, then use arrow keys to move through results and Enter to select.',
+    noResults: 'No results found.',
+  },
   DzConfirmDialog: { confirm: 'Confirm', cancel: 'Cancel' },
   // Count-bearing messages (TASK-R5-O4). Each was built by concatenation —
   // `${n} day${n === 1 ? '' : 's'}` — which is English's two forms and nobody

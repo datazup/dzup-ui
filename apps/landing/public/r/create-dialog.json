@@ -19,6 +19,7 @@
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens",
+    "reka-ui",
     "@lucide/vue"
   ],
   "meta": {

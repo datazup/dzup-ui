@@ -278,7 +278,7 @@ const dzMotionAttr = useDzMotionAttribute()
           {{ fallbackTitle }}
         </DialogTitle>
         <DialogDescription class="sr-only">
-          Search commands, then use arrow keys to move through results and Enter to select.
+          {{ dzMessages.description }}
         </DialogDescription>
         <!-- `ignore-filter` — this component owns filtering; Reka must not also.
              Reka's `ComboboxItem` registers each row's RENDERED TEXT
@@ -439,7 +439,7 @@ const dzMotionAttr = useDzMotionAttribute()
             <!-- Empty state -->
             <ComboboxEmpty data-part="empty" :class="cn(styles.empty(), props.ui?.empty)">
               <slot name="empty">
-                No results found.
+                {{ dzMessages.noResults }}
               </slot>
             </ComboboxEmpty>
           </ComboboxContent>

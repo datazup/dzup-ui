@@ -44,7 +44,7 @@ describe('toTemplateItem', () => {
     expect(item.title).toBe(META.name)
     expect(item.description).toBe(META.blurb)
     expect(item.categories).toEqual(['dashboards'])
-    expect(item.dependencies).toEqual(['@dzup-ui/core', '@dzup-ui/tokens'])
+    expect(item.dependencies).toEqual(['@dzup-ui/core', '@dzup-ui/tokens', 'reka-ui'])
     expect(item.registryDependencies).toEqual([])
     expect(item.meta.components).toEqual(['DzStatCard', 'DzCard'])
     expect(item.meta.tier).toBe('free')

@@ -18,7 +18,8 @@
   "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
+    "@dzup-ui/tokens",
+    "reka-ui"
   ],
   "meta": {
     "components": [

@@ -50,7 +50,9 @@
       "noResults": "No results found"
     },
     "DzCommandPalette": {
-      "ariaLabel": "Command palette"
+      "ariaLabel": "Command palette",
+      "description": "Search commands, then use arrow keys to move through results and Enter to select.",
+      "noResults": "No results found."
     },
     "DzConfirmDialog": {
       "confirm": "Confirm",

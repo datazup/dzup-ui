@@ -3,7 +3,7 @@ import type { Persona } from './DzPersonaSelector.types.ts'
  * DzPersonaSelector — Unit / behavior tests.
  */
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { anatomy as personaAnatomy } from './DzPersonaSelector.anatomy.ts'
 import DzPersonaSelector from './DzPersonaSelector.vue'
 
@@ -94,20 +94,35 @@ describe('dzPersonaSelector — Unit Tests', () => {
 
 // DZUP-UI-R11-05B-20261006-C1: compare the declared listbox action with the real editable wrapper.
 describe('dzPersonaSelector — declared option activation', () => {
-  it.fails('selects the active persona using the second declared activation key', async () => {
+  // Known defect, pinned as asserted CURRENT behaviour (UI-DZUP-UI-TEST-M-07).
+  // It was an `it.fails`, which passed on ANY throw — a renamed part, a missing
+  // anatomy binding or a mount error all read as "defect still present". The
+  // preconditions below fail loudly instead, and the last block states what
+  // the editable input does today with the second declared activation key:
+  // nothing. When the defect is repaired, flip that block to expect ['arch'].
+  it('pins that the second declared activation key does not yet select the active persona', async () => {
+    const activation = personaAnatomy.keyboard.filter(binding => binding.action === 'Select the focused option.')
+    expect(activation).toHaveLength(2)
+    const key = activation[1]!.key
+    expect(key).toBe(' ')
+
     const original = HTMLElement.prototype.scrollIntoView
     HTMLElement.prototype.scrollIntoView = () => {}
     const wrapper = mount(DzPersonaSelector, { attachTo: document.body, props: { personas }, attrs: { portalDisabled: true } })
     try {
-      const input = wrapper.get('input')
+      const input = wrapper.get('input[role="combobox"]')
       await input.trigger('keydown', { key: 'ArrowDown' })
       await flushPromises()
-      await new Promise(resolve => setTimeout(resolve, 30))
-      expect(input.attributes('aria-activedescendant')).toBeTruthy()
-      const key = personaAnatomy.keyboard.filter(binding => binding.action === 'Select the focused option.')[1]!.key
+      await vi.waitFor(() => expect(input.attributes('aria-activedescendant')).toBeTruthy())
+      const active = input.attributes('aria-activedescendant')!
+      expect(document.getElementById(active)?.textContent).toContain('Ada Lovelace')
+
       await input.trigger('keydown', { key })
       await flushPromises()
-      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['arch'])
+
+      expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+      expect(input.attributes('aria-expanded')).toBe('true')
+      expect(input.attributes('aria-activedescendant')).toBe(active)
     }
     finally {
       wrapper.unmount()

@@ -95,7 +95,7 @@ export type StringRule
  */
 export const RATCHET_CEILINGS: Readonly<Partial<Record<StringRule, number>>> = {
   'bound-literal-aria-label': 43,
-  'literal-empty-state': 10,
+  'literal-empty-state': 9,
 }
 
 /** Whether a quoted string reads as language rather than as a key or token. */
