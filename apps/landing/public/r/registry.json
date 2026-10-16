@@ -570,6 +570,7 @@
           "DzResizableHandle",
           "DzScrollArea",
           "DzToolbar",
+          "DzButton",
           "DzDivider",
           "DzBadge",
           "DzIcon",

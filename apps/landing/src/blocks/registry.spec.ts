@@ -14,6 +14,7 @@
 
 import * as core from '@dzup-ui/core'
 import { describe, expect, it } from 'vitest'
+import themingDemoSource from '../components/ThemingDemo.vue?raw'
 import { BLOCKS, blocksByCategory, CATEGORIES } from './registry.ts'
 import { getBlockSource } from './sources.ts'
 
@@ -107,5 +108,33 @@ describe('block registry', () => {
         ).toBe(true)
       }
     })
+  })
+})
+
+/** The `<template>` block of an SFC source (script-side string literals excluded). */
+function templateOf(source: string): string {
+  // The SFC's own block opens at the start of a line; a `'<template>'` string
+  // literal inside the script (code samples) does not.
+  const match = /^<template>$/m.exec(source)
+  const end = source.lastIndexOf('</template>')
+  return match && end > match.index ? source.slice(match.index, end) : ''
+}
+
+// UI-DZUP-UI-DESIGN-M-02: a block that advertises itself as built from core
+// components must not hand-roll the controls core already ships.
+describe('core control adoption', () => {
+  it('resizable-workspace renders DzButton, not raw <button>', () => {
+    const block = BLOCKS.find(b => b.id === 'resizable-workspace')!
+    const template = templateOf(getBlockSource(block.path))
+    expect(template).not.toBe('')
+    expect(template).not.toMatch(/<button\b/)
+    expect(template).toMatch(/<DzButton\b/)
+    expect(block.components).toContain('DzButton')
+  })
+
+  it('themingDemo uses DzSlider, not raw range inputs', () => {
+    const template = templateOf(themingDemoSource)
+    expect(template).not.toMatch(/type="range"/)
+    expect(template).toMatch(/<DzSlider\b/)
   })
 })

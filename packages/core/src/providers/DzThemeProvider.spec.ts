@@ -6,8 +6,10 @@
 
 import type { DzThemeContext } from './DzThemeProvider.types'
 import { mount } from '@vue/test-utils'
+import { renderToString } from '@vue/server-renderer'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent, h, nextTick } from 'vue'
+import { createSSRApp, defineComponent, h, nextTick } from 'vue'
+import DzColorModeToggle from '../components/navigation/DzColorModeToggle.vue'
 import DzThemeProvider from './DzThemeProvider.vue'
 import { getThemeScript, themeScript } from './theme-script.ts'
 import { useTheme } from './useTheme.ts'
@@ -298,6 +300,47 @@ describe('useTheme provider consumer', () => {
     expect(ctx.theme.value).toBe('system')
     expect(typeof ctx.setTheme).toBe('function')
     expect(typeof ctx.toggleTheme).toBe('function')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// SSR + hydration (UI-DZUP-UI-DESIGN-M-09)
+// ---------------------------------------------------------------------------
+
+describe('dzThemeProvider hydration with a persisted theme', () => {
+  const root = () => h(DzThemeProvider, { defaultTheme: 'light' }, {
+    default: () => h(DzColorModeToggle),
+  })
+
+  it('first client render matches the server; the persisted value applies after mount', async () => {
+    // The server has no storage: render with nothing persisted.
+    const server = await renderToString(createSSRApp({ render: root }))
+    expect(server).toContain('data-mode="light"')
+
+    // The browser has "dark" persisted from an earlier visit.
+    localStorage.setItem('dz-theme', 'dark')
+    const container = document.createElement('div')
+    container.innerHTML = server
+    const baseline = container.innerHTML
+    document.body.appendChild(container)
+
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const app = createSSRApp({ render: root })
+    app.mount(container)
+
+    // Hydration claimed the server markup unchanged and raised no mismatch.
+    expect(container.innerHTML).toBe(baseline)
+    const diagnostics = [...warn.mock.calls, ...error.mock.calls].map(args => String(args[0]))
+    expect(diagnostics.filter(m => /hydration/i.test(m))).toEqual([])
+
+    // After mount the persisted preference is applied.
+    await nextTick()
+    expect(container.querySelector('[data-mode]')!.getAttribute('data-mode')).toBe('dark')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+
+    app.unmount()
+    container.remove()
   })
 })
 

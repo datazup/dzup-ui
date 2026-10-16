@@ -109,6 +109,8 @@ declare module '@dzup-ui/contracts' {
       seconds: DzMessage<{ count: number }>
       remaining: DzMessage<{ duration: string }>
     }
+    /** The default loader label on a DataGrid fetching its first rows (UI-DZUP-UI-UX-M-04). */
+    DzDataGrid: { loading: string }
     DzDataGridHeader: { selectAllRows: string }
     DzDataGridPagination: { rowsPerPage: string, previousPage: string, nextPage: string }
     DzDataView: {
@@ -118,6 +120,11 @@ declare module '@dzup-ui/contracts' {
       showingAll: DzMessage<{ count: number }>
       showingRange: DzMessage<{ start: number, end: number, total: number }>
     }
+    /**
+     * The default error state of `DzErrorBoundary` and `DzAsyncBoundary`
+     * (UI-DZUP-UI-UX-H-01). One group for both: they render the same fallback.
+     */
+    DzErrorBoundary: { message: string, retry: string }
     DzFileUpload: { ariaLabel: string }
     DzInput: { clear: string, loading: string }
     DzLightbox: { close: string, previous: string, next: string }
@@ -271,6 +278,7 @@ export const enMessages = {
     seconds: '{count, plural, one {# second} other {# seconds}}',
     remaining: '{duration} remaining',
   },
+  DzDataGrid: { loading: 'Loading data' },
   DzDataGridHeader: { selectAllRows: 'Select all rows' },
   DzDataGridPagination: {
     rowsPerPage: 'Rows per page',
@@ -285,6 +293,7 @@ export const enMessages = {
     // The one deliberate English change: the literal said "of 1 items".
     showingRange: '{total, plural, one {Showing {start} to {end} of # item} other {Showing {start} to {end} of # items}}',
   },
+  DzErrorBoundary: { message: 'Something went wrong.', retry: 'Try again' },
   DzFileUpload: { ariaLabel: 'Upload files' },
   DzInput: { clear: 'Clear input', loading: 'Loading' },
   DzLightbox: {

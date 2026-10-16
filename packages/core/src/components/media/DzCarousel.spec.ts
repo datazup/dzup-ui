@@ -1,11 +1,12 @@
-import { DZ_DIRECTION_KEY } from '@dzup-ui/contracts'
+import { DZ_DIRECTION_KEY, DZ_MOTION_KEY } from '@dzup-ui/contracts'
 import { expectKeyboardContract } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
 /**
  * DzCarousel (compound) — Unit / behavior tests.
  */
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h, nextTick, ref } from 'vue'
+import { createDzMotion } from '../../composables/provider/useDzMotion.ts'
 import { anatomy as carouselAnatomy } from './DzCarousel.anatomy.ts'
 import DzCarousel from './DzCarousel.vue'
 import DzCarouselDots from './DzCarouselDots.vue'
@@ -195,5 +196,73 @@ describe('dzCarouselDots', () => {
     const tablist = wrapper.find('[role="tablist"]')
     expect(tablist.exists()).toBe(true)
     expect(tablist.findAll('[role="tab"]')).toHaveLength(3)
+  })
+})
+
+// UI-DZUP-UI-DESIGN-M-13: autoplay honours reduced motion, pauses on focus and
+// silences the live region while rotating.
+describe('dzCarousel autoplay', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  function mountAutoplay(motion: 'reduced' | 'full', model = ref(0)) {
+    return mount(DzCarousel, {
+      attachTo: document.body,
+      props: {
+        'autoplay': true,
+        'interval': 1000,
+        'loop': true,
+        'modelValue': model.value,
+        'onUpdate:modelValue': (v: unknown) => { model.value = v as number },
+      },
+      global: { provide: { [DZ_MOTION_KEY as symbol]: createDzMotion(ref(motion)) } },
+      slots: {
+        default: () => [
+          h(DzCarouselSlide, null, { default: () => 'Slide 1' }),
+          h(DzCarouselSlide, null, { default: () => 'Slide 2' }),
+          h(DzCarouselNext),
+        ],
+      },
+    })
+  }
+
+  it('advances on the interval and turns the live region off while rotating', async () => {
+    vi.useFakeTimers()
+    const model = ref(0)
+    const wrapper = mountAutoplay('full', model)
+    await nextTick()
+    expect(wrapper.find('[data-part="viewport"]').attributes('aria-live')).toBe('off')
+    vi.advanceTimersByTime(1000)
+    expect(model.value).toBe(1)
+    wrapper.unmount()
+  })
+
+  it('never starts when reduced motion resolves true', async () => {
+    vi.useFakeTimers()
+    const model = ref(0)
+    const wrapper = mountAutoplay('reduced', model)
+    await nextTick()
+    vi.advanceTimersByTime(5000)
+    expect(model.value).toBe(0)
+    expect(wrapper.find('[data-part="viewport"]').attributes('aria-live')).toBe('polite')
+    wrapper.unmount()
+  })
+
+  it('stops while focus is inside and resumes when focus leaves', async () => {
+    vi.useFakeTimers()
+    const model = ref(0)
+    const wrapper = mountAutoplay('full', model)
+    const root = wrapper.find('[role="region"]')
+    await root.trigger('focusin')
+    await nextTick()
+    vi.advanceTimersByTime(3000)
+    expect(model.value).toBe(0)
+    expect(wrapper.find('[data-part="viewport"]').attributes('aria-live')).toBe('polite')
+
+    await root.trigger('focusout', { relatedTarget: null })
+    vi.advanceTimersByTime(1000)
+    expect(model.value).toBe(1)
+    wrapper.unmount()
   })
 })

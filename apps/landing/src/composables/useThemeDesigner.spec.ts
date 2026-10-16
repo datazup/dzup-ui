@@ -1,6 +1,6 @@
-import { decodeThemeRecipe, PALETTE_CONFIGS } from '@dzup-ui/tokens'
+import { DARK_SEMANTIC_TOKENS, decodeThemeRecipe, LIGHT_SEMANTIC_TOKENS, PALETTE_CONFIGS } from '@dzup-ui/tokens'
 import { afterEach, describe, expect, it } from 'vitest'
-import { useThemeDesigner } from './useThemeDesigner.ts'
+import { DARK_PAIRS, LIGHT_PAIRS, resolveSemanticEndpoint, useThemeDesigner } from './useThemeDesigner.ts'
 
 /**
  * Guards the Theme Designer's core promises (docs/landing — /themes editor):
@@ -120,5 +120,43 @@ describe('useThemeDesigner', () => {
   it('ignores a malformed URL token without throwing', () => {
     expect(d.deserialize('not-valid-base64!!')).toBe(false)
     expect(d.hasOverrides.value).toBe(false)
+  })
+})
+
+// UI-DZUP-UI-DESIGN-M-14: the readout must measure the shades the shipped
+// semantic tokens reference, not a hand-restated table.
+describe('contrast pairs mirror the semantic tokens', () => {
+  /** Independent parse of a semantic value: `var(--dz-colors-<intent>-<shade>)` or white. */
+  function expected(map: Record<string, string>, token: string): unknown {
+    const value = map[token]!
+    if (value === 'oklch(1 0 0)')
+      return 'white'
+    const m = /^var\(--dz-colors-([a-z]+)-(\d+)\)$/.exec(value)
+    expect(m, `${token} = ${value}`).not.toBeNull()
+    return [m![1], Number(m![2])]
+  }
+
+  it.each([
+    ['light', LIGHT_PAIRS, LIGHT_SEMANTIC_TOKENS],
+    ['dark', DARK_PAIRS, DARK_SEMANTIC_TOKENS],
+  ] as const)('%s: every pair endpoint equals its semantic token shade', (_theme, pairs, map) => {
+    expect(pairs.length).toBe(8)
+    for (const pair of pairs) {
+      expect(pair.fg, `${pair.label} fg (${pair.fgToken})`).toEqual(expected(map, pair.fgToken))
+      expect(pair.bg, `${pair.label} bg (${pair.bgToken})`).toEqual(expected(map, pair.bgToken))
+    }
+  })
+
+  it('measures Warning solid on the shipped --dz-warning (warning-400) in both themes', () => {
+    for (const pairs of [LIGHT_PAIRS, DARK_PAIRS]) {
+      const warning = pairs.find(p => p.label === 'Warning solid')!
+      expect(warning.bg).toEqual(['warning', 400])
+      expect(warning.fg).toEqual(['neutral', 900])
+    }
+  })
+
+  it('refuses a token that does not resolve to a designer palette shade', () => {
+    expect(() => resolveSemanticEndpoint({ '--dz-x': 'red' }, '--dz-x')).toThrow(/does not resolve/)
+    expect(() => resolveSemanticEndpoint({}, '--dz-missing')).toThrow(/does not resolve/)
   })
 })

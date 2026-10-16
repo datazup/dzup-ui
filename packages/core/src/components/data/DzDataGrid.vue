@@ -29,8 +29,10 @@ import { computed, provide, toRef, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDataGrid } from '../../composables/useDataGrid/useDataGrid.ts'
 import { useDataGridNavigation } from '../../composables/useDataGrid/useDataGridNavigation.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzButton from '../buttons/DzButton.vue'
+import DzSkeleton from '../feedback/DzSkeleton.vue'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
 import DzDataGridBody from './DzDataGridBody.vue'
@@ -152,6 +154,15 @@ const hasActiveFilters = computed(() => grid.filters.value.length > 0)
 const isEmpty = computed(() => !props.loading && grid.displayData.value.length === 0)
 const showEmptyState = computed(() => isEmpty.value && !hasActiveFilters.value)
 const showNoMatchRow = computed(() => isEmpty.value && hasActiveFilters.value)
+/**
+ * First load: fetching with no rows yet (UI-DZUP-UI-UX-M-04). The header stays
+ * and the body shows skeleton rows (as `DzTableBody` does) with a live status
+ * label, instead of falling through to a bare header-only table.
+ */
+const isFirstLoad = computed(() => props.loading && grid.displayData.value.length === 0)
+const skeletonRowCount = 3
+const dzMessages = useComponentMessages('DzDataGrid')
+
 const columnSpan = computed(() =>
   props.columns.length + (props.selectable === 'multiple' ? 1 : 0),
 )
@@ -181,6 +192,7 @@ const { testId: dzTestId } = useDzTestIds()
     <!-- Loading overlay -->
     <div v-if="loading && grid.displayData.value.length > 0" data-part="loader" :class="cn(styles.loading(), ui?.loader)">
       <slot name="loading">
+        <span role="status" class="sr-only">{{ dzMessages.loading }}</span>
         <svg class="animate-spin h-6 w-6 text-[var(--dz-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -207,7 +219,21 @@ const { testId: dzTestId } = useDzTestIds()
       role="grid"
     >
       <DzDataGridHeader />
-      <DzDataGridBody :row-key="(rowKey as string | undefined)" @row-click="handleRowClick">
+      <tbody
+        v-if="isFirstLoad"
+        data-part="loader"
+        data-first-load=""
+        role="rowgroup"
+        aria-hidden="true"
+        :class="cn(ui?.loader)"
+      >
+        <tr v-for="n in skeletonRowCount" :key="`skeleton-row-${n}`">
+          <td :colspan="columnSpan" class="p-[var(--dz-spacing-2)]">
+            <DzSkeleton variant="text" />
+          </td>
+        </tr>
+      </tbody>
+      <DzDataGridBody v-else :row-key="(rowKey as string | undefined)" @row-click="handleRowClick">
         <template v-if="$slots.cell" #cell="cellProps">
           <!-- @vue-ignore: generic T not preserved across slot forwarding from DzDataGridBody -->
           <slot name="cell" v-bind="cellProps" />
@@ -233,6 +259,9 @@ const { testId: dzTestId } = useDzTestIds()
         </tr>
       </tbody>
     </table>
+
+    <!-- First load: announce it; the skeleton body above is decorative -->
+    <span v-if="isFirstLoad" role="status" class="sr-only">{{ dzMessages.loading }}</span>
 
     <!-- Pagination -->
     <DzDataGridPagination

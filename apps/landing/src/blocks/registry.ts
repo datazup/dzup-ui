@@ -447,7 +447,7 @@ export const BLOCKS: BlockDef[] = [
     description: 'An IDE-style three-pane shell built on DzResizable — a collapsible file explorer, an editor and a live preview, each scrolling independently in a DzScrollArea, with draggable handles and a DzToolbar across the top.',
     category: 'layout',
     tags: ['resizable', 'splitter', 'ide', 'panes', 'scroll-area'],
-    components: ['DzResizable', 'DzResizablePanel', 'DzResizableHandle', 'DzScrollArea', 'DzToolbar', 'DzDivider', 'DzBadge', 'DzIcon', 'DzText'],
+    components: ['DzResizable', 'DzResizablePanel', 'DzResizableHandle', 'DzScrollArea', 'DzToolbar', 'DzButton', 'DzDivider', 'DzBadge', 'DzIcon', 'DzText'],
     path: './layout/ResizableWorkspace.vue',
   }),
   defineBlock({

@@ -145,6 +145,54 @@ describe('dzCopyButton', () => {
     expect(wrapper.emitted('copied')).toBeUndefined()
   })
 
+  it('does NOT emit copied or flip to success when the legacy fallback fails', async () => {
+    const originalClipboard = navigator.clipboard
+    const originalExec = document.execCommand
+    Object.defineProperty(navigator, 'clipboard', { value: undefined, writable: true, configurable: true })
+    const execCommand = vi.fn().mockReturnValue(false)
+    document.execCommand = execCommand
+    try {
+      const wrapper = mount(DzCopyButton, { props: { value: 'nope', tone: 'primary' } })
+      await wrapper.trigger('click')
+      await wrapper.vm.$nextTick()
+      expect(execCommand).toHaveBeenCalledWith('copy')
+      expect(wrapper.emitted('copied')).toBeUndefined()
+      expect(wrapper.attributes('data-state')).toBe('idle')
+      expect(wrapper.attributes('data-tone')).toBe('primary')
+    }
+    finally {
+      Object.defineProperty(navigator, 'clipboard', { value: originalClipboard, writable: true, configurable: true })
+      document.execCommand = originalExec
+    }
+  })
+
+  it('emits copied when the legacy fallback succeeds', async () => {
+    const originalClipboard = navigator.clipboard
+    const originalExec = document.execCommand
+    Object.defineProperty(navigator, 'clipboard', { value: undefined, writable: true, configurable: true })
+    document.execCommand = vi.fn().mockReturnValue(true)
+    try {
+      const wrapper = mount(DzCopyButton, { props: { value: 'yes' } })
+      await wrapper.trigger('click')
+      await wrapper.vm.$nextTick()
+      expect(wrapper.emitted('copied')![0]).toEqual(['yes'])
+      expect(wrapper.attributes('data-tone')).toBe('success')
+    }
+    finally {
+      Object.defineProperty(navigator, 'clipboard', { value: originalClipboard, writable: true, configurable: true })
+      document.execCommand = originalExec
+    }
+  })
+
+  it('does NOT emit copied when the Clipboard API rejects', async () => {
+    writeTextMock.mockRejectedValueOnce(new Error('denied'))
+    const wrapper = mount(DzCopyButton, { props: { value: 'x' } })
+    await wrapper.trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('copied')).toBeUndefined()
+    expect(wrapper.attributes('data-state')).toBe('idle')
+  })
+
   // ── Accessibility ──
 
   it('has default aria-label "Copy to clipboard"', () => {

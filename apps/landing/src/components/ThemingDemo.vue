@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DzAlert, DzBadge, DzButton, DzInput, DzProgress, DzRating, DzSwitch } from '@dzup-ui/core'
+import { DzAlert, DzBadge, DzButton, DzInput, DzProgress, DzRating, DzSlider, DzSwitch } from '@dzup-ui/core'
 import { Check, Copy } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import { LINKS } from '../config.ts'
@@ -94,18 +94,18 @@ async function copyVars(): Promise<void> {
           </button>
         </div>
 
-        <label class="control">
-          <span class="control-label">Hue <em>{{ hue }}</em></span>
-          <input v-model.number="hue" type="range" min="0" max="360" step="1" class="range" @input="activePreset = ''">
-        </label>
-        <label class="control">
-          <span class="control-label">Chroma <em>{{ chroma.toFixed(2) }}</em></span>
-          <input v-model.number="chroma" type="range" min="0" max="0.3" step="0.01" class="range" @input="activePreset = ''">
-        </label>
-        <label class="control">
-          <span class="control-label">Radius <em>{{ radius.toFixed(3) }}rem</em></span>
-          <input v-model.number="radius" type="range" min="0" max="1.5" step="0.025" class="range">
-        </label>
+        <div class="control">
+          <span class="control-label" aria-hidden="true">Hue <em>{{ hue }}</em></span>
+          <DzSlider v-model="hue" :min="0" :max="360" :step="1" size="sm" aria-label="Hue" @change="activePreset = ''" />
+        </div>
+        <div class="control">
+          <span class="control-label" aria-hidden="true">Chroma <em>{{ chroma.toFixed(2) }}</em></span>
+          <DzSlider v-model="chroma" :min="0" :max="0.3" :step="0.01" size="sm" aria-label="Chroma" @change="activePreset = ''" />
+        </div>
+        <div class="control">
+          <span class="control-label" aria-hidden="true">Radius <em>{{ radius.toFixed(3) }}rem</em></span>
+          <DzSlider v-model="radius" :min="0" :max="1.5" :step="0.025" size="sm" aria-label="Radius" />
+        </div>
 
         <pre class="css-out"><code>{{ cssText }}</code></pre>
 
@@ -230,11 +230,6 @@ async function copyVars(): Promise<void> {
   font-style: normal;
   font-family: var(--dz-font-mono, monospace);
   color: var(--dz-muted-foreground, #585b60);
-}
-
-.range {
-  width: 100%;
-  accent-color: var(--dz-primary, #0766ee);
 }
 
 .css-out {

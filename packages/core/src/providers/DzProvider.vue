@@ -327,7 +327,14 @@ function suppressTransitions(): void {
   })
 }
 
-const theme = ref<ThemePreference>(readPersistedTheme() ?? themeDefault.value)
+/**
+ * Setup renders from `themeDefault` only — never from storage — so the server
+ * and the first client render agree (UI-DZUP-UI-DESIGN-M-09). The persisted
+ * preference is applied in `onMounted`, beside `systemPrefersDark`; the
+ * pre-paint `getThemeScript` has already put the right attribute on `<html>`,
+ * so the page itself does not flash in between.
+ */
+const theme = ref<ThemePreference>(themeDefault.value)
 const systemPrefersDark = ref(false)
 
 /** Resolved theme: converts 'system' to actual light/dark */
@@ -403,6 +410,9 @@ onMounted(() => {
     mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     systemPrefersDark.value = mediaQuery.matches
     mediaQuery.addEventListener('change', handleMediaChange)
+    const persisted = readPersistedTheme()
+    if (persisted !== null)
+      theme.value = persisted
     applyThemeAttribute(resolvedTheme.value)
   }
 

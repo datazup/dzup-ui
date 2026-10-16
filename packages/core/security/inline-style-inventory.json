@@ -292,7 +292,7 @@
     },
     {
       "file": "packages/core/src/components/media/DzCarousel.vue",
-      "line": 207,
+      "line": 260,
       "kind": "bound",
       "disposition": "required-dynamic",
       "source": ":style=\"{ transform: orientation === 'horizontal' ? `translateX(-${model * 100}%)` : `translateY(-${model * 100}%)`, }\""

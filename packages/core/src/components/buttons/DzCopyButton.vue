@@ -4,9 +4,9 @@ import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './
 /**
  * DzCopyButton — Clipboard copy button with visual feedback.
  *
- * Copies the provided value to the clipboard using the Clipboard API
- * with a textarea fallback. Shows a checkmark icon for 2 seconds
- * after a successful copy.
+ * Copies the provided value through the shared `useClipboard` composable
+ * (Clipboard API with a checked textarea fallback). Shows a checkmark icon
+ * for 2 seconds after a confirmed copy; a failed copy emits nothing.
  *
  * @example
  * ```vue
@@ -14,7 +14,8 @@ import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './
  * <DzCopyButton value="secret" label="Copy token" copiedLabel="Copied!" />
  * ```
  */
-import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
+import { computed, useAttrs } from 'vue'
+import { useClipboard } from '../../composables/useClipboard/useClipboard.ts'
 import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
@@ -41,8 +42,12 @@ defineSlots<DzCopyButtonSlots>()
 
 const attrs = useAttrs()
 
-const copied = ref(false)
-let resetTimer: ReturnType<typeof setTimeout> | undefined
+/**
+ * One clipboard code path (UI-DZUP-UI-ARCH-M-08): `useClipboard` owns the
+ * Clipboard API call, the legacy fallback's result check, the 2 s reset and
+ * the unmount cleanup. `copied` is only ever true after a confirmed copy.
+ */
+const { copied, copy } = useClipboard({ resetDelay: 2000 })
 
 /** Whether a text label is shown next to the icon (non-square layout) */
 const hasLabel = computed(() => Boolean(props.label || props.copiedLabel))
@@ -102,66 +107,17 @@ const resolvedAriaLabel = computed(() =>
 )
 
 /**
- * Copy the value to the clipboard.
- * Uses navigator.clipboard.writeText with a textarea fallback.
+ * Copy the value to the clipboard and emit `copied` only when the copy was
+ * confirmed — a rejected Clipboard API call or a legacy fallback whose
+ * `execCommand('copy')` returns false leaves the button idle.
  */
 async function handleCopy(): Promise<void> {
   if (props.disabled || copied.value)
     return
 
-  try {
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(props.value)
-    }
-    else {
-      fallbackCopy(props.value)
-    }
-
-    copied.value = true
+  await copy(props.value)
+  if (copied.value)
     emit('copied', props.value)
-
-    if (resetTimer !== undefined)
-      clearTimeout(resetTimer)
-
-    resetTimer = setTimeout(() => {
-      copied.value = false
-    }, 2000)
-  }
-  catch {
-    // Fallback if clipboard API rejects (e.g. permissions)
-    try {
-      fallbackCopy(props.value)
-      copied.value = true
-      emit('copied', props.value)
-
-      if (resetTimer !== undefined)
-        clearTimeout(resetTimer)
-
-      resetTimer = setTimeout(() => {
-        copied.value = false
-      }, 2000)
-    }
-    catch {
-      // Silently fail — no clipboard access
-    }
-  }
-}
-
-onBeforeUnmount(() => {
-  if (resetTimer !== undefined)
-    clearTimeout(resetTimer)
-})
-
-/** Textarea-based fallback for environments without Clipboard API */
-function fallbackCopy(text: string): void {
-  const textarea = document.createElement('textarea')
-  textarea.value = text
-  textarea.style.position = 'fixed'
-  textarea.style.opacity = '0'
-  document.body.appendChild(textarea)
-  textarea.select()
-  document.execCommand('copy')
-  document.body.removeChild(textarea)
 }
 
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).

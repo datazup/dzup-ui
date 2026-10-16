@@ -3,7 +3,7 @@
 An IDE-style three-pane shell built on DzResizable — a collapsible file explorer, an editor and a live preview, each scrolling independently in a DzScrollArea, with draggable handles and a DzToolbar across the top.
 
 - **Category:** Layout
-- **Components:** DzResizable, DzResizablePanel, DzResizableHandle, DzScrollArea, DzToolbar, DzDivider, DzBadge, DzIcon, DzText
+- **Components:** DzResizable, DzResizablePanel, DzResizableHandle, DzScrollArea, DzToolbar, DzButton, DzDivider, DzBadge, DzIcon, DzText
 - **Preview:** /blocks/resizable-workspace
 
 ```vue
@@ -24,6 +24,7 @@ An IDE-style three-pane shell built on DzResizable — a collapsible file explor
  */
 import {
   DzBadge,
+  DzButton,
   DzDivider,
   DzIcon,
   DzResizable,
@@ -84,12 +85,18 @@ const code: string[] = [
         </DzBadge>
       </template>
       <template #end>
-        <button type="button" class="rw-tbtn">
-          <DzIcon :icon="Save" size="xs" /> Save
-        </button>
-        <button type="button" class="rw-tbtn rw-tbtn--primary">
-          <DzIcon :icon="Play" size="xs" /> Run
-        </button>
+        <DzButton variant="outline" tone="neutral" size="sm">
+          <template #prefix>
+            <DzIcon :icon="Save" size="xs" />
+          </template>
+          Save
+        </DzButton>
+        <DzButton variant="solid" tone="primary" size="sm">
+          <template #prefix>
+            <DzIcon :icon="Play" size="xs" />
+          </template>
+          Run
+        </DzButton>
       </template>
     </DzToolbar>
 
@@ -135,9 +142,9 @@ const code: string[] = [
             PREVIEW
           </DzText>
           <div class="rw-preview">
-            <button type="button" class="rw-preview-btn">
+            <DzButton variant="outline" tone="neutral">
               Clicked 3 times
-            </button>
+            </DzButton>
           </div>
           <DzDivider class="rw-preview-rule" />
           <div class="rw-status">
@@ -179,27 +186,6 @@ const code: string[] = [
   border-left: 0;
   border-right: 0;
   border-top: 0;
-}
-
-.rw-toolbar :deep(.rw-tbtn),
-.rw-tbtn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--dz-space-1, 0.25rem);
-  font: inherit;
-  font-size: var(--dz-text-sm, 0.875rem);
-  padding: var(--dz-space-1, 0.25rem) var(--dz-space-3, 0.75rem);
-  border-radius: var(--dz-radius-md, 0.5rem);
-  border: 1px solid var(--dz-border, #e5e7eb);
-  background: var(--dz-background, #fff);
-  color: var(--dz-foreground, #111);
-  cursor: pointer;
-}
-
-.rw-tbtn--primary {
-  background: var(--dz-primary, #6366f1);
-  border-color: var(--dz-primary, #6366f1);
-  color: var(--dz-primary-foreground, #fff);
 }
 
 .rw-body {
@@ -269,16 +255,6 @@ const code: string[] = [
   align-items: center;
   justify-content: center;
   padding: var(--dz-space-6, 1.5rem) 0;
-}
-
-.rw-preview-btn {
-  font: inherit;
-  padding: var(--dz-space-2, 0.5rem) var(--dz-space-4, 1rem);
-  border-radius: var(--dz-radius-md, 0.5rem);
-  border: 1px solid var(--dz-border, #e5e7eb);
-  background: var(--dz-muted, #f3f4f6);
-  color: var(--dz-foreground, #111);
-  cursor: pointer;
 }
 
 .rw-preview-rule {

@@ -157,6 +157,26 @@ describe('dzDataGrid — Data attributes', () => {
     expect(wrapper.attributes('data-loading')).toBe('')
   })
 
+  // UI-DZUP-UI-UX-M-04
+  it('first load (loading, no rows) renders a skeleton body with an accessible status', () => {
+    const wrapper = mountGrid({ loading: true, data: [] })
+    expect(wrapper.find('[data-part="empty"]').exists()).toBe(false)
+    expect(wrapper.findAll('th').length).toBeGreaterThan(0)
+    const skeleton = wrapper.find('tbody[data-part="loader"]')
+    expect(skeleton.exists()).toBe(true)
+    expect(skeleton.findAll('tr').length).toBe(3)
+    const status = wrapper.find('[role="status"]')
+    expect(status.text()).toBe('Loading data')
+  })
+
+  it('loading with rows keeps the overlay, now labelled', () => {
+    const wrapper = mountGrid({ loading: true })
+    const overlay = wrapper.find('div[data-part="loader"]')
+    expect(overlay.exists()).toBe(true)
+    expect(overlay.find('[role="status"]').text()).toBe('Loading data')
+    expect(wrapper.find('tbody[data-part="loader"]').exists()).toBe(false)
+  })
+
   it('sets aria-busy when loading', () => {
     const wrapper = mountGrid({ loading: true })
     expect(wrapper.attributes('aria-busy')).toBe('true')

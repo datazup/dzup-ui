@@ -24,6 +24,7 @@ import type {
  */
 import { computed, onBeforeUnmount, onMounted, provide, ref, toRef, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzMotion } from '../../composables/provider/useDzMotion.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
@@ -125,10 +126,26 @@ function registerSlide(): () => void {
   }
 }
 
+/**
+ * Autoplay follows the APG carousel pattern (UI-DZUP-UI-DESIGN-M-13):
+ *
+ * - it never starts while reduced motion resolves true (OS or provider policy,
+ *   through the shared `useDzMotion` seam), and stops if that flips mid-run;
+ * - it pauses while the pointer is over the carousel or focus is inside it, and
+ *   resumes only when neither holds;
+ * - the live region is `off` while rotating, so automatic slide changes are not
+ *   announced; it is `polite` whenever a user is driving.
+ */
+const { reduced: motionReduced } = useDzMotion()
+const rotating = ref(false)
+let hovered = false
+let focusWithin = false
+
 function startAutoplay(): void {
   stopAutoplay()
-  if (props.autoplay && props.interval > 0) {
+  if (props.autoplay && props.interval > 0 && !motionReduced.value && !hovered && !focusWithin) {
     autoplayTimer = setInterval(() => next(), props.interval)
+    rotating.value = true
   }
 }
 
@@ -137,12 +154,46 @@ function stopAutoplay(): void {
     clearInterval(autoplayTimer)
     autoplayTimer = null
   }
+  rotating.value = false
+}
+
+function onMouseEnter(): void {
+  hovered = true
+  stopAutoplay()
+}
+
+function onMouseLeave(): void {
+  hovered = false
+  if (props.autoplay)
+    startAutoplay()
+}
+
+function onFocusIn(): void {
+  focusWithin = true
+  stopAutoplay()
+}
+
+function onFocusOut(event: FocusEvent): void {
+  const root = event.currentTarget as HTMLElement | null
+  const target = event.relatedTarget as Node | null
+  if (root && target && root.contains(target))
+    return
+  focusWithin = false
+  if (props.autoplay)
+    startAutoplay()
 }
 
 watch(() => props.autoplay, (val) => {
   if (val)
     startAutoplay()
   else stopAutoplay()
+})
+
+watch(motionReduced, (isReduced) => {
+  if (isReduced)
+    stopAutoplay()
+  else if (props.autoplay)
+    startAutoplay()
 })
 
 onMounted(() => {
@@ -197,10 +248,12 @@ const { testId: dzTestId } = useDzTestIds()
     class="[contain:layout_style]"
     v-bind="{ ...dzTestId('dz-carousel'), ...$attrs, class: undefined }"
     @keydown="onKeydown"
-    @mouseenter="stopAutoplay"
-    @mouseleave="autoplay ? startAutoplay() : undefined"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+    @focusin="onFocusIn"
+    @focusout="onFocusOut"
   >
-    <div aria-live="polite" data-part="viewport" :class="cn(styles.viewport(), props.ui?.viewport)">
+    <div :aria-live="rotating ? 'off' : 'polite'" data-part="viewport" :class="cn(styles.viewport(), props.ui?.viewport)">
       <div
         data-part="content"
         :class="cn(styles.container(), props.ui?.content)"

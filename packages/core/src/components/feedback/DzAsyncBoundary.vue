@@ -9,6 +9,11 @@ import type { DzAsyncBoundaryEmits, DzAsyncBoundaryProps, DzAsyncBoundarySlots }
  * The caught error is held locally and rendered through the `error` slot with a
  * `reset` callback; it is not re-thrown.
  *
+ * With no `error` slot the boundary renders a default `role="alert"` message
+ * with a retry button that calls `reset` (strings from the `DzErrorBoundary`
+ * message group), so an unslotted boundary never fails silently. Because the
+ * error is not re-thrown, `onError` is the only reporting channel.
+ *
  * @example
  * ```vue
  * <DzAsyncBoundary :timeout="5000" @timeout="warn">
@@ -22,6 +27,9 @@ import type { DzAsyncBoundaryEmits, DzAsyncBoundaryProps, DzAsyncBoundarySlots }
  * ```
  */
 import { onErrorCaptured, ref } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import DzButton from '../buttons/DzButton.vue'
+import DzAlert from './DzAlert.vue'
 import DzSpinner from './DzSpinner.vue'
 
 const props = withDefaults(defineProps<DzAsyncBoundaryProps>(), {
@@ -34,6 +42,7 @@ const emit = defineEmits<DzAsyncBoundaryEmits>()
 defineSlots<DzAsyncBoundarySlots>()
 
 const capturedError = ref<unknown>(null)
+const dzMessages = useComponentMessages('DzErrorBoundary')
 
 let timeoutId: ReturnType<typeof setTimeout> | undefined
 
@@ -75,7 +84,16 @@ defineExpose({
 
 <template>
   <template v-if="capturedError !== null">
-    <slot name="error" :error="capturedError" :reset="reset" />
+    <slot name="error" :error="capturedError" :reset="reset">
+      <DzAlert tone="danger">
+        {{ dzMessages.message }}
+        <template #actions>
+          <DzButton variant="outline" tone="neutral" size="sm" @click="reset">
+            {{ dzMessages.retry }}
+          </DzButton>
+        </template>
+      </DzAlert>
+    </slot>
   </template>
   <Suspense v-else @pending="onPending" @resolve="onResolve" @error="handleSuspenseError">
     <slot />

@@ -64,6 +64,9 @@
       "seconds": "{count, plural, one {# second} other {# seconds}}",
       "remaining": "{duration} remaining"
     },
+    "DzDataGrid": {
+      "loading": "Loading data"
+    },
     "DzDataGridHeader": {
       "selectAllRows": "Select all rows"
     },
@@ -78,6 +81,10 @@
       "loading": "Loading items",
       "showingAll": "{count, plural, one {Showing # item} other {Showing # items}}",
       "showingRange": "{total, plural, one {Showing {start} to {end} of # item} other {Showing {start} to {end} of # items}}"
+    },
+    "DzErrorBoundary": {
+      "message": "Something went wrong.",
+      "retry": "Try again"
     },
     "DzFileUpload": {
       "ariaLabel": "Upload files"

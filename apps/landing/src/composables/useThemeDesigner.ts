@@ -37,9 +37,11 @@ import type { ComputedRef } from 'vue'
 import {
   createDefaultThemeRecipe,
   createThemeRecipePreset,
+  DARK_SEMANTIC_TOKENS,
   decodeThemeRecipe,
   encodeThemeRecipe,
   formatOklch,
+  LIGHT_SEMANTIC_TOKENS,
   PALETTE_CONFIGS,
   serializeThemeRecipe,
   THEME_RECIPE_FONTS,
@@ -282,15 +284,21 @@ export interface ContrastPair {
   passLarge: boolean
 }
 
+/** A pair endpoint: an intent+shade, or pure white. */
+export type PairEndpoint = [DesignerIntent, Shade] | 'white'
+
 /** A pair descriptor: foreground vs background, each an intent+shade or white. */
-interface PairSpec {
+export interface PairSpec {
   label: string
-  fg: [DesignerIntent, Shade] | 'white'
-  bg: [DesignerIntent, Shade]
+  /** The semantic tokens the endpoints were resolved from. */
+  fgToken: string
+  bgToken: string
+  fg: PairEndpoint
+  bg: PairEndpoint
 }
 
 /** Luminance of a pair endpoint under the current design. */
-function endpointLum(end: [DesignerIntent, Shade] | 'white'): number {
+function endpointLum(end: PairEndpoint): number {
   if (end === 'white')
     return 1
   const [intent, shade] = end
@@ -298,7 +306,36 @@ function endpointLum(end: [DesignerIntent, Shade] | 'white'): number {
   return oklchLuminance(lightness, chroma, hue)
 }
 
-function evalPairs(specs: PairSpec[]): ContrastPair[] {
+const PRIMITIVE_REF = /^var\(--dz-colors-([a-z]+)-(\d+)\)$/
+const SEMANTIC_REF = /^var\((--dz-[a-z-]+)\)$/
+
+/**
+ * Resolve a semantic token to the palette shade it references in `map`
+ * (following semantic → semantic aliases). Throws on anything the designer
+ * cannot retune, so a semantic-layer change fails loudly here instead of
+ * silently measuring a pair the product does not ship.
+ */
+export function resolveSemanticEndpoint(map: Record<string, string>, token: string): PairEndpoint {
+  let value = map[token]
+  for (let hops = 0; value !== undefined && hops < 4; hops++) {
+    if (value.replace(/\s+/g, ' ') === 'oklch(1 0 0)')
+      return 'white'
+    const primitive = PRIMITIVE_REF.exec(value)
+    if (primitive) {
+      const intent = primitive[1] as DesignerIntent
+      if (!(DESIGNER_INTENTS as readonly string[]).includes(intent))
+        break
+      return [intent, Number(primitive[2]) as Shade]
+    }
+    const alias = SEMANTIC_REF.exec(value)
+    if (!alias)
+      break
+    value = map[alias[1]!]
+  }
+  throw new Error(`[themeDesigner] ${token} does not resolve to a designer palette shade`)
+}
+
+function evalPairs(specs: readonly PairSpec[]): ContrastPair[] {
   return specs.map((spec) => {
     const ratio = contrastRatio(endpointLum(spec.fg), endpointLum(spec.bg))
     return {
@@ -310,31 +347,33 @@ function evalPairs(specs: PairSpec[]): ContrastPair[] {
   })
 }
 
-// Shade mappings mirror the semantic layers (@dzup-ui/tokens semantic/*.ts): in
-// light, text is neutral-900/-600 on neutral-100 and solids are shade 500 with
-// white/neutral-900 text; in dark, surfaces invert (neutral-950 bg, neutral-50
-// text) and solids lift to shade 400 with a -950 foreground.
-const LIGHT_PAIRS: PairSpec[] = [
-  { label: 'Body text', fg: ['neutral', 900], bg: ['neutral', 100] },
-  { label: 'Muted text', fg: ['neutral', 600], bg: ['neutral', 100] },
-  { label: 'Primary solid', fg: 'white', bg: ['primary', 500] },
-  { label: 'Link', fg: ['primary', 600], bg: ['neutral', 100] },
-  { label: 'Success solid', fg: 'white', bg: ['success', 500] },
-  { label: 'Warning solid', fg: ['neutral', 900], bg: ['warning', 300] },
-  { label: 'Danger solid', fg: 'white', bg: ['danger', 500] },
-  { label: 'Info solid', fg: 'white', bg: ['info', 500] },
+// Each readout measures a real semantic pair (UI-DZUP-UI-DESIGN-M-14): the
+// shades are read from @dzup-ui/tokens' semantic maps rather than restated, so
+// a pair can never report a pass for a shade the shipped token does not use.
+const PAIR_TOKENS: ReadonlyArray<{ label: string, fg: string, bg: string }> = [
+  { label: 'Body text', fg: '--dz-foreground', bg: '--dz-background' },
+  { label: 'Muted text', fg: '--dz-muted-foreground', bg: '--dz-background' },
+  { label: 'Primary solid', fg: '--dz-primary-foreground', bg: '--dz-primary' },
+  { label: 'Link', fg: '--dz-link', bg: '--dz-background' },
+  { label: 'Success solid', fg: '--dz-success-foreground', bg: '--dz-success' },
+  { label: 'Warning solid', fg: '--dz-warning-foreground', bg: '--dz-warning' },
+  { label: 'Danger solid', fg: '--dz-danger-foreground', bg: '--dz-danger' },
+  { label: 'Info solid', fg: '--dz-info-foreground', bg: '--dz-info' },
 ]
 
-const DARK_PAIRS: PairSpec[] = [
-  { label: 'Body text', fg: ['neutral', 50], bg: ['neutral', 950] },
-  { label: 'Muted text', fg: ['neutral', 400], bg: ['neutral', 950] },
-  { label: 'Primary solid', fg: ['primary', 950], bg: ['primary', 400] },
-  { label: 'Link', fg: ['primary', 400], bg: ['neutral', 950] },
-  { label: 'Success solid', fg: ['success', 950], bg: ['success', 400] },
-  { label: 'Warning solid', fg: ['neutral', 900], bg: ['warning', 300] },
-  { label: 'Danger solid', fg: ['danger', 950], bg: ['danger', 400] },
-  { label: 'Info solid', fg: ['info', 950], bg: ['info', 400] },
-]
+function pairsFor(map: Record<string, string>): PairSpec[] {
+  return PAIR_TOKENS.map(({ label, fg, bg }) => ({
+    label,
+    fgToken: fg,
+    bgToken: bg,
+    fg: resolveSemanticEndpoint(map, fg),
+    bg: resolveSemanticEndpoint(map, bg),
+  }))
+}
+
+/** The measured pairs per theme, resolved from the semantic token maps. */
+export const LIGHT_PAIRS: readonly PairSpec[] = pairsFor(LIGHT_SEMANTIC_TOKENS)
+export const DARK_PAIRS: readonly PairSpec[] = pairsFor(DARK_SEMANTIC_TOKENS)
 
 const contrastLight = computed<ContrastPair[]>(() => evalPairs(LIGHT_PAIRS))
 const contrastDark = computed<ContrastPair[]>(() => evalPairs(DARK_PAIRS))
