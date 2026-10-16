@@ -80,6 +80,25 @@ export const TAILWIND_BROWSER_CDN = 'https://cdn.jsdelivr.net/npm/@tailwindcss/b
 export const THEME_RECIPE_MESSAGE = 'dz-playground:theme-recipe'
 
 /**
+ * The only `<html>` attributes a `THEME_RECIPE_MESSAGE` may set — exactly the
+ * ones `@dzup-ui/tokens`' `applyThemeRecipe` writes (UI-DZUP-UI-SEC-M-06).
+ *
+ * The listener used to call `setAttribute` for every key it was sent. The
+ * sandbox is a same-origin srcdoc frame, so `{ attributes: { onmouseover } }`
+ * was script execution in the docs origin for any window that could post to it.
+ */
+export const THEME_RECIPE_ATTRIBUTES = [
+  'data-theme',
+  'data-theme-mode',
+  'data-density',
+  'data-motion-preview',
+  'dir',
+] as const
+
+/** Every CSS variable a recipe message may set starts with this prefix. */
+export const THEME_RECIPE_VARIABLE_PREFIX = '--dz-'
+
+/**
  * One component's playground seed, as written to
  * `apps/docs/public/playground/seeds.json` and read by the site at runtime.
  *
@@ -211,15 +230,23 @@ export function sandboxHeadHTML(options: SandboxHeadOptions): string {
       + `el.setAttribute('data-theme',${JSON.stringify(theme)});`
       + `new MutationObserver(sync).observe(el,{attributes:true,attributeFilter:['class']});})();`
 
-  // Applies the variables a ThemeRecipe expands to, plus the four data-*
-  // attributes `applyThemeRecipe` sets. The recipe itself is never computed
-  // here — the host runs @dzup-ui/tokens' own applyThemeRecipe and sends the
-  // result, so there is exactly one theme engine (this task's stop condition).
+  // Applies the variables a ThemeRecipe expands to, plus the attributes
+  // `applyThemeRecipe` sets. The recipe itself is never computed here — the
+  // host runs @dzup-ui/tokens' own applyThemeRecipe and sends the result, so
+  // there is exactly one theme engine (this task's stop condition).
+  //
+  // Only the embedding page may drive it (`e.source === window.parent`), only
+  // `--dz-*` properties and the allowlisted attributes are applied, and only
+  // string values: anything else in the message is ignored, never coerced.
   const recipeBridge
-    = `(function(){var el=document.documentElement;window.addEventListener('message',function(e){`
+    = `(function(){var el=document.documentElement;`
+      + `var A=${JSON.stringify(THEME_RECIPE_ATTRIBUTES)};var P=${JSON.stringify(THEME_RECIPE_VARIABLE_PREFIX)};`
+      + `window.addEventListener('message',function(e){`
+      + `if(e.source!==window.parent||e.source===window)return;`
       + `var d=e.data;if(!d||d.type!==${JSON.stringify(THEME_RECIPE_MESSAGE)})return;`
-      + `var v=d.variables||{};for(var k in v)el.style.setProperty(k,v[k]);`
-      + `var a=d.attributes||{};for(var n in a)el.setAttribute(n,a[n]);});})();`
+      + `var v=d.variables||{};for(var k in v){if(Object.prototype.hasOwnProperty.call(v,k)&&k.indexOf(P)===0&&typeof v[k]==='string')el.style.setProperty(k,v[k]);}`
+      + `var a=d.attributes||{};for(var n in a){if(Object.prototype.hasOwnProperty.call(a,n)&&A.indexOf(n)!==-1&&typeof a[n]==='string')el.setAttribute(n,a[n]);}`
+      + `});})();`
 
   return [
     `<script src="${TAILWIND_BROWSER_CDN}"></script>`,

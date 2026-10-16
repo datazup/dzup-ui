@@ -1,4 +1,5 @@
 import type { DzupUiModuleOptions } from './module.ts'
+import { createHash } from 'node:crypto'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 /**
@@ -32,12 +33,14 @@ vi.mock('@nuxt/kit', () => ({
 }))
 
 const { COMPONENT_OWNERSHIP } = await import('@dzup-ui/core/ownership')
+const { getThemeScript } = await import('@dzup-ui/core/theme-script')
 const {
   applyPrefix,
   componentsToRegister,
   proAvailability,
   proMissingMessage,
   proTierMissingMessage,
+  themeScriptCspHash,
 } = await import('./module.ts')
 const moduleDefinition = (await import('./module.ts')).default as unknown as {
   meta: { name: string, configKey: string }
@@ -50,7 +53,7 @@ interface FakeNuxt {
     rootDir: string
     css: string[]
     build: { transpile: string[] }
-    app: { head: { script?: { innerHTML: string, type: string }[] } }
+    app: { head: { script?: { innerHTML: string, type: string, nonce?: string }[] } }
   }
 }
 
@@ -204,6 +207,43 @@ describe('stylesheets and transpilation', () => {
     const script = runSetup().options.app.head.script
     expect(script).toHaveLength(1)
     expect(script?.[0]?.innerHTML).toContain('data-theme')
+  })
+})
+
+describe('the theme script (UI-DZUP-UI-ARCH-M-05, SEC-M-04, DESIGN-M-08)', () => {
+  it('is Core\'s getThemeScript output for the default options, not a copy', () => {
+    const [script] = runSetup().options.app.head.script ?? []
+    expect(script?.innerHTML).toBe(getThemeScript())
+    expect(script).not.toHaveProperty('nonce')
+  })
+
+  it('carries the provider options through: storageKey, attribute, defaultTheme, persist and direction', () => {
+    const themeScript = { storageKey: 'acme-theme', attribute: 'data-mode', defaultTheme: 'dark', persist: true, locale: 'ar-EG' } as const
+    const [script] = runSetup({ themeScript }).options.app.head.script ?? []
+    expect(script?.innerHTML).toBe(getThemeScript(themeScript))
+    expect(script?.innerHTML).toContain('"acme-theme"')
+    expect(script?.innerHTML).toContain('"data-mode"')
+    expect(script?.innerHTML).toContain(`setAttribute('dir',"rtl")`)
+    expect(runSetup({ themeScript: { direction: 'rtl' } }).options.app.head.script?.[0]?.innerHTML)
+      .toBe(getThemeScript({ direction: 'rtl' }))
+  })
+
+  it('writes a supplied nonce on the script element, and keeps it out of the script body', () => {
+    const [script] = runSetup({ themeScript: { nonce: 'r4nd0m', storageKey: 'k' } }).options.app.head.script ?? []
+    expect(script).toMatchObject({ nonce: 'r4nd0m', innerHTML: getThemeScript({ storageKey: 'k' }) })
+    expect(script?.innerHTML).not.toContain('r4nd0m')
+  })
+
+  it('injects nothing when disabled', () => {
+    expect(runSetup({ themeScript: false }).options.app.head.script ?? []).toEqual([])
+  })
+
+  it('publishes the CSP hash of exactly the script it injects', () => {
+    const options = { storageKey: 'acme-theme', nonce: 'ignored-by-the-hash' }
+    const [script] = runSetup({ themeScript: options }).options.app.head.script ?? []
+    const expected = `'sha256-${createHash('sha256').update(script!.innerHTML, 'utf8').digest('base64')}'`
+    expect(themeScriptCspHash(options)).toBe(expected)
+    expect(themeScriptCspHash()).not.toBe(expected)
   })
 })
 

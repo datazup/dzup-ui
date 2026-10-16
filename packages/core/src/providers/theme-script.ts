@@ -17,7 +17,7 @@
  * Or with a bundler / SSR helper:
  *
  * ```ts
- * import { getThemeScript } from '@dzup-ui/core/providers'
+ * import { getThemeScript } from '@dzup-ui/core/theme-script'
  *
  * // Custom storage key and attribute
  * const script = getThemeScript({ storageKey: 'my-theme', attribute: 'data-mode' })
@@ -34,11 +34,17 @@
  * (`useDzLocale`) instead of duplicating it into a string literal that no test
  * can reach.
  *
- * @module @dzup-ui/core/providers/theme-script
+ * **One script, every host.** This is the only copy: `@dzup-ui/nuxt` injects
+ * `getThemeScript(options)` and `@dzup-ui/tokens/utils`' `themeScript` is a
+ * deprecated literal of the defaults. The module imports nothing that touches
+ * Vue or the DOM, which is what lets the `./theme-script` subpath load in a
+ * Nuxt module at build time without pulling a component in with it.
+ *
+ * @module @dzup-ui/core/theme-script
  */
 
 import type { DzDirectionPreference, DzLocale } from '@dzup-ui/contracts'
-import { directionForLocale } from '../composables/provider/useDzLocale.ts'
+import { directionForLocale } from '../i18n/direction.ts'
 
 /** Options for generating the theme initialization script */
 export interface ThemeScriptOptions {
@@ -46,15 +52,24 @@ export interface ThemeScriptOptions {
   storageKey?: string
   /** HTML attribute name (default: 'data-theme') */
   attribute?: string
-  /** Default theme when nothing is persisted (default: 'system') */
+  /**
+   * Default theme when nothing valid is persisted (default: 'system').
+   * A persisted `'system'` is honoured as system, never replaced by this.
+   */
   defaultTheme?: 'light' | 'dark' | 'system'
+  /**
+   * Read the persisted preference (default: `true`). Mirrors
+   * `DzProvider`'s `theme.persist`: with `false` the provider ignores
+   * `localStorage`, so the script must too or the first paint would show a
+   * theme the provider then replaces.
+   */
+  persist?: boolean
   /**
    * Writing direction to set on `<html>` before first paint (ADR-20).
    *
    * `'auto'` — the default — resolves from {@link ThemeScriptOptions.locale}.
-   * With neither given the script writes no `dir` at all, so the emitted string
-   * is byte-identical to what it was before direction existed: a host that has
-   * not declared a locale gets no opinion imposed on its markup.
+   * With neither given the script writes no `dir` at all: a host that has not
+   * declared a locale gets no opinion imposed on its markup.
    */
   direction?: DzDirectionPreference
   /** BCP-47 tag the direction resolves from when `direction` is `'auto'`. */
@@ -64,11 +79,11 @@ export interface ThemeScriptOptions {
 /**
  * The `dir` this script should write, or `undefined` for "say nothing".
  *
- * Exported for the spec: the interesting cases (`'auto'` with no locale, an
- * explicit direction that contradicts the locale) are decisions, and a decision
- * that is only reachable through a generated string is a decision nothing tests.
+ * The interesting cases (`'auto'` with no locale, an explicit direction that
+ * contradicts the locale) are decisions; the spec reaches them through the
+ * generated script's behaviour.
  */
-export function resolveScriptDirection(options: ThemeScriptOptions): 'ltr' | 'rtl' | undefined {
+function resolveScriptDirection(options: ThemeScriptOptions): 'ltr' | 'rtl' | undefined {
   const { direction = 'auto', locale } = options
   if (direction !== 'auto')
     return direction
@@ -76,7 +91,21 @@ export function resolveScriptDirection(options: ThemeScriptOptions): 'ltr' | 'rt
 }
 
 /**
+ * A host-supplied string as a JavaScript string literal. Every option value
+ * reaches the script through here and nowhere else, so how a value is
+ * embedded is decided in one place.
+ */
+function jsString(value: string): string {
+  return JSON.stringify(value)
+}
+
+/**
  * Generate a theme initialization script string with custom options.
+ *
+ * Resolution order, matching `DzProvider`: a persisted `'light'`, `'dark'` or
+ * `'system'` wins; anything else (nothing stored, a stale or foreign value,
+ * storage disabled or throwing) falls back to `defaultTheme`; `'system'` is
+ * then resolved through `prefers-color-scheme`.
  *
  * @param options - Script generation options
  * @returns Inline JavaScript string for `<head>` injection
@@ -86,6 +115,7 @@ export function getThemeScript(options: ThemeScriptOptions = {}): string {
     storageKey = 'dz-theme',
     attribute = 'data-theme',
     defaultTheme = 'system',
+    persist = true,
   } = options
 
   const dir = resolveScriptDirection(options)
@@ -94,9 +124,18 @@ export function getThemeScript(options: ThemeScriptOptions = {}): string {
   // is themed but not yet directed.
   const dirWrite = dir === undefined
     ? ''
-    : `;document.documentElement.setAttribute('dir',${JSON.stringify(dir)})`
+    : `;document.documentElement.setAttribute('dir',${jsString(dir)})`
 
-  return `(function(){try{var s=localStorage.getItem(${JSON.stringify(storageKey)});var t=s==='light'||s==='dark'?s:null;if(!t){var d=${JSON.stringify(defaultTheme)};t=d==='system'?window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light':d}document.documentElement.setAttribute(${JSON.stringify(attribute)},t)${dirWrite}}catch(e){}})()`
+  // Storage is read in its own `try`: a browser that throws on `localStorage`
+  // access (blocked storage, some private modes) still gets the default theme
+  // rather than no theme at all.
+  const read = persist
+    ? `var s=null;try{s=localStorage.getItem(${jsString(storageKey)})}catch(e){}`
+    : `var s=null;`
+
+  return `(function(){try{${read}var p=s==='light'||s==='dark'||s==='system'?s:${jsString(defaultTheme)};`
+    + `var t=p==='system'?(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):p;`
+    + `document.documentElement.setAttribute(${jsString(attribute)},t)${dirWrite}}catch(e){}})()`
 }
 
 /**

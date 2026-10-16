@@ -315,7 +315,9 @@ const ANY_TAG = /<\/?[a-z][a-z0-9-]*/i
  */
 const DANGEROUS_IN_OUTPUT: readonly { readonly name: string, readonly pattern: RegExp }[] = [
   { name: 'a script-bearing element', pattern: /<\s*(?:script|iframe|object|embed|frame|frameset|noscript|base|meta|link|form|template|annotation-xml)\b/i },
-  { name: 'an event attribute', pattern: /\son[a-z]+\s*=/i },
+  // `/` and a closing quote separate attributes as well as whitespace does:
+  // `<img src="x"/onerror="…">` and `<img src="x"onerror="…">` both build one.
+  { name: 'an event attribute', pattern: /[\s/"']on[a-z]+\s*=/i },
   { name: 'an executable URL scheme in a URL attribute', pattern: /(?:href|src|xlink:href|action|formaction|srcdoc|poster|background|data)\s*=\s*(?:["']\s*)?(?:javascript|vbscript|livescript|data|file|blob)\s*:/i },
   { name: 'a legacy CSS expression', pattern: /expression\s*\(/i },
   { name: 'a CSS @import', pattern: /@import\b/i },
@@ -344,6 +346,57 @@ const SURVIVING_COMMENT = {
  * parser honours) is reported rather than assumed inert.
  */
 const EXECUTABLE_SCHEME = /(?:javascript|vbscript|livescript)\s*:/i
+
+/** Every start tag in the output, as raw source text. */
+const START_TAG = /<[a-z][a-z0-9-]*(?:[^>"']|"[^"]*"|'[^']*')*>?/gi
+
+/**
+ * The named character references an attribute value can use to spell a scheme
+ * or a separator. Not the full HTML table: only names that decode to a
+ * character one of the patterns above depends on, which is the set an evasion
+ * would use. Matched case-sensitively, as the tokenizer does.
+ */
+const NAMED_REFERENCES: Readonly<Record<string, string>> = {
+  'colon': ':',
+  'Tab': '\t',
+  'NewLine': '\n',
+  'sol': '/',
+  'lpar': '(',
+  'rpar': ')',
+  'period': '.',
+  'excl': '!',
+  'quot': '"',
+  'apos': '\'',
+  'amp': '&',
+  'lt': '<',
+  'gt': '>',
+  'equals': '=',
+  'commat': '@',
+}
+
+/**
+ * The live tags of an output as a browser reads their attributes: character
+ * references decoded, and the tab / line-feed / carriage-return characters the
+ * URL parser strips from a scheme removed (UI-DZUP-UI-SEC-M-10).
+ *
+ * Scoped to tag text on purpose. Decoding the whole output would turn an
+ * escaping adapter's `&lt;img onerror=…&gt;` *text* into something that looks
+ * like markup — the false positive the no-tag gate below exists to prevent —
+ * while an entity inside an attribute value is exactly what the browser
+ * decodes before it resolves `href` or `src`.
+ */
+function decodedTagText(value: string): string {
+  const tags = value.match(START_TAG) ?? []
+  return tags
+    .map(tag => tag
+      .replace(/&#(?:x([0-9a-f]+)|(\d+));?/gi, (whole, hex: string | undefined, dec: string | undefined) => {
+        const code = hex !== undefined ? Number.parseInt(hex, 16) : Number(dec)
+        return Number.isFinite(code) && code > 0 && code <= 0x10FFFF ? String.fromCodePoint(code) : whole
+      })
+      .replace(/&([a-z]+);/gi, (whole, name: string) => NAMED_REFERENCES[name] ?? whole)
+      .replace(/[\t\n\r]/g, ''))
+    .join('\n')
+}
 
 /** What {@link classifyVerdict} decided, and the sentence explaining it. */
 export interface VerdictClassification {
@@ -390,11 +443,16 @@ export function classifyVerdict(input: string, output: { ok: true, value: string
   if (!ANY_TAG.test(value))
     return { verdict: 'escaped', detail: 'no tag survived — the output builds no markup' }
 
+  // Scanned twice: as written, and as the browser decodes the tags' attributes
+  // (`href="&#106;avascript:…"`, `java&#9;script:`, `javascript&colon;`).
+  const decoded = decodedTagText(value)
   for (const { name, pattern } of DANGEROUS_IN_OUTPUT) {
     if (pattern.test(value))
       return { verdict: 'passed-through', detail: `${name} survived: ${JSON.stringify(value.slice(0, 120))}` }
+    if (pattern.test(decoded))
+      return { verdict: 'passed-through', detail: `${name} survived once character references are decoded: ${JSON.stringify(value.slice(0, 120))}` }
   }
-  if (EXECUTABLE_SCHEME.test(value))
+  if (EXECUTABLE_SCHEME.test(value) || EXECUTABLE_SCHEME.test(decoded))
     return { verdict: 'passed-through', detail: `an executable scheme survived beside live markup: ${JSON.stringify(value.slice(0, 120))}` }
 
   return { verdict: 'stripped', detail: 'markup survived carrying no dangerous element, attribute or scheme' }

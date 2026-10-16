@@ -19,6 +19,12 @@
  * Inline script string for `<head>`.
  * Reads `localStorage('dz-theme')`, resolves 'system' to actual preference,
  * and sets `data-theme` on `document.documentElement`.
+ *
+ * @deprecated Use `getThemeScript(options)` (or `themeScript`) from
+ * `@dzup-ui/core/theme-script`, the one implementation the provider and the
+ * Nuxt module share. This literal hard-codes the `dz-theme` key and the
+ * `data-theme` attribute and cannot follow a provider's `storageKey`,
+ * `attribute`, `defaultTheme`, `persist` or `locale` (UI-DZUP-UI-ARCH-M-05).
  */
 export const themeScript = `(function(){try{var t=localStorage.getItem('dz-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}else{var d=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',d)}}catch(e){}})();`
 

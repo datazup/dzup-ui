@@ -323,6 +323,24 @@
       "rollback": "the alias resolves to the canonical token through var(); both names render identically",
       "owner": "tokens",
       "docs": "packages/tokens/TOKENS.md"
+    },
+    {
+      "symbol": "themeScript",
+      "package": "@dzup-ui/tokens",
+      "kind": "function",
+      "annotation": { "file": "packages/tokens/src/utils/theme-script.ts" },
+      "replacement": "getThemeScript(options) / themeScript from @dzup-ui/core/theme-script",
+      "replacementExample": "import { themeScript } from '@dzup-ui/tokens/utils'  ->  import { getThemeScript } from '@dzup-ui/core/theme-script'; const themeScript = getThemeScript({ storageKey, attribute, defaultTheme })",
+      "firstDeprecated": "0.2.1",
+      "firstDeprecatedBasis": "NOT derivable from git yet: the annotation is uncommitted on the audit-implementation branch (UI-DZUP-UI-ARCH-M-05). @dzup-ui/tokens 0.2.0 is published without it, so the first release that can carry it is the next one after 0.2.0; re-derive once it lands.",
+      "earliestRemoval": "0.4.0",
+      "earliestRemovalBasis": "VERSIONING.md §4 -- at least one full 0.x minor series (0.3.x) after the release that first ships the annotation, removed in a MINOR.",
+      "codemod": null,
+      "migration": "Manual: replace the import with getThemeScript from @dzup-ui/core/theme-script and pass the same storageKey/attribute/defaultTheme/persist/locale the app gives DzProvider's theme prop. With no options the output resolves the same preference the literal did. Nuxt apps need nothing -- @dzup-ui/nuxt injects Core's script itself (module option `themeScript`).",
+      "runtimeWarning": { "status": "absent", "mechanism": null, "evidence": null, "reason": "the symbol is a string constant inlined into a host's HTML; there is no call site to warn from, and turning it into a warning getter would change an exported const into an accessor and defeat tree-shaking of the utils entry." },
+      "rollback": "keep importing the literal; it is unchanged and still correct for an app on the default key, attribute and theme",
+      "owner": "tokens",
+      "docs": "packages/core/src/providers/theme-script.ts"
     }
   ]
 }

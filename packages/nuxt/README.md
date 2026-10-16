@@ -186,6 +186,28 @@ The module injects the theme script into `<head>` before any stylesheet
 paint, so a dark-mode reader does not get a white flash on a cold load — the
 server cannot know their theme, and this is what closes that gap.
 
+The script is Core's `getThemeScript(options)` (`@dzup-ui/core/theme-script`),
+configured through `dzupUi.themeScript`. Give it the same `storageKey`,
+`attribute`, `defaultTheme`, `persist` and `locale`/`direction` you give
+`DzProvider`'s `theme`, or the first paint reads a different key than the
+provider writes.
+
+Under a strict Content-Security-Policy, allow the script by hash:
+`themeScriptCspHash(options)` (exported by this module) returns the
+`'sha256-…'` source for exactly the script these options produce. `nonce` writes
+a nonce attribute on the element, for a setup that substitutes a per-response
+value; a nonce fixed in config is public and protects nothing.
+`themeScript: false` injects nothing, for a host that renders the script itself.
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@dzup-ui/nuxt'],
+  dzupUi: {
+    themeScript: { storageKey: 'acme-theme', defaultTheme: 'light' },
+  },
+})
+```
+
 Wrap your layout in `DzThemeProvider` to make the theme reactive:
 
 <!-- fixture: packages/nuxt/test/fixtures/ssr-hydration/app.vue -->

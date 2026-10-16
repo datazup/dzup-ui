@@ -99,6 +99,34 @@ describe('measureHtmlDepth', () => {
     expect(measureHtmlDepth('<div title="a>b"><span>x</span></div>')).toBe(2)
   })
 
+  it('matches a raw-text end tag case-insensitively, and only on the whole name prefix', () => {
+    expect(measureHtmlDepth('<SCRIPT><div></ScRiPt><p>x</p>')).toBe(1)
+    expect(measureHtmlDepth('<xmp></x><div></div></xmp>')).toBe(1)
+    expect(measureHtmlDepth('<title>a</title><div><span></span></div>')).toBe(2)
+  })
+
+  it('scans repeated raw-text elements in linear time (UI-DZUP-UI-SEC-M-07)', () => {
+    // Depth 1 and under maxLength, so nothing short-circuits: the old scanner
+    // lower-cased the whole payload once per `<xmp>`, ~1.3e9 conversions here.
+    const payload = '<xmp></xmp>'.repeat(11_000)
+    const toLowerCase = vi.spyOn(String.prototype, 'toLowerCase')
+    let best = Number.POSITIVE_INFINITY
+    try {
+      for (let run = 0; run < 3; run++) {
+        const started = performance.now()
+        expect(measureHtmlDepth(payload)).toBe(1)
+        best = Math.min(best, performance.now() - started)
+      }
+      // Deterministic half: the payload itself is never lower-cased.
+      const longest = toLowerCase.mock.contexts.reduce<number>((most, self) => Math.max(most, String(self).length), 0)
+      expect(longest).toBeLessThan(payload.length)
+    }
+    finally {
+      toLowerCase.mockRestore()
+    }
+    expect(best).toBeLessThan(50)
+  })
+
   it('returns early once the limit is passed', () => {
     // The guard's reason for existing: a depth bomb is rejected without the
     // scanner walking the rest of the payload, and without a DOM being built.

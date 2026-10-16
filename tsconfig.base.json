@@ -42,6 +42,9 @@
       // the same reason as the comment above: packages/nuxt imports it, and the
       // Typecheck CI job has no dist (found 2026-10-02, run 36997534497).
       "@dzup-ui/core/ownership": ["./packages/core/src/generated/component-ownership.ts"],
+      // Same reason: `./theme-script` (imported by packages/nuxt) is
+      // src/providers/theme-script.ts, which neither candidate below finds.
+      "@dzup-ui/core/theme-script": ["./packages/core/src/providers/theme-script.ts"],
       "@dzup-ui/core/*": ["./packages/core/src/*", "./packages/core/src/components/*"],
       "@dzup-ui/compat": ["./packages/compat/src/index.ts"],
       "@dzup-ui/compat/*": ["./packages/compat/src/*"],

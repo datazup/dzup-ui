@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "ae4c6be7fe991f9c6caf7bcbf1f67d7b76b478d5",
+  "sourceCommit": "b22cfc7ecbf5cee5ffac925a9983eabd23505189",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -21388,7 +21388,8 @@
       "subpath": ".",
       "subpaths": [
         ".",
-        "./providers"
+        "./providers",
+        "./theme-script"
       ],
       "kind": "type",
       "evidence": [
@@ -22958,7 +22959,8 @@
       "subpath": ".",
       "subpaths": [
         ".",
-        "./providers"
+        "./providers",
+        "./theme-script"
       ],
       "kind": "unclassified",
       "evidence": [
@@ -24228,7 +24230,8 @@
       "subpath": ".",
       "subpaths": [
         ".",
-        "./providers"
+        "./providers",
+        "./theme-script"
       ],
       "kind": "unclassified",
       "evidence": [

@@ -275,6 +275,7 @@ describe('the real repository', () => {
         "@dzup-ui/core/providers",
         "@dzup-ui/core/resolver",
         "@dzup-ui/core/styles",
+        "@dzup-ui/core/theme-script",
         "@dzup-ui/core/typography",
         "@dzup-ui/mcp",
         "@dzup-ui/mcp/registry",

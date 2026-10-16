@@ -147,6 +147,34 @@ describe('classifyVerdict', () => {
     expect(classifyVerdict(HOSTILE, { ok: true, value: '<img src="x">' }).verdict).toBe('stripped')
   })
 
+  describe('decodes what the browser decodes before scanning (UI-DZUP-UI-SEC-M-10)', () => {
+    it.each([
+      ['a named colon', '<a href="javascript&colon;alert(1)">x</a>'],
+      ['a decimal reference', '<a href="&#106;avascript:alert(1)">x</a>'],
+      ['a decimal reference without its semicolon', '<a href="&#106avascript:alert(1)">x</a>'],
+      ['a hex reference', '<a href="&#x6A;avascript:alert(1)">x</a>'],
+      ['an encoded tab inside the scheme', '<a href="java&#9;script:alert(1)">x</a>'],
+      ['a named tab inside the scheme', '<a href="java&Tab;script:alert(1)">x</a>'],
+      ['a raw newline inside the scheme', '<a href="java\nscript:alert(1)">x</a>'],
+      ['a /-separated event attribute', '<img src="x"/onerror="alert(1)">'],
+      ['a quote-adjacent event attribute', '<img src="x"onerror="alert(1)">'],
+    ])('%s survives as `passed-through`', (_shape, value) => {
+      expect(classifyVerdict(HOSTILE, { ok: true, value }).verdict).toBe('passed-through')
+    })
+
+    it('leaves a decoded but harmless attribute `stripped`', () => {
+      expect(classifyVerdict(HOSTILE, { ok: true, value: '<a href="https&colon;//example.test/&#97;">x</a>' }).verdict)
+        .toBe('stripped')
+    })
+
+    it('does not decode escaped TEXT beside a surviving tag into markup', () => {
+      // Decoding is scoped to tag text: an encoded scheme rendered as text
+      // inside a kept <p> is inert, and must not read as a live href.
+      expect(classifyVerdict(HOSTILE, { ok: true, value: '<p>&lt;a href=&quot;java&#9;script&colon;x&quot;&gt;</p>' }).verdict)
+        .toBe('stripped')
+    })
+  })
+
   it('an escaped output whose TEXT still reads `onerror=` is `escaped`, not `passed-through`', () => {
     // The regression this gate exists for. Escaping touches only `&<>"'`, so
     // ` onerror=` survives as literal text in every correctly escaped output.

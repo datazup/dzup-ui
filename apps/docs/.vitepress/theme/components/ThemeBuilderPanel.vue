@@ -123,7 +123,9 @@ function pushToSandbox(): void {
   if (!frame?.contentWindow || !validation.value.ok)
     return
   const payload = sandboxPayload(recipe.value, systemPrefersDark.value)
-  frame.contentWindow.postMessage({ type: THEME_RECIPE_MESSAGE, ...payload }, '*')
+  // The sandbox is a same-origin srcdoc frame, so name our own origin rather
+  // than '*' (UI-DZUP-UI-SEC-M-06): a frame that navigated elsewhere gets nothing.
+  frame.contentWindow.postMessage({ type: THEME_RECIPE_MESSAGE, ...payload }, window.location.origin)
 }
 
 async function launchPreview(): Promise<void> {

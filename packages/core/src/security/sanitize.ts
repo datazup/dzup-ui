@@ -280,12 +280,37 @@ export function measureHtmlDepth(html: string, limit: number = Number.POSITIVE_I
       return max
 
     if (RAW_TEXT_ELEMENTS.has(name)) {
-      const close = html.toLowerCase().indexOf(`</${name}`, i)
+      const close = indexOfEndTag(html, name, i)
       i = close === -1 ? n : close
     }
   }
 
   return max
+}
+
+/**
+ * Index of the first `</name` at or after `from`, the name matched ASCII
+ * case-insensitively, or -1.
+ *
+ * Searches from the cursor rather than lower-casing the payload: the scan used
+ * to call `html.toLowerCase()` once per raw-text element, so `'<xmp></xmp>'`
+ * repeated to `maxLength` cost O(n²) inside the guard that exists to bound the
+ * work (UI-DZUP-UI-SEC-M-07). Lower-casing a copy is also unsafe for offsets:
+ * a few non-ASCII characters change length when lower-cased. `name` is already
+ * lower-case ASCII, as every tag name the scanner records is.
+ */
+function indexOfEndTag(html: string, name: string, from: number): number {
+  for (let at = html.indexOf('</', from); at !== -1; at = html.indexOf('</', at + 2)) {
+    let k = 0
+    for (; k < name.length; k++) {
+      const c = html.charCodeAt(at + 2 + k)
+      if ((c >= 65 && c <= 90 ? c + 32 : c) !== name.charCodeAt(k))
+        break
+    }
+    if (k === name.length)
+      return at
+  }
+  return -1
 }
 
 // ---------------------------------------------------------------------------

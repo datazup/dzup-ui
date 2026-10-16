@@ -363,3 +363,78 @@ describe('getThemeScript', () => {
     expect(script).toContain('setAttribute')
   })
 })
+
+/**
+ * Run a generated script against a recording `<html>`, a stubbed storage and a
+ * stubbed `prefers-color-scheme`, and return the attributes it wrote. The
+ * behaviour is asserted, not the string: a substring check passes a script
+ * that reads the right key and then ignores what it read.
+ */
+function runThemeScript(
+  script: string,
+  { stored = null, osDark = false, storageThrows = false }: { stored?: string | null, osDark?: boolean, storageThrows?: boolean } = {},
+): { attributes: Record<string, string>, reads: string[] } {
+  const attributes: Record<string, string> = {}
+  const reads: string[] = []
+  const localStorage = {
+    getItem: (key: string) => {
+      if (storageThrows)
+        throw new Error('SecurityError')
+      reads.push(key)
+      return stored
+    },
+  }
+  const window = { matchMedia: (query: string) => ({ matches: osDark && query.includes('dark') }) }
+  const document = { documentElement: { setAttribute: (name: string, value: string) => { attributes[name] = value } } }
+  // eslint-disable-next-line no-new-func -- evaluating the generated script is the point of the test
+  new Function('window', 'document', 'localStorage', script)(window, document, localStorage)
+  return { attributes, reads }
+}
+
+describe('getThemeScript behaviour (UI-DZUP-UI-DESIGN-M-08)', () => {
+  it('honours a persisted "system" over a light default, resolving it from the OS', () => {
+    const script = getThemeScript({ defaultTheme: 'light' })
+    expect(runThemeScript(script, { stored: 'system', osDark: true }).attributes['data-theme']).toBe('dark')
+    expect(runThemeScript(script, { stored: 'system', osDark: false }).attributes['data-theme']).toBe('light')
+  })
+
+  it('honours a persisted "system" over a dark default', () => {
+    const script = getThemeScript({ defaultTheme: 'dark' })
+    expect(runThemeScript(script, { stored: 'system', osDark: false }).attributes['data-theme']).toBe('light')
+  })
+
+  it('uses a persisted light or dark as-is', () => {
+    const script = getThemeScript({ defaultTheme: 'system' })
+    expect(runThemeScript(script, { stored: 'dark', osDark: false }).attributes['data-theme']).toBe('dark')
+    expect(runThemeScript(script, { stored: 'light', osDark: true }).attributes['data-theme']).toBe('light')
+  })
+
+  it('falls back to defaultTheme for nothing stored or a foreign value', () => {
+    expect(runThemeScript(getThemeScript({ defaultTheme: 'dark' })).attributes['data-theme']).toBe('dark')
+    expect(runThemeScript(getThemeScript({ defaultTheme: 'light' }), { stored: 'sepia', osDark: true }).attributes['data-theme']).toBe('light')
+    expect(runThemeScript(getThemeScript(), { osDark: true }).attributes['data-theme']).toBe('dark')
+  })
+
+  it('reads the configured key and writes the configured attribute', () => {
+    const { attributes, reads } = runThemeScript(getThemeScript({ storageKey: 'acme-mode', attribute: 'data-mode' }), { stored: 'dark' })
+    expect(reads).toEqual(['acme-mode'])
+    expect(attributes).toEqual({ 'data-mode': 'dark' })
+  })
+
+  it('still applies the default when storage access throws', () => {
+    const { attributes } = runThemeScript(getThemeScript({ defaultTheme: 'dark' }), { storageThrows: true })
+    expect(attributes['data-theme']).toBe('dark')
+  })
+
+  it('ignores storage entirely when persist is false, as the provider does', () => {
+    const { attributes, reads } = runThemeScript(getThemeScript({ persist: false, defaultTheme: 'light' }), { stored: 'dark' })
+    expect(reads).toEqual([])
+    expect(attributes['data-theme']).toBe('light')
+  })
+
+  it('writes dir beside the theme only when a direction is declared', () => {
+    expect(runThemeScript(getThemeScript({ locale: 'ar-EG' })).attributes.dir).toBe('rtl')
+    expect(runThemeScript(getThemeScript({ locale: 'ar-EG', direction: 'ltr' })).attributes.dir).toBe('ltr')
+    expect(runThemeScript(getThemeScript()).attributes).not.toHaveProperty('dir')
+  })
+})

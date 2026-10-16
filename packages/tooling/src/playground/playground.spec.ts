@@ -37,6 +37,7 @@ import {
   playgroundImportMap,
   sandboxHeadHTML,
   TAILWIND_BROWSER_CDN,
+  THEME_RECIPE_ATTRIBUTES,
   THEME_RECIPE_MESSAGE,
   wrapStoryTemplate,
 } from './playground-contract.ts'
@@ -159,6 +160,81 @@ describe('the sandbox head is the contract, not a template', () => {
     expect(
       sandboxHeadHTML({ assetBase: '/p/', theme: 'light', acceptThemeRecipe: true }),
     ).toContain(THEME_RECIPE_MESSAGE)
+  })
+
+  describe('the ThemeRecipe listener (UI-DZUP-UI-SEC-M-06)', () => {
+    type Listener = (event: { source: unknown, data: unknown }) => void
+
+    /**
+     * Run the emitted listener against a recording `<html>` and return a
+     * dispatcher. The bridge is plain ES5 that touches only `window` and
+     * `document`, so it is evaluated with those two bound — the behaviour is
+     * asserted, not the string.
+     */
+    function bootListener() {
+      const head = sandboxHeadHTML({ assetBase: '/p/', theme: 'light', acceptThemeRecipe: true })
+      const script = [...head.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+        .map(match => match[1]!)
+        .find(body => body.includes(THEME_RECIPE_MESSAGE))!
+      const attributes: Record<string, string> = {}
+      const properties: Record<string, string> = {}
+      const parent = {}
+      let listener: Listener | undefined
+      const window = {
+        parent,
+        addEventListener: (type: string, fn: Listener) => {
+          if (type === 'message')
+            listener = fn
+        },
+      }
+      const document = {
+        documentElement: {
+          setAttribute: (name: string, value: string) => { attributes[name] = value },
+          style: { setProperty: (name: string, value: string) => { properties[name] = value } },
+        },
+      }
+      // eslint-disable-next-line no-new-func -- evaluating the generated bridge is the point of the test
+      new Function('window', 'document', script)(window, document)
+      const send = (source: unknown, data: unknown): void => listener!({ source, data })
+      return { attributes, properties, parent, send }
+    }
+
+    const message = {
+      type: THEME_RECIPE_MESSAGE,
+      variables: { '--dz-primary': 'red' },
+      attributes: { 'data-theme': 'dark', 'dir': 'rtl' },
+    }
+
+    it('applies a recipe posted by the embedding page', () => {
+      const { attributes, properties, parent, send } = bootListener()
+      send(parent, message)
+      expect(attributes).toEqual({ 'data-theme': 'dark', 'dir': 'rtl' })
+      expect(properties).toEqual({ '--dz-primary': 'red' })
+    })
+
+    it('ignores a recipe from any window other than the parent', () => {
+      const { attributes, properties, send } = bootListener()
+      send({}, message)
+      send(null, message)
+      expect(attributes).toEqual({})
+      expect(properties).toEqual({})
+    })
+
+    it('applies only allowlisted attributes and --dz- properties, with string values', () => {
+      const { attributes, properties, parent, send } = bootListener()
+      send(parent, {
+        type: THEME_RECIPE_MESSAGE,
+        variables: { 'color': 'red', '--dz-ok': 'blue', '--dz-num': 4 },
+        attributes: { 'onmouseover': 'alert(1)', 'style': 'x', 'data-density': 'compact', 'dir': { toString: () => 'rtl' } },
+      })
+      expect(attributes).toEqual({ 'data-density': 'compact' })
+      expect(properties).toEqual({ '--dz-ok': 'blue' })
+    })
+
+    it('allowlists exactly the attributes applyThemeRecipe writes', () => {
+      expect([...THEME_RECIPE_ATTRIBUTES].sort())
+        .toEqual(['data-density', 'data-motion-preview', 'data-theme', 'data-theme-mode', 'dir'])
+    })
   })
 
   it('binds the bare specifier the import map promises', () => {

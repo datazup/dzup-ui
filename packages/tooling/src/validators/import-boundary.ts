@@ -7,6 +7,10 @@
  *   - core      -> tokens + contracts only (no compat)
  *   - compat    -> core + contracts + tokens
  *   - No deep imports into other packages (only through public exports)
+ *   - No relative import that leaves its own package (`../../../testing/src/…`)
+ *     unless RELATIVE_SOURCE_READS names the pair and says why
+ *   - Every directory under packages/ with a package.json is scanned; one with
+ *     no ALLOWED_DEPS row is itself a violation (UI-DZUP-UI-ARCH-M-04)
  *
  * Usage:
  *   tsx packages/tooling/src/validators/import-boundary.ts
@@ -14,8 +18,8 @@
  * Exit code 1 if violations found.
  */
 
-import { readdirSync, readFileSync, statSync } from 'node:fs'
-import { dirname, join, relative, resolve } from 'node:path'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { dirname, join, relative, resolve, sep } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
@@ -33,24 +37,52 @@ interface Violation {
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../')
 const PACKAGES_DIR = resolve(ROOT, 'packages')
 
-/** Package names that are part of the monorepo */
-const PACKAGE_NAMES = ['tokens', 'contracts', 'core', 'compat', 'codemods', 'tooling'] as const
-type PackageName = typeof PACKAGE_NAMES[number]
+/**
+ * Package directories that are part of the monorepo, derived from
+ * `packages/<dir>/package.json` rather than written down: a hand-kept list
+ * silently omitted testing, mcp and nuxt, so their imports were never checked.
+ */
+const PACKAGE_NAMES: readonly string[] = readdirSync(PACKAGES_DIR)
+  .filter(entry => existsSync(join(PACKAGES_DIR, entry, 'package.json')))
+  .sort()
+type PackageName = string
 
 /**
  * Allowed @dzup-ui/* dependencies for each package.
- * If a package is not listed, it has no allowed cross-package imports.
+ * A package directory with no row here is reported, not waved through.
  */
-const ALLOWED_DEPS: Record<PackageName, readonly PackageName[]> = {
+const ALLOWED_DEPS: Readonly<Record<PackageName, readonly PackageName[]>> = {
   tokens: [],
   contracts: ['tokens'],
   core: ['tokens', 'contracts'],
   compat: ['tokens', 'contracts', 'core'],
   codemods: ['tokens', 'contracts', 'core', 'compat'],
+  // Published, framework-free test helpers: a consumer installs them without
+  // the component library, so they import no other package at runtime.
+  testing: [],
+  // Published MCP server: it serves generated docs data and imports no package.
+  mcp: [],
+  // Published Nuxt module: registers Core's components and injects Core's
+  // theme script; the ownership diagnostics come from contracts.
+  nuxt: ['tokens', 'contracts', 'core'],
   // Private, never published: the generators and validators here exist to read
   // the component packages (ownership, capability and quality matrices, perf
   // tier fixtures, published-import checks).
   tooling: ['tokens', 'contracts', 'core'],
+}
+
+/**
+ * Relative imports that deliberately cross into another package's source, by
+ * importing package → imported package, each with its reason. Anything not
+ * named here that leaves its own package root fails the gate.
+ */
+const RELATIVE_SOURCE_READS: Readonly<Record<PackageName, Readonly<Record<PackageName, string>>>> = {
+  tooling: {
+    contracts: 'private validators read contract source so a gate never depends on a stale build',
+    core: 'i18n and sanitizer validators check Core\'s source of truth, not a possibly stale dist',
+    testing: 'security-corpus, security-conformance and resolution gates run the published helpers from source',
+    tokens: 'DTCG and design.md checks walk the token source modules themselves',
+  },
 }
 
 /** Regex to match @dzup-ui/ imports, including deep imports */
@@ -58,6 +90,9 @@ const DZUP_IMPORT_RE = /(?:from\s|import\s*\(?)['"](@dzup-ui\/[^'"]+)['"]/g
 
 /** Regex to extract the package name from a @dzup-ui/ path */
 const PACKAGE_NAME_RE = /^@dzup-ui\/([\w-]+)/
+
+/** Regex to match relative specifiers that climb at least one directory */
+const RELATIVE_IMPORT_RE = /(?:from\s|import\s*\(?)['"]((?:\.\.\/)+[^'"]*)['"]/g
 
 /** Deep import pattern: @dzup-ui/pkg/anything-beyond-root */
 const DEEP_IMPORT_RE = /^@dzup-ui\/[\w-]+\/.+/
@@ -135,11 +170,25 @@ function collectFiles(dir: string, extensions: string[]): string[] {
 
 function detectPackage(filePath: string): PackageName | undefined {
   const rel = relative(PACKAGES_DIR, filePath)
-  const firstSegment = rel.split('/')[0]
-  if (PACKAGE_NAMES.includes(firstSegment as PackageName)) {
-    return firstSegment as PackageName
+  const firstSegment = rel.split(sep)[0]
+  if (firstSegment !== undefined && PACKAGE_NAMES.includes(firstSegment)) {
+    return firstSegment
   }
   return undefined
+}
+
+/**
+ * The package a relative specifier lands in when it leaves `pkg`, or
+ * `undefined` when it stays inside its own package root (or lands outside
+ * packages/ entirely, e.g. a hoisted node_modules path, which is not a
+ * package boundary).
+ */
+function relativeTargetPackage(filePath: string, specifier: string, pkg: PackageName): PackageName | undefined {
+  const target = relative(PACKAGES_DIR, resolve(dirname(filePath), specifier))
+  const [first, second] = target.split(sep)
+  if (first === undefined || first === '..' || first === pkg || second === 'node_modules')
+    return undefined
+  return PACKAGE_NAMES.includes(first) ? first : undefined
 }
 
 // --- Validation ---
@@ -158,7 +207,8 @@ function validateFile(filePath: string): Violation[] {
 
   const content = readFileSync(filePath, 'utf-8')
   const lines = content.split('\n')
-  const allowed = ALLOWED_DEPS[pkg]
+  const allowed = ALLOWED_DEPS[pkg] ?? []
+  const relativeReads = RELATIVE_SOURCE_READS[pkg] ?? {}
 
   let inBlockComment = false
 
@@ -192,6 +242,25 @@ function validateFile(filePath: string): Violation[] {
       continue
     }
 
+    // Relative specifiers that leave the package: the @dzup-ui/ check below
+    // cannot see `../../../testing/src/x.ts`, which is the same edge spelled
+    // so that no gate reads it.
+    for (const relativeMatch of line.matchAll(RELATIVE_IMPORT_RE)) {
+      const specifier = relativeMatch[1]
+      if (specifier === undefined)
+        continue
+      const targetPkg = relativeTargetPackage(filePath, specifier, pkg)
+      if (targetPkg === undefined || relativeReads[targetPkg] !== undefined)
+        continue
+      violations.push({
+        file: relative(ROOT, filePath),
+        line: i + 1,
+        importPath: specifier,
+        reason: `Relative import leaves package "${pkg}" for "${targetPkg}". Import "@dzup-ui/${targetPkg}" through its exports`
+          + `${allowed.includes(targetPkg) ? '' : ` (and "${pkg}" may not depend on it at all)`}, or record the pair in RELATIVE_SOURCE_READS with a reason.`,
+      })
+    }
+
     // Reset regex lastIndex for each line
     DZUP_IMPORT_RE.lastIndex = 0
     let match: RegExpExecArray | null = DZUP_IMPORT_RE.exec(line)
@@ -209,7 +278,7 @@ function validateFile(filePath: string): Violation[] {
         continue
       }
 
-      const importedPkg = pkgMatch[1] as PackageName
+      const importedPkg = pkgMatch[1]
 
       // Self-imports are allowed (a package can import from itself)
       if (importedPkg === pkg) {
@@ -250,6 +319,15 @@ function main(): void {
   const allViolations: Violation[] = []
 
   for (const pkgName of PACKAGE_NAMES) {
+    if (ALLOWED_DEPS[pkgName] === undefined) {
+      allViolations.push({
+        file: `packages/${pkgName}/package.json`,
+        line: 1,
+        importPath: `@dzup-ui/${pkgName}`,
+        reason: `Package "${pkgName}" has no ALLOWED_DEPS row. Declare which packages it may import, so its imports are checked rather than ignored.`,
+      })
+    }
+
     const pkgSrcDir = resolve(PACKAGES_DIR, pkgName, 'src')
     const files = collectFiles(pkgSrcDir, ['.ts', '.vue'])
 

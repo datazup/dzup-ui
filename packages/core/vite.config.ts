@@ -73,6 +73,8 @@ const config = createLibConfig({
     'index': 'src/index.ts',
     'resolver': 'src/resolver.ts',
     'providers/index': 'src/providers/index.ts',
+    // `./theme-script`: Vue-free, so @dzup-ui/nuxt can load it at build time.
+    'providers/theme-script': 'src/providers/theme-script.ts',
     'i18n/index': 'src/i18n/index.ts',
     ...familyEntries,
   },
