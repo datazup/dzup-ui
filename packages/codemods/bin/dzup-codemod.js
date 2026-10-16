@@ -25,7 +25,7 @@
  *   dzup-codemod all ./src --dry-run --verbose
  */
 
-import { existsSync } from 'node:fs'
+import { existsSync, statSync } from 'node:fs'
 import { resolve } from 'node:path'
 import process from 'node:process'
 
@@ -128,6 +128,10 @@ async function main() {
   const targetPath = resolve(process.cwd(), opts.target)
   if (!existsSync(targetPath)) {
     process.stderr.write(`Target directory does not exist: ${targetPath}\n`)
+    process.exit(1)
+  }
+  if (!statSync(targetPath).isDirectory()) {
+    process.stderr.write(`Target is not a directory: ${targetPath}\n`)
     process.exit(1)
   }
 

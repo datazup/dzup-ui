@@ -2,7 +2,8 @@
   DzThemeProvider — Provides theme context to the component tree.
 
   Since TASK-OSS-P4-02 this is a **thin wrapper over `DzProvider`** with theme
-  props only. Its public contract is unchanged — same four props, same ADR-09
+  props only. Its public contract is unchanged — same four theme props (plus
+  the CSP `nonce` it forwards, UI-DZUP-UI-SEC-L-09), same ADR-09
   context (`theme`, `resolvedTheme`, `setTheme`, `toggleTheme`), same ADR-15
   persistence and `data-theme` reflection, same bare `<slot />` — and its test
   suite passes untouched, which is the evidence for that claim.
@@ -58,7 +59,7 @@ const theme = computed<DzProviderThemeOptions>(() => ({
 </script>
 
 <template>
-  <DzProvider :theme="theme">
+  <DzProvider :theme="theme" :nonce="props.nonce">
     <slot />
   </DzProvider>
 </template>

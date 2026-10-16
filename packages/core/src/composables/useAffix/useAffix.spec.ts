@@ -3,7 +3,7 @@ import { flushPromises, mount } from '@vue/test-utils'
  * useAffix — composable behaviour tests, exercised through a tiny host.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, shallowRef } from 'vue'
 import { useAffix } from './useAffix.ts'
 
 let rect: Partial<DOMRect>
@@ -150,6 +150,56 @@ describe('useAffix', () => {
       finally {
         restore()
       }
+    })
+  })
+  describe('explicit target changes after mount', () => {
+    it('moves the scroll listener to the new container', async () => {
+      const first = document.createElement('div')
+      const second = document.createElement('div')
+      document.body.append(first, second)
+      first.getBoundingClientRect = () => ({ top: 0, bottom: 200 }) as DOMRect
+      second.getBoundingClientRect = () => ({ top: 0, bottom: 200 }) as DOMRect
+      const firstRemove = vi.spyOn(first, 'removeEventListener')
+      const secondAdd = vi.spyOn(second, 'addEventListener')
+
+      const target = shallowRef<HTMLElement>(first)
+      const onAffixChange = vi.fn()
+      const TargetHost = defineComponent({
+        setup() {
+          const { affixed, setRootRef } = useAffix({
+            offsetTop: () => 0,
+            target: () => target.value,
+            onChange: value => onAffixChange(value),
+          })
+          return { affixed, setRootRef }
+        },
+        render() {
+          return h('div', { 'ref': this.setRootRef, 'data-affixed': this.affixed }, 'content')
+        },
+      })
+
+      const wrapper = mount(TargetHost, { attachTo: document.body })
+      ;(wrapper.element as HTMLElement).getBoundingClientRect = () => rect as DOMRect
+
+      target.value = second
+      await flushPromises()
+
+      expect(firstRemove).toHaveBeenCalledWith('scroll', expect.any(Function))
+      expect(secondAdd).toHaveBeenCalledWith('scroll', expect.any(Function), { passive: true })
+
+      // Scrolling the old container no longer drives the affix; the new one does.
+      rect = { ...rect, top: -1 }
+      first.dispatchEvent(new Event('scroll'))
+      await flushPromises()
+      expect(onAffixChange).not.toHaveBeenCalled()
+
+      second.dispatchEvent(new Event('scroll'))
+      await flushPromises()
+      expect(onAffixChange).toHaveBeenLastCalledWith(true)
+
+      wrapper.unmount()
+      first.remove()
+      second.remove()
     })
   })
 })

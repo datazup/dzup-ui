@@ -17,6 +17,11 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Least privilege (UI-DZUP-UI-SEC-L-04): the GITHUB_TOKEN can read the
+# repository and nothing else. A job that needs more declares it itself.
+permissions:
+  contents: read
+
 jobs:
   # ──────────────────────────────────────────────
   # G0: PR Gates (blocking)
@@ -252,6 +257,79 @@ jobs:
       # (TASK-FREE-11). Rate-limited hosts are allowlisted inside the script.
       - name: External link check (identity surfaces)
         run: yarn check:links
+
+  # Blocking on pull requests (UI-DZUP-UI-SEC-L-02). `yarn scan:credentials`
+  # was a manual script no workflow ran, so a committed secret was caught only
+  # if someone remembered to. `--diff` scans the lines this PR adds — not the
+  # whole history, which the H3 purge owns — and prints the file and pattern,
+  # never the matched value.
+  secret-scan:
+    name: Secret scan (PR diff)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The merge base with the target branch must be reachable.
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scan the lines this pull request adds
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: bash scripts/credential-scan.sh --diff "origin/$BASE_REF"
+
+  # Dependency advisories (UI-DZUP-UI-SEC-L-03). validate:licenses and
+  # validate:peers never asked an advisory database anything. NON-BLOCKING
+  # until the first recorded baseline is triaged: the audit step is
+  # `continue-on-error`, and its outcome plus the report land in the run
+  # summary and an artifact on every PR and every main push. Promote it by
+  # deleting `continue-on-error` once the high/critical baseline is clean.
+  dependency-audit:
+    name: Dependency advisories (yarn npm audit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.19.0'
+      - name: Enable Corepack
+        run: corepack enable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Audit every resolved dependency (high and above)
+        id: advisories
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          yarn npm audit --all --recursive --severity high 2>&1 | tee dependency-audit.txt
+      - name: Record the advisory result in the run summary
+        if: always()
+        env:
+          AUDIT_OUTCOME: ${{ steps.advisories.outcome }}
+        run: |
+          {
+            echo "## Dependency advisories (high and above) — **${AUDIT_OUTCOME}**"
+            echo ""
+            echo '```'
+            tail -n 60 dependency-audit.txt 2>/dev/null || echo "no report was written"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload the advisory report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-audit
+          path: dependency-audit.txt
+          if-no-files-found: warn
 
   # ──────────────────────────────────────────────
   # G1: Merge Gates (main branch)

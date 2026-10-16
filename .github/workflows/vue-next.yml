@@ -48,6 +48,11 @@ concurrency:
   group: vue-next-${{ github.ref }}
   cancel-in-progress: true
 
+# Least privilege (UI-DZUP-UI-SEC-L-04): the GITHUB_TOKEN can read the
+# repository and nothing else. A job that needs more declares it itself.
+permissions:
+  contents: read
+
 jobs:
   suite:
     name: Unit + contract suite under Vue 3.6-RC

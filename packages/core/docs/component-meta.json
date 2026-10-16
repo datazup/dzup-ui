@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "76c2b67c361926e348b008d15f769b07c9aaf103",
+  "sourceCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -310,8 +310,8 @@
     "publicComponents": 144,
     "compoundParts": 65,
     "unclassifiable": 0,
-    "props": 1758,
-    "propsWithDescription": 1758,
+    "props": 1759,
+    "propsWithDescription": 1759,
     "propsWithDeclaredDefault": 684,
     "propsWithLiteralUndefinedDefault": 551,
     "events": 366,
@@ -48363,6 +48363,15 @@
           "declaredIn": "packages/core/src/providers/DzThemeProvider.types.ts"
         },
         {
+          "name": "nonce",
+          "type": "string | undefined",
+          "required": false,
+          "default": null,
+          "description": "CSP nonce for the transition-suppression `<style>` tag (ADR-20).\n\nForwarded to the underlying `DzProvider`. Leave it unset to inherit the\nnonce of an outer `DzProvider`; with neither, the tag carries no nonce and\na strict `style-src` policy blocks it on every theme switch.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/providers/DzThemeProvider.types.ts"
+        },
+        {
           "name": "storageKey",
           "type": "string | undefined",
           "required": false,
@@ -48388,8 +48397,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 4,
-        "propsWithDescription": 4,
+        "props": 5,
+        "propsWithDescription": 5,
         "propsWithDeclaredDefault": 4,
         "events": 0,
         "eventsWithDescription": 0,

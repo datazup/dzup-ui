@@ -58,7 +58,9 @@ jobs:
       # (DZUP-UI-PUBLISH-PATH-20260925-R1).
       - name: Publish prerelease
         run: |
-          yarn release:publish --provenance --tag ${{ inputs.tag }}
+          yarn release:publish --provenance --tag "$PRERELEASE_TAG"
         env:
+          # Through env, never interpolated into the script (UI-DZUP-UI-SEC-L-04).
+          PRERELEASE_TAG: ${{ inputs.tag }}
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           YARN_NPM_PUBLISH_REGISTRY: https://registry.npmjs.org

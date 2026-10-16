@@ -2,6 +2,12 @@
 # credential-scan.sh — scan git history for accidentally committed secrets
 # Run this BEFORE executing git filter-repo (H3 history purge).
 # Usage: bash scripts/credential-scan.sh [--fix]
+#        bash scripts/credential-scan.sh --diff <base-ref>
+#
+# --diff <base-ref> is the CI gate (UI-DZUP-UI-SEC-L-02, ci.yml `secret-scan`):
+# it scans only the lines added since the merge base with <base-ref>, prints
+# the file and the pattern (never the matched text, so a leaked value does not
+# land in the CI log a second time) and exits 1 on any hit.
 #
 # Requires: git (already installed)
 # Optionally uses: gitleaks (https://github.com/gitleaks/gitleaks) if available
@@ -49,6 +55,38 @@ declare -a PATTERNS=(
   # .env-style
   '^(export )?[A-Z_]+=.{8,}$'
 )
+
+# ─── Diff mode (CI gate) ──────────────────────────────────────────────────────
+if [[ "${1:-}" == "--diff" ]]; then
+  BASE="${2:?usage: credential-scan.sh --diff <base-ref>}"
+  echo "--- Scanning lines added since merge base with $BASE ---"
+  while IFS= read -r file; do
+    [[ -z "$file" ]] && continue
+    added=$(git diff --no-color --unified=0 "$BASE"...HEAD -- "$file" \
+      | grep -E '^\+' | grep -vE '^\+\+\+ ' | cut -c2- || true)
+    [[ -z "$added" ]] && continue
+    for pat in "${PATTERNS[@]}"; do
+      # The bare KEY=value pattern is for .env files; in source it matches
+      # every shell assignment, so a PR diff applies it to .env* files only.
+      if [[ "$pat" == '^(export )?'* && "$(basename "$file")" != .env* ]]; then
+        continue
+      fi
+      if grep -qE -- "$pat" <<<"$added"; then
+        echo -e "${RED}PATTERN HIT (diff):${NC} $pat"
+        echo "  $file"
+        FOUND=$((FOUND + 1))
+      fi
+    done
+  done < <(git diff --name-only --diff-filter=d "$BASE"...HEAD -- . ':!*.lock' ':!scripts/credential-scan.sh')
+  echo ""
+  if [[ $FOUND -gt 0 ]]; then
+    echo -e "${RED}SECRET SCAN FAILED — $FOUND pattern hit(s) in added lines.${NC}"
+    echo "Remove the value from the change (and rotate it if it is real) before merging."
+    exit 1
+  fi
+  echo -e "${GREEN}SECRET SCAN PASSED — no credential patterns in added lines.${NC}"
+  exit 0
+fi
 
 # ─── 1. Scan current working tree ─────────────────────────────────────────────
 echo "--- [1/3] Scanning working tree ---"

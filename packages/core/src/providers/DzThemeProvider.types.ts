@@ -55,6 +55,14 @@ export interface DzThemeProviderProps {
    * transitions fire across the whole page.
    */
   disableTransitionOnChange?: boolean
+  /**
+   * CSP nonce for the transition-suppression `<style>` tag (ADR-20).
+   *
+   * Forwarded to the underlying `DzProvider`. Leave it unset to inherit the
+   * nonce of an outer `DzProvider`; with neither, the tag carries no nonce and
+   * a strict `style-src` policy blocks it on every theme switch.
+   */
+  nonce?: string
 }
 
 // ---------------------------------------------------------------------------

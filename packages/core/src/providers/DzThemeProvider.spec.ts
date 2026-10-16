@@ -10,6 +10,7 @@ import { renderToString } from '@vue/server-renderer'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createSSRApp, defineComponent, h, nextTick } from 'vue'
 import DzColorModeToggle from '../components/navigation/DzColorModeToggle.vue'
+import DzProvider from './DzProvider.vue'
 import DzThemeProvider from './DzThemeProvider.vue'
 import { getThemeScript, themeScript } from './theme-script.ts'
 import { useTheme } from './useTheme.ts'
@@ -204,6 +205,56 @@ describe('dzThemeProvider setTheme', () => {
   })
 })
 
+describe('dzThemeProvider transition-suppression nonce (UI-DZUP-UI-SEC-L-09)', () => {
+  /** Keep the suppression tag in <head> past the frame that would remove it. */
+  // Tags injected by earlier tests may still be waiting for their frame.
+  function removeSuppressionTags(): void {
+    document.querySelectorAll('#dz-theme-no-transition').forEach(tag => tag.remove())
+  }
+
+  beforeEach(() => {
+    removeSuppressionTags()
+    vi.stubGlobal('requestAnimationFrame', () => 0)
+  })
+
+  afterEach(() => {
+    removeSuppressionTags()
+    vi.unstubAllGlobals()
+  })
+
+  function suppressionTag(): HTMLStyleElement | null {
+    const tags = document.querySelectorAll<HTMLStyleElement>('#dz-theme-no-transition')
+    expect(tags).toHaveLength(1)
+    return tags[0] ?? null
+  }
+
+  it('puts its own nonce on the injected style tag', async () => {
+    const { getCtx } = mountProvider({ nonce: 'abc' })
+    getCtx().setTheme('dark')
+    await nextTick()
+    expect(suppressionTag()?.getAttribute('nonce')).toBe('abc')
+  })
+
+  it('inherits the nonce of an outer DzProvider when it has none of its own', async () => {
+    const { Consumer, getCtx } = createConsumer()
+    mount(DzProvider, {
+      props: { nonce: 'outer' },
+      slots: { default: () => h(DzThemeProvider, null, { default: () => h(Consumer) }) },
+    })
+    getCtx().setTheme('dark')
+    await nextTick()
+    expect(suppressionTag()?.getAttribute('nonce')).toBe('outer')
+  })
+
+  it('carries no nonce when neither it nor an ancestor supplies one', async () => {
+    const { getCtx } = mountProvider()
+    getCtx().setTheme('dark')
+    await nextTick()
+    expect(suppressionTag()).not.toBeNull()
+    expect(suppressionTag()?.hasAttribute('nonce')).toBe(false)
+  })
+})
+
 describe('dzThemeProvider toggleTheme', () => {
   it('toggles from light to dark', async () => {
     const { getCtx } = mountProvider({ defaultTheme: 'light' })
@@ -395,6 +446,25 @@ describe('getThemeScript', () => {
   it('uses custom defaultTheme dark', () => {
     const script = getThemeScript({ defaultTheme: 'dark' })
     expect(script).toContain('"dark"')
+  })
+
+  it('cannot be broken out of its <script> element by an option value (UI-DZUP-UI-SEC-L-06)', () => {
+    const script = getThemeScript({ storageKey: '</script><b>', attribute: 'data-x<!--' })
+    expect(script).not.toMatch(/<\/script/i)
+    expect(script).not.toContain('<!--')
+    expect(script).not.toMatch(/[<>&\u2028\u2029]/)
+  })
+
+  it('still reads and writes the exact escaped values at run time', () => {
+    const key = '</script><b>&\u2028'
+    const { attributes, reads } = runThemeScript(getThemeScript({ storageKey: key, attribute: 'data-a&b' }), { stored: 'dark' })
+    expect(reads).toEqual([key])
+    expect(attributes).toEqual({ 'data-a&b': 'dark' })
+  })
+
+  it('rejects a defaultTheme or direction outside its union', () => {
+    expect(() => getThemeScript({ defaultTheme: '"-alert(1)-"' as never })).toThrow(TypeError)
+    expect(() => getThemeScript({ direction: 'sideways' as never })).toThrow(TypeError)
   })
 
   it('produces syntactically valid javascript', () => {

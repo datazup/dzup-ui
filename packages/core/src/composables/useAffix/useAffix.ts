@@ -203,12 +203,16 @@ export function useAffix(options: UseAffixOptions = {}): UseAffixReturn {
     listenTarget = null
   }
 
+  let mounted = false
+
   onMounted(() => {
+    mounted = true
     attach()
     update()
   })
 
   onBeforeUnmount(() => {
+    mounted = false
     detach()
     if (rafId) {
       cancelAnimationFrame(rafId)
@@ -217,9 +221,20 @@ export function useAffix(options: UseAffixOptions = {}): UseAffixReturn {
   })
 
   // Re-measure (and re-bind to a possibly-new target) when inputs change.
+  // The explicit target getter is part of the source so a reactive target
+  // (e.g. a DzAffix `target` prop) moves the scroll listener to the new
+  // container instead of leaving it on the one resolved at mount.
   watch(
-    () => [toValue(options.offsetTop), toValue(options.offsetBottom)],
-    () => update(),
+    () => [toValue(options.offsetTop), toValue(options.offsetBottom), options.target?.()],
+    () => {
+      if (!mounted)
+        return
+      if (getTarget() !== listenTarget) {
+        detach()
+        attach()
+      }
+      update()
+    },
   )
 
   const rootStyle = computed((): Record<string, string> => {

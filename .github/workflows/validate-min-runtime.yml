@@ -41,6 +41,11 @@ concurrency:
   group: min-runtime-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Least privilege (UI-DZUP-UI-SEC-L-04): the GITHUB_TOKEN can read the
+# repository and nothing else. A job that needs more declares it itself.
+permissions:
+  contents: read
+
 jobs:
   validate-min-runtime:
     name: Validators at the minimum runtime

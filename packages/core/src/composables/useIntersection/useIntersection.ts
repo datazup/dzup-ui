@@ -71,6 +71,8 @@ export function useIntersection(options: UseIntersectionOptions): UseIntersectio
   let observer: IntersectionObserver | null = null
   /** The element currently observed, to skip redundant reconnects. */
   let observedEl: Element | null = null
+  /** The root the live observer was created with (the observer root is immutable). */
+  let observedRoot: Element | null = null
 
   /** Serialise the observer options so a change can be detected cheaply. */
   const observerKey = computed(() =>
@@ -83,6 +85,7 @@ export function useIntersection(options: UseIntersectionOptions): UseIntersectio
     observer?.disconnect()
     observer = null
     observedEl = null
+    observedRoot = null
     observedKey = ''
   }
 
@@ -96,11 +99,13 @@ export function useIntersection(options: UseIntersectionOptions): UseIntersectio
       return
     }
     // Nothing meaningful changed — keep the live observer and its state.
-    if (observer && observedEl === el && observedKey === observerKey.value)
+    const rootEl = root.value ?? null
+    if (observer && observedEl === el && observedRoot === rootEl && observedKey === observerKey.value)
       return
 
     disconnect()
     observedEl = el
+    observedRoot = rootEl
     observedKey = observerKey.value
     observer = new IntersectionObserver(
       (entries) => {
@@ -113,7 +118,7 @@ export function useIntersection(options: UseIntersectionOptions): UseIntersectio
           disconnect()
       },
       {
-        root: root.value ?? null,
+        root: rootEl,
         rootMargin: rootMargin.value,
         threshold: threshold.value,
       },

@@ -72,6 +72,11 @@ concurrency:
   group: min-peer-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Least privilege (UI-DZUP-UI-SEC-L-04): the GITHUB_TOKEN can read the
+# repository and nothing else. A job that needs more declares it itself.
+permissions:
+  contents: read
+
 jobs:
   min-peer:
     name: Declared peer floor (vue + reka-ui)
@@ -118,7 +123,18 @@ jobs:
       #   3  the restore did not verify — the checkout is dirty
       - name: Typecheck and suite at the declared floor
         id: lane
-        run: node packages/tooling/scripts/min-peer-lane.mjs ${{ inputs.commands && format('-- {0}', inputs.commands) || '' }}
+        # The free-text input reaches the shell as data, never as script text
+        # (UI-DZUP-UI-SEC-L-04): it is word-split into argv with globbing off,
+        # so `;`, `$(...)` and quotes in it cannot run anything.
+        env:
+          LANE_COMMANDS: ${{ inputs.commands }}
+        run: |
+          set -f
+          if [ -n "$LANE_COMMANDS" ]; then
+            node packages/tooling/scripts/min-peer-lane.mjs -- $LANE_COMMANDS
+          else
+            node packages/tooling/scripts/min-peer-lane.mjs
+          fi
 
       # The runner restores package.json and yarn.lock in a `finally` and
       # verifies its own restore. This is the independent second opinion — the

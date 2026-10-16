@@ -91,13 +91,31 @@ function resolveScriptDirection(options: ThemeScriptOptions): 'ltr' | 'rtl' | un
 }
 
 /**
+ * Characters JSON leaves raw that still matter inside an inline `<script>`:
+ * `<` (`</script>`, `<!--`), `>` and `&` for the HTML tokenizer, and the two
+ * line terminators older engines reject in string literals.
+ */
+const SCRIPT_UNSAFE = /[<>&\u2028\u2029]/g
+
+/**
  * A host-supplied string as a JavaScript string literal. Every option value
  * reaches the script through here and nowhere else, so how a value is
  * embedded is decided in one place.
+ *
+ * `JSON.stringify` alone does not make a value safe inside an inline
+ * `<script>`: a storage key such as `</script><b>` would close the element
+ * and inject markup (UI-DZUP-UI-SEC-L-06). The unsafe characters are written
+ * as `\uXXXX` escapes, which decode to the same string at run time.
  */
 function jsString(value: string): string {
-  return JSON.stringify(value)
+  return JSON.stringify(value).replace(
+    SCRIPT_UNSAFE,
+    char => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`,
+  )
 }
+
+const THEMES: ReadonlySet<string> = new Set(['light', 'dark', 'high-contrast', 'system'])
+const DIRECTIONS: ReadonlySet<string> = new Set(['ltr', 'rtl', 'auto'])
 
 /**
  * Generate a theme initialization script string with custom options.
@@ -117,6 +135,13 @@ export function getThemeScript(options: ThemeScriptOptions = {}): string {
     defaultTheme = 'system',
     persist = true,
   } = options
+
+  // The type unions are not enforced at run time (a Nuxt config or env value
+  // can carry anything); an unknown value is a host configuration error.
+  if (!THEMES.has(defaultTheme))
+    throw new TypeError(`getThemeScript: unknown defaultTheme ${JSON.stringify(defaultTheme)}`)
+  if (options.direction !== undefined && !DIRECTIONS.has(options.direction))
+    throw new TypeError(`getThemeScript: unknown direction ${JSON.stringify(options.direction)}`)
 
   const dir = resolveScriptDirection(options)
   // Inside the same `try`, and after the theme write: both attributes land on

@@ -11,8 +11,8 @@ import type { ComponentAnatomy } from '@dzup-ui/contracts'
  *
  * The `<style>` tag the provider injects to suppress transitions during a theme
  * switch is not a part. It lives in `<head>` for one frame, carries no
- * `data-part`, and nothing may target it — which is why it takes a CSP nonce
- * instead.
+ * `data-part`, and nothing may target it. It carries the CSP nonce from the
+ * `nonce` prop, or from an outer `DzProvider` when the prop is unset.
  */
 export const anatomy = {
   parts: 'none',

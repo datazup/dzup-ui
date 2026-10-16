@@ -755,7 +755,7 @@ These hold for every component below, so they are stated once here:
 - **DzProvider** — one root component for every concern an application configures.
   - props: `defaults`, `direction`, `formats`, `locale`, `messages`, `motion`, `nonce`, `portal`, `sanitizer`, `testIdPrefix`, `testIds`, `theme`, `urlPolicy`
 - **DzThemeProvider** — Provides theme context to the component tree.
-  - props: `attribute`, `defaultTheme`, `disableTransitionOnChange`, `storageKey`
+  - props: `attribute`, `defaultTheme`, `disableTransitionOnChange`, `nonce`, `storageKey`
 
 ---
 

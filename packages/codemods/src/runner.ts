@@ -8,7 +8,7 @@
  */
 
 import type { TransformStats } from './utils/logger.js'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, statSync, writeFileSync } from 'node:fs'
 import process from 'node:process'
 import { globSync } from 'glob'
 import { CodemodLogger } from './utils/logger.js'
@@ -68,6 +68,15 @@ export interface RunResult {
 // Runner
 // ---------------------------------------------------------------------------
 
+function isDirectory(path: string): boolean {
+  try {
+    return statSync(path).isDirectory()
+  }
+  catch {
+    return false
+  }
+}
+
 export class CodemodRunner {
   private readonly logger = new CodemodLogger()
   private readonly options: ResolvedOptions
@@ -90,6 +99,12 @@ export class CodemodRunner {
    * @returns A {@link RunResult} with success status and statistics.
    */
   async run(transform: TransformFn, targetPath: string): Promise<RunResult> {
+    if (!isDirectory(targetPath)) {
+      // A missing or non-directory target must not read as a clean, empty run.
+      process.stderr.write(`Target is not a directory: ${targetPath}\n`)
+      return { success: false, stats: this.logger.getStats() }
+    }
+
     const files = this.findFiles(targetPath)
 
     if (this.options.verbose) {
@@ -122,8 +137,11 @@ export class CodemodRunner {
 
   private findFiles(targetPath: string): string[] {
     const exts = this.options.extensions.join(',')
-    const pattern = `${targetPath}/**/*.{${exts}}`
-    return globSync(pattern, {
+    // The target directory is the glob `cwd`, never part of the pattern: a
+    // path segment such as `[id]` or `(group)`, or a Windows backslash path,
+    // would otherwise be read as glob syntax and silently match nothing.
+    return globSync(`**/*.{${exts}}`, {
+      cwd: targetPath,
       ignore: this.options.ignore,
       absolute: true,
     })
