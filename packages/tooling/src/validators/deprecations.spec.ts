@@ -280,7 +280,7 @@ describe('checkDeprecations — seeded failures', () => {
     })
 
     it('fires on either side of a replacementExample', () => {
-      const report = run({ replacementExample: "import { a } from '@dzup-ui/core/nope'  ->  import { a } from '@dzup-ui/core'" })
+      const report = run({ replacementExample: 'import { a } from \'@dzup-ui/core/nope\'  ->  import { a } from \'@dzup-ui/core\'' })
       expect(report.violations.filter(x => x.rule === 'unexported-path')).toHaveLength(1)
     })
 
@@ -288,13 +288,13 @@ describe('checkDeprecations — seeded failures', () => {
       const report = run({
         kind: 'module',
         symbol: '@dzup-ui/core/theme-script',
-        replacementExample: "import { a } from '@dzup-ui/core/icons/check'  ->  import { a } from '@dzup-ui/core'",
+        replacementExample: 'import { a } from \'@dzup-ui/core/icons/check\'  ->  import { a } from \'@dzup-ui/core\'',
       })
       expect(report.violations).toEqual([])
     })
 
     it('ignores a package outside the workspace', () => {
-      const report = run({ replacementExample: "import { a } from '@dzup-ui/elsewhere/deep'  ->  import { a } from '@dzup-ui/core'" })
+      const report = run({ replacementExample: 'import { a } from \'@dzup-ui/elsewhere/deep\'  ->  import { a } from \'@dzup-ui/core\'' })
       expect(report.violations).toEqual([])
     })
   })

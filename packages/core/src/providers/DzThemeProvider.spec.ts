@@ -5,8 +5,8 @@
  */
 
 import type { DzThemeContext } from './DzThemeProvider.types'
-import { mount } from '@vue/test-utils'
 import { renderToString } from '@vue/server-renderer'
+import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createSSRApp, defineComponent, h, nextTick } from 'vue'
 import DzColorModeToggle from '../components/navigation/DzColorModeToggle.vue'
@@ -498,7 +498,13 @@ function runThemeScript(
     },
   }
   const window = { matchMedia: (query: string) => ({ matches: osDark && query.includes('dark') }) }
-  const document = { documentElement: { setAttribute: (name: string, value: string) => { attributes[name] = value } } }
+  const document = {
+    documentElement: {
+      setAttribute: (name: string, value: string) => {
+        attributes[name] = value
+      },
+    },
+  }
   // eslint-disable-next-line no-new-func -- evaluating the generated script is the point of the test
   new Function('window', 'document', 'localStorage', script)(window, document, localStorage)
   return { attributes, reads }

@@ -92,7 +92,7 @@ const DZUP_IMPORT_RE = /(?:from\s|import\s*\(?)['"](@dzup-ui\/[^'"]+)['"]/g
 const PACKAGE_NAME_RE = /^@dzup-ui\/([\w-]+)/
 
 /** Regex to match relative specifiers that climb at least one directory */
-const RELATIVE_IMPORT_RE = /(?:from\s|import\s*\(?)['"]((?:\.\.\/)+[^'"]*)['"]/g
+const RELATIVE_IMPORT_RE = /(?:from\s|import\s*\(?)['"](\.\.\/[^'"]*)['"]/g
 
 /** Deep import pattern: @dzup-ui/pkg/anything-beyond-root */
 const DEEP_IMPORT_RE = /^@dzup-ui\/[\w-]+\/.+/

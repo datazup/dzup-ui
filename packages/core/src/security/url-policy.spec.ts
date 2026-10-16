@@ -141,7 +141,9 @@ describe('the documented default', () => {
     expect(() => (DZ_ALLOWED_URL_SCHEMES as string[]).push('javascript')).toThrow(TypeError)
     expect(() => (DZ_DEFAULT_URL_POLICY.allowedSchemes as string[]).push('javascript')).toThrow(TypeError)
     const limits = DZ_PROVIDER_DEFAULTS.sanitizer.limits as { maxLength: number }
-    expect(() => { limits.maxLength = Number.MAX_SAFE_INTEGER }).toThrow(TypeError)
+    expect(() => {
+      limits.maxLength = Number.MAX_SAFE_INTEGER
+    }).toThrow(TypeError)
     expect(DZ_PROVIDER_DEFAULTS.sanitizer.limits.maxLength).toBe(128 * 1024)
     expect(DZ_DEFAULT_URL_POLICY.isAllowed('javascript:alert(1)', NAV)).toBe(false)
   })

@@ -29,7 +29,7 @@ function topLevel(key: string): { value: string, items: string[] } | undefined {
   const value = lines[start]!.slice(key.length + 1).trim()
   const items: string[] = []
   for (const line of lines.slice(start + 1)) {
-    const item = /^\s+-\s+(.*)$/.exec(line)
+    const item = /^\s+-\s(.*)$/.exec(line)
     if (item === null)
       break
     items.push(item[1]!.trim().replace(/^["']|["']$/g, ''))
@@ -39,7 +39,7 @@ function topLevel(key: string): { value: string, items: string[] } | undefined {
 
 /** Minutes, for the units Yarn's DURATION settings accept. Bare numbers are minutes. */
 function durationMinutes(raw: string): number {
-  const match = /^["']?(\d+(?:\.\d+)?)\s*(ms|s|m|h|d|w)?["']?$/.exec(raw)
+  const match = /^["']?(\d+(?:\.\d+)?)\s*(ms|[smhdw])?["']?$/.exec(raw)
   if (match === null)
     throw new Error(`unparseable duration: ${raw}`)
   const factors = { ms: 1 / 60000, s: 1 / 60, m: 1, h: 60, d: 1440, w: 10080 }

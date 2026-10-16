@@ -348,7 +348,7 @@ const SURVIVING_COMMENT = {
 const EXECUTABLE_SCHEME = /(?:javascript|vbscript|livescript)\s*:/i
 
 /** Every start tag in the output, as raw source text. */
-const START_TAG = /<[a-z][a-z0-9-]*(?:[^>"']|"[^"]*"|'[^']*')*>?/gi
+const START_TAG = /<[a-z](?:[^>"']|"[^"]*"|'[^']*')*>?/gi
 
 /**
  * The named character references an attribute value can use to spell a scheme
@@ -357,21 +357,21 @@ const START_TAG = /<[a-z][a-z0-9-]*(?:[^>"']|"[^"]*"|'[^']*')*>?/gi
  * would use. Matched case-sensitively, as the tokenizer does.
  */
 const NAMED_REFERENCES: Readonly<Record<string, string>> = {
-  'colon': ':',
-  'Tab': '\t',
-  'NewLine': '\n',
-  'sol': '/',
-  'lpar': '(',
-  'rpar': ')',
-  'period': '.',
-  'excl': '!',
-  'quot': '"',
-  'apos': '\'',
-  'amp': '&',
-  'lt': '<',
-  'gt': '>',
-  'equals': '=',
-  'commat': '@',
+  colon: ':',
+  Tab: '\t',
+  NewLine: '\n',
+  sol: '/',
+  lpar: '(',
+  rpar: ')',
+  period: '.',
+  excl: '!',
+  quot: '"',
+  apos: '\'',
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  equals: '=',
+  commat: '@',
 }
 
 /**

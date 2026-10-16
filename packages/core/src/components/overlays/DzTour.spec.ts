@@ -11,8 +11,8 @@ import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, ref } from 'vue'
-import { anatomy as tourAnatomy } from './DzTour.anatomy.ts'
 import DzProvider from '../../providers/DzProvider.vue'
+import { anatomy as tourAnatomy } from './DzTour.anatomy.ts'
 import DzTour from './DzTour.vue'
 
 describe('dzTour — controlled and uncontrolled value ownership', () => {

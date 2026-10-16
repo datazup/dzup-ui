@@ -15,8 +15,8 @@ import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './
  * ```
  */
 import { computed, useAttrs } from 'vue'
-import { useClipboard } from '../../composables/useClipboard/useClipboard.ts'
 import { useDzDefaults, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
+import { useClipboard } from '../../composables/useClipboard/useClipboard.ts'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { copyButtonVariants } from './DzCopyButton.variants.ts'

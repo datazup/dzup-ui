@@ -24,8 +24,8 @@ import type {
  */
 import { computed, onBeforeUnmount, onMounted, provide, ref, toRef, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
-import { useDzMotion } from '../../composables/provider/useDzMotion.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
+import { useDzMotion } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
 import { carouselVariants } from './DzCarousel.variants.ts'
