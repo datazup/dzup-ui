@@ -56,6 +56,30 @@ ancestor element, typically `<html>`. Tokens cascade from there. The Nuxt module
 injects a FOUC-prevention script (ADR-15) so the theme is applied before first
 paint.
 
+### Re-mapping a component token inside a themed subtree
+
+Component-token defaults are declared at `:where(:root, [data-theme])` with zero
+specificity, so they are re-declared on every element that carries
+`data-theme`. That is what lets a `<div data-theme="dark">` wrapper re-theme the
+components inside it: most defaults are `var()` aliases of semantic tokens, and a
+`var()` resolves where it is declared.
+
+The same rule decides where **your** re-map has to go. A re-map at `:root` reaches
+every component that is not inside a `[data-theme]` wrapper; inside one, the
+wrapper's own default declaration is closer and wins by inheritance. To re-map a
+component token for a themed subtree, declare it on that wrapper (or on any
+element inside it):
+
+```css
+:root { --dz-kbd-bg: var(--dz-accent); }                 /* the page */
+[data-theme="dark"] { --dz-kbd-bg: var(--dz-accent); }   /* every dark subtree */
+.settings-panel { --dz-kbd-bg: var(--dz-accent); }      /* one region, any theme */
+```
+
+A selector of your own always beats the library's zero-specificity default, and
+unlayered CSS beats the `dz-components` layer regardless, so none of these needs
+`!important`.
+
 ## The one thing not to do
 
 Do not select library class names. They are implementation detail of the `tv()`
