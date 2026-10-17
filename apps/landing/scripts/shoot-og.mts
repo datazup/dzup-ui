@@ -102,10 +102,12 @@ async function loadToolchain() {
       'Playwright is not installed. Run `yarn install` then `npx playwright install chromium`.',
     )
   }
-  let sharp: typeof import('sharp')
+  // sharp >= 0.35 ships real ESM (`dist/index.mjs` + `index.d.mts`) whose
+  // factory is the module's `default` export; the namespace itself is not
+  // callable. Typed as that factory so `sharp(png)…` checks downstream.
+  let sharp: typeof import('sharp').default
   try {
-    const mod = (await import('sharp')) as { default?: typeof import('sharp') }
-    sharp = mod.default ?? (mod as unknown as typeof import('sharp'))
+    sharp = (await import('sharp')).default
   }
   catch {
     throw new Error('sharp is not installed. Run `yarn install` in the repo root.')
