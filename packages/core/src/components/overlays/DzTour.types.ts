@@ -71,6 +71,23 @@ export interface DzTourProps extends BaseAccessibilityProps {
    * `ui['item-indicator']` lands on every step dot.
    */
   ui?: DzTourUi
+  /**
+   * Label overrides for the default controls and the step counter (QF-67).
+   * Each wins over the `DzTour` catalog entry, which itself follows any
+   * `DzProvider` message override and falls back to English.
+   */
+  skipLabel?: string
+  /** Label for the Back control. See `skipLabel`. */
+  backLabel?: string
+  /** Label for the Next control. See `skipLabel`. */
+  nextLabel?: string
+  /** Label for the Finish control on the last step. See `skipLabel`. */
+  finishLabel?: string
+  /**
+   * The step counter announced in the live region, e.g. `Schritt 2 von 5`.
+   * A function receives the one-based current step and the step total.
+   */
+  stepOfLabel?: string | ((current: number, total: number) => string)
 }
 
 /** Events emitted by DzTour. */

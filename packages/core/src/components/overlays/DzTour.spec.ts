@@ -291,6 +291,41 @@ describe('dzTour -- catalog strings (UI-DZUP-UI-UX-L-10)', () => {
     expect(text('[data-testid="dz-tour-next"]')).toBe('Fertig')
     expect(text('[role="status"][aria-live="polite"]')).toBe('Schritt 2 von 2')
   })
+
+  it('label props win over the catalog, with no provider at all (QF-67)', async () => {
+    const steps = setupTargets()
+    mount(
+      defineComponent({
+        components: { DzTour },
+        setup() {
+          const open = ref(true)
+          const current = ref(0)
+          const stepOf = (c: number, t: number): string => `Schritt ${c} von ${t}`
+          return { open, current, steps, stepOf }
+        },
+        template: `
+          <DzTour
+            v-model:open="open" v-model:current="current" :steps="steps"
+            skip-label="Überspringen" back-label="Zurück" next-label="Weiter" finish-label="Fertig"
+            :step-of-label="stepOf"
+          />
+        `,
+      }),
+      { attachTo: document.body },
+    )
+    await flushPromises()
+    const text = (selector: string) => document.body.querySelector(selector)?.textContent?.trim()
+
+    expect(text('[data-testid="dz-tour-skip"]')).toBe('Überspringen')
+    expect(text('[data-testid="dz-tour-next"]')).toBe('Weiter')
+    expect(text('[role="status"][aria-live="polite"]')).toBe('Schritt 1 von 2')
+
+    clickTestId('dz-tour-next')
+    await flushPromises()
+    expect(text('[data-testid="dz-tour-back"]')).toBe('Zurück')
+    expect(text('[data-testid="dz-tour-next"]')).toBe('Fertig')
+    expect(text('[role="status"][aria-live="polite"]')).toBe('Schritt 2 von 2')
+  })
 })
 
 describe('dzTour -- D7: focus is restored when the tour is dismissed', () => {

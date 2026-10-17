@@ -52,6 +52,11 @@ const props = withDefaults(defineProps<DzTourProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  skipLabel: undefined,
+  backLabel: undefined,
+  nextLabel: undefined,
+  finishLabel: undefined,
+  stepOfLabel: undefined,
 })
 
 const emit = defineEmits<{
@@ -73,6 +78,18 @@ const styles = tourVariants()
 // UI-DZUP-UI-UX-L-10): the three controls and the announced step counter.
 const dzMessages = useComponentMessages('DzTour')
 const dzFormat = useComponentMessageFormat('DzTour')
+
+// Label props win over the catalog (QF-67), which already carries provider overrides.
+const skipText = computed(() => props.skipLabel ?? dzMessages.value.skip)
+const backText = computed(() => props.backLabel ?? dzMessages.value.back)
+const nextText = computed(() => props.nextLabel ?? dzMessages.value.next)
+const finishText = computed(() => props.finishLabel ?? dzMessages.value.finish)
+function stepOfText(current: number, total: number): string {
+  const label = props.stepOfLabel
+  if (typeof label === 'function')
+    return label(current, total)
+  return label ?? dzFormat('stepOf', { current, total })
+}
 
 const autoId = useId()
 const titleId = computed(() => `${props.id ?? autoId}-title`)
@@ -360,7 +377,7 @@ const dzMotionAttr = useDzMotionAttribute()
     >
       <!-- Live region announcing step changes -->
       <div :id="liveId" :class="styles.liveRegion()" aria-live="polite" role="status">
-        {{ dzFormat('stepOf', { current: activeIndex + 1, total }) }}
+        {{ stepOfText(activeIndex + 1, total) }}
       </div>
 
       <!-- Body -->
@@ -399,7 +416,7 @@ const dzMotionAttr = useDzMotionAttribute()
               data-testid="dz-tour-skip"
               @click="close"
             >
-              {{ dzMessages.skip }}
+              {{ skipText }}
             </DzButton>
             <DzButton
               v-if="!isFirst"
@@ -409,7 +426,7 @@ const dzMotionAttr = useDzMotionAttribute()
               data-testid="dz-tour-back"
               @click="prev"
             >
-              {{ dzMessages.back }}
+              {{ backText }}
             </DzButton>
             <DzButton
               variant="solid"
@@ -418,7 +435,7 @@ const dzMotionAttr = useDzMotionAttribute()
               data-testid="dz-tour-next"
               @click="next"
             >
-              {{ isLast ? dzMessages.finish : dzMessages.next }}
+              {{ isLast ? finishText : nextText }}
             </DzButton>
           </div>
         </div>
