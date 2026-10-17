@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { beforeAll, describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, onUnmounted } from 'vue'
 
 /**
@@ -60,5 +60,25 @@ describe('state set up outside a test is shared, not swept', () => {
     expect(document.querySelector('[data-testid="leaky"]')).not.toBeNull()
     shared.unmount()
     fixture.remove()
+  })
+})
+
+// QF-68: the root vitest config sets restoreMocks / unstubGlobals / unstubEnvs,
+// so a double installed by one test cannot decide the next test's outcome.
+describe('a mock, global stub or env stub left by a test', () => {
+  const target = { greet: (): string => 'real' }
+  const originalMatchMedia = globalThis.matchMedia
+
+  it('is left installed, as an early-failing test would leave it', () => {
+    vi.spyOn(target, 'greet').mockReturnValue('spy')
+    vi.stubGlobal('matchMedia', 'stubbed')
+    vi.stubEnv('DZ_GLOBAL_CLEANUP_PROBE', 'set')
+    expect(target.greet()).toBe('spy')
+  })
+
+  it('is restored before the next test', () => {
+    expect(target.greet()).toBe('real')
+    expect(globalThis.matchMedia).toBe(originalMatchMedia)
+    expect(import.meta.env.DZ_GLOBAL_CLEANUP_PROBE).toBeUndefined()
   })
 })

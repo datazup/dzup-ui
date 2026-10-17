@@ -35,6 +35,14 @@ export default defineConfig({
     testTimeout: 60_000,
     hookTimeout: 60_000,
     setupFiles: ['./vitest.setup.ts', './vitest.setup.a11y.ts'],
+    // QF-68 (UI-DZUP-UI-TEST-L-02): undo every `vi.spyOn`, `vi.stubGlobal` and
+    // `vi.stubEnv` after each test, so one spec's doubles cannot decide the next
+    // test's outcome. `restoreMocks` restores spies to their originals and
+    // resets `vi.fn()` call history and one-off implementations; a module-level
+    // `vi.fn(impl)` keeps the implementation it was created with.
+    restoreMocks: true,
+    unstubGlobals: true,
+    unstubEnvs: true,
     include: [
       'packages/*/src/**/*.spec.ts',
       'packages/*/tests/**/*.spec.ts',

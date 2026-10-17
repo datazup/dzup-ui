@@ -35,7 +35,7 @@
 
 import { DzThemeProvider } from '@dzup-ui/core'
 import { mount } from '@vue/test-utils'
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
 import { provideMotionPreference } from '../motion/useReducedMotion.ts'
 import { useThemeTransition } from './useThemeTransition.ts'
@@ -87,7 +87,8 @@ function mountTransition(reduced = false) {
   return { wrapper, ...api }
 }
 
-beforeAll(() => {
+// beforeEach, not beforeAll: the root config unstubs globals after every test (QF-68).
+beforeEach(() => {
   // jsdom has no matchMedia; DzThemeProvider reads it for the system colour
   // scheme and `useReducedMotion` for the OS motion setting. A non-matching stub
   // gives the light / full-motion baseline; the reduced case is driven by the

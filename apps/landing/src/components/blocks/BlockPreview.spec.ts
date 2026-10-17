@@ -143,14 +143,15 @@ beforeAll(() => {
     Element.prototype.releasePointerCapture = () => {}
   }
   Object.defineProperty(navigator, 'clipboard', { configurable: true, value: clipboard })
+})
+
+beforeEach(() => {
+  // Per test, not in beforeAll: the root config unstubs globals after every test (QF-68).
   vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
     cb(0)
     return 1
   })
   vi.stubGlobal('cancelAnimationFrame', () => {})
-})
-
-beforeEach(() => {
   installMatchMedia()
   clipboard.writeText.mockClear()
 })

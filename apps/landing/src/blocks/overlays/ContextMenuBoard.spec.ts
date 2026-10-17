@@ -22,11 +22,12 @@
 import { DzThemeProvider } from '@dzup-ui/core'
 import { fireEvent, render, screen } from '@testing-library/vue'
 import { flushPromises } from '@vue/test-utils'
-import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 import ContextMenuBoard from './ContextMenuBoard.vue'
 
-beforeAll(() => {
+// beforeEach, not beforeAll: the root config unstubs globals after every test (QF-68).
+beforeEach(() => {
   if (typeof window.matchMedia !== 'function') {
     vi.stubGlobal('matchMedia', (query: string) => ({
       matches: false,
