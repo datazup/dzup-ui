@@ -121,8 +121,23 @@ This component declares no states: nothing about it is advertised to CSS or to a
 may set. The list is the complete supported override surface; any other `--dz-*` it inherits is
 not a promise.
 
-This component declares no component tokens of its own: it is styled entirely from the global
-semantic layer, which the theme owns.
+| Custom property |
+| --- |
+| `--dz-codeblock-bg` |
+| `--dz-codeblock-border` |
+| `--dz-codeblock-font-family` |
+| `--dz-codeblock-font-size` |
+| `--dz-codeblock-header-bg` |
+| `--dz-codeblock-header-font-size` |
+| `--dz-codeblock-header-padding-x` |
+| `--dz-codeblock-header-padding-y` |
+| `--dz-codeblock-header-text` |
+| `--dz-codeblock-line-height` |
+| `--dz-codeblock-line-number` |
+| `--dz-codeblock-line-number-width` |
+| `--dz-codeblock-padding` |
+| `--dz-codeblock-radius` |
+| `--dz-codeblock-text` |
 
 Declared in `packages/core/src/components/data/DzCodeBlock.anatomy.ts`.
 
@@ -171,7 +186,7 @@ component that renders the same way every time is the normal case for this.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `b0e3e0c`.
+last changed at `5bde5c5`.
 
 ## Extraction fidelity
 
@@ -189,8 +204,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `f0ed614f` for the capability matrix,
-`f0ed614f` for the quality matrix. It is **locally qualified**:
+artifact records — `f8e6ef10` for the capability matrix,
+`f8e6ef10` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -200,7 +215,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `b0e3e0c3`
+- **Component last changed at:** `5bde5c5b`
 
 ### WCAG 2.2 criteria in scope (9)
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "f0ed614fa45ed941438d5ba600bcc1fe4d67b662",
+  "sourceCommit": "f8e6ef100adf51d4bdb3f53b56a22e5f99bf4597",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -310,10 +310,10 @@
     "publicComponents": 144,
     "compoundParts": 65,
     "unclassifiable": 0,
-    "props": 1759,
-    "propsWithDescription": 1759,
+    "props": 1764,
+    "propsWithDescription": 1764,
     "propsWithDeclaredDefault": 684,
-    "propsWithLiteralUndefinedDefault": 551,
+    "propsWithLiteralUndefinedDefault": 556,
     "events": 366,
     "eventsWithDescription": 366,
     "eventsFromExtractor": 0,
@@ -3822,7 +3822,7 @@
       ],
       "source": "packages/core/src/components/feedback/DzBlockUI.vue",
       "typesSource": "packages/core/src/components/feedback/DzBlockUI.types.ts",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "f29b2e4ac3895f15de99082a58d87ee95f41cd44",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -6535,7 +6535,7 @@
       ],
       "source": "packages/core/src/components/media/DzCarousel.vue",
       "typesSource": "packages/core/src/components/media/DzCarousel.types.ts",
-      "componentCommit": "ffcbc897ebba27bf01c34ffd8e3ef3e03dc09461",
+      "componentCommit": "c60dc8c068d859f1d8e292fb05e54385d833a068",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -7133,7 +7133,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCascader.vue",
       "typesSource": "packages/core/src/components/forms/DzCascader.types.ts",
-      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
+      "componentCommit": "949ecfc92e01a94da15578b722bf1a00d9c60869",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -9095,7 +9095,7 @@
       ],
       "source": "packages/core/src/components/data/DzCodeBlock.vue",
       "typesSource": "packages/core/src/components/data/DzCodeBlock.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "5bde5c5bd7a41cc0d5b57a2a7c2cff3307c78ab9",
       "componentType": "class",
       "tier": "A",
       "anatomy": {
@@ -9116,6 +9116,23 @@
           "header",
           "language",
           "line-number"
+        ],
+        "componentTokens": [
+          "--dz-codeblock-bg",
+          "--dz-codeblock-border",
+          "--dz-codeblock-font-family",
+          "--dz-codeblock-font-size",
+          "--dz-codeblock-header-bg",
+          "--dz-codeblock-header-font-size",
+          "--dz-codeblock-header-padding-x",
+          "--dz-codeblock-header-padding-y",
+          "--dz-codeblock-header-text",
+          "--dz-codeblock-line-height",
+          "--dz-codeblock-line-number",
+          "--dz-codeblock-line-number-width",
+          "--dz-codeblock-padding",
+          "--dz-codeblock-radius",
+          "--dz-codeblock-text"
         ],
         "riskTier": "A",
         "rtl": {
@@ -9922,7 +9939,7 @@
       ],
       "source": "packages/core/src/components/forms/DzColorPicker.vue",
       "typesSource": "packages/core/src/components/forms/DzColorPicker.types.ts",
-      "componentCommit": "e601918aee17a9a94eca6608e23973a0d8790df7",
+      "componentCommit": "949ecfc92e01a94da15578b722bf1a00d9c60869",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -14882,7 +14899,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDatePicker.types.ts",
-      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
+      "componentCommit": "b1734954f2cd615b5891040b87b16989e2da066f",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -15433,7 +15450,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDateRangePicker.types.ts",
-      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
+      "componentCommit": "b1734954f2cd615b5891040b87b16989e2da066f",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -22271,7 +22288,7 @@
       ],
       "source": "packages/core/src/components/media/DzImageComparison.vue",
       "typesSource": "packages/core/src/components/media/DzImageComparison.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "f29b2e4ac3895f15de99082a58d87ee95f41cd44",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -27713,7 +27730,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMention.vue",
       "typesSource": "packages/core/src/components/forms/DzMention.types.ts",
-      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
+      "componentCommit": "735856a12885915fe25d5010267bd7cff54e6221",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -29109,7 +29126,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzMultiSelect.types.ts",
-      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
+      "componentCommit": "84505d6d6401e0dd4d57ca104ab41cd589fd0438",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -48865,7 +48882,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTimePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzTimePicker.types.ts",
-      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
+      "componentCommit": "949ecfc92e01a94da15578b722bf1a00d9c60869",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -50369,7 +50386,7 @@
       ],
       "source": "packages/core/src/components/feedback/DzTokenProgressBar.vue",
       "typesSource": "packages/core/src/components/feedback/DzTokenProgressBar.types.ts",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "f29b2e4ac3895f15de99082a58d87ee95f41cd44",
       "componentType": "class",
       "tier": "A",
       "anatomy": {
@@ -51327,7 +51344,7 @@
       ],
       "source": "packages/core/src/components/overlays/DzTour.vue",
       "typesSource": "packages/core/src/components/overlays/DzTour.types.ts",
-      "componentCommit": "e601918aee17a9a94eca6608e23973a0d8790df7",
+      "componentCommit": "edd4e54aa63e70485cb491521f707ce67f7d7176",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -51468,12 +51485,30 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
+          "name": "backLabel",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Label for the Back control. See `skipLabel`.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
+        },
+        {
           "name": "current",
           "type": "number | undefined",
           "required": false,
           "default": "0",
           "description": "Zero-based index of the step currently shown; defaults to the first step.",
           "descriptionSource": "vue-component-meta"
+        },
+        {
+          "name": "finishLabel",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Label for the Finish control on the last step. See `skipLabel`.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
         },
         {
           "name": "id",
@@ -51490,6 +51525,15 @@
           "required": false,
           "default": "true",
           "description": "Dim everything except the active target with a spotlight mask.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Label for the Next control. See `skipLabel`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
         },
@@ -51516,6 +51560,24 @@
           "required": false,
           "default": "true",
           "description": "Scroll an off-screen target into view when its step activates.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
+        },
+        {
+          "name": "skipLabel",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Label overrides for the default controls and the step counter (QF-67).\nEach wins over the `DzTour` catalog entry, which itself follows any\n`DzProvider` message override and falls back to English.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
+        },
+        {
+          "name": "stepOfLabel",
+          "type": "string | ((current: number, total: number) => string) | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "The step counter announced in the live region, e.g. `Schritt 2 von 5`.\nA function receives the one-based current step and the step total.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
         },
@@ -51701,8 +51763,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 16,
+        "propsWithDescription": 16,
         "propsWithDeclaredDefault": 4,
         "events": 5,
         "eventsWithDescription": 5,

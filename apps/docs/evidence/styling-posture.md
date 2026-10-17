@@ -90,10 +90,10 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/capability-matrix.json` | `cb0622954dbc0185…` | yes |
+| `packages/core/docs/capability-matrix.json` | `7ab3d3fd45c18f17…` | yes |
 | `packages/core/src/styles/base.css` | `51bd247384ac4598…` | yes |
 
-Capability matrix `sourceCommit` `f0ed614f` · quality matrix `f0ed614f`.
+Capability matrix `sourceCommit` `f8e6ef10` · quality matrix `f8e6ef10`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production

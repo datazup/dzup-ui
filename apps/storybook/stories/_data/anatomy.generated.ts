@@ -183,7 +183,7 @@ export const ANATOMY: Readonly<Record<string, DocAnatomy>> = {
   DzCodeBlock: {
     parts: ['root', 'header', 'filename', 'language', 'copy-button', 'content', 'line-number'],
     states: [],
-    componentTokens: [],
+    componentTokens: ['--dz-codeblock-bg', '--dz-codeblock-text', '--dz-codeblock-border', '--dz-codeblock-radius', '--dz-codeblock-padding', '--dz-codeblock-font-family', '--dz-codeblock-font-size', '--dz-codeblock-line-height', '--dz-codeblock-header-bg', '--dz-codeblock-header-text', '--dz-codeblock-header-padding-x', '--dz-codeblock-header-padding-y', '--dz-codeblock-header-font-size', '--dz-codeblock-line-number', '--dz-codeblock-line-number-width'],
     riskTier: 'A',
     optionalParts: ['header', 'filename', 'language', 'copy-button', 'line-number'],
     rtl: { mirrors: 'none', keyboard: 'none' },

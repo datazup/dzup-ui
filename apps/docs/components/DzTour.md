@@ -51,19 +51,24 @@ never as asserted.
 :::
 
 
-## Props (11, of which 4 inherited from `@dzup-ui/contracts`)
+## Props (16, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
+| `backLabel` | `string \| undefined` | no | `undefined` | Label for the Back control. See `skipLabel`. |
 | `current` | `number \| undefined` | no | `0` | Zero-based index of the step currently shown; defaults to the first step. |
+| `finishLabel` | `string \| undefined` | no | `undefined` | Label for the Finish control on the last step. See `skipLabel`. |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `mask` | `boolean \| undefined` | no | `true` | Dim everything except the active target with a spotlight mask. |
+| `nextLabel` | `string \| undefined` | no | `undefined` | Label for the Next control. See `skipLabel`. |
 | `open` | `boolean \| undefined` | no | `false` | Whether the tour is running; `false` keeps every step hidden. |
 | `portalTo` | `string \| HTMLElement \| undefined` | no | — | Portal target for the teleported layer. Added by TASK-OSS-P4-04. This component used to teleport to a hard-coded `body` with no way to redirect it — which is precisely the case an application embedding the library in a shadow root or a micro-frontend shell cannot work around. Falls back to the `DzProvider` target, then to `document.body`. |
 | `scrollIntoView` | `boolean \| undefined` | no | `true` | Scroll an off-screen target into view when its step activates. |
+| `skipLabel` | `string \| undefined` | no | `undefined` | Label overrides for the default controls and the step counter (QF-67). Each wins over the `DzTour` catalog entry, which itself follows any `DzProvider` message override and falls back to English. |
+| `stepOfLabel` | `string \| ((current: number, total: number) => string) \| undefined` | no | `undefined` | The step counter announced in the live region, e.g. `Schritt 2 von 5`. A function receives the one-based current step and the step total. |
 | `steps` | `DzTourStep[]` | yes | — | The ordered steps that make up the tour. |
 | `ui` | `Partial<Record<"action" \| "title" \| "list" \| "footer" \| "overlay" \| "description" \| "header" \| "item-indicator" \| "panel", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTour.anatomy.ts` (ADR-19 §5). `class` keeps its existing target (the step panel); `ui['item-indicator']` lands on every step dot. |
 
@@ -241,7 +246,7 @@ component that renders the same way every time is the normal case for this.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `e601918`.
+last changed at `edd4e54`.
 
 ## Extraction fidelity
 
@@ -250,7 +255,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 11 | 11 | 4 declare a default, of which 4 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 16 | 16 | 4 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 5 | 5 | 3 recovered from the `Dz*Emits` interface · 2 synthesised by `defineModel` |
 | Slots | 3 | 3 | 3 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |
@@ -259,8 +264,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `f0ed614f` for the capability matrix,
-`f0ed614f` for the quality matrix. It is **locally qualified**:
+artifact records — `f8e6ef10` for the capability matrix,
+`f8e6ef10` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -270,7 +275,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`, `teleports`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `e601918a`
+- **Component last changed at:** `edd4e54a`
 
 **Why this pattern:** A sequence of dialogs that spotlight elements outside themselves: focus, the overlay cut-out and the target’s own scroll position all have to agree, step after step.
 
@@ -363,7 +368,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/overlays/DzTour.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/overlays/DzTour.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at e543799, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 4112b10. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `portal-hydration` | trait teleports | `present` | `packages/core/tests/ssr/portal-hydration.spec.ts` — Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |

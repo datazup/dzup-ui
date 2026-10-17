@@ -230,7 +230,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `a01965f`.
+last changed at `f29b2e4`.
 
 ## Extraction fidelity
 
@@ -248,8 +248,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `f0ed614f` for the capability matrix,
-`f0ed614f` for the quality matrix. It is **locally qualified**:
+artifact records — `f8e6ef10` for the capability matrix,
+`f8e6ef10` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -259,7 +259,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `drags`
 - **Security boundary:** `url` — Both `src` props are host-supplied URLs that become subresource loads.
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `a01965fa`
+- **Component last changed at:** `f29b2e4a`
 
 ### WCAG 2.2 criteria in scope (20)
 
@@ -355,7 +355,7 @@ Every kind of evidence required of this component — by Tier B, by its traits (
 | `controlled-uncontrolled` | tier B | **`unrun`** | The unit spec does not exercise both a controlled and an uncontrolled value path. |
 | `browser-play` | tier B | `pass` | `packages/core/stories/media/DzImageComparison.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/media/DzImageComparison.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at e543799, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 4112b10. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzImageComparison.md` — 6 AT/browser pairs, none executed. |
 | `non-drag-alternative` | trait drags | `present` | `packages/core/src/components/media/DzImageComparison.spec.ts` — A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer. |
 | `threat-model` | boundary url | `present` | `packages/core/security/url-boundary.threat-model.md` · `packages/core/security/coverage.json` — Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |

@@ -227,7 +227,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `e601918`.
+last changed at `949ecfc`.
 
 ## Extraction fidelity
 
@@ -245,8 +245,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `f0ed614f` for the capability matrix,
-`f0ed614f` for the quality matrix. It is **locally qualified**:
+artifact records — `f8e6ef10` for the capability matrix,
+`f8e6ef10` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -256,7 +256,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `teleports`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `e601918a`
+- **Component last changed at:** `949ecfc9`
 
 **Why this pattern:** A popover panel combining a saturation surface, hue and alpha sliders and a text field over one colour model. APG has no colour-picker pattern; the sliders inside it follow the slider pattern individually.
 
@@ -348,7 +348,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/forms/DzColorPicker.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzColorPicker.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at e543799, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 4112b10. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `portal-hydration` | trait teleports | **`unrun`** | No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzColorPicker.stories.ts` |

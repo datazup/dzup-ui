@@ -284,7 +284,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `77270db`.
+last changed at `735856a`.
 
 ## Extraction fidelity
 
@@ -302,8 +302,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `f0ed614f` for the capability matrix,
-`f0ed614f` for the quality matrix. It is **locally qualified**:
+artifact records — `f8e6ef10` for the capability matrix,
+`f8e6ef10` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -313,7 +313,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `dataset`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `77270db3`
+- **Component last changed at:** `735856a1`
 
 **Why this pattern:** An inline combobox inside free text: the trigger is a character in the value, and the popup position follows the caret rather than the field.
 
@@ -407,7 +407,7 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/forms/DzMention.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzMention.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzMention.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at e543799, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 4112b10. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/forms/DzMention.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzMention.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzMention.stories.ts` |

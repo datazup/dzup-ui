@@ -22,7 +22,7 @@
     },
     {
       "path": "morphing-dialog.css",
-      "content": "/* The trigger and the panel share one view-transition-name, so the browser\n   morphs one box into the other. Gate the custom timing under no-preference so\n   reduced motion gets the instant default cross-fade. UNSCOPED (::view-transition\n   pseudos live on :root). */\n.atlas { view-transition-name: atlas; }\n\n@media (prefers-reduced-motion: no-preference) {\n  ::view-transition-group(atlas) {\n    animation-duration: var(--dz-duration-normal);\n    animation-timing-function: var(--dz-ease-emphasis, var(--dz-ease-out));\n  }\n}",
+      "content": "/* The trigger and the panel share one view-transition-name, so the browser\n   morphs one box into the other. Gate the custom timing under no-preference so\n   reduced motion gets the instant default cross-fade. UNSCOPED (::view-transition\n   pseudos live on :root). */\n.atlas { view-transition-name: atlas; }\n\n@media (prefers-reduced-motion: no-preference) {\n  ::view-transition-group(atlas) {\n    animation-duration: var(--dz-duration-normal);\n    animation-timing-function: var(--dz-ease-out);\n  }\n}",
       "type": "registry:file",
       "target": "components/animations/morphing-dialog.css"
     },

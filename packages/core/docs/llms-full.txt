@@ -5396,19 +5396,24 @@ Step-by-step product walkthrough that spotlights target elements
 - **v-model:** `v-model:current` (`number | undefined`), `v-model:open` (`boolean | undefined`)
 - **Anatomy parts (ADR-19):** `action`, `description`, `footer`, `header`, `item-indicator`, `list`, `overlay`, `panel`, `title`
 
-**Props** (11, of which 4 inherited from `@dzup-ui/contracts`):
+**Props** (16, of which 4 inherited from `@dzup-ui/contracts`):
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
+| `backLabel` | `string \| undefined` | no | `undefined` | Label for the Back control. See `skipLabel`. |
 | `current` | `number \| undefined` | no | `0` | Zero-based index of the step currently shown; defaults to the first step. |
+| `finishLabel` | `string \| undefined` | no | `undefined` | Label for the Finish control on the last step. See `skipLabel`. |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `mask` | `boolean \| undefined` | no | `true` | Dim everything except the active target with a spotlight mask. |
+| `nextLabel` | `string \| undefined` | no | `undefined` | Label for the Next control. See `skipLabel`. |
 | `open` | `boolean \| undefined` | no | `false` | Whether the tour is running; `false` keeps every step hidden. |
 | `portalTo` | `string \| HTMLElement \| undefined` | no | — | Portal target for the teleported layer. Added by TASK-OSS-P4-04. This component used to teleport to a hard-coded `body` with no way to redirect it — which is precisely the case an application embedding the library in a shadow root or a micro-frontend shell cannot work around. Falls back to the `DzProvider` target, then to `document.body`. |
 | `scrollIntoView` | `boolean \| undefined` | no | `true` | Scroll an off-screen target into view when its step activates. |
+| `skipLabel` | `string \| undefined` | no | `undefined` | Label overrides for the default controls and the step counter (QF-67). Each wins over the `DzTour` catalog entry, which itself follows any `DzProvider` message override and falls back to English. |
+| `stepOfLabel` | `string \| ((current: number, total: number) => string) \| undefined` | no | `undefined` | The step counter announced in the live region, e.g. `Schritt 2 von 5`. A function receives the one-based current step and the step total. |
 | `steps` | `DzTourStep[]` | yes | — | The ordered steps that make up the tour. |
 | `ui` | `Partial<Record<"action" \| "title" \| "list" \| "footer" \| "overlay" \| "description" \| "header" \| "item-indicator" \| "panel", DzClassValue>> \| undefined` | no | — | Per-part class overrides, keyed by the names in `DzTour.anatomy.ts` (ADR-19 §5). `class` keeps its existing target (the step panel); `ui['item-indicator']` lands on every step dot. |
 

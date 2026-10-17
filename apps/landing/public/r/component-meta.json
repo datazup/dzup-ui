@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+  "sourceCommit": "f8e6ef100adf51d4bdb3f53b56a22e5f99bf4597",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -310,10 +310,10 @@
     "publicComponents": 144,
     "compoundParts": 65,
     "unclassifiable": 0,
-    "props": 1757,
-    "propsWithDescription": 1757,
-    "propsWithDeclaredDefault": 685,
-    "propsWithLiteralUndefinedDefault": 550,
+    "props": 1764,
+    "propsWithDescription": 1764,
+    "propsWithDeclaredDefault": 684,
+    "propsWithLiteralUndefinedDefault": 556,
     "events": 366,
     "eventsWithDescription": 366,
     "eventsFromExtractor": 0,
@@ -2437,14 +2437,16 @@
       ],
       "source": "packages/core/src/components/feedback/DzAsyncBoundary.vue",
       "typesSource": "packages/core/src/components/feedback/DzAsyncBoundary.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "ef955cb4246cff010677d3f116c61966612f5731",
       "componentType": "class",
       "tier": "A",
       "anatomy": {
         "state": "absent",
         "parts": []
       },
-      "providerHooks": [],
+      "providerHooks": [
+        "useDzMessages"
+      ],
       "capability": {
         "tier": "A",
         "pattern": "none",
@@ -2455,13 +2457,12 @@
         "cells": {
           "excepted": 1,
           "pass": 1,
-          "present": 1,
-          "unrun": 3
+          "present": 2,
+          "unrun": 2
         },
         "unrun": [
           "axe",
-          "ssr-sample",
-          "unit-spec"
+          "ssr-sample"
         ],
         "stale": []
       },
@@ -3821,7 +3822,7 @@
       ],
       "source": "packages/core/src/components/feedback/DzBlockUI.vue",
       "typesSource": "packages/core/src/components/feedback/DzBlockUI.types.ts",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "f29b2e4ac3895f15de99082a58d87ee95f41cd44",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -5452,15 +5453,12 @@
         "traits": [],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 7,
           "stale": 1,
-          "unrun": 4
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -6537,7 +6535,7 @@
       ],
       "source": "packages/core/src/components/media/DzCarousel.vue",
       "typesSource": "packages/core/src/components/media/DzCarousel.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "c60dc8c068d859f1d8e292fb05e54385d833a068",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -6612,6 +6610,7 @@
       },
       "providerHooks": [
         "useDzDirection",
+        "useDzMotion",
         "useDzTestIds"
       ],
       "capability": {
@@ -7134,7 +7133,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCascader.vue",
       "typesSource": "packages/core/src/components/forms/DzCascader.types.ts",
-      "componentCommit": "14d4cb4a770b6f14bbbc2cc91894f28cd35619c7",
+      "componentCommit": "949ecfc92e01a94da15578b722bf1a00d9c60869",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -7887,7 +7886,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCheckbox.vue",
       "typesSource": "packages/core/src/components/forms/DzCheckbox.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -8242,7 +8241,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCheckboxGroup.vue",
       "typesSource": "packages/core/src/components/forms/DzCheckboxGroup.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -9096,7 +9095,7 @@
       ],
       "source": "packages/core/src/components/data/DzCodeBlock.vue",
       "typesSource": "packages/core/src/components/data/DzCodeBlock.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "5bde5c5bd7a41cc0d5b57a2a7c2cff3307c78ab9",
       "componentType": "class",
       "tier": "A",
       "anatomy": {
@@ -9117,6 +9116,23 @@
           "header",
           "language",
           "line-number"
+        ],
+        "componentTokens": [
+          "--dz-codeblock-bg",
+          "--dz-codeblock-border",
+          "--dz-codeblock-font-family",
+          "--dz-codeblock-font-size",
+          "--dz-codeblock-header-bg",
+          "--dz-codeblock-header-font-size",
+          "--dz-codeblock-header-padding-x",
+          "--dz-codeblock-header-padding-y",
+          "--dz-codeblock-header-text",
+          "--dz-codeblock-line-height",
+          "--dz-codeblock-line-number",
+          "--dz-codeblock-line-number-width",
+          "--dz-codeblock-padding",
+          "--dz-codeblock-radius",
+          "--dz-codeblock-text"
         ],
         "riskTier": "A",
         "rtl": {
@@ -9659,7 +9675,7 @@
       ],
       "source": "packages/core/src/components/navigation/DzColorModeToggle.vue",
       "typesSource": "packages/core/src/components/navigation/DzColorModeToggle.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "76c2b67c361926e348b008d15f769b07c9aaf103",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -9824,7 +9840,7 @@
       "slots": [
         {
           "name": "icon",
-          "type": "{ mode: \"light\" | \"dark\" | \"system\"; theme: ThemePreference; }",
+          "type": "{ mode: \"light\" | \"dark\" | \"high-contrast\" | \"system\"; theme: ThemePreference; }",
           "description": "Override the rendered glyph for a given mode (icon / switch variants).\nReceives the resolved mode and the active theme preference.",
           "descriptionSource": "vue-component-meta",
           "hasPayload": true
@@ -9923,7 +9939,7 @@
       ],
       "source": "packages/core/src/components/forms/DzColorPicker.vue",
       "typesSource": "packages/core/src/components/forms/DzColorPicker.types.ts",
-      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
+      "componentCommit": "949ecfc92e01a94da15578b722bf1a00d9c60869",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -10021,6 +10037,7 @@
         ]
       },
       "providerHooks": [
+        "useDzLocale",
         "useDzMessages",
         "useDzPortalTarget",
         "useDzTestIds"
@@ -10035,17 +10052,18 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 5,
-          "unrun": 4
+          "pass": 7,
+          "present": 7,
+          "stale": 1,
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -10407,7 +10425,7 @@
       ],
       "source": "packages/core/src/components/forms/DzCombobox.vue",
       "typesSource": "packages/core/src/components/forms/DzCombobox.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -10547,14 +10565,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 6,
+          "present": 8,
           "stale": 1,
-          "unrun": 4
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
-          "keyboard-spec",
           "portal-hydration"
         ],
         "stale": [
@@ -11167,7 +11183,7 @@
       ],
       "source": "packages/core/src/components/overlays/DzCommandPalette.vue",
       "typesSource": "packages/core/src/components/overlays/DzCommandPalette.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "7a004e44be9c9e92721d4cf4877424a8b1dcce44",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -11279,19 +11295,18 @@
           "teleports"
         ],
         "cells": {
-          "pass": 8,
-          "present": 4,
-          "unrun": 6
+          "pass": 7,
+          "present": 8,
+          "stale": 1,
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec",
           "portal-hydration"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -11540,6 +11555,27 @@
             "lines": [
               494,
               581
+            ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              584,
+              601
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              604,
+              623
+            ]
+          },
+          {
+            "id": "Empty",
+            "lines": [
+              629,
+              667
             ]
           }
         ],
@@ -12874,7 +12910,7 @@
       ],
       "source": "packages/core/src/components/buttons/DzCopyButton.vue",
       "typesSource": "packages/core/src/components/buttons/DzCopyButton.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "c2eaedcfc51b7ba471fee672a834c36a10546bee",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -13487,7 +13523,7 @@
       ],
       "source": "packages/core/src/components/data/DzDataGrid.vue",
       "typesSource": "packages/core/src/components/data/DzDataGrid.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -13645,6 +13681,7 @@
         ]
       },
       "providerHooks": [
+        "useDzMessages",
         "useDzTestIds"
       ],
       "capability": {
@@ -13659,14 +13696,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 6,
+          "present": 8,
           "stale": 1,
-          "unrun": 4
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "portal-hydration"
         ],
         "stale": [
@@ -14128,7 +14163,7 @@
       ],
       "source": "packages/core/src/components/data/DzDataGridBody.vue",
       "componentCommit": "unknown",
-      "componentType": "class",
+      "componentType": "function",
       "anatomy": {
         "state": "absent",
         "parts": []
@@ -14143,14 +14178,23 @@
           "description": "Key field for row identity",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzDataGridBody.vue"
+        },
+        {
+          "name": "rows",
+          "type": "T[] | undefined",
+          "required": false,
+          "default": null,
+          "description": "Rows to render; omitted, the injected grid's display rows. `DzDataGrid`\npasses its display rows here so the body's row type is the grid's `T` and\n`rowClick` and the `cell` slot keep it (UI-DZUP-UI-CODE-M-01).",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/data/DzDataGridBody.vue"
         }
       ],
       "globalPropCount": 12,
       "events": [
         {
           "name": "rowClick",
-          "type": "[row: Record<string, unknown>, index: number]",
-          "signature": "(event: \"rowClick\", row: Record<string, unknown>, index: number): void",
+          "type": "[row: T, index: number]",
+          "signature": "(evt: \"rowClick\", row: T, index: number): void",
           "description": "Emitted when a row is clicked, with the row and its zero-based index. Fires before selection toggles.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
@@ -14159,7 +14203,7 @@
       "slots": [
         {
           "name": "cell",
-          "type": "{ row: Record<string, unknown>; column: ColumnDef<Record<string, unknown>>; value: unknown; }",
+          "type": "{ row: T; column: ColumnDef<T>; value: unknown; }",
           "description": "Override one cell's rendering. Receives the row, its column definition and\nthe raw field value; unfilled, the cell prints `row[column.field]`.",
           "descriptionSource": "vue-component-meta",
           "hasPayload": true
@@ -14170,8 +14214,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 1,
-        "propsWithDescription": 1,
+        "props": 2,
+        "propsWithDescription": 2,
         "propsWithDeclaredDefault": 0,
         "events": 1,
         "eventsWithDescription": 1,
@@ -14203,6 +14247,7 @@
         "parts": []
       },
       "providerHooks": [
+        "useDzLocale",
         "useDzMessages"
       ],
       "props": [],
@@ -14339,7 +14384,7 @@
       ],
       "source": "packages/core/src/components/data/DzDataView.vue",
       "typesSource": "packages/core/src/components/data/DzDataView.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -14404,15 +14449,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 8,
           "stale": 1,
-          "unrun": 4
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -14486,8 +14528,8 @@
           "name": "emptyTitle",
           "type": "string | undefined",
           "required": false,
-          "default": "\"No items\"",
-          "description": "Title for the built-in empty state",
+          "default": "undefined",
+          "description": "Title for the built-in empty state. Defaults to the `DzDataView.empty`\ncatalog message (\"No items\").",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzDataView.types.ts"
         },
@@ -14802,6 +14844,13 @@
               517,
               594
             ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              597,
+              616
+            ]
           }
         ],
         "primary": {
@@ -14811,12 +14860,21 @@
             131
           ],
           "source": "export const ListLayout: Story = {\n  args: { layout: 'list' },\n  render: args => ({\n    components: { DzDataView },\n    setup: () => ({ args, products }),\n    template: `\n      <DzDataView v-bind=\"args\" :items=\"products\" data-key=\"id\">\n        <template #item=\"{ item }\">${rowTemplate}</template>\n      </DzDataView>\n    `,\n  }),\n}"
+        },
+        "runnable": {
+          "id": "KeyboardContract",
+          "lines": [
+            597,
+            616
+          ],
+          "source": "export const KeyboardContract: Story = {\n  render: () => ({\n    components: { DzDataView },\n    data() {\n      return { items: [{ id: 'alpha', name: 'Alpha' }, { id: 'beta', name: 'Beta' }], action: '', count: 0 }\n    },\n    template: `\n      <div>\n        <button type=\"button\">Before view</button>\n        <DzDataView :items=\"items\" data-key=\"id\" layout-toggle :sort-options=\"[{ label: 'Name', field: 'name', order: 1 }]\">\n          <template #item=\"{ item }\">\n            <button type=\"button\" @click=\"action = item.id; count++\">Open {{ item.name }}</button>\n          </template>\n        </DzDataView>\n        <button type=\"button\">After view</button>\n        <output data-testid=\"actions\">{{ action }}:{{ count }}</output>\n      </div>\n    `,\n  }),\n}",
+          "template": "\n      <div>\n        <button type=\"button\">Before view</button>\n        <DzDataView :items=\"items\" data-key=\"id\" layout-toggle :sort-options=\"[{ label: 'Name', field: 'name', order: 1 }]\">\n          <template #item=\"{ item }\">\n            <button type=\"button\" @click=\"action = item.id; count++\">Open {{ item.name }}</button>\n          </template>\n        </DzDataView>\n        <button type=\"button\">After view</button>\n        <output data-testid=\"actions\">{{ action }}:{{ count }}</output>\n      </div>\n    "
         }
       },
       "extraction": {
         "props": 23,
         "propsWithDescription": 23,
-        "propsWithDeclaredDefault": 16,
+        "propsWithDeclaredDefault": 15,
         "events": 6,
         "eventsWithDescription": 6,
         "eventsModelDerived": 4,
@@ -14841,7 +14899,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDatePicker.types.ts",
-      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
+      "componentCommit": "b1734954f2cd615b5891040b87b16989e2da066f",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -14996,13 +15054,12 @@
         "traits": [],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 6,
           "stale": 1,
-          "unrun": 3
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": [
@@ -15393,7 +15450,7 @@
       ],
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzDateRangePicker.types.ts",
-      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
+      "componentCommit": "b1734954f2cd615b5891040b87b16989e2da066f",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -15549,14 +15606,12 @@
         "traits": [],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 6,
           "stale": 1,
-          "unrun": 4
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "keyboard-spec"
         ],
         "stale": [
@@ -18483,14 +18538,16 @@
       ],
       "source": "packages/core/src/components/feedback/DzErrorBoundary.vue",
       "typesSource": "packages/core/src/components/feedback/DzErrorBoundary.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "ef955cb4246cff010677d3f116c61966612f5731",
       "componentType": "class",
       "tier": "A",
       "anatomy": {
         "state": "absent",
         "parts": []
       },
-      "providerHooks": [],
+      "providerHooks": [
+        "useDzMessages"
+      ],
       "capability": {
         "tier": "A",
         "pattern": "none",
@@ -19245,7 +19302,7 @@
       ],
       "source": "packages/core/src/components/forms/DzFileUpload.vue",
       "typesSource": "packages/core/src/components/forms/DzFileUpload.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "e601918aee17a9a94eca6608e23973a0d8790df7",
       "componentType": "class",
       "tier": "D",
       "anatomy": {
@@ -19287,6 +19344,7 @@
         ]
       },
       "providerHooks": [
+        "useDzLocale",
         "useDzMessages",
         "useDzTestIds"
       ],
@@ -22230,7 +22288,7 @@
       ],
       "source": "packages/core/src/components/media/DzImageComparison.vue",
       "typesSource": "packages/core/src/components/media/DzImageComparison.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "f29b2e4ac3895f15de99082a58d87ee95f41cd44",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -23295,7 +23353,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzInput.vue",
       "typesSource": "packages/core/src/components/inputs/DzInput.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -24150,7 +24208,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzInputMask.vue",
       "typesSource": "packages/core/src/components/inputs/DzInputMask.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -24866,7 +24924,7 @@
       ],
       "source": "packages/core/src/components/forms/DzKnob.vue",
       "typesSource": "packages/core/src/components/forms/DzKnob.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -26107,7 +26165,7 @@
       ],
       "source": "packages/core/src/components/forms/DzListbox.vue",
       "typesSource": "packages/core/src/components/forms/DzListbox.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -27380,14 +27438,12 @@
         "cells": {
           "excepted": 1,
           "pass": 7,
-          "present": 8,
+          "present": 10,
           "stale": 1,
-          "unrun": 3
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "data-scenarios",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -27610,6 +27666,20 @@
               480,
               544
             ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              547,
+              556
+            ]
+          },
+          {
+            "id": "LargeCatalog",
+            "lines": [
+              576,
+              612
+            ]
           }
         ],
         "primary": {
@@ -27660,7 +27730,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMention.vue",
       "typesSource": "packages/core/src/components/forms/DzMention.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "735856a12885915fe25d5010267bd7cff54e6221",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -27785,14 +27855,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 6,
+          "present": 8,
           "stale": 1,
-          "unrun": 3
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "data-scenarios"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -28256,50 +28324,64 @@
             ]
           },
           {
+            "id": "Empty",
+            "lines": [
+              353,
+              394
+            ]
+          },
+          {
             "id": "InvalidState",
             "name": "Invalid State",
             "lines": [
-              353,
-              370
+              400,
+              417
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              376,
-              397
+              423,
+              444
             ]
           },
           {
             "id": "States",
             "lines": [
-              403,
-              523
+              450,
+              570
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Combobox Keyboard Pattern",
             "lines": [
-              529,
-              621
+              576,
+              668
             ]
           },
           {
             "id": "RealWorldCommentComposer",
             "name": "Real World: Issue Comment Composer",
             "lines": [
-              627,
-              716
+              674,
+              763
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              731,
-              784
+              778,
+              831
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              834,
+              851
             ]
           }
         ],
@@ -29044,7 +29126,7 @@
       ],
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzMultiSelect.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "84505d6d6401e0dd4d57ca104ab41cd589fd0438",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -29182,15 +29264,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 5,
+          "present": 8,
           "stale": 1,
-          "unrun": 5
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec",
           "portal-hydration"
         ],
         "stale": [
@@ -29591,27 +29670,41 @@
             ]
           },
           {
+            "id": "Empty",
+            "lines": [
+              311,
+              340
+            ]
+          },
+          {
             "id": "Accessibility",
             "name": "Accessibility: Focus States",
             "lines": [
-              311,
-              325
+              346,
+              360
             ]
           },
           {
             "id": "RealWorldTagPicker",
             "name": "Real World: Tag Picker",
             "lines": [
-              331,
-              353
+              366,
+              388
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              367,
-              415
+              402,
+              450
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              453,
+              470
             ]
           }
         ],
@@ -29663,7 +29756,7 @@
       ],
       "source": "packages/core/src/components/feedback/DzNotification.vue",
       "typesSource": "packages/core/src/components/feedback/DzNotification.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "7a004e44be9c9e92721d4cf4877424a8b1dcce44",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -30016,7 +30109,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzNumberInput.vue",
       "typesSource": "packages/core/src/components/inputs/DzNumberInput.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -30513,7 +30606,7 @@
       ],
       "source": "packages/core/src/components/data/DzOrderList.vue",
       "typesSource": "packages/core/src/components/data/DzOrderList.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "componentType": "function",
       "tier": "C",
       "anatomy": {
@@ -30670,14 +30763,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 7,
+          "present": 9,
           "stale": 1,
-          "unrun": 3
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "data-scenarios"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -30954,26 +31045,40 @@
             ]
           },
           {
-            "id": "States",
+            "id": "Empty",
             "lines": [
               214,
-              310
+              256
+            ]
+          },
+          {
+            "id": "States",
+            "lines": [
+              258,
+              343
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Keyboard-Only Reorder",
             "lines": [
-              316,
-              412
+              349,
+              445
             ]
           },
           {
             "id": "RealWorldDashboardOrder",
             "name": "Real World: Dashboard Widget Order",
             "lines": [
-              418,
-              505
+              451,
+              538
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              541,
+              555
             ]
           }
         ],
@@ -30987,13 +31092,13 @@
           "template": "\n      <div style=\"max-width: 26rem\">\n        <DzOrderList v-bind=\"args\" v-model:value=\"value\" data-key=\"id\">\n          <template #item=\"{ item }\">{{ item.label }}</template>\n        </DzOrderList>\n      </div>\n    "
         },
         "runnable": {
-          "id": "States",
+          "id": "Empty",
           "lines": [
             214,
-            310
+            256
           ],
-          "source": "/**\n * `disabled` is the state DzOrderList declares as a prop, and the component adds\n * two transient row states on top of it (`data-state=\"grabbed\"` during a\n * keyboard grab, `data-state=\"selected\"` when `selectable`). All three are\n * shown here, because \"disabled\" on a reorderable list means something specific:\n * the rows stay readable, the control buttons go dead, and the keyboard grab\n * refuses to start.\n *\n * The disabled list is asserted rather than clicked — its variant sets\n * `pointer-events: none` on the root, so the browser would swallow the click.\n */\nexport const States: Story = {\n  render: () => ({\n    components: { DzOrderList },\n    setup() {\n      const enabled = ref<Task[]>([...sampleTasks])\n      const disabled = ref<Task[]>([...sampleTasks])\n      const selectable = ref<Task[]>([...sampleTasks])\n      return { enabled, disabled, selectable }\n    },\n    template: `\n      <div class=\"grid gap-8 lg:grid-cols-3\">\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Enabled</p>\n          <DzOrderList v-model:value=\"enabled\" data-key=\"id\" data-testid=\"ol-enabled\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Disabled</p>\n          <DzOrderList disabled v-model:value=\"disabled\" data-key=\"id\" data-testid=\"ol-disabled\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Selectable — selected rows</p>\n          <DzOrderList selectable v-model:value=\"selectable\" data-key=\"id\" data-testid=\"ol-selectable\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement)\n\n    const enabled = canvas.getByTestId('ol-enabled')\n    const disabled = canvas.getByTestId('ol-disabled')\n    const selectable = canvas.getByTestId('ol-selectable')\n\n    const labels = (root: HTMLElement) =>\n      [...root.querySelectorAll('li[data-index]')]\n        .map(li => (li.textContent ?? '').replace(/\\s+/g, ' ').trim())\n\n    // Enabled: the focused row is row 0, so \"up\" is unavailable and \"down\" is\n    // live — the controls describe what is actually possible.\n    await expect(\n      within(enabled).getByRole('button', { name: 'Move up' }),\n    ).toBeDisabled()\n    const moveDown = within(enabled).getByRole('button', { name: 'Move down' })\n    await expect(moveDown).toBeEnabled()\n    await userEvent.click(moveDown)\n    await waitFor(() =>\n      expect(labels(enabled)[0]).toBe('Review with the team'),\n    )\n    await expect(labels(enabled)[1]).toBe('Draft the proposal')\n\n    // Disabled: rows are still readable, every control is dead, and the root\n    // carries `data-disabled` for the styling contract.\n    await expect(disabled).toHaveAttribute('data-disabled')\n    await expect(labels(disabled)).toHaveLength(5)\n    for (const name of ['Move to top', 'Move up', 'Move down', 'Move to bottom'])\n      await expect(within(disabled).getByRole('button', { name })).toBeDisabled()\n\n    // Selectable: rows become `option`s in a multi-selectable listbox, and a\n    // selected row stamps `data-state=\"selected\"`.\n    const listbox = within(selectable).getByRole('listbox')\n    await expect(listbox).toHaveAttribute('aria-multiselectable', 'true')\n    const options = within(listbox).getAllByRole('option')\n    await expect(options[0]).toHaveAttribute('aria-selected', 'false')\n    await userEvent.click(options[1]!)\n    await waitFor(() => expect(options[1]).toHaveAttribute('aria-selected', 'true'))\n    await expect(options[1]).toHaveAttribute('data-state', 'selected')\n\n    // Grabbed: Space on a focused row enters the keyboard-drag state, which the\n    // row exposes as `aria-grabbed` + `data-state=\"grabbed\"`.\n    const firstRow = enabled.querySelector<HTMLElement>('li[data-index=\"0\"]')!\n    firstRow.focus()\n    await userEvent.keyboard(' ')\n    await waitFor(() => expect(firstRow).toHaveAttribute('data-state', 'grabbed'))\n    await expect(firstRow).toHaveAttribute('aria-grabbed', 'true')\n    await userEvent.keyboard('{Escape}')\n    await waitFor(() => expect(firstRow).not.toHaveAttribute('data-state'))\n  },\n}",
-          "template": "\n      <div class=\"grid gap-8 lg:grid-cols-3\">\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Enabled</p>\n          <DzOrderList v-model:value=\"enabled\" data-key=\"id\" data-testid=\"ol-enabled\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Disabled</p>\n          <DzOrderList disabled v-model:value=\"disabled\" data-key=\"id\" data-testid=\"ol-disabled\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n\n        <section class=\"space-y-2\">\n          <p class=\"text-sm font-medium\">Selectable — selected rows</p>\n          <DzOrderList selectable v-model:value=\"selectable\" data-key=\"id\" data-testid=\"ol-selectable\">\n            <template #item=\"{ item }\">{{ item.label }}</template>\n          </DzOrderList>\n        </section>\n      </div>\n    "
+          "source": "/**\n * `disabled` is the state DzOrderList declares as a prop, and the component adds\n * two transient row states on top of it (`data-state=\"grabbed\"` during a\n * keyboard grab, `data-state=\"selected\"` when `selectable`). All three are\n * shown here, because \"disabled\" on a reorderable list means something specific:\n * the rows stay readable, the control buttons go dead, and the keyboard grab\n * refuses to start.\n *\n * The disabled list is asserted rather than clicked — its variant sets\n * `pointer-events: none` on the root, so the browser would swallow the click.\n */\n/**\n * An empty sequence: the list shows its empty row, and every move control is\n * disabled because there is nothing to move.\n */\nexport const Empty: Story = {\n  render: () => ({\n    components: { DzOrderList },\n    setup() {\n      const value = ref<Task[]>([])\n      return { value }\n    },\n    template: `\n      <div style=\"max-width: 26rem\" data-testid=\"ol-empty\">\n        <DzOrderList v-model:value=\"value\" data-key=\"id\" aria-label=\"Empty sequence\">\n          <template #item=\"{ item }\">{{ item.label }}</template>\n          <template #empty>No steps in this sequence yet</template>\n        </DzOrderList>\n      </div>\n    `,\n  }),\n  play: async ({ canvasElement }) => {\n    const canvas = within(within(canvasElement).getByTestId('ol-empty'))\n    const list = canvas.getByRole('list', { name: 'Empty sequence' })\n    await expect(within(list).getAllByRole('listitem')).toHaveLength(1)\n    await expect(within(list).getByText('No steps in this sequence yet')).toBeVisible()\n\n    const controls = within(canvas.getByRole('group')).getAllByRole('button')\n    await expect(controls).toHaveLength(4)\n    for (const control of controls)\n      await expect(control).toBeDisabled()\n  },\n}",
+          "template": "\n      <div style=\"max-width: 26rem\" data-testid=\"ol-empty\">\n        <DzOrderList v-model:value=\"value\" data-key=\"id\" aria-label=\"Empty sequence\">\n          <template #item=\"{ item }\">{{ item.label }}</template>\n          <template #empty>No steps in this sequence yet</template>\n        </DzOrderList>\n      </div>\n    "
         }
       },
       "extraction": {
@@ -31024,7 +31129,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzOtpInput.vue",
       "typesSource": "packages/core/src/components/inputs/DzOtpInput.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -32344,7 +32449,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzPasswordInput.vue",
       "typesSource": "packages/core/src/components/inputs/DzPasswordInput.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "e601918aee17a9a94eca6608e23973a0d8790df7",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -32959,13 +33064,11 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 8,
-          "unrun": 5
+          "present": 10,
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "keyboard-spec",
           "portal-hydration"
         ],
@@ -34357,7 +34460,7 @@
       ],
       "source": "packages/core/src/providers/DzProvider.vue",
       "typesSource": "packages/core/src/providers/DzProvider.types.ts",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "6264983549be8f5ba8e7b2600ff8285a0d3d31f7",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -34900,7 +35003,7 @@
       ],
       "source": "packages/core/src/components/forms/DzRadio.vue",
       "typesSource": "packages/core/src/components/forms/DzRadio.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -35158,7 +35261,7 @@
       ],
       "source": "packages/core/src/components/forms/DzRadioGroup.vue",
       "typesSource": "packages/core/src/components/forms/DzRadioGroup.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -35521,7 +35624,7 @@
       ],
       "source": "packages/core/src/components/forms/DzRangeSlider.vue",
       "typesSource": "packages/core/src/components/forms/DzRangeSlider.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -36025,7 +36128,7 @@
       ],
       "source": "packages/core/src/components/forms/DzRating.vue",
       "typesSource": "packages/core/src/components/forms/DzRating.types.ts",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -38194,7 +38297,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzSearchInput.vue",
       "typesSource": "packages/core/src/components/inputs/DzSearchInput.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -39065,7 +39168,7 @@
       ],
       "source": "packages/core/src/components/forms/DzSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzSelect.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -40456,15 +40559,11 @@
         ],
         "cells": {
           "pass": 8,
-          "present": 8,
-          "unrun": 5
+          "present": 12,
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": []
       },
@@ -40715,6 +40814,27 @@
             "lines": [
               530,
               625
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              628,
+              642
+            ]
+          },
+          {
+            "id": "LargeSections",
+            "lines": [
+              653,
+              701
+            ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              704,
+              726
             ]
           }
         ],
@@ -41329,7 +41449,7 @@
       ],
       "source": "packages/core/src/components/forms/DzSlider.vue",
       "typesSource": "packages/core/src/components/forms/DzSlider.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -44699,7 +44819,7 @@
       ],
       "source": "packages/core/src/components/forms/DzSwitch.vue",
       "typesSource": "packages/core/src/components/forms/DzSwitch.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -45194,13 +45314,12 @@
         "cells": {
           "excepted": 1,
           "pass": 7,
-          "present": 7,
+          "present": 8,
           "stale": 1,
-          "unrun": 2
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -45534,6 +45653,13 @@
               834,
               947
             ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              950,
+              978
+            ]
           }
         ],
         "primary": {
@@ -45589,7 +45715,9 @@
         "state": "absent",
         "parts": []
       },
-      "providerHooks": [],
+      "providerHooks": [
+        "useDzMessages"
+      ],
       "props": [
         {
           "name": "skeletonRows",
@@ -46918,7 +47046,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTagsInput.vue",
       "typesSource": "packages/core/src/components/forms/DzTagsInput.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -47707,7 +47835,7 @@
       ],
       "source": "packages/core/src/components/inputs/DzTextarea.vue",
       "typesSource": "packages/core/src/components/inputs/DzTextarea.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -48194,7 +48322,7 @@
       ],
       "source": "packages/core/src/providers/DzThemeProvider.vue",
       "typesSource": "packages/core/src/providers/DzThemeProvider.types.ts",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "81eaa57ddf24cf82a56bf22777c549ecccde5ff9",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -48257,6 +48385,15 @@
           "declaredIn": "packages/core/src/providers/DzThemeProvider.types.ts"
         },
         {
+          "name": "nonce",
+          "type": "string | undefined",
+          "required": false,
+          "default": null,
+          "description": "CSP nonce for the transition-suppression `<style>` tag (ADR-20).\n\nForwarded to the underlying `DzProvider`. Leave it unset to inherit the\nnonce of an outer `DzProvider`; with neither, the tag carries no nonce and\na strict `style-src` policy blocks it on every theme switch.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/providers/DzThemeProvider.types.ts"
+        },
+        {
           "name": "storageKey",
           "type": "string | undefined",
           "required": false,
@@ -48282,8 +48419,8 @@
         "stories": []
       },
       "extraction": {
-        "props": 4,
-        "propsWithDescription": 4,
+        "props": 5,
+        "propsWithDescription": 5,
         "propsWithDeclaredDefault": 4,
         "events": 0,
         "eventsWithDescription": 0,
@@ -48745,7 +48882,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTimePicker.vue",
       "typesSource": "packages/core/src/components/forms/DzTimePicker.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "949ecfc92e01a94da15578b722bf1a00d9c60869",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -48884,14 +49021,12 @@
         ],
         "cells": {
           "pass": 7,
-          "present": 4,
+          "present": 6,
           "stale": 1,
-          "unrun": 5
+          "unrun": 3
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
           "keyboard-spec",
           "portal-hydration"
         ],
@@ -50251,7 +50386,7 @@
       ],
       "source": "packages/core/src/components/feedback/DzTokenProgressBar.vue",
       "typesSource": "packages/core/src/components/feedback/DzTokenProgressBar.types.ts",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "f29b2e4ac3895f15de99082a58d87ee95f41cd44",
       "componentType": "class",
       "tier": "A",
       "anatomy": {
@@ -50444,7 +50579,7 @@
       ],
       "source": "packages/core/src/components/layout/DzToolbar.vue",
       "typesSource": "packages/core/src/components/layout/DzToolbar.types.ts",
-      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
+      "componentCommit": "acc5ba1e7fa5e1649617762f7fd414a07d7ad914",
       "componentType": "class",
       "tier": "B",
       "anatomy": {
@@ -51209,7 +51344,7 @@
       ],
       "source": "packages/core/src/components/overlays/DzTour.vue",
       "typesSource": "packages/core/src/components/overlays/DzTour.types.ts",
-      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
+      "componentCommit": "edd4e54aa63e70485cb491521f707ce67f7d7176",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -51292,6 +51427,8 @@
         ]
       },
       "providerHooks": [
+        "useDzLocale",
+        "useDzMessages",
         "useDzMotion",
         "useDzPortalTarget"
       ],
@@ -51308,16 +51445,12 @@
         "cells": {
           "excepted": 1,
           "pass": 6,
-          "present": 5,
+          "present": 9,
           "stale": 1,
-          "unrun": 5
+          "unrun": 1
         },
         "unrun": [
-          "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec"
+          "at-manual"
         ],
         "stale": [
           "perf-baseline"
@@ -51352,12 +51485,30 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
+          "name": "backLabel",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Label for the Back control. See `skipLabel`.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
+        },
+        {
           "name": "current",
           "type": "number | undefined",
           "required": false,
           "default": "0",
           "description": "Zero-based index of the step currently shown; defaults to the first step.",
           "descriptionSource": "vue-component-meta"
+        },
+        {
+          "name": "finishLabel",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Label for the Finish control on the last step. See `skipLabel`.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
         },
         {
           "name": "id",
@@ -51374,6 +51525,15 @@
           "required": false,
           "default": "true",
           "description": "Dim everything except the active target with a spotlight mask.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Label for the Next control. See `skipLabel`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
         },
@@ -51400,6 +51560,24 @@
           "required": false,
           "default": "true",
           "description": "Scroll an off-screen target into view when its step activates.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
+        },
+        {
+          "name": "skipLabel",
+          "type": "string | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "Label overrides for the default controls and the step counter (QF-67).\nEach wins over the `DzTour` catalog entry, which itself follows any\n`DzProvider` message override and falls back to English.",
+          "descriptionSource": "vue-component-meta",
+          "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
+        },
+        {
+          "name": "stepOfLabel",
+          "type": "string | ((current: number, total: number) => string) | undefined",
+          "required": false,
+          "default": "undefined",
+          "description": "The step counter announced in the live region, e.g. `Schritt 2 von 5`.\nA function receives the one-based current step and the step total.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/overlays/DzTour.types.ts"
         },
@@ -51550,6 +51728,20 @@
               399,
               484
             ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              487,
+              500
+            ]
+          },
+          {
+            "id": "LargeTour",
+            "lines": [
+              513,
+              565
+            ]
           }
         ],
         "primary": {
@@ -51559,11 +51751,20 @@
             116
           ],
           "source": "export const BasicThreeStep: Story = {\n  render: args => ({\n    components: { DzTour, DzButton },\n    setup() {\n      return { args, steps }\n    },\n    data() {\n      return { open: false, current: 0 }\n    },\n    template: `\n      <div>\n        ${demoToolbar}\n        <DzButton @click=\"open = true; current = 0\">Start tour</DzButton>\n        <DzTour\n          v-bind=\"args\"\n          v-model:open=\"open\"\n          v-model:current=\"current\"\n          :steps=\"steps\"\n        />\n      </div>\n    `,\n  }),\n}"
+        },
+        "runnable": {
+          "id": "Large",
+          "lines": [
+            487,
+            500
+          ],
+          "source": "export const Large: Story = {\n  render: () => ({\n    components: { DzTour },\n    data() {\n      const dataset: DzTourStep[] = Array.from({ length: 50 }, (_, i) => ({ target: '#data-tour-target', title: `Step ${i + 1}`, description: `Instruction ${i + 1}` }))\n      return { dataset, items: [...dataset], open: false, current: 0, changed: -1 }\n    },\n    template: `<div><button id=\"data-tour-target\" type=\"button\" @click=\"current = 0; open = true\">Start data tour</button>\n      <button type=\"button\" @click=\"items = []\">Clear data</button><button type=\"button\" @click=\"items = [...dataset]\">Restore data</button>\n      <output data-testid=\"changed\">{{ changed }}</output>\n      <DzTour v-model:open=\"open\" v-model:current=\"current\" :steps=\"items\" :mask=\"false\" :scroll-into-view=\"false\" @change=\"changed = $event\" />\n    </div>`,\n  }),\n}",
+          "template": "<div><button id=\"data-tour-target\" type=\"button\" @click=\"current = 0; open = true\">Start data tour</button>\n      <button type=\"button\" @click=\"items = []\">Clear data</button><button type=\"button\" @click=\"items = [...dataset]\">Restore data</button>\n      <output data-testid=\"changed\">{{ changed }}</output>\n      <DzTour v-model:open=\"open\" v-model:current=\"current\" :steps=\"items\" :mask=\"false\" :scroll-into-view=\"false\" @change=\"changed = $event\" />\n    </div>"
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 11,
+        "props": 16,
+        "propsWithDescription": 16,
         "propsWithDeclaredDefault": 4,
         "events": 5,
         "eventsWithDescription": 5,
@@ -51589,7 +51790,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTransfer.vue",
       "typesSource": "packages/core/src/components/forms/DzTransfer.types.ts",
-      "componentCommit": "74c763e07d0a35d2b6159e45c0f6197aef728fd1",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -52162,7 +52363,7 @@
       ],
       "source": "packages/core/src/components/data/DzTree.vue",
       "typesSource": "packages/core/src/components/data/DzTree.types.ts",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -52258,6 +52459,7 @@
         ]
       },
       "providerHooks": [
+        "useDzMessages",
         "useDzTestIds"
       ],
       "capability": {
@@ -52270,14 +52472,17 @@
           "dataset"
         ],
         "cells": {
-          "pass": 8,
+          "pass": 7,
           "present": 8,
+          "stale": 1,
           "unrun": 1
         },
         "unrun": [
           "at-manual"
         ],
-        "stale": []
+        "stale": [
+          "perf-baseline"
+        ]
       },
       "props": [
         {
@@ -52929,7 +53134,7 @@
       ],
       "source": "packages/core/src/components/forms/DzTreeSelect.vue",
       "typesSource": "packages/core/src/components/forms/DzTreeSelect.types.ts",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "componentType": "class",
       "tier": "C",
       "anatomy": {
@@ -53087,16 +53292,12 @@
         "cells": {
           "excepted": 1,
           "pass": 6,
-          "present": 4,
+          "present": 8,
           "stale": 1,
-          "unrun": 6
+          "unrun": 2
         },
         "unrun": [
           "at-manual",
-          "axe",
-          "controlled-uncontrolled",
-          "data-scenarios",
-          "keyboard-spec",
           "portal-hydration"
         ],
         "stale": [
@@ -53520,43 +53721,64 @@
             ]
           },
           {
+            "id": "Empty",
+            "lines": [
+              298,
+              327
+            ]
+          },
+          {
             "id": "InFormField",
             "name": "In FormField",
             "lines": [
-              298,
-              322
+              333,
+              357
             ]
           },
           {
             "id": "DarkMode",
             "name": "Dark Mode Preview",
             "lines": [
-              328,
-              351
+              363,
+              386
             ]
           },
           {
             "id": "Accessibility",
             "name": "Accessibility: Keyboard-Only Tree Combobox",
             "lines": [
-              357,
-              458
+              392,
+              493
             ]
           },
           {
             "id": "RealWorldCatalogFilter",
             "name": "Real World: Catalog Category Filter",
             "lines": [
-              464,
-              560
+              499,
+              595
             ]
           },
           {
             "id": "AsyncOptions",
             "name": "Async Options: loading → ready → error → retry",
             "lines": [
-              573,
-              621
+              608,
+              656
+            ]
+          },
+          {
+            "id": "KeyboardContract",
+            "lines": [
+              659,
+              677
+            ]
+          },
+          {
+            "id": "Large",
+            "lines": [
+              680,
+              697
             ]
           }
         ],
@@ -53789,7 +54011,7 @@
       ],
       "source": "packages/core/src/components/media/DzWatermark.vue",
       "typesSource": "packages/core/src/components/media/DzWatermark.types.ts",
-      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661",
+      "componentCommit": "feeba4efe57a9cd0debd350d3d5bdab5b214055c",
       "componentType": "class",
       "tier": "A",
       "anatomy": {

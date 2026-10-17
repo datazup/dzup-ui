@@ -1438,6 +1438,17 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/tokens",
+      "@dzup-ui/core"
+    ],
+    "level": "minor",
+    "summary": "**`DzCodeBlock` reads its own `--dz-codeblock-*` tokens, and every one of them is emitted.**",
+    "body": "**`DzCodeBlock` reads its own `--dz-codeblock-*` tokens, and every one of them is emitted.**\n\n`CODEBLOCK_TOKENS` was exported but never written to `tokens.css`, the six\nsemantic `--dz-codeblock-*` colours were emitted with a dark palette that\nnothing consumed, and `DzCodeBlock` painted itself with `--dz-muted` directly.\nNow each name is declared exactly once and `DzCodeBlock` consumes all of them:\n\n- The six colours stay in the semantic tier and now resolve to what the block has\n  always looked like: `--dz-codeblock-bg` / `-header-bg` → `var(--dz-muted)`,\n  `-text` → `var(--dz-foreground)`, `-border` → `var(--dz-border)`,\n  `-header-text` / `-line-number` → `var(--dz-muted-foreground)`, in light and\n  dark. **Their values in `tokens.css` change** (they were neutral-900/950\n  shades); the high-contrast mapping is unchanged.\n- `CODEBLOCK_TOKENS` now holds the layout half only and is emitted in the\n  component tier: `--dz-codeblock-radius`, `-padding`, `-font-family`,\n  `-font-size`, `-line-height`, `-header-padding-x`, `-header-padding-y`,\n  `-header-font-size`, `-line-number-width`. **Removed keys:** `--dz-codeblock-bg`,\n  `-border`, `-text`, `-header-bg` (now semantic only), `-header-color` (use\n  `-header-text`), `-line-number-color` (use `-line-number`); none of them was\n  ever emitted as CSS. `-line-number-width` is `2rem`, the gutter the block has\n  always rendered.\n- Line numbers take `--dz-codeblock-line-number` instead of the inherited text\n  colour at 50% opacity.\n\nSetting any `--dz-codeblock-*` property now re-skins code blocks.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/contracts",
       "@dzup-ui/core"
     ],
@@ -1648,6 +1659,16 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
+    "summary": "**`DzCarousel`'s arrows and dots stay put while the slides move.**",
+    "body": "**`DzCarousel`'s arrows and dots stay put while the slides move.**\n\n`DzCarouselPrevious`, `DzCarouselNext` and `DzCarouselDots` composed into the default slot were\nrendered inside the sliding track. The track's `transform` made it their containing block, so the\narrows slid out of view with it and were clipped — after the first slide change a real pointer\ncould not reach \"Next slide\", and the dots scrolled away with the slides. They now render outside\nthe track, inside the carousel root; slides (wrapped or not) stay in the track. No API change.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/codemods"
     ],
     "level": "patch",
@@ -1687,6 +1708,18 @@ export const PENDING: PendingChange[] = [
     "body": "**Components can now declare what a consumer may address, and five of them do: parts, states, and a typed per-part `ui` override.**\n\nUntil now the only sanctioned way to restyle a dzup-ui component was a design\ntoken or the `class` on its root. Anything else — a spinner inside a button, the\nerror message under an input, a dialog's backdrop, a select's portaled listbox —\nwas reachable only by writing a descendant selector against class names that\n`tailwind-variants` generates and is free to change. Those selectors worked\nuntil they didn't, and nothing told anyone when they stopped.\n\nADR-19 (`docs/adr/ADR-19-public-styling-contract.md`) makes that surface\nexplicit. This release lands the machinery and the first five components.\n\n**New in `@dzup-ui/contracts`**\n\n- `ComponentAnatomy` — a component's declared parts, states, component tokens,\n  recipe axes and risk tier.\n- `ANATOMY_PART_VOCABULARY` — the shared part names, so `content` means the same\n  thing on a dialog and on a popover.\n- `AnatomyPart<A>` and `UiOverrides<A>` — derived types that make a part name a\n  compile error rather than a class that lands nowhere.\n\n**New in `@dzup-ui/testing`**\n\n- `expectAnatomy(wrapper, anatomy)` — asserts the rendered DOM emits every\n  declared part exactly once (or is declared optional) and no undeclared one.\n  Runner-independent, and it takes the anatomy structurally, so the package\n  needs no dependency on `@dzup-ui/contracts`.\n\n**New in `@dzup-ui/core`: `data-part` and `ui` on five components**\n\n| Component | Parts you can now address |\n|---|---|\n| `DzButton` | `root`, `spinner` |\n| `DzInput` | `root`, `control`, `input`, `prefix`, `suffix`, `spinner`, `clear`, `error` |\n| `DzSelect` | `root`, `trigger`, `icon`, `content`, `viewport`, `input`, `item`, `item-indicator`, `item-label`, `empty`, `error` |\n| `DzDialogContent` | `overlay`, `content`, `header`, `viewport`, `footer` |\n| `DzTable` (family) | `root`, `content`, `title`, `header`, `body`, `row`, `cell`, `footer` |\n\n```vue\n<!-- before: a selector against a generated class, and a prayer -->\n<style>.my-form .inline-flex > svg { height: 24px !important; }</style>\n\n<!-- after -->\n<DzButton loading :ui=\"{ spinner: 'h-6 w-6' }\">Save</DzButton>\n<DzSelect :items=\"items\" :ui=\"{ content: 'max-h-40', item: 'py-3' }\" />\n<DzDialogContent :ui=\"{ overlay: 'backdrop-blur-sm' }\" />\n```\n\nOverrides merge through `cn()` (clsx + tailwind-merge), so a conflicting utility\nreplaces the component's own rather than fighting it. **No `!important` is\nneeded, and Playwright asserts that in a real browser** rather than the docs\nasserting it in prose.\n\n**`DzDialog` declares `parts: 'none'`** — it wraps Reka's `DialogRoot`, which is\na provider and renders no element. That is an answer, not an omission: the\ndialog's surface is declared on `DzDialogContent`, where the nodes are.\n\n**Nothing is removed, and every existing override keeps working.**\n\n- `class` lands exactly where it always did — the button root, the input's\n  visual field, the select trigger, the dialog panel, the table's scroll\n  container. `ui.root` is the new way to reach an outer node.\n- `data-dz-dialog-overlay`, `data-dz-search-input` and `data-dz-no-results` are\n  still emitted, now alongside `data-part` (dual-emit for one minor series;\n  removing them needs a major).\n- `DzDialogContent`'s `overlayClass` still applies. It is deprecated in favour\n  of `:ui=\"{ overlay: … }\"`; both work, and `ui` takes precedence.\n\n**Two things this release deliberately does not claim**\n\n`DzSelect` and `DzTable` declare `componentTokens: []`, because they own no\n`--dz-select-*` or `--dz-table-*` custom property — they style from global\nsemantic tokens. Declaring invented names would have documented override points\nthat do not exist. Per-instance restyling of those two goes through `ui`.\n\n`DzButton` mirrors `data-tone` but not `data-variant` or `data-size`, though it\ndeclares all three recipe axes. Its contract spec asserts that gap rather than\nhiding it, so closing it is a visible change rather than a silent one.\n\n**138 of 143 public components have not declared an anatomy yet.**\n`yarn validate:ownership` reports the number against a ceiling that only\nratchets down, and the Storybook docs say plainly, per component, when a\ncomponent has not declared one.",
     "breaking": false,
     "deprecated": true
+  },
+  {
+    "packages": [
+      "@dzup-ui/core",
+      "@dzup-ui/tokens",
+      "@dzup-ui/contracts"
+    ],
+    "level": "patch",
+    "summary": "**`@dzup-ui/core/composables` and `@dzup-ui/core/utilities`, one WCAG contrast implementation, frozen provider defaults, and `sideEffects` on tokens and contracts.**",
+    "body": "**`@dzup-ui/core/composables` and `@dzup-ui/core/utilities`, one WCAG contrast implementation, frozen provider defaults, and `sideEffects` on tokens and contracts.**\n\n- **New subpaths `@dzup-ui/core/composables` and `@dzup-ui/core/utilities`.**\n  `import { useToast } from '@dzup-ui/core/composables'` and\n  `import { cn } from '@dzup-ui/core/utilities'` no longer pull in the root\n  entry, which re-exports every component family and loads the base\n  stylesheet. Both subpaths export the same functions as the root, and the root\n  is unchanged. `validate:exports` checks that each subpath exports every\n  manifest entry in its category and nothing the root does not export.\n- **New in `@dzup-ui/tokens/utils`: `oklchToLinearSrgb`, `oklchLuminance`,\n  `wcagLuminanceFromLinear`, `wcagContrastRatio` and `clampUnit`.** The DESIGN.md\n  contrast gate and the landing site's theme designer and block theme now call\n  these functions, so the contrast verdict shown to a visitor uses the same\n  maths as the verdict the gate enforces.\n- **`DZ_PROVIDER_DEFAULTS` and `DZ_ALLOWED_URL_SCHEMES` are frozen at every\n  level.** Before, only the outer objects were frozen. A cast-away `push` onto\n  the scheme allowlist, or a write to the sanitizer `limits`, now throws in\n  strict code instead of widening every URL sink and sanitizer call on the page.\n  The types are unchanged.\n- **`@dzup-ui/tokens` declares `\"sideEffects\": [\"*.css\"]` and\n  `@dzup-ui/contracts` declares `\"sideEffects\": false`.** Bundlers other than\n  Rollup can now drop the modules a build does not import.",
+    "breaking": false,
+    "deprecated": false
   },
   {
     "packages": [
@@ -1736,6 +1769,16 @@ export const PENDING: PendingChange[] = [
     "level": "patch",
     "summary": "Fix invalid published declarations (D152). Emits payloads labelled `event` printed `(event: \"click\", event: MouseEvent)`, a duplicate identifier (`TS2300`) in `DzPopconfirm.vue.d.ts` and `DzSpeedDial.vue.d.ts` for any consumer on TypeScript's default `skipLibCheck: false`, and the same invalid signature in the generated docs. The 60 payload labels are now `e`; tuple labels do not affect assignability, so no consumer code changes.",
     "body": "Fix invalid published declarations (D152). Emits payloads labelled `event` printed `(event: \"click\", event: MouseEvent)`, a duplicate identifier (`TS2300`) in `DzPopconfirm.vue.d.ts` and `DzSpeedDial.vue.d.ts` for any consumer on TypeScript's default `skipLibCheck: false`, and the same invalid signature in the generated docs. The 60 payload labels are now `e`; tuple labels do not affect assignability, so no consumer code changes.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
+    "summary": "**The date pickers open from their trigger with ArrowDown / ArrowUp, and the multiline `DzMention` no longer carries a role a `<textarea>` may not have.**",
+    "body": "**The date pickers open from their trigger with ArrowDown / ArrowUp, and the multiline `DzMention` no longer carries a role a `<textarea>` may not have.**\n\n- `DzDatePicker` and `DzDateRangePicker` declared (APG combobox) that ArrowDown / ArrowUp on\n  the closed trigger opens the calendar, but the trigger only reacted to a click. Both keys now\n  open it and emit `open`.\n- The default multiline `DzMention` rendered `<textarea role=\"combobox\" aria-haspopup aria-expanded>`,\n  which ARIA in HTML does not allow (axe `aria-allowed-role`). The textarea keeps its native\n  textbox role with `aria-autocomplete=\"list\"`, `aria-controls` and `aria-activedescendant`; the\n  single-line input is still a combobox.",
     "breaking": false,
     "deprecated": false
   },
@@ -1840,6 +1883,26 @@ export const PENDING: PendingChange[] = [
       "@dzup-ui/core"
     ],
     "level": "patch",
+    "summary": "**Every Core transition duration now comes from `--dz-duration-*`.**",
+    "body": "**Every Core transition duration now comes from `--dz-duration-*`.**\n\n25 sites in 18 components (Accordion, Tree, Tour, MeterGroup, BlockUI, Progress,\nTokenProgressBar, ScrollProgress, Notification, Resizable, Sidebar, SidebarSection,\nCarousel, Lightbox, ImageComparison, Knob, the table cell's resize affordance) used raw\nTailwind `duration-150/200/300`. They now use `--dz-duration-fast` / `-normal` / `-slow`\n(the same 150/200/300ms by default), so a theme or a reduced-motion override that retimes\nthe scale now retimes these too.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
+    "summary": "**`DzMultiSelect` says when `maxSelections` is reached.**",
+    "body": "**`DzMultiSelect` says when `maxSelections` is reached.**\n\nAt the limit the remaining options are disabled; a screen-reader user now hears why. A polite\nlive region announces \"Maximum selected. Remove an option to choose another.\" and, while\nthe limit holds, the same text joins the input's `aria-describedby`. The string is the new\ncatalog key `DzMultiSelect.maxReached`, overridable through `DzProvider`\nmessages like every other catalog string; packs list it as a fallback until translated.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
     "summary": "**Navigation and data components declare their styling surface, and a sidebar no longer opens on the wrong edge in Arabic.**",
     "body": "**Navigation and data components declare their styling surface, and a sidebar no longer opens on the wrong edge in Arabic.**\n\nThe ADR-19 styling contract — declared parts, declared states, a typed per-part\n`ui` override — reached two more families this release. **Every** public\ncomponent in `navigation` now declares one, and eleven more in `data` join\n`DzTable`, so restyling a menu, a pager, a tab set, a calendar or a grid no\nlonger means writing a descendant selector against a class name\n`tailwind-variants` is free to change.\n\n**New `data-part` and `ui` surfaces**\n\n| Family | Components | Parts you can now address |\n|---|---|---|\n| `navigation` | `DzAnchor`, `DzBackTop`, `DzBreadcrumb` (family), `DzColorModeToggle`, `DzMegaMenu`, `DzMenu` (family), `DzPagination`, `DzSegmented`, `DzSidebar` (family), `DzStepper`, `DzStepperItem`, `DzTabs` (family) | `root`, `list`, `item`, `item-label`, `separator`, `trigger`, `indicator`, `panel`, `group`, `group-label`, `action`, `content`, `close`, `header`, `footer`, `body`, `overlay`, `icon`, `suffix`, `title`, `description` |\n| `data` | `DzAccordion` (family), `DzCalendar`, `DzChip`, `DzDataGrid` (family), `DzDataView`, `DzInfiniteScroll`, `DzListItem`, `DzOrderList`, `DzTag`, `DzTree`, `DzTreeItem` | `root`, `item`, `trigger`, `indicator`, `content`, `header`, `title`, `group`, `action`, `row`, `cell`, `body`, `panel`, `list`, `item-label`, `control`, `loader`, `error`, `hint`, `empty`, `footer`, `close` |\n\n```vue\n<DzPagination :total=\"500\" :ui=\"{ action: 'rounded-full', separator: 'opacity-40' }\" />\n<DzSidebar :ui=\"{ overlay: 'backdrop-blur-sm', body: 'gap-1' }\" />\n<DzTabTrigger value=\"one\" closable :ui=\"{ close: 'opacity-100' }\">One</DzTabTrigger>\n<DzCalendar v-model=\"date\" :ui=\"{ item: 'rounded-lg', 'title': 'font-semibold' }\" />\n<DzTreeItem :node=\"node\" :ui=\"{ indicator: 'text-[var(--dz-primary)]' }\" />\n```\n\n**Two real fixes, not just declarations.**\n\n`validate:rtl` reads a component's declared `rtl.mirrors` and then checks its\nsource for physical utilities. Declaring these two turned up geometry that\npromised to follow the reading direction and did not:\n\n- **`DzSidebar`** pinned the rail and the mobile drawer with `left-0`, and the\n  drawer slid out with `-translate-x-full`. In a right-to-left document that put\n  the navigation on the edge the content reads away from, and would have slid\n  the drawer *into* the page instead of off it. Now `inset-s-0` plus an\n  `rtl:translate-x-full` companion.\n- **`DzBackTop`** pinned the scroll-to-top control with\n  `right-[var(--dz-back-top-offset)]`. Unlike `DzFab`, it takes no `position`\n  prop — the corner is \"out of the way of the text\", which is a statement about\n  the reading direction. Now `inset-e-`.\n\nTwo inline physical margins went with them: the sidebar item's badge\n(`ml-auto` → `ms-auto`) and the data view's paginator (`ml-auto` → `ms-auto`).\n\n**In a left-to-right document nothing moves by a pixel.** `inset-s-`, `inset-e-`\nand `ms-` compile to the same edge that `left-`, `right-` and `ml-` did.\n\n**Nothing is removed and every existing override keeps working.** `ui` is a new\noptional prop on 22 components; `class` lands exactly where it always did; no\npart was renamed and no `data-state` value changed.",
     "breaking": false,
@@ -1921,11 +1984,33 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/core",
+      "@dzup-ui/nuxt",
+      "@dzup-ui/tokens"
+    ],
+    "level": "patch",
+    "summary": "**The pre-paint theme script has one implementation, and it honours the provider's options.**",
+    "body": "**The pre-paint theme script has one implementation, and it honours the provider's options.**\n\n`getThemeScript` now honours a persisted `\"system\"` preference instead of\nreplacing it with `defaultTheme`, so a user who chose System in an app whose\ndefault is light no longer sees a light flash on a dark OS. It also accepts\n`persist: false` (matching `DzProvider`'s `theme.persist`) and still applies the\ndefault theme when `localStorage` access throws.\n\nCore exports the generator from a new, Vue-free subpath, `@dzup-ui/core/theme-script`\n(`./providers` keeps re-exporting it). `@dzup-ui/nuxt` injects\n`getThemeScript(options)` from it instead of a hand-copied literal, through a new\n`themeScript` module option: Core's script options (`storageKey`, `attribute`,\n`defaultTheme`, `persist`, `direction`, `locale`), a `nonce` for nonce-based\nContent-Security-Policies, or `false` to inject nothing. `themeScriptCspHash(options)`\nreturns the `'sha256-…'` source for hash-based policies.\n\n`@dzup-ui/tokens/utils`' `themeScript` literal is deprecated in favour of the\nCore export (ledgered in `packages/contracts/deprecations.json`).",
+    "breaking": false,
+    "deprecated": true
+  },
+  {
+    "packages": [
       "@dzup-ui/core"
     ],
     "level": "patch",
     "summary": "**Every overlay now teleports where your application says, including the four that never asked.**",
     "body": "**Every overlay now teleports where your application says, including the four that never asked.**\n\nNineteen components portal part of themselves out of the DOM — dialogs, sheets,\npopovers, tooltips, menus, select and combobox panels, the command palette, the\nlightbox, the tour, the sidebar's mobile overlay and the blocking layer. Each one\ndecided its own destination. Fifteen took a `portalTo` prop you had to pass to\nevery instance; **four teleported to a hard-coded `body` with no way to redirect\nthem at all**: `DzBlockUI`, `DzSidebar`, `DzPopconfirm` and `DzTour`.\n\nNow they all follow one rule:\n\n```\ninstance `portalTo`  →  DzProvider `portal`  →  document.body\n```\n\n```vue\n<DzProvider portal=\"#app-overlays\">\n  <App />\n</DzProvider>\n```\n\n**Nothing changes without a provider.** With no `portal` set and no `portalTo`\nprop, every component teleports exactly where it did before — which is what let\nnineteen components migrate in one change instead of nineteen.\n\n**This closes the shadow-DOM limitation the Styling Cookbook documented twice as\nunsolvable.** Custom properties inherit through a shadow boundary and\nstylesheets do not, so an overlay that escaped to `document.body` lost the\nadopted sheet and rendered unstyled. Point `portal` at a container inside the\nroot and it stays within the boundary:\n\n```vue\n<DzProvider :portal=\"shadowOverlayContainer\">\n  <App />\n</DzProvider>\n```\n\n**New:** `portalTo` on `DzBlockUI`, `DzSidebar`, `DzPopconfirm` and `DzTour`, so\nthe per-instance escape hatch is uniform across all nineteen.\n\n`portalDisabled` and `portalDefer` are unchanged and stay per-instance — they\nare about whether *this* overlay teleports, not about where overlays go.\n\nNew guide: **Portals & Embedding**, covering the shadow-root recipe (both halves\n— adopted stylesheets *and* the portal container), the end-to-end testing recipe\n(`portal` plus `test-id-prefix`), and the CSP nonce note.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
+    "summary": "**Overlays stack on the published `--dz-z-*` layer scale.**",
+    "body": "**Overlays stack on the published `--dz-z-*` layer scale.**\n\nDialogs, sheets, the command palette, the lightbox, popovers, tooltips, menus, the\nselect family, the colour/time pickers, the cascader and the toast viewport used\nnumeric z utilities (`z-50`, `z-[60]`, `z-[100]`) far below the 1000–1080 scale\nthat `DzBlockUI`, `DzTour` and `DzPopconfirm` already used, so a toast raised over\na full-screen `DzBlockUI` and any overlay opened from a `DzTour` step painted\nunderneath. Each now resolves through its layer, with the numeric value as the\nfallback: dialog and sheet through `--dz-dialog-overlay-z-index` /\n`--dz-dialog-z-index` (modal-backdrop 1040 / modal 1050), the command palette and\nlightbox on modal-backdrop / modal, every body-portaled anchored surface (popover,\ndropdown and context menus, the select family, colour/time picker, cascader) on\n`--dz-z-popover` (1060, above a dialog it is opened from), the tooltip on\n`--dz-z-tooltip` (1070) and the toast viewport on `--dz-z-toast` (1080). In-flow\nmenus that are not portaled (`DzMention`, the data-grid column menu) use\n`--dz-z-dropdown`.\n\nConsumers who placed their own `fixed` UI between `z-50` and `z-[100]` relative to\nthese overlays should re-check its stacking; re-theming a `--dz-z-*` layer now\nmoves the overlays on it.",
     "breaking": false,
     "deprecated": false
   },
@@ -2138,6 +2223,16 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/nuxt"
+    ],
+    "level": "patch",
+    "summary": "**`@dzup-ui/nuxt` now requires the `@dzup-ui/core` release that ships what it imports.**",
+    "body": "**`@dzup-ui/nuxt` now requires the `@dzup-ui/core` release that ships what it imports.**\n\nThe module imports `@dzup-ui/core/ownership` and `@dzup-ui/core/theme-script` at load,\nand neither exists in `@dzup-ui/core` 0.2.0 — yet the peer range `>=0.1.0-alpha.0`\naccepted it, so a Nuxt app on core 0.2.0 installed cleanly and then failed to load its\nconfig with a \"package path not exported\" error. The peer range is now\n`>=0.3.0-0`; install `@dzup-ui/core` 0.3.0 (or a 0.3.0 prerelease) alongside this\nrelease.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/testing"
     ],
     "level": "patch",
@@ -2185,6 +2280,16 @@ export const PENDING: PendingChange[] = [
     "level": "patch",
     "summary": "Ship declarations for every root export. The multi-entry `rollupTypes` build wrote the theme-script rollup over `dist/index.d.ts`, so consumers had no types for tokens, palettes or the ThemeRecipeV1 API; declarations are now emitted per file.",
     "body": "Ship declarations for every root export. The multi-entry `rollupTypes` build wrote the theme-script rollup over `dist/index.d.ts`, so consumers had no types for tokens, palettes or the ThemeRecipeV1 API; declarations are now emitted per file.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "minor",
+    "summary": "**`DzTour` accepts label props for its controls and step counter.**",
+    "body": "**`DzTour` accepts label props for its controls and step counter.**\n\nNew optional props `skipLabel`, `backLabel`, `nextLabel`, `finishLabel` and `stepOfLabel`\n(a string, or `(current, total) => string`). Each wins over the `DzTour` catalog entry, which\nstill follows `DzProvider` message overrides and falls back to English — so an application\ncan localise a single tour without a provider-wide catalog.",
     "breaking": false,
     "deprecated": false
   },
@@ -2320,6 +2425,13 @@ export const HIGHLIGHTS: Highlight[] = [
     "kind": "deprecated",
     "section": "@dzup-ui/contracts, @dzup-ui/core",
     "text": "**`DzProvider`: one component configures theme, locale, direction, messages, formats, portals, motion, component defaults, CSP nonce and test ids.**"
+  },
+  {
+    "source": "changeset",
+    "date": "Unreleased",
+    "kind": "deprecated",
+    "section": "@dzup-ui/core, @dzup-ui/nuxt, @dzup-ui/tokens",
+    "text": "**The pre-paint theme script has one implementation, and it honours the provider's options.**"
   },
   {
     "source": "changeset",

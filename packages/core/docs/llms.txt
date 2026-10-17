@@ -451,7 +451,7 @@ These hold for every component below, so they are stated once here:
   - v-model: `v-model:open`
   - parts (ADR-19): `content`, `indicator`
 - **DzTour** — Step-by-step product walkthrough that spotlights target elements
-  - props: `mask`, `portalTo`, `scrollIntoView`, `steps`, `ui`
+  - props: `backLabel`, `finishLabel`, `mask`, `nextLabel`, `portalTo`, `scrollIntoView`, `skipLabel`, `stepOfLabel`, `steps`, `ui`
   - v-model: `v-model:current`, `v-model:open`
   - parts (ADR-19): `action`, `description`, `footer`, `header`, `item-indicator`, `list`, `overlay`, `panel`, `title`
 - **DzContextMenuContent** — Content panel for DzContextMenu.
