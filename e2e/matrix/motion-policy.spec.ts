@@ -79,6 +79,7 @@ const REVEAL: Record<string, Reveal> = {
   DzAccordion: { kind: 'click', role: 'button', name: /what is dzup-ui/i },
   DzAnchor: { kind: 'scroll-link' },
   DzBlockUI: { kind: 'click', role: 'button', name: /block panel/i },
+  DzCarousel: { kind: 'click', role: 'button', name: /next slide/i },
   // Rendered with the story. Clicking would switch the document theme, which
   // animates the whole page rather than this component.
   DzColorModeToggle: { kind: 'rendered' },
