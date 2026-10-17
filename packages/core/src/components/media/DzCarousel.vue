@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import type {
-  DzCarouselContext,
-  DzCarouselEmits,
-  DzCarouselProps,
-  DzCarouselSlots,
-} from './DzCarousel.types.ts'
 /**
  * DzCarousel — Image/content carousel with autoplay and navigation.
  *
@@ -22,7 +16,14 @@ import type {
  * </DzCarousel>
  * ```
  */
-import { computed, onBeforeUnmount, onMounted, provide, ref, toRef, useAttrs, watch } from 'vue'
+import type { VNode } from 'vue'
+import type {
+  DzCarouselContext,
+  DzCarouselEmits,
+  DzCarouselProps,
+  DzCarouselSlots,
+} from './DzCarousel.types.ts'
+import { computed, Fragment, onBeforeUnmount, onMounted, provide, ref, toRef, useAttrs, useSlots, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useDzMotion, useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
@@ -48,6 +49,39 @@ const props = withDefaults(defineProps<DzCarouselProps>(), {
 
 const emit = defineEmits<DzCarouselEmits>()
 defineSlots<DzCarouselSlots>()
+
+/**
+ * The navigation parts render OUTSIDE the sliding track. The track carries a
+ * `transform`, which makes it the containing block of every absolutely
+ * positioned descendant: a `DzCarouselPrevious` / `DzCarouselNext` placed in the
+ * default slot (the documented composition) was positioned against the moving
+ * track, slid out of the viewport with it and was clipped by its
+ * `overflow-hidden` — the Next arrow was not clickable in the default story.
+ * Matched by component name so this file does not import (and bundle) the
+ * parts; everything else, including wrapped slides, stays in the track.
+ */
+const CONTROL_PARTS = new Set(['DzCarouselPrevious', 'DzCarouselNext', 'DzCarouselDots'])
+const slots = useSlots()
+
+function flatten(nodes: VNode[]): VNode[] {
+  return nodes.flatMap(node => node.type === Fragment && Array.isArray(node.children)
+    ? flatten(node.children as VNode[])
+    : [node])
+}
+
+function isControlPart(node: VNode): boolean {
+  const type = node.type as { name?: string, __name?: string } | string | symbol
+  return typeof type === 'object' && type !== null
+    && (CONTROL_PARTS.has(type.name ?? '') || CONTROL_PARTS.has(type.__name ?? ''))
+}
+
+function TrackNodes(): VNode[] {
+  return flatten((slots.default?.() ?? []) as VNode[]).filter(node => !isControlPart(node))
+}
+
+function ControlNodes(): VNode[] {
+  return flatten((slots.default?.() ?? []) as VNode[]).filter(isControlPart)
+}
 
 const attrs = useAttrs()
 const slideCount = ref(0)
@@ -270,8 +304,9 @@ const { testId: dzTestId } = useDzTestIds()
             : `translateY(-${model * 100}%)`,
         }"
       >
-        <slot />
+        <TrackNodes />
       </div>
     </div>
+    <ControlNodes />
   </div>
 </template>
