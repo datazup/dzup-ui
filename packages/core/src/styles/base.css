@@ -783,6 +783,21 @@
     --dz-inplace-disabled-opacity: 0.5;
   }
 
+  /*
+   * Component-tinted control rings (UI-DZUP-UI-DESIGN-L-05). DzInplace and DzListbox
+   * options use the shared outline utilities, and their own ring token picks the
+   * colour. The semantic --dz-control-focus-ring-color is set here, not in the
+   * variants, because INTERACTION_CONTRACT.md keeps focus-ring token plumbing out of
+   * component code.
+   */
+  .dz-inplace {
+    --dz-control-focus-ring-color: var(--dz-inplace-ring);
+  }
+
+  [data-dz-listbox-option] {
+    --dz-control-focus-ring-color: var(--dz-listbox-active-ring, var(--dz-ring));
+  }
+
   /* DzFloatLabel — floating-label rest/float typography and color */
   :where(:root) {
     --dz-float-label-color: var(--dz-muted-foreground);

@@ -51,7 +51,8 @@ export const listboxVariants = tv({
       'transition-colors duration-[var(--dz-duration-fast)] ease-[var(--dz-ease-default)]',
       'data-[highlighted]:bg-[var(--dz-listbox-item-active-bg,var(--dz-muted))]',
       // Inset outline (forced-colors keeps it); `outline-none` would out-layer it.
-      'dz-focus-ring-control-inset [--dz-control-focus-ring-color:var(--dz-listbox-active-ring,var(--dz-ring))]',
+      // base.css tints it with --dz-listbox-active-ring.
+      'dz-focus-ring-control-inset',
       'data-[state=checked]:bg-[var(--dz-listbox-item-selected-bg,var(--dz-primary-muted))]',
       'data-[state=checked]:text-[var(--dz-listbox-item-selected-fg,var(--dz-primary))]',
       'dz-disabled-control',

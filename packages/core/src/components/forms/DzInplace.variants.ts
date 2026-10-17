@@ -21,8 +21,8 @@ export const inplaceVariants = tv({
       'px-[var(--dz-inplace-padding-x)] py-[var(--dz-inplace-padding-y)]',
       'cursor-text transition-colors',
       'hover:bg-[var(--dz-inplace-hover-bg)]',
-      // Outline-based (forced-colors keeps it), tinted by the component's own ring token.
-      'dz-focus-ring-control [--dz-control-focus-ring-color:var(--dz-inplace-ring)]',
+      // Outline-based (forced-colors keeps it). base.css tints it with --dz-inplace-ring.
+      'dz-focus-ring-control',
     ].join(' '),
     hint: 'shrink-0 text-[var(--dz-inplace-hint-color)] opacity-0 transition-opacity group-hover:opacity-100',
     editor: 'inline-flex items-center gap-[var(--dz-inplace-gap)] max-w-full',
