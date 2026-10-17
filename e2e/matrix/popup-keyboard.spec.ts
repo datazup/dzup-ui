@@ -123,8 +123,9 @@ for (const component of ['DzDatePicker', 'DzDateRangePicker']) {
       await expect(trigger).toHaveAttribute('aria-expanded', 'false')
       await trigger.focus()
       await trigger.press('ArrowDown')
-      test.fail(true, 'R11-05B F7/F8: declared closed-trigger arrow does not open the calendar; cell remains unrun')
-      expect(await trigger.getAttribute('aria-expanded')).toBe('true')
+      // R11-05B F7/F8, fixed by QF-39 (AUDIT-FOLLOWUPS-20261017-R1): the trigger
+      // now opens the calendar on ArrowDown; the expected-failure pin is retired.
+      await expect(trigger).toHaveAttribute('aria-expanded', 'true')
     })
   })
 }
