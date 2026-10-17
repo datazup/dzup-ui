@@ -308,7 +308,7 @@ const dzMessages = useComponentMessages('DzTableCell')
     -->
     <div
       v-if="showResizeHandle"
-      class="pointer-events-none absolute right-0 top-1/2 z-20 flex -translate-y-1/2 items-center gap-px opacity-0 transition-opacity duration-150 group-hover/dz-col-resize:opacity-100 group-focus-within/dz-col-resize:opacity-100 data-[steppers=visible]:opacity-100"
+      class="pointer-events-none absolute right-0 top-1/2 z-20 flex -translate-y-1/2 items-center gap-px opacity-0 transition-opacity duration-[var(--dz-duration-fast)] group-hover/dz-col-resize:opacity-100 group-focus-within/dz-col-resize:opacity-100 data-[steppers=visible]:opacity-100"
       :data-steppers="stepsRevealed ? 'visible' : undefined"
     >
       <button

@@ -27,7 +27,7 @@ export const blockUiVariants = tv({
       'bg-[var(--dz-blockui-mask,var(--dz-overlay-bg))]',
       'backdrop-blur-[var(--dz-blockui-blur,0px)]',
       'pointer-events-auto cursor-progress outline-none',
-      'transition-opacity duration-200',
+      'transition-opacity duration-[var(--dz-duration-normal)]',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
     /** Message rendered beneath the default spinner. */

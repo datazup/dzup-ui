@@ -29,7 +29,7 @@ export const knobVariants = tv({
     valueArc: [
       'fill-none',
       'stroke-[var(--dz-knob-value)]',
-      'transition-[stroke-dashoffset] duration-150',
+      'transition-[stroke-dashoffset] duration-[var(--dz-duration-fast)]',
     ].join(' '),
     label: [
       'pointer-events-none absolute inset-0 flex items-center justify-center',

@@ -47,7 +47,7 @@ export const scrollProgressRootVariants = tv({
 export const scrollProgressBarVariants = tv({
   base: [
     'h-full origin-left',
-    'transition-[width] duration-150 ease-out',
+    'transition-[width] duration-[var(--dz-duration-fast)] ease-out',
     'motion-reduce:transition-none',
   ].join(' '),
 

@@ -92,7 +92,7 @@ const showContent = computed(() => !props.collapsible || isOpen.value)
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
-          class="transition-transform duration-200"
+          class="transition-transform duration-[var(--dz-duration-normal)]"
           :class="{ 'rotate-180': isOpen }"
         >
           <polyline points="6 9 12 15 18 9" />

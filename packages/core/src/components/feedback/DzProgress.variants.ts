@@ -35,7 +35,7 @@ export const progressTrackVariants = tv({
 export const progressBarVariants = tv({
   base: [
     'h-full rounded-[var(--dz-radius-full)]',
-    'transition-[width] duration-300 ease-in-out',
+    'transition-[width] duration-[var(--dz-duration-slow)] ease-in-out',
   ].join(' '),
 
   variants: {

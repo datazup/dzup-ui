@@ -17,7 +17,7 @@ export const notificationVariants = tv({
     'bg-[var(--dz-background)]',
     'shadow-[var(--dz-shadow-md)]',
     'text-[var(--dz-foreground)]',
-    'transition-all duration-200',
+    'transition-all duration-[var(--dz-duration-normal)]',
     'data-[state=closed]:opacity-0 data-[state=closed]:translate-x-full',
     '[&>svg]:shrink-0 [&>svg]:mt-0.5',
   ].join(' '),

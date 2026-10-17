@@ -40,11 +40,11 @@ export const resizableVariants = tv({
       // consumer's own peer cannot capture it.
       'peer/dz-resize-handle',
       'relative flex shrink-0 items-center justify-center',
-      'transition-colors duration-150',
+      'transition-colors duration-[var(--dz-duration-fast)]',
       'dz-focus-ring-control dz-disabled-control',
       'before:absolute before:inset-0 before:m-auto before:-z-10',
       'before:bg-[var(--dz-border)]',
-      'before:transition-colors before:duration-150',
+      'before:transition-colors before:duration-[var(--dz-duration-fast)]',
       'hover:before:bg-[var(--dz-primary)]',
     ].join(' '),
     handleIndicator: [
@@ -90,7 +90,7 @@ export const resizableVariants = tv({
      */
     handleSteppers: [
       'pointer-events-none relative z-20 shrink-0',
-      'opacity-0 transition-opacity duration-150',
+      'opacity-0 transition-opacity duration-[var(--dz-duration-fast)]',
       'peer-hover/dz-resize-handle:opacity-100',
       'peer-focus-within/dz-resize-handle:opacity-100',
       'hover:opacity-100 focus-within:opacity-100',

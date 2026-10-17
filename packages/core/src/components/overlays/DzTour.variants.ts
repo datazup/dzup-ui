@@ -19,7 +19,7 @@ export const tourVariants = tv({
       'pointer-events-none',
       'rounded-[var(--dz-tour-radius,var(--dz-radius-md))]',
       'shadow-[0_0_0_9999px_var(--dz-tour-mask,var(--dz-overlay-bg))]',
-      'transition-all duration-200',
+      'transition-all duration-[var(--dz-duration-normal)]',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
     /** Anchored popover panel. */

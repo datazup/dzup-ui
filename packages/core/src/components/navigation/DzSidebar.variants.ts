@@ -16,7 +16,7 @@ export const sidebarVariants = tv({
       'border-e border-[var(--dz-sidebar-border)]',
       'bg-[var(--dz-sidebar-bg)]',
       'text-[var(--dz-sidebar-foreground)]',
-      'transition-[width,transform] duration-300 ease-in-out',
+      'transition-[width,transform] duration-[var(--dz-duration-slow)] ease-in-out',
     ].join(' '),
     body: 'flex-1 flex flex-col overflow-y-auto overflow-x-hidden min-h-0',
     item: [
@@ -24,7 +24,7 @@ export const sidebarVariants = tv({
       'rounded-[var(--dz-sidebar-item-radius)]',
       'px-[var(--dz-sidebar-item-padding-x)] py-[var(--dz-sidebar-item-padding-y)]',
       'text-[length:var(--dz-text-sm)] font-medium',
-      'transition-colors duration-150',
+      'transition-colors duration-[var(--dz-duration-fast)]',
       'cursor-pointer',
       'text-[var(--dz-sidebar-foreground)]',
       'hover:bg-[var(--dz-sidebar-item-hover-bg)] hover:text-[var(--dz-sidebar-item-hover-text)]',

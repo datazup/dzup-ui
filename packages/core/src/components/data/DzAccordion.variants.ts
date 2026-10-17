@@ -31,7 +31,7 @@ export const accordionVariants = tv({
       'data-[state=open]:animate-[accordion-down_200ms_ease-out] motion-reduce:animate-none',
       'data-[state=closed]:animate-[accordion-up_200ms_ease-out] motion-reduce:animate-none',
     ].join(' '),
-    chevron: 'h-4 w-4 shrink-0 transition-transform duration-200 motion-reduce:transition-none',
+    chevron: 'h-4 w-4 shrink-0 transition-transform duration-[var(--dz-duration-normal)] motion-reduce:transition-none',
   },
 
   variants: {

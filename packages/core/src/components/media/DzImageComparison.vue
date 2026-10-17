@@ -94,7 +94,7 @@ const dividerStyle = computed(() =>
 const motionClass = computed(() =>
   dragging.value
     ? ''
-    : 'transition-[clip-path,left,top] duration-150 motion-reduce:transition-none',
+    : 'transition-[clip-path,left,top] duration-[var(--dz-duration-fast)] motion-reduce:transition-none',
 )
 
 function commit(next: number): void {

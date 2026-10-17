@@ -94,7 +94,7 @@ const dzMessages = useComponentMessages('DzTokenProgressBar')
     v-bind="{ ...$attrs, class: undefined }"
   >
     <div
-      class="h-full rounded-[var(--dz-radius-full)] transition-[width] duration-200 ease-out"
+      class="h-full rounded-[var(--dz-radius-full)] transition-[width] duration-[var(--dz-duration-normal)] ease-out"
       :style="{ width: `${percent}%`, backgroundColor: barColor }"
       :class="{
         'dz-progress-warn': state === 'warn',

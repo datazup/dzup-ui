@@ -23,7 +23,7 @@ export const carouselVariants = tv({
       'bg-[var(--dz-background)]/80 backdrop-blur-sm',
       'text-[var(--dz-foreground)]',
       'shadow-[var(--dz-shadow-sm)]',
-      'transition-all duration-150',
+      'transition-all duration-[var(--dz-duration-fast)]',
       'hover:bg-[var(--dz-muted)]',
       'dz-focus-ring-button dz-disabled-button',
     ].join(' '),
@@ -43,7 +43,7 @@ export const carouselVariants = tv({
     dot: [
       'rounded-full',
       'bg-[var(--dz-muted-foreground)]/30',
-      'transition-all duration-200',
+      'transition-all duration-[var(--dz-duration-normal)]',
       'hover:bg-[var(--dz-muted-foreground)]/50',
     ].join(' '),
     dotActive: 'bg-[var(--dz-primary)] hover:bg-[var(--dz-primary)]',

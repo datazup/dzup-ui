@@ -154,9 +154,9 @@ const { testId: dzTestId } = useDzTestIds()
 
     <Teleport :to="resolvedPortalTo" :disabled="!fullScreen">
       <Transition
-        enter-active-class="transition-opacity duration-200 motion-reduce:transition-none"
+        enter-active-class="transition-opacity duration-[var(--dz-duration-normal)] motion-reduce:transition-none"
         enter-from-class="opacity-0"
-        leave-active-class="transition-opacity duration-200 motion-reduce:transition-none"
+        leave-active-class="transition-opacity duration-[var(--dz-duration-normal)] motion-reduce:transition-none"
         leave-to-class="opacity-0"
       >
         <div

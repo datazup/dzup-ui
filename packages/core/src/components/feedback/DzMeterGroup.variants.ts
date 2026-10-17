@@ -59,7 +59,7 @@ export const meterGroupTrackVariants = tv({
 /** Individual proportional segment fill */
 export const meterGroupSegmentVariants = tv({
   base: [
-    'transition-[width,height] duration-300 ease-in-out',
+    'transition-[width,height] duration-[var(--dz-duration-slow)] ease-in-out',
     'first:rounded-s-[var(--dz-radius-full)] last:rounded-e-[var(--dz-radius-full)]',
   ].join(' '),
 })
