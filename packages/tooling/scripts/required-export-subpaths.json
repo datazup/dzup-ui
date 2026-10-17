@@ -49,9 +49,10 @@
       "subpaths": ["."]
     },
     "@dzup-ui/testing": {
-      "$reason": "The consumer-facing test kit. `./vitest` is a setup module imported for its effect (see published-imports-policy.json); `./security-corpus` is the shared attack corpus TASK-R3-O4 formalises across the two repositories; `./security-conformance` is the runner TASK-S3-O3 adds so that corpus is executable against any DzSanitizerAdapter rather than only readable.",
-      "subpaths": [".", "./vitest", "./security-corpus", "./security-conformance"],
+      "$reason": "The consumer-facing test kit. `./vitest` is a setup module imported for its effect (see published-imports-policy.json); `./security-corpus` is the shared attack corpus TASK-R3-O4 formalises across the two repositories; `./security-conformance` is the runner TASK-S3-O3 adds so that corpus is executable against any DzSanitizerAdapter rather than only readable; `./resolution` is the built consumer-resolution helper for build configurations.",
+      "subpaths": [".", "./vitest", "./security-corpus", "./resolution", "./security-conformance"],
       "notes": {
+        "./resolution": "DZUI-GAPADM-07-20261002-R1 (0afb2968) exported it without listing it here, so validate:exports had been red on main since. It is the built `createDzupResolution` helper that external build configurations (`yarn test:resolution:packed`, a checkout co-development host) import instead of the private, source-only `@dzup-ui/tooling/resolution`. Its `patch` changeset is .changeset/testing-publishes-consumer-resolution.md (still pending, so this listing ships in the same release as the export). Listed by AUDIT-FOLLOWUPS-20261017-R1.",
         "./security-conformance": "TASK-S3-O3. A published FORMAT can be claimed; a published RUNNER can only be passed or failed. This subpath is how a host or another tier runs the versioned corpus against the adapter it installed on DzProvider, gets a per-fixture verdict report, and can prove conformance against a versioned artifact instead of a private copy. It is separate from `./security-corpus` because the corpus is data plus a loader and the runner is a measurement: a consumer that only reads fixtures should not pull the verdict classifier, and a consumer that only measures should not have to know where the JSON lives."
       }
     },
