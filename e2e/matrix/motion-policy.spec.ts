@@ -79,7 +79,10 @@ const REVEAL: Record<string, Reveal> = {
   DzAccordion: { kind: 'click', role: 'button', name: /what is dzup-ui/i },
   DzAnchor: { kind: 'scroll-link' },
   DzBlockUI: { kind: 'click', role: 'button', name: /block panel/i },
-  DzCarousel: { kind: 'click', role: 'button', name: /next slide/i },
+  // Keyboard focus, not a click: in the default story #storybook-root takes the
+  // pointer hit for the absolutely positioned arrow. Focus is the user path that
+  // pauses autoplay (focus-within), and the arrow's own transition is governed.
+  DzCarousel: { kind: 'focus', role: 'button', name: /next slide/i },
   // Rendered with the story. Clicking would switch the document theme, which
   // animates the whole page rather than this component.
   DzColorModeToggle: { kind: 'rendered' },

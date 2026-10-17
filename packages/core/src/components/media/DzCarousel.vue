@@ -25,7 +25,7 @@ import type {
 import { computed, onBeforeUnmount, onMounted, provide, ref, toRef, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
-import { useDzMotion } from '../../composables/provider/useDzMotion.ts'
+import { useDzMotion, useDzMotionAttribute } from '../../composables/provider/useDzMotion.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
 import { carouselVariants } from './DzCarousel.variants.ts'
@@ -137,6 +137,12 @@ function registerSlide(): () => void {
  *   announced; it is `polite` whenever a user is driving.
  */
 const { reduced: motionReduced } = useDzMotion()
+/**
+ * The slide track's transform transition honours the application motion policy
+ * too, not only autoplay: the track binds `data-dz-motion`, which tokens.css
+ * reduces. Under the default policy no attribute renders.
+ */
+const dzMotionAttr = useDzMotionAttribute()
 const rotating = ref(false)
 let hovered = false
 let focusWithin = false
@@ -256,6 +262,7 @@ const { testId: dzTestId } = useDzTestIds()
     <div :aria-live="rotating ? 'off' : 'polite'" data-part="viewport" :class="cn(styles.viewport(), props.ui?.viewport)">
       <div
         data-part="content"
+        :data-dz-motion="dzMotionAttr"
         :class="cn(styles.container(), props.ui?.content)"
         :style="{
           transform: orientation === 'horizontal'

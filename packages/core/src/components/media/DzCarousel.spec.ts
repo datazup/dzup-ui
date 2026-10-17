@@ -249,6 +249,19 @@ describe('dzCarousel autoplay', () => {
     wrapper.unmount()
   })
 
+  it('marks the slide track for the motion policy only when it resolves reduced', async () => {
+    // The track's transform transition is the animated node; tokens.css reduces
+    // whatever sits under [data-dz-motion="reduce"].
+    const reduced = mountAutoplay('reduced')
+    await nextTick()
+    expect(reduced.find('[data-part="content"]').attributes('data-dz-motion')).toBe('reduce')
+    reduced.unmount()
+    const full = mountAutoplay('full')
+    await nextTick()
+    expect(full.find('[data-part="content"]').attributes('data-dz-motion')).toBeUndefined()
+    full.unmount()
+  })
+
   it('stops while focus is inside and resumes when focus leaves', async () => {
     vi.useFakeTimers()
     const model = ref(0)
