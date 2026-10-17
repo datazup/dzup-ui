@@ -35,6 +35,7 @@ import {
   PLAYGROUND_IMPORT_SPECIFIER,
   PLAYGROUND_REPL_STYLESHEETS,
   TAILWIND_BROWSER_CDN,
+  TAILWIND_BROWSER_SRI,
 } from '../playground/playground-contract.ts'
 
 export interface ParityViolation {
@@ -153,6 +154,19 @@ export function checkPlaygroundParity(root: string = ROOT): ParityViolation[] {
           why: 'components carry no stylesheet of their own (ADR-04: tv() + Tailwind over '
             + '--dz-* tokens), so a sandbox without the browser JIT renders them unstyled — '
             + 'which looks like a component defect and is not one',
+        },
+        {
+          rule: 'tailwind-sri',
+          value: TAILWIND_BROWSER_SRI,
+          why: 'the sandbox frame is allow-same-origin, so the JIT script runs with the docs '
+            + 'origin\'s DOM and storage; a host that loads it without the contract\'s integrity '
+            + 'hash runs whatever the CDN serves (UI-DZUP-UI-SEC-L-07)',
+        },
+        {
+          rule: 'tailwind-crossorigin',
+          value: 'crossorigin="anonymous"',
+          why: 'a cross-origin script with an integrity attribute is only checked under CORS; '
+            + 'without crossorigin the browser blocks it outright',
         },
       ]))
     }

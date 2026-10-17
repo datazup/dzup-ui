@@ -29,7 +29,14 @@ export const DZUP_VERSION = '^0.1.0'
  *  have to ship a precompiled utility sheet. Same CDN pattern the REPL already
  *  uses to load Vue.
  */
-export const TAILWIND_BROWSER_CDN = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4'
+export const TAILWIND_BROWSER_CDN = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.2/dist/index.global.js'
+
+/**
+ * Subresource Integrity for the exact file above (UI-DZUP-UI-SEC-L-07): the
+ * sandbox is same-origin, so the browser must refuse any byte the CDN changes.
+ * Mirrors TAILWIND_BROWSER_SRI in packages/tooling/src/playground/playground-contract.ts.
+ */
+export const TAILWIND_BROWSER_SRI = 'sha384-VAyuBHsdFUMC23V8p+TBco2mRRsJq+VcYWCt6sTzkGhZ23TClYSk9wL3DAQk2oFT'
 
 /**
  * Absolute URL to the generated `public/playground/` directory, resolved
@@ -87,7 +94,7 @@ export function replSandboxHeadHTML(theme: 'light' | 'dark'): string {
     + `el.setAttribute('data-theme',${JSON.stringify(theme)});`
     + `new MutationObserver(sync).observe(el,{attributes:true,attributeFilter:['class']});})();`
   return [
-    `<script src="${TAILWIND_BROWSER_CDN}"></script>`,
+    `<script src="${TAILWIND_BROWSER_CDN}" integrity="${TAILWIND_BROWSER_SRI}" crossorigin="anonymous"></script>`,
     `<link rel="stylesheet" href="${base}tokens.css">`,
     // Exactly the two stylesheets build-playground.mjs writes — nothing else.
     // A third link (`dzup-core.css`) used to sit here for an SFC-<style> bundle

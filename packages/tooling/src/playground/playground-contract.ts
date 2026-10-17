@@ -67,8 +67,20 @@ export const PLAYGROUND_IMPORT_SPECIFIER = '@dzup-ui/core'
  * (`inline-flex`, `h-[var(--dz-button-md-height)]`, …) live inside the sandbox,
  * so no precompiled utility sheet has to ship. A runtime CDN dependency — see
  * D3-F3 and owner decision D3-D2.
+ *
+ * Pinned to an exact file and carried with Subresource Integrity
+ * (UI-DZUP-UI-SEC-L-07): the sandbox frame is `allow-same-origin`, so whatever
+ * this URL serves runs with the docs origin's DOM and storage. A floating
+ * `@4` tag would let the CDN change the script under us; the hash makes the
+ * browser refuse any byte that differs. The version tracks the workspace
+ * `tailwindcss` (playground.spec.ts asserts it against yarn.lock). To move it:
+ * fetch the new exact file once, take `sha384` of its bytes, and update
+ * VERSION, CDN and SRI here and in apps/storybook/stories/_blocks/playground.config.ts
+ * together — `yarn validate:playground-parity` fails on a half-move.
  */
-export const TAILWIND_BROWSER_CDN = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4'
+export const TAILWIND_BROWSER_VERSION = '4.2.2'
+export const TAILWIND_BROWSER_CDN = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.2/dist/index.global.js'
+export const TAILWIND_BROWSER_SRI = 'sha384-VAyuBHsdFUMC23V8p+TBco2mRRsJq+VcYWCt6sTzkGhZ23TClYSk9wL3DAQk2oFT'
 
 /**
  * The `postMessage` type a host sends to push a ThemeRecipe's expanded CSS
@@ -249,7 +261,7 @@ export function sandboxHeadHTML(options: SandboxHeadOptions): string {
       + `});})();`
 
   return [
-    `<script src="${TAILWIND_BROWSER_CDN}"></script>`,
+    `<script src="${TAILWIND_BROWSER_CDN}" integrity="${TAILWIND_BROWSER_SRI}" crossorigin="anonymous"></script>`,
     `<link rel="stylesheet" href="${assetBase}tokens.css">`,
     `<link rel="stylesheet" href="${assetBase}core.css">`,
     `<style>html,body{margin:0;padding:16px;background:var(--dz-background, transparent);color:var(--dz-foreground, inherit);font-family:var(--dz-font-sans, system-ui, -apple-system, sans-serif);}</style>`,

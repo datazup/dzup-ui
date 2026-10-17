@@ -37,6 +37,8 @@ import {
   playgroundImportMap,
   sandboxHeadHTML,
   TAILWIND_BROWSER_CDN,
+  TAILWIND_BROWSER_SRI,
+  TAILWIND_BROWSER_VERSION,
   THEME_RECIPE_ATTRIBUTES,
   THEME_RECIPE_MESSAGE,
   wrapStoryTemplate,
@@ -147,6 +149,27 @@ describe('the sandbox head is the contract, not a template', () => {
 
   it('loads the Tailwind browser JIT — without it every tv() component is unstyled', () => {
     expect(sandboxHeadHTML({ assetBase: '/p/', theme: 'dark' })).toContain(TAILWIND_BROWSER_CDN)
+  })
+
+  it('pins the JIT to one exact file and carries its integrity hash (UI-DZUP-UI-SEC-L-07)', () => {
+    // The frame is allow-same-origin: a floating tag would let the CDN swap the
+    // script that runs with the docs origin's DOM and storage.
+    expect(TAILWIND_BROWSER_CDN).toBe(
+      `https://cdn.jsdelivr.net/npm/@tailwindcss/browser@${TAILWIND_BROWSER_VERSION}/dist/index.global.js`,
+    )
+    expect(TAILWIND_BROWSER_VERSION).toMatch(/^\d+\.\d+\.\d+$/)
+    expect(TAILWIND_BROWSER_SRI).toMatch(/^sha384-[A-Za-z0-9+/]{64}$/)
+    expect(sandboxHeadHTML({ assetBase: '/p/', theme: 'light' })).toContain(
+      `<script src="${TAILWIND_BROWSER_CDN}" integrity="${TAILWIND_BROWSER_SRI}" crossorigin="anonymous"></script>`,
+    )
+  })
+
+  it('pins the JIT to the workspace tailwindcss version', () => {
+    // The browser build and the compiler the library is developed against must
+    // generate the same utilities; move both together.
+    const lock = readFileSync(join(ROOT, 'yarn.lock'), 'utf8')
+    const entry = /^"tailwindcss@npm:[^\n]*":\n {2}version: (\S+)$/m.exec(lock)
+    expect(entry?.[1]).toBe(TAILWIND_BROWSER_VERSION)
   })
 
   it('seeds data-theme from the host and mirrors @vue/repl\'s class writes', () => {
