@@ -1634,7 +1634,7 @@ __metadata:
     nuxt: "npm:4.5.1"
     typescript: "npm:^5.8.3"
   peerDependencies:
-    "@dzup-ui/core": ">=0.1.0-alpha.0"
+    "@dzup-ui/core": ">=0.3.0-0"
     "@dzup-ui/tokens": ">=0.1.0-alpha.0"
     nuxt: ">=3.0.0"
   languageName: unknown
@@ -1695,6 +1695,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@dzup-ui/tooling@workspace:packages/tooling"
   dependencies:
+    "@changesets/get-release-plan": "npm:^4.0.15"
     "@vitejs/plugin-vue": "npm:^6"
     "@vue/test-utils": "npm:^2.4.6"
     jsdom: "npm:^29.0.2"

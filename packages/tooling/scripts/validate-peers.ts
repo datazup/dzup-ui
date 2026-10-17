@@ -21,6 +21,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import getReleasePlan from '@changesets/get-release-plan'
 import { checkPeerDeps, formatPeerCheck } from '../src/validators/peer-ranges.ts'
 
 // --- Types ---
@@ -81,12 +82,23 @@ function getInstalledVersion(depName: string): string | null {
   return pkg !== null ? pkg.version : null
 }
 
+/**
+ * The version each workspace package's pending changesets release, from
+ * Changesets' own release plan (read-only: nothing is versioned or written).
+ * Feeds the changeset-timed peer floor in `checkPeerDeps`.
+ */
+async function buildPendingVersionMap(): Promise<Map<string, string>> {
+  const plan = await getReleasePlan(ROOT)
+  return new Map(plan.releases.map(release => [release.name, release.newVersion]))
+}
+
 // --- Main ---
 
-function main(): void {
+async function main(): Promise<void> {
   console.warn('Peer dependency validation\n')
 
   const workspaceVersions = buildWorkspaceVersionMap()
+  const pendingVersions = await buildPendingVersionMap()
   const packageResults: PackageResult[] = []
 
   const packageDirs = readdirSync(PACKAGES_DIR, { withFileTypes: true })
@@ -102,7 +114,7 @@ function main(): void {
     if (Object.keys(peers).length === 0)
       continue
 
-    const checks = checkPeerDeps(pkg, workspaceVersions, getInstalledVersion)
+    const checks = checkPeerDeps(pkg, workspaceVersions, getInstalledVersion, pendingVersions)
     packageResults.push({ name: pkg.name, checks })
   }
 
@@ -139,11 +151,11 @@ function main(): void {
   }
 
   if (totalWarn > 0) {
-    console.warn(`\nNote: ${totalWarn} optional peer(s) not installed.`)
+    console.warn(`\nNote: ${totalWarn} warning(s): optional peers not installed, or changeset-timed floors waiting on their release.`)
   }
 
   console.warn('\nPeer dependency validation passed.')
   process.exit(0)
 }
 
-main()
+await main()

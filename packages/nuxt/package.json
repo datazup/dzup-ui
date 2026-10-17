@@ -38,7 +38,7 @@
     "build": "tsc --project tsconfig.build.json"
   },
   "peerDependencies": {
-    "@dzup-ui/core": ">=0.1.0-alpha.0",
+    "@dzup-ui/core": ">=0.3.0-0",
     "@dzup-ui/tokens": ">=0.1.0-alpha.0",
     "nuxt": ">=3.0.0"
   },

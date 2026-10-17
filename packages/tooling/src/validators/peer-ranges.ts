@@ -136,11 +136,20 @@ export function satisfiesRange(version: string, range: string): boolean {
 
 /**
  * Checks all peer dependencies for a single package.
+ *
+ * `pendingVersions` maps a workspace package to the version its pending
+ * changesets release (Changesets' release plan, read without writing). A peer
+ * on an `@dzup-ui/*` workspace package whose floor is ABOVE the workspace
+ * version is a changeset-timed floor (UI-DZUP-UI-ARCH-M-07): it names the
+ * first release that ships what the dependent imports, which by definition is
+ * not the version in the tree yet. It is reported `WARN`, not `PASS`, and only
+ * when that pending release satisfies the range; any other mismatch fails.
  */
 export function checkPeerDeps(
   pkg: PeerPackageJson,
   workspaceVersions: ReadonlyMap<string, string>,
   installedVersionOf: InstalledVersionLookup,
+  pendingVersions: ReadonlyMap<string, string> = new Map(),
 ): PeerCheckResult[] {
   const results: PeerCheckResult[] = []
   const peers = pkg.peerDependencies ?? {}
@@ -153,6 +162,17 @@ export function checkPeerDeps(
     const workspaceVersion = workspaceVersions.get(dep)
     if (workspaceVersion !== undefined) {
       const satisfied = satisfiesRange(workspaceVersion, range)
+      const pending = pendingVersions.get(dep)
+      if (!satisfied && dep.startsWith('@dzup-ui/') && pending !== undefined && satisfiesRange(pending, range)) {
+        results.push({
+          dep,
+          range,
+          resolved: workspaceVersion,
+          status: 'WARN',
+          message: `workspace ${workspaceVersion} does not satisfy ${range} yet; the pending changesets release ${pending}, which does (changeset-timed floor)`,
+        })
+        continue
+      }
       results.push({
         dep,
         range,

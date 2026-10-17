@@ -8,6 +8,11 @@
     },
     "@dzup-ui/core": {
       "$reason": "The root barrel plus the seams a host reaches without pulling the component barrel, plus the eleven family subpaths a bundler-less consumer imports from directly.",
+      "since": {
+        "//": "The first @dzup-ui/core release that ships each subpath, where it is LATER than the oldest version a dependent's peer floor could name (UI-DZUP-UI-ARCH-M-07). packages/nuxt/src/peer-floor.spec.ts holds @dzup-ui/nuxt's core peer floor at or above the highest `since` of every core subpath module.ts imports. Published core 0.2.0 ships neither of these; 0.3.0 is the release the pending minor changesets compute.",
+        "./ownership": "0.3.0",
+        "./theme-script": "0.3.0"
+      },
       "subpaths": [
         ".",
         "./resolver",
