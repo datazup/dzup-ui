@@ -280,7 +280,7 @@ describe('dzMultiSelect — at maxSelections', () => {
       expect(input.attributes('aria-describedby') ?? '').not.toContain(region.attributes('id'))
 
       await wrapper.setProps({ modelValue: ['apple', 'banana'] })
-      expect(region.text()).toBe('2 options selected, the maximum. Remove one to choose another.')
+      expect(region.text()).toBe('Maximum selected. Remove an option to choose another.')
       expect(input.attributes('aria-describedby')?.split(' ')).toContain(region.attributes('id'))
 
       await wrapper.setProps({ modelValue: ['banana'] })

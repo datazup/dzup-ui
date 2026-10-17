@@ -37,7 +37,7 @@ import { computed, ref, useAttrs } from 'vue'
 import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
-import { useComponentMessageFormat, useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { multiSelectVariants } from './DzMultiSelect.variants.ts'
 import DzOptionsState from './DzOptionsState.vue'
@@ -228,7 +228,6 @@ const rootClasses = computed(() =>
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzMultiSelect')
-const dzFormat = useComponentMessageFormat('DzMultiSelect')
 
 /**
  * QF-08: at `maxSelections` the input stays enabled but unselected options are
@@ -237,9 +236,10 @@ const dzFormat = useComponentMessageFormat('DzMultiSelect')
  * description, so it is read on focus too.
  */
 const maxReachedId = computed(() => `${resolvedId.value}-max-reached`)
-const maxReachedText = computed(() =>
-  isMaxReached.value ? dzFormat('maxReached', { count: props.maxSelections ?? 0 }) : '',
-)
+// No count in the text, deliberately: the selected tags already say how many,
+// and a count-bearing message would pull the ICU formatter (~2.3 KB gzip) into
+// this component's bundle for one sentence.
+const maxReachedText = computed(() => (isMaxReached.value ? dzMessages.value.maxReached : ''))
 const inputAriaDescribedby = computed(() =>
   isMaxReached.value
     ? [resolvedAriaDescribedby.value, maxReachedId.value].filter(Boolean).join(' ')
