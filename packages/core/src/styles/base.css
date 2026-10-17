@@ -138,6 +138,22 @@
     outline-offset: calc(var(--dz-control-focus-ring-width) * -1);
   }
 
+  /*
+   * Component-tinted control rings (UI-DZUP-UI-DESIGN-L-05). DzInplace and DzListbox
+   * options use the shared outline utilities, and their own ring token picks the
+   * colour. The semantic --dz-control-focus-ring-color is set here, beside the
+   * utilities, not in the variants: INTERACTION_CONTRACT.md keeps focus-ring token
+   * plumbing out of component code, and the dz-components layer holds component
+   * token defaults only (component-token-scope.spec.ts).
+   */
+  .dz-inplace {
+    --dz-control-focus-ring-color: var(--dz-inplace-ring);
+  }
+
+  [data-dz-listbox-option] {
+    --dz-control-focus-ring-color: var(--dz-listbox-active-ring, var(--dz-ring));
+  }
+
   .dz-focus-ring-input:focus-visible {
     outline: var(--dz-input-focus-ring-width) solid var(--dz-input-focus-ring-color);
     outline-offset: var(--dz-input-focus-ring-offset);
@@ -523,12 +539,20 @@
    Component-local custom properties mapped to semantic tokens (ADR-04/ADR-17).
    Declared in the dz-components layer so consumer utilities still win.
 
-   The defaults are declared at :where(:root), not on the component element
-   (UI-DZUP-UI-DESIGN-H-01). A declaration on the element itself always beats
-   the value it would inherit, so a consumer re-map at :root or on a theme
-   wrapper (the styling contract's "re-map one and every instance follows")
-   never reached the component. :where() keeps the default at zero
-   specificity, the same root scope the component tier of tokens.css uses.
+   The defaults are declared at :where(:root, [data-theme]), not on the
+   component element (UI-DZUP-UI-DESIGN-H-01). A declaration on the element
+   itself always beats the value it would inherit, so a consumer re-map at
+   :root or on a theme wrapper (the styling contract's "re-map one and every
+   instance follows") never reached the component. :where() keeps the default
+   at zero specificity.
+
+   [data-theme] is in the list because most defaults are var() aliases of
+   semantic tokens (--dz-kbd-bg: var(--dz-muted)). A var() resolves where it is
+   declared and the RESOLVED value is inherited, so a default declared at :root
+   alone keeps the root theme's colours inside a subtree [data-theme="dark"] or
+   [data-theme="high-contrast"] wrapper, which re-declares only the semantic
+   tier. Re-declaring the defaults on every theme root re-resolves them there.
+   A consumer re-map meant for a themed subtree goes on that wrapper too.
 
    Only the variant hooks below — [data-size], [data-variant], [data-tone] —
    stay on the element, because they are per-instance by definition.
@@ -536,7 +560,7 @@
 
 @layer dz-components {
   /* DzCalendar — cell sizing, today ring, selected/range fills, muting */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-calendar-cell-size: 2.25rem;
     --dz-calendar-cell-radius: var(--dz-radius-sm);
     --dz-calendar-cell-foreground: var(--dz-foreground);
@@ -573,7 +597,7 @@
   }
 
   /* DzDataView — container gap, list dividers, list-row padding */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-data-view-gap: var(--dz-spacing-4);
     --dz-data-view-toolbar-gap: var(--dz-spacing-3);
     --dz-data-view-list-divider: var(--dz-border);
@@ -596,7 +620,7 @@
   }
 
   /* DzInfiniteScroll — sentinel height + status-row spacing */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-infinite-scroll-sentinel-size: var(--dz-spacing-1);
     --dz-infinite-scroll-status-gap: var(--dz-spacing-2);
     --dz-infinite-scroll-status-padding-y: var(--dz-spacing-4);
@@ -613,31 +637,31 @@
   }
 
   /* DzAnimatedNumber — affix gap, figure weight + tracking */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-animated-number-gap: var(--dz-spacing-1);
     --dz-animated-number-font-weight: var(--dz-font-semibold);
     --dz-animated-number-tracking: var(--dz-tracking-tight);
   }
 
   /* DzRelativeTime — font size (inherits the shared small text scale) */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-relative-time-font-size: var(--dz-text-sm);
   }
 
   /* DzDeferredContent — reserved height before content mounts */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-deferred-content-min-height: var(--dz-spacing-32);
   }
 
   /* DzCountdown — figure spacing, weight, and tracking (size/tone via tv()) */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-countdown-gap: var(--dz-spacing-2);
     --dz-countdown-font-weight: var(--dz-font-bold);
     --dz-countdown-tracking: var(--dz-tracking-tight);
   }
 
   /* DzKbd — keyboard-key chip: surface, gap, per-size geometry */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-kbd-bg: var(--dz-muted);
     --dz-kbd-fg: var(--dz-foreground);
     --dz-kbd-border: var(--dz-border);
@@ -677,7 +701,7 @@
   }
 
   /* DzMegaMenu — menubar gap + dropdown panel/column spacing */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-menu-bar-gap: var(--dz-spacing-1);
     --dz-menu-panel-offset: var(--dz-spacing-1);
     --dz-menu-panel-padding: var(--dz-spacing-4);
@@ -686,7 +710,7 @@
   }
 
   /* DzAnchor — scrollspy TOC: indentation, link spacing, rail + active colors */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-anchor-font-size: var(--dz-text-sm);
     --dz-anchor-item-gap: var(--dz-spacing-1_5);
     --dz-anchor-indent: var(--dz-spacing-4);
@@ -697,7 +721,7 @@
   }
 
   /* DzFab — circular dimension, glyph size, and elevation (size-scaled) */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-fab-size: var(--dz-spacing-14);
     --dz-fab-icon-size: var(--dz-spacing-6);
     --dz-fab-shadow: var(--dz-shadow-lg);
@@ -732,14 +756,14 @@
   }
 
   /* DzBackTop — fixed-corner placement and fade/slide entrance */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-back-top-offset: var(--dz-spacing-6);
     --dz-back-top-z: 40;
     --dz-back-top-transition: 200ms;
   }
 
   /* DzScrollProgress — edge-pinned reading-progress bar / corner ring */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-scroll-progress-height: var(--dz-spacing-1);
     --dz-scroll-progress-track: transparent;
     --dz-scroll-progress-z: 50;
@@ -748,13 +772,13 @@
   }
 
   /* DzColorModeToggle — inline glyph sizing and icon-swap transition */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-color-mode-toggle-icon-size: var(--dz-spacing-5);
     --dz-color-mode-toggle-transition: 200ms;
   }
 
   /* DzBlockUI — content mask scrim, blur, message, and stacking order */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-blockui-mask: var(--dz-overlay-bg);
     --dz-blockui-blur: 0px;
     --dz-blockui-radius: var(--dz-radius-md);
@@ -765,14 +789,14 @@
   }
 
   /* DzWatermark — tiled mark color, subtlety (opacity), and stacking order */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-watermark-color: var(--dz-muted-foreground);
     --dz-watermark-opacity: 0.15;
     --dz-watermark-z: 9;
   }
 
   /* DzInplace — display affordance (hover hint) and editor wrapper */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-inplace-gap: var(--dz-spacing-2);
     --dz-inplace-padding-x: var(--dz-spacing-2);
     --dz-inplace-padding-y: var(--dz-spacing-1);
@@ -783,23 +807,8 @@
     --dz-inplace-disabled-opacity: 0.5;
   }
 
-  /*
-   * Component-tinted control rings (UI-DZUP-UI-DESIGN-L-05). DzInplace and DzListbox
-   * options use the shared outline utilities, and their own ring token picks the
-   * colour. The semantic --dz-control-focus-ring-color is set here, not in the
-   * variants, because INTERACTION_CONTRACT.md keeps focus-ring token plumbing out of
-   * component code.
-   */
-  .dz-inplace {
-    --dz-control-focus-ring-color: var(--dz-inplace-ring);
-  }
-
-  [data-dz-listbox-option] {
-    --dz-control-focus-ring-color: var(--dz-listbox-active-ring, var(--dz-ring));
-  }
-
   /* DzFloatLabel — floating-label rest/float typography and color */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-float-label-color: var(--dz-muted-foreground);
     --dz-float-label-active-color: var(--dz-primary);
     --dz-float-label-rest-font-size: var(--dz-text-base);
@@ -811,7 +820,7 @@
   }
 
   /* DzOrderList — reorderable list surface, handle, and drop indicator */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-order-list-gap: var(--dz-spacing-2);
     --dz-order-list-control-gap: var(--dz-spacing-1);
     --dz-order-list-radius: var(--dz-radius-md);
@@ -833,7 +842,7 @@
   }
 
   /* DzToolbar — gap/padding density (size) and surface treatment (variant) */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-toolbar-gap: var(--dz-spacing-2);
     --dz-toolbar-padding-x: var(--dz-spacing-4);
     --dz-toolbar-padding-y: var(--dz-spacing-2);
@@ -880,7 +889,7 @@
   }
 
   /* DzPanel — titled container density (size), surface (variant), accent (tone) */
-  :where(:root) {
+  :where(:root, [data-theme]) {
     --dz-panel-radius: var(--dz-radius-md);
     --dz-panel-bg: var(--dz-surface);
     --dz-panel-foreground: var(--dz-foreground);

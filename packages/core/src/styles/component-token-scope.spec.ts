@@ -13,6 +13,12 @@ import { describe, expect, it } from 'vitest'
  * `:root { --dz-calendar-selected-bg: red }` only reaches the calendar if
  * base.css declares the default at root scope, never on `.dz-calendar`.
  *
+ * Root scope is `:where(:root, [data-theme])`, not `:where(:root)` alone. Most
+ * defaults alias a semantic token (`--dz-kbd-bg: var(--dz-muted)`), and a var()
+ * resolves where it is declared: a default declared only at :root would carry
+ * the root theme's resolved colour into a subtree `[data-theme="dark"]` wrapper,
+ * which re-declares only the semantic tier.
+ *
  * jsdom does not resolve custom properties through @layer, so the cascade is
  * checked against the stylesheet text: who declares each token, and where.
  */
@@ -51,7 +57,7 @@ function tokenRules(): Rule[] {
   return rules
 }
 
-const ROOT_SELECTOR = ':where(:root)'
+const ROOT_SELECTOR = ':where(:root, [data-theme])'
 /** The per-instance hooks that may stay element-scoped. */
 const VARIANT_HOOK = /^\.dz-[a-z-]+\[data-(?:size|variant|tone)='[\w-]+'\]$/
 
@@ -60,7 +66,7 @@ const rootNames = new Set(rules.filter(r => r.selector === ROOT_SELECTOR).flatMa
 const variantNames = new Set(rules.filter(r => r.selector !== ROOT_SELECTOR).flatMap(r => r.names))
 
 describe('component tokens in base.css (UI-DZUP-UI-DESIGN-H-01)', () => {
-  it('declares every default at :where(:root), not on the component element', () => {
+  it('declares every default at :where(:root, [data-theme]), not on the component element', () => {
     expect(rootNames.size).toBeGreaterThan(100)
     for (const { selector, names } of rules) {
       if (selector === ROOT_SELECTOR)
@@ -76,7 +82,7 @@ describe('component tokens in base.css (UI-DZUP-UI-DESIGN-H-01)', () => {
 
   it('gives every variant-scoped token a root default to fall back to', () => {
     for (const name of variantNames)
-      expect(rootNames.has(name), `${name} has no :where(:root) default`).toBe(true)
+      expect(rootNames.has(name), `${name} has no root-scope default`).toBe(true)
   })
 
   it('leaves every token outside a variant hook re-mappable from :root', () => {
@@ -94,6 +100,21 @@ describe('component tokens in base.css (UI-DZUP-UI-DESIGN-H-01)', () => {
     expect(families.size).toBe(rules.filter(r => r.selector === ROOT_SELECTOR).length)
     expect(rootNames.has('--dz-calendar-selected-bg')).toBe(true)
     expect(variantNames.has('--dz-calendar-selected-bg')).toBe(false)
+  })
+
+  it('re-declares the defaults on every theme root, so a subtree theme re-resolves them', () => {
+    // A default that aliases a semantic token must be re-declared wherever that
+    // semantic token is: tokens.css re-declares the semantic tier on bare
+    // [data-theme="…"] selectors (a subtree wrapper, not only <html>). Declared at
+    // :root alone, the alias would resolve once and inherit the root theme.
+    const aliases = rules
+      .filter(r => r.selector === ROOT_SELECTOR)
+      .flatMap(r => r.names)
+    expect(aliases.length).toBe(rootNames.size)
+    const bareRoot = rules.filter(r => r.selector === ':where(:root)' || r.selector === ':root')
+    expect(bareRoot.map(r => r.names[0]), 'component-token defaults declared at :root only').toEqual([])
+    const layer = componentsLayer().replace(/\/\*[\s\S]*?\*\//g, '')
+    expect(layer).toMatch(/--dz-kbd-bg:\s*var\(--dz-muted\)/)
   })
 
   it('the calendar selected cell reads the re-mappable token', () => {
