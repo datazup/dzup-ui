@@ -2,12 +2,13 @@
   "//": "TASK-S1-O2 (2026-09-22). The staleness ratchet for packages/core/docs/capability-matrix.json. `validate:capability-matrix` gate 7 fails when `staleCells` RISES above the ceiling, and fails when it FALLS without the ceiling being lowered in the same change -- the same two-way handshake component-meta-ceilings.json uses, so progress is recorded rather than absorbed. Measured at 4e4e46f over 144 rows. Gate 3 still REPORTS every stale cell by name; this file is what makes the number refuse to grow.",
 
   "staleCells": {
-    "//": "Cells whose evidence artifact predates the component's last change. 22 at 4e4e46f, and every one of them is `perf-baseline` -- 21 Tier C plus DzFileUpload (Tier D), which is every component that owes the row. The cause is single and proven: packages/core/perf/baselines.json holds 33 baselines over 26 components and ALL of them stamp sourceCommit 4c9fb7a (2026-08-21), while the 22 components last changed at a01965f (2026-09-17), 2d51eec (2026-09-18) and 527dbd1 (2026-09-20) -- git ancestry, not a validator artifact. Clearing it means REWRITING baselines.json from a fresh >=5-run capture, which is a baseline replacement: an owner action, explicitly withheld from every agent in this programme, and the property of TASK-S1-O4. Lower this to 0 in the same change that lands the recapture. || 2026-10-02, at the merge of origin/main and the browser-matrix re-sweep: 17. Upstream's D135 / O7-D1 size recapture (7c23198, 70647fb, linux, 2026-09-29) gave DzColorPicker, DzCommandPalette, DzPersonaSelector, DzSidebar and DzTree a `size` baseline newer than their last change, so their perf-baseline cell reads `pass` and the ceiling fell 22 -> 17 in the same change. The remaining 17 are the runtime-metric owners, still on the 2026-08-21 win32 capture; clearing them is still the owner action named in blockedOn. || 2026-10-12, R13-UI-RECONCILE-20261012-R1: 18. The R11-01 DzCommandPalette SFC repair (input aria-controls bound to the rendered listbox, listbox named) is a component change newer than the 2026-09-29 size baseline 70647fb gave it, so its perf-baseline cell reads `stale`, not `pass`. packages/core/perf/baselines.json is a protected input of that packet and is not recaptured; clearing it is the same owner action named in blockedOn.",
-    "ceiling": 18,
+    "//": "Cells whose evidence artifact predates the component's last change. 22 at 4e4e46f, and every one of them is `perf-baseline` -- 21 Tier C plus DzFileUpload (Tier D), which is every component that owes the row. The cause is single and proven: packages/core/perf/baselines.json holds 33 baselines over 26 components and ALL of them stamp sourceCommit 4c9fb7a (2026-08-21), while the 22 components last changed at a01965f (2026-09-17), 2d51eec (2026-09-18) and 527dbd1 (2026-09-20) -- git ancestry, not a validator artifact. Clearing it means REWRITING baselines.json from a fresh >=5-run capture, which is a baseline replacement: an owner action, explicitly withheld from every agent in this programme, and the property of TASK-S1-O4. Lower this to 0 in the same change that lands the recapture. || 2026-10-02, at the merge of origin/main and the browser-matrix re-sweep: 17. Upstream's D135 / O7-D1 size recapture (7c23198, 70647fb, linux, 2026-09-29) gave DzColorPicker, DzCommandPalette, DzPersonaSelector, DzSidebar and DzTree a `size` baseline newer than their last change, so their perf-baseline cell reads `pass` and the ceiling fell 22 -> 17 in the same change. The remaining 17 are the runtime-metric owners, still on the 2026-08-21 win32 capture; clearing them is still the owner action named in blockedOn. || 2026-10-12, R13-UI-RECONCILE-20261012-R1: 18. The R11-01 DzCommandPalette SFC repair (input aria-controls bound to the rendered listbox, listbox named) is a component change newer than the 2026-09-29 size baseline 70647fb gave it, so its perf-baseline cell reads `stale`, not `pass`. packages/core/perf/baselines.json is a protected input of that packet and is not recaptured; clearing it is the same owner action named in blockedOn. || 2026-10-17, AUDIT-REMOTE-CONTINUE-20261016-R1 AMENDMENT-3 (operator-declared): 20. The dzup-ui audit fixes change DzColorPicker (7a004e44 invalid-hex handling, 77270db3 shared useFormControl, e601918a catalog swatch strings) and DzTree (8bbf4a6c catalog empty-state string), both newer than the 2026-09-29 size baseline 70647fb gave them, so their perf-baseline cells read `stale`, not `pass`. packages/core/perf/baselines.json is protected and is not recaptured; clearing these two is the same owner action named in blockedOn.",
+    "ceiling": 20,
     "blockedOn": "owner decisions D-S1O4-1 (designate the authoritative perf capture host) then D-S1O4-2 (adopt a capture and lower this ceiling to 0 in the same change). TASK-S1-O4 ran on 2026-09-23 and confirmed it cannot clear these cells: the only action that does is a baseline replacement, which is withheld from every agent. See docs/program-2026-09-22-architecture/reports/TASK-S1-O4-handoff.md.",
     "components": [
       "DzCalendar",
       "DzCascader",
+      "DzColorPicker",
       "DzCombobox",
       "DzCommandPalette",
       "DzDataGrid",
@@ -23,6 +24,7 @@
       "DzTimePicker",
       "DzTour",
       "DzTransfer",
+      "DzTree",
       "DzTreeSelect"
     ]
   },
@@ -54,13 +56,14 @@
       "2026-10-06 DZUP-UI-R11-05A-20261006-C1: present 584 -> 585 (+1), keyboard-spec 26 -> 27. Combobox unit events assert opening, Arrow navigation, Home/End, Enter selection and close, Escape value preservation and Tab closing without cancellation or value change. Browser conditions exposed a text-200 Tab defect; the component now binds its existing open-state ref to Reka and closes on captured Tab. The complete three-engine browser matrix is re-recorded. No SSR, AT, perf or exception changes.",
       "2026-10-07 DZUP-UI-R11-05B-20261006-C1: present 585 -> 588 (+3), keyboard-spec 27 -> 30. CommandPalette global Ctrl/Cmd+K, result navigation, emitted execution and dismissal; MultiSelect opening/navigation/endpoints/toggle/open retention/Escape/Backspace; TreeSelect navigation/branch actions/endpoints/activation/Escape/native Tab. Unit actions and three-engine/all-condition browser checks qualify the cells. DatePicker and DateRangePicker downward-arrow opening and PersonaSelector secondary activation are reproduced failures; their three cells stay unrun. Isolated keyboard stories enable shortcuts and uncontrolled expansion. No component source, browser ledger, SSR, AT, perf or exception changes.",
       "2026-10-07 DZUP-UI-R11-07-20261007-C1: present 588 -> 596 (+8), data-scenarios 10 -> 18. Real Large stories exercise 100-record command/menu/mention/multiselect/order/sidebar/tree datasets and a 50-step Tour, empty replacement and recovery; supported async seams assert loading/error/retry. Three-engine/eight-condition browser checks qualify all eight scenarios. A1 repairs wrapping of large Tour indicators/footer controls after native pointer activation failed on touch; complete browser matrix recaptured at clean f95572c, including explicit known keyboard failure pins. No keyboard, SSR, AT, performance, ownership or exception credit.",
-      "2026-10-12 R13-UI-RECONCILE-20261012-R1: pass 563 -> 562 (-1), perf-baseline pass 5 -> 4; present 596 -> 596 (+0). The joined R11 source (data carrier cb8d430e, side c3af05df, native 92cd0854) is measured on a fresh complete three-engine ledger at 7f7c1a20, so browser-matrix pass stays 88. DzCommandPalette perf-baseline falls pass -> stale: the R11-01 SFC labeling repair postdates its size baseline and the protected baselines.json is not recaptured (staleCells 17 -> 18). Side R11-02 data-scenarios stories (CommandPalette/Mention/MultiSelect/OrderList/TreeSelect Empty; MegaMenu, Sidebar and Tour large datasets, renamed LargeCatalog/LargeSections/LargeTour beside the carrier's `Large`) assert the same eight data-scenarios cells R11-07 already credits, so data-scenarios stays 18 and the side's 564 -> 572 move does not add. Native R11-08 KeyboardContract hosts and native-keyboard.spec.ts move no cell. No present cell is raised to an old count."
+      "2026-10-12 R13-UI-RECONCILE-20261012-R1: pass 563 -> 562 (-1), perf-baseline pass 5 -> 4; present 596 -> 596 (+0). The joined R11 source (data carrier cb8d430e, side c3af05df, native 92cd0854) is measured on a fresh complete three-engine ledger at 7f7c1a20, so browser-matrix pass stays 88. DzCommandPalette perf-baseline falls pass -> stale: the R11-01 SFC labeling repair postdates its size baseline and the protected baselines.json is not recaptured (staleCells 17 -> 18). Side R11-02 data-scenarios stories (CommandPalette/Mention/MultiSelect/OrderList/TreeSelect Empty; MegaMenu, Sidebar and Tour large datasets, renamed LargeCatalog/LargeSections/LargeTour beside the carrier's `Large`) assert the same eight data-scenarios cells R11-07 already credits, so data-scenarios stays 18 and the side's 564 -> 572 move does not add. Native R11-08 KeyboardContract hosts and native-keyboard.spec.ts move no cell. No present cell is raised to an old count.",
+      "2026-10-17 AUDIT-REMOTE-CONTINUE-20261016-R1 AMENDMENT-3: pass 562 -> 560 (-2), perf-baseline pass 4 -> 2; present 596 -> 597 (+1), unit-spec 127 -> 128. DzColorPicker and DzTree perf-baseline fall pass -> stale: the audit's source fixes to both (see staleCells, 18 -> 20) postdate their size baselines and the protected baselines.json is not recaptured. DzAsyncBoundary unit-spec rises unrun -> present: ef955cb4 adds a behaviour test that throws from a child, asserts the role=alert message and the 'Try again' control, clicks it and asserts reset renders the content again. Browser-matrix pass stays 88 on a fresh complete three-engine ledger (chromium/firefox at ffcbc897, webkit at e5437995)."
     ],
 
     "totals": {
       "//": "Derived, and checked against the sum of `kinds` by gate 8 -- so the headline a report quotes cannot drift from the per-kind table underneath it. This is `runtime-floor-ceilings.json`'s device (`maxBreaches` must EQUAL the list) applied to a tally.",
-      "pass": 562,
-      "present": 596
+      "pass": 560,
+      "present": 597
     },
 
     "kinds": {
@@ -76,7 +79,7 @@
       "keyboard-spec": { "pass": 0, "present": 30 },
       "malicious-corpus": { "pass": 0, "present": 15 },
       "non-drag-alternative": { "pass": 0, "present": 7 },
-      "perf-baseline": { "pass": 4, "present": 0 },
+      "perf-baseline": { "pass": 2, "present": 0 },
       "portal-hydration": { "pass": 0, "present": 4 },
       "real-world-story": { "pass": 22, "present": 0 },
       "rtl-contract": { "pass": 0, "present": 89 },
@@ -85,7 +88,7 @@
       "story-light-dark": { "pass": 142, "present": 0 },
       "threat-model": { "pass": 0, "present": 15 },
       "token-contrast": { "pass": 138, "present": 0 },
-      "unit-spec": { "pass": 0, "present": 127 },
+      "unit-spec": { "pass": 0, "present": 128 },
       "url-policy": { "pass": 0, "present": 15 }
     }
   },
