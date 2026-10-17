@@ -846,14 +846,14 @@ jobs:
       # shows up. `lighthouserc.spec.ts` asserts the two configs agree on URLs and
       # thresholds, so the only variable here is the device.
       - name: Lighthouse CI — desktop (LCP < 2.5s, CLS < 0.1, a11y >= 0.9)
-        uses: treosh/lighthouse-ci-action@v12
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12 (resolved 2026-10-17)
         with:
           configPath: ./apps/landing/lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
       # The mobile LCP ceiling is 4s, not 2.5s: lighthouserc.mobile.json explains why.
       - name: Lighthouse CI — mobile (LCP < 4s, CLS < 0.1, a11y >= 0.9)
-        uses: treosh/lighthouse-ci-action@v12
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12 (resolved 2026-10-17)
         with:
           configPath: ./apps/landing/lighthouserc.mobile.json
           uploadArtifacts: true

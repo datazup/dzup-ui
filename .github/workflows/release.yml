@@ -75,7 +75,7 @@ jobs:
       # does nothing, and the steps below build, publish and tag.
       - name: Create Release Pull Request
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0 (newest v1.x tag, resolved 2026-10-17)
         with:
           version: yarn version-packages
           title: 'chore: version packages'
@@ -109,7 +109,7 @@ jobs:
       # when `yarn release` ended with the same command.
       - name: Tag and create GitHub releases
         if: steps.changesets.outputs.hasChangesets == 'false'
-        uses: changesets/action@v1
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0 (newest v1.x tag, resolved 2026-10-17)
         with:
           publish: yarn changeset tag
         env:

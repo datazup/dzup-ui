@@ -60,7 +60,7 @@ jobs:
         run: yarn build
       - name: Run Chromatic
         id: chromatic
-        uses: chromaui/action@latest
+        uses: chromaui/action@e50abd573c8a789526f165fec06137a7c21d7299 # v18.13.0 (= refs/tags/latest, resolved 2026-10-17)
         with:
           # Never committed — configure the token as a repo secret.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

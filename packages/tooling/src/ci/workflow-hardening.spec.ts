@@ -6,8 +6,7 @@
  * and min-peer expanded a free-text dispatch input straight into a shell line.
  * Every workflow now declares its token permissions, inputs reach `run:` only
  * through `env:`, and third-party actions are SHA-pinned — except the
- * references below, whose commit SHAs could not be verified offline when this
- * pin landed. The list is exact in both directions: pinning one fails until it
+ * references in PENDING_SHA_PIN (none since QF-46). The list is exact in both directions: pinning one fails until it
  * is removed here, and a new unpinned action fails until it is pinned.
  */
 import { describe, expect, it } from 'vitest'
@@ -21,12 +20,15 @@ import {
   usesRefs,
 } from './workflow-text.ts'
 
-/** Third-party actions still awaiting a verified full-length commit SHA. */
-const PENDING_SHA_PIN: Record<string, string> = {
-  'chromaui/action@latest': 'chromatic.yml — receives CHROMATIC_PROJECT_TOKEN; pin needs an online SHA lookup',
-  'treosh/lighthouse-ci-action@v12': 'ci.yml landing-perf — no secret; pin needs an online SHA lookup',
-  'changesets/action@v1': 'release.yml — pin needs an online SHA lookup',
-}
+/**
+ * Third-party actions still awaiting a verified full-length commit SHA. Empty
+ * since AUDIT-FOLLOWUPS-20261017-R1 (QF-46) resolved the last three with
+ * `git ls-remote https://github.com/<owner>/<repo> refs/tags/<tag>` (peeled):
+ * chromaui/action latest = v18.13.0, treosh/lighthouse-ci-action v12, and
+ * changesets/action v1 -> v1.9.0 (the repository carries no moving `v1` ref).
+ * Kept as a record so a deliberate exception has a place to be stated.
+ */
+const PENDING_SHA_PIN: Record<string, string> = {}
 
 const FULL_SHA = /@[0-9a-f]{40}$/
 const INPUT_IN_SCRIPT = /\$\{\{\s*(?:github\.event\.)?inputs\./
