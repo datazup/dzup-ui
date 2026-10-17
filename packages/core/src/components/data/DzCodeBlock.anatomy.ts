@@ -36,16 +36,30 @@ export const anatomy = {
   states: [],
 
   /**
-   * **Empty, and the reason is a live defect, not a design choice.**
-   * `DzCodeBlock.tokens.ts` declares 14 `--dz-codeblock-*` names and is imported
-   * by nothing; `CODEBLOCK_TOKENS` in `@dzup-ui/tokens` declares 15, is publicly
-   * exported, and is never read by `generate.ts` — so **no `--dz-codeblock-*`
-   * custom property is emitted into any stylesheet**, and this component's own
-   * files reference none. Declaring them here would document override points
-   * that do not exist in the CSS. See TASK-N2-T1 finding K3 and owner decision
-   * T1-D2; when that tier is wired up, these names move here.
+   * The whole `--dz-codeblock-*` set, each name declared once in tokens.css:
+   * the six colours in the semantic tier (so the high-contrast cascade can map
+   * them to system colours) and the layout in `CODEBLOCK_TOKENS`, the component
+   * tier. Wired by UI-DZUP-UI-DESIGN-L-01 (owner decision T1-D2, closed as
+   * "wire it" by delegated decision D2), which also deleted the dead
+   * `DzCodeBlock.tokens.ts`.
    */
-  componentTokens: [],
+  componentTokens: [
+    '--dz-codeblock-bg',
+    '--dz-codeblock-text',
+    '--dz-codeblock-border',
+    '--dz-codeblock-radius',
+    '--dz-codeblock-padding',
+    '--dz-codeblock-font-family',
+    '--dz-codeblock-font-size',
+    '--dz-codeblock-line-height',
+    '--dz-codeblock-header-bg',
+    '--dz-codeblock-header-text',
+    '--dz-codeblock-header-padding-x',
+    '--dz-codeblock-header-padding-y',
+    '--dz-codeblock-header-font-size',
+    '--dz-codeblock-line-number',
+    '--dz-codeblock-line-number-width',
+  ],
 
   /**
    * Source code is physical on purpose: it reads left to right in every locale,

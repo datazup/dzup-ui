@@ -194,9 +194,11 @@ describe('checkTokenReferences — the real package', () => {
   })
 
   it('reads the shipped ABI through the DTCG gate\'s own parser', () => {
-    // 674 is the count TASK-N2-T1 recorded for dist/tokens.css. If this drifts,
-    // the two gates have stopped agreeing about what the stylesheet declares.
-    expect(report.declaredByTokensCss).toBe(674)
+    // 674 is the count TASK-N2-T1 recorded for dist/tokens.css; 683 since
+    // UI-DZUP-UI-DESIGN-L-01 emitted the nine CODEBLOCK_TOKENS layout names. If
+    // this drifts, the two gates have stopped agreeing about what the stylesheet
+    // declares.
+    expect(report.declaredByTokensCss).toBe(683)
   })
 
   it('finds every reference site in the library', () => {
@@ -208,6 +210,8 @@ describe('checkTokenReferences — the real package', () => {
   })
 
   it('keeps every allowlisted hook live', () => {
-    expect(report.hooks).toBe(44)
+    // 35 since UI-DZUP-UI-DESIGN-L-01: the nine --dz-codeblock-* hooks are now
+    // declared tokens, so they left the allowlist.
+    expect(report.hooks).toBe(35)
   })
 })

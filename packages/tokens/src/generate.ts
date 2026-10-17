@@ -21,6 +21,7 @@ import { BADGE_TOKENS } from './component/badge.js'
 // Component
 import { BUTTON_TOKENS } from './component/button.js'
 import { CARD_TOKENS } from './component/card.js'
+import { CODEBLOCK_TOKENS } from './component/codeblock.js'
 import { CONTROL_TOKENS } from './component/control.js'
 import { DIALOG_TOKENS } from './component/dialog.js'
 import { INPUT_TOKENS } from './component/input.js'
@@ -95,6 +96,7 @@ function generateCss(): string {
     ...SIDEBAR_TOKENS,
     ...APPSHELL_TOKENS,
     ...PAGE_HERO_TOKENS,
+    ...CODEBLOCK_TOKENS,
   }
 
   return `/**
@@ -341,6 +343,7 @@ function generateTypes(): string {
     ...SIDEBAR_TOKENS,
     ...APPSHELL_TOKENS,
     ...PAGE_HERO_TOKENS,
+    ...CODEBLOCK_TOKENS,
   }
 
   const primitiveNames = extractTokenNames(allPrimitiveVars)

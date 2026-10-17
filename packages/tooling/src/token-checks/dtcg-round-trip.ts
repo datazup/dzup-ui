@@ -68,6 +68,7 @@ import { APPSHELL_TOKENS } from '../../../tokens/src/component/appshell.js'
 import { BADGE_TOKENS } from '../../../tokens/src/component/badge.js'
 import { BUTTON_TOKENS } from '../../../tokens/src/component/button.js'
 import { CARD_TOKENS } from '../../../tokens/src/component/card.js'
+import { CODEBLOCK_TOKENS } from '../../../tokens/src/component/codeblock.js'
 import { CONTROL_TOKENS } from '../../../tokens/src/component/control.js'
 import { DIALOG_TOKENS } from '../../../tokens/src/component/dialog.js'
 import { INPUT_TOKENS } from '../../../tokens/src/component/input.js'
@@ -216,6 +217,7 @@ const PATH_PREFIX_TO_CSS_SEGMENT: Readonly<Record<string, string>> = {
   'component.sidebar': 'sidebar',
   'component.appshell': 'appshell',
   'component.page-hero': 'page-hero',
+  'component.codeblock': 'codeblock',
 }
 
 /** `primitive.color.primary.500` -> `--dz-colors-primary-500`. */
@@ -430,6 +432,7 @@ export function declarationsFromTokenMaps(): CssDeclaration[] {
     ...SIDEBAR_TOKENS,
     ...APPSHELL_TOKENS,
     ...PAGE_HERO_TOKENS,
+    ...CODEBLOCK_TOKENS,
   })
   return declarations
 }

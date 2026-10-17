@@ -29,60 +29,6 @@
       "reason": "Stacking-context hook. DzAffix pins a node with `position: sticky` and the correct z-index depends entirely on the host layout, so the library declines to pick one and ships a conservative default in the fallback."
     },
     {
-      "token": "--dz-codeblock-font-family",
-      "owner": "DzCodeBlock",
-      "fallback": "var(--dz-font-mono)",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
-      "token": "--dz-codeblock-font-size",
-      "owner": "DzCodeBlock",
-      "fallback": "var(--dz-text-sm)",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
-      "token": "--dz-codeblock-header-font-size",
-      "owner": "DzCodeBlock",
-      "fallback": "var(--dz-text-xs)",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
-      "token": "--dz-codeblock-header-padding-x",
-      "owner": "DzCodeBlock",
-      "fallback": "var(--dz-spacing-4)",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
-      "token": "--dz-codeblock-header-padding-y",
-      "owner": "DzCodeBlock",
-      "fallback": "var(--dz-spacing-2)",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
-      "token": "--dz-codeblock-line-height",
-      "owner": "DzCodeBlock",
-      "fallback": "var(--dz-leading-normal)",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
-      "token": "--dz-codeblock-line-number-color",
-      "owner": "DzCodeBlock",
-      "fallback": "var(--dz-codeblock-line-number)",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
-      "token": "--dz-codeblock-line-number-width",
-      "owner": "DzCodeBlock",
-      "fallback": "2rem",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
-      "token": "--dz-codeblock-radius",
-      "owner": "DzCodeBlock",
-      "fallback": "var(--dz-radius-lg)",
-      "reason": "Theming hook for the code surface. NOTE: `codeBlockTokens` currently has no consumer — DzCodeBlock.variants.ts styles itself with raw Tailwind utilities — so these names document an intent the component does not yet honour. Fallbacks were set to the utility each slot actually renders today. See TASK-R5-O7 decision D45."
-    },
-    {
       "token": "--dz-colors-destructive-100",
       "owner": "DzConfirmDialog",
       "fallback": "theme(colors.red.100)",

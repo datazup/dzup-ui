@@ -43,20 +43,9 @@ const lines = computed(() => props.code.split('\n'))
 /** Whether the header bar should be displayed */
 const showHeader = computed(() => !!props.filename || !!props.language || props.copyable)
 
-const rootClasses = computed(() =>
-  cn(
-    styles.root(),
-    'bg-[var(--dz-muted)] border-[var(--dz-border)] text-[var(--dz-foreground)]',
-    attrs.class as string | undefined,
-  ),
-)
+const rootClasses = computed(() => cn(styles.root(), attrs.class as string | undefined))
 
-const headerClasses = computed(() =>
-  cn(
-    styles.header(),
-    'bg-[var(--dz-muted)] border-[var(--dz-border)] text-[var(--dz-muted-foreground)]',
-  ),
-)
+const headerClasses = computed(() => styles.header())
 
 const contentStyles = computed(() => {
   const result: Record<string, string> = {}

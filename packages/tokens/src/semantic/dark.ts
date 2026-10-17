@@ -153,12 +153,14 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-appshell-main-bg': 'var(--dz-colors-neutral-950)',
 
   /* ── CodeBlock ── */
-  '--dz-codeblock-bg': 'var(--dz-colors-neutral-950)',
-  '--dz-codeblock-text': 'var(--dz-colors-neutral-100)',
-  '--dz-codeblock-border': 'var(--dz-colors-neutral-800)',
-  '--dz-codeblock-header-bg': 'var(--dz-colors-neutral-900)',
-  '--dz-codeblock-header-text': 'var(--dz-colors-neutral-500)',
-  '--dz-codeblock-line-number': 'var(--dz-colors-neutral-700)',
+  /* A muted panel, as DzCodeBlock has always rendered; these six were emitted
+   * with a dark palette nothing consumed (UI-DZUP-UI-DESIGN-L-01, D2). */
+  '--dz-codeblock-bg': 'var(--dz-muted)',
+  '--dz-codeblock-text': 'var(--dz-foreground)',
+  '--dz-codeblock-border': 'var(--dz-border)',
+  '--dz-codeblock-header-bg': 'var(--dz-muted)',
+  '--dz-codeblock-header-text': 'var(--dz-muted-foreground)',
+  '--dz-codeblock-line-number': 'var(--dz-muted-foreground)',
 
   /* ── Chart / categorical palette (shifted lighter for dark bg) ── */
   '--dz-chart-1': 'var(--dz-colors-primary-400)',

@@ -1526,8 +1526,8 @@ function download(text: string, filename: string, mime: string): void {
   padding: 16px;
   max-height: 320px;
   overflow: auto;
-  background: var(--dz-codeblock-bg, #1b1d1f);
-  color: var(--dz-codeblock-text, #e7e8e9);
+  background: var(--dz-codeblock-bg, #d3d4d7);
+  color: var(--dz-codeblock-text, #1b1d1f);
   font-family: var(--dz-font-mono, monospace);
   font-size: var(--dz-text-xs, 0.75rem);
   line-height: 1.65;

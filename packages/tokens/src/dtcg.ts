@@ -66,6 +66,7 @@ import { APPSHELL_TOKENS } from './component/appshell.js'
 import { BADGE_TOKENS } from './component/badge.js'
 import { BUTTON_TOKENS } from './component/button.js'
 import { CARD_TOKENS } from './component/card.js'
+import { CODEBLOCK_TOKENS } from './component/codeblock.js'
 import { CONTROL_TOKENS } from './component/control.js'
 import { DIALOG_TOKENS } from './component/dialog.js'
 import { INPUT_TOKENS } from './component/input.js'
@@ -763,6 +764,7 @@ export const COMPONENT_GROUPS: readonly ComponentGroupSpec[] = [
   { group: 'sidebar', description: 'DzSidebar. Carries two deprecated aliases.', tokens: SIDEBAR_TOKENS },
   { group: 'appshell', description: 'DzAppShell layout.', tokens: APPSHELL_TOKENS },
   { group: 'page-hero', description: 'Dark gradient hero band.', tokens: PAGE_HERO_TOKENS },
+  { group: 'codeblock', description: 'DzCodeBlock layout; its colours are semantic.', tokens: CODEBLOCK_TOKENS },
 ]
 
 /**

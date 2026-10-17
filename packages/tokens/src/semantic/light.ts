@@ -212,12 +212,14 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-appshell-main-bg': 'var(--dz-colors-neutral-100)',
 
   /* ── CodeBlock ── */
-  '--dz-codeblock-bg': 'var(--dz-colors-neutral-900)',
-  '--dz-codeblock-text': 'var(--dz-colors-neutral-100)',
-  '--dz-codeblock-border': 'var(--dz-colors-neutral-800)',
-  '--dz-codeblock-header-bg': 'var(--dz-colors-neutral-800)',
-  '--dz-codeblock-header-text': 'var(--dz-colors-neutral-400)',
-  '--dz-codeblock-line-number': 'var(--dz-colors-neutral-600)',
+  /* A muted panel, as DzCodeBlock has always rendered; these six were emitted
+   * with a dark palette nothing consumed (UI-DZUP-UI-DESIGN-L-01, D2). */
+  '--dz-codeblock-bg': 'var(--dz-muted)',
+  '--dz-codeblock-text': 'var(--dz-foreground)',
+  '--dz-codeblock-border': 'var(--dz-border)',
+  '--dz-codeblock-header-bg': 'var(--dz-muted)',
+  '--dz-codeblock-header-text': 'var(--dz-muted-foreground)',
+  '--dz-codeblock-line-number': 'var(--dz-muted-foreground)',
 
   /* ── Chart / categorical palette ──
    * A 10-way qualitative scale for data viz. Hues are spread around the wheel so
