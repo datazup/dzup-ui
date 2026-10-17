@@ -34,7 +34,7 @@ import {
  * <DzDatePicker v-model="date" min="2026-01-01" max="2026-12-31" />
  * ```
  */
-import { computed, toRef, useAttrs } from 'vue'
+import { computed, ref, toRef, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDatePicker } from '../../composables/useDatePicker/index.ts'
 import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
@@ -103,7 +103,22 @@ function handleDateChange(date: DateValue | undefined): void {
   emit('select', iso)
 }
 
+/**
+ * Open state, held here so the trigger's declared keyboard contract can open
+ * the calendar (QF-39): APG `combobox` says ArrowDown / ArrowUp on the closed
+ * trigger opens it, and Reka's trigger reacts to click only.
+ */
+const isOpen = ref(false)
+
+function onTriggerKeydown(e: KeyboardEvent): void {
+  if (isOpen.value || resolvedDisabled.value || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp'))
+    return
+  e.preventDefault()
+  handleOpenChange(true)
+}
+
 function handleOpenChange(open: boolean): void {
+  isOpen.value = open
   if (open) {
     emit('open')
   }
@@ -185,6 +200,7 @@ const { testId: dzTestId } = useDzTestIds()
       :placeholder="placeholderDate"
       granularity="day"
       @update:model-value="handleDateChange"
+      :open="isOpen"
       @update:open="handleOpenChange"
     >
       <DatePickerAnchor>
@@ -248,6 +264,7 @@ const { testId: dzTestId } = useDzTestIds()
             class="ms-auto dz-target-min inline-flex items-center justify-center bg-transparent border-0 outline-none cursor-pointer dz-focus-ring-button"
             :class="[ui?.trigger]"
             :aria-label="ariaLabel ?? 'Open date picker'"
+            @keydown="onTriggerKeydown"
           >
             <slot name="trigger" :value="model || undefined" :placeholder="props.placeholder">
               <CalendarIcon data-part="icon" :class="[styles.icon(), ui?.icon]" aria-hidden="true" />

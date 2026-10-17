@@ -117,10 +117,10 @@ describe('r11 Tier C accessibility scope — forms', () => {
     expect(await axe(landmark)).toHaveNoViolations()
   })
 
-  // F2, an open defect and not a pass: the default multiline control is a
+  // F2, retired by QF-39: the default multiline control was a
   // `<textarea role="combobox">`, a role ARIA in HTML does not allow on that
-  // element. Pinned as an expected failure so the repair has to retire it.
-  it.fails('pins DzMention multiline textarea failing aria-allowed-role', async () => {
+  // element. It is now a native textbox with aria-autocomplete="list".
+  it('checks DzMention multiline textarea (native textbox, no disallowed role)', async () => {
     const landmark = createLandmark()
     mount(DzMention, { props: { triggers: mentionTriggers, ariaLabel: 'Comment' }, attachTo: landmark })
     expect(await axe(landmark)).toHaveNoViolations()

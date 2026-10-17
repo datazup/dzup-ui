@@ -225,12 +225,11 @@ describe('dzDateRangePicker — calendar grid Home/End', () => {
 
 // DZUP-UI-R11-05B-20261006-C1: test the promised closed-calendar action.
 describe('dzDateRangePicker — declared calendar opening', () => {
-  it.fails('opens from the closed trigger using the declared downward arrow', async () => {
+  it('opens from the closed trigger using the declared downward arrow', async () => {
     const wrapper = mount(DzDateRangePicker, { attachTo: document.body })
     const trigger = wrapper.get('[data-part="trigger"]')
     await trigger.trigger('keydown', { key: dateRangePickerAnatomy.keyboard[0].key })
-    // A known defect (it.fails): there is no condition to wait for, so drain the
-    // queued work instead of sleeping a fixed interval.
+    // Was a pinned defect (it.fails) until QF-39 wired the trigger's arrow keys.
     await flushPromises()
     try {
       expect(trigger.attributes('aria-expanded')).toBe('true')

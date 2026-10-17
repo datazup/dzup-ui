@@ -51,11 +51,23 @@ describe('dzMention — Contract Spec v1', () => {
     }
   })
 
-  it('exposes the combobox role with listbox popup', () => {
-    const wrapper = mount(DzMention, { props: { triggers } })
+  it('exposes the combobox role with listbox popup on the single-line input', () => {
+    const wrapper = mount(DzMention, { props: { triggers, multiline: false } })
     const control = wrapper.find('[role="combobox"]')
     expect(control.exists()).toBe(true)
     expect(control.attributes('aria-haspopup')).toBe('listbox')
+    expect(control.attributes('aria-autocomplete')).toBe('list')
+  })
+
+  it('keeps the multiline textarea a textbox with list autocomplete (QF-39)', () => {
+    // ARIA in HTML allows no role on <textarea>, so `role="combobox"` failed
+    // axe aria-allowed-role. The textarea keeps its native textbox role and
+    // advertises the suggestion list through the attributes a textbox allows.
+    const wrapper = mount(DzMention, { props: { triggers } })
+    const control = wrapper.get('textarea')
+    expect(control.attributes('role')).toBeUndefined()
+    expect(control.attributes('aria-expanded')).toBeUndefined()
+    expect(control.attributes('aria-haspopup')).toBeUndefined()
     expect(control.attributes('aria-autocomplete')).toBe('list')
   })
 
