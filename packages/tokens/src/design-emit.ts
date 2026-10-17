@@ -187,12 +187,12 @@ export const CURATED_EASING_USAGE: Readonly<Record<string, string>> = {
  */
 export const CURATED_LAYER_USAGE: Readonly<Record<string, string>> = {
   'base': 'Ordinary in-flow content. The default stacking context.',
-  'dropdown': 'Menus and listboxes anchored to a trigger — `DzSelect`, `DzMegaMenu`.',
+  'dropdown': 'In-flow menus that are not portaled and stay inside their container — `DzMegaMenu`, `DzMention`, the `DzDataGrid` column menu.',
   'sticky': 'Headers and toolbars pinned while their container scrolls — `DzTable`.',
   'fixed': 'Viewport-pinned chrome — `DzAppShell` header and sidebar.',
   'modal-backdrop': 'The scrim dimming everything behind a modal — `DzBlockUI`, `DzTour`.',
   'modal': 'Modal surfaces that trap focus — `DzDialog`, `DzSheet`.',
-  'popover': 'Non-modal floating surfaces anchored to a trigger — `DzPopover`, `DzPopconfirm`.',
+  'popover': 'Non-modal surfaces portaled to the body and anchored to a trigger — `DzPopover`, `DzPopconfirm`, the select family (`DzSelect`, `DzCombobox`, `DzDatePicker` …) and `DzDropdownMenu` / `DzContextMenu`. Above `modal`, so one opened inside a dialog is not buried under it.',
   'tooltip': 'Transient hover / focus labels — `DzTooltip`. Above popovers, below toasts.',
   'toast': 'Global notifications — `DzToast`. The top of the stack.',
 }

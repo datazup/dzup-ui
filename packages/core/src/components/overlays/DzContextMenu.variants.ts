@@ -12,7 +12,7 @@ import { tv } from 'tailwind-variants'
 export const contextMenuVariants = tv({
   slots: {
     content: [
-      'z-50 min-w-[8rem]',
+      'z-[var(--dz-z-popover,1060)] min-w-[8rem]',
       'overflow-hidden',
       'rounded-[var(--dz-radius-md)]',
       'border border-[var(--dz-border)]',

@@ -185,7 +185,7 @@ const { testId: dzTestId } = useDzTestIds()
         <PopoverContent
           data-part="content"
           :side-offset="4"
-          class="z-50 w-64 rounded-[var(--dz-radius-lg)] border border-[var(--dz-border)] bg-[var(--dz-background)] shadow-[var(--dz-shadow-lg)]"
+          class="z-[var(--dz-z-popover,1060)] w-64 rounded-[var(--dz-radius-lg)] border border-[var(--dz-border)] bg-[var(--dz-background)] shadow-[var(--dz-shadow-lg)]"
           :class="[ui?.content]"
         >
           <div data-part="panel" :class="[styles.panel(), ui?.panel]">

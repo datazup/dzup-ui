@@ -12,13 +12,13 @@ import { tv } from 'tailwind-variants'
 export const commandPaletteVariants = tv({
   slots: {
     overlay: [
-      'fixed inset-0 z-50',
+      'fixed inset-0 z-[var(--dz-z-modal-backdrop,1040)]',
       'bg-[var(--dz-overlay-bg)]',
       'transition-opacity',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
     content: [
-      'fixed left-1/2 top-[20%] z-50',
+      'fixed left-1/2 top-[20%] z-[var(--dz-z-modal,1050)]',
       '-translate-x-1/2',
       'w-full max-w-lg',
       'overflow-hidden',

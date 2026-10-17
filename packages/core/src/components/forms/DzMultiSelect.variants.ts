@@ -29,7 +29,7 @@ export const multiSelectVariants = tv({
       'placeholder:text-[var(--dz-muted-foreground)]',
     ].join(' '),
     content: [
-      'z-[60] overflow-hidden rounded-[var(--dz-radius-md)]',
+      'z-[var(--dz-z-popover,1060)] overflow-hidden rounded-[var(--dz-radius-md)]',
       'w-[var(--reka-combobox-trigger-width)]',
       'max-h-[var(--reka-combobox-content-available-height)]',
       'border border-[var(--dz-border)]',

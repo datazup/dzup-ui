@@ -333,12 +333,12 @@ probably belongs inside an existing layer rather than beside it.
 | Token | Value | What belongs here |
 | --- | --- | --- |
 | `--dz-z-base` | 0 | Ordinary in-flow content. The default stacking context. |
-| `--dz-z-dropdown` | 1000 | Menus and listboxes anchored to a trigger — `DzSelect`, `DzMegaMenu`. |
+| `--dz-z-dropdown` | 1000 | In-flow menus that are not portaled and stay inside their container — `DzMegaMenu`, `DzMention`, the `DzDataGrid` column menu. |
 | `--dz-z-sticky` | 1020 | Headers and toolbars pinned while their container scrolls — `DzTable`. |
 | `--dz-z-fixed` | 1030 | Viewport-pinned chrome — `DzAppShell` header and sidebar. |
 | `--dz-z-modal-backdrop` | 1040 | The scrim dimming everything behind a modal — `DzBlockUI`, `DzTour`. |
 | `--dz-z-modal` | 1050 | Modal surfaces that trap focus — `DzDialog`, `DzSheet`. |
-| `--dz-z-popover` | 1060 | Non-modal floating surfaces anchored to a trigger — `DzPopover`, `DzPopconfirm`. |
+| `--dz-z-popover` | 1060 | Non-modal surfaces portaled to the body and anchored to a trigger — `DzPopover`, `DzPopconfirm`, the select family (`DzSelect`, `DzCombobox`, `DzDatePicker` …) and `DzDropdownMenu` / `DzContextMenu`. Above `modal`, so one opened inside a dialog is not buried under it. |
 | `--dz-z-tooltip` | 1070 | Transient hover / focus labels — `DzTooltip`. Above popovers, below toasts. |
 | `--dz-z-toast` | 1080 | Global notifications — `DzToast`. The top of the stack. |
 

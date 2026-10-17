@@ -22,7 +22,7 @@ export const datePickerVariants = tv({
       'data-[placeholder]:text-[var(--dz-muted-foreground)]',
     ].join(' '),
     content: [
-      'z-[60] overflow-hidden rounded-[var(--dz-radius-md)]',
+      'z-[var(--dz-z-popover,1060)] overflow-hidden rounded-[var(--dz-radius-md)]',
       'border border-[var(--dz-border)]',
       'bg-[var(--dz-popover)]',
       'text-[var(--dz-popover-foreground)]',

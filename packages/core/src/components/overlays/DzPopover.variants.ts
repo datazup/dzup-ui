@@ -12,7 +12,7 @@ import { tv } from 'tailwind-variants'
 export const popoverVariants = tv({
   slots: {
     content: [
-      'z-50',
+      'z-[var(--dz-z-popover,1060)]',
       'overflow-hidden',
       'rounded-[var(--dz-radius-lg)]',
       'border border-[var(--dz-border)]',

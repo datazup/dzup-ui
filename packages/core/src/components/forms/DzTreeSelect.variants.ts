@@ -44,7 +44,7 @@ export const treeSelectVariants = tv({
     ].join(' '),
     icon: 'shrink-0 text-[var(--dz-muted-foreground)]',
     panel: [
-      'z-[60] overflow-y-auto',
+      'z-[var(--dz-z-popover,1060)] overflow-y-auto',
       'rounded-[var(--dz-radius-md)]',
       'min-w-[var(--reka-popover-trigger-width)]',
       'max-h-[min(var(--reka-popover-content-available-height),20rem)]',

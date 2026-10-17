@@ -12,7 +12,7 @@ import { tv } from 'tailwind-variants'
 export const toastVariants = tv({
   slots: {
     viewport: [
-      'fixed z-[100]',
+      'fixed z-[var(--dz-z-toast,1080)]',
       'flex flex-col gap-[var(--dz-spacing-2)]',
       'p-[var(--dz-spacing-4)]',
       'max-h-screen',

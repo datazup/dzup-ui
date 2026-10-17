@@ -604,7 +604,7 @@ const { testId: dzTestId } = useDzTestIds()
           data-part="content"
           :side-offset="4"
           align="start"
-          class="z-50"
+          class="z-[var(--dz-z-popover,1060)]"
           :class="[ui?.content]"
         >
           <div data-part="panel" :class="[styles.panel(), ui?.panel]">

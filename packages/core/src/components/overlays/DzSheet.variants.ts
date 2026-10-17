@@ -18,13 +18,13 @@ import { tv } from 'tailwind-variants'
 export const sheetVariants = tv({
   slots: {
     overlay: [
-      'fixed inset-0 z-50',
+      'fixed inset-0 z-[var(--dz-dialog-overlay-z-index,var(--dz-z-modal-backdrop,1040))]',
       'bg-[var(--dz-overlay-bg)]',
       'transition-opacity',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
     content: [
-      'fixed z-50',
+      'fixed z-[var(--dz-dialog-z-index,var(--dz-z-modal,1050))]',
       'bg-[var(--dz-surface-raised)]',
       'text-[var(--dz-foreground)]',
       'shadow-[var(--dz-shadow-xl)]',

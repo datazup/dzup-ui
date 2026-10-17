@@ -12,7 +12,7 @@ import { tv } from 'tailwind-variants'
 export const lightboxVariants = tv({
   slots: {
     overlay: [
-      'fixed inset-0 z-50',
+      'fixed inset-0 z-[var(--dz-z-modal,1050)]',
       'bg-[var(--dz-foreground)]/90 backdrop-blur-sm',
       'flex items-center justify-center',
       'data-[state=open]:animate-in data-[state=open]:fade-in-0',

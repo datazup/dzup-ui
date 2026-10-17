@@ -13,13 +13,13 @@ import { tv } from 'tailwind-variants'
 export const dialogVariants = tv({
   slots: {
     overlay: [
-      'fixed inset-0 z-50',
+      'fixed inset-0 z-[var(--dz-dialog-overlay-z-index,var(--dz-z-modal-backdrop,1040))]',
       'bg-[var(--dz-overlay-bg)]',
       'transition-opacity',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
     content: [
-      'fixed left-1/2 top-1/2 z-50',
+      'fixed left-1/2 top-1/2 z-[var(--dz-dialog-z-index,var(--dz-z-modal,1050))]',
       '-translate-x-1/2 -translate-y-1/2',
       'w-full',
       'rounded-[var(--dz-radius-lg)]',

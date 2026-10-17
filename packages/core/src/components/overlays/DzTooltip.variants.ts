@@ -12,7 +12,7 @@ import { tv } from 'tailwind-variants'
 export const tooltipVariants = tv({
   slots: {
     content: [
-      'z-50',
+      'z-[var(--dz-z-tooltip,1070)]',
       'overflow-hidden',
       'rounded-[var(--dz-radius-md)]',
       'border border-[var(--dz-border)]',

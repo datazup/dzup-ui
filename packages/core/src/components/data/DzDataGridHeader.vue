@@ -28,7 +28,7 @@ defineOptions({
 })
 
 const filterPopoverClasses = [
-  'absolute top-full left-0 z-50 mt-1',
+  'absolute top-full left-0 z-[var(--dz-z-dropdown,1000)] mt-1',
   'bg-[var(--dz-background)] border border-[var(--dz-border)]',
   'rounded-[var(--dz-radius-md)] shadow-[var(--dz-shadow-md)]',
   'p-[var(--dz-spacing-3)] min-w-[200px]',

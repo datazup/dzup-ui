@@ -22,7 +22,7 @@ export const selectVariants = tv({
       'data-[placeholder]:text-[var(--dz-muted-foreground)]',
     ].join(' '),
     content: [
-      'z-[60] overflow-hidden rounded-[var(--dz-radius-md)]',
+      'z-[var(--dz-z-popover,1060)] overflow-hidden rounded-[var(--dz-radius-md)]',
       'min-w-[var(--reka-select-trigger-width)]',
       'max-h-[var(--reka-select-content-available-height)]',
       'border border-[var(--dz-border)]',

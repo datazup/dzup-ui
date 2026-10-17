@@ -33,7 +33,7 @@ export const mentionVariants = tv({
     ].join(' '),
     // --- Suggestion menu (shared menu surface) ---
     menu: [
-      'absolute z-50 min-w-[12rem] max-w-[20rem]',
+      'absolute z-[var(--dz-z-dropdown,1000)] min-w-[12rem] max-w-[20rem]',
       'flex flex-col',
       'rounded-[var(--dz-radius-lg)]',
       'border border-[var(--dz-border)]',
