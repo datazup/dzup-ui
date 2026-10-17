@@ -8,6 +8,15 @@
  * @module @dzup-ui/tooling/tree-shake-sentinel
  */
 
+import { enMessages } from '../../core/src/i18n/messages.ts'
+
+/**
+ * The i18n catalog's message-group keys (`DzDataGrid`, `DzDataGridHeader`, …).
+ * Only these may be excused as object-literal keys: they are the one place a
+ * component name legitimately appears as a key in every bundle.
+ */
+export const CATALOG_GROUP_KEYS: ReadonlySet<string> = new Set(Object.keys(enMessages))
+
 /** Characters that may not sit either side of a sentinel for it to count. */
 const IDENTIFIER_CHAR = /[\w$]/
 
@@ -34,8 +43,17 @@ const IDENTIFIER_CHAR = /[\w$]/
  * really leaked still matches: its compiled definition carries
  * `__name: "DzDataGrid"` (a quoted VALUE, followed by `,` or `}`, never by `:`),
  * and its import or export binding is a bare identifier.
+ *
+ * The key exemption applies only to a sentinel that IS a catalog group key
+ * ({@link CATALOG_GROUP_KEYS}); any other component name seen as an object key
+ * (a leaked registry such as `{ DzButton: DzButton }`) still counts.
  */
-export function sentinelPresent(bundle: string, sentinel: string): boolean {
+export function sentinelPresent(
+  bundle: string,
+  sentinel: string,
+  catalogKeys: ReadonlySet<string> = CATALOG_GROUP_KEYS,
+): boolean {
+  const keyExempt = catalogKeys.has(sentinel)
   let from = 0
   for (;;) {
     const at = bundle.indexOf(sentinel, from)
@@ -46,7 +64,7 @@ export function sentinelPresent(bundle: string, sentinel: string): boolean {
     const afterIndex = at + sentinel.length
     const after = afterIndex >= bundle.length ? '' : bundle[afterIndex]!
 
-    if (!IDENTIFIER_CHAR.test(before) && !IDENTIFIER_CHAR.test(after) && !isObjectKey(bundle, at, afterIndex))
+    if (!IDENTIFIER_CHAR.test(before) && !IDENTIFIER_CHAR.test(after) && !(keyExempt && isObjectKey(bundle, at, afterIndex)))
       return true
 
     from = at + 1

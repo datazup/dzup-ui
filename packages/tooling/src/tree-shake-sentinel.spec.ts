@@ -11,7 +11,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { sentinelPresent } from './tree-shake-sentinel.ts'
+import { CATALOG_GROUP_KEYS, sentinelPresent } from './tree-shake-sentinel.ts'
 
 describe('sentinelPresent', () => {
   describe('the false positive that broke the gate', () => {
@@ -66,6 +66,20 @@ describe('sentinelPresent', () => {
       const leaked = '{ DzDataGrid: { loading: "Loading data" } };\nconst _sfc_main = { __name: "DzDataGrid", props: {} };'
       expect(sentinelPresent(leaked, 'DzDataGrid')).toBe(true)
       expect(sentinelPresent('const _sfc_main={__name:"DzDataGrid"}', 'DzDataGrid')).toBe(true)
+    })
+
+    it('excuses an object key only for a catalog group key', () => {
+      // DzDataGrid is a catalog group; DzNotACatalogGroup is not, so a registry
+      // that keys a leaked component by name still counts.
+      expect(sentinelPresent('{DzDataGrid:{loading:"x"}}', 'DzDataGrid')).toBe(false)
+      expect(sentinelPresent('{DzNotACatalogGroup:{loading:"x"}}', 'DzNotACatalogGroup')).toBe(true)
+      expect(sentinelPresent('{DzDataGrid:{loading:"x"}}', 'DzDataGrid', new Set())).toBe(true)
+    })
+
+    it('reads the catalog group keys from the real catalog', () => {
+      expect(CATALOG_GROUP_KEYS.has('DzDataGrid')).toBe(true)
+      expect(CATALOG_GROUP_KEYS.has('DzDataGridHeader')).toBe(true)
+      expect(CATALOG_GROUP_KEYS.has('DzButton')).toBe(false)
     })
 
     it('fires on a key-like use that is not an object key', () => {
