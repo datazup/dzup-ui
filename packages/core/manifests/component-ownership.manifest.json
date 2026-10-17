@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "ffcbc897ebba27bf01c34ffd8e3ef3e03dc09461",
+  "sourceCommit": "f0ed614fa45ed941438d5ba600bcc1fe4d67b662",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",

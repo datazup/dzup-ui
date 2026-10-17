@@ -240,8 +240,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `ffcbc897` for the capability matrix,
-`ffcbc897` for the quality matrix. It is **locally qualified**:
+artifact records — `f0ed614f` for the capability matrix,
+`f0ed614f` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -350,7 +350,7 @@ Every kind of evidence required of this component — by Tier D, by its traits (
 | `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/forms/DzFileUpload.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzFileUpload.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `stale` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at e543799, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzFileUpload.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzFileUpload.md` — 6 AT/browser pairs, none executed. |
@@ -361,7 +361,7 @@ Every kind of evidence required of this component — by Tier D, by its traits (
 | `url-policy` | tier D | `present` | `packages/core/security/DzFileUpload.url-policy.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 | `csp-fixture` | tier D | `present` | `packages/core/security/DzFileUpload.csp-fixture.spec.ts` · `packages/core/security/coverage.json` — Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified. |
 
-**1 unrun:** `at-manual` · **2 stale:** `browser-matrix`, `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**1 unrun:** `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

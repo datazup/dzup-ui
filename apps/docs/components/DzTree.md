@@ -260,8 +260,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `ffcbc897` for the capability matrix,
-`ffcbc897` for the quality matrix. It is **locally qualified**:
+artifact records — `f0ed614f` for the capability matrix,
+`f0ed614f` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -366,14 +366,14 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/data/DzTree.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/data/DzTree.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/data/DzTree.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `stale` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at e543799, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `data-scenarios` | trait dataset | `present` | `packages/core/stories/data/DzTree.stories.ts` |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/data/DzTree.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/data/DzTree.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTree.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**1 unrun:** `at-manual` · **2 stale:** `browser-matrix`, `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**1 unrun:** `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records
