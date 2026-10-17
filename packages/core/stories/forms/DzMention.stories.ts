@@ -129,8 +129,8 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
 
-    // The textarea is a combobox; focus it and type @ to open the listbox
-    const combobox = canvas.getByRole('combobox', { name: 'Comment' })
+    // The textarea is a textbox with list autocomplete; type @ to open it
+    const combobox = canvas.getByRole('textbox', { name: 'Comment' })
     await expect(combobox).toBeInTheDocument()
     await userEvent.click(combobox)
     await userEvent.type(combobox, '@')
@@ -174,7 +174,7 @@ export const UserMentions: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const combobox = canvas.getByRole('combobox', { name: 'Comment' })
+    const combobox = canvas.getByRole('textbox', { name: 'Comment' })
     await expect(combobox).toBeInTheDocument()
     // Type @ to open the suggestions dropdown
     await userEvent.click(combobox)
@@ -214,7 +214,7 @@ export const Hashtags: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const combobox = canvas.getByRole('combobox', { name: 'Issue body' })
+    const combobox = canvas.getByRole('textbox', { name: 'Issue body' })
     await expect(combobox).toBeInTheDocument()
     // Type # to open the tag suggestions dropdown
     await userEvent.click(combobox)
@@ -536,22 +536,22 @@ export const States: Story = {
 
     // Idle: nothing flagged, and the control is a live combobox.
     const idleRoot = rootOf('mn-idle')
-    const idleBox = within(idleRoot).getByRole('combobox', { name: 'Idle comment' })
+    const idleBox = within(idleRoot).getByRole('textbox', { name: 'Idle comment' })
     await expect(idleRoot).not.toHaveAttribute('data-disabled')
     await expect(idleRoot).not.toHaveAttribute('aria-busy')
-    await expect(idleBox).toHaveAttribute('aria-expanded', 'false')
+    await expect(idleBox).not.toHaveAttribute('aria-controls')
     await expect(idleBox).toBeEnabled()
 
     // Disabled: flagged on the root and enforced on the control.
     const disabledRoot = rootOf('mn-disabled')
     await expect(disabledRoot).toHaveAttribute('data-disabled')
-    await expect(within(disabledRoot).getByRole('combobox', { name: 'Disabled comment' }))
+    await expect(within(disabledRoot).getByRole('textbox', { name: 'Disabled comment' }))
       .toBeDisabled()
 
     // Invalid: flagged for CSS, announced on the control, explained in an alert.
     const invalidRoot = rootOf('mn-invalid')
     await expect(invalidRoot).toHaveAttribute('data-invalid')
-    await expect(within(invalidRoot).getByRole('combobox', { name: 'Invalid comment' }))
+    await expect(within(invalidRoot).getByRole('textbox', { name: 'Invalid comment' }))
       .toHaveAttribute('aria-invalid', 'true')
     await expect(within(invalidRoot).getByRole('alert'))
       .toHaveTextContent('A comment is required')
@@ -559,7 +559,7 @@ export const States: Story = {
     // Loading: typing the trigger character opens the menu and puts the control
     // into a busy state whose copy replaces the option list.
     const loadingRoot = rootOf('mn-loading')
-    const asyncBox = within(loadingRoot).getByRole('combobox', { name: 'Async comment' })
+    const asyncBox = within(loadingRoot).getByRole('textbox', { name: 'Async comment' })
     await userEvent.click(asyncBox)
     await userEvent.type(asyncBox, '@a')
     await waitFor(() => expect(loadingRoot).toHaveAttribute('aria-busy', 'true'))
@@ -574,11 +574,11 @@ export const States: Story = {
 // ---------------------------------------------------------------------------
 
 /**
- * The APG editable-combobox pattern DzMention implements, asserted rather than
- * described.
- *
- * DOM focus never leaves the textarea: the suggestion list is announced through
- * `aria-expanded`, `aria-controls` and `aria-activedescendant`, with a polite
+ * The keyboard pattern DzMention implements, asserted rather than described.
+ * The multiline control is a native textbox (a <textarea> may carry no role,
+ * QF-39); the single-line input is an APG editable combobox.
+ * DOM focus never leaves the textarea: the open list is announced through
+ * `aria-controls` and `aria-activedescendant`, with a polite
  * live region reporting the match count. The play function types the trigger,
  * moves the active option with the Arrow keys, inserts with Enter and dismisses
  * with Escape, checking after every step that the pointer was never needed.
@@ -619,12 +619,12 @@ export const Accessibility: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const root = canvas.getByTestId('mn-a11y').firstElementChild as HTMLElement
-    const box = within(root).getByRole('combobox', { name: 'Keyboard comment' })
+    const box = within(root).getByRole('textbox', { name: 'Keyboard comment' })
 
     // Closed state advertises the popup without claiming one is open.
-    await expect(box).toHaveAttribute('aria-haspopup', 'listbox')
+    await expect(box).not.toHaveAttribute('role')
     await expect(box).toHaveAttribute('aria-autocomplete', 'list')
-    await expect(box).toHaveAttribute('aria-expanded', 'false')
+    await expect(box).not.toHaveAttribute('aria-expanded')
     await expect(box).not.toHaveAttribute('aria-controls')
 
     // Reach the control with Tab only, then type the trigger character.
@@ -634,7 +634,7 @@ export const Accessibility: Story = {
     await userEvent.keyboard('@')
 
     // The list opens and is wired to the control by id.
-    await waitFor(() => expect(box).toHaveAttribute('aria-expanded', 'true'))
+    await waitFor(() => expect(box).toHaveAttribute('aria-controls'))
     const listbox = within(root).getByRole('listbox')
     await expect(box).toHaveAttribute('aria-controls', listbox.id)
 
@@ -653,16 +653,16 @@ export const Accessibility: Story = {
 
     // Enter inserts the active option at the caret and closes the list.
     await userEvent.keyboard('{Enter}')
-    await waitFor(() => expect(box).toHaveAttribute('aria-expanded', 'false'))
+    await waitFor(() => expect(box).not.toHaveAttribute('aria-controls'))
     await expect(canvas.getByTestId('mn-a11y-value')).toHaveTextContent('@Bob Smith')
 
     // Escape dismisses a re-opened list without inserting anything: the draft
     // keeps the bare trigger character and gains no second mention.
     const beforeEscape = (box as HTMLTextAreaElement).value
     await userEvent.keyboard('@')
-    await waitFor(() => expect(box).toHaveAttribute('aria-expanded', 'true'))
+    await waitFor(() => expect(box).toHaveAttribute('aria-controls'))
     await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(box).toHaveAttribute('aria-expanded', 'false'))
+    await waitFor(() => expect(box).not.toHaveAttribute('aria-controls'))
     await expect((box as HTMLTextAreaElement).value).toBe(`${beforeEscape}@`)
   },
 }
@@ -723,7 +723,7 @@ export const RealWorldCommentComposer: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const root = canvas.getByTestId('mn-rw').firstElementChild as HTMLElement
-    const box = within(root).getByRole('combobox', { name: 'Comment body' })
+    const box = within(root).getByRole('textbox', { name: 'Comment body' })
 
     // An empty draft cannot be posted.
     await expect(canvas.getByTestId('mn-submit')).toBeDisabled()
@@ -821,7 +821,7 @@ export const AsyncOptions: Story = {
       host: mentionHost,
       root: canvasElement,
       open: async () => {
-        await userEvent.click(canvas.getByRole('combobox'))
+        await userEvent.click(canvas.getByRole('textbox'))
         await userEvent.keyboard('@')
       },
       expectOptions: () => waitFor(() => expect(canvas.getByRole('option', { name: 'Ada Lovelace' })).toBeVisible()),
