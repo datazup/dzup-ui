@@ -151,7 +151,7 @@ examples for.
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `a01965f`.
+last changed at `ef955cb`.
 
 ## Extraction fidelity
 
@@ -169,8 +169,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `ae4c6be7` for the capability matrix,
-`ae4c6be7` for the quality matrix. It is **locally qualified**:
+artifact records — `ffcbc897` for the capability matrix,
+`ffcbc897` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -180,7 +180,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** none declared
 - **Security boundary:** `none`
 - **Declared anatomy:** `absent` — the component has not declared its parts, which is not the same claim as having none
-- **Component last changed at:** `a01965fa`
+- **Component last changed at:** `ef955cb4`
 
 ::: warning Recorded exceptions
 A requirement this component provably cannot meet. The row stays in the matrix and the reason
@@ -233,10 +233,10 @@ Every kind of evidence required of this component — by Tier A — and what was
 | Evidence | Required by | State | Where |
 | --- | --- | --- | --- |
 | `contract-spec` | tier A | `present` | `packages/core/src/components/feedback/DzAsyncBoundary.contract.spec.ts` |
-| `unit-spec` | tier A | **`unrun`** | `packages/core/src/components/feedback/DzAsyncBoundary.spec.ts` — The unit spec exists and renders the component, and no live test drives it: the component calls `defineEmits`/`defineModel`, and nothing here triggers an event, sets a value, changes a prop or reads what was emitted. `unit-spec` is "render and behaviour units" (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing. |
+| `unit-spec` | tier A | `present` | `packages/core/src/components/feedback/DzAsyncBoundary.spec.ts` |
 | `axe` | tier A | **`unrun`** | No a11y spec runs axe over a tree containing this component in a test that runs. |
 | `story-light-dark` | tier A | `pass` | `packages/core/stories/feedback/DzAsyncBoundary.stories.ts` |
 | `ssr-sample` | tier A | **`unrun`** | No SSR spec server-renders this component in a test that runs. |
 | `token-contrast` | tier A | `excepted` | Renders only the slot it is given; it ships no colour pair of its own. |
 
-**3 unrun:** `unit-spec`, `axe`, `ssr-sample` · **1 excepted:** `token-contrast`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**2 unrun:** `axe`, `ssr-sample` · **1 excepted:** `token-contrast`. They are named rather than counted, because a total tells a reader nothing about what is missing.

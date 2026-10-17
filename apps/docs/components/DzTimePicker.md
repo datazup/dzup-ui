@@ -251,7 +251,7 @@ presence-only boolean attribute, so it is selectable in CSS and assertable in a 
 **Migration.** Breaking changes to this component are recorded in the repository's changesets
 and published in the release notes; nothing is restated here, because a hand-typed migration
 note drifts from the release it describes the first time the release changes. This component
-last changed at `8e5f717`.
+last changed at `77270db`.
 
 ## Extraction fidelity
 
@@ -269,8 +269,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `ae4c6be7` for the capability matrix,
-`ae4c6be7` for the quality matrix. It is **locally qualified**:
+artifact records — `ffcbc897` for the capability matrix,
+`ffcbc897` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -280,7 +280,7 @@ production evidence, and it must not be read as a conformance claim.
 - **Traits:** `teleports`
 - **Security boundary:** `none`
 - **Declared anatomy:** `declared`
-- **Component last changed at:** `8e5f717f`
+- **Component last changed at:** `77270db3`
 
 **Why this pattern:** A text field over a teleported list of times, where the list is generated from a step and a locale rather than supplied.
 
@@ -373,14 +373,14 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `controlled-uncontrolled` | tier B | `present` | `packages/core/src/components/forms/DzTimePicker.spec.ts` |
 | `browser-play` | tier B | `pass` | `packages/core/stories/forms/DzTimePicker.stories.ts` |
 | `rtl-contract` | tier B | `present` | `packages/core/src/components/forms/DzTimePicker.anatomy.ts` · `packages/core/docs/rtl-matrix.md` |
-| `browser-matrix` | tier B | `pass` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
+| `browser-matrix` | tier B | `stale` | `e2e/matrix/conditions.spec.ts` · `e2e/matrix/browser-evidence.json` · `e2e/matrix/known-failures.json` · `e2e/matrix/engine-ratchets.json` — 24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran |
 | `portal-hydration` | trait teleports | **`unrun`** | No spec server-renders this component with its portal branch taken AND hydrates the result. Measured (RESIDUAL-17): this component portals through a Reka UI `*Portal` primitive, which renders NOTHING on the server — `renderToString` emits a false `v-if` and `ctx.teleports` is empty — so there is no teleported content for SSR to preserve and none for hydration to match. `open: true` in a test call is not evidence the branch was taken; the anchor pair in the output is. Asserted in `packages/core/tests/ssr/portal-hydration.spec.ts`, so this reason goes red the day it stops being true. |
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/forms/DzTimePicker.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/forms/DzTimePicker.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTimePicker.md` — 6 AT/browser pairs, none executed. |
 | `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**3 unrun:** `keyboard-spec`, `portal-hydration`, `at-manual` · **1 stale:** `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**3 unrun:** `keyboard-spec`, `portal-hydration`, `at-manual` · **2 stale:** `browser-matrix`, `perf-baseline`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

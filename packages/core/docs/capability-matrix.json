@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "ae4c6be7fe991f9c6caf7bcbf1f67d7b76b478d5",
+  "sourceCommit": "ffcbc897ebba27bf01c34ffd8e3ef3e03dc09461",
   "generatedFrom": [
     "packages/core/docs/quality-matrix.json",
     "packages/core/manifests/component-ownership.manifest.json",
@@ -81,32 +81,32 @@
     "A": {
       "pass": 106,
       "fail": 0,
-      "present": 150,
+      "present": 151,
       "stale": 0,
-      "unrun": 90,
+      "unrun": 89,
       "excepted": 4
     },
     "B": {
-      "pass": 300,
+      "pass": 276,
       "fail": 0,
       "present": 264,
-      "stale": 0,
+      "stale": 24,
       "unrun": 287,
       "excepted": 66
     },
     "C": {
-      "pass": 149,
+      "pass": 131,
       "fail": 0,
       "present": 170,
-      "stale": 17,
+      "stale": 35,
       "unrun": 34,
       "excepted": 4
     },
     "D": {
-      "pass": 7,
+      "pass": 6,
       "fail": 0,
       "present": 12,
-      "stale": 1,
+      "stale": 2,
       "unrun": 1,
       "excepted": 0
     }
@@ -239,7 +239,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -546,7 +546,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -856,7 +856,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/feedback/DzAsyncBoundary.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "ef955cb4246cff010677d3f116c61966612f5731",
       "cells": [
         {
           "kind": "contract-spec",
@@ -871,11 +871,10 @@
           "kind": "unit-spec",
           "origin": "tier A",
           "scope": "component",
-          "state": "unrun",
+          "state": "present",
           "artifacts": [
             "packages/core/src/components/feedback/DzAsyncBoundary.spec.ts"
-          ],
-          "note": "The unit spec exists and renders the component, and no live test drives it: the component calls `defineEmits`/`defineModel`, and nothing here triggers an event, sets a value, changes a prop or reads what was emitted. `unit-spec` is \"render and behaviour units\" (`packages/tooling/src/quality/spec-contract-surfaces.ts`). This read `present` until RESIDUAL-19, on the file existing."
+          ]
         },
         {
           "kind": "axe",
@@ -1281,7 +1280,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -1510,7 +1509,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -1750,7 +1749,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -1941,7 +1940,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -2213,7 +2212,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -2470,7 +2469,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -2506,7 +2505,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/media/DzCarousel.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "ffcbc897ebba27bf01c34ffd8e3ef3e03dc09461",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2613,14 +2612,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -2666,7 +2665,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzCascader.vue",
-      "componentCommit": "14d4cb4a770b6f14bbbc2cc91894f28cd35619c7",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2774,14 +2773,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -2860,7 +2859,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzCheckbox.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2969,14 +2968,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3010,7 +3009,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzCheckboxGroup.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -3117,14 +3116,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3272,7 +3271,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3578,7 +3577,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3612,7 +3611,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/navigation/DzColorModeToggle.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "76c2b67c361926e348b008d15f769b07c9aaf103",
       "cells": [
         {
           "kind": "contract-spec",
@@ -3719,14 +3718,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -3762,7 +3761,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzColorPicker.vue",
-      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
+      "componentCommit": "e601918aee17a9a94eca6608e23973a0d8790df7",
       "cells": [
         {
           "kind": "contract-spec",
@@ -3870,14 +3869,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -3919,7 +3918,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -3950,7 +3949,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzCombobox.vue",
-      "componentCommit": "4f68982f9c5ee808e7c8b300acfc9d05604f102e",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -4058,14 +4057,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4147,7 +4146,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/overlays/DzCommandPalette.vue",
-      "componentCommit": "4f68982f9c5ee808e7c8b300acfc9d05604f102e",
+      "componentCommit": "7a004e44be9c9e92721d4cf4877424a8b1dcce44",
       "cells": [
         {
           "kind": "contract-spec",
@@ -4256,14 +4255,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4456,7 +4455,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4693,7 +4692,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -4735,7 +4734,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/buttons/DzCopyButton.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "c2eaedcfc51b7ba471fee672a834c36a10546bee",
       "cells": [
         {
           "kind": "contract-spec",
@@ -4841,14 +4840,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -4874,7 +4873,7 @@
           "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-dark-chromium-linux.png",
           "e2e/visual/component-baselines.spec.ts-snapshots/component-DzCopyButton-light-chromium-linux.png"
         ],
-        "note": "2/2 baseline(s) were captured before the component's last change (b0e3e0c3) — a pass about different code."
+        "note": "2/2 baseline(s) were captured before the component's last change (c2eaedcf) — a pass about different code."
       }
     },
     {
@@ -4969,7 +4968,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzDataGrid.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5077,14 +5076,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -5165,7 +5164,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzDataView.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5273,14 +5272,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -5351,7 +5350,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
-      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5459,14 +5458,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -5528,7 +5527,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
-      "componentCommit": "f4d61c24e956e32568308d4ae460fb930bb72f2e",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5636,14 +5635,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -5990,7 +5989,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -6227,7 +6226,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -6425,7 +6424,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/feedback/DzErrorBoundary.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "ef955cb4246cff010677d3f116c61966612f5731",
       "cells": [
         {
           "kind": "contract-spec",
@@ -6614,7 +6613,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -6768,7 +6767,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -6813,7 +6812,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzFileUpload.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "e601918aee17a9a94eca6608e23973a0d8790df7",
       "cells": [
         {
           "kind": "contract-spec",
@@ -6922,14 +6921,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "a11y-narrative",
@@ -7635,7 +7634,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8015,7 +8014,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8207,7 +8206,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -8363,7 +8362,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8397,7 +8396,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/inputs/DzInput.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -8506,14 +8505,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8625,7 +8624,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/inputs/DzInputMask.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -8732,14 +8731,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -8853,7 +8852,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzKnob.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -8961,14 +8960,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -9129,7 +9128,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -9409,7 +9408,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -9445,7 +9444,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzListbox.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -9552,14 +9551,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -9795,7 +9794,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -9901,7 +9900,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzMention.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10009,14 +10008,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10202,7 +10201,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -10359,7 +10358,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10467,14 +10466,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -10553,7 +10552,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/feedback/DzNotification.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "7a004e44be9c9e92721d4cf4877424a8b1dcce44",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10660,14 +10659,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -10701,7 +10700,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/inputs/DzNumberInput.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10808,14 +10807,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -10852,7 +10851,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzOrderList.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10960,14 +10959,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -11048,7 +11047,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/inputs/DzOtpInput.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -11155,14 +11154,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11389,7 +11388,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11537,7 +11536,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11571,7 +11570,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/inputs/DzPasswordInput.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "e601918aee17a9a94eca6608e23973a0d8790df7",
       "cells": [
         {
           "kind": "contract-spec",
@@ -11679,14 +11678,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -11788,7 +11787,7 @@
           "artifacts": [
             "packages/core/src/components/forms/DzPersonaSelector.spec.ts"
           ],
-          "note": "The component declares 7 binding(s); the unit spec asserts no key event for `ArrowUp`, `Home`, `End`, `Enter`, `Space`. The contract is the yardstick, not the presence of any key at all."
+          "note": "The component declares 7 binding(s); the unit spec asserts no key event for `ArrowUp`, `Home`, `End`, `Enter`. The contract is the yardstick, not the presence of any key at all."
         },
         {
           "kind": "state-stories",
@@ -11838,7 +11837,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12065,7 +12064,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12227,7 +12226,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -12350,7 +12349,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/providers/DzProvider.vue",
-      "componentCommit": "527dbd150036b5f07bd69e672825ff14ec3a592d",
+      "componentCommit": "6264983549be8f5ba8e7b2600ff8285a0d3d31f7",
       "cells": [
         {
           "kind": "contract-spec",
@@ -12450,14 +12449,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12603,7 +12602,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzRadio.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -12711,14 +12710,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12752,7 +12751,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzRadioGroup.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -12861,14 +12860,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -12904,7 +12903,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzRangeSlider.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -13011,14 +13010,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13060,7 +13059,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzRating.vue",
-      "componentCommit": "63c1325d0b6d0caf862e198675db1685730f04fe",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -13168,14 +13167,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13412,7 +13411,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13727,7 +13726,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -13839,7 +13838,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/inputs/DzSearchInput.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -13947,14 +13946,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -14103,7 +14102,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -14140,7 +14139,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzSelect.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -14249,14 +14248,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14425,7 +14424,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14586,7 +14585,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -14780,7 +14779,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzSlider.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -14889,14 +14888,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15132,7 +15131,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -15381,7 +15380,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15537,7 +15536,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15857,7 +15856,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -15998,7 +15997,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16032,7 +16031,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzSwitch.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -16099,7 +16098,7 @@
           "artifacts": [
             "packages/core/src/components/forms/DzSwitch.spec.ts"
           ],
-          "note": "The component declares 2 binding(s); the unit spec asserts no key event for `Space`, `Enter`. The contract is the yardstick, not the presence of any key at all."
+          "note": "The component declares 2 binding(s); the unit spec asserts no key event for `Enter`. The contract is the yardstick, not the presence of any key at all."
         },
         {
           "kind": "state-stories",
@@ -16141,14 +16140,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16299,7 +16298,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -16495,7 +16494,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16644,7 +16643,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -16680,7 +16679,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzTagsInput.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -16788,14 +16787,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -16917,7 +16916,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/inputs/DzTextarea.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -17026,14 +17025,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17067,7 +17066,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/providers/DzThemeProvider.vue",
-      "componentCommit": "a01965fa58ba827ab69a9408423406aba5c148c8",
+      "componentCommit": "81eaa57ddf24cf82a56bf22777c549ecccde5ff9",
       "cells": [
         {
           "kind": "contract-spec",
@@ -17172,7 +17171,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "0/24 projects measured green at 7f7c1a2. 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "0/24 projects measured green at 7f7c1a2, ffcbc89. 24 project(s) unrun: chromium/default, chromium/forced-colors, chromium/reduced-motion, chromium/rtl, chromium/touch, chromium/zoom-400, chromium/text-200, chromium/spacing, firefox/default, firefox/forced-colors, firefox/reduced-motion, firefox/rtl, firefox/touch, firefox/zoom-400, firefox/text-200, firefox/spacing, webkit/default, webkit/forced-colors, webkit/reduced-motion, webkit/rtl, webkit/touch, webkit/zoom-400, webkit/text-200, webkit/spacing. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17208,7 +17207,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzTimePicker.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -17316,14 +17315,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -17673,7 +17672,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -17819,7 +17818,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -18051,7 +18050,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -18203,7 +18202,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -18248,7 +18247,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/overlays/DzTour.vue",
-      "componentCommit": "7edd39ad45f5f309015b1f93801fa0f29813090d",
+      "componentCommit": "e601918aee17a9a94eca6608e23973a0d8790df7",
       "cells": [
         {
           "kind": "contract-spec",
@@ -18358,14 +18357,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -18448,7 +18447,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzTransfer.vue",
-      "componentCommit": "74c763e07d0a35d2b6159e45c0f6197aef728fd1",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "cells": [
         {
           "kind": "contract-spec",
@@ -18556,14 +18555,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -18636,7 +18635,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/data/DzTree.vue",
-      "componentCommit": "b0e3e0c372981662975cf48e9f51770d834d5a58",
+      "componentCommit": "8bbf4a6c783aab73189e065fc07fde3dab91402c",
       "cells": [
         {
           "kind": "contract-spec",
@@ -18744,14 +18743,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "data-scenarios",
@@ -18794,7 +18793,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -18928,7 +18927,7 @@
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "at-manual",
@@ -18965,7 +18964,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzTreeSelect.vue",
-      "componentCommit": "8e5f717f852be2e492d58e6fabb8a7083d522816",
+      "componentCommit": "77270db35c93b06c8bd5a70896127f945004cc48",
       "cells": [
         {
           "kind": "contract-spec",
@@ -19074,14 +19073,14 @@
           "kind": "browser-matrix",
           "origin": "tier B",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "e2e/matrix/conditions.spec.ts",
             "e2e/matrix/browser-evidence.json",
             "e2e/matrix/known-failures.json",
             "e2e/matrix/engine-ratchets.json"
           ],
-          "note": "24/24 projects measured green at 7f7c1a2. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
+          "note": "24/24 projects measured green at 7f7c1a2, ffcbc89. 8 measured before the component's last change. chromium 149.0.7827.55 (playwright chromium v1228): all 8 conditions, no expected failure in what it ran. firefox 151.0 (playwright firefox v1532): all 8 conditions, no expected failure in what it ran. webkit 26.5 (playwright webkit v2311): all 8 conditions, no expected failure in what it ran"
         },
         {
           "kind": "portal-hydration",
@@ -19234,7 +19233,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/media/DzWatermark.vue",
-      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661",
+      "componentCommit": "feeba4efe57a9cd0debd350d3d5bdab5b214055c",
       "cells": [
         {
           "kind": "contract-spec",
