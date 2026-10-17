@@ -126,6 +126,7 @@
     },
     "DzMultiSelect": {
       "clearAll": "Clear all",
+      "maxReached": "{count, plural, one {# option selected, the maximum. Remove it to choose another.} other {# options selected, the maximum. Remove one to choose another.}}",
       "toggleOptions": "Toggle options"
     },
     "DzNotification": {

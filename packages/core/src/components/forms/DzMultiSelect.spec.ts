@@ -268,6 +268,30 @@ describe('dzMultiSelect — declared keyboard actions', () => {
 })
 
 describe('dzMultiSelect — at maxSelections', () => {
+  it('says why the rest is disabled: a live region and the input description (QF-08)', async () => {
+    const wrapper = mount(DzMultiSelect, {
+      attachTo: document.body,
+      props: { items, modelValue: ['apple'], maxSelections: 2, portalDisabled: true },
+    })
+    try {
+      const input = wrapper.get('input')
+      const region = wrapper.get('[aria-live="polite"].sr-only')
+      expect(region.text()).toBe('')
+      expect(input.attributes('aria-describedby') ?? '').not.toContain(region.attributes('id'))
+
+      await wrapper.setProps({ modelValue: ['apple', 'banana'] })
+      expect(region.text()).toBe('2 options selected, the maximum. Remove one to choose another.')
+      expect(input.attributes('aria-describedby')?.split(' ')).toContain(region.attributes('id'))
+
+      await wrapper.setProps({ modelValue: ['banana'] })
+      expect(region.text()).toBe('')
+      expect(input.attributes('aria-describedby') ?? '').not.toContain(region.attributes('id'))
+    }
+    finally {
+      wrapper.unmount()
+    }
+  })
+
   it('keeps the input focusable and lets selected options be toggled off', async () => {
     const original = HTMLElement.prototype.scrollIntoView
     HTMLElement.prototype.scrollIntoView = () => {}

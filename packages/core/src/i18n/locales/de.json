@@ -76,6 +76,7 @@
     "DzMention.noResults",
     "DzMention.suggestionsAvailable",
     "DzMultiSelect.clearAll",
+    "DzMultiSelect.maxReached",
     "DzMultiSelect.toggleOptions",
     "DzNotification.dismiss",
     "DzNumberInput.decrease",

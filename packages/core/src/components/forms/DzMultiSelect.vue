@@ -37,7 +37,7 @@ import { computed, ref, useAttrs } from 'vue'
 import { useDzPortalTarget, useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
-import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
+import { useComponentMessageFormat, useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { multiSelectVariants } from './DzMultiSelect.variants.ts'
 import DzOptionsState from './DzOptionsState.vue'
@@ -228,6 +228,23 @@ const rootClasses = computed(() =>
 
 // User-visible strings, resolved against the application's catalog (ADR-20).
 const dzMessages = useComponentMessages('DzMultiSelect')
+const dzFormat = useComponentMessageFormat('DzMultiSelect')
+
+/**
+ * QF-08: at `maxSelections` the input stays enabled but unselected options are
+ * disabled, which a screen-reader user meets with no reason given. The limit is
+ * said once in a polite live region and, while it holds, joins the input's
+ * description, so it is read on focus too.
+ */
+const maxReachedId = computed(() => `${resolvedId.value}-max-reached`)
+const maxReachedText = computed(() =>
+  isMaxReached.value ? dzFormat('maxReached', { count: props.maxSelections ?? 0 }) : '',
+)
+const inputAriaDescribedby = computed(() =>
+  isMaxReached.value
+    ? [resolvedAriaDescribedby.value, maxReachedId.value].filter(Boolean).join(' ')
+    : resolvedAriaDescribedby.value,
+)
 
 // Stable test hooks, off unless a host enables them (ADR-20 §8, TASK-R5-O3).
 const { testId: dzTestId } = useDzTestIds()
@@ -294,7 +311,7 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
           :disabled="resolvedDisabled"
           :aria-label="ariaLabel"
           :aria-labelledby="ariaLabelledby"
-          :aria-describedby="resolvedAriaDescribedby"
+          :aria-describedby="inputAriaDescribedby"
           :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
           @focus="handleFocus"
           @blur="handleBlur"
@@ -326,6 +343,7 @@ const handleAsyncOptionsKeydown = provideRetryKeyboardRoute()
           </button>
         </ComboboxTrigger>
       </ComboboxAnchor>
+      <span :id="maxReachedId" class="sr-only" aria-live="polite">{{ maxReachedText }}</span>
 
       <ComboboxPortal
         :to="resolvedPortalTo"

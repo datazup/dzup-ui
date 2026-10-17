@@ -169,7 +169,7 @@ declare module '@dzup-ui/contracts' {
       noResults: string
       suggestionsAvailable: DzMessage<{ count: number }>
     }
-    DzMultiSelect: { clearAll: string, toggleOptions: string }
+    DzMultiSelect: { clearAll: string, maxReached: DzMessage<{ count: number }>, toggleOptions: string }
     DzNotification: { dismiss: string }
     DzNumberInput: { decrease: string, increase: string }
     DzOrderList: {
@@ -383,7 +383,11 @@ export const enMessages = {
     noResults: 'No matches',
     suggestionsAvailable: '{count, plural, one {# suggestion available} other {# suggestions available}}',
   },
-  DzMultiSelect: { clearAll: 'Clear all', toggleOptions: 'Toggle options' },
+  DzMultiSelect: {
+    clearAll: 'Clear all',
+    maxReached: '{count, plural, one {# option selected, the maximum. Remove it to choose another.} other {# options selected, the maximum. Remove one to choose another.}}',
+    toggleOptions: 'Toggle options',
+  },
   DzNotification: { dismiss: 'Dismiss notification' },
   DzNumberInput: { decrease: 'Decrease value', increase: 'Increase value' },
   DzOrderList: {
