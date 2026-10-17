@@ -33,24 +33,12 @@ const PUBLISHED_BUILD = ['package.json', 'packages/core/package.json', 'packages
 const SOURCE_COMPILERS = ['apps/landing/package.json', 'apps/storybook/package.json']
 
 /**
- * The recorded exception. The blocker is the same for both entries: moving them
- * to vite 7 / plugin-vue 6 changes `yarn.lock` and needs a dependency install,
- * which the audit-implementation lane that recorded this may not run. Delete an
- * entry in the same change that aligns it.
+ * The recorded exception list. Empty since AUDIT-FOLLOWUPS-20261017-R1 (RF-16)
+ * moved apps/landing and apps/storybook to vite ^7 / @vitejs/plugin-vue ^6.
+ * The shrink-only check below still applies: an entry may be added only with a
+ * blocker, and an aligned app may not stay listed.
  */
-const RECORDED_EXCEPTIONS: Record<string, { vite: number, pluginVue: number, blocker: string }> = {
-  'apps/landing/package.json': {
-    vite: 6,
-    pluginVue: 5,
-    blocker: 'bumping vite ^6 -> ^7 and @vitejs/plugin-vue ^5 -> ^6 needs a yarn install that regenerates yarn.lock',
-  },
-  'apps/storybook/package.json': {
-    vite: 6,
-    pluginVue: 5,
-    blocker: 'bumping vite ^6 -> ^7 and @vitejs/plugin-vue ^5 -> ^6 needs a yarn install that regenerates yarn.lock; '
-      + 'confirm @storybook/vue3-vite accepts vite 7 in the same change',
-  },
-}
+const RECORDED_EXCEPTIONS: Record<string, { vite: number, pluginVue: number, blocker: string }> = {}
 
 interface Majors { vite: number | undefined, pluginVue: number | undefined }
 
