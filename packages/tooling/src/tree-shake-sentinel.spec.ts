@@ -27,6 +27,15 @@ describe('sentinelPresent', () => {
       expect(sentinelPresent(catalog, 'DzDataGrid')).toBe(false)
     })
 
+    it('does not fire on the root DataGrid catalog group key', () => {
+      // `DzDataGrid: { loading, empty }` from packages/core/src/i18n/messages.ts,
+      // as the unminified library build prints it, and minified / quoted forms.
+      const unminified = '  DzOrderList: { empty: "No items" },\n  DzDataGrid: { loading: "Loading data", empty: "No data available" },\n'
+      expect(sentinelPresent(unminified, 'DzDataGrid')).toBe(false)
+      expect(sentinelPresent('{DzDataGrid:{loading:"Loading data"}}', 'DzDataGrid')).toBe(false)
+      expect(sentinelPresent('{"DzDataGrid": {"loading":"Loading data"}}', 'DzDataGrid')).toBe(false)
+    })
+
     it('does not fire on a longer identifier that ends with the sentinel', () => {
       expect(sentinelPresent('const MyDzDataGrid=1', 'DzDataGrid')).toBe(false)
     })
@@ -49,6 +58,20 @@ describe('sentinelPresent', () => {
       expect(sentinelPresent('DzDataGrid', 'DzDataGrid')).toBe(true)
       expect(sentinelPresent('x=DzDataGrid', 'DzDataGrid')).toBe(true)
       expect(sentinelPresent('DzDataGrid=x', 'DzDataGrid')).toBe(true)
+    })
+
+    it('fires on the compiled component definition next to a catalog key', () => {
+      // A leaked SFC carries `__name: "DzDataGrid"`; the catalog key beside it
+      // must not hide it.
+      const leaked = '{ DzDataGrid: { loading: "Loading data" } };\nconst _sfc_main = { __name: "DzDataGrid", props: {} };'
+      expect(sentinelPresent(leaked, 'DzDataGrid')).toBe(true)
+      expect(sentinelPresent('const _sfc_main={__name:"DzDataGrid"}', 'DzDataGrid')).toBe(true)
+    })
+
+    it('fires on a key-like use that is not an object key', () => {
+      expect(sentinelPresent('x ? DzDataGrid : y', 'DzDataGrid')).toBe(true)
+      expect(sentinelPresent('export { DzDataGrid }', 'DzDataGrid')).toBe(true)
+      expect(sentinelPresent('export { DzDataGrid, DzButton }', 'DzDataGrid')).toBe(true)
     })
 
     it('finds a real occurrence that follows a false one', () => {
