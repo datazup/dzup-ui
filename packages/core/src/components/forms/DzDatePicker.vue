@@ -199,8 +199,8 @@ const { testId: dzTestId } = useDzTestIds()
       :name="name"
       :placeholder="placeholderDate"
       granularity="day"
-      @update:model-value="handleDateChange"
       :open="isOpen"
+      @update:model-value="handleDateChange"
       @update:open="handleOpenChange"
     >
       <DatePickerAnchor>
