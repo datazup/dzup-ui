@@ -414,7 +414,9 @@ describe('the evidence ratchet (gate 8, RESIDUAL-17, D-RES16-3)', () => {
     // added) and took `pass` to 562 (DzCommandPalette perf-baseline stale).
     // The 2026-10-17 audit landing took `pass` to 560 (DzColorPicker and DzTree
     // perf-baseline stale) and `present` to 597 (DzAsyncBoundary unit-spec).
-    expect(shipped.evidenceCells.totals.pass).toBe(560)
+    // AUDIT-FOLLOWUPS-R2-20261018-R1 took `pass` to 577 (the 22 size baselines
+    // recaptured at 8275cefc: 17 perf-baseline cells stale -> pass).
+    expect(shipped.evidenceCells.totals.pass).toBe(577)
     expect(shipped.evidenceCells.totals.present).toBe(597)
   })
 })
