@@ -229,7 +229,7 @@ then the component's own default.**
 | --- | --- |
 | **Server rendering** | `present` — `packages/core/tests/ssr/portal-hydration.spec.ts`. |
 | **Portal / teleport** | `present` — `packages/core/tests/ssr/portal-hydration.spec.ts`. Server-rendered with the portal branch taken (the teleport anchor pair asserted), the teleported markup read from `renderToString`'s SSR context, then hydrated with ZERO bytes of the component's own output rewritten. What is NOT evidenced is whether hydration CLAIMS server-rendered content sitting in the teleport target rather than re-creating it: a minimal `<Teleport to="body">` control mismatches the same way under a hand-placed target in jsdom, so that half needs a real SSR document in a real engine — owner decision `D-RES17-1`. |
-| **Performance baseline** | `stale` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
+| **Performance baseline** | `pass` — `packages/core/perf/baselines.json`. 1/1 metric(s) have a derived threshold |
 | **Security boundary** | `none` — no host-supplied HTML, file, URL or payload reaches a sink. |
 
 **Peer packages.** Which external packages this component can reach is a property of the built
@@ -264,8 +264,8 @@ extraction that produced the tables above.
 
 ::: warning How far this evidence goes
 Every state on this page is read from a generated artifact and bound to the commit that
-artifact records — `31fc36c7` for the capability matrix,
-`31fc36c7` for the quality matrix. It is **locally qualified**:
+artifact records — `8275cefc` for the capability matrix,
+`8275cefc` for the quality matrix. It is **locally qualified**:
 produced by a local run on one machine, against a worktree carrying uncommitted work. It is **not** continuous-integration evidence, **not** release evidence and **not**
 production evidence, and it must not be read as a conformance claim.
 :::
@@ -374,9 +374,9 @@ Every kind of evidence required of this component — by Tier C, by its traits (
 | `a11y-narrative` | tier C | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `real-world-story` | tier C | `pass` | `packages/core/stories/overlays/DzTour.stories.ts` |
 | `at-manual` | tier B | **`unrun`** | `e2e/at-matrix/DzTour.md` — 6 AT/browser pairs, none executed. |
-| `perf-baseline` | tier C | `stale` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
+| `perf-baseline` | tier C | `pass` | `packages/core/perf/baselines.json` — 1/1 metric(s) have a derived threshold |
 
-**1 unrun:** `at-manual` · **1 stale:** `perf-baseline` · **1 excepted:** `state-stories`. They are named rather than counted, because a total tells a reader nothing about what is missing.
+**1 unrun:** `at-manual` · **1 excepted:** `state-stories`. They are named rather than counted, because a total tells a reader nothing about what is missing.
 
 The `at-manual` row above is the matrix's **summary** of the screen-reader lane. This page does
 not rely on it: the *Assistive technology* section is rendered from the append-only run records

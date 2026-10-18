@@ -105,16 +105,46 @@
     "hostname": "am5",
     "node": "v24.20.0",
     "metricIds": [
+      "size:DzCalendar",
+      "size:DzCascader",
       "size:DzColorPicker",
+      "size:DzCombobox",
       "size:DzCommandPalette",
+      "size:DzDataGrid",
+      "size:DzDataView",
+      "size:DzDatePicker",
+      "size:DzDateRangePicker",
+      "size:DzFileUpload",
+      "size:DzMegaMenu",
+      "size:DzMention",
+      "size:DzMultiSelect",
+      "size:DzOrderList",
+      "size:DzPersonaSelector",
       "size:DzSidebar",
-      "size:DzTree"
+      "size:DzTable",
+      "size:DzTimePicker",
+      "size:DzTour",
+      "size:DzTransfer",
+      "size:DzTree",
+      "size:DzTreeSelect"
     ],
-    "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
-    "decision": "D-S1O4-1 / D-S1O4-2",
-    "grantedBy": "operator use this host 2026-10-08",
-    "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
-    "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
-    "scope": "SIZE byte counts only for these four records; global authoritative designation and quiescence policy remain unchanged."
+    "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
+    "decision": "D-S1O4-1 (#20) size cells only / D-S1O4-2 (#23) size half / D-S1O4-4 (#21)",
+    "grantedBy": "operator as perf-budget owner, 2026-10-18 (AUDIT-FOLLOWUPS-R2-20261018-R1 budget-widening grant); exact profile entry chosen by the delegated decider (keep the am5 size profile that measured the bytes)",
+    "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1",
+    "admissionCommit": null,
+    "previous": {
+      "metricIds": [
+        "size:DzColorPicker",
+        "size:DzCommandPalette",
+        "size:DzSidebar",
+        "size:DzTree"
+      ],
+      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+      "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
+      "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
+      "grantedBy": "operator use this host 2026-10-08"
+    },
+    "scope": "SIZE byte counts only, for all 22 size:* records. Gzipped bytes of a deterministic build do not vary with host load. The global authoritative designation, committed.byKind and quiescence policy are unchanged; every timing family (runtime, leak, longtask, memory, hydration) stays undesignated, pending a dedicated host (operator provisioning, register #20 option A). Naming linux-x64-ci for size (register #20 option C) is a recorded follow-up, not done here."
   }
 }

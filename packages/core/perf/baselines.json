@@ -709,28 +709,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          18613,
-          18613,
-          18613,
-          18613,
-          18613
+          19682,
+          19682,
+          19682,
+          19682,
+          19682
         ],
         "runs": 5,
-        "median": 18613,
-        "p95": 18613,
-        "mean": 18613,
+        "median": 19682,
+        "p95": 19682,
+        "mean": 19682,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 19543.65,
-      "thresholdFormula": "median 18613.00 + max(3σ 0.00, 5% 930.65) = 19543.65",
+      "threshold": 19682,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 19682 B, no headroom (was 19543.65)",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 19543.65,
+          "to": 19682,
+          "reason": "b09 8bbf4a6c motion-token transitions + one focus ring + catalog empty strings; R13 4f68982f reconcile; GAPADM-03 b0e3e0c3 SSR/CSP-safe utilities instead of inline styles",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              18613,
+              18613,
+              18613,
+              18613,
+              18613
+            ],
+            "runs": 5,
+            "median": 18613,
+            "p95": 18613,
+            "mean": 18613,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 19543.65,
+          "thresholdFormula": "median 18613.00 + max(3σ 0.00, 5% 930.65) = 19543.65",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -742,28 +796,74 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          23559,
-          23559,
-          23559,
-          23559,
-          23559
+          24141,
+          24141,
+          24141,
+          24141,
+          24141
         ],
         "runs": 5,
-        "median": 23559,
-        "p95": 23559,
-        "mean": 23559,
+        "median": 24141,
+        "p95": 24141,
+        "mean": 24141,
         "stddev": 0,
         "cv": 0
       },
       "threshold": 24736.95,
       "thresholdFormula": "median 23559.00 + max(3σ 0.00, 5% 1177.95) = 24736.95",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              23559,
+              23559,
+              23559,
+              23559,
+              23559
+            ],
+            "runs": 5,
+            "median": 23559,
+            "p95": 23559,
+            "mean": 23559,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 24736.95,
+          "thresholdFormula": "median 23559.00 + max(3σ 0.00, 5% 1177.95) = 24736.95",
+          "policy": "Within budget at 8275cefc; existing threshold and its original derivation retained, not recalculated from the refreshed distribution."
+        }
       }
     },
     {
@@ -775,23 +875,23 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19428,
-          19428,
-          19428,
-          19428,
-          19428
+          22867,
+          22867,
+          22867,
+          22867,
+          22867
         ],
         "runs": 5,
-        "median": 19428,
-        "p95": 19428,
-        "mean": 19428,
+        "median": 22867,
+        "p95": 22867,
+        "mean": 22867,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 20349,
-      "thresholdFormula": "median 19380.00 + max(3σ 0.00, 5% 969.00) = 20349.00",
+      "threshold": 22867,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 22867 B, no headroom (was 20349)",
       "unmeasurable": null,
-      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
@@ -799,7 +899,7 @@
         "node": "v24.20.0"
       },
       "sizeCapture": {
-        "capturedAt": "2026-10-08T09:16:49.908Z",
+        "capturedAt": "2026-10-18T08:22:14.170Z",
         "runs": 5,
         "profileId": "am5-linux-x64-32c-node24-size",
         "hostname": "am5",
@@ -807,42 +907,49 @@
         "instrument": {
           "path": "packages/tooling/src/perf/export-sizes.ts",
           "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
-          "lockSha256": "c1dda2f7dc75c4230bb0bf53fcfa276e6abccb43971686f0dc9a05924bd7445a"
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
         },
         "toolchain": {
           "vite": "7.3.5",
           "@vitejs/plugin-vue": "6.0.7",
           "esbuild": "0.27.4",
           "tsx": "4.21.0",
-          "vue": "3.5.31",
+          "vue": "3.5.43",
           "typescript": "5.9.3",
-          "vitest": "3.2.6"
+          "vitest": "3.2.7"
         },
-        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/gap-lanes-20261002/private/gap-ui-r11-perf-size-refresh-20261007-a3/raw-captures.json",
-        "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
-        "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
-        "adoptionDecision": "D-S1O4-2: operator use this host 2026-10-08",
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
         "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 20349,
+          "to": 22867,
+          "reason": "7a004e44 invalid-hex handling, 77270db3 shared useFormControl (field a11y wiring), e601918a localisable swatch strings, 8bbf4a6c motion tokens/focus ring, 949ecfc9 --dz-z-* overlay layer scale",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
         "existingBudget": {
-          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
           "distribution": {
             "samples": [
-              19380,
-              19380,
-              19380,
-              19380,
-              19380
+              19428,
+              19428,
+              19428,
+              19428,
+              19428
             ],
             "runs": 5,
-            "median": 19380,
-            "p95": 19380,
-            "mean": 19380,
+            "median": 19428,
+            "p95": 19428,
+            "mean": 19428,
             "stddev": 0,
             "cv": 0
           },
           "threshold": 20349,
           "thresholdFormula": "median 19380.00 + max(3σ 0.00, 5% 969.00) = 20349.00",
-          "policy": "Retained existing threshold and its original derivation; not recalculated from the refreshed distribution."
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
         }
       }
     },
@@ -855,28 +962,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          22616,
-          22616,
-          22616,
-          22616,
-          22616
+          24956,
+          24956,
+          24956,
+          24956,
+          24956
         ],
         "runs": 5,
-        "median": 22616,
-        "p95": 22616,
-        "mean": 22616,
+        "median": 24956,
+        "p95": 24956,
+        "mean": 24956,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 23746.8,
-      "thresholdFormula": "median 22616.00 + max(3σ 0.00, 5% 1130.80) = 23746.80",
+      "threshold": 24956,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 24956 B, no headroom (was 23746.8)",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 23746.8,
+          "to": 24956,
+          "reason": "5ae76ba7 Combobox a11y fix, 77270db3 shared useFormControl, 76c2b67c/8bbf4a6c token refactors, 949ecfc9 overlay layer scale, 4f68982f R11 Tab-close fix",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              22616,
+              22616,
+              22616,
+              22616,
+              22616
+            ],
+            "runs": 5,
+            "median": 22616,
+            "p95": 22616,
+            "mean": 22616,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 23746.8,
+          "thresholdFormula": "median 22616.00 + max(3σ 0.00, 5% 1130.80) = 23746.80",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -888,23 +1049,23 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          20137,
-          20137,
-          20137,
-          20137,
-          20137
+          21313,
+          21313,
+          21313,
+          21313,
+          21313
         ],
         "runs": 5,
-        "median": 20137,
-        "p95": 20137,
-        "mean": 20137,
+        "median": 21313,
+        "p95": 21313,
+        "mean": 21313,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 21105,
-      "thresholdFormula": "median 20100.00 + max(3σ 0.00, 5% 1005.00) = 21105.00",
+      "threshold": 21313,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 21313 B, no headroom (was 21105)",
       "unmeasurable": null,
-      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
@@ -912,7 +1073,7 @@
         "node": "v24.20.0"
       },
       "sizeCapture": {
-        "capturedAt": "2026-10-08T09:16:58.537Z",
+        "capturedAt": "2026-10-18T08:22:14.170Z",
         "runs": 5,
         "profileId": "am5-linux-x64-32c-node24-size",
         "hostname": "am5",
@@ -920,42 +1081,49 @@
         "instrument": {
           "path": "packages/tooling/src/perf/export-sizes.ts",
           "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
-          "lockSha256": "c1dda2f7dc75c4230bb0bf53fcfa276e6abccb43971686f0dc9a05924bd7445a"
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
         },
         "toolchain": {
           "vite": "7.3.5",
           "@vitejs/plugin-vue": "6.0.7",
           "esbuild": "0.27.4",
           "tsx": "4.21.0",
-          "vue": "3.5.31",
+          "vue": "3.5.43",
           "typescript": "5.9.3",
-          "vitest": "3.2.6"
+          "vitest": "3.2.7"
         },
-        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/gap-lanes-20261002/private/gap-ui-r11-perf-size-refresh-20261007-a3/raw-captures.json",
-        "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
-        "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
-        "adoptionDecision": "D-S1O4-2: operator use this host 2026-10-08",
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
         "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 21105,
+          "to": 21313,
+          "reason": "39c0721b shortcut + hardcoded-strings fixes, 7a004e44 catalog strings, R11-01 aria-controls/listbox name repair, 8bbf4a6c focus ring, 949ecfc9 overlay layer scale",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
         "existingBudget": {
-          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
           "distribution": {
             "samples": [
-              20100,
-              20100,
-              20100,
-              20100,
-              20100
+              20137,
+              20137,
+              20137,
+              20137,
+              20137
             ],
             "runs": 5,
-            "median": 20100,
-            "p95": 20100,
-            "mean": 20100,
+            "median": 20137,
+            "p95": 20137,
+            "mean": 20137,
             "stddev": 0,
             "cv": 0
           },
           "threshold": 21105,
           "thresholdFormula": "median 20100.00 + max(3σ 0.00, 5% 1005.00) = 21105.00",
-          "policy": "Retained existing threshold and its original derivation; not recalculated from the refreshed distribution."
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
         }
       }
     },
@@ -968,28 +1136,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          36450,
-          36450,
-          36450,
-          36450,
-          36450
+          42884,
+          42884,
+          42884,
+          42884,
+          42884
         ],
         "runs": 5,
-        "median": 36450,
-        "p95": 36450,
-        "mean": 36450,
+        "median": 42884,
+        "p95": 42884,
+        "mean": 42884,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 38272.5,
-      "thresholdFormula": "median 36450.00 + max(3σ 0.00, 5% 1822.50) = 38272.50",
+      "threshold": 42884,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 42884 B, no headroom (was 38272.5)",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 38272.5,
+          "to": 42884,
+          "reason": "5ae76ba7 DataGrid subparts, 77270db3 typed rows, R11-04 controlled selectedRows/sortModel/filters, e601918a localisable filter strings, 949ecfc9 overlay layer scale",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              36450,
+              36450,
+              36450,
+              36450,
+              36450
+            ],
+            "runs": 5,
+            "median": 36450,
+            "p95": 36450,
+            "mean": 36450,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 38272.5,
+          "thresholdFormula": "median 36450.00 + max(3σ 0.00, 5% 1822.50) = 38272.50",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1001,28 +1223,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          24871,
-          24871,
-          24871,
-          24871,
-          24871
+          26496,
+          26496,
+          26496,
+          26496,
+          26496
         ],
         "runs": 5,
-        "median": 24871,
-        "p95": 24871,
-        "mean": 24871,
+        "median": 26496,
+        "p95": 26496,
+        "mean": 26496,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 26114.55,
-      "thresholdFormula": "median 24871.00 + max(3σ 0.00, 5% 1243.55) = 26114.55",
+      "threshold": 26496,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 26496 B, no headroom (was 26114.55)",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 26114.55,
+          "to": 26496,
+          "reason": "8bbf4a6c motion tokens/focus ring + catalog empty strings, GAPADM-03 SSR/CSP-safe utilities, R13 reconcile",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              24871,
+              24871,
+              24871,
+              24871,
+              24871
+            ],
+            "runs": 5,
+            "median": 24871,
+            "p95": 24871,
+            "mean": 24871,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 26114.55,
+          "thresholdFormula": "median 24871.00 + max(3σ 0.00, 5% 1243.55) = 26114.55",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1034,28 +1310,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          17971,
-          17971,
-          17971,
-          17971,
-          17971
+          19217,
+          19217,
+          19217,
+          19217,
+          19217
         ],
         "runs": 5,
-        "median": 17971,
-        "p95": 17971,
-        "mean": 17971,
+        "median": 19217,
+        "p95": 19217,
+        "mean": 19217,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 18869.55,
-      "thresholdFormula": "median 17971.00 + max(3σ 0.00, 5% 898.55) = 18869.55",
+      "threshold": 19217,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 19217 B, no headroom (was 18869.55)",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 18869.55,
+          "to": 19217,
+          "reason": "735856a1 QF-39 behaviour fixes (ArrowDown opening), 77270db3 shared useFormControl, 76c2b67c/8bbf4a6c token refactors, 949ecfc9 overlay layer scale, R9 #trigger slot rendered",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              17971,
+              17971,
+              17971,
+              17971,
+              17971
+            ],
+            "runs": 5,
+            "median": 17971,
+            "p95": 17971,
+            "mean": 17971,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 18869.55,
+          "thresholdFormula": "median 17971.00 + max(3σ 0.00, 5% 898.55) = 18869.55",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1067,28 +1397,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          18154,
-          18154,
-          18154,
-          18154,
-          18154
+          19393,
+          19393,
+          19393,
+          19393,
+          19393
         ],
         "runs": 5,
-        "median": 18154,
-        "p95": 18154,
-        "mean": 18154,
+        "median": 19393,
+        "p95": 19393,
+        "mean": 19393,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 19061.7,
-      "thresholdFormula": "median 18154.00 + max(3σ 0.00, 5% 907.70) = 19061.70",
+      "threshold": 19393,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 19393 B, no headroom (was 19061.7)",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 19061.7,
+          "to": 19393,
+          "reason": "735856a1 QF-39 behaviour fixes, 77270db3 shared useFormControl, 76c2b67c/8bbf4a6c token refactors, R9 #trigger slot rendered",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              18154,
+              18154,
+              18154,
+              18154,
+              18154
+            ],
+            "runs": 5,
+            "median": 18154,
+            "p95": 18154,
+            "mean": 18154,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 19061.7,
+          "thresholdFormula": "median 18154.00 + max(3σ 0.00, 5% 907.70) = 19061.70",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1100,28 +1484,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          20629,
-          20629,
-          20629,
-          20629,
-          20629
+          24164,
+          24164,
+          24164,
+          24164,
+          24164
         ],
         "runs": 5,
-        "median": 20629,
-        "p95": 20629,
-        "mean": 20629,
+        "median": 24164,
+        "p95": 24164,
+        "mean": 24164,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 21660.45,
-      "thresholdFormula": "median 20629.00 + max(3σ 0.00, 5% 1031.45) = 21660.45",
+      "threshold": 24164,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 24164 B, no headroom (was 21660.45)",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 21660.45,
+          "to": 24164,
+          "reason": "5ae76ba7 disabled-state fix, 77270db3 shared useFormControl, e601918a localisable rejection strings",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              20629,
+              20629,
+              20629,
+              20629,
+              20629
+            ],
+            "runs": 5,
+            "median": 20629,
+            "p95": 20629,
+            "mean": 20629,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 21660.45,
+          "thresholdFormula": "median 20629.00 + max(3σ 0.00, 5% 1031.45) = 21660.45",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1133,28 +1571,74 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19434,
-          19434,
-          19434,
-          19434,
-          19434
+          20398,
+          20398,
+          20398,
+          20398,
+          20398
         ],
         "runs": 5,
-        "median": 19434,
-        "p95": 19434,
-        "mean": 19434,
+        "median": 20398,
+        "p95": 20398,
+        "mean": 20398,
         "stddev": 0,
         "cv": 0
       },
       "threshold": 20405.7,
       "thresholdFormula": "median 19434.00 + max(3σ 0.00, 5% 971.70) = 20405.70",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              19434,
+              19434,
+              19434,
+              19434,
+              19434
+            ],
+            "runs": 5,
+            "median": 19434,
+            "p95": 19434,
+            "mean": 19434,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 20405.7,
+          "thresholdFormula": "median 19434.00 + max(3σ 0.00, 5% 971.70) = 20405.70",
+          "policy": "Within budget at 8275cefc; existing threshold and its original derivation retained, not recalculated from the refreshed distribution."
+        }
       }
     },
     {
@@ -1166,28 +1650,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          25287,
-          25287,
-          25287,
-          25287,
-          25287
+          27654,
+          27654,
+          27654,
+          27654,
+          27654
         ],
         "runs": 5,
-        "median": 25287,
-        "p95": 25287,
-        "mean": 25287,
+        "median": 27654,
+        "p95": 27654,
+        "mean": 27654,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 26551.35,
-      "thresholdFormula": "median 25287.00 + max(3σ 0.00, 5% 1264.35) = 26551.35",
+      "threshold": 27654,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 27654 B, no headroom (was 26551.35)",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 26551.35,
+          "to": 27654,
+          "reason": "735856a1 QF-39 behaviour fixes, 77270db3 shared useFormControl, 76c2b67c/8bbf4a6c token refactors, 949ecfc9 overlay layer scale",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              25287,
+              25287,
+              25287,
+              25287,
+              25287
+            ],
+            "runs": 5,
+            "median": 25287,
+            "p95": 25287,
+            "mean": 25287,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 26551.35,
+          "thresholdFormula": "median 25287.00 + max(3σ 0.00, 5% 1264.35) = 26551.35",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1199,28 +1737,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          21441,
-          21441,
-          21441,
-          21441,
-          21441
+          23796,
+          23796,
+          23796,
+          23796,
+          23796
         ],
         "runs": 5,
-        "median": 21441,
-        "p95": 21441,
-        "mean": 21441,
+        "median": 23796,
+        "p95": 23796,
+        "mean": 23796,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 22513.05,
-      "thresholdFormula": "median 21441.00 + max(3σ 0.00, 5% 1072.05) = 22513.05",
+      "threshold": 23796,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 23796 B, no headroom (was 22513.05)",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 22513.05,
+          "to": 23796,
+          "reason": "cc41e1e4/84505d6d QF-08 announced maxSelections limit, 39c0721b disabled fix, 77270db3 shared useFormControl, 949ecfc9 overlay layer scale",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              21441,
+              21441,
+              21441,
+              21441,
+              21441
+            ],
+            "runs": 5,
+            "median": 21441,
+            "p95": 21441,
+            "mean": 21441,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 22513.05,
+          "thresholdFormula": "median 21441.00 + max(3σ 0.00, 5% 1072.05) = 22513.05",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1232,28 +1824,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          22665,
-          22665,
-          22665,
-          22665,
-          22665
+          23961,
+          23961,
+          23961,
+          23961,
+          23961
         ],
         "runs": 5,
-        "median": 22665,
-        "p95": 22665,
-        "mean": 22665,
+        "median": 23961,
+        "p95": 23961,
+        "mean": 23961,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 23798.25,
-      "thresholdFormula": "median 22665.00 + max(3σ 0.00, 5% 1133.25) = 23798.25",
+      "threshold": 23961,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 23961 B, no headroom (was 23798.25)",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 23798.25,
+          "to": 23961,
+          "reason": "8bbf4a6c motion tokens/focus ring, GAPADM-03 SSR/CSP-safe utilities",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              22665,
+              22665,
+              22665,
+              22665,
+              22665
+            ],
+            "runs": 5,
+            "median": 22665,
+            "p95": 22665,
+            "mean": 22665,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 23798.25,
+          "thresholdFormula": "median 22665.00 + max(3σ 0.00, 5% 1133.25) = 23798.25",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1265,28 +1911,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          23273,
-          23273,
-          23273,
-          23273,
-          23273
+          25611,
+          25611,
+          25611,
+          25611,
+          25611
         ],
         "runs": 5,
-        "median": 23273,
-        "p95": 23273,
-        "mean": 23273,
+        "median": 25611,
+        "p95": 25611,
+        "mean": 25611,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 24436.65,
-      "thresholdFormula": "median 23273.00 + max(3σ 0.00, 5% 1163.65) = 24436.65",
+      "threshold": 25611,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 25611 B, no headroom (was 24436.65)",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 24436.65,
+          "to": 25611,
+          "reason": "7a004e44 catalog strings, R13 reconcile, GAPADM-03 merge",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              23273,
+              23273,
+              23273,
+              23273,
+              23273
+            ],
+            "runs": 5,
+            "median": 23273,
+            "p95": 23273,
+            "mean": 23273,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 24436.65,
+          "thresholdFormula": "median 23273.00 + max(3σ 0.00, 5% 1163.65) = 24436.65",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1298,23 +1998,23 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19147,
-          19147,
-          19147,
-          19147,
-          19147
+          20214,
+          20214,
+          20214,
+          20214,
+          20214
         ],
         "runs": 5,
-        "median": 19147,
-        "p95": 19147,
-        "mean": 19147,
+        "median": 20214,
+        "p95": 20214,
+        "mean": 20214,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 20072.85,
-      "thresholdFormula": "median 19117.00 + max(3σ 0.00, 5% 955.85) = 20072.85",
+      "threshold": 20214,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 20214 B, no headroom (was 20072.85)",
       "unmeasurable": null,
-      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
@@ -1322,7 +2022,7 @@
         "node": "v24.20.0"
       },
       "sizeCapture": {
-        "capturedAt": "2026-10-08T09:17:07.396Z",
+        "capturedAt": "2026-10-18T08:22:14.170Z",
         "runs": 5,
         "profileId": "am5-linux-x64-32c-node24-size",
         "hostname": "am5",
@@ -1330,42 +2030,49 @@
         "instrument": {
           "path": "packages/tooling/src/perf/export-sizes.ts",
           "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
-          "lockSha256": "c1dda2f7dc75c4230bb0bf53fcfa276e6abccb43971686f0dc9a05924bd7445a"
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
         },
         "toolchain": {
           "vite": "7.3.5",
           "@vitejs/plugin-vue": "6.0.7",
           "esbuild": "0.27.4",
           "tsx": "4.21.0",
-          "vue": "3.5.31",
+          "vue": "3.5.43",
           "typescript": "5.9.3",
-          "vitest": "3.2.6"
+          "vitest": "3.2.7"
         },
-        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/gap-lanes-20261002/private/gap-ui-r11-perf-size-refresh-20261007-a3/raw-captures.json",
-        "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
-        "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
-        "adoptionDecision": "D-S1O4-2: operator use this host 2026-10-08",
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
         "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 20072.85,
+          "to": 20214,
+          "reason": "f29b2e4a RF-11 duration tokens, R13 reconcile (R11 collapsed item naming)",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
         "existingBudget": {
-          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
           "distribution": {
             "samples": [
-              19117,
-              19117,
-              19117,
-              19117,
-              19117
+              19147,
+              19147,
+              19147,
+              19147,
+              19147
             ],
             "runs": 5,
-            "median": 19117,
-            "p95": 19117,
-            "mean": 19117,
+            "median": 19147,
+            "p95": 19147,
+            "mean": 19147,
             "stddev": 0,
             "cv": 0
           },
           "threshold": 20072.85,
           "thresholdFormula": "median 19117.00 + max(3σ 0.00, 5% 955.85) = 20072.85",
-          "policy": "Retained existing threshold and its original derivation; not recalculated from the refreshed distribution."
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
         }
       }
     },
@@ -1378,28 +2085,74 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          15947,
-          15947,
-          15947,
-          15947,
-          15947
+          16673,
+          16673,
+          16673,
+          16673,
+          16673
         ],
         "runs": 5,
-        "median": 15947,
-        "p95": 15947,
-        "mean": 15947,
+        "median": 16673,
+        "p95": 16673,
+        "mean": 16673,
         "stddev": 0,
         "cv": 0
       },
       "threshold": 16744.35,
       "thresholdFormula": "median 15947.00 + max(3σ 0.00, 5% 797.35) = 16744.35",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              15947,
+              15947,
+              15947,
+              15947,
+              15947
+            ],
+            "runs": 5,
+            "median": 15947,
+            "p95": 15947,
+            "mean": 15947,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 16744.35,
+          "thresholdFormula": "median 15947.00 + max(3σ 0.00, 5% 797.35) = 16744.35",
+          "policy": "Within budget at 8275cefc; existing threshold and its original derivation retained, not recalculated from the refreshed distribution."
+        }
       }
     },
     {
@@ -1411,28 +2164,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          22767,
-          22767,
-          22767,
-          22767,
-          22767
+          24450,
+          24450,
+          24450,
+          24450,
+          24450
         ],
         "runs": 5,
-        "median": 22767,
-        "p95": 22767,
-        "mean": 22767,
+        "median": 24450,
+        "p95": 24450,
+        "mean": 24450,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 23905.35,
-      "thresholdFormula": "median 22767.00 + max(3σ 0.00, 5% 1138.35) = 23905.35",
+      "threshold": 24450,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 24450 B, no headroom (was 23905.35)",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 23905.35,
+          "to": 24450,
+          "reason": "77270db3 shared useFormControl, 76c2b67c/8bbf4a6c token refactors, 949ecfc9 overlay layer scale, R13 reconcile",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              22767,
+              22767,
+              22767,
+              22767,
+              22767
+            ],
+            "runs": 5,
+            "median": 22767,
+            "p95": 22767,
+            "mean": 22767,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 23905.35,
+          "thresholdFormula": "median 22767.00 + max(3σ 0.00, 5% 1138.35) = 23905.35",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1444,28 +2251,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          21707,
-          21707,
-          21707,
-          21707,
-          21707
+          27648,
+          27648,
+          27648,
+          27648,
+          27648
         ],
         "runs": 5,
-        "median": 21707,
-        "p95": 21707,
-        "mean": 21707,
+        "median": 27648,
+        "p95": 27648,
+        "mean": 27648,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 22792.35,
-      "thresholdFormula": "median 21707.00 + max(3σ 0.00, 5% 1085.35) = 22792.35",
+      "threshold": 27648,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 27648 B, no headroom (was 22792.35)",
       "unmeasurable": null,
-      "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 22792.35,
+          "to": 27648,
+          "reason": "edd4e54a QF-67 label props for controls and step counter, e601918a localisable tour strings, f29b2e4a duration tokens, R11-07 large-indicator wrapping fix",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "7c23198aa32fc3c06488ca0d3f91cec84d53dfaf",
+          "distribution": {
+            "samples": [
+              21707,
+              21707,
+              21707,
+              21707,
+              21707
+            ],
+            "runs": 5,
+            "median": 21707,
+            "p95": 21707,
+            "mean": 21707,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 22792.35,
+          "thresholdFormula": "median 21707.00 + max(3σ 0.00, 5% 1085.35) = 22792.35",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     },
     {
@@ -1477,28 +2338,74 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          21396,
-          21396,
-          21396,
-          21396,
-          21396
+          22131,
+          22131,
+          22131,
+          22131,
+          22131
         ],
         "runs": 5,
-        "median": 21396,
-        "p95": 21396,
-        "mean": 21396,
+        "median": 22131,
+        "p95": 22131,
+        "mean": 22131,
         "stddev": 0,
         "cv": 0
       },
       "threshold": 22465.8,
       "thresholdFormula": "median 21396.00 + max(3σ 0.00, 5% 1069.80) = 22465.80",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              21396,
+              21396,
+              21396,
+              21396,
+              21396
+            ],
+            "runs": 5,
+            "median": 21396,
+            "p95": 21396,
+            "mean": 21396,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 22465.8,
+          "thresholdFormula": "median 21396.00 + max(3σ 0.00, 5% 1069.80) = 22465.80",
+          "policy": "Within budget at 8275cefc; existing threshold and its original derivation retained, not recalculated from the refreshed distribution."
+        }
       }
     },
     {
@@ -1510,23 +2417,23 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          19015,
-          19015,
-          19015,
-          19015,
-          19015
+          22274,
+          22274,
+          22274,
+          22274,
+          22274
         ],
         "runs": 5,
-        "median": 19015,
-        "p95": 19015,
-        "mean": 19015,
+        "median": 22274,
+        "p95": 22274,
+        "mean": 22274,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 19966.8,
-      "thresholdFormula": "median 19016.00 + max(3σ 0.00, 5% 950.80) = 19966.80",
+      "threshold": 22274,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 22274 B, no headroom (was 19966.8)",
       "unmeasurable": null,
-      "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
@@ -1534,7 +2441,7 @@
         "node": "v24.20.0"
       },
       "sizeCapture": {
-        "capturedAt": "2026-10-08T09:17:16.405Z",
+        "capturedAt": "2026-10-18T08:22:14.170Z",
         "runs": 5,
         "profileId": "am5-linux-x64-32c-node24-size",
         "hostname": "am5",
@@ -1542,42 +2449,49 @@
         "instrument": {
           "path": "packages/tooling/src/perf/export-sizes.ts",
           "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
-          "lockSha256": "c1dda2f7dc75c4230bb0bf53fcfa276e6abccb43971686f0dc9a05924bd7445a"
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
         },
         "toolchain": {
           "vite": "7.3.5",
           "@vitejs/plugin-vue": "6.0.7",
           "esbuild": "0.27.4",
           "tsx": "4.21.0",
-          "vue": "3.5.31",
+          "vue": "3.5.43",
           "typescript": "5.9.3",
-          "vitest": "3.2.6"
+          "vitest": "3.2.7"
         },
-        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/gap-lanes-20261002/private/gap-ui-r11-perf-size-refresh-20261007-a3/raw-captures.json",
-        "admission": "repos/dzup-ui/docs/planning/UI-R11-PERF-SIZE-REFRESH-20261007-P1-ADMISSION-a3-r2.md",
-        "admissionCommit": "dd6d5a896d1234d2ed316a56e8d911b75d0b2d29",
-        "adoptionDecision": "D-S1O4-2: operator use this host 2026-10-08",
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
         "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 19966.8,
+          "to": 22274,
+          "reason": "8bbf4a6c catalog empty-state string + motion tokens/focus ring, 77270db3 shared useFormControl, f29b2e4a duration tokens",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
         "existingBudget": {
-          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "sourceCommit": "eb35f34b1120a309b4895594650168d0ca7928e6",
           "distribution": {
             "samples": [
-              19016,
-              19016,
-              19016,
-              19016,
-              19016
+              19015,
+              19015,
+              19015,
+              19015,
+              19015
             ],
             "runs": 5,
-            "median": 19016,
-            "p95": 19016,
-            "mean": 19016,
+            "median": 19015,
+            "p95": 19015,
+            "mean": 19015,
             "stddev": 0,
             "cv": 0
           },
           "threshold": 19966.8,
           "thresholdFormula": "median 19016.00 + max(3σ 0.00, 5% 950.80) = 19966.80",
-          "policy": "Retained existing threshold and its original derivation; not recalculated from the refreshed distribution."
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
         }
       }
     },
@@ -1590,28 +2504,82 @@
       "unit": "bytes",
       "distribution": {
         "samples": [
-          27873,
-          27873,
-          27873,
-          27873,
-          27873
+          30054,
+          30054,
+          30054,
+          30054,
+          30054
         ],
         "runs": 5,
-        "median": 27873,
-        "p95": 27873,
-        "mean": 27873,
+        "median": 30054,
+        "p95": 30054,
+        "mean": 30054,
         "stddev": 0,
         "cv": 0
       },
-      "threshold": 29266.65,
-      "thresholdFormula": "median 27873.00 + max(3σ 0.00, 5% 1393.65) = 29266.65",
+      "threshold": 30054,
+      "thresholdFormula": "owner re-seed D-S1O4-4 (AUDIT-FOLLOWUPS-R2-20261018-R1): measured 30054 B, no headroom (was 29266.65)",
       "unmeasurable": null,
-      "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+      "sourceCommit": "8275cefcf811eca59c87bd2756f0dfb8d7c91672",
       "host": {
         "platform": "linux",
         "arch": "x64",
         "cpus": 32,
         "node": "v24.20.0"
+      },
+      "sizeCapture": {
+        "capturedAt": "2026-10-18T08:22:14.170Z",
+        "runs": 5,
+        "profileId": "am5-linux-x64-32c-node24-size",
+        "hostname": "am5",
+        "scope": "size only",
+        "instrument": {
+          "path": "packages/tooling/src/perf/export-sizes.ts",
+          "sha256": "98d9bdc2ce6736385ce12f4898f5cbad226273472b3374c2e3887625abc2c819",
+          "lockSha256": "cbafad4a06d8fc61154224d0fe5f8a6e24bf04d289251f8447ffff8e8f652eb9"
+        },
+        "toolchain": {
+          "vite": "7.3.5",
+          "@vitejs/plugin-vue": "6.0.7",
+          "esbuild": "0.27.4",
+          "tsx": "4.21.0",
+          "vue": "3.5.43",
+          "typescript": "5.9.3",
+          "vitest": "3.2.7"
+        },
+        "rawEvidence": "/data/storage/datazup-runtime/ninel/evidence/audit-followups-r2-20261018/lanes/afr2-dzup-ui-20261018-l1/raw-size-captures.json",
+        "admission": "AUDIT-FOLLOWUPS-R2-20261018-R1 (operator, 2026-10-18; evidence/audit-followups-r2-20261018/ADMISSION.md budget-widening grant)",
+        "adoptionDecision": "D-S1O4-2 (size cells only): recaptured at 8275cefc on the operator-designated am5 size host",
+        "quietHostAttested": false,
+        "budgetRaise": {
+          "decision": "D-S1O4-4 (#21)",
+          "owner": "operator (perf-budget owner)",
+          "from": 29266.65,
+          "to": 30054,
+          "reason": "77270db3 shared useFormControl, 76c2b67c/8bbf4a6c token refactors, 949ecfc9 overlay layer scale, R13 reconcile",
+          "rule": "raised to the measured gzip bytes, no headroom (budget-widening grant; delegated decider D1 Q2)"
+        },
+        "existingBudget": {
+          "sourceCommit": "70647fba7b7fe49ddf39fc39fe33dbe4391ade68",
+          "distribution": {
+            "samples": [
+              27873,
+              27873,
+              27873,
+              27873,
+              27873
+            ],
+            "runs": 5,
+            "median": 27873,
+            "p95": 27873,
+            "mean": 27873,
+            "stddev": 0,
+            "cv": 0
+          },
+          "threshold": 29266.65,
+          "thresholdFormula": "median 27873.00 + max(3σ 0.00, 5% 1393.65) = 29266.65",
+          "policy": "Breached at 8275cefc; re-seeded to the measured value by owner decision D-S1O4-4."
+        }
       }
     }
   ]

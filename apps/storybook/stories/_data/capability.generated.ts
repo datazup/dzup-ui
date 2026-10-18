@@ -87,10 +87,10 @@ export const CAPABILITY_TOTALS = {
     "excepted": 66
   },
   "C": {
-    "pass": 147,
+    "pass": 164,
     "fail": 0,
     "present": 170,
-    "stale": 19,
+    "stale": 2,
     "unrun": 34,
     "excepted": 4
   },
@@ -105,7 +105,7 @@ export const CAPABILITY_TOTALS = {
 } as const
 
 /** Repository HEAD the evidence was collected at. */
-export const CAPABILITY_SOURCE_COMMIT = "31fc36c729e389bde7876196a3d1d807d0bf12f0"
+export const CAPABILITY_SOURCE_COMMIT = "8275cefcf811eca59c87bd2756f0dfb8d7c91672"
 
 export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
   {
@@ -500,7 +500,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/data/DzCalendar.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/data/DzCalendar.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzCalendar.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -599,7 +599,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzCascader.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -789,7 +789,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzColorPicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzColorPicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzColorPicker.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -819,7 +819,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCombobox.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCombobox.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzCombobox.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -849,7 +849,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/overlays/DzCommandPalette.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/overlays/DzCommandPalette.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzCommandPalette.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -1021,7 +1021,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/data/DzDataView.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/data/DzDataView.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzDataView.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -1049,7 +1049,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDatePicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDatePicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzDatePicker.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -1077,7 +1077,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDateRangePicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDateRangePicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzDateRangePicker.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -1835,7 +1835,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/navigation/DzMegaMenu.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/navigation/DzMegaMenu.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzMegaMenu.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     { kind: "threat-model", state: "present", origin: "boundary url", artifacts: ["packages/core/security/url-boundary.threat-model.md", "packages/core/security/coverage.json"], note: "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified." },
     { kind: "malicious-corpus", state: "present", origin: "boundary url", artifacts: ["packages/core/security/url-boundary.malicious-corpus.spec.ts", "packages/core/security/coverage.json"], note: "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified." },
     { kind: "url-policy", state: "present", origin: "boundary url", artifacts: ["packages/core/security/url-boundary.url-policy.spec.ts", "packages/core/security/coverage.json"], note: "Covered by a class-level artifact, not a per-component one. Corpus last run 2026-09-22 at 589be13 (worktree dirty): 403/403 passed, 0 failed, exit 0 — locally qualified." },
@@ -1867,7 +1867,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMention.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMention.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzMention.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -1944,7 +1944,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMultiSelect.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMultiSelect.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzMultiSelect.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -2023,7 +2023,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/data/DzOrderList.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/data/DzOrderList.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzOrderList.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     { kind: "non-drag-alternative", state: "present", origin: "trait drags", artifacts: ["packages/core/src/components/data/DzOrderList.spec.ts"], note: "A keyboard path is asserted; whether it covers the whole drag interaction is a review question this cannot answer." },
     ],
   },
@@ -3124,7 +3124,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTimePicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTimePicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTimePicker.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -3310,7 +3310,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/overlays/DzTour.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/overlays/DzTour.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTour.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -3339,7 +3339,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTransfer.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -3368,7 +3368,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/data/DzTree.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/data/DzTree.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTree.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -3423,7 +3423,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTreeSelect.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTreeSelect.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTreeSelect.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {

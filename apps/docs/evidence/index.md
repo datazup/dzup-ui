@@ -25,13 +25,13 @@ renders as `unrun`, in the same table and with the same weight as a requirement 
 
 | State | Cells |
 | --- | --- |
-| `pass` | 560 |
+| `pass` | 577 |
 | `present` | 597 |
-| `stale` | 20 |
+| `stale` | 3 |
 | `excepted` | 74 |
 | **`unrun`** | 411 |
 
-Of those, **411 are `unrun`** — nothing has measured them — and **20 are `stale`**. Which cells, on which components, is on [the capability matrix](/evidence/capability-matrix) and on each component page.
+Of those, **411 are `unrun`** — nothing has measured them — and **3 are `stale`**. Which cells, on which components, is on [the capability matrix](/evidence/capability-matrix) and on each component page.
 
 The assistive-technology matrix is counted separately, and its number is **0 of 534**: 89 components times 6 declared AT/browser pairings, of which 0 have been executed. See [the AT matrix](/evidence/at-matrix).
 
@@ -77,11 +77,11 @@ SHA-256 of the exact bytes these pages were rendered from:
 
 | Artifact | sha256 | Present |
 | --- | --- | --- |
-| `packages/core/docs/capability-matrix.json` | `7b3b3af21ad145c6…` | yes |
-| `packages/core/docs/quality-matrix.json` | `d62580814414268a…` | yes |
+| `packages/core/docs/capability-matrix.json` | `62c2d73e990071dc…` | yes |
+| `packages/core/docs/quality-matrix.json` | `9b21de42be4b913f…` | yes |
 | `e2e/at-matrix/index.json` | `d35ef2dfa049e253…` | yes |
 
-Capability matrix `sourceCommit` `31fc36c7` · quality matrix `31fc36c7`.
+Capability matrix `sourceCommit` `8275cefc` · quality matrix `8275cefc`.
 
 ::: warning Standing
 Locally qualified. Not continuous-integration evidence, not release evidence, not production
