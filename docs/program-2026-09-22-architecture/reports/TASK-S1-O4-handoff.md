@@ -891,3 +891,23 @@ legalise six long-task breaches — a strictly worse contract with a green matri
   52, and the known pre-existing red (`validate:peers`, D174/D175) is at
   **link 49**, not 48. Any report quoting "link 48" against this tree is
   quoting a stale position.
+
+### 13. Postscript, 2026-10-18 — the size half is decided (AUDIT-FOLLOWUPS-R2-20261018-R1)
+
+The operator decided items 2 and 3 of §11 for the `size` family only, as perf-budget owner.
+The record is
+[`owner-decision-register-2026-09-22.md` §25](./owner-decision-register-2026-09-22.md).
+- **D-S1O4-4: decided.** The 18 budgets breached at `8275cefc` were re-seeded to their
+  measured gzip bytes, with no headroom. The 4 within budget were kept.
+- **D-S1O4-1: decided for size only.** The 22 `size:*` records are designated to
+  `am5-linux-x64-32c-node24-size` (`capture-environment.json` `sizeRecordAuthority`).
+- **D-S1O4-2: done for the size half.** All 22 size cells were recaptured.
+
+The capture did not use `yarn perf:capture`. That command recaptures every timing family as
+well, and those stay closed. The size records were rebuilt with the same instrument
+(`measureExportSizes` + `toBaseline`), and every runtime record is byte-identical.
+
+Results: `perf:size-gate` passes 22 of 22, and `staleCells` falls from 20 to 3.
+DzDataGrid, DzFileUpload and DzTable remain stale on their 2026-08-21 runtime baselines.
+§11 items 1 and 2 are still open for the timing families: a dedicated host is operator
+provisioning.
