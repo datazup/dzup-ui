@@ -391,9 +391,11 @@ describe('the evidence ratchet (gate 8, RESIDUAL-17, D-RES16-3)', () => {
     // rise the record noticed, declared in `//moves`. R13-UI-RECONCILE took it
     // to 4: the R11-01 DzCommandPalette repair postdates its size baseline.
     // The 2026-10-17 audit landing took it to 2: its DzColorPicker and DzTree
-    // fixes postdate theirs.
+    // fixes postdate theirs. AUDIT-FOLLOWUPS-R2-20261018-R1 took it to 19: all 22
+    // size baselines recaptured at 8275cefc (D-S1O4-4); DzDataGrid, DzFileUpload
+    // and DzTable stay stale on their 2026-08-21 runtime baselines.
     expect(shipped.evidenceCells.kinds['at-manual']).toEqual({ pass: 0, present: 0 })
-    expect(shipped.evidenceCells.kinds['perf-baseline']).toEqual({ pass: 2, present: 0 })
+    expect(shipped.evidenceCells.kinds['perf-baseline']).toEqual({ pass: 19, present: 0 })
     // The baseline was seeded at the post-RESIDUAL-16 measurement — `pass` 558,
     // `present` 608 — NOT at the pre-audit 585/623, because seeding a ratchet at
     // numbers an audit has just shown to be false would write the inflation into
