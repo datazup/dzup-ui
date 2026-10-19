@@ -21,6 +21,10 @@
  * @module @dzup-ui/core/utilities/isDevEnv
  */
 
+// Keep browser consumers independent of Node's ambient types. This module-local
+// declaration is erased; the expression below remains available to bundlers.
+declare const process: { readonly env: { readonly NODE_ENV?: string } }
+
 /** `true` unless the consumer's build has `NODE_ENV` set to `production`. */
 export function isDevEnv(): boolean {
   // eslint-disable-next-line node/prefer-global/process -- must stay the bare global the consumer's bundler replaces
