@@ -20,7 +20,7 @@ import { RadioGroupRoot } from 'reka-ui'
  * </DzRadioGroup>
  * ```
  */
-import { computed, useAttrs } from 'vue'
+import { computed, nextTick, onBeforeUnmount, useAttrs } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDzDirection } from '../../composables/provider/useDzLocale.ts'
 import { useFormControl } from '../../composables/useFormField/useFormControl.ts'
@@ -64,8 +64,15 @@ const {
   resolvedAriaDescribedby,
 } = useFormControl(props)
 
+/**
+ * Changes of value seen so far. The arrow-key check below reads it to tell
+ * whether Reka has already checked the radio it focused.
+ */
+let valueChanges = 0
+
 /** Reka UI emits AcceptableValue; we narrow to string for our API */
 function handleValueChange(value: unknown): void {
+  valueChanges += 1
   const stringValue = String(value ?? '')
   model.value = stringValue
   emit('change', stringValue)
@@ -78,6 +85,56 @@ function handleFocus(event: FocusEvent): void {
 function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
+
+/**
+ * An arrow key moves focus **and checks** (APG radio group; UIPRO-FRM-06).
+ *
+ * Reka moves focus on the next tick and checks the radio it lands on from a
+ * `setTimeout(0)` queued by that radio's focus handler — but only while the
+ * arrow is still held, which it reads from a window `keyup` listener. A key
+ * released before the timer fires (a quick tap, or any scripted press) moved
+ * focus and left the selection behind.
+ *
+ * So this queues one more timer, behind Reka's, and checks the focused radio
+ * only if no value change arrived since the key went down: when Reka did check
+ * it, nothing happens twice. It answers only the arrows Reka acted on, which
+ * Reka marks by preventing their default; an arrow with a modifier held, or in
+ * a disabled group, moved nothing and checks nothing. It clicks rather than
+ * writing the model, as Reka does, so the radio's own `select` path runs.
+ */
+const ARROW_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'])
+let pendingArrowCheck: ReturnType<typeof setTimeout> | undefined
+
+function checkFocusedRadio(root: HTMLElement, changesAtPress: number): void {
+  pendingArrowCheck = undefined
+  if (!root.isConnected || valueChanges !== changesAtPress)
+    return
+  const focused = root.ownerDocument.activeElement
+  if (!(focused instanceof HTMLElement) || focused.getAttribute('role') !== 'radio')
+    return
+  if (focused.closest('[role="radiogroup"]') !== root)
+    return
+  if (focused.getAttribute('aria-checked') === 'true' || focused.hasAttribute('data-disabled'))
+    return
+  focused.click()
+}
+
+function handleKeydown(event: KeyboardEvent): void {
+  if (!ARROW_KEYS.has(event.key) || !event.defaultPrevented || resolvedDisabled.value)
+    return
+  const root = event.currentTarget
+  if (!(root instanceof HTMLElement))
+    return
+  const changesAtPress = valueChanges
+  // Registered after Reka's own `nextTick` focus move, so it runs after it,
+  // and the timer it queues runs after the one Reka queued from that focus.
+  void nextTick(() => {
+    clearTimeout(pendingArrowCheck)
+    pendingArrowCheck = setTimeout(checkFocusedRadio, 0, root, changesAtPress)
+  })
+}
+
+onBeforeUnmount(() => clearTimeout(pendingArrowCheck))
 
 const classes = computed(() =>
   cn(
@@ -115,6 +172,7 @@ const { testId: dzTestId } = useDzTestIds()
     @update:model-value="handleValueChange"
     @focus="handleFocus"
     @blur="handleBlur"
+    @keydown="handleKeydown"
   >
     <slot />
   </RadioGroupRoot>

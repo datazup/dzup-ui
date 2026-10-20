@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils'
  * DzRadioGroup + DzRadio — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
-import { h } from 'vue'
+import { h, nextTick } from 'vue'
 import DzRadio from './DzRadio.vue'
 import { anatomy as radioGroupAnatomy } from './DzRadioGroup.anatomy.ts'
 import DzRadioGroup from './DzRadioGroup.vue'
@@ -192,5 +192,159 @@ describe('dzRadioGroup — the declared Space, asserted where source cannot reac
 
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
     wrapper.unmount()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// UIPRO-FRM-06. The APG radio group pattern: an arrow key moves focus to the
+// next radio **and checks it**. Reka checks the radio its roving focus lands on
+// only if the arrow is still held when a `setTimeout(0)` scheduled from the
+// radio's focus handler fires; a key released before then (a fast tap, or any
+// scripted press — which is how the forms replay drives it) moved focus and
+// left the selection behind.
+// ---------------------------------------------------------------------------
+
+describe('dzRadioGroup — arrow keys move focus and check (UIPRO-FRM-06)', () => {
+  const flushTimers = () => new Promise<void>(resolve => setTimeout(resolve, 0))
+
+  const mountControlled = (props: Record<string, unknown> = {}, radios = ['a', 'b', 'c']) => {
+    const wrapper = mount(DzRadioGroup, {
+      props: {
+        'modelValue': 'a',
+        'onUpdate:modelValue': (value: string) => wrapper.setProps({ modelValue: value }),
+        ...props,
+      },
+      slots: {
+        default: () => radios.map(value =>
+          h(DzRadio, { value, disabled: value === 'disabled' }, { default: () => `Option ${value}` }),
+        ),
+      },
+      attachTo: document.body,
+    })
+    return wrapper
+  }
+
+  const radioAt = (wrapper: ReturnType<typeof mount>, index: number) =>
+    wrapper.findAll('[role="radio"]')[index]!.element as HTMLElement
+
+  /**
+   * Focus the first radio and let the timer Reka schedules from that focus run
+   * out, so it cannot fire in the middle of the press under test.
+   */
+  async function focusFirstRadio(wrapper: ReturnType<typeof mount>) {
+    await nextTick()
+    radioAt(wrapper, 0).focus()
+    await flushTimers()
+  }
+
+  async function press(target: HTMLElement, key: string, { holdPastCheck = false } = {}) {
+    target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }))
+    // Reka moves focus on the next tick.
+    await nextTick()
+    if (holdPastCheck)
+      await flushTimers()
+    target.dispatchEvent(new KeyboardEvent('keyup', { key, bubbles: true, cancelable: true }))
+    await flushTimers()
+    await flushTimers()
+    await nextTick()
+  }
+
+  it('checks the radio ArrowDown focuses when the key is released at once', async () => {
+    const wrapper = mountControlled()
+    await focusFirstRadio(wrapper)
+
+    await press(radioAt(wrapper, 0), 'ArrowDown')
+
+    expect(document.activeElement).toBe(radioAt(wrapper, 1))
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('b')
+    expect(wrapper.emitted('change')?.at(-1)?.[0]).toBe('b')
+    expect(radioAt(wrapper, 1).getAttribute('aria-checked')).toBe('true')
+    wrapper.unmount()
+  })
+
+  it('checks the radio ArrowUp focuses, wrapping from the first to the last', async () => {
+    const wrapper = mountControlled()
+    await focusFirstRadio(wrapper)
+
+    await press(radioAt(wrapper, 0), 'ArrowUp')
+
+    expect(document.activeElement).toBe(radioAt(wrapper, 2))
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('c')
+    wrapper.unmount()
+  })
+
+  it('checks on ArrowRight in a horizontal group', async () => {
+    const wrapper = mountControlled({ orientation: 'horizontal' })
+    await focusFirstRadio(wrapper)
+
+    await press(radioAt(wrapper, 0), 'ArrowRight')
+
+    expect(document.activeElement).toBe(radioAt(wrapper, 1))
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('b')
+    wrapper.unmount()
+  })
+
+  it('checks exactly once when the key is held past Reka\'s own check', async () => {
+    const wrapper = mountControlled()
+    await focusFirstRadio(wrapper)
+
+    await press(radioAt(wrapper, 0), 'ArrowDown', { holdPastCheck: true })
+
+    expect(wrapper.emitted('update:modelValue')).toEqual([['b']])
+    expect(wrapper.emitted('change')).toEqual([['b']])
+    wrapper.unmount()
+  })
+
+  it('skips a disabled radio and checks the next one', async () => {
+    const wrapper = mountControlled({}, ['a', 'disabled', 'c'])
+    await focusFirstRadio(wrapper)
+
+    await press(radioAt(wrapper, 0), 'ArrowDown')
+
+    expect(document.activeElement).toBe(radioAt(wrapper, 2))
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('c')
+    wrapper.unmount()
+  })
+
+  it('checks nothing for a key that does not move focus', async () => {
+    const wrapper = mountControlled()
+    await focusFirstRadio(wrapper)
+
+    await press(radioAt(wrapper, 0), 'a')
+
+    expect(document.activeElement).toBe(radioAt(wrapper, 0))
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('checks nothing with a modifier held, which Reka leaves to the platform', async () => {
+    const wrapper = mountControlled()
+    await focusFirstRadio(wrapper)
+
+    radioAt(wrapper, 0).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', ctrlKey: true, bubbles: true, cancelable: true }))
+    await nextTick()
+    radioAt(wrapper, 0).dispatchEvent(new KeyboardEvent('keyup', { key: 'ArrowDown', bubbles: true, cancelable: true }))
+    await flushTimers()
+    await flushTimers()
+
+    expect(document.activeElement).toBe(radioAt(wrapper, 0))
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('does not check after the group unmounts mid-press', async () => {
+    const wrapper = mountControlled()
+    await focusFirstRadio(wrapper)
+    const radio = radioAt(wrapper, 0)
+
+    radio.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }))
+    await nextTick()
+    radio.dispatchEvent(new KeyboardEvent('keyup', { key: 'ArrowDown', bubbles: true, cancelable: true }))
+    const emittedBefore = wrapper.emitted('update:modelValue')?.length ?? 0
+    wrapper.unmount()
+    await flushTimers()
+    await flushTimers()
+
+    expect(wrapper.emitted('update:modelValue')?.length ?? 0).toBe(emittedBefore)
   })
 })

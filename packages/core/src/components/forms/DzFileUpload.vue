@@ -390,6 +390,12 @@ const { testId: dzTestId } = useDzTestIds()
       `resolvedId` was computed and then rendered nowhere at all, so this
       control had no id in the DOM and nothing could reference it (renderer
       contract C2).
+
+      No `aria-required` here (UIPRO-FRM-06): it is not a supported attribute
+      of `role="button"`, so assistive technology ignores it and axe reports
+      `aria-allowed-attr`. The requirement is the input's native `required`,
+      `data-required` on the root, and the enclosing field's description,
+      which `resolvedAriaDescribedby` already links.
     -->
     <div
       :id="resolvedId"
@@ -400,7 +406,6 @@ const { testId: dzTestId } = useDzTestIds()
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (isInvalid || undefined)"
-      :aria-required="resolvedRequired || undefined"
       :aria-disabled="resolvedDisabled || undefined"
       @click="handleClick"
       @keydown="handleKeydown"

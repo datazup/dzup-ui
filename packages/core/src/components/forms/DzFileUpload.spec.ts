@@ -5,8 +5,12 @@ import { mount } from '@vue/test-utils'
  * DzFileUpload — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
+import { axe } from 'vitest-axe'
 import { h, ref } from 'vue'
 import DzFileUpload from './DzFileUpload.vue'
+import DzFormDescription from './DzFormDescription.vue'
+import DzFormField from './DzFormField.vue'
+import DzFormLabel from './DzFormLabel.vue'
 
 function createFile(name: string, size: number, type = 'text/plain'): File {
   const content = Array.from({ length: size }, () => 'a').join('')
@@ -215,12 +219,51 @@ describe('dzFileUpload — Unit Tests', () => {
     expect(errorId).toBeTruthy()
     expect(wrapper.find('[role="button"]').attributes('aria-describedby')).toContain(errorId)
   })
+})
 
-  it('reflects the required prop via aria-required on the dropzone', () => {
+/**
+ * UIPRO-FRM-06. `aria-required` is not a supported attribute of `role="button"`
+ * (WAI-ARIA 1.2; axe `aria-allowed-attr`), so the drop zone carried an attribute
+ * assistive technology is told to ignore and the forms replay flagged it. The
+ * requirement lives where it means something: the native `required` on the file
+ * input, `data-required` on the root, and the enclosing field's description.
+ */
+describe('dzFileUpload — required without aria-required on role="button" (UIPRO-FRM-06)', () => {
+  it('keeps aria-required off the drop zone and required on the input', () => {
     const wrapper = mount(DzFileUpload, {
       props: { required: true },
     })
-    expect(wrapper.find('[role="button"]').attributes('aria-required')).toBe('true')
+    const zone = wrapper.find('[role="button"]')
+    expect(zone.attributes('aria-required')).toBeUndefined()
+    expect(wrapper.find('input[type="file"]').attributes('required')).toBeDefined()
+    expect(wrapper.attributes('data-required')).toBe('')
+  })
+
+  it('takes the requirement from a required DzFormField the same way, with the field description linked', () => {
+    const wrapper = mount(() =>
+      h(DzFormField, { required: true }, () => [
+        h(DzFormLabel, () => 'Attachment'),
+        h(DzFileUpload),
+        h(DzFormDescription, () => 'Required: attach the signed contract'),
+      ]))
+    const zone = wrapper.find('[role="button"]')
+    const description = wrapper.find('p[id$="-description"]')
+    expect(zone.attributes('aria-required')).toBeUndefined()
+    expect(wrapper.find('input[type="file"]').attributes('required')).toBeDefined()
+    expect(description.exists()).toBe(true)
+    expect(zone.attributes('aria-describedby')?.split(' ')).toContain(description.attributes('id'))
+  })
+
+  it('has no aria-allowed-attr violation when required', async () => {
+    const wrapper = mount(DzFileUpload, {
+      props: { required: true, ariaLabel: 'Upload contract' },
+      attachTo: document.body,
+    })
+    const results = await axe(wrapper.element as Element, {
+      runOnly: { type: 'rule', values: ['aria-allowed-attr'] },
+    })
+    expect(results.violations.map(v => v.id)).toEqual([])
+    wrapper.unmount()
   })
 })
 
