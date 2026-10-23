@@ -87,6 +87,15 @@ export interface UseDataGridNavigationReturn {
    * over the grid's cells. Bound on every `<th>` and `<td>`; safe on both.
    */
   onCellKeydown: (event: KeyboardEvent) => void
+  /**
+   * Pull the tab stop back inside a body of `rowCount` rows of `colCount` cells.
+   *
+   * The position is remembered, and the rows and cells it points into can shrink
+   * under it — a shorter page, a filter, a reload, a column or the selection cell
+   * going away. A position past the end matches no cell, and the body would have
+   * no tab stop at all (DZUP-UI-CODE-H-03).
+   */
+  clampActiveCell: (rowCount: number, colCount: number) => void
 }
 
 // ---------------------------------------------------------------------------
@@ -200,5 +209,13 @@ export function useDataGridNavigation(): UseDataGridNavigationReturn {
     focusCell(rows, target.row, target.col)
   }
 
-  return { activeCell, isActiveCell, onCellKeydown }
+  function clampActiveCell(rowCount: number, colCount: number): void {
+    const { row, col } = activeCell.value
+    const clampedRow = Math.max(0, Math.min(row, rowCount - 1))
+    const clampedCol = Math.max(0, Math.min(col, colCount - 1))
+    if (clampedRow !== row || clampedCol !== col)
+      activeCell.value = { row: clampedRow, col: clampedCol }
+  }
+
+  return { activeCell, isActiveCell, onCellKeydown, clampActiveCell }
 }
