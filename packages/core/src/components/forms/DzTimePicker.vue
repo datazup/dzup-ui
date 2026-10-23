@@ -347,10 +347,16 @@ function afterSelect(): void {
 function commitDraft(source: 'user' | 'api'): void {
   if (draftHour.value == null || draftMinute.value == null)
     return
+  const second = showSeconds.value ? (draftSecond.value ?? 0) : 0
+  // An enabled hour only means SOME minute in it is in range: picking it keeps
+  // the previous minute or defaults to the first one, either of which can fall
+  // outside min/max (DZUP-UI-CODE-H-01). Never commit such a draft.
+  if (!withinBounds(draftHour.value, draftMinute.value, second))
+    return
   const value = formatModel({
     hour: draftHour.value,
     minute: draftMinute.value,
-    second: showSeconds.value ? (draftSecond.value ?? 0) : 0,
+    second,
   })
   if (value === model.value)
     return
