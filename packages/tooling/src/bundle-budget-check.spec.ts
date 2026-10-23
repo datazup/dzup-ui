@@ -11,7 +11,8 @@
 import { Buffer } from 'node:buffer'
 import { spawnSync } from 'node:child_process'
 import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { createRequire } from 'node:module'
+import { dirname, join, posix, resolve } from 'node:path'
 import process from 'node:process'
 import { gzipSync } from 'node:zlib'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -359,7 +360,8 @@ describe('bundlesize.config.json', () => {
     expect(stylesTarget).toBeDefined()
 
     const budgeted = loadConfig(REPO_ROOT).files.map(f => f.path)
-    expect(budgeted).toContain(join('packages', 'core', stylesTarget ?? ''))
+    // Config paths are forward-slash on every host, so build the expectation with posix.
+    expect(budgeted).toContain(posix.join('packages', 'core', stylesTarget ?? ''))
   })
 })
 
@@ -370,14 +372,20 @@ describe('bundlesize.config.json', () => {
 /**
  * Each checker derives the repo root from its own location, so copying it to
  * the same relative path under a scratch root makes it read that root's
- * config. Node strips the types itself; neither script imports anything local.
+ * config. Neither script imports anything local.
+ *
+ * The copy runs through tsx, as CI runs both checkers, not through Node's own
+ * type stripping: the CI matrix's Node 20.19.0 has none and 22.13.0 only behind
+ * a flag. The scratch root has no node_modules, so tsx resolves from the repo.
  */
+const TSX_CLI = createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx/cli')
+
 function runCheckerIn(rootDir: string, scriptRelPath: string, args: string[] = []) {
   const target = join(rootDir, scriptRelPath)
   mkdirSync(dirname(target), { recursive: true })
   copyFileSync(join(REPO_ROOT, scriptRelPath), target)
   writeFileSync(join(rootDir, 'package.json'), JSON.stringify({ type: 'module' }))
-  return spawnSync(process.execPath, [target, ...args], { cwd: rootDir, encoding: 'utf-8' })
+  return spawnSync(process.execPath, [TSX_CLI, target, ...args], { cwd: rootDir, encoding: 'utf-8' })
 }
 
 describe.each([
