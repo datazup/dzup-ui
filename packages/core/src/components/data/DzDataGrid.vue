@@ -24,7 +24,7 @@ import type {
  * </DzDataGrid>
  * ```
  */
-import { computed, provide, toRef, useAttrs } from 'vue'
+import { computed, provide, toRef, useAttrs, watch } from 'vue'
 import { useDzTestIds } from '../../composables/provider/useDzEnvironment.ts'
 import { useDataGrid } from '../../composables/useDataGrid/useDataGrid.ts'
 import { useDataGridNavigation } from '../../composables/useDataGrid/useDataGridNavigation.ts'
@@ -164,6 +164,16 @@ const dzMessages = useComponentMessages('DzDataGrid')
 
 const columnSpan = computed(() =>
   props.columns.length + (props.selectable === 'multiple' ? 1 : 0),
+)
+
+/**
+ * Keep the body's roving tab stop on a cell that exists (DZUP-UI-CODE-H-03).
+ * `columnSpan` is the body's cell count per row, selection cell included, which
+ * is the coordinate `isActiveCell` is asked in.
+ */
+watch(
+  [() => grid.displayData.value.length, columnSpan],
+  ([rowCount, colCount]) => navigation.clampActiveCell(rowCount, colCount),
 )
 
 function handleRowClick(row: T, index: number): void {
