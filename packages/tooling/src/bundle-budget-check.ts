@@ -9,11 +9,16 @@
  * - Gzip compression measurement via `node:zlib`
  * - Human-readable size parsing and formatting
  * - `--ci` flag for machine-readable JSON output
- * - Non-zero exit code when any budget is exceeded
+ * - Non-zero exit code when any budget is exceeded or any budgeted file is
+ *   missing — a budget on a file that was never built is no budget
+ *   (DZUP-UI-ERR-H-02)
+ * - `--allow-unbuilt` flag to report missing files as skipped, for local
+ *   runs before `yarn build`; CI runs after the build and must not pass it
  *
  * Usage:
  *   npx tsx packages/tooling/src/bundle-budget-check.ts
  *   npx tsx packages/tooling/src/bundle-budget-check.ts --ci
+ *   npx tsx packages/tooling/src/bundle-budget-check.ts --allow-unbuilt
  *
  * @module @dzup-ui/tooling/bundle-budget-check
  */
@@ -53,9 +58,16 @@ export interface CheckResult {
 export interface CheckSummary {
   results: CheckResult[]
   passed: number
+  /** Over budget, plus missing unless `allowUnbuilt` was set */
   failed: number
+  /** Missing, counted here only when `allowUnbuilt` was set */
   skipped: number
   allPassed: boolean
+}
+
+export interface CheckOptions {
+  /** Report a missing budgeted file as skipped instead of failed (pre-build runs) */
+  allowUnbuilt?: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -206,13 +218,15 @@ export function checkEntry(rootDir: string, entry: BudgetEntry): CheckResult {
 /**
  * Runs the full bundle budget check against all configured entries.
  */
-export function runBudgetCheck(rootDir: string): CheckSummary {
+export function runBudgetCheck(rootDir: string, options: CheckOptions = {}): CheckSummary {
   const config = loadConfig(rootDir)
   const results: CheckResult[] = config.files.map(entry => checkEntry(rootDir, entry))
 
   const passed = results.filter(r => r.exists && r.passed).length
-  const failed = results.filter(r => r.exists && !r.passed).length
-  const skipped = results.filter(r => !r.exists).length
+  const overBudget = results.filter(r => r.exists && !r.passed).length
+  const missing = results.filter(r => !r.exists).length
+  const failed = overBudget + (options.allowUnbuilt === true ? 0 : missing)
+  const skipped = options.allowUnbuilt === true ? missing : 0
 
   return {
     results,
@@ -230,7 +244,7 @@ export function runBudgetCheck(rootDir: string): CheckSummary {
 /**
  * Prints results in human-readable format.
  */
-function printHumanReport(summary: CheckSummary): void {
+function printHumanReport(summary: CheckSummary, allowUnbuilt: boolean): void {
   console.log('\n=== Bundle Budget Check ===\n')
 
   const maxPathLen = Math.max(...summary.results.map(r => r.path.length))
@@ -239,7 +253,12 @@ function printHumanReport(summary: CheckSummary): void {
     const paddedPath = result.path.padEnd(maxPathLen + 2)
 
     if (!result.exists) {
-      console.log(`  SKIP  ${paddedPath} (file not found — build first)`)
+      if (allowUnbuilt) {
+        console.log(`  SKIP  ${paddedPath} (file not found — build first)`)
+      }
+      else {
+        console.error(`  FAIL  ${paddedPath} (file not found — build first, or pass --allow-unbuilt)`)
+      }
       continue
     }
 
@@ -257,7 +276,7 @@ function printHumanReport(summary: CheckSummary): void {
   )
 
   if (summary.failed > 0) {
-    console.error(`\nBundle budget EXCEEDED for ${summary.failed} file(s)`)
+    console.error(`\nBundle budget check FAILED for ${summary.failed} file(s) — over budget or missing`)
   }
   else if (summary.skipped > 0) {
     console.log(`\nNote: ${summary.skipped} file(s) not found — run yarn build first.`)
@@ -300,16 +319,17 @@ function printCiReport(summary: CheckSummary): void {
 function main(): void {
   const args = process.argv.slice(2)
   const ciMode = args.includes('--ci')
+  const allowUnbuilt = args.includes('--allow-unbuilt')
   const rootDir = resolve(import.meta.dirname, '..', '..', '..')
 
   try {
-    const summary = runBudgetCheck(rootDir)
+    const summary = runBudgetCheck(rootDir, { allowUnbuilt })
 
     if (ciMode) {
       printCiReport(summary)
     }
     else {
-      printHumanReport(summary)
+      printHumanReport(summary, allowUnbuilt)
     }
 
     process.exit(summary.failed > 0 ? 1 : 0)

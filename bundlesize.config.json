@@ -6,11 +6,11 @@
       "compression": "gzip"
     },
     {
-      "path": "packages/core/dist/index.css",
+      "path": "packages/core/dist/core.css",
       "maxSize": "50 kB",
       "compression": "gzip"
     },
-{
+    {
       "path": "packages/tokens/dist/tokens.css",
       "maxSize": "15 kB",
       "compression": "gzip"

@@ -6,8 +6,12 @@
  *
  * Usage:
  *   tsx packages/tooling/scripts/validate-bundle.ts
+ *   tsx packages/tooling/scripts/validate-bundle.ts --allow-unbuilt
  *
- * Exit code 1 if any file exceeds its budget.
+ * Exit code 1 if any file exceeds its budget or any budgeted file is missing —
+ * a budget on a file that was never built is no budget (DZUP-UI-ERR-H-02).
+ * `--allow-unbuilt` reports missing files as skipped, for local runs before
+ * `yarn build`; CI runs after the build and must not pass it.
  */
 
 import { existsSync, readFileSync } from 'node:fs'
@@ -94,6 +98,8 @@ function getGzippedSize(filePath: string): number {
 // --- Main ---
 
 function main(): void {
+  const allowUnbuilt = process.argv.slice(2).includes('--allow-unbuilt')
+
   if (!existsSync(CONFIG_PATH)) {
     console.error(`Bundle size config not found: ${relative(ROOT, CONFIG_PATH)}`)
     console.error('Expected bundlesize.config.json at repo root.')
@@ -151,7 +157,12 @@ function main(): void {
     const paddedPath = result.path.padEnd(maxPathLen + 2)
 
     if (!result.exists) {
-      console.warn(`  SKIP  ${paddedPath} (file not found — build first)`)
+      if (allowUnbuilt) {
+        console.warn(`  SKIP  ${paddedPath} (file not found — build first)`)
+      }
+      else {
+        console.error(`  FAIL  ${paddedPath} (file not found — build first, or pass --allow-unbuilt)`)
+      }
       continue
     }
 
@@ -160,15 +171,16 @@ function main(): void {
     console.warn(`  ${status}  ${paddedPath} ${result.actualSizeLabel} ${arrow} ${result.maxSizeLabel} (budget)`)
   }
 
-  const failedCount = results.filter(r => r.exists && !r.passed).length
-  const skippedCount = results.filter(r => !r.exists).length
+  const missingCount = results.filter(r => !r.exists).length
+  const failedCount = results.filter(r => r.exists && !r.passed).length + (allowUnbuilt ? 0 : missingCount)
+  const skippedCount = allowUnbuilt ? missingCount : 0
   const passedCount = results.filter(r => r.exists && r.passed).length
 
   console.warn(`\n${'='.repeat(60)}`)
   console.warn(`Results: ${passedCount} passed, ${failedCount} failed, ${skippedCount} skipped`)
 
   if (failedCount > 0) {
-    console.error(`\nBundle budget EXCEEDED for ${failedCount} file(s)`)
+    console.error(`\nBundle budget check FAILED for ${failedCount} file(s) — over budget or missing`)
     process.exit(1)
   }
 
