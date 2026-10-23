@@ -17,6 +17,7 @@
 
 import type { SourceBinding } from '../release/binding.ts'
 import type { StopConditionConfig } from './stop-conditions.ts'
+import { execFileSync } from 'node:child_process'
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
@@ -336,6 +337,71 @@ describe('sC-8 — a fail-open path', () => {
       { n: 9, title: 'CSP', verdict: 'green', reason: '' },
     ])
     expect(verdictOf(8, d).verdict).toBe('clear')
+  })
+})
+
+// --- SC-9 — experience evidence for a CHANGED high-risk component -----------
+
+describe('sC-9 — experience evidence missing for a changed high-risk component', () => {
+  // SC-1 only clears on a clean tree, so the candidate SC-9 is asked about is
+  // one whose changes are all COMMITTED. A real repository is the only honest
+  // fixture for that: the changes have to exist in history, not in a stub.
+  const COMPONENT = 'packages/core/src/components/forms/DzRisky.vue'
+
+  function sh(root: string, ...args: string[]): string {
+    return execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@example.invalid', '-c', 'commit.gpgsign=false', ...args], { cwd: root, encoding: 'utf8' }).trim()
+  }
+
+  /** A repo with one commit holding a tier-B component and no browser/AT evidence. */
+  function repo(): { root: string, first: string } {
+    const root = tree({
+      [COMPONENT]: '<template><div /></template>\n',
+      'packages/core/docs/quality-matrix.json': { components: [{ component: 'DzRisky', tier: 'B' }] },
+    })
+    sh(root, 'init', '-q')
+    sh(root, 'add', '-A')
+    sh(root, 'commit', '-q', '-m', 'first')
+    return { root, first: sh(root, 'rev-parse', 'HEAD') }
+  }
+
+  function run(root: string, previousShort: string | null): { verdict: string, detail: string } {
+    const head = sh(root, 'rev-parse', 'HEAD')
+    if (previousShort !== null)
+      mkdirSync(join(root, `qa/2026-01-01-${previousShort}`), { recursive: true })
+    const candidate = join(root, `qa/2026-01-02-${head.slice(0, 7)}`)
+    mkdirSync(candidate, { recursive: true })
+    return verdictOf(9, candidate, { sourceCommit: head, shortCommit: head.slice(0, 7) }, root)
+  }
+
+  it('fires on a COMMITTED high-risk change with no evidence — a clean tree is not "nothing changed"', () => {
+    const { root, first } = repo()
+    writeFileSync(join(root, COMPONENT), '<template><span /></template>\n', 'utf8')
+    sh(root, 'commit', '-q', '-am', 'change the component')
+    const r = run(root, first.slice(0, 7))
+    expect(r.verdict).toBe('fired')
+    expect(r.detail).toContain('1 changed high-risk component')
+  })
+
+  it('still fires on an uncommitted high-risk change', () => {
+    const { root, first } = repo()
+    writeFileSync(join(root, COMPONENT), '<template><span /></template>\n', 'utf8')
+    expect(run(root, first.slice(0, 7)).verdict).toBe('fired')
+  })
+
+  it('is clear when no component changed since the previous candidate', () => {
+    const { root, first } = repo()
+    expect(run(root, first.slice(0, 7)).verdict).toBe('clear')
+  })
+
+  it('is UNEVALUABLE when git cannot answer — a git failure is not "nothing changed"', () => {
+    const { root } = repo()
+    // The previous candidate names a commit this repository does not contain.
+    expect(run(root, 'deadbee').verdict).toBe('unevaluable')
+  })
+
+  it('is UNEVALUABLE with no previous candidate — "changed" needs a baseline', () => {
+    const { root } = repo()
+    expect(run(root, null).verdict).toBe('unevaluable')
   })
 })
 
