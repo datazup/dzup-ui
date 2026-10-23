@@ -273,13 +273,23 @@ export function useCountdown(options: UseCountdownOptions): UseCountdownReturn {
 
   const visibilityEnabled = (): boolean => Boolean(toValue(options.pauseOnHidden))
 
-  // Re-anchor when the target/mode changes while idle so the displayed resting
-  // value stays correct (e.g. a deadline prop updated before start).
+  // Re-anchor when the target/mode changes. Idle (or paused) timers only update
+  // their resting value; a running timer restarts against the new deadline, and
+  // a finished one re-arms if the new target still lies ahead (DZUP-UI-CODE-H-02).
   watch(
     () => [toValue(options.mode), targetMs()] as const,
     () => {
-      if (!running.value && !finished.value)
-        remaining.value = toRemainingParts(initialRemaining())
+      const left = initialRemaining()
+      // Still at zero: stay finished rather than firing `finish` a second time.
+      if (finished.value && left <= 0)
+        return
+      const rearm = running.value || finished.value
+      clearTimer()
+      running.value = false
+      finished.value = false
+      remaining.value = toRemainingParts(left)
+      if (rearm)
+        start()
     },
   )
 
