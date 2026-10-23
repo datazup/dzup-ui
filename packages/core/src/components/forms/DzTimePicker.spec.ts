@@ -274,6 +274,38 @@ describe('dzTimePicker — Popover (roll layout)', () => {
     // 10:xx is within range → enabled.
     expect(hours[10]!.attributes('disabled')).toBeUndefined()
   })
+
+  // DZUP-UI-CODE-H-01: hour 09 stays enabled under min 09:30 because 09:30 and
+  // 09:45 are in range, but picking it defaults the minute to 00. The draft
+  // 09:00 is below min and must not be committed in either footer mode.
+  it.each([false, true])('never commits a draft below min after picking a partly in-range hour, footer=%s', async (footer) => {
+    const wrapper = mountPicker({ min: '09:30', step: 15, hour12: false, footer })
+    await open(wrapper)
+    const hours = wrapper.find('[role="listbox"][aria-label="Hours"]').findAll('button')
+    expect(hours[9]!.attributes('disabled')).toBeUndefined()
+    await hours[9]!.trigger('click') // "09" → draft 09:00
+    if (footer)
+      await wrapper.findAll('button').filter(b => b.text() === 'OK')[0]!.trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toBeFalsy()
+    expect(wrapper.emitted('change')).toBeFalsy()
+  })
+
+  it('commits once the draft is back within min (footer=false)', async () => {
+    const wrapper = mountPicker({ min: '09:30', step: 15, hour12: false, footer: false })
+    await open(wrapper)
+    await wrapper.find('[role="listbox"][aria-label="Hours"]').findAll('button')[9]!.trigger('click') // "09"
+    await wrapper.find('[role="listbox"][aria-label="Minutes"]').findAll('button')[2]!.trigger('click') // "30"
+    expect(wrapper.emitted('update:modelValue')).toEqual([['09:30']])
+  })
+
+  it('never commits a draft above max carried over from the previous minute', async () => {
+    const wrapper = mountPicker({ modelValue: '16:30', max: '17:15', step: 15, hour12: false, footer: false })
+    await open(wrapper)
+    const hours = wrapper.find('[role="listbox"][aria-label="Hours"]').findAll('button')
+    expect(hours[17]!.attributes('disabled')).toBeUndefined()
+    await hours[17]!.trigger('click') // "17" with minute 30 → draft 17:30
+    expect(wrapper.emitted('update:modelValue')).toBeFalsy()
+  })
 })
 
 describe('dzTimePicker — Popover (select layout)', () => {
