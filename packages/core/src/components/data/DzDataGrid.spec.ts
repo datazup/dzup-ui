@@ -755,6 +755,54 @@ describe('dzDataGrid — APG grid cell navigation', () => {
     wrapper.unmount()
   })
 
+  /**
+   * DZUP-UI-CODE-H-03. The tab stop is a remembered position, and the rows and
+   * columns it points into can shrink under it. Without a clamp, a position past
+   * the new last row or column matches no cell and the body has no tab stop at all.
+   */
+  it('keeps exactly one body tab stop after paging to a shorter page', async () => {
+    const { wrapper, table } = mountNav({ pagination: { pageSize: 2 } })
+
+    // Page 1 has two rows; move to the last cell of the second.
+    press(table.tBodies[0]!.rows[0]!.cells[2]!, 'ArrowDown')
+    await wrapper.vm.$nextTick()
+
+    // Page 2 has one row, so body row 1 no longer exists.
+    await wrapper.find('button[aria-label="Next page"]').trigger('click')
+    const body = table.tBodies[0]!
+    expect(body.rows).toHaveLength(1)
+
+    const inOrder = [...body.querySelectorAll('td')].filter(c => c.getAttribute('tabindex') === '0')
+    expect(inOrder).toHaveLength(1)
+    expect(inOrder[0]).toBe(body.rows[0]!.cells[2])
+
+    wrapper.unmount()
+  })
+
+  it('keeps exactly one body tab stop when the data, the columns or the selection cell shrink', async () => {
+    const { wrapper, table } = mountNav({ selectable: 'multiple' })
+    const tabStops = () => [...table.tBodies[0]!.querySelectorAll('td')].filter(c => c.getAttribute('tabindex') === '0')
+
+    // Last row, last cell: body row 2, cell 3 (selection + 3 columns).
+    press(table.tBodies[0]!.rows[2]!.cells[0]!, 'End')
+    await wrapper.vm.$nextTick()
+    expect(tabStops()).toEqual([table.tBodies[0]!.rows[2]!.cells[3]])
+
+    // Reloaded to one row.
+    await wrapper.setProps({ data: testData.slice(0, 1) })
+    expect(tabStops()).toEqual([table.tBodies[0]!.rows[0]!.cells[3]])
+
+    // The selection cell goes away, so cell 3 no longer exists.
+    await wrapper.setProps({ selectable: false })
+    expect(tabStops()).toEqual([table.tBodies[0]!.rows[0]!.cells[2]])
+
+    // A column goes away.
+    await wrapper.setProps({ columns: testColumns.slice(0, 2) })
+    expect(tabStops()).toEqual([table.tBodies[0]!.rows[0]!.cells[1]])
+
+    wrapper.unmount()
+  })
+
   it('leaves a control inside a cell its own keys', () => {
     const { wrapper, table } = mountNav({ selectable: 'multiple' })
     const checkbox = table.tBodies[0]!.rows[0]!.cells[0]!.querySelector('button[role="checkbox"]')!
