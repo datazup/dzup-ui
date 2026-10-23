@@ -9,8 +9,10 @@
  */
 
 import { Buffer } from 'node:buffer'
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { spawnSync } from 'node:child_process'
+import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import process from 'node:process'
 import { gzipSync } from 'node:zlib'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
@@ -281,8 +283,11 @@ describe('runBudgetCheck', () => {
     expect(summary.failed).toBe(1)
   })
 
-  it('counts missing files as skipped, not failed', () => {
-    const rootDir = join(TMP_DIR, 'run-skip')
+  // DZUP-UI-ERR-H-02: a budget on a file that was never built is no budget. The
+  // core CSS entry named dist/index.css for months while the build emitted
+  // dist/core.css, and this check reported green the whole time.
+  it('fails a missing budgeted file by default', () => {
+    const rootDir = join(TMP_DIR, 'run-missing')
     mkdirSync(rootDir, { recursive: true })
     writeFileSync(
       join(rootDir, 'bundlesize.config.json'),
@@ -294,9 +299,26 @@ describe('runBudgetCheck', () => {
     )
 
     const summary = runBudgetCheck(rootDir)
+    expect(summary.failed).toBe(1)
+    expect(summary.skipped).toBe(0)
+    expect(summary.allPassed).toBe(false)
+  })
+
+  it('counts missing files as skipped only with allowUnbuilt', () => {
+    const rootDir = join(TMP_DIR, 'run-skip')
+    mkdirSync(rootDir, { recursive: true })
+    writeFileSync(
+      join(rootDir, 'bundlesize.config.json'),
+      JSON.stringify({
+        files: [
+          { path: 'dist/missing.js', maxSize: '100 kB' },
+        ],
+      }),
+    )
+
+    const summary = runBudgetCheck(rootDir, { allowUnbuilt: true })
     expect(summary.skipped).toBe(1)
     expect(summary.failed).toBe(0)
-    // Missing files do not count as failures
     expect(summary.allPassed).toBe(true)
   })
 
@@ -317,6 +339,83 @@ describe('runBudgetCheck', () => {
     const summary = runBudgetCheck(rootDir)
     expect(summary.results).toHaveLength(2)
     expect(summary.passed).toBe(1)
-    expect(summary.skipped).toBe(1)
+    expect(summary.failed).toBe(1)
+    expect(summary.skipped).toBe(0)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// The repo's own config (DZUP-UI-ERR-H-02)
+// ---------------------------------------------------------------------------
+
+const REPO_ROOT = resolve(import.meta.dirname, '..', '..', '..')
+
+describe('bundlesize.config.json', () => {
+  it('budgets the stylesheet core actually ships — its ./styles export target', () => {
+    const corePkg = JSON.parse(
+      readFileSync(join(REPO_ROOT, 'packages', 'core', 'package.json'), 'utf-8'),
+    ) as { exports: Record<string, string> }
+    const stylesTarget = corePkg.exports['./styles']
+    expect(stylesTarget).toBeDefined()
+
+    const budgeted = loadConfig(REPO_ROOT).files.map(f => f.path)
+    expect(budgeted).toContain(join('packages', 'core', stylesTarget ?? ''))
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Both CLIs CI runs after the build (DZUP-UI-ERR-H-02)
+// ---------------------------------------------------------------------------
+
+/**
+ * Each checker derives the repo root from its own location, so copying it to
+ * the same relative path under a scratch root makes it read that root's
+ * config. Node strips the types itself; neither script imports anything local.
+ */
+function runCheckerIn(rootDir: string, scriptRelPath: string, args: string[] = []) {
+  const target = join(rootDir, scriptRelPath)
+  mkdirSync(dirname(target), { recursive: true })
+  copyFileSync(join(REPO_ROOT, scriptRelPath), target)
+  writeFileSync(join(rootDir, 'package.json'), JSON.stringify({ type: 'module' }))
+  return spawnSync(process.execPath, [target, ...args], { cwd: rootDir, encoding: 'utf-8' })
+}
+
+describe.each([
+  'packages/tooling/scripts/validate-bundle.ts',
+  'packages/tooling/src/bundle-budget-check.ts',
+])('%s', (scriptRelPath) => {
+  const slug = scriptRelPath.replace(/\W+/g, '-')
+
+  function scratchRoot(name: string, files: Array<{ path: string, maxSize: string }>): string {
+    const rootDir = join(TMP_DIR, `cli-${slug}-${name}`)
+    mkdirSync(join(rootDir, 'dist'), { recursive: true })
+    writeFileSync(join(rootDir, 'dist', 'ok.js'), 'const ok = 1;')
+    writeFileSync(join(rootDir, 'bundlesize.config.json'), JSON.stringify({ files }))
+    return rootDir
+  }
+
+  it('exits 0 when every budgeted file exists and is under budget', () => {
+    const rootDir = scratchRoot('pass', [{ path: 'dist/ok.js', maxSize: '100 kB' }])
+    const run = runCheckerIn(rootDir, scriptRelPath)
+    expect(run.status, run.stderr).toBe(0)
+  })
+
+  it('exits 1 when a budgeted file is missing', () => {
+    const rootDir = scratchRoot('missing', [
+      { path: 'dist/ok.js', maxSize: '100 kB' },
+      { path: 'dist/never-built.css', maxSize: '100 kB' },
+    ])
+    const run = runCheckerIn(rootDir, scriptRelPath)
+    expect(run.status, `${run.stdout}${run.stderr}`).toBe(1)
+    expect(`${run.stdout}${run.stderr}`).toContain('dist/never-built.css')
+  })
+
+  it('exits 0 for a missing file only with --allow-unbuilt', () => {
+    const rootDir = scratchRoot('allow-unbuilt', [
+      { path: 'dist/ok.js', maxSize: '100 kB' },
+      { path: 'dist/never-built.css', maxSize: '100 kB' },
+    ])
+    const run = runCheckerIn(rootDir, scriptRelPath, ['--allow-unbuilt'])
+    expect(run.status, run.stderr).toBe(0)
   })
 })
