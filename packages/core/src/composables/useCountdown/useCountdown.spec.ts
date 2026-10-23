@@ -1,10 +1,11 @@
+import type { MaybeRefOrGetter } from 'vue'
 import type { CountdownMode, UseCountdownReturn } from './useCountdown.ts'
 import { mount } from '@vue/test-utils'
 /**
  * useCountdown — Unit tests (pure helpers + fake-timer engine).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 import {
   formatRemaining,
   toRemainingParts,
@@ -90,7 +91,7 @@ afterEach(() => {
 /** Mount a throwaway host that exposes the composable's return value. */
 function mountCountdown(options: {
   mode?: CountdownMode
-  target: Date | number
+  target: MaybeRefOrGetter<Date | number>
   interval?: number
   autoStart?: boolean
   pauseOnHidden?: boolean
@@ -206,5 +207,69 @@ describe('useCountdown', () => {
     vi.advanceTimersByTime(3000)
     // No further ticks after unmount.
     expect(onTick).toHaveBeenCalledTimes(1)
+  })
+
+  // DZUP-UI-CODE-H-02: a target change must re-anchor the live deadline, not
+  // only the resting value of an idle timer.
+  it('re-anchors the deadline when the target changes mid-run', async () => {
+    const onFinish = vi.fn()
+    const target = ref(NOW.getTime() + 10_000)
+    const { api } = mountCountdown({ target, onFinish })
+    vi.advanceTimersByTime(2000)
+    expect(api().remaining.value.total).toBe(8000)
+    // Pull the deadline in: 5s after NOW, i.e. 3s from the current instant.
+    target.value = NOW.getTime() + 5000
+    await nextTick()
+    expect(api().remaining.value.total).toBe(3000)
+    expect(api().running.value).toBe(true)
+    vi.advanceTimersByTime(1000)
+    expect(api().remaining.value.total).toBe(2000)
+    vi.advanceTimersByTime(2000)
+    expect(api().finished.value).toBe(true)
+    expect(onFinish).toHaveBeenCalledTimes(1)
+  })
+
+  it('re-anchors a duration timer to the new span when it changes mid-run', async () => {
+    const target = ref(10_000)
+    const { api } = mountCountdown({ mode: 'duration', target })
+    vi.advanceTimersByTime(3000)
+    expect(api().remaining.value.total).toBe(7000)
+    target.value = 4000
+    await nextTick()
+    expect(api().remaining.value.total).toBe(4000)
+    vi.advanceTimersByTime(1000)
+    expect(api().remaining.value.total).toBe(3000)
+  })
+
+  it('re-arms a finished timer when the target moves into the future', async () => {
+    const onFinish = vi.fn()
+    const target = ref(NOW.getTime() + 2000)
+    const { api } = mountCountdown({ target, onFinish })
+    vi.advanceTimersByTime(3000)
+    expect(api().finished.value).toBe(true)
+    expect(onFinish).toHaveBeenCalledTimes(1)
+    // A new deadline 5s from the current instant.
+    target.value = NOW.getTime() + 3000 + 5000
+    await nextTick()
+    expect(api().finished.value).toBe(false)
+    expect(api().running.value).toBe(true)
+    expect(api().remaining.value.total).toBe(5000)
+    vi.advanceTimersByTime(1000)
+    expect(api().remaining.value.total).toBe(4000)
+    vi.advanceTimersByTime(4000)
+    expect(api().finished.value).toBe(true)
+    expect(onFinish).toHaveBeenCalledTimes(2)
+  })
+
+  it('stays finished without a second finish when the new target is also past', async () => {
+    const onFinish = vi.fn()
+    const target = ref(NOW.getTime() - 1000)
+    const { api } = mountCountdown({ target, onFinish })
+    expect(api().finished.value).toBe(true)
+    target.value = NOW.getTime() - 5000
+    await nextTick()
+    expect(api().finished.value).toBe(true)
+    expect(api().remaining.value.total).toBe(0)
+    expect(onFinish).toHaveBeenCalledTimes(1)
   })
 })
