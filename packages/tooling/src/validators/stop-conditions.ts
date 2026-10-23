@@ -114,12 +114,13 @@ function readJson<T>(path: string): T | null {
   }
 }
 
-function git(args: string[], root: string = ROOT): string {
+/** `null` when git fails — a failure is not an empty answer, and must not read as one. */
+function git(args: string[], root: string = ROOT): string | null {
   try {
-    return execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }).trim()
+    return execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] }).trim()
   }
   catch {
-    return ''
+    return null
   }
 }
 
@@ -537,18 +538,41 @@ const sc8: Evaluator = (ctx) => {
   return { verdict: 'clear', detail: `rows ${watched.join(', ')} green — every optional-peer and sanitizer path fails closed as documented`, revealedBy: [path] }
 }
 
-/** SC-9 — browser/AT/RTL/SSR evidence missing for a CHANGED high-risk component. */
+/**
+ * SC-9 — browser/AT/RTL/SSR evidence missing for a CHANGED high-risk component.
+ *
+ * "Changed" means changed since the previous candidate, committed or not. SC-1
+ * only clears on a clean tree, so reading the working tree alone would see
+ * nothing on exactly the candidate that can otherwise ship.
+ */
 const sc9: Evaluator = (ctx) => {
-  const changed = git(['status', '--porcelain', '--', 'packages/core/src/components'], ctx.root)
+  const prevName = previousCandidate(ctx.candidate, ctx.evidenceDir)
+  if (prevName === null) {
+    return {
+      verdict: 'unevaluable',
+      detail: 'no earlier release candidate exists, so there is no commit to say which components this candidate changed',
+      revealedBy: ['docs/qa/release/'],
+    }
+  }
+  const since = prevName.slice(prevName.lastIndexOf('-') + 1)
+  const committedCmd = `git diff --name-only ${since} ${ctx.head} -- packages/core/src/components`
+  const committed = git(['diff', '--name-only', since, ctx.head, '--', 'packages/core/src/components'], ctx.root)
+  const uncommitted = git(['status', '--porcelain', '--', 'packages/core/src/components'], ctx.root)
+  if (committed === null || uncommitted === null) {
+    return {
+      verdict: 'unevaluable',
+      detail: `git could not list the components changed since \`${prevName}\` (${since}), so "no component changed" cannot be asserted`,
+      revealedBy: [committed === null ? committedCmd : 'git status --porcelain -- packages/core/src/components'],
+    }
+  }
   const changedComponents = new Set(
-    changed === ''
-      ? []
-      : changed.split(/\r?\n/)
-          .map(l => /([A-Z]\w+)\.(?:vue|types\.ts|variants\.ts)$/.exec(l)?.[1])
-          .filter((n): n is string => typeof n === 'string'),
+    `${committed}\n${uncommitted}`
+      .split(/\r?\n/)
+      .map(l => /([A-Z]\w+)\.(?:vue|types\.ts|variants\.ts)$/.exec(l)?.[1])
+      .filter((n): n is string => typeof n === 'string'),
   )
   if (changedComponents.size === 0)
-    return { verdict: 'clear', detail: 'no component under packages/core/src/components changed in this candidate, so no component owes new browser/AT/RTL/SSR evidence', revealedBy: ['git status --porcelain -- packages/core/src/components'] }
+    return { verdict: 'clear', detail: `no component under packages/core/src/components changed since \`${prevName}\`, so no component owes new browser/AT/RTL/SSR evidence`, revealedBy: [committedCmd, 'git status --porcelain -- packages/core/src/components'] }
 
   const quality = readJson<{ components?: Array<{ name?: string, component?: string, tier: string }> }>(resolve(ctx.root, 'packages/core/docs/quality-matrix.json'))
   if (quality?.components === undefined)
