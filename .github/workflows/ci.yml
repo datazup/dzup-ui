@@ -847,9 +847,11 @@ jobs:
       # shows up. `lighthouserc.spec.ts` asserts the two configs agree on URLs and
       # thresholds, so the only variable here is the device.
       # The action's own upload has no retention input, so its artifacts kept the org's 90-day default and
-      # filled the 500 MB artifact pool (CI-ARTIFACT-RETENTION-20261030-R1). Each run's results move out of
-      # .lighthouseci/ (the next collect keeps its manifest and reports) into a visible folder, which
-      # upload-artifact includes without include-hidden-files; landing-perf uploads both below.
+      # filled the 500 MB artifact pool (CI-ARTIFACT-RETENTION-20261030-R1). After each run, only each URL's
+      # representative report (per manifest.json) and the assertion results are kept: the other 20 runs
+      # and the raw lhr-* copies are most of the size. The results then move out of .lighthouseci/ (the
+      # next collect would keep its manifest and reports) into a visible folder, which upload-artifact
+      # includes without include-hidden-files; landing-perf uploads both below.
       - name: Lighthouse CI — desktop (LCP < 2.5s, CLS < 0.1, a11y >= 0.9)
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12 (resolved 2026-10-17)
         with:
@@ -858,7 +860,14 @@ jobs:
           temporaryPublicStorage: true
       - name: Set the desktop Lighthouse results aside
         if: always()
-        run: if [ -d .lighthouseci ]; then rm -rf lighthouse-desktop && mv .lighthouseci lighthouse-desktop; fi
+        run: |
+          if [ -f .lighthouseci/manifest.json ]; then
+            { jq -r '[.[] | select(.isRepresentativeRun) | .jsonPath, .htmlPath] as $keep
+                | .[] | select(.isRepresentativeRun | not) | .jsonPath, .htmlPath | select(IN($keep[]) | not)' \
+                .lighthouseci/manifest.json | xargs -r -d '\n' rm -f -- && rm -f .lighthouseci/lhr-*; } \
+              || echo "::warning::Lighthouse report pruning failed; every run is uploaded"
+          fi
+          if [ -d .lighthouseci ]; then rm -rf lighthouse-desktop && mv .lighthouseci lighthouse-desktop; fi
       # The mobile LCP ceiling is 4s, not 2.5s: lighthouserc.mobile.json explains why.
       - name: Lighthouse CI — mobile (LCP < 4s, CLS < 0.1, a11y >= 0.9)
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12 (resolved 2026-10-17)
@@ -868,11 +877,16 @@ jobs:
           temporaryPublicStorage: true
       - name: Set the mobile Lighthouse results aside
         if: always()
-        run: if [ -d .lighthouseci ]; then rm -rf lighthouse-mobile && mv .lighthouseci lighthouse-mobile; fi
+        run: |
+          if [ -f .lighthouseci/manifest.json ]; then
+            { jq -r '[.[] | select(.isRepresentativeRun) | .jsonPath, .htmlPath] as $keep
+                | .[] | select(.isRepresentativeRun | not) | .jsonPath, .htmlPath | select(IN($keep[]) | not)' \
+                .lighthouseci/manifest.json | xargs -r -d '\n' rm -f -- && rm -f .lighthouseci/lhr-*; } \
+              || echo "::warning::Lighthouse report pruning failed; every run is uploaded"
+          fi
+          if [ -d .lighthouseci ]; then rm -rf lighthouse-mobile && mv .lighthouseci lighthouse-mobile; fi
       # Publish the perf badge + Lighthouse results as a downloadable artifact so
-      # the score is inspectable from the run even when an assertion fails. Each
-      # URL's representative report, the manifest and the assertion results are
-      # kept; the 25 per-run lhr-* files per device (~20-30 MB) are not.
+      # the score is inspectable from the run even when an assertion fails.
       - name: Upload landing perf artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -882,7 +896,6 @@ jobs:
             apps/landing/dist/perf-badge.json
             lighthouse-desktop/
             lighthouse-mobile/
-            !lighthouse-*/lhr-*
           retention-days: 7
 
   coverage:
