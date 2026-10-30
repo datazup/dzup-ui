@@ -88,12 +88,17 @@ describe('artifact retention (CI-ARTIFACT-RETENTION-20261030-R1)', () => {
   it('keeps each URL\'s representative Lighthouse report and moves the results into the uploaded folders', () => {
     for (const { file, job } of lighthouse) {
       const scripts = allSteps.filter(entry => entry.file === file && entry.job === job).map(({ step }) => step.join('\n'))
+      const upload = scripts.findIndex(script => script.includes('\n            lighthouse-mobile/'))
       for (const device of ['desktop', 'mobile']) {
-        const aside = scripts.find(script => script.includes(`mv .lighthouseci lighthouse-${device}`))
+        const run = scripts.findIndex(script => /uses:\s*treosh\/lighthouse-ci-action@/.test(script) && script.includes(`lighthouserc${device === 'mobile' ? '.mobile' : ''}.json`))
+        const index = scripts.findIndex(script => script.includes(`mv .lighthouseci lighthouse-${device}`))
+        const aside = scripts[index]
         expect(aside, `${file}:${job}:${device}`).toBeDefined()
         expect(aside).toMatch(/^ {8}if: always\(\)$/m)
         expect(aside).toContain('select(.isRepresentativeRun | not)')
         expect(aside).toContain('rm -f .lighthouseci/lhr-*')
+        // Right after its own Lighthouse run, and before the upload.
+        expect([run + 1 === index, index < upload], `${file}:${job}:${device} order`).toEqual([true, true])
       }
     }
   })
