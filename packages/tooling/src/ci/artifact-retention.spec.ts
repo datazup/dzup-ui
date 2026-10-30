@@ -7,7 +7,9 @@
  * retention input: 146 of those artifacts (2.5 GB) filled the pool, and
  * every repository's uploads then failed with "Artifact storage quota has been
  * hit". Every upload now states a retention of at most 14 days, and the
- * Lighthouse action's own upload stays off.
+ * Lighthouse action's own upload stays off. upload-artifact@v4 also skips
+ * hidden paths unless `include-hidden-files: true`, which left landing-perf's
+ * `.lighthouseci/` out of every artifact, so a hidden upload path is refused.
  */
 import { describe, expect, it } from 'vitest'
 import { jobs, listWorkflowFiles, readWorkflow } from './workflow-text.ts'
@@ -24,6 +26,23 @@ function steps(body: string[]): string[][] {
       result.at(-1)?.push(line)
   }
   return result
+}
+
+/** The `path:` entries of an upload step, inline or as a block scalar. */
+function uploadPaths(step: string[]): string[] {
+  const start = step.findIndex(line => /^ {10}path:/.test(line))
+  if (start === -1)
+    return []
+  const inline = step[start]!.replace(/^ {10}path:\s*/, '').trim()
+  if (inline !== '' && !/^[|>][+-]?$/.test(inline))
+    return [inline]
+  const entries: string[] = []
+  for (const line of step.slice(start + 1)) {
+    if (!/^ {12,}\S/.test(line))
+      break
+    entries.push(line.trim())
+  }
+  return entries
 }
 
 function uses(step: string[], action: string): boolean {
@@ -57,6 +76,19 @@ describe('artifact retention (CI-ARTIFACT-RETENTION-20261030-R1)', () => {
     const offending = lighthouse
       .filter(({ step }) => !step.some(line => /^ {10}uploadArtifacts:\s*false\s*$/.test(line)))
       .map(({ file, job }) => `${file}:${job}`)
+    expect(offending).toEqual([])
+    for (const { file, job } of lighthouse) {
+      const paths = uploads.filter(upload => upload.file === file && upload.job === job).flatMap(({ step }) => uploadPaths(step))
+      expect(paths).toEqual(expect.arrayContaining(['lighthouse-desktop/', 'lighthouse-mobile/']))
+    }
+  })
+
+  it('uploads no hidden path unless the step sets include-hidden-files: true', () => {
+    const offending = uploads
+      .filter(({ step }) => !step.some(line => /^ {10}include-hidden-files:\s*true\s*$/.test(line)))
+      .flatMap(({ file, job, step }) => uploadPaths(step)
+        .filter(entry => !entry.startsWith('!') && entry.split('/').some(part => /^\.[^./]/.test(part)))
+        .map(entry => `${file}:${job}:${entry}`))
     expect(offending).toEqual([])
   })
 })

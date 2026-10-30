@@ -847,22 +847,18 @@ jobs:
       # shows up. `lighthouserc.spec.ts` asserts the two configs agree on URLs and
       # thresholds, so the only variable here is the device.
       # The action's own upload has no retention input, so its artifacts kept the org's 90-day default and
-      # filled the 500 MB artifact pool (CI-ARTIFACT-RETENTION-20261030-R1). Each `lhci collect` clears
-      # .lighthouseci/, so the desktop results are uploaded here and the mobile ones by landing-perf below.
+      # filled the 500 MB artifact pool (CI-ARTIFACT-RETENTION-20261030-R1). Each run's results move out of
+      # .lighthouseci/ (the next collect keeps its manifest and reports) into a visible folder, which
+      # upload-artifact includes without include-hidden-files; landing-perf uploads both below.
       - name: Lighthouse CI — desktop (LCP < 2.5s, CLS < 0.1, a11y >= 0.9)
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12 (resolved 2026-10-17)
         with:
           configPath: ./apps/landing/lighthouserc.json
           uploadArtifacts: false
           temporaryPublicStorage: true
-      - name: Upload desktop Lighthouse results
+      - name: Set the desktop Lighthouse results aside
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-results-desktop
-          path: .lighthouseci/
-          if-no-files-found: ignore
-          retention-days: 7
+        run: if [ -d .lighthouseci ]; then rm -rf lighthouse-desktop && mv .lighthouseci lighthouse-desktop; fi
       # The mobile LCP ceiling is 4s, not 2.5s: lighthouserc.mobile.json explains why.
       - name: Lighthouse CI — mobile (LCP < 4s, CLS < 0.1, a11y >= 0.9)
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12 (resolved 2026-10-17)
@@ -870,8 +866,13 @@ jobs:
           configPath: ./apps/landing/lighthouserc.mobile.json
           uploadArtifacts: false
           temporaryPublicStorage: true
+      - name: Set the mobile Lighthouse results aside
+        if: always()
+        run: if [ -d .lighthouseci ]; then rm -rf lighthouse-mobile && mv .lighthouseci lighthouse-mobile; fi
       # Publish the perf badge + Lighthouse results as a downloadable artifact so
-      # the score is inspectable from the run even when an assertion fails.
+      # the score is inspectable from the run even when an assertion fails. Each
+      # URL's representative report, the manifest and the assertion results are
+      # kept; the 25 per-run lhr-* files per device (~20-30 MB) are not.
       - name: Upload landing perf artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -879,7 +880,9 @@ jobs:
           name: landing-perf
           path: |
             apps/landing/dist/perf-badge.json
-            .lighthouseci/
+            lighthouse-desktop/
+            lighthouse-mobile/
+            !lighthouse-*/lhr-*
           retention-days: 7
 
   coverage:
