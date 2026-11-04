@@ -1,7 +1,7 @@
 {
   "name": "@dzup-ui/codemods",
   "type": "module",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Code transforms for migrating from old dzup-ui to vNext",
   "license": "MIT",
   "repository": {
